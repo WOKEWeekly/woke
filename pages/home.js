@@ -8,6 +8,7 @@ export default class Home extends Component {
 		return (
 			<div>
 				<div className={css.example}>Awakening Through Conversation</div>
+        <img src="/static/blackexcellence/19.jpg" />
 				<Link>Let us become more aware</Link>
 			</div>
 		);
