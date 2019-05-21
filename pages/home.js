@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 
-import css from "../static/styles/home.scss";
+import css from "~/styles/home.scss";
 import Link from 'next/link';
 
 export default class Home extends Component {
