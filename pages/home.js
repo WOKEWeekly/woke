@@ -7,7 +7,6 @@ export default class Home extends Component {
 		return (
 			<div className={css.body}>
 				<div className={css.example}>Awakening Through Conversation</div>
-        <img src="/static/blackexcellence/19.jpg" />
 			</div>
 		);
 	}
