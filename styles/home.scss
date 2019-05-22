@@ -1,4 +1,16 @@
+
 $font-size: 100px;
+
+.body {
+  background-attachment: fixed;
+  background-color: black;
+  background-image: url("/static/bg/body-bg.jpg");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
 .example {
   font-size: $font-size;
+  font-family: 'Raleway'
 }

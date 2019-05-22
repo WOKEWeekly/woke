@@ -1,15 +1,13 @@
 import React, { Component } from "react";
 
-import css from "~/styles/home.scss";
-import Link from 'next/link';
+import css from "../styles/home.scss";
 
 export default class Home extends Component {
 	render(){
 		return (
-			<div>
+			<div className={css.body}>
 				<div className={css.example}>Awakening Through Conversation</div>
         <img src="/static/blackexcellence/19.jpg" />
-				<Link>Let us become more aware</Link>
 			</div>
 		);
 	}
