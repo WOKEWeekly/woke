@@ -1,0 +1,41 @@
+
+$title-font: 'Patua One';
+$body-font: 'Raleway';
+$primary: #6C4D90;
+$dark: #0d0c0e;
+
+.prenav {
+  background-color: black;
+  padding: 3px 0;
+
+  .socials { margin: 0 3px; }
+
+  .auth {
+    color: $primary;
+    font-family: $title-font;
+    font-weight: 100;
+    text-align: right;
+    a {
+      margin: 0 3px;
+      font-size: 1.1em;
+      text-transform: uppercase;
+      vertical-align: middle;
+    }
+  }
+}
+
+.nav {
+  background-color: $dark;
+  
+  .links {
+    font-family: $body-font;
+    font-weight: 700;
+  }
+}
+
+.footer {
+  background-color: $dark;
+  position: absolute;
+  bottom: 0;
+  padding: 1.5em 0
+}

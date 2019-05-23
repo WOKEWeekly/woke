@@ -1,7 +1,7 @@
 const dotenv = require('dotenv').config({path: '/root/config.env'});
 const nodemailer = require('nodemailer');
 
-const emails = require('../constants/info.js');
+const emails = require('../constants/settings.js');
 
 /** Pass credentials to transporter */
 const transporter = nodemailer.createTransport({
