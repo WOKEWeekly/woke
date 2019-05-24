@@ -1,4 +1,6 @@
 
+@import "variables";
+
 .body {
   background: {  
     attachment: fixed;
@@ -7,5 +9,21 @@
     position: center;
     repeat: no-repeat;
     size: cover;
+  }
+}
+
+.cover {
+  background: {  
+    attachment: fixed;
+    position: center;
+    repeat: no-repeat;
+    size: cover;
+  }
+  border-top: $border;
+  border-bottom: $border;
+
+  div {
+    position: relative;
+    top: 35%;
   }
 }

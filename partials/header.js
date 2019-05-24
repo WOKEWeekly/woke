@@ -7,19 +7,8 @@ import { colors } from '~/constants/theme.js';
 
 import css from '~/styles/partials.scss';
 
-export default class Header extends Component {
-	render(){
-		return (
-      <div>
-        <PreNavBar/>        
-        <MainNavBar />
-      </div>
-		);
-	}
-}
-
 /** Little top bar for social media icons and account details */
-class PreNavBar extends Component {
+export class PreNavBar extends Component {
   render(){
     return (
       <Container className={css.prenav} fluid={true}>
@@ -43,10 +32,10 @@ class PreNavBar extends Component {
 }
 
 /** Main navigation bar with routes */
-class MainNavBar extends Component {
+export class MainNavBar extends Component {
   render(){
     return (
-      <Navbar className={css.nav} variant="dark" expand="lg">
+      <Navbar className={css.nav} variant="dark" expand="lg" sticky="top">
         <Navbar.Brand href="/">
           <img
             src="/static/images/logos/wokeweekly-logo.png"
@@ -57,15 +46,14 @@ class MainNavBar extends Component {
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="ml-auto">
-            <Nav.Link href="/" className={css.links}>Home</Nav.Link>
             <Nav.Link href="#link" className={css.links}>Sessions</Nav.Link>
-            <Nav.Link href="#link" className={css.links}>Topic Suggestions</Nav.Link>
+            <Nav.Link href="#link" className={css.links}>Forum</Nav.Link>
             <NavDropdown className={css.links} title="Topics" id="basic-nav-dropdown">
               <NavDropdown.Item href="#action/3.1" className={css.links}>Topic Suggestions</NavDropdown.Item>
               <NavDropdown.Item href="#action/3.2" className={css.links}>Topic Bank</NavDropdown.Item>
             </NavDropdown>
             <Nav.Link href="#link" className={css.links}>#BlackExcellence</Nav.Link>
-            <Nav.Link href="#link" className={css.links}>The Exec</Nav.Link>
+            <Nav.Link href="#link" className={css.links}>The Exec.</Nav.Link>
             <Nav.Link href="#link" className={css.links}>About</Nav.Link>
             <Nav.Link href={`mailto: ${emails.enquiries}`} className={css.links}>Contact</Nav.Link>
           </Nav>

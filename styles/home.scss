@@ -1,0 +1,27 @@
+@import "variables";
+
+.threepart {
+  height: 575px;
+  margin: 1em 0;
+  .part {
+    background-size: cover;
+    border-radius: 30px;
+    height: 100%;
+    text-align: center;
+    position: relative;
+    .caption {
+      width: 80%;
+      margin: 0 auto;
+      .headline {
+        color: white;
+        font-family: $title-font;
+        font-size: 2.2rem; }
+      .description {
+        color: white;
+        font-family: $body-font;
+        font-size: 1.1rem;
+        text-align: center;
+      } 
+    }
+  }
+}

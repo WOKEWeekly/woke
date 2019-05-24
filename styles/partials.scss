@@ -1,12 +1,9 @@
 
-$title-font: 'Patua One';
-$body-font: 'Raleway';
-$primary: #6C4D90;
-$dark: #0d0c0e;
+@import "variables";
 
 .prenav {
   background-color: black;
-  padding: 3px 0;
+  padding: 3px 2em;
 
   .socials { margin: 0 3px; }
 
@@ -35,7 +32,6 @@ $dark: #0d0c0e;
 
 .footer {
   background-color: $dark;
-  position: absolute;
   bottom: 0;
   padding: 1.5em 0
 }

@@ -4,7 +4,7 @@ import { library } from '@fortawesome/fontawesome-svg-core';
 import { fab } from '@fortawesome/free-brands-svg-icons';
 
 import App, { Container } from 'next/app';
-import Header from "../partials/header.js";
+import {PreNavBar, MainNavBar} from "../partials/header.js";
 import Footer from "../partials/footer.js";
 
 import css from '~/styles/app.scss';
@@ -35,7 +35,7 @@ class MyApp extends App {
         <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Raleway:400,700" />
         <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Patua+One:400,700" />
 
-        <Header />
+        <PreNavBar /> <MainNavBar />
         <Component {...pageProps} />
         <Footer />
       </Container>
