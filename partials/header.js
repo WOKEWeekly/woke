@@ -22,7 +22,9 @@ export class PreNavBar extends Component {
               <Icon icon={"youtube"} href={accounts.youtube} />
             </Col>
             <Col xs={6} className={css.auth}>
-              <a>Login</a><a>|</a><a>Sign Up</a>
+              <a href="#login">Login</a>
+              <a>|</a>
+              <a href="#signup">Sign Up</a>
             </Col>
           </Row>
         </Container>

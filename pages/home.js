@@ -18,7 +18,7 @@ export default class Home extends Component {
 					<Row className={css.threepart}>
 						<Part
 							headline={'Enlightenment'}
-							description={'Facilitating open-floor conversation to shape the minds and alter the perspectives of participants'}
+							description={'Facilitating open-floor conversation to shape the minds and alter the perspectives of participants.'}
 							image={'three-part-1.jpg'} />
 						<Part
 							headline={'Expression'}
@@ -38,7 +38,7 @@ export default class Home extends Component {
 class Part extends Component {
 	render(){
 		return (
-			<Col md={4}>
+			<Col md={4} className={css.colpart}>
 				<div className={css.part} style={{backgroundImage: `url(/static/images/bg/${this.props.image})`}}>
 					<div className={css.caption}>
 						<div className={css.headline}>{this.props.headline}</div>

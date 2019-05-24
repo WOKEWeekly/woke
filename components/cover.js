@@ -28,7 +28,8 @@ class Title extends Component {
       <div style={{
         color: 'white',
         fontFamily: fonts.body,
-        fontSize: 40
+        fontSize: 40,
+        lineHeight: 1.3
       }}>{this.props.children}</div>
     );
   }

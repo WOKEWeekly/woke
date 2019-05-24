@@ -1,7 +1,16 @@
+/** Fonts */
 $title-font: 'Patua One';
 $body-font: 'Raleway';
+
+/** Colors */
 $primary: #6C4D90;
 $dark: #0d0c0e;
 
-
+/** Custom */
 $border: 2px solid $primary;
+
+/** Media queries */
+$break-sm: 576px; // Small devices (landscape phones)
+$break-md: 768px; // Medium devices (tablets)
+$break-lg: 992px; // Large devices (desktops)
+$break-xl: 1200px; // Extra large devices (large desktops)
