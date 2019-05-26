@@ -29,7 +29,7 @@ export class PreNavBar extends Component {
           </Row>
         </Container>
       </Container>
-    )
+    );
   }
 }
 
@@ -66,16 +66,32 @@ export class MainNavBar extends Component {
 
 /** Social media icon template */
 class Icon extends Component {
+  constructor(){
+    super();
+    this.state = {
+      isLoaded: false
+    }
+  }
+
+  componentDidMount(){
+    this.setState({ isLoaded: true });
+  }
+
   render(){
-    return (
-      <a
-        href={this.props.href}
-        style={{fontSize: 24}}>
-        <FontAwesomeIcon
-          icon={['fab', this.props.icon]}
-          color={colors.primary}
-          className={css.socials} />
-      </a>
-    )
+    if (this.state.isLoaded){
+      return (
+        <a
+          href={this.props.href}
+          style={{fontSize: 24}}>
+          <FontAwesomeIcon
+            icon={['fab', this.props.icon]}
+            color={colors.primary}
+            className={css.socials} />
+        </a>
+      )
+    } else {
+      return null;
+    }
+    
   }
 }

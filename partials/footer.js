@@ -38,16 +38,32 @@ class Socials extends Component {
 
 /** Social media icon template */
 class Icon extends Component {
+  constructor(){
+    super();
+    this.state = {
+      isLoaded: false
+    }
+  }
+
+  componentDidMount(){
+    this.setState({ isLoaded: true });
+  }
+
   render(){
-    return (
-      <div className={css.socials}>
-        <a href={this.props.href}>
-          <FontAwesomeIcon
-            icon={["fab", this.props.icon]}
-            color={colors.primary}
-            size={'3x'} />
-        </a>
-      </div>
-    )
+    if (this.state.isLoaded){
+      return (
+        <div className={css.socials}>
+          <a href={this.props.href}>
+            <FontAwesomeIcon
+              icon={["fab", this.props.icon]}
+              color={colors.primary}
+              size={'3x'} />
+          </a>
+        </div>
+      )
+    } else {
+      return null;
+    }
+   
   }
 }
