@@ -5,11 +5,12 @@ $body-font: 'Raleway';
 /** Colors */
 $primary: #6C4D90;
 $primary-dark: rgba(28, 8, 34, 0.80);
-$dark: #0d0c0e;
+$dark: #0D0C0E;
 
 /** Custom */
 $secondary-border: 1px solid rgb(245, 222, 179);
 $border: 2px solid $primary;
+$toolbar: rgb(0, 0, 0);
 
 /** Media queries */
 $break-sm: 576px; // Small devices (landscape phones)

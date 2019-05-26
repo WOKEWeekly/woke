@@ -1,5 +1,6 @@
 import React, { Component, PureComponent } from 'react';
-import {Container, Col, Row} from 'react-bootstrap';
+import { Button, ButtonGroup, Dropdown } from 'react-bootstrap';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import Cover from '~/components/cover.js';
 import css from '~/styles/sessions.scss';
@@ -64,7 +65,9 @@ export default class Sessions extends Component {
 
     /** Render sessions in grid */
     const SessionGrid = () => {
-      return <div className={css.grid}>{this.renderSessions()}</div>;
+      return <div className={css.grid}>
+      {this.renderSessions()}
+      </div>;
     };
 
     return (
@@ -75,9 +78,9 @@ export default class Sessions extends Component {
           image={'sessions-header.jpg'}
           height={200} />
 
-        <Container fluid={true} className={css.toolbar}></Container>
-
         {isLoaded ? <SessionGrid/> : null}
+
+        <Toolbar />
       </div>
     );
 	}
@@ -88,7 +91,7 @@ class Session extends PureComponent {
     const { item } = this.props;
     
     return (
-      <a href={`/session/${item.slug}`}>
+      <a href={`/session/${item.slug}`} style={{textDecoration: 'none'}}>
         <div className={css.cell}>
           <img
             src={`/static/images/sessions/${item.image}`}
@@ -101,5 +104,42 @@ class Session extends PureComponent {
         </div>
       </a>
     );
+  }
+}
+
+/** Toolbar for view settings and sorting */
+class Toolbar extends Component {
+  render(){
+    return (
+      <div className={css.toolbar}>
+        <ButtonGroup className={css.view}>
+          <Button><Icon icon={'th-large'} />Grid</Button>
+          <Button><Icon icon={'list-ul'} />List</Button>
+        </ButtonGroup>
+
+        <Dropdown as={ButtonGroup} className={css.sort}>
+          <Dropdown.Toggle><Icon icon={'sort-amount-down'} />Sort</Dropdown.Toggle>
+          <Dropdown.Menu>
+            <Dropdown.Item eventKey="1">Sort by Oldest</Dropdown.Item>
+            <Dropdown.Item eventKey="2">Sort by Newest</Dropdown.Item>
+          </Dropdown.Menu>
+        </Dropdown>
+      </div>
+    )
+  }
+}
+
+/** Toolbar icons */
+class Icon extends Component {
+  render(){
+    return (
+      <FontAwesomeIcon
+        icon={['fas', this.props.icon]}
+        color={'white'}
+        style={{
+          marginRight: 5
+        }} />
+    )
+    
   }
 }

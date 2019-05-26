@@ -2,6 +2,7 @@
 @import "variables";
 
 .grid {
+  border-bottom: $border;
   display: grid;
   grid-template-columns: repeat(5, 20%);
   width: 100%;
@@ -20,11 +21,13 @@
         color: white;
         font-family: $title-font;
         font-size: 1.2em;
+        text-decoration: none;
       }
       .date {
         color: white;
         font-family: $body-font;
         font-size: 0.8em;
+        text-decoration: none;
       }
     }
   }
@@ -32,5 +35,18 @@
 }
 
 .toolbar {
-  
+  background-color: $toolbar;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  bottom: 0%;
+  height: 5vh;
+  position: sticky;
+  width: 100%;
+  .view {
+    max-height: 100%;
+  }
+  .sort {
+    max-height: 100%;
+  }
 }
