@@ -1,15 +1,15 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
 import {Container} from 'react-bootstrap';
 
-import { colors, fonts } from '~/constants/theme.js';
+import { fonts } from '~/constants/theme.js';
 
-import css from '~/styles/app.scss';
+import css from '~/styles/_app.scss';
 
 export default class Cover extends Component {
 	render(){
 		return (
       <Container fluid={true} className={css.cover} style={{
-        backgroundImage: `url(${this.props.image})`,
+        backgroundImage: `url(/static/images/bg/${this.props.image})`,
         height: this.props.height,
         textAlign: 'center'
       }}>

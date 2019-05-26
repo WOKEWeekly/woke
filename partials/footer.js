@@ -1,5 +1,5 @@
-import React, { Component } from "react";
-import {Container, Col, Row} from 'react-bootstrap';
+import React, { Component } from 'react';
+import {Col, Row, Navbar} from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { accounts } from '~/constants/settings.js';
@@ -10,11 +10,9 @@ import css from '~/styles/partials.scss';
 export default class Footer extends Component {
 	render(){
 		return (
-			<Container fluid={true} className={css.footer}>
-        <Row>
-          <Col md={4}><Socials/></Col>
-        </Row>
-			</Container>
+			<Navbar className={css.footer} >
+        <Col md={4}><Socials/></Col>
+			</Navbar>
 		);
 	}
 }
@@ -42,14 +40,7 @@ class Socials extends Component {
 class Icon extends Component {
   render(){
     return (
-      <div style={{
-        backgroundColor: 'black',
-        borderRadius: 30,
-        display: 'inline-block',
-        padding: 20,
-        textAlign: 'center',
-        width: 100
-      }}>
+      <div className={css.socials}>
         <a href={this.props.href}>
           <FontAwesomeIcon
             icon={["fab", this.props.icon]}

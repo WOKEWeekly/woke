@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
 import {Container, Col, Row} from 'react-bootstrap';
 
 import Cover from '~/components/cover.js';
@@ -11,7 +11,7 @@ export default class Home extends Component {
 				<Cover
 					title={'Awakening Through Conversation.'}
 					subtitle={'Debates and discussions centered around and beyond the UK black community.'}
-					image={'/static/images/bg/home-header.jpg'}
+					image={'home-header.jpg'}
 					height={575} />
 
 				<Container fluid={true}>

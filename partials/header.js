@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
 import {Container, Col, Row, Nav, Navbar, NavDropdown} from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
@@ -38,17 +38,16 @@ export class MainNavBar extends Component {
   render(){
     return (
       <Navbar className={css.nav} variant="dark" expand="lg" sticky="top">
-        <Navbar.Brand href="/">
+        <Navbar.Brand href="/home">
           <img
             src="/static/images/logos/wokeweekly-logo.png"
             height="40"
-            className="d-inline-block align-top"
             alt="#WOKEWeekly Logo" />
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="ml-auto">
-            <Nav.Link href="#link" className={css.links}>Sessions</Nav.Link>
+            <Nav.Link href="/sessions" className={css.links}>Sessions</Nav.Link>
             <Nav.Link href="#link" className={css.links}>Forum</Nav.Link>
             <NavDropdown className={css.links} title="Topics" id="basic-nav-dropdown">
               <NavDropdown.Item href="#action/3.1" className={css.links}>Topic Suggestions</NavDropdown.Item>
