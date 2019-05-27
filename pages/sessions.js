@@ -1,8 +1,12 @@
 import React, { Component, PureComponent } from 'react';
-import { Button, ButtonGroup, Dropdown } from 'react-bootstrap';
+import { Button, ButtonGroup, Dropdown, Container, Col, Row } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
+import Link from 'next/link';
+
 import Cover from '~/components/cover.js';
+import { Title, Subtitle, Paragraph } from '~/components/text.js';
+
 import css from '~/styles/sessions.scss';
 
 import { formatDate } from '~/constants/date.js';
@@ -12,7 +16,8 @@ export default class Sessions extends Component {
     super();
     this.state = {
       sessions: [],
-      isLoaded: false
+      isLoaded: false,
+      view: 'list'
     }
   }
 
@@ -49,11 +54,11 @@ export default class Sessions extends Component {
 
   /** Render all sessions */
   renderSessions = () => {
-    const { sessions } = this.state;
+    const { sessions, view } = this.state;
     const items = [];
 
     for (const [index, item] of sessions.entries()) {
-      items.push(<Session key={index} item={item} />);
+      items.push(<Session key={index} item={item} view={view} />);
     }
 
     return items;
@@ -61,13 +66,18 @@ export default class Sessions extends Component {
 
 	render(){
 
-    const { isLoaded } = this.state;
+    const { isLoaded, view } = this.state;
 
     /** Render sessions in grid */
     const SessionGrid = () => {
-      return <div className={css.grid}>
-      {this.renderSessions()}
-      </div>;
+      return <div className={css.grid}>{this.renderSessions()}</div>;
+    };
+
+    /** Render sessions in list */
+    const SessionList = () => {
+      return <Container className={css.list}>
+        {this.renderSessions()}
+      </Container>;
     };
 
     return (
@@ -78,9 +88,9 @@ export default class Sessions extends Component {
           image={'sessions-header.jpg'}
           height={200} />
 
-        {isLoaded ? <SessionGrid/> : null}
+        {!isLoaded ? null : view === 'grid' ? <SessionGrid/> : <SessionList/>}
 
-        <Toolbar />
+        <Toolbar view={view} />
       </div>
     );
 	}
@@ -88,44 +98,83 @@ export default class Sessions extends Component {
 
 class Session extends PureComponent {
   render(){
-    const { item } = this.props;
+    const { item, view } = this.props;
     
-    return (
-      <a href={`/session/${item.slug}`} style={{textDecoration: 'none'}}>
-        <div className={css.cell}>
-          <img
-            src={`/static/images/sessions/${item.image}`}
-            alt={item.title}
-            className={css.image} />
-          <div className={css.details}>
-            <div className={css.title}>{item.title}</div>
-            <div className={css.date}>{formatDate(item.dateHeld, true)}</div>
+    if (view === 'grid'){
+      return (
+        <Link href={`/session/${item.slug}`}>
+          <div className={css.cell}>
+            <img
+              src={`/static/images/sessions/${item.image}`}
+              alt={item.title}
+              className={css.image} />
+            <div className={css.details}>
+              <Title className={css.title}>{item.title}</Title>
+              <Subtitle className={css.date}>{formatDate(item.dateHeld, true)}</Subtitle>
+            </div>
           </div>
-        </div>
-      </a>
-    );
+        </Link>
+      );
+    } else {
+      return (
+        <Link href={`/session/${item.slug}`}>
+          <Row className={css.item}>
+            <Col xs={4} className={'p-0'}>
+              <img
+                src={`/static/images/sessions/${item.image}`}
+                alt={item.title}
+                className={css.image} />
+            </Col>
+            <Col xs={8}>
+              <div className={css.details}>
+                <Title className={css.title}>{item.title}</Title>
+                <Subtitle className={css.date}>{formatDate(item.dateHeld, true)}</Subtitle>
+                <Paragraph className={css.description}>{item.text}</Paragraph>
+              </div>
+            </Col>
+          </Row>
+        </Link>
+      );
+    }
+    
   }
 }
 
 /** Toolbar for view settings and sorting */
 class Toolbar extends Component {
-  render(){
-    return (
-      <div className={css.toolbar}>
-        <ButtonGroup className={css.view}>
-          <Button><Icon icon={'th-large'} />Grid</Button>
-          <Button><Icon icon={'list-ul'} />List</Button>
-        </ButtonGroup>
+  constructor(){
+    super();
+    this.state = {
+      isLoaded: false
+    }
+  }
 
-        <Dropdown as={ButtonGroup} className={css.sort}>
-          <Dropdown.Toggle><Icon icon={'sort-amount-down'} />Sort</Dropdown.Toggle>
-          <Dropdown.Menu>
-            <Dropdown.Item eventKey="1">Sort by Oldest</Dropdown.Item>
-            <Dropdown.Item eventKey="2">Sort by Newest</Dropdown.Item>
-          </Dropdown.Menu>
-        </Dropdown>
-      </div>
-    )
+  componentDidMount(){
+    this.setState({ isLoaded: true });
+  }
+
+  render(){
+    if (this.state.isLoaded){
+      return (
+        <div className={css.toolbar}>
+          <ButtonGroup className={css.view}>
+            <Button><Icon icon={'th-large'} />Grid</Button>
+            <Button><Icon icon={'list-ul'} />List</Button>
+          </ButtonGroup>
+  
+          <Dropdown as={ButtonGroup} className={css.sort}>
+            <Dropdown.Toggle><Icon icon={'sort-amount-down'} />Sort</Dropdown.Toggle>
+            <Dropdown.Menu>
+              <Dropdown.Item eventKey="1">Sort by Oldest</Dropdown.Item>
+              <Dropdown.Item eventKey="2">Sort by Newest</Dropdown.Item>
+            </Dropdown.Menu>
+          </Dropdown>
+        </div>
+      )
+    } else {
+      return null;
+    }
+    
   }
 }
 

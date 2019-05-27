@@ -109,7 +109,7 @@ require('./private/auth.js')(app, conn, passport, verifyToken);
 require('./private/cron.js')(schedule, conn);
 require('./private/file.js')(app);
 require('./private/mobile.js')(app, conn, verifyToken);
-require('./private/routes.js')(app, conn);
+require('./private/routes.js')(app, conn, server);
 
 const emails = require('./private/emails.js');
 const notifications = require('./private/notifications.js');
