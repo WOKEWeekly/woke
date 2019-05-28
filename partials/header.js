@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { accounts, emails } from '~/constants/settings.js';
 import { colors } from '~/constants/theme.js';
 
-import css from '~/styles/partials.scss';
+import css from '~/styles/_partials.scss';
 
 /** Little top bar for social media icons and account details */
 export class PreNavBar extends Component {
@@ -48,11 +48,8 @@ export class MainNavBar extends Component {
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="ml-auto">
             <Nav.Link href="/sessions" className={css.links}>Sessions</Nav.Link>
+            <Nav.Link href="#link" className={css.links}>Topic Bank</Nav.Link>
             <Nav.Link href="#link" className={css.links}>Forum</Nav.Link>
-            <NavDropdown className={css.links} title="Topics" id="basic-nav-dropdown">
-              <NavDropdown.Item href="#action/3.1" className={css.links}>Topic Suggestions</NavDropdown.Item>
-              <NavDropdown.Item href="#action/3.2" className={css.links}>Topic Bank</NavDropdown.Item>
-            </NavDropdown>
             <Nav.Link href="#link" className={css.links}>#BlackExcellence</Nav.Link>
             <Nav.Link href="#link" className={css.links}>The Exec.</Nav.Link>
             <Nav.Link href="#link" className={css.links}>About</Nav.Link>

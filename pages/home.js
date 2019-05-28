@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import {Container, Col, Row} from 'react-bootstrap';
 
 import Cover from '~/components/cover.js';
-import css from "../styles/home.scss";
+import css from "~/styles/home.scss";
 
 export default class Home extends Component {
 	render(){

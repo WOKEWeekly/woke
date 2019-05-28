@@ -1,11 +1,12 @@
 import React, { Component, PureComponent } from 'react';
-import { Button, ButtonGroup, Dropdown, Container, Col, Row } from 'react-bootstrap';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Button, Container, Col, Dropdown, Row, ToggleButton, ToggleButtonGroup } from 'react-bootstrap';
 
 import Link from 'next/link';
 
 import Cover from '~/components/cover.js';
-import { Title, Subtitle, Paragraph } from '~/components/text.js';
+import Icon from '~/components/icon.js';
+import { Title, Subtitle, Paragraph, Divider } from '~/components/text.js';
+import Toolbar from '~/components/toolbar.js';
 
 import css from '~/styles/sessions.scss';
 
@@ -17,7 +18,8 @@ export default class Sessions extends Component {
     this.state = {
       sessions: [],
       isLoaded: false,
-      view: 'list'
+      view: 1,
+      sort: '2',
     }
   }
 
@@ -37,17 +39,12 @@ export default class Sessions extends Component {
     })
     .then(response => response.json())
     .then(sessions => {
-      /** Sort sessions in descending order of date */
-      sessions.sort(function (a,b) {
-        a = a.dateHeld;
-        b = b.dateHeld;
-        return a < b ? 1 : a > b ? -1 : 0
-      });
-      
       this.setState({
         sessions: sessions,
         isLoaded: true
       });
+
+      this.sortSessions(this.state.sort);
     })
     .catch(error => console.error(error));
   }
@@ -63,6 +60,34 @@ export default class Sessions extends Component {
 
     return items;
   }
+
+  sortSessions = (sort) => {
+    const { sessions } = this.state;
+
+    switch(sort){
+      case '1':
+        sessions.sort(function (a,b) {
+          a = a.dateHeld;
+          b = b.dateHeld;
+          return a < b ? -1 : a > b ? 1 : 0;
+        });
+        break;
+      case '2':
+        sessions.sort(function (a,b) {
+          a = a.dateHeld;
+          b = b.dateHeld;
+          return a < b ? 1 : a > b ? -1 : 0;
+        });
+        break;
+    }  
+
+    this.setState({
+      sessions: sessions,
+      sort: sort
+    });
+  }
+
+  switchView = (value) => { this.setState({ view: value }); }
 
 	render(){
 
@@ -88,9 +113,29 @@ export default class Sessions extends Component {
           image={'sessions-header.jpg'}
           height={200} />
 
-        {!isLoaded ? null : view === 'grid' ? <SessionGrid/> : <SessionList/>}
+        {!isLoaded ? null : view === 1 ? <SessionGrid/> : <SessionList/>}
 
-        <Toolbar view={view} />
+        <Toolbar>
+          <Button variant="dark"><Icon name={'plus'} />Add Session</Button>
+
+          <ToggleButtonGroup
+            className={css.view}
+            type={'radio'}
+            name={'view'}
+            defaultValue={1}
+            onChange={this.switchView}>
+            <ToggleButton variant="dark" value={1}><Icon name={'th-large'} />Grid</ToggleButton>
+            <ToggleButton variant="dark" value={2}><Icon name={'list-ul'} />List</ToggleButton>
+          </ToggleButtonGroup>
+    
+          <Dropdown className={css.sort} onSelect={this.sortSessions}>
+            <Dropdown.Toggle variant="dark"><Icon name={'sort-amount-down'} />Sort</Dropdown.Toggle>
+            <Dropdown.Menu onSelect={this.switchSort}>
+              <Dropdown.Item eventKey={1}>Sort Ascending</Dropdown.Item>
+              <Dropdown.Item eventKey={2}>Sort Descending</Dropdown.Item>
+            </Dropdown.Menu>
+          </Dropdown>
+        </Toolbar>
       </div>
     );
 	}
@@ -100,7 +145,7 @@ class Session extends PureComponent {
   render(){
     const { item, view } = this.props;
     
-    if (view === 'grid'){
+    if (view === 1){
       return (
         <Link href={`/session/${item.slug}`}>
           <div className={css.cell}>
@@ -129,6 +174,7 @@ class Session extends PureComponent {
               <div className={css.details}>
                 <Title className={css.title}>{item.title}</Title>
                 <Subtitle className={css.date}>{formatDate(item.dateHeld, true)}</Subtitle>
+                <Divider />
                 <Paragraph className={css.description}>{item.text}</Paragraph>
               </div>
             </Col>
@@ -136,59 +182,6 @@ class Session extends PureComponent {
         </Link>
       );
     }
-    
-  }
-}
-
-/** Toolbar for view settings and sorting */
-class Toolbar extends Component {
-  constructor(){
-    super();
-    this.state = {
-      isLoaded: false
-    }
-  }
-
-  componentDidMount(){
-    this.setState({ isLoaded: true });
-  }
-
-  render(){
-    if (this.state.isLoaded){
-      return (
-        <div className={css.toolbar}>
-          <ButtonGroup className={css.view}>
-            <Button><Icon icon={'th-large'} />Grid</Button>
-            <Button><Icon icon={'list-ul'} />List</Button>
-          </ButtonGroup>
-  
-          <Dropdown as={ButtonGroup} className={css.sort}>
-            <Dropdown.Toggle><Icon icon={'sort-amount-down'} />Sort</Dropdown.Toggle>
-            <Dropdown.Menu>
-              <Dropdown.Item eventKey="1">Sort by Oldest</Dropdown.Item>
-              <Dropdown.Item eventKey="2">Sort by Newest</Dropdown.Item>
-            </Dropdown.Menu>
-          </Dropdown>
-        </div>
-      )
-    } else {
-      return null;
-    }
-    
-  }
-}
-
-/** Toolbar icons */
-class Icon extends Component {
-  render(){
-    return (
-      <FontAwesomeIcon
-        icon={['fas', this.props.icon]}
-        color={'white'}
-        style={{
-          marginRight: 5
-        }} />
-    )
     
   }
 }

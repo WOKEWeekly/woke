@@ -1,18 +1,19 @@
 import React, { Component } from 'react';
-import {Col, Row, Navbar} from 'react-bootstrap';
+import {Col, Row } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { accounts } from '~/constants/settings.js';
 import { colors } from '~/constants/theme.js';
 
-import css from '~/styles/partials.scss';
+import css from '~/styles/_partials.scss';
+
 
 export default class Footer extends Component {
 	render(){
 		return (
-			<Navbar className={css.footer} >
+			<div className={css.footer} >
         <Col md={4}><Socials/></Col>
-			</Navbar>
+			</div>
 		);
 	}
 }

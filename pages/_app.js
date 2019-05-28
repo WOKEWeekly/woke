@@ -5,8 +5,8 @@ import { fab } from '@fortawesome/free-brands-svg-icons';
 import { fas } from '@fortawesome/free-solid-svg-icons';
 
 import App, { Container } from 'next/app';
-import {PreNavBar, MainNavBar} from "../partials/header.js";
-import Footer from "../partials/footer.js";
+import {PreNavBar, MainNavBar} from "~/partials/header.js";
+import Footer from "~/partials/footer.js";
 
 import css from '~/styles/_app.scss';
 

@@ -4,8 +4,9 @@
 .grid {
   border-bottom: $border;
   display: grid;
-  grid-template-columns: repeat(5, 20%);
+  grid-template-columns: repeat(6, calc(100% / 6));
   width: 100%;
+  @media (max-width: $break-xl) { grid-template-columns: repeat(5, 20%); }
   @media (max-width: $break-lg) { grid-template-columns: repeat(4, 25%); }
   @media (max-width: $break-md) { grid-template-columns: repeat(3, calc(100% / 3)); }
   @media (max-width: $break-sm) { grid-template-columns: repeat(2, 50%); }
@@ -23,17 +24,19 @@
       flex-direction: column;
       height: 100%;
       justify-content: center;
-      padding: 0.8em 0;
+      padding: 0.8em 0.5em;
       text-align: center;
       .title {
-        font-size: 1.3vw;
+        font-size: 1.1vw;
+        @media (max-width: $break-xl) { font-size: 1.3vw; }
         @media (max-width: $break-lg) { font-size: 1.8vw; }
         @media (max-width: $break-md) { font-size: 2.5vw; }
         @media (max-width: $break-sm) { font-size: 3.5vw; }
       }
       .date {
         font-size: 0.9vw;
-        @media (max-width: $break-lg) { font-size: 1.5vw; }
+        @media (max-width: $break-xl) { font-size: 1vw; }
+        @media (max-width: $break-lg) { font-size: 1.2vw; }
         @media (max-width: $break-md) { font-size: 1.9vw; }
         @media (max-width: $break-sm) { font-size: 2.2vw; }
       }
@@ -65,23 +68,6 @@
         @media (max-width: $break-sm) { font-size: 2.2vw; }
       }
     }
-  }
-}
-
-.toolbar {
-  background-color: $toolbar;
-  display: flex;
-  justify-content: space-evenly;
-  align-items: center;
-  bottom: 0%;
-  height: 5vh;
-  position: sticky;
-  width: 100%;
-  .view {
-    max-height: 100%;
-  }
-  .sort {
-    max-height: 100%;
   }
 }
 

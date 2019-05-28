@@ -3,7 +3,7 @@ import {Container} from 'react-bootstrap';
 
 import { fonts } from '~/constants/theme.js';
 
-import css from '~/styles/_app.scss';
+import css from '~/styles/_components.scss';
 
 export default class Cover extends Component {
 	render(){

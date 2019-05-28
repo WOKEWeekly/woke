@@ -1,0 +1,31 @@
+@import "variables";
+
+.cover {
+  background: {  
+    attachment: fixed;
+    position: center;
+    repeat: no-repeat;
+    size: cover;
+  }
+  align-items: center;
+  border-bottom: $border;
+  border-top: $border;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.toolbar {
+  background-color: $toolbar;
+  bottom: 0%;
+  height: 5vh;
+  padding: 1.5em 0;
+  position: sticky;
+  width: 100%;
+  .container {
+    align-items: center;
+    display: flex;
+    justify-content: space-between;
+    height: 100%;
+  }
+}

@@ -10,19 +10,11 @@
     repeat: no-repeat;
     size: cover;
   }
-}
+  height: 100vh;
 
-.cover {
-  background: {  
-    attachment: fixed;
-    position: center;
-    repeat: no-repeat;
-    size: cover;
+  > div {
+    display: grid;
+    grid-template-rows: auto auto 1fr auto;
+    min-height: 100%;
   }
-  align-items: center;
-  border-bottom: $border;
-  border-top: $border;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
 }
