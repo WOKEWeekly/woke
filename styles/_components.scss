@@ -18,27 +18,51 @@
 
 /** form.js && datepicker.js */
 .text {
+  color: white;
   font-family: $body-font;
   font-size: 1em;
+}
+
+.heading {
+  @extend .text;
+  font-size: 2em;
+  padding: 0 15px;
+  margin-bottom: .8em;
 }
 
 .group {
   .label {
     @extend .text;
-    color: white;
     display: block;
-    + div { // .react-native-wrapper
-      display: block !important;
-      div { // .react-datepicker__input-container
-        display: block !important;
-      }
-    }
   }
   .input {
     @extend .text;
+    background: none;
+    border: none;
+    border-bottom: $underline;
+    padding: .4em;
+    width: 100%;
+  }
+  .input:focus {
+    outline: none;
   }
   .textarea {
-    @extend .text;
+    @extend .input;
+    min-height: 42px;
+  }
+
+
+  label + div { // .react-native-wrapper
+    display: block !important;
+    div { // .react-datepicker__input-container
+      display: block !important;
+    }
+  }
+
+  @media (max-width: $break-md) {
+    > div {
+      margin: .8em 0;
+    }
   }
 }
 

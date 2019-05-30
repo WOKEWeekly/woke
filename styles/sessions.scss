@@ -104,6 +104,8 @@
 .form {
   padding: 2em;
   margin: 0 auto;
-  width: 50%;
+  width: 60%;
+  @media (max-width: $break-xl) { width: 70%; }
+  @media (max-width: $break-lg) { width: 80%; }
   @media (max-width: $break-md) { width: 100%; }
 }
