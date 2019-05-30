@@ -4,7 +4,7 @@ import { Button, Container } from 'react-bootstrap';
 import Icon from '~/components/icon.js';
 import { Title, Subtitle, Paragraph, Divider } from '~/components/text.js';
 import Toolbar from '~/components/toolbar.js';
-import { Wrapper } from '~/components/layout.js';
+import { Spacer } from '~/components/layout.js';
 
 import { formatDate } from '~/constants/date.js';
 
@@ -20,7 +20,7 @@ export default class SessionPage extends Component {
     session.text = session.text.trim().length > 0 ? session.text : 'No description.';
 
     return (
-      <Wrapper>
+      <Spacer>
         <Container className={css.entity}>
           <img
             src={`/static/images/sessions/${session.image}`}
@@ -34,7 +34,7 @@ export default class SessionPage extends Component {
           </div>
         </Container>
         {true ? toolbar : null}
-      </Wrapper>
+      </Spacer>
       
     );
   }

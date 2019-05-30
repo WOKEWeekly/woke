@@ -116,7 +116,11 @@ export default class Sessions extends Component {
         {!isLoaded ? null : view === 1 ? <SessionGrid/> : <SessionList/>}
 
         <Toolbar>
-          <Button variant="dark"><Icon name={'plus'} />Add Session</Button>
+          <Link href={'/sessions/form'}>
+            <Button variant="dark">
+              <Icon name={'plus'} />Add Session
+            </Button>
+          </Link>
 
           <ToggleButtonGroup
             className={css.view}

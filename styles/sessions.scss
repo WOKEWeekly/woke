@@ -71,9 +71,9 @@
   }
 }
 
-/***********
-*** PAGE
-************/
+/************
+*** single.js
+*************/
 
 .entity {
   margin: 1em 0;
@@ -95,4 +95,15 @@
       @media (max-width: $break-md) { font-size: 1em; }
     }
   }
+}
+
+/*************
+*** form.js
+*************/
+
+.form {
+  padding: 2em;
+  margin: 0 auto;
+  width: 50%;
+  @media (max-width: $break-md) { width: 100%; }
 }

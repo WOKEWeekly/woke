@@ -1,5 +1,6 @@
 @import "variables";
 
+/** cover.js */
 .cover {
   background: {  
     attachment: fixed;
@@ -15,6 +16,33 @@
   justify-content: center;
 }
 
+/** form.js && datepicker.js */
+.text {
+  font-family: $body-font;
+  font-size: 1em;
+}
+
+.group {
+  .label {
+    @extend .text;
+    color: white;
+    display: block;
+    + div { // .react-native-wrapper
+      display: block !important;
+      div { // .react-datepicker__input-container
+        display: block !important;
+      }
+    }
+  }
+  .input {
+    @extend .text;
+  }
+  .textarea {
+    @extend .text;
+  }
+}
+
+/** toolbar.js */
 .toolbar {
   background-color: $toolbar;
   bottom: 0%;

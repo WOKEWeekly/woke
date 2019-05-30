@@ -12,5 +12,6 @@ module.exports = {
     updates: "updates@wokeweekly.co.uk",
 
     director: "zavidegbue@gmail.com"
-  }
+  },
+  creationDate: new Date(2017, 2, 2)
 }

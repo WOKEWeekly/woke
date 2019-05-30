@@ -7,13 +7,10 @@ module.exports = function(app, conn, server){
     let sql = "SELECT * FROM sessions WHERE slug = ?";
     let session = {};
     
-    conn.query(sql, [slug], function (err, result, fields) {
+    conn.query(sql, [slug], function (err, result) {
       if (!err){
-        
         session = result[0];
-        console.log(`Retrieved details for ${session.title}.`);
-
-        return server.render(req, res, '/sessions.one', { session });
+        return server.render(req, res, '/sessions/single', { session });
       } else {
         res.status(400).send(err.toString());
       }
