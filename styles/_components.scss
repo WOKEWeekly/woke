@@ -1,6 +1,33 @@
 @import "variables";
 
-/** cover.js */
+/****************/
+/** button .js **/
+/****************/
+
+.template-button {
+  border: 1px solid white;
+  color: white;
+  border-radius: 15px;
+  font-family: $body-font;
+  padding: 1em;
+  width: 200px;}
+.template-button:focus {
+  outline: none;
+}
+
+.submit {
+  @extend .template-button;
+  background-color: $primary-dark;
+}
+
+.cancel {
+  @extend .template-button;
+  background-color: $cancel-button;
+}
+
+/****************/
+/** cover .js **/
+/****************/
 .cover {
   background: {  
     attachment: fixed;
@@ -16,7 +43,10 @@
   justify-content: center;
 }
 
-/** form.js && datepicker.js */
+
+/******************************/
+/** form.js && datepicker.js **/
+/******************************/
 .text {
   color: white;
   font-family: $body-font;
@@ -26,7 +56,6 @@
 .heading {
   @extend .text;
   font-size: 2em;
-  padding: 0 15px;
   margin-bottom: .8em;
 }
 
@@ -51,22 +80,23 @@
     min-height: 42px;
   }
 
-
-  label + div { // .react-native-wrapper
-    display: block !important;
-    div { // .react-datepicker__input-container
-      display: block !important;
-    }
-  }
-
   @media (max-width: $break-md) {
-    > div {
-      margin: .8em 0;
-    }
+    > div { margin: .8em 0; }
   }
 }
 
-/** toolbar.js */
+:global(.react-datepicker-wrapper),
+:global(.react-datepicker__input-container) {
+  display: block !important;
+}
+:global(.react-datepicker__day--outside-month){
+  color: #a9a9a9;
+}
+
+
+/****************/
+/** toolbar.js **/
+/****************/
 .toolbar {
   background-color: $toolbar;
   bottom: 0%;

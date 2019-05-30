@@ -4,10 +4,17 @@ import {Container, Col, Row} from 'react-bootstrap';
 import Cover from '~/components/cover.js';
 import css from "~/styles/home.scss";
 
+import Meta from '~/partials/meta.js';
+
 export default class Home extends Component {
 	render(){
 		return (
 			<div>
+				<Meta
+					title={'#WOKEWeekly - Awakening Through Conversation'}
+					description={'Debates and discussions centered around and beyond the UK black community at university campuses. Providing a safe-space for expression and opinions to be heard and encouraging unity amongst the community through conversation, bringing together those divided by social status, religion and interest.'}
+					url={'/'} />
+
 				<Cover
 					title={'Awakening Through Conversation.'}
 					subtitle={'Debates and discussions centered around and beyond the UK black community.'}

@@ -24,9 +24,10 @@ export class EventDatePicker extends Component {
         selected={this.props.date}
         onChange={this.props.onChange}
         customInput={<DateInput />}
-        dateFormat={'d MMMM yyyy'}
+        dateFormat={'EEEE d MMMM yyyy'}
         placeholderText={'Select a date.'}
         minDate={creationDate}
+        peekNextMonth={false}
         fixedHeight
         locale="en" />
     );
@@ -34,19 +35,6 @@ export class EventDatePicker extends Component {
 }
 
 export class BirthdayPicker extends Component {
-  constructor() {
-    super();
-    this.state = {
-      startDate: new Date()
-    };
-  }
- 
-  handleChange = (date) => {
-    this.setState({
-      startDate: date
-    });
-  }
-
   render(){
     return (
       <DatePicker

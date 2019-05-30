@@ -6,6 +6,8 @@ module.exports = {
     linkedin: "https://www.linkedin.com/company/wokeweeklyuk",
     youtube: "https://www.youtube.com/channel/UC2pxSc01dJSFSVDPSN6_hBA"
   },
+  creationDate: new Date(2017, 2, 2),
+  domain: "https://www.wokeweekly.co.uk",
   emails: {
     applications: "applications@wokeweekly.co.uk",
     enquiries: "enquiries@wokeweekly.co.uk",
@@ -13,5 +15,4 @@ module.exports = {
 
     director: "zavidegbue@gmail.com"
   },
-  creationDate: new Date(2017, 2, 2)
 }

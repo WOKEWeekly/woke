@@ -1,16 +1,16 @@
 import React, { Component, PureComponent } from 'react';
 import { Button, Container, Col, Dropdown, Row, ToggleButton, ToggleButtonGroup } from 'react-bootstrap';
-
 import Link from 'next/link';
 
 import Cover from '~/components/cover.js';
 import Icon from '~/components/icon.js';
 import { Title, Subtitle, Paragraph, Divider } from '~/components/text.js';
 import Toolbar from '~/components/toolbar.js';
+import { formatDate } from '~/constants/date.js';
 
+import Meta from '~/partials/meta.js';
 import css from '~/styles/sessions.scss';
 
-import { formatDate } from '~/constants/date.js';
 
 export default class Sessions extends Component {
   constructor(){
@@ -107,6 +107,11 @@ export default class Sessions extends Component {
 
     return (
       <div>
+        <Meta
+					title={'Sessions | #WOKEWeekly'}
+					description={'Where we do the magic...'}
+					url={'/sessions'} />
+
         <Cover
           title={'Sessions'}
           subtitle={'Where we do the magic...'}
@@ -116,7 +121,7 @@ export default class Sessions extends Component {
         {!isLoaded ? null : view === 1 ? <SessionGrid/> : <SessionList/>}
 
         <Toolbar>
-          <Link href={'/sessions/form'}>
+          <Link href={'/sessions/add'}>
             <Button variant="dark">
               <Icon name={'plus'} />Add Session
             </Button>
@@ -151,7 +156,7 @@ class Session extends PureComponent {
     
     if (view === 1){
       return (
-        <Link href={`/session/${item.slug}`}>
+        <Link href={`/sessions/${item.slug}`}>
           <div className={css.cell}>
             <img
               src={`/static/images/sessions/${item.image}`}
@@ -166,7 +171,7 @@ class Session extends PureComponent {
       );
     } else {
       return (
-        <Link href={`/session/${item.slug}`}>
+        <Link href={`/sessions/${item.slug}`}>
           <Row className={css.item}>
             <Col xs={4} className={'p-0'}>
               <img

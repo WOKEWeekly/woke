@@ -35,6 +35,12 @@ export class Label extends Component {
 
 /** For inline text inputs */
 export class Input extends Component {
+  constructor(props){
+    super(props);
+    this.state = {
+      value: props.value
+    }
+  }
   render(){
     return (
       <input
@@ -54,7 +60,8 @@ export class TextArea extends Component {
       <Textarea
         placeholder={this.props.placeholder}
         className={css.textarea}
-        minRows={5} />
+        minRows={5}
+        {...this.props} />
     )
   }
 }
