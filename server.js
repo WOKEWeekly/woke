@@ -22,21 +22,21 @@ const dev = process.env.NODE_ENV !== 'production';
 const server = next({ dev });
 const handle = server.getRequestHandler();
 
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(cookieParser());
+
+app.use(expressSession({
+  // cookie: {maxAge: 2 * 60 * 60 * 1000},
+  secret: process.env.SESSION_SECRET || "secret",
+  resave: true,
+  saveUninitialized: true
+}));
+app.use(flash());
+app.use(passport.initialize());
+app.use(passport.session());
+
 server.prepare().then(() => {
-	app.use(bodyParser.json());
-	app.use(bodyParser.urlencoded({ extended: false }));
-	app.use(cookieParser());
-
-	app.use(expressSession({
-		// cookie: {maxAge: 2 * 60 * 60 * 1000},
-		secret: process.env.SESSION_SECRET || "secret",
-		resave: true,
-		saveUninitialized: true
-	}));
-	app.use(flash());
-	app.use(passport.initialize());
-	app.use(passport.session());
-
 	app.get('*', (req, res) => handle(req, res));
 	app.listen(port, (err) => {
 		if (err) throw err;

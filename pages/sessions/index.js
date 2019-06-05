@@ -156,7 +156,7 @@ class Session extends PureComponent {
     
     if (view === 1){
       return (
-        <Link href={`/sessions/${item.slug}`}>
+        <Link href={`/session/${item.slug}`}>
           <div className={css.cell}>
             <img
               src={`/static/images/sessions/${item.image}`}
@@ -171,7 +171,7 @@ class Session extends PureComponent {
       );
     } else {
       return (
-        <Link href={`/sessions/${item.slug}`}>
+        <Link href={`/session/${item.slug}`}>
           <Row className={css.item}>
             <Col xs={4} className={'p-0'}>
               <img

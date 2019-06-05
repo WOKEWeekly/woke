@@ -60,7 +60,19 @@ export class TextArea extends Component {
       <Textarea
         placeholder={this.props.placeholder}
         className={css.textarea}
-        minRows={5}
+        minRows={3}
+        {...this.props} />
+    )
+  }
+}
+
+/** File selector */
+export class FileSelector extends Component {
+  render(){
+    return (
+      <input
+        type={'file'}
+        className={css.file}
         {...this.props} />
     )
   }

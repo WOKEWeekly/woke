@@ -1,4 +1,5 @@
 import React, { Component} from 'react';
+import Router from 'next/router';
 import { formatISODate } from '~/constants/date.js';
 
 import SessionForm from './form.js';
@@ -13,13 +14,17 @@ export default class SessionEdit extends Component {
     this.state = {
       title: props.session.title,
       date: new Date(props.session.dateHeld),
-      description: props.session.text
+      description: props.session.description,
+
+      image: props.session.image,
+      imageChanged: false
     };
   }
  
   handleTitle = (event) => { this.setState({title: event.target.value}); }
   handleDate = (date) => { this.setState({date}); }
   handleDescription = (event) => { this.setState({description: event.target.value}); }
+  handleImage = (event) => { this.setState({image: event.target.files[0]}); }
 
   /** Update session details */
   updateSession = () => {
@@ -40,7 +45,12 @@ export default class SessionEdit extends Component {
         handleTitle={this.handleTitle}
         handleDate={this.handleDate}
         handleDescription={this.handleDescription}
+
         confirmText={'Update'}
+        cancelFunc={Router.back}
+
+        metaTitle={'Edit Session'}
+        metaUrl={'/edit'}
          />
     );
   }

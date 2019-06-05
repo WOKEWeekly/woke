@@ -19,17 +19,17 @@ module.exports = function(app){
   };
   
   const session_storage = multer.diskStorage({
-    destination: function(req, file, callback) {callback(null, `.${sessions_dir}`);},
+    destination: function(req, file, callback) {callback(null, `./static/images/sessions/`);},
     filename: function (req, file, callback) {callback(null, file.originalname);}
   });
   
   const candidate_storage = multer.diskStorage({
-    destination: function(req, file, callback) {callback(null, `.${blackex_dir}`);},
+    destination: function(req, file, callback) {callback(null, `./static/images/blackexcellence/`);},
     filename: function (req, file, callback) {callback(null, file.originalname);}
   });
   
   const member_storage = multer.diskStorage({
-    destination: function(req, file, callback) {callback(null, `.${team_dir}`);},
+    destination: function(req, file, callback) {callback(null, `./static/images/team`);},
     filename: function (req, file, callback) {callback(null, file.originalname);}
   });
   

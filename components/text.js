@@ -45,6 +45,7 @@ export class Divider extends Component {
     return (
       <hr style={{
         backgroundColor: 'white',
+        overflow: 'hidden'
       }} />
     )
   }

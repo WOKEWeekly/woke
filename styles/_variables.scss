@@ -4,16 +4,25 @@ $body-font: 'Raleway';
 
 /** Colors */
 $primary: #6C4D90;
-$primary-dark: rgba(28, 8, 34, 0.80);
+$primary-light: rgba(142, 116, 171, .5);
+$primary-dark: rgba(28, 8, 34, .8);
 $dark: #0D0C0E;
 
-/** Custom */
+/** Borders */
 $border: 2px solid $primary;
 $secondary-border: 1px solid rgb(245, 222, 179);
+
 $underline: 1px solid rgba(255, 255, 255, .7);
 
+/** Buttons */
+$submit-button: rgba(57, 17, 68, 0.5);
+$submit-hover: rgba(91, 27, 112, 0.5);
+$submit-active: $primary-dark;
 $cancel-button: rgba(142, 116, 171, .5);
-$toolbar: rgb(0, 0, 0);
+$cancel-hover: rgba(190, 155, 229, .3);
+$cancel-active: rgba(173, 127, 224, .5);
+
+$toolbar: black;
 
 /** Media queries */
 $break-sm: 576px; // Small devices (landscape phones)

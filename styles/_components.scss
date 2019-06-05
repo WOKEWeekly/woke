@@ -10,19 +10,28 @@
   border-radius: 15px;
   font-family: $body-font;
   padding: 1em;
-  width: 200px;}
-.template-button:focus {
-  outline: none;
+  width: 200px;
+  -webkit-transition-duration: .3s;
+  transition-duration: .3s;
+  &:focus { outline: none; }
+  &:active {
+    -webkit-transition-duration: .1s;
+    transition-duration: .1s;
+  }
 }
 
 .submit {
   @extend .template-button;
-  background-color: $primary-dark;
+  background-color: $submit-button;
+  &:hover { box-shadow: inset 0 0 100px 100px $submit-hover; }
+  &:active { box-shadow: inset 0 0 100px 100px $submit-active; }
 }
 
 .cancel {
   @extend .template-button;
   background-color: $cancel-button;
+  &:hover { box-shadow: inset 0 0 100px 100px $cancel-hover; }
+  &:active { box-shadow: inset 0 0 100px 100px $cancel-active; }
 }
 
 /****************/
@@ -50,19 +59,22 @@
 .text {
   color: white;
   font-family: $body-font;
-  font-size: 1em;
+  font-size: 1.2em;
 }
 
 .heading {
-  @extend .text;
-  font-size: 2em;
+  color: white;
+  font-family: $body-font;
+  font-size: 2.2em;
   margin-bottom: .8em;
 }
 
 .group {
   .label {
-    @extend .text;
+    color: white;
     display: block;
+    font-family: $title-font;
+    font-size: 1.1em;
   }
   .input {
     @extend .text;
@@ -71,13 +83,14 @@
     border-bottom: $underline;
     padding: .4em;
     width: 100%;
-  }
-  .input:focus {
-    outline: none;
+    &:focus { outline: none; }
   }
   .textarea {
     @extend .input;
     min-height: 42px;
+  }
+  .file {
+    
   }
 
   @media (max-width: $break-md) {
@@ -86,12 +99,8 @@
 }
 
 :global(.react-datepicker-wrapper),
-:global(.react-datepicker__input-container) {
-  display: block !important;
-}
-:global(.react-datepicker__day--outside-month){
-  color: #a9a9a9;
-}
+:global(.react-datepicker__input-container) { display: block !important; }
+:global(.react-datepicker__day--outside-month){ color: #a9a9a9; }
 
 
 /****************/

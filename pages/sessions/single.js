@@ -5,7 +5,7 @@ import Link from 'next/link';
 import Icon from '~/components/icon.js';
 import { Title, Subtitle, Paragraph, Divider } from '~/components/text.js';
 import Toolbar from '~/components/toolbar.js';
-import { Spacer } from '~/components/layout.js';
+import { Shader, Spacer } from '~/components/layout.js';
 
 import { formatDate } from '~/constants/date.js';
 import Meta from '~/partials/meta.js';
@@ -18,35 +18,42 @@ export default class SessionPage extends Component {
 
   render(){
     const { session } = this.props;
-    session.text = session.text.trim().length > 0 ? session.text : 'No description.';
+    if (session){
+    
+      session.description = session.description.trim().length > 0 ? session.description : 'No description.';
 
-    return (
-      <Spacer>
-        <Meta
-					title={`${session.title} | #WOKEWeekly`}
-					description={session.text}
-          url={`/sessions/${session.slug}`}
-          image={`static/images/sessions/${session.image}`}
-          alt={session.title} />
+      return (
+        <Spacer>
+          <Meta
+            title={`${session.title} | #WOKEWeekly`}
+            description={session.description}
+            url={`/sessions/${session.slug}`}
+            image={`static/images/sessions/${session.image}`}
+            alt={session.title} />
 
-        <Container className={css.entity}>
-          <img
-            src={`/static/images/sessions/${session.image}`}
-            alt={session.title}
-            className={css.image} />
-          <div className={css.details}>
-            <Title className={css.title}>{session.title}</Title>
-            <Subtitle className={css.subtitle}>{formatDate(session.dateHeld, true)}</Subtitle>
-            <Divider />
-            <Paragraph className={css.description}>{session.text}</Paragraph>
-          </div>
-        </Container>
+          <Shader>
+          <Container className={css.entity}>
+            <img
+              src={`/static/images/sessions/${session.image}`}
+              alt={session.title}
+              className={css.image} />
+            <div className={css.details}>
+              <Title className={css.title}>{session.title}</Title>
+              <Subtitle className={css.subtitle}>{formatDate(session.dateHeld, true)}</Subtitle>
+              <Divider />
+              <Paragraph className={css.description}>{session.description}</Paragraph>
+            </div>
+          </Container>
+
+          </Shader>
+
+          {true /** Admin */ ? toolbar(session.id) : null}
+        </Spacer>
         
-        {true /** Admin */ ? toolbar(session.id) : null}
-
-      </Spacer>
-      
-    );
+      );
+    } else {
+      return null;
+    }
   }
 }
 

@@ -1,8 +1,8 @@
 
 module.exports = function(app, conn, server){
 
-  /** Individual session detail page */
-  app.get('/sessions/:slug', function(req, res){
+  /** Render individual session detail page */
+  app.get('/session/:slug', function(req, res){
     let slug = req.params.slug;
     let sql = "SELECT * FROM sessions WHERE slug = ?";
     let session = {};
@@ -17,7 +17,7 @@ module.exports = function(app, conn, server){
     });
   });
 
-  /** Edit session */
+  /** Render edit session page */
   app.get('/sessions/edit/:id', function(req, res){
     let id = req.params.id;
     let sql = "SELECT * FROM sessions WHERE id = ?";

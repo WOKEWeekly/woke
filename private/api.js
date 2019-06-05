@@ -15,6 +15,132 @@ module.exports = function(app, conn, verifyToken){
     }
   });
 
+  /** Add new session to database */
+  app.post('/addSession', /* verifyToken, */ function(req, res){
+    // jwt.verify(req.token, process.env.JWT_SECRET, (err, auth) => {
+    //   if (err){
+    //     res.sendStatus(403);
+    //   } else {
+    //     if (!(auth.user && auth.user.clearance >= CLEARANCES.ACTIONS.CRUD_SESSIONS)){
+    //       res.status(401).send(`You are not authorised to perform such an action.`);
+    //       return;
+    //     }
+
+        var session = req.body;
+        console.log(session);
+        var sql = "INSERT INTO sessions (title, dateHeld, image, slug, description) VALUES ?";
+        var values = [[session.title, session.dateHeld, session.image, session.slug, session.description]];
+        
+        conn.query(sql, [values], function (err, result, fields) {
+          if (!err){
+            req.flash('success', `You've added the session: ${session.title}.`);
+            console.log('Nice');
+            res.sendStatus(200);
+          } else {
+            if (err.toString().includes("Incorrect string")){
+              res.status(422).send(`Please do not use emojis during input.`)
+            } else {
+              res.status(400).send(err.toString());
+              console.error(err.toString());
+            }
+          }
+        });
+    //   }
+    // });
+  });
+
+  /** Update details of existing session in database */
+  app.put('/updateSession', verifyToken, function(req, res){
+    jwt.verify(req.token, process.env.JWT_SECRET, (err, auth) => {
+      if (err){
+        res.sendStatus(403);
+      } else {
+        if (!(auth.user && auth.user.clearance >= CLEARANCES.ACTIONS.CRUD_SESSIONS)){
+          res.status(401).send(`You are not authorised to perform such an action.`);
+          return;
+        }
+
+        var session1 = req.body.sessions[0];
+        var session2 = req.body.sessions[1];
+        
+        var sql = "UPDATE sessions SET title = ?, dateHeld = ?, image = ?, slug = ?, text = ?, description = ?, delta = ? WHERE id = ?";
+        var values = [session2.title, session2.dateHeld, session2.image, session2.slug, session2.text, session2.description, session2.delta, session1.id];
+        
+        conn.query(sql, values, function (err, result, fields) {
+          if (!err){
+            req.flash('success', `You've updated the details of session: ${session2.title}.`);
+            
+            let image = `.${sessions_dir}${session1.image}`;
+            
+            /** Delete first image from file system if there was an image change */
+            if (session2.change == true){
+              if (session1.image !== session2.image){
+                fs.unlink(image, function(err1) {
+                  if (!err1) {
+                    console.log(`Deleted first ${session1.image} from the /sessions directory.` );
+                    res.sendStatus(200);
+                  } else {
+                    console.error(err1.toString());
+                    res.sendStatus(200);
+                  }
+                });
+              } else {
+                console.log("Same slugs. Image is being replaced rather than deleted.");
+                res.sendStatus(200);
+              }
+            } else {
+              console.log("No image change, hence, no deletion.");
+              res.sendStatus(200);
+            }
+          } else {
+            console.error(err.toString());
+            if (err.toString().includes("Incorrect string")){
+              res.status(422).send(`Please do not use emojis during input.`)
+            } else {
+              res.status(400).send(err.toString());
+            }
+          }
+        });
+      }
+    });
+  });
+
+  /** Delete an existing session from database */
+  app.delete('/deleteSession', verifyToken, function(req, res){
+    jwt.verify(req.token, process.env.JWT_SECRET, (err, auth) => {
+      if (err){
+        res.sendStatus(403);
+      } else {
+        if (!(auth.user && auth.user.clearance >= CLEARANCES.ACTIONS.CRUD_SESSIONS)){
+          res.status(401).send(`You are not authorised to perform such an action.`);
+          return;
+        }
+
+        var session = req.body;
+        var sql = "DELETE FROM sessions WHERE id = ?";
+        
+        conn.query(sql, session.id, function (err, result, fields) {
+          if (!err){
+            req.flash('success', `You've deleted session: ${session.title}.`);
+            
+            /** Delete image from file system */
+            fs.unlink(`.${sessions_dir}${session.image}`, function(err1) {
+              if (!err1) {
+                res.sendStatus(200);
+                console.log(`Deleted ${session.image} from the /sessions directory.` );
+              } else {
+                console.warn(`${session.image} not found in /sessions directory.` );
+                res.sendStatus(200);
+              }
+            });
+          } else {
+            res.status(400).send(err.toString());
+          }
+        });
+      }
+    });
+  });
+
   /** Retrieve all candidates */
   app.get('/getBlackEx', function(req, res){
     if (req.headers['authorization'] !== 'authorized'){
@@ -391,129 +517,6 @@ module.exports = function(app, conn, verifyToken){
         }
       });
     }
-  });
-
-  /** Add new session to database */
-  app.post('/addSession', verifyToken, function(req, res){
-    jwt.verify(req.token, process.env.JWT_SECRET, (err, auth) => {
-      if (err){
-        res.sendStatus(403);
-      } else {
-        if (!(auth.user && auth.user.clearance >= CLEARANCES.ACTIONS.CRUD_SESSIONS)){
-          res.status(401).send(`You are not authorised to perform such an action.`);
-          return;
-        }
-
-        var session = req.body;
-        var sql = "INSERT INTO sessions (title, dateHeld, image, slug, text, description, delta) VALUES ?";
-        var values = [[session.title, session.dateHeld, session.image, session.slug, session.text, session.description, session.delta]];
-        
-        conn.query(sql, [values], function (err, result, fields) {
-          if (!err){
-            req.flash('success', `You've added the session: ${session.title}.`);
-            res.sendStatus(200);
-          } else {
-            if (err.toString().includes("Incorrect string")){
-              res.status(422).send(`Please do not use emojis during input.`)
-            } else {
-              res.status(400).send(err.toString());
-            }
-          }
-        });
-      }
-    });
-  });
-
-  /** Update details of existing session in database */
-  app.put('/updateSession', verifyToken, function(req, res){
-    jwt.verify(req.token, process.env.JWT_SECRET, (err, auth) => {
-      if (err){
-        res.sendStatus(403);
-      } else {
-        if (!(auth.user && auth.user.clearance >= CLEARANCES.ACTIONS.CRUD_SESSIONS)){
-          res.status(401).send(`You are not authorised to perform such an action.`);
-          return;
-        }
-
-        var session1 = req.body.sessions[0];
-        var session2 = req.body.sessions[1];
-        
-        var sql = "UPDATE sessions SET title = ?, dateHeld = ?, image = ?, slug = ?, text = ?, description = ?, delta = ? WHERE id = ?";
-        var values = [session2.title, session2.dateHeld, session2.image, session2.slug, session2.text, session2.description, session2.delta, session1.id];
-        
-        conn.query(sql, values, function (err, result, fields) {
-          if (!err){
-            req.flash('success', `You've updated the details of session: ${session2.title}.`);
-            
-            let image = `.${sessions_dir}${session1.image}`;
-            
-            /** Delete first image from file system if there was an image change */
-            if (session2.change == true){
-              if (session1.image !== session2.image){
-                fs.unlink(image, function(err1) {
-                  if (!err1) {
-                    console.log(`Deleted first ${session1.image} from the /sessions directory.` );
-                    res.sendStatus(200);
-                  } else {
-                    console.error(err1.toString());
-                    res.sendStatus(200);
-                  }
-                });
-              } else {
-                console.log("Same slugs. Image is being replaced rather than deleted.");
-                res.sendStatus(200);
-              }
-            } else {
-              console.log("No image change, hence, no deletion.");
-              res.sendStatus(200);
-            }
-          } else {
-            console.error(err.toString());
-            if (err.toString().includes("Incorrect string")){
-              res.status(422).send(`Please do not use emojis during input.`)
-            } else {
-              res.status(400).send(err.toString());
-            }
-          }
-        });
-      }
-    });
-  });
-
-  /** Delete an existing session from database */
-  app.delete('/deleteSession', verifyToken, function(req, res){
-    jwt.verify(req.token, process.env.JWT_SECRET, (err, auth) => {
-      if (err){
-        res.sendStatus(403);
-      } else {
-        if (!(auth.user && auth.user.clearance >= CLEARANCES.ACTIONS.CRUD_SESSIONS)){
-          res.status(401).send(`You are not authorised to perform such an action.`);
-          return;
-        }
-
-        var session = req.body;
-        var sql = "DELETE FROM sessions WHERE id = ?";
-        
-        conn.query(sql, session.id, function (err, result, fields) {
-          if (!err){
-            req.flash('success', `You've deleted session: ${session.title}.`);
-            
-            /** Delete image from file system */
-            fs.unlink(`.${sessions_dir}${session.image}`, function(err1) {
-              if (!err1) {
-                res.sendStatus(200);
-                console.log(`Deleted ${session.image} from the /sessions directory.` );
-              } else {
-                console.warn(`${session.image} not found in /sessions directory.` );
-                res.sendStatus(200);
-              }
-            });
-          } else {
-            res.status(400).send(err.toString());
-          }
-        });
-      }
-    });
   });
 
   /** Retrieve all topics */
