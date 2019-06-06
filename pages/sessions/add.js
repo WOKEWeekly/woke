@@ -17,6 +17,7 @@ export default class SessionAdd extends Component {
     };
   }
  
+  /** Handle session detail changes */
   handleTitle = (event) => { this.setState({title: event.target.value}); }
   handleDate = (date) => { this.setState({date}); }
   handleDescription = (event) => { this.setState({description: event.target.value}); }
@@ -28,6 +29,7 @@ export default class SessionAdd extends Component {
     
     const { title, date, description, image } = this.state;
 
+    /** Generate slugs and filenames from title and data */
     let slug = generateSlug(title);
     let filename = `${formatISODate(date)}-${slug}.${getExtension(image)}`;
     
@@ -39,26 +41,20 @@ export default class SessionAdd extends Component {
       image: filename
     };
 
+    const data = new FormData();
+    data.append('session', JSON.stringify(session));
+    data.append('file', image, filename);
+
+    /** Add session to database */
     fetch('/addSession', {
       method: 'POST',
-      body: JSON.stringify(session),
+      body: data,
       headers: {
         'Authorization': 'authorized',
-        'Content-Type': 'application/json',
+        'Path': 'sessions'
       }
     }).then(res => {
-      if (res.ok){
-        const formData = new FormData()
-        formData.append('file', image, filename);
-
-        /** Upload file to /sessions directory */
-        fetch('/uploadSession', {
-          method: 'POST',
-          body: formData
-        })
-        .then(() => Router.push('/sessions'))
-        .catch(error => console.error(error));
-      }
+      if (res.ok) Router.push('/sessions');
     }).catch(error => console.error(error));
   }
 

@@ -1,7 +1,9 @@
 const LocalStrategy = require('passport-local').Strategy;
 const validator = require("email-validator");
+const async = require('async');
+const { verifyToken } = require('./middleware.js');
 
-module.exports = function(app, conn, passport, verifyToken){
+module.exports = function(app, conn, passport){
   
   /* Used to serialize the user for the session */
   passport.serializeUser(function(user, done) {

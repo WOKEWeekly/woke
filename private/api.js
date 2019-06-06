@@ -1,4 +1,7 @@
-module.exports = function(app, conn, verifyToken){
+const async = require('async');
+const { verifyToken, upload } = require('./middleware.js');
+
+module.exports = function(app, conn){
 
   /** Retrieve all sessions */
   app.get('/getSessions', function(req, res){
@@ -16,37 +19,36 @@ module.exports = function(app, conn, verifyToken){
   });
 
   /** Add new session to database */
-  app.post('/addSession', /* verifyToken, */ function(req, res){
-    // jwt.verify(req.token, process.env.JWT_SECRET, (err, auth) => {
-    //   if (err){
-    //     res.sendStatus(403);
-    //   } else {
-    //     if (!(auth.user && auth.user.clearance >= CLEARANCES.ACTIONS.CRUD_SESSIONS)){
-    //       res.status(401).send(`You are not authorised to perform such an action.`);
-    //       return;
-    //     }
+  app.post('/addSession', /* verifyToken, */ upload.single('file'), function(req, res, err){
+    // let user = req.auth;
 
-        var session = req.body;
-        console.log(session);
-        var sql = "INSERT INTO sessions (title, dateHeld, image, slug, description) VALUES ?";
-        var values = [[session.title, session.dateHeld, session.image, session.slug, session.description]];
-        
-        conn.query(sql, [values], function (err, result, fields) {
-          if (!err){
-            req.flash('success', `You've added the session: ${session.title}.`);
-            console.log('Nice');
-            res.sendStatus(200);
-          } else {
-            if (err.toString().includes("Incorrect string")){
-              res.status(422).send(`Please do not use emojis during input.`)
-            } else {
-              res.status(400).send(err.toString());
-              console.error(err.toString());
-            }
-          }
-        });
-    //   }
-    // });
+    // if (!(user && user.clearance >= CLEARANCES.ACTIONS.CRUD_SESSIONS)){
+    //   res.status(401).send(`You are not authorised to perform such an action.`);
+    //   return;
+    // }
+
+    if (req.file) {
+      console.log("Session image successfully received.");
+    } else {
+      if (err.toString().includes("Request Entity Too Large")){
+        res.status(413).send(`The file you're trying to upload is too large.`);
+      } else {
+        res.status(400).send(err.toString());
+      }
+    }
+
+    var session = JSON.parse(req.body.session);
+    var sql = "INSERT INTO sessions (title, dateHeld, image, slug, description) VALUES ?";
+    var values = [[session.title, session.dateHeld, session.image, session.slug, session.description]];
+    
+    conn.query(sql, [values], function (err, result, fields) {
+      if (err){
+        res.status(400).send(err.toString());
+        console.error(err.toString());
+      } else {
+        res.sendStatus(200);
+      }
+    });
   });
 
   /** Update details of existing session in database */

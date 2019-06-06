@@ -1,7 +1,6 @@
 const express = require('express');
 const app = express();
 
-const async = require('async');
 const bcrypt = require('bcrypt');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
@@ -9,11 +8,9 @@ const dotenv = require('dotenv').config({path: './config.env'});
 const expressSession = require('express-session');
 const flash = require('connect-flash');
 const fs = require('fs');
-const jwt = require('jsonwebtoken');
 const mysql = require('mysql');
 const passport = require('passport');
 const request = require('superagent');
-const schedule = require('node-schedule');
 const url = require('url');
 
 const next = require('next');
@@ -62,21 +59,6 @@ conn.connect(function(err) {
 });
 
 /*******************************************
-* Tokenisation
-*******************************************/
-
-/* Verify access token */
-function verifyToken(req, res, next){
-  const bearerHeader = req.headers['authorization'];
-  if (typeof bearerHeader !== 'undefined'){
-    const bearer = bearerHeader.split(' ');
-    const token = bearer[1];
-    req.token = token;
-    next();
-  }
-}
-
-/*******************************************
 * Templates & Locals
 *******************************************/
 
@@ -104,11 +86,10 @@ app.use(function (req, res, next) {
 * Microservices
 *******************************************/
 
-require('./private/api.js')(app, conn, verifyToken);
-require('./private/auth.js')(app, conn, passport, verifyToken);
-require('./private/cron.js')(schedule, conn);
-require('./private/file.js')(app);
-require('./private/mobile.js')(app, conn, verifyToken);
+require('./private/api.js')(app, conn);
+require('./private/auth.js')(app, conn, passport);
+require('./private/cron.js')(conn);
+require('./private/mobile.js')(app, conn);
 require('./private/routes.js')(app, conn, server);
 
 const emails = require('./private/emails.js');

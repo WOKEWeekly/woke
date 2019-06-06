@@ -1,5 +1,7 @@
+const async = require('async');
+const { verifyToken } = require('./middleware.js');
 
-module.exports = function(app, conn, verifyToken){
+module.exports = function(app, conn){
   
   /** Add push notification token for user */
   app.post('/users/addPushToken', verifyToken, function(req, res){

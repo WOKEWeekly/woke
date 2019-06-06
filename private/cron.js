@@ -1,5 +1,6 @@
+const schedule = require('node-schedule');
 
-module.exports = function(schedule, conn){
+module.exports = function(conn){
   
   /** Send Question of the Day notifications at 9:00am everyday */
   schedule.scheduleJob('0 9 * * *', function(){
