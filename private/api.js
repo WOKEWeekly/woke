@@ -1,4 +1,5 @@
 const async = require('async');
+// const fs = require('fs');
 const { verifyToken, upload } = require('./middleware.js');
 
 module.exports = function(app, conn){
@@ -108,37 +109,36 @@ module.exports = function(app, conn){
   });
 
   /** Delete an existing session from database */
-  app.delete('/deleteSession', verifyToken, function(req, res){
-    jwt.verify(req.token, process.env.JWT_SECRET, (err, auth) => {
-      if (err){
-        res.sendStatus(403);
-      } else {
-        if (!(auth.user && auth.user.clearance >= CLEARANCES.ACTIONS.CRUD_SESSIONS)){
-          res.status(401).send(`You are not authorised to perform such an action.`);
-          return;
-        }
+  app.delete('/deleteSession', /* verifyToken, */ function(req, res){
+    // if (!(auth.user && auth.user.clearance >= CLEARANCES.ACTIONS.CRUD_SESSIONS)){
+    //   res.status(401).send(`You are not authorised to perform such an action.`);
+    //   return;
+    // }
 
-        var session = req.body;
-        var sql = "DELETE FROM sessions WHERE id = ?";
-        
+    async.waterfall([
+      function(callback){
+        const session = req.body;
+        const sql = "DELETE FROM sessions WHERE id = ?";
+
         conn.query(sql, session.id, function (err, result, fields) {
-          if (!err){
-            req.flash('success', `You've deleted session: ${session.title}.`);
-            
-            /** Delete image from file system */
-            fs.unlink(`.${sessions_dir}${session.image}`, function(err1) {
-              if (!err1) {
-                res.sendStatus(200);
-                console.log(`Deleted ${session.image} from the /sessions directory.` );
-              } else {
-                console.warn(`${session.image} not found in /sessions directory.` );
-                res.sendStatus(200);
-              }
-            });
-          } else {
-            res.status(400).send(err.toString());
-          }
+          err ? callback(err) : callback(null, session.image);
         });
+      // },
+      // function(image, callback){
+      //   fs.unlink(`./static/images/sessions/${image}`, function(err) {
+      //     if (err) {
+      //       console.warn(`${session.image} not found in /sessions directory.`);
+      //       callback(err);
+      //     } else {
+      //       console.log(`Deleted ${image} from the /sessions directory.` );
+      //       res.sendStatus(200);
+      //     }
+      //   });
+      }
+    ], function(err){
+      if (err){
+        res.status(400).send(err.toString());
+        console.log(err.toString());
       }
     });
   });

@@ -102,6 +102,13 @@
 :global(.react-datepicker__input-container) { display: block !important; }
 :global(.react-datepicker__day--outside-month){ color: #a9a9a9; }
 
+/****************/
+/** modal.js **/
+/****************/
+.modal {
+  background: rgba(0,0,0,.7);
+  border: white;
+}
 
 /****************/
 /** toolbar.js **/
