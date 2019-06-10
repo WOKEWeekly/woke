@@ -59,14 +59,10 @@ export default class SessionAdd extends Component {
   }
 
   render(){
-    const { title, date, description } = this.state;
-
     return (
       <SessionForm
         heading={'Add New Session'}
-        title={title}
-        date={date}
-        description={description}
+        session={this.state}
         handleTitle={this.handleTitle}
         handleDate={this.handleDate}
         handleDescription={this.handleDescription}

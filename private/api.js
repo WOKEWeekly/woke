@@ -16,7 +16,7 @@ module.exports = function(app, conn){
   });
 
   /** Add new session to database */
-  app.post('/addSession', /* verifyToken, */ function(req, res){
+  app.post('/addSession', verifyToken, function(req, res){
     async.waterfall([
       function(callback){ // Upload file to directory
         upload(req, res, function(err){
@@ -38,7 +38,7 @@ module.exports = function(app, conn){
   });
 
   /** Update details of existing session in database */
-  app.put('/updateSession', /* verifyToken,*/ function(req, res){
+  app.put('/updateSession', verifyToken, function(req, res){
     async.waterfall([
       function(callback){ // Upload new image to directory
         upload(req, res, function(err){
@@ -74,7 +74,7 @@ module.exports = function(app, conn){
   });
 
   /** Delete an existing session from database */
-  app.delete('/deleteSession', /* verifyToken, */ function(req, res){
+  app.delete('/deleteSession', verifyToken, function(req, res){
     async.waterfall([
       function(callback){ // Delete session from database
         const session = req.body;

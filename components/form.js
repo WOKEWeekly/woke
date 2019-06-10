@@ -1,5 +1,5 @@
 import React, { Component} from 'react';
-import { Form, Col, Row } from 'react-bootstrap';
+import { Form, Row } from 'react-bootstrap';
 import Textarea from 'react-textarea-autosize';
 
 import css from '~/styles/_components.scss';
@@ -47,8 +47,7 @@ export class Input extends Component {
         type={'text'}
         placeholder={this.props.placeholder}
         className={css.input}
-        {...this.props}>
-        </input>
+        {...this.props} />
     )
   }
 }
@@ -70,10 +69,21 @@ export class TextArea extends Component {
 export class FileSelector extends Component {
   render(){
     return (
-      <input
-        type={'file'}
-        className={css.file}
-        {...this.props} />
+      <div className={css.file}>
+        <label className={css.file_button}>
+          Browse...
+          <input
+            type={'file'}
+            style={{display: 'none'}}
+            onChange={this.props.onChange} />
+        </label>
+        <input
+          type={'text'}
+          disabled
+          value={this.props.value}
+          placeholder={'Choose a file'}
+          className={css.file_input} />
+      </div>
     )
   }
 }

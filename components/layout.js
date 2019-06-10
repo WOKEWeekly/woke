@@ -14,8 +14,11 @@ export class Shader extends Component {
 export class Spacer extends Component {
   render(){
     return (
-      <div style={{
+      <div
+      {...this.props}
+      style={{
         display: 'grid',
+        height: '100%',
         gridTemplateRows: '1fr auto'
       }}>{this.props.children}</div>
     );

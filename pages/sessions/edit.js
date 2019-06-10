@@ -68,14 +68,10 @@ export default class SessionEdit extends Component {
   }
 
   render(){
-    const { title, date, description, image, imageChanged } = this.state;
-
     return (
       <SessionForm
         heading={'Edit Session'}
-        title={title}
-        date={date}
-        description={description}
+        session={this.state}
         handleTitle={this.handleTitle}
         handleDate={this.handleDate}
         handleDescription={this.handleDescription}

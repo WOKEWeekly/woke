@@ -7,11 +7,18 @@ export const generateSlug = (slug) => {
   .replace(/\s+/g, '-');            // Replace spaces with dashes
 }
 
+/** Retrieve filename from field or selection.
+ ** If object, use name value. If string, use value. Empty if null */
+export const getFilename = (image) => {
+  return !image ? '' : typeof image === 'object' ? image.name : image;
+}
+
+/** Generate the filename for sessions */
 export const generateSessionFilename = (date, slug, image) => {
   return `${formatISODate(date)}_${slug}.${getExtension(image)}`;
 }
 
-/** Get file extension */
+/** Retrieve file extension via string manipulation */
 const getExtension = (file) => {
   return file.name ? file.name.split('.').pop().toLowerCase() : '';
 }
