@@ -41,18 +41,23 @@ module.exports = {
       destination: function(req, file, callback) {callback(null, `./static/images/${req.headers.path}/`);},
       filename: function (req, file, callback) {callback(null, file.originalname);}
     }),
-    limits:  {
+    limits: {
       files: 1,
       fileSize: 5 * 1024 * 1024
     },
     fileFilter: function(req, file, callback) {
+      /** Limit to certain image types */
       let allowedMimes = ['image/jpeg', 'image/pjpeg', 'image/png', 'image/gif'];
-      if (allowedMimes.includes(file.mimetype)){
-        callback(null, true);
-      } else {
+      if (!allowedMimes.includes(file.mimetype)){
         callback(new Error('Invalid file type. Only jpg, png and gif image files are allowed.'));
-        console.error('Invalid file type. Only jpg, png and gif image files are allowed.');
       }
+
+      /** If no image change, skip */
+      if (!req.body.changed){
+        return callback(null, false);
+      }
+
+      callback(null, true);
     }
-  })
+  }).single('file')
 }

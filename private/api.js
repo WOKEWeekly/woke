@@ -1,5 +1,5 @@
 const async = require('async');
-// const fs = require('fs');
+const fs = require('fs');
 const { verifyToken, upload } = require('./middleware.js');
 
 module.exports = function(app, conn){
@@ -10,136 +10,88 @@ module.exports = function(app, conn){
       res.sendStatus(403);
     } else {
       conn.query("SELECT * FROM sessions", function (err, result) {
-        if (!err){
-          res.json(result);
-        } else {
-          res.status(400).send(err.toString());
-        }
+        resToClient(res, err, result)
       });
     }
   });
 
   /** Add new session to database */
-  app.post('/addSession', /* verifyToken, */ upload.single('file'), function(req, res, err){
-    // let user = req.auth;
-
-    // if (!(user && user.clearance >= CLEARANCES.ACTIONS.CRUD_SESSIONS)){
-    //   res.status(401).send(`You are not authorised to perform such an action.`);
-    //   return;
-    // }
-
-    if (req.file) {
-      console.log("Session image successfully received.");
-    } else {
-      if (err.toString().includes("Request Entity Too Large")){
-        res.status(413).send(`The file you're trying to upload is too large.`);
-      } else {
-        res.status(400).send(err.toString());
+  app.post('/addSession', /* verifyToken, */ function(req, res){
+    async.waterfall([
+      function(callback){ // Upload file to directory
+        upload(req, res, function(err){
+          err ? callback(err) : callback(null);
+        });
+      },
+      function(callback){ // Add session to databse
+        const session = JSON.parse(req.body.session);
+        const sql = "INSERT INTO sessions (title, dateHeld, image, slug, description) VALUES ?";
+        const values = [[session.title, session.dateHeld, session.image, session.slug, session.description]];
+        
+        conn.query(sql, [values], function (err, result, fields) {
+          err ? callback(err) : callback(null);
+        });
       }
-    }
-
-    var session = JSON.parse(req.body.session);
-    var sql = "INSERT INTO sessions (title, dateHeld, image, slug, description) VALUES ?";
-    var values = [[session.title, session.dateHeld, session.image, session.slug, session.description]];
-    
-    conn.query(sql, [values], function (err, result, fields) {
-      if (err){
-        res.status(400).send(err.toString());
-        console.error(err.toString());
-      } else {
-        res.sendStatus(200);
-      }
+    ], function(err){
+      resToClient(res, err);
     });
   });
 
   /** Update details of existing session in database */
-  app.put('/updateSession', verifyToken, function(req, res){
-    jwt.verify(req.token, process.env.JWT_SECRET, (err, auth) => {
-      if (err){
-        res.sendStatus(403);
-      } else {
-        if (!(auth.user && auth.user.clearance >= CLEARANCES.ACTIONS.CRUD_SESSIONS)){
-          res.status(401).send(`You are not authorised to perform such an action.`);
-          return;
-        }
-
-        var session1 = req.body.sessions[0];
-        var session2 = req.body.sessions[1];
-        
-        var sql = "UPDATE sessions SET title = ?, dateHeld = ?, image = ?, slug = ?, text = ?, description = ?, delta = ? WHERE id = ?";
-        var values = [session2.title, session2.dateHeld, session2.image, session2.slug, session2.text, session2.description, session2.delta, session1.id];
+  app.put('/updateSession', /* verifyToken,*/ function(req, res){
+    async.waterfall([
+      function(callback){ // Upload new image to directory
+        upload(req, res, function(err){
+          err ? callback(err) : callback(null);
+        });
+      },
+      function(callback){ // Update session in database
+        const { session1, session2 } = JSON.parse(req.body.sessions);
+        const sql = "UPDATE sessions SET title = ?, dateHeld = ?, image = ?, slug = ?, description = ? WHERE id = ?";
+        const values = [session2.title, session2.dateHeld, session2.image, session2.slug, session2.description, session1.id];
         
         conn.query(sql, values, function (err, result, fields) {
           if (!err){
-            req.flash('success', `You've updated the details of session: ${session2.title}.`);
+            const image = `./static/images/sessions/${session1.image}`;
             
-            let image = `.${sessions_dir}${session1.image}`;
-            
-            /** Delete first image from file system if there was an image change */
-            if (session2.change == true){
+            if (req.body.changed){
               if (session1.image !== session2.image){
-                fs.unlink(image, function(err1) {
-                  if (!err1) {
-                    console.log(`Deleted first ${session1.image} from the /sessions directory.` );
-                    res.sendStatus(200);
-                  } else {
-                    console.error(err1.toString());
-                    res.sendStatus(200);
-                  }
-                });
-              } else {
-                console.log("Same slugs. Image is being replaced rather than deleted.");
-                res.sendStatus(200);
-              }
-            } else {
-              console.log("No image change, hence, no deletion.");
-              res.sendStatus(200);
-            }
-          } else {
-            console.error(err.toString());
-            if (err.toString().includes("Incorrect string")){
-              res.status(422).send(`Please do not use emojis during input.`)
-            } else {
-              res.status(400).send(err.toString());
-            }
-          }
+                callback(null, image);
+              } else { callback(true); }
+            } else { callback(true); }
+          } else { callback(err); }
+        });
+      },
+      function(image, callback){ // Delete original image from directory
+        fs.unlink(image, function(err) {
+          if (err) console.warn(err.toString());
+          callback(null);
         });
       }
+    ], function(err){
+      resToClient(res, err);
     });
   });
 
   /** Delete an existing session from database */
   app.delete('/deleteSession', /* verifyToken, */ function(req, res){
-    // if (!(auth.user && auth.user.clearance >= CLEARANCES.ACTIONS.CRUD_SESSIONS)){
-    //   res.status(401).send(`You are not authorised to perform such an action.`);
-    //   return;
-    // }
-
     async.waterfall([
-      function(callback){
+      function(callback){ // Delete session from database
         const session = req.body;
         const sql = "DELETE FROM sessions WHERE id = ?";
 
         conn.query(sql, session.id, function (err, result, fields) {
           err ? callback(err) : callback(null, session.image);
         });
-      // },
-      // function(image, callback){
-      //   fs.unlink(`./static/images/sessions/${image}`, function(err) {
-      //     if (err) {
-      //       console.warn(`${session.image} not found in /sessions directory.`);
-      //       callback(err);
-      //     } else {
-      //       console.log(`Deleted ${image} from the /sessions directory.` );
-      //       res.sendStatus(200);
-      //     }
-      //   });
+      },
+      function(image, callback){ // Delete image from directory
+        fs.unlink(`./static/images/sessions/${image}`, function(err) {
+          if (err) console.warn(`${session.image} not found in /sessions directory.`);
+          callback(null);
+        });
       }
     ], function(err){
-      if (err){
-        res.status(400).send(err.toString());
-        console.log(err.toString());
-      }
+      resToClient(res, err);
     });
   });
 
@@ -922,3 +874,11 @@ module.exports = function(app, conn){
 
 }
 
+function resToClient(res, err, json){
+  if (err && err !== true){
+    res.status(400).send(err.toString());
+    console.error(err.toString());
+  } else {
+    json ? res.json(json) : res.sendStatus(200);
+  }
+}

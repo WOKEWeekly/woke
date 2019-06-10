@@ -1,7 +1,7 @@
 import React, { Component} from 'react';
 import Router from 'next/router';
 import { formatISODate } from '~/constants/date.js';
-import { generateSlug, getExtension } from '~/constants/file.js';
+import { generateSlug, generateSessionFilename } from '~/constants/file.js';
 import { isValidSession } from '~/constants/validations.js';
 
 import SessionForm from './form.js';
@@ -31,7 +31,7 @@ export default class SessionAdd extends Component {
 
     /** Generate slugs and filenames from title and data */
     let slug = generateSlug(title);
-    let filename = `${formatISODate(date)}-${slug}.${getExtension(image)}`;
+    let filename = generateSessionFilename(date, slug, image);
     
     const session = {
       title: title,

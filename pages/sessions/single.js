@@ -1,6 +1,7 @@
 import React, { Component} from 'react';
 import { Button, Container } from 'react-bootstrap';
-import { Link, Router } from 'next';
+import Link from 'next/link';
+import Router from 'next/router';
 
 import Icon from '~/components/icon.js';
 import { ConfirmModal } from '~/components/modal.js';

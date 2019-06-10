@@ -41,7 +41,7 @@ export const formatDate = (value, withDate) => {
 }
 
 /** Get date in YYYY-MM-DD format */
-export const formatISODate = (value) => {
+export const formatISODate = (value, joined) => {
   let dd = value.getDate();
   let mm = value.getMonth() + 1;
   let yyyy = value.getFullYear();
@@ -49,9 +49,7 @@ export const formatISODate = (value) => {
   dd = (dd < 10) ? '0' + dd : dd;
   mm = (mm < 10) ? '0' + mm : mm;
 
-  let today = `${yyyy}-${mm}-${dd}`;
-  
-  return today;
+  return joined ? `${yyyy}-${mm}-${dd}` : `${yyyy}${mm}${dd}`;
 }
 
 /** Get suffix of date */

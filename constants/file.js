@@ -1,4 +1,4 @@
-
+import { formatISODate } from '~/constants/date.js';
 
 /** Generate slugs for URLs */
 export const generateSlug = (slug) => {
@@ -7,7 +7,11 @@ export const generateSlug = (slug) => {
   .replace(/\s+/g, '-');            // Replace spaces with dashes
 }
 
+export const generateSessionFilename = (date, slug, image) => {
+  return `${formatISODate(date)}_${slug}.${getExtension(image)}`;
+}
+
 /** Get file extension */
-export const getExtension = (file) => {
-  return file.name.split('.').pop().toLowerCase();
+const getExtension = (file) => {
+  return file.name ? file.name.split('.').pop().toLowerCase() : '';
 }

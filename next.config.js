@@ -2,12 +2,18 @@
 const withSass = require("@zeit/next-sass")
 const withCss = require("@zeit/next-css")
 const withPlugins = require("next-compose-plugins")
+const shebang_loader = require('shebang-loader');
 
 module.exports = withPlugins([
   [
     withCss,
     {
       webpack: function(config) {
+        config.node = {
+          fs: 'empty',
+          child_process: 'empty',
+          module: 'empty'
+        };
         config.module.rules.push({
           test: /\.(eot|woff|woff2|ttf|svg|png|jpg|gif)$/,
           use: {
@@ -16,7 +22,13 @@ module.exports = withPlugins([
               limit: 100000,
               name: "[name].[ext]",
             },
-          },
+          }
+        },
+        {
+          test: /\.(js)$/,
+          use: {
+            loader: 'shebang-loader'
+          }
         })
         return config
       },
