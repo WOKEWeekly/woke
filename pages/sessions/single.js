@@ -3,6 +3,7 @@ import { Button, Container } from 'react-bootstrap';
 import Link from 'next/link';
 import Router from 'next/router';
 
+import { EditButton, DeleteButton } from '~/components/button.js';
 import Icon from '~/components/icon.js';
 import { ConfirmModal } from '~/components/modal.js';
 import { Title, Subtitle, Paragraph, Divider } from '~/components/text.js';
@@ -78,12 +79,12 @@ export default class SessionPage extends Component {
         {true /** Admin */ ? 
           <Toolbar>
             <Link href={`/sessions/edit/${session.id}`}>
-              <Button variant={'success'}><Icon name={'edit'} />Edit Session</Button>
+              <EditButton><Icon name={'edit'} />Edit Session</EditButton>
             </Link>
       
-            <Button variant={'danger'} onClick={this.showModal}>
+            <DeleteButton onClick={this.showModal}>
               <Icon name={'trash'} />Delete Session
-            </Button>
+            </DeleteButton>
           </Toolbar>
         : null}
 
@@ -91,7 +92,7 @@ export default class SessionPage extends Component {
           visible={this.state.modalVisible}
           message={'Are you sure you want to delete this session?'}
           confirmFunc={this.deleteSession}
-          confirmText={'Delete Session'}
+          confirmText={'Delete'}
           close={this.hideModal} />
       </Spacer>
     );

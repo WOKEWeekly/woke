@@ -41,9 +41,9 @@ export default class SessionEdit extends Component {
     const sessions = {
       session1: this.props.session,
       session2: {
-        title: title,
+        title: title.trim(),
         dateHeld: formatISODate(date),
-        description: description,
+        description: description.trim(),
         slug: slug,
         image: filename
       }

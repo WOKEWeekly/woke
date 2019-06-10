@@ -4,11 +4,12 @@
 /** button .js **/
 /****************/
 
-.template-button {
+.button {
   border: 1px solid white;
   color: white;
   border-radius: 15px;
   font-family: $body-font;
+  min-width: 100px;
   padding: 1em;
   -webkit-transition-duration: .3s;
   transition-duration: .3s;
@@ -20,20 +21,21 @@
 }
 
 .submit {
-  @extend .template-button;
+  @extend .button;
   background-color: $submit-button;
-  width: 200px;
+  min-width: 200px;
   &:hover { box-shadow: inset 0 0 100px 100px $submit-hover; }
   &:active { box-shadow: inset 0 0 100px 100px $submit-active; }
 }
 
 .cancel {
-  @extend .template-button;
+  @extend .button;
   background-color: $cancel-button;
-  width: 200px;
+  min-width: 200px;
   &:hover { box-shadow: inset 0 0 100px 100px $cancel-hover; }
   &:active { box-shadow: inset 0 0 100px 100px $cancel-active; }
 }
+
 
 /****************/
 /** cover .js **/
@@ -125,9 +127,13 @@
 /****************/
 /** modal.js **/
 /****************/
-.modal {
-  background: rgba(0,0,0,.7);
-  border: white;
+.modal_body, .modal_footer {
+  background: $dark;
+}
+
+:global(.modal-content) {
+  border: 1px solid rgba(255,255,255,.7) !important;
+  overflow: hidden;
 }
 
 /****************/

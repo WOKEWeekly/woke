@@ -30,12 +30,14 @@ export class Subtitle extends Component {
 export class Paragraph extends Component {
   render(){
     return (
-      <div
+      <pre
         {...this.props}
         style={{
           color: 'white',
+          display: 'inline',
           fontFamily: fonts.body,
-        }}>{this.props.children}</div>
+          whiteSpace: 'pre-line'
+        }}>{this.props.children}</pre>
     )
   }
 }

@@ -34,9 +34,9 @@ export default class SessionAdd extends Component {
     let filename = generateSessionFilename(date, slug, image);
     
     const session = {
-      title: title,
+      title: title.trim(),
       dateHeld: formatISODate(date),
-      description: description,
+      description: description.trim(),
       slug: slug,
       image: filename
     };

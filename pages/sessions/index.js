@@ -4,6 +4,7 @@ import Link from 'next/link';
 
 import Cover from '~/components/cover.js';
 import Icon from '~/components/icon.js';
+import { Shader } from '~/components/layout.js';
 import { Title, Subtitle, Paragraph, Divider } from '~/components/text.js';
 import Toolbar from '~/components/toolbar.js';
 import { formatDate } from '~/constants/date.js';
@@ -106,7 +107,7 @@ export default class Sessions extends Component {
     };
 
     return (
-      <div>
+      <Shader>
         <Meta
 					title={'Sessions | #WOKEWeekly'}
 					description={'Where we do the magic...'}
@@ -145,7 +146,7 @@ export default class Sessions extends Component {
             </Dropdown.Menu>
           </Dropdown>
         </Toolbar>
-      </div>
+      </Shader>
     );
 	}
 }
@@ -184,7 +185,7 @@ class Session extends PureComponent {
                 <Title className={css.title}>{item.title}</Title>
                 <Subtitle className={css.date}>{formatDate(item.dateHeld, true)}</Subtitle>
                 <Divider />
-                <Paragraph className={css.description}>{item.text}</Paragraph>
+                <Paragraph className={css.description}>{item.description}</Paragraph>
               </div>
             </Col>
           </Row>

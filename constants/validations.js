@@ -4,7 +4,6 @@ import { Alert } from '~/components/alert.js';
 export const isValidSession = (session) => {
   if (!ifExists(session.title.trim(), 'Enter the session title.')) return false;
   if (!ifExists(session.date, 'Select the date when the session will be held.')) return false;
-  if (!ifExists(session.description.trim(), 'Enter the session\'s description.')) return false;
   if (!ifExists(session.image, 'Please select an image for the session.')) return false;
   return true;
 }

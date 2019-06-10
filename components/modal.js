@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { Button, Modal } from 'react-bootstrap';
+import { Modal } from 'react-bootstrap';
+import { DeleteButton, CloseButton } from '~/components/button.js';
 import css from '~/styles/_components.scss';
 
 export class ConfirmModal extends Component {
@@ -10,15 +11,14 @@ export class ConfirmModal extends Component {
     return (
       <Modal
         show={visible}
-        centered
-        className={css.modal}>
-        <Modal.Body>
-          <p>{message}</p>
+        centered>
+        <Modal.Body className={css.modal_body}>
+          <p className={css.text}>{message}</p>
         </Modal.Body>
 
-        <Modal.Footer>
-          <Button variant={'danger'} onClick={confirmFunc}>{confirmText}</Button>
-          <Button variant={'secondary'} onClick={close}>Cancel</Button>
+        <Modal.Footer className={css.modal_footer}>
+          <DeleteButton onClick={confirmFunc}>{confirmText}</DeleteButton>
+          <CloseButton onClick={close}>Cancel</CloseButton>
         </Modal.Footer>
     </Modal>
     )

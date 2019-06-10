@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Button } from 'react-bootstrap';
 import classNames from 'classnames';
 
 import css from '~/styles/_components.scss';
@@ -26,5 +27,38 @@ export class CancelButton extends Component {
       </button>
     )
     
+  }
+}
+
+export class EditButton extends Component {
+  render(){
+    return (
+      <Button
+        {...this.props}
+        className={css.button}
+        variant={'success'}>{this.props.children}</Button>
+    )
+  }
+}
+
+export class DeleteButton extends Component {
+  render(){
+    return (
+      <Button
+        {...this.props}
+        className={css.button}
+        variant={'danger'}>{this.props.children}</Button>
+    )
+  }
+}
+
+export class CloseButton extends Component {
+  render(){
+    return (
+      <Button
+        {...this.props}
+        className={css.button}
+        variant={'secondary'}>{this.props.children}</Button>
+    )
   }
 }
