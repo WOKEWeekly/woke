@@ -1,4 +1,8 @@
 import React from 'react';
+import { Provider } from 'react-redux';
+
+import { PersistGate } from 'redux-persist/integration/react';
+import configureStore from '~/reducers/store.js';
 
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { fab } from '@fortawesome/free-brands-svg-icons';
@@ -11,6 +15,7 @@ import Footer from "~/partials/footer.js";
 import css from '~/styles/_app.scss';
 
 library.add(fab, fas);
+const { store, persistor } = configureStore()
 
 export default class WOKE extends App {
   static async getInitialProps({ Component, ctx }) {
@@ -36,9 +41,15 @@ export default class WOKE extends App {
         <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Raleway:400,700" />
         <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Patua+One:400,700" />
 
-        <PreNavBar /> <MainNavBar />
-        <Component {...pageProps} />
-        <Footer />
+        <Provider store={store}>
+          <PersistGate loading={null} persistor={persistor}>
+            <PreNavBar /> <MainNavBar />
+            <Component {...pageProps} />
+            <Footer />
+          </PersistGate>
+        </Provider>
+
+        
       </Container>
     );
   }

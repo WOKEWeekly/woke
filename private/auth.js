@@ -1,6 +1,8 @@
 const LocalStrategy = require('passport-local').Strategy;
 const validator = require("email-validator");
 const async = require('async');
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 const { verifyToken } = require('./middleware.js');
 
 module.exports = function(app, conn, passport){
@@ -25,8 +27,8 @@ module.exports = function(app, conn, passport){
     username = req.body.username;
     password = req.body.password;
     
-    var sql = `SELECT * FROM user WHERE Username = ? OR Email = ?`;
-    var values = [username, username];
+    const sql = `SELECT * FROM user WHERE Username = ? OR Email = ?`;
+    const values = [username, username];
     conn.query(sql, values, function(err, rows){
       
       if (err) return done(err);
@@ -52,7 +54,6 @@ module.exports = function(app, conn, passport){
     
     if (req.user){
       console.log("Logging in for user " + req.user.firstname + ".");
-      req.flash('positive', `Welcome, ${req.user.firstname}!`);
     } else {
       res.status(400).send("Invalid user");
     }
@@ -66,7 +67,7 @@ module.exports = function(app, conn, passport){
     
     /** Pass authenticated user information to mobile app */
     jwt.sign({user: req.user}, process.env.JWT_SECRET, (err, token) => {
-      var user = {};
+      const user = {};
       user.id = req.user.id;
       user.firstname = req.user.firstname;
       user.lastname = req.user.lastname;
@@ -87,7 +88,7 @@ module.exports = function(app, conn, passport){
   
   /** Sign up a new user */
   app.post('/signup', function(req, res){
-    var user = req.body;
+    const user = req.body;
     
     if (!validator.validate(user.email)) res.status(400).send("Your email address is invalid.");
     if (user.password !== user.password2) res.status(400).send("Your passwords do not match.");
@@ -97,8 +98,8 @@ module.exports = function(app, conn, passport){
         /** Hash entered password */
         bcrypt.hash(user.password, 8, function(err, hash) {
           if (!err){
-            var sql = "INSERT INTO user (firstname, lastname, clearance, email, username, password) VALUES ?";
-            var values = [[user.firstname, user.lastname, 1, user.email, user.username, hash]];
+            const sql = "INSERT INTO user (firstname, lastname, clearance, email, username, password) VALUES ?";
+            const values = [[user.firstname, user.lastname, 1, user.email, user.username, hash]];
             callback(null, sql, values);
           } else {
             throw err;
@@ -137,8 +138,8 @@ module.exports = function(app, conn, passport){
       },
       /** Store verification token in database */
       function(id, salt, callback){
-        var sql = "INSERT INTO user_tokens (user_id, token_string, type) VALUES ?";
-        var values = [[id, salt, 'verification']];
+        const sql = "INSERT INTO user_tokens (user_id, token_string, type) VALUES ?";
+        const values = [[id, salt, 'verification']];
         
         conn.query(sql, [values], function(err, result){	
           if (!err){
@@ -171,13 +172,13 @@ module.exports = function(app, conn, passport){
   
   /** Change user's username in database */
   app.get('/verifyAccount/:id/:token', function(req, res){
-    var { id, token } = req.params;
+    const { id, token } = req.params;
     
     async.waterfall([
       /** Determine user account */
       function(callback){
-        var sql = "SELECT * FROM user_tokens WHERE (user_id, token_string) = (?, ?)";
-        var values = [id, token];
+        const sql = "SELECT * FROM user_tokens WHERE (user_id, token_string) = (?, ?)";
+        const values = [id, token];
         
         conn.query(sql, values, function(err, result){	
           if (!err){
@@ -190,7 +191,7 @@ module.exports = function(app, conn, passport){
       },
       /** Determine user clearance level */
       function(length, callback){
-        var sql = "SELECT clearance FROM user WHERE id = ?";
+        const sql = "SELECT clearance FROM user WHERE id = ?";
         
         if (length > 0){
           conn.query(sql, id, function(err, result){	
@@ -209,7 +210,7 @@ module.exports = function(app, conn, passport){
       function(clearance, callback){
         if (clearance < 2){
           
-          var sql = "UPDATE user SET clearance = 2 WHERE id = ?";
+          const sql = "UPDATE user SET clearance = 2 WHERE id = ?";
           
           conn.query(sql, id, function(err, result){	
             if (!err){
@@ -225,7 +226,7 @@ module.exports = function(app, conn, passport){
       },
       /** Delete verification token */
       function(callback){
-        var sql = "DELETE FROM user_tokens WHERE user_id = ?";
+        const sql = "DELETE FROM user_tokens WHERE user_id = ?";
         
         conn.query(sql, id, function(err, result){	
           if (!err){
@@ -249,7 +250,7 @@ module.exports = function(app, conn, passport){
   
   /** Resend the verification email to user's email address */
   app.post('/resendVerificationEmail', verifyToken, function(req, res){
-    var id = req.body.id;
+    const id = req.body.id;
     
     async.waterfall([
       /** Verify token */
@@ -265,14 +266,14 @@ module.exports = function(app, conn, passport){
       },
       /** Retrieve user and token string from database */
       function(callback){
-        var sql = `SELECT * from user
+        const sql = `SELECT * from user
         INNER JOIN user_tokens on user.id = user_tokens.user_id
         WHERE (user.id, user_tokens.type) = (?, ?)`;
-        var values = [id, 'verification'];
+        const values = [id, 'verification'];
         
         conn.query(sql, values, function(err, result){	
           if (!err){
-            var user = result[0];
+            const user = result[0];
             callback(null, user, user.token_string);
           } else {
             res.status(400).send(error.toString());
@@ -299,8 +300,8 @@ module.exports = function(app, conn, passport){
       if (err){
         res.sendStatus(403);
       } else {
-        var sql = "UPDATE user SET username = ? WHERE id = ?";
-        var values = [req.body.username, auth.user.id];
+        const sql = "UPDATE user SET username = ? WHERE id = ?";
+        const values = [req.body.username, auth.user.id];
         
         conn.query(sql, values, function(err, result){	
           if (!err){
@@ -320,11 +321,11 @@ module.exports = function(app, conn, passport){
       if (err){
         res.sendStatus(403);
       } else {
-        var old_password = req.body.old_password;
-        var new_password = req.body.new_password;
+        const old_password = req.body.old_password;
+        const new_password = req.body.new_password;
         
-        var sql = `SELECT * FROM user WHERE ID = ?`;
-        var id = auth.user.id;
+        const sql = `SELECT * FROM user WHERE ID = ?`;
+        const id = auth.user.id;
         
         conn.query(sql, id, function(err, result){
           if (!(bcrypt.compareSync(old_password, result[0].password) || old_password == result[0].password)) {
@@ -332,8 +333,8 @@ module.exports = function(app, conn, passport){
           } else {
             bcrypt.hash(new_password, 8, function(err, hash) {
               if (!err){
-                var sql = "UPDATE user SET password = ? WHERE id = ?";
-                var values = [hash, id];
+                const sql = "UPDATE user SET password = ? WHERE id = ?";
+                const values = [hash, id];
                 
                 conn.query(sql, values, function(err1, result){
                   if (!err1){
@@ -451,9 +452,9 @@ module.exports = function(app, conn, passport){
           return;
         }
         
-        var user = req.body;
-        var sql = "UPDATE user SET clearance = ? WHERE id = ?";
-        var values = [user.clearance, user.id];
+        const user = req.body;
+        const sql = "UPDATE user SET clearance = ? WHERE id = ?";
+        const values = [user.clearance, user.id];
         
         conn.query(sql, values, function(err, result){	
           if (!err){

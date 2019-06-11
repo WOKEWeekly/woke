@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
-import {Container, Col, Row, Nav, Navbar, NavDropdown} from 'react-bootstrap';
+import {Container, Col, Row, Nav, Navbar} from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
+import { Login } from '~/components/modal.js';
 
 import { accounts, emails } from '~/constants/settings.js';
 import { colors } from '~/constants/theme.js';
@@ -9,6 +11,17 @@ import css from '~/styles/_partials.scss';
 
 /** Little top bar for social media icons and account details */
 export class PreNavBar extends Component {
+  constructor(){
+    super();
+    this.state = {
+      modalVisible: false
+    }
+  }
+
+  /** Show and hide login modal */
+  showModal = () => { this.setState({modalVisible: true})}
+  hideModal = () => { this.setState({modalVisible: false})}
+
   render(){
     return (
       <Container className={css.prenav} fluid={true}>
@@ -22,12 +35,14 @@ export class PreNavBar extends Component {
               <Icon icon={"youtube"} href={accounts.youtube} />
             </Col>
             <Col xs={6} className={css.auth}>
-              <a href="#login">Login</a>
+              <button onClick={this.showModal}>Login</button>
               <a>|</a>
               <a href="#signup">Sign Up</a>
             </Col>
           </Row>
         </Container>
+
+        <Login visible={this.state.modalVisible} close={this.hideModal} />
       </Container>
     );
   }
@@ -89,6 +104,5 @@ class Icon extends Component {
     } else {
       return null;
     }
-    
   }
 }

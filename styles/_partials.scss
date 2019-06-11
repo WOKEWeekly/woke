@@ -9,15 +9,23 @@
 
   .auth {
     color: $primary;
+    font-size: 1.1em;
     font-family: $title-font;
     font-weight: 100;
     text-align: right;
     a {
       color: inherit;
-      font-size: 1.1em;
       margin: 0 3px;
       text-transform: uppercase;
+      vertical-align: middle; }
+    button {
+      background: none;
+      border: none;
+      color: inherit;
+      outline: none;
+      text-transform: uppercase;
       vertical-align: middle;
+      &:hover { text-decoration: underline; }
     }
   }
 }

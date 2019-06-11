@@ -62,12 +62,10 @@
 .text {
   color: white;
   font-family: $body-font;
-  font-size: 1.2em;
 }
 
 .heading {
-  color: white;
-  font-family: $body-font;
+  @extend .text;
   font-size: 2.2em;
   margin-bottom: .8em;
 }
@@ -84,6 +82,7 @@
     background: none;
     border: none;
     border-bottom: $underline;
+    font-size: 1.2em;
     padding: .4em;
     width: 100%;
     &:focus { outline: none; }
@@ -91,6 +90,12 @@
   .textarea {
     @extend .input;
     min-height: 42px;
+  }
+  .checkbox {
+    @extend .text;
+    .box {
+      margin-right: 5px;
+    }
   }
   .file {
     border: 1px solid white;
@@ -127,10 +132,14 @@
 /****************/
 /** modal.js **/
 /****************/
-.modal_body, .modal_footer {
+.modal_header, .modal_body, .modal_footer {
   background: $dark;
 }
 
+:global(.modal-open) {
+  padding: 0 !important;
+  overflow-y: auto
+}
 :global(.modal-content) {
   border: 1px solid rgba(255,255,255,.7) !important;
   overflow: hidden;

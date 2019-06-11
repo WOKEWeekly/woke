@@ -1,7 +1,6 @@
 const express = require('express');
 const app = express();
 
-const bcrypt = require('bcrypt');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const dotenv = require('dotenv').config({path: './config.env'});

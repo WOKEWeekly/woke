@@ -65,6 +65,27 @@ export class TextArea extends Component {
   }
 }
 
+export class Checkbox extends Component {
+  constructor(props){
+    super(props);
+    this.state = {
+      checked: props.checked
+    }
+  }
+  render(){
+    return (
+      <label className={css.checkbox}>
+        <input
+          type={'checkbox'}
+          checked={this.state.checked}
+          onChange={this.props.onChange}
+          className={css.box} />
+          {this.props.label}
+      </label>
+    )
+  }
+}
+
 /** File selector */
 export class FileSelector extends Component {
   render(){
