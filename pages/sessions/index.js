@@ -3,7 +3,7 @@ import { Button, Container, Col, Dropdown, Row, ToggleButton, ToggleButtonGroup 
 import Link from 'next/link';
 
 import Cover from '~/components/cover.js';
-import Icon from '~/components/icon.js';
+import { Icon } from '~/components/icon.js';
 import { Shader } from '~/components/layout.js';
 import { Title, Subtitle, Paragraph, Divider } from '~/components/text.js';
 import Toolbar from '~/components/toolbar.js';

@@ -1,16 +1,14 @@
 import React, { Component } from 'react';
-import {Container, Col, Row, Nav, Navbar} from 'react-bootstrap';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Container, Col, Row, Nav, Navbar } from 'react-bootstrap';
+import { connect } from 'react-redux';
+import { HeaderIcon } from '~/components/icon';
 
-import { Login } from '~/components/modal.js';
-
+import Login from './login';
 import { accounts, emails } from '~/constants/settings.js';
-import { colors } from '~/constants/theme.js';
-
 import css from '~/styles/_partials.scss';
 
 /** Little top bar for social media icons and account details */
-export class PreNavBar extends Component {
+class PreNavbar extends Component {
   constructor(){
     super();
     this.state = {
@@ -19,26 +17,44 @@ export class PreNavBar extends Component {
   }
 
   /** Show and hide login modal */
-  showModal = () => { this.setState({modalVisible: true})}
-  hideModal = () => { this.setState({modalVisible: false})}
+  showModal = () => { this.setState({modalVisible: true}); }
+  hideModal = () => { this.setState({modalVisible: false}); }
 
   render(){
+
+    /** If authenticated, show name. Else, show option to login/register */
+    const renderAccount = () => {
+      const { fullname, isAuthenticated } = this.props.user;
+  
+      if (isAuthenticated){
+        return (
+          <Col xs={6} className={css.auth}>
+            <a href="#signup">{fullname}</a>
+          </Col>
+        );
+      } else {
+        return (
+          <Col xs={6} className={css.no_auth}>
+            <button onClick={this.showModal}>Login</button>
+            <a>|</a>
+            <a href="#signup">Sign Up</a>
+          </Col>
+        );
+      }
+    }
+
     return (
       <Container className={css.prenav} fluid={true}>
         <Container>
           <Row>
             <Col xs={6}>
-              <Icon icon={"facebook-f"} href={accounts.facebook} />
-              <Icon icon={"twitter"} href={accounts.twitter} />
-              <Icon icon={"instagram"} href={accounts.instagram} />
-              <Icon icon={"linkedin-in"} href={accounts.linkedin} />
-              <Icon icon={"youtube"} href={accounts.youtube} />
+              <HeaderIcon icon={"facebook-f"} href={accounts.facebook} />
+              <HeaderIcon icon={"twitter"} href={accounts.twitter} />
+              <HeaderIcon icon={"instagram"} href={accounts.instagram} />
+              <HeaderIcon icon={"linkedin-in"} href={accounts.linkedin} />
+              <HeaderIcon icon={"youtube"} href={accounts.youtube} />
             </Col>
-            <Col xs={6} className={css.auth}>
-              <button onClick={this.showModal}>Login</button>
-              <a>|</a>
-              <a href="#signup">Sign Up</a>
-            </Col>
+            {renderAccount()}
           </Row>
         </Container>
 
@@ -76,33 +92,8 @@ export class MainNavBar extends Component {
   }
 }
 
-/** Social media icon template */
-class Icon extends Component {
-  constructor(){
-    super();
-    this.state = {
-      isLoaded: false
-    }
-  }
+const mapStateToProps = state => ({
+  user: state.user
+});
 
-  componentDidMount(){
-    this.setState({ isLoaded: true });
-  }
-
-  render(){
-    if (this.state.isLoaded){
-      return (
-        <a
-          href={this.props.href}
-          style={{fontSize: 24}}>
-          <FontAwesomeIcon
-            icon={['fab', this.props.icon]}
-            color={colors.primary}
-            className={css.socials} />
-        </a>
-      )
-    } else {
-      return null;
-    }
-  }
-}
+export const PreNavBar = connect(mapStateToProps)(PreNavbar);

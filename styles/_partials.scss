@@ -4,14 +4,20 @@
 .prenav {
   background-color: black;
   padding: 3px 2em;
-
-  .socials { margin: 0 3px; }
-
   .auth {
     color: $primary;
     font-size: 1.1em;
+    font-family: $body-font;
+    text-align: right;
+    a {
+      color: inherit;
+      font-weight: 900;
+      margin: 0 3px; }
+  }
+  .no_auth {
+    color: $primary;
+    font-size: 1.1em;
     font-family: $title-font;
-    font-weight: 100;
     text-align: right;
     a {
       color: inherit;
@@ -32,7 +38,6 @@
 
 .nav {
   background-color: $dark;
-  
   .links {
     font-family: $body-font;
     font-weight: 700;
@@ -45,12 +50,4 @@
   clear: both;
   padding: 1.6em 0;
   width: 100%;
-  .socials {
-    background-color: black;
-    border-radius: 30px;
-    display: inline-block;
-    padding: 1em 0;
-    text-align: center;
-    width: 5.5em;
-  }
 }

@@ -6,6 +6,7 @@ const initialUser = {
   fullname: '',
   username: '',
   clearance: 0,
+  isAuthenticated: false,
   hasClearance: function(){},
 };
 
@@ -13,12 +14,14 @@ const initialUser = {
 const userReducer = (state = initialUser, action) => {
   switch (action.type) {
     case 'SAVE_USER':
-      console.log(action.payload);
       const user = action.payload;
-      user['fullname'] = `${user.firstname} ${user.lastname}`;
-      user['hasClearance'] = function(value){
+
+      user.isAuthenticated = true;
+      user.fullname = `${user.firstname} ${user.lastname}`;
+      user.hasClearance = function(value){
         return action.payload.clearance >= value ? true : false;
       }
+      
       return user;
     default:
       return state;

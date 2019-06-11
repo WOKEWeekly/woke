@@ -4,7 +4,7 @@ import Link from 'next/link';
 import Router from 'next/router';
 
 import { EditButton, DeleteButton } from '~/components/button.js';
-import Icon from '~/components/icon.js';
+import { Icon } from '~/components/icon.js';
 import { ConfirmModal } from '~/components/modal.js';
 import { Title, Subtitle, Paragraph, Divider } from '~/components/text.js';
 import Toolbar from '~/components/toolbar.js';
