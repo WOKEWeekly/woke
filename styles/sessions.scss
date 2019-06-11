@@ -49,7 +49,7 @@
   .item {
     background-color: $primary-dark;
     border-radius: 10px;
-    border: 1px solid rgba(255, 255, 255, 0.7);
+    border: 1px solid $faded-white;
     margin: 0.5em 0;
     overflow: hidden;
     .image { width: 100%; }
@@ -68,8 +68,8 @@
         @media (max-width: $break-sm) { font-size: 2.2vw; }
       }
       .description {
-        font-size: 0.8vw;
-        @media (max-width: $break-lg) { font-size: 1.4vw; }
+        font-size: 1.1vw;
+        @media (max-width: $break-lg) { font-size: 1.8vw; }
         @media (max-width: $break-md) { font-size: 1.8vw; }
         @media (max-width: $break-sm) { font-size: 2.1vw; }
       }

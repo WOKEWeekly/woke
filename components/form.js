@@ -54,13 +54,29 @@ export class Input extends Component {
 
 /** For long text inputs */
 export class TextArea extends Component {
+  constructor(props){
+    super(props);
+    this.state = {
+      wordCount: props.value.length
+    }
+  }
+
+  countWords = (event) => {
+    this.props.onChange(event);
+    this.setState({wordCount: event.target.value.length})
+  }
+
   render(){
     return (
-      <Textarea
-        placeholder={this.props.placeholder}
-        className={css.textarea}
-        minRows={3}
-        {...this.props} />
+      <div>
+        <Textarea
+          placeholder={this.props.placeholder}
+          className={css.textarea}
+          minRows={3}
+          value={this.props.value}
+          onChange={this.countWords} />
+          <label className={css.wordcount}>{this.state.wordCount}</label>
+      </div>
     )
   }
 }

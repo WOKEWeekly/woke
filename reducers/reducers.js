@@ -1,5 +1,6 @@
 import { combineReducers } from 'redux';
 
+/** Reducer for user authentication */
 const initialUser = {
   firstname: '',
   lastname: '',
@@ -10,7 +11,6 @@ const initialUser = {
   hasClearance: function(){},
 };
 
-/** Reducer for user authentication */
 const userReducer = (state = initialUser, action) => {
   switch (action.type) {
     case 'SAVE_USER':
@@ -23,11 +23,32 @@ const userReducer = (state = initialUser, action) => {
       }
       
       return user;
-    default:
-      return state;
+    case 'CLEAR_USER': return state;
+    default: return state;
+  }
+};
+
+/** Reducer for session settings */
+const defaultSession = {
+  view: 1,
+  sort: '2'
+}
+
+const sessionReducer = (state = defaultSession, action) => {
+  switch (action.type) {
+    case 'SAVE_SESSION_VIEW':
+      return Object.assign({}, state, {
+        view: action.payload
+      });
+    case 'SAVE_SESSION_SORT':
+      return Object.assign({}, state, {
+        sort: action.payload
+      });
+    default: return state;
   }
 };
 
 export default combineReducers({
-  user: userReducer
+  user: userReducer,
+  session: sessionReducer
 });

@@ -8,11 +8,13 @@ $primary-light: rgba(142, 116, 171, .5);
 $primary-dark: rgba(28, 8, 34, .8);
 $dark: #0D0C0E;
 
+$faded-white: rgba(255, 255, 255, .7);
+
 /** Borders */
 $border: 2px solid $primary;
 $secondary-border: 1px solid rgb(245, 222, 179);
 
-$underline: 1px solid rgba(255, 255, 255, .7);
+$underline: 1px solid $faded-white;
 
 /** Buttons */
 $submit-button: rgba(57, 17, 68, 0.5);

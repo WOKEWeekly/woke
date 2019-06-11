@@ -1,6 +1,9 @@
 import React, { Component, PureComponent } from 'react';
 import { Button, Container, Col, Dropdown, Row, ToggleButton, ToggleButtonGroup } from 'react-bootstrap';
 import Link from 'next/link';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { saveSessionSort, saveSessionView } from '~/reducers/actions';
 
 import Cover from '~/components/cover.js';
 import { Icon } from '~/components/icon.js';
@@ -13,14 +16,14 @@ import Meta from '~/partials/meta.js';
 import css from '~/styles/sessions.scss';
 
 
-export default class Sessions extends Component {
-  constructor(){
-    super();
+class Sessions extends Component {
+  constructor(props){
+    super(props);
     this.state = {
       sessions: [],
       isLoaded: false,
-      view: 1,
-      sort: '2',
+      view: props.session.view,
+      sort: props.session.sort,
     }
   }
 
@@ -88,7 +91,14 @@ export default class Sessions extends Component {
     });
   }
 
-  switchView = (value) => { this.setState({ view: value }); }
+  switchView = (value) => {
+    this.setState({ view: value });
+    this.props.saveSessionView(value);
+  }
+  switchSort = (value) => {
+    this.props.saveSessionSort(value);
+    this.sortSessions(value);
+  }
 
 	render(){
 
@@ -132,15 +142,15 @@ export default class Sessions extends Component {
             className={css.view}
             type={'radio'}
             name={'view'}
-            defaultValue={1}
+            defaultValue={view}
             onChange={this.switchView}>
             <ToggleButton variant="dark" value={1}><Icon name={'th-large'} />Grid</ToggleButton>
             <ToggleButton variant="dark" value={2}><Icon name={'list-ul'} />List</ToggleButton>
           </ToggleButtonGroup>
     
-          <Dropdown className={css.sort} onSelect={this.sortSessions}>
+          <Dropdown className={css.sort} onSelect={this.switchSort}>
             <Dropdown.Toggle variant="dark"><Icon name={'sort-amount-down'} />Sort</Dropdown.Toggle>
-            <Dropdown.Menu onSelect={this.switchSort}>
+            <Dropdown.Menu>
               <Dropdown.Item eventKey={1}>Sort Ascending</Dropdown.Item>
               <Dropdown.Item eventKey={2}>Sort Descending</Dropdown.Item>
             </Dropdown.Menu>
@@ -195,3 +205,16 @@ class Session extends PureComponent {
     
   }
 }
+
+const mapStateToProps = state => ({
+  session: state.session,
+});
+
+const mapDispatchToProps = dispatch => (
+  bindActionCreators({
+    saveSessionSort,
+    saveSessionView
+  }, dispatch)
+);
+
+export default connect(mapStateToProps, mapDispatchToProps)(Sessions);

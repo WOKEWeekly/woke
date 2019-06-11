@@ -5,7 +5,7 @@ import { bindActionCreators } from 'redux';
 import { saveUser } from '~/reducers/actions';
 
 import { SubmitButton, CancelButton } from '~/components/button.js';
-import { Group, Label, Input, Checkbox } from '~/components/form';
+import { Group, Label, Input, Checkbox } from '~/components/form.js';
 import css from '~/styles/_components.scss';
 
 class LoginModal extends Component {

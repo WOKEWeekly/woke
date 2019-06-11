@@ -90,6 +90,13 @@
   .textarea {
     @extend .input;
     min-height: 42px;
+    + .wordcount {
+      color: $faded-white;
+      font-family: $title-font;
+      margin: 0;
+      text-align: right;
+      width: 100%;
+    }
   }
   .checkbox {
     @extend .text;
@@ -141,7 +148,7 @@
   overflow-y: auto
 }
 :global(.modal-content) {
-  border: 1px solid rgba(255,255,255,.7) !important;
+  border: 1px solid $faded-white !important;
   overflow: hidden;
 }
 

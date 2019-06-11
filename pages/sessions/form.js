@@ -33,7 +33,6 @@ export default class SessionForm extends Component {
               <Col md={8}>
                 <Label>Title:</Label>
                 <Input
-                  name={'title'}
                   value={title}
                   onChange={handleTitle}
                   placeholder={"Enter the title."} />
@@ -41,7 +40,6 @@ export default class SessionForm extends Component {
               <Col md={4}>
                 <Label>Date Held:</Label>
                 <EventDatePicker
-                  name={'date'}
                   date={date}
                   onChange={handleDate} />
               </Col>
@@ -50,7 +48,6 @@ export default class SessionForm extends Component {
               <Col>
                 <Label>Description:</Label>
                 <TextArea
-                  name={'description'}
                   value={description}
                   onChange={handleDescription}
                   placeholder={"Enter the description."} />
@@ -59,7 +56,6 @@ export default class SessionForm extends Component {
             <Group>
               <Col>
                 <FileSelector
-                  name={'image'}
                   value={filename}
                   onChange={handleImage} />
               </Col>
