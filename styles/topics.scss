@@ -1,0 +1,51 @@
+
+@import "variables";
+
+.grid {
+  border-bottom: $border;
+  display: grid;
+  grid-template-columns: repeat(6, calc(100% / 6));
+  width: 100%;
+  @media (max-width: $break-xl) { grid-template-columns: repeat(5, 20%); }
+  @media (max-width: $break-lg) { grid-template-columns: repeat(4, 25%); }
+  @media (max-width: $break-md) { grid-template-columns: repeat(3, calc(100% / 3)); }
+  @media (max-width: $break-sm) { grid-template-columns: repeat(2, 50%); }
+  .cell {
+    border-radius: 15px;
+    border: $secondary-border;
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    min-height: 12em;
+    margin: .1em;
+    padding: .5em;
+    text-align: center;
+    .headline {
+      font-size: 1.2em;
+      border-bottom: 1px solid white;
+      padding-bottom: .5em; }
+    .question {
+      font-size: .9em;
+      padding: .7em 0; }
+    .details {
+      font-size: .8em;
+      border-top: 1px solid white;
+      padding-top: .5em; }
+  }
+}
+
+/*************
+*** form.js
+*************/
+
+.form {
+  padding: 2em;
+  margin: 0 auto;
+  width: 60%;
+  @media (max-width: $break-xl) { width: 70%; }
+  @media (max-width: $break-lg) { width: 80%; }
+  @media (max-width: $break-md) { width: 100%; }
+  .options {
+    -webkit-transition-duration: .3s;
+    transition-duration: .3s;
+  }
+}

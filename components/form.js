@@ -1,6 +1,7 @@
 import React, { Component} from 'react';
 import { Form, Row } from 'react-bootstrap';
 import Textarea from 'react-textarea-autosize';
+import classNames from 'classnames';
 
 import css from '~/styles/_components.scss';
 
@@ -16,8 +17,12 @@ export class Heading extends Component {
 /** For grouping form components */
 export class Group extends Component {
   render(){
+    const classes = classNames(css.group, this.props.className);
     return (
-      <Form.Group as={Row} className={css.group}>
+      <Form.Group
+        as={Row}
+        className={classes}
+        style={this.props.style}>
         {this.props.children}
       </Form.Group>
     )
@@ -45,7 +50,6 @@ export class Input extends Component {
     return (
       <input
         type={'text'}
-        placeholder={this.props.placeholder}
         className={css.input}
         {...this.props} />
     )
@@ -61,7 +65,7 @@ export class TextArea extends Component {
     }
   }
 
-  countWords = (event) => {
+  handleTextChange = (event) => {
     this.props.onChange(event);
     this.setState({wordCount: event.target.value.length})
   }
@@ -70,13 +74,28 @@ export class TextArea extends Component {
     return (
       <div>
         <Textarea
-          placeholder={this.props.placeholder}
           className={css.textarea}
           minRows={3}
-          value={this.props.value}
-          onChange={this.countWords} />
-          <label className={css.wordcount}>{this.state.wordCount}</label>
+          onChange={this.handleTextChange}
+          {...this.props} />
+        <label className={css.wordcount}>{this.state.wordCount}</label>
       </div>
+    )
+  }
+}
+
+export class Select extends Component {
+  render(){
+    const { placeholder, items } = this.props;
+    return (
+      <select
+        className={css.select}
+        {...this.props}>
+        <option value={''} disabled>{placeholder}</option>
+        {React.Children.map(items, (item) => {
+          return <option value={item}>{item}</option>
+        })}
+      </select>
     )
   }
 }

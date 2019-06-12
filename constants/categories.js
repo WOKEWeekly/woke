@@ -1,65 +1,84 @@
-module.exports = {
-  categories: [{
+/** Topic categories */
+export const categories = [
+  {
     label: 'Christian',
-    value: 'Christian',
     short: 'christian',
-    color: 'rgba(61,38,1,1)',
-    gradient: ['rgba(92,62,2,1)', 'rgba(61,38,1,1)', 'rgba(33,22,0,1)']
-  }, {
+    color: 'rgb(95, 107, 58)',
+    textColor: 'black',
+    gradient: ['rgb(219, 213, 164)', 'rgb(204, 195, 127)', 'rgb(182, 170, 73)']
+  },
+  {
     label: 'Ethnicity',
-    value: 'Ethnicity',
     short: 'ethnicity',
-    color: 'rgba(61,38,1,1)',
-    gradient: ['rgba(92,62,2,1)', 'rgba(61,38,1,1)', 'rgba(33,22,0,1)']
-  }, {
+    color: 'rgb(61, 38, 1)',
+    textColor: 'white',
+    gradient: ['rgb(92, 62, 2)', 'rgb(61, 38, 1)', 'rgb(33, 22, 0)']
+  },
+  { 
     label: 'Family & Relationships',
-    value: 'Family & Relationships',
     short: 'family',
-    color: 'rgba(79,1,14,1)',
-    gradient: ['rgba(107,3,18,1)', 'rgba(79,1,14,1)', 'rgba(56,0,13,1)']
-  }, {
+    color: 'rgb(79, 1, 14)',
+    textColor: 'white',
+    gradient: ['rgb(107, 3, 18)', 'rgb(79, 1, 14)', 'rgb(56, 0, 13)']
+  },
+  {
     label: 'Gender',
-    value: 'Gender',
     short: 'gender',
-    color: 'rgba(91,1,85,1)',
-    gradient: ['rgba(132,3,128,1)', 'rgba(91,1,85,1)', 'rgba(61,0,61,1)']
-  }, {
+    color: 'rgb(91, 1, 85)',
+    textColor: 'white',
+    gradient: ['rgb(132, 3, 128)', 'rgb(91, 1, 85)', 'rgb(61, 0, 61)']
+  },
+  { 
     label: 'Mental Health',
-    value: 'Mental Health',
     short: 'mental',
-    color: 'rgba(2,75,58,1)',
-    gradient: ['rgba(2,75,58,1)', 'rgba(1,61,47,1)', 'rgba(0,51,39,1)']
-  }, {
+    color: 'rgb(2, 75, 58)',
+    textColor: 'white',
+    gradient: ['rgb(2, 75, 58)', 'rgb(1, 61, 47)', 'rgb(0, 51, 39)'],
+  },
+  { 
     label: 'Philosophy & Ethics',
-    value: 'Philosophy & Ethics',
     short: 'philosophy',
-    color: 'rgba(8,1,79,1)',
-    gradient: ['rgba(3,52,102,1)', 'rgba(8,1,79,1)', 'rgba(3,0,53,1)']
-  }, {
+    color: 'rgb(8, 1, 79)',
+    textColor: 'white',
+    gradient: ['rgb(3, 52, 102)', 'rgb(8, 1, 79)', 'rgb(3, 0, 53)'],
+  },
+  { 
     label: 'Politics',
-    value: 'Politics',
     short: 'politics',
-    color: 'rgba(59,59,59,1)',
-    gradient: ['rgba(51,51,51,1)', 'rgba(59,59,59,1)', 'rgba(28,28,28,1)', 'rgba(18,18,18,1)', 'rgba(13,13,13,1)']
-  }, {
+    color: 'rgb(59, 59, 59)',
+    textColor: 'white',
+    gradient: ['rgb(51, 51, 51)', 'rgb(59, 59, 59)', 'rgb(28, 28, 28)', 'rgb(18, 18, 18)', 'rgb(13, 13, 13)'],
+  },
+  { 
     label: 'Race',
-    value: 'Race',
     short: 'race',
-    color: 'rgba(46,1,68,1)',
-    gradient: ['rgba(62,2,91,1)', 'rgba(46,1,68,1)', 'rgba(34,0,51,1)']
-  }, {
+    color: 'rgb(46, 1, 68)',
+    textColor: 'white',
+    gradient: ['rgb(62, 2, 91)', 'rgb(46, 1, 68)', 'rgb(34, 0, 51)'],
+  },
+  { 
     label: 'Society & Stereotypes',
-    value: 'Society & Stereotypes',
     short: 'society',
-    color: 'rgba(63,66,1,1)',
-    gradient: ['rgba(99,99,2,1)', 'rgba(63,66,1,1)', 'rgba(42,45,1,1)']
-  }],
-  types: [
-    { label: 'Debate', short: 'debate'},
-    { label: 'Discussion', short: 'discussion'},
-  ],
-  polarity: [
-    { label: 'Polar', value: 1, short: 'polarity'},
-    { label: 'Non-Polar', value: 0, short: 'nonpolar'},
-  ]
-};
+    color: 'rgb(63, 66, 1)',
+    textColor: 'white',
+    gradient: ['rgb(99, 99, 2)', 'rgb(63, 66, 1)', 'rgb(42, 45, 1)']
+  },
+];
+
+/** Topic types */
+export const types = [
+  { label: 'Debate', short: 'debate'},
+  { label: 'Discussion', short: 'discussion'},
+]
+
+/** Topic polarity options */
+export const polarity = [
+  { label: 'Polar', short: 'polarity'},
+  { label: 'Non-Polar', short: 'nonpolar'},
+]
+
+/** Retrieve array of colours for specific category */
+export const getTextColor = (value) => {
+  const found = categories.find(category => category.label === value);
+  return found ? found.textColor : 'black';
+}

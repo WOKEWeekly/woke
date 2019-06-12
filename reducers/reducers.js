@@ -48,7 +48,22 @@ const sessionReducer = (state = defaultSession, action) => {
   }
 };
 
+const defaultTopic = {
+  sort: '2'
+}
+
+const topicReducer = (state = defaultTopic, action) => {
+  switch (action.type) {
+    case 'SAVE_TOPIC_SORT':
+      return Object.assign({}, state, {
+        sort: action.payload
+      });
+    default: return state;
+  }
+};
+
 export default combineReducers({
   user: userReducer,
-  session: sessionReducer
+  session: sessionReducer,
+  topic: topicReducer
 });

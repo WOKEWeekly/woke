@@ -18,3 +18,8 @@ export const saveSessionSort = sort => ({
   type: 'SAVE_SESSION_SORT',
   payload: sort,
 });
+
+export const saveTopicSort = sort => ({
+  type: 'SAVE_TOPIC_SORT',
+  payload: sort,
+});

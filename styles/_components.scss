@@ -71,6 +71,7 @@
 }
 
 .group {
+  padding: .2em 0;
   .label {
     color: white;
     display: block;
@@ -97,6 +98,13 @@
       text-align: right;
       width: 100%;
     }
+  }
+  .select {
+    @extend .input;
+    border-radius: 0;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
   }
   .checkbox {
     @extend .text;

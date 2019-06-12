@@ -79,7 +79,7 @@ export class MainNavBar extends Component {
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="ml-auto">
             <Nav.Link href="/sessions" className={css.links}>Sessions</Nav.Link>
-            <Nav.Link href="#link" className={css.links}>Topic Bank</Nav.Link>
+            <Nav.Link href="/topics" className={css.links}>Topic Bank</Nav.Link>
             <Nav.Link href="#link" className={css.links}>Forum</Nav.Link>
             <Nav.Link href="#link" className={css.links}>#BlackExcellence</Nav.Link>
             <Nav.Link href="#link" className={css.links}>The Exec.</Nav.Link>

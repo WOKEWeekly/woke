@@ -95,6 +95,29 @@ module.exports = function(app, conn){
     });
   });
 
+  /** Retrieve all topics */
+  app.get('/getTopics', verifyToken, function(req, res){
+    conn.query("SELECT * FROM topics", function (err, result) {
+      resToClient(res, err, result)
+    });
+  });
+
+  /** Add new topic to database */
+  app.post('/addTopic', verifyToken, function(req, res){
+    const topic = req.body;
+    const sql = "INSERT INTO topics (headline, category, question, description, type, polarity, option1, option2, user_id) VALUES ?";
+    const values = [[topic.headline, topic.category, topic.question, topic.description, topic.type,
+      topic.polarity, topic.option1, topic.option2, topic.userId]];
+    
+    conn.query(sql, [values], function (err) {
+      resToClient(res, err);
+    });
+  });
+
+  /****************************
+   * CHECKPOINT
+   ***************************/
+
   /** Retrieve all candidates */
   app.get('/getBlackEx', function(req, res){
     if (req.headers['authorization'] !== 'authorized'){
@@ -473,27 +496,7 @@ module.exports = function(app, conn){
     }
   });
 
-  /** Retrieve all topics */
-  app.get('/getTopics', verifyToken, function(req, res){
-    jwt.verify(req.token, process.env.JWT_SECRET, (err, auth) => {
-      if (err){
-        res.sendStatus(403);
-      } else {
-        if (!(auth.user && auth.user.clearance >= CLEARANCES.ACTIONS.VIEW_TOPICS)){
-          res.status(401).send(`You are not authorised to perform such an action.`);
-          return;
-        }
-
-        conn.query("SELECT * FROM topics", function (err, result) {
-          if (!err){
-            res.json(result);
-          } else {
-            res.status(400).send(err.toString());
-          }
-        });
-      }
-    });
-  });
+  
 
   /** Get Random Topic */
   app.get('/getRandomTopic', function(req, res){
@@ -552,39 +555,6 @@ module.exports = function(app, conn){
         }
       });
     }
-  });
-
-  /** Add new topic to database */
-  app.post('/addTopic', verifyToken, function(req, res){
-    jwt.verify(req.token, process.env.JWT_SECRET, (err, auth) => {
-      if (err){
-        res.sendStatus(403);
-      } else {
-        if (!(auth.user && auth.user.clearance >= CLEARANCES.ACTIONS.CRUD_TOPICS)){
-          res.status(401).send(`You are not authorised to perform such an action.`);
-          return;
-        }
-
-        var topic = req.body;
-
-        var sql = "INSERT INTO topics (headline, category, question, description, type, user, polarity, option1, option2) VALUES ?";
-        var values = [[topic.headline, topic.category, topic.question, topic.description, topic.type, topic.user,
-          topic.polarity, topic.option1, topic.option2]];
-        
-        conn.query(sql, [values], function (err, result, fields) {
-          if (!err){
-            req.flash('success', `You've added the topic: ${topic.headline}:${topic.question}.`);
-            res.sendStatus(200);
-          } else {
-            if (err.toString().includes("Incorrect string")){
-              res.status(422).send(`Please do not use emojis during input.`)
-            } else {
-              res.status(400).send(err.toString());
-            }
-          }
-        });
-      }
-    });
   });
 
   /** Update topic in database */
