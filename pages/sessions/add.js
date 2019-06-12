@@ -1,12 +1,13 @@
 import React, { Component} from 'react';
 import Router from 'next/router';
+import { connect } from 'react-redux';
 import { formatISODate } from '~/constants/date.js';
 import { generateSlug, generateSessionFilename } from '~/constants/file.js';
 import { isValidSession } from '~/constants/validations.js';
 
 import SessionForm from './form.js';
 
-export default class SessionAdd extends Component {
+class SessionAdd extends Component {
   constructor() {
     super();
     this.state = {
@@ -50,7 +51,7 @@ export default class SessionAdd extends Component {
       method: 'POST',
       body: data,
       headers: {
-        'Authorization': 'authorized',
+        'Authorization': `Bearer ${this.props.user.token}`,
         'Path': 'sessions'
       }
     }).then(res => {
@@ -77,3 +78,9 @@ export default class SessionAdd extends Component {
     );
   }
 }
+
+const mapStateToProps = state => ({
+  user: state.user
+});
+
+export default connect(mapStateToProps)(SessionAdd);

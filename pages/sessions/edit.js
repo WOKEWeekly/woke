@@ -1,4 +1,5 @@
 import React, { Component} from 'react';
+import { connect } from 'react-redux';
 import Router from 'next/router';
 import { formatISODate } from '~/constants/date.js';
 import { generateSlug, generateSessionFilename } from '~/constants/file.js';
@@ -6,7 +7,7 @@ import { isValidSession } from '~/constants/validations.js';
 
 import SessionForm from './form.js';
 
-export default class SessionEdit extends Component {
+class SessionEdit extends Component {
   static async getInitialProps({ query }) {
     return { session: query.session };
   }
@@ -59,7 +60,7 @@ export default class SessionEdit extends Component {
       method: 'PUT',
       body: data,
       headers: {
-        'Authorization': 'authorized',
+        'Authorization': `Bearer ${this.props.user.token}`,
         'Path': 'sessions'
       }
     }).then(res => {
@@ -87,3 +88,9 @@ export default class SessionEdit extends Component {
     );
   }
 }
+
+const mapStateToProps = state => ({
+  user: state.user
+});
+
+export default connect(mapStateToProps)(SessionEdit);

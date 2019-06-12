@@ -13,6 +13,7 @@
   .cell {
     border-radius: 15px;
     border: $secondary-border;
+    cursor: pointer;
     display: grid;
     grid-template-rows: auto 1fr auto;
     min-height: 12em;

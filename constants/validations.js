@@ -15,8 +15,8 @@ export const isValidTopic = (topic) => {
   if (!ifExists(topic.question.trim(), 'Enter the topic question.')) return false;
   if (!ifExists(topic.type, 'Select the topic type.')) return false;
   if (topic.polarity){
-    if (!ifExists(topic.option1, 'Enter the first option to the question.')) return false;
-    if (!ifExists(topic.option2, 'Enter the second option to the question.')) return false;
+    if (!ifExists(topic.option1.trim(), 'Enter the first option to the question.')) return false;
+    if (!ifExists(topic.option2.trim(), 'Enter the second option to the question.')) return false;
   }
   return true;
 }

@@ -40,7 +40,7 @@ class TopicBank extends Component {
     fetch('/getTopics', {
       method: 'GET',
       headers: {
-        'Authorization': 'authorized',
+        'Authorization': `Bearer ${this.props.user.token}`,
         'Content-Type': 'application/json',
       }
     })
@@ -179,6 +179,7 @@ class Topic extends PureComponent {
 
 const mapStateToProps = state => ({
   topic: state.topic,
+  user: state.user
 });
 
 const mapDispatchToProps = dispatch => (

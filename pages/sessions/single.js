@@ -1,5 +1,6 @@
 import React, { Component} from 'react';
 import { Container } from 'react-bootstrap';
+import { connect } from 'react-redux';
 import Link from 'next/link';
 import Router from 'next/router';
 
@@ -14,7 +15,7 @@ import { formatDate } from '~/constants/date.js';
 import Meta from '~/partials/meta.js';
 import css from '~/styles/sessions.scss';
 
-export default class SessionPage extends Component {
+class SessionPage extends Component {
   constructor(){
     super();
 
@@ -35,7 +36,7 @@ export default class SessionPage extends Component {
       method: 'DELETE',
       body: JSON.stringify(this.props.session),
       headers: {
-        'Authorization': 'authorized',
+        'Authorization': `Bearer ${this.props.user.token}`,
         'Content-Type': 'application/json'
       }
     }).then(res => {
@@ -98,3 +99,9 @@ export default class SessionPage extends Component {
     );
   }
 }
+
+const mapStateToProps = state => ({
+  user: state.user
+});
+
+export default connect(mapStateToProps)(SessionPage);

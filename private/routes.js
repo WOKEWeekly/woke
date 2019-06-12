@@ -5,11 +5,10 @@ module.exports = function(app, conn, server){
   app.get('/session/:slug', function(req, res){
     let slug = req.params.slug;
     let sql = "SELECT * FROM sessions WHERE slug = ?";
-    let session = {};
     
     conn.query(sql, [slug], function (err, result) {
       if (!err){
-        session = result[0];
+        const session = result[0];
         return server.render(req, res, '/sessions/single', { session });
       } else {
         res.status(400).send(err.toString());
@@ -21,12 +20,26 @@ module.exports = function(app, conn, server){
   app.get('/sessions/edit/:id', function(req, res){
     let id = req.params.id;
     let sql = "SELECT * FROM sessions WHERE id = ?";
-    let session = {};
     
     conn.query(sql, [id], function (err, result) {
       if (!err){
-        session = result[0];
+        const session = result[0];
         return server.render(req, res, '/sessions/edit', { session });
+      } else {
+        res.status(400).send(err.toString());
+      }
+    });
+  });
+
+  /** Render edit topic page */
+  app.get('/topics/edit/:id', function(req, res){
+    let id = req.params.id;
+    let sql = "SELECT * FROM topics WHERE id = ?";
+    
+    conn.query(sql, [id], function (err, result) {
+      if (!err){
+        const topic = result[0];
+        return server.render(req, res, '/sessions/edit', { topic });
       } else {
         res.status(400).send(err.toString());
       }
