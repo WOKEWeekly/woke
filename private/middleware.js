@@ -5,25 +5,33 @@ module.exports = {
 
   /** Verify access tokens */
   verifyToken: (req, res, next) => {
-    // const bearerHeader = req.headers['authorization'];
-    // if (typeof bearerHeader !== 'undefined'){
-    //   const bearer = bearerHeader.split(' ');
-    //   const token = bearer[1];
-    //   req.token = token;
-    //   jwt.verify(req.token, process.env.JWT_SECRET, (err, auth) => {
-    //     if (!err){
-    //       req.auth = auth;
-    //       next();
-    //     } else {
-    //       res.status(400);
-    //       console.error(err.toString());
-    //     }
-    //   });
-    // } else {
-    //   res.status(400);
-    //   console.error('Unauthorized request.');
-    // }
-    next();
+    const bearerHeader = req.headers['authorization'];
+    if (typeof bearerHeader !== 'undefined'){
+      const bearer = bearerHeader.split(' ');
+      const token = bearer[1];
+      req.token = token;
+      jwt.verify(req.token, process.env.JWT_SECRET, (err, auth) => {
+        if (!err){
+          req.auth = auth;
+          next();
+        } else {
+          res.status(400);
+          console.error(err.toString());
+        }
+      });
+    } else {
+      res.status(400);
+      console.error('Unauthorized request.');
+    }
+  },
+
+  /** Check for 'authorized' token */
+  validateRequest: (req, res, next) => {
+    if (req.headers['authorization'] !== 'authorized'){
+      res.sendStatus(403);
+    } else {
+      next();
+    }
   },
 
   /** Check authorisation */

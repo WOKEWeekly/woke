@@ -1,18 +1,14 @@
 const async = require('async');
 const fs = require('fs');
-const { verifyToken, upload } = require('./middleware.js');
+const { verifyToken, validateRequest, upload } = require('./middleware.js');
 
 module.exports = function(app, conn){
 
   /** Retrieve all sessions */
-  app.get('/getSessions', function(req, res){
-    if (req.headers['authorization'] !== 'authorized'){
-      res.sendStatus(403);
-    } else {
-      conn.query("SELECT * FROM sessions", function (err, result) {
-        resToClient(res, err, result)
-      });
-    }
+  app.get('/getSessions', validateRequest, function(req, res){
+    conn.query("SELECT * FROM sessions", function (err, result) {
+      resToClient(res, err, result)
+    });
   });
 
   /** Add new session to database */
