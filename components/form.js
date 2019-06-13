@@ -50,8 +50,11 @@ export class Input extends Component {
     return (
       <input
         type={'text'}
+        name={this.props.name}
+        placeholder={this.props.placeholder}
         className={css.input}
-        {...this.props} />
+        value={this.props.value || ''}
+        onChange={this.props.onChange} />
     )
   }
 }
@@ -61,7 +64,7 @@ export class TextArea extends Component {
   constructor(props){
     super(props);
     this.state = {
-      wordCount: props.value.length
+      wordCount: props.value ? props.value.length : 0
     }
   }
 
@@ -74,10 +77,12 @@ export class TextArea extends Component {
     return (
       <div>
         <Textarea
+          name={this.props.name}
+          placeholder={this.props.placeholder}
           className={css.textarea}
           minRows={3}
-          onChange={this.handleTextChange}
-          {...this.props} />
+          value={this.props.value || ''}
+          onChange={this.handleTextChange} />
         <label className={css.wordcount}>{this.state.wordCount}</label>
       </div>
     )

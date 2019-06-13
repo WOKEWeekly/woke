@@ -12,7 +12,7 @@ import css from '~/styles/topics.scss'
 
 export default class TopicForm extends Component {
   render(){
-    const { heading, confirmText, confirmFunc, cancelFunc, metaTitle, metaUrl, handleText, handleRadio , handleCheckbox} = this.props;
+    const { heading, confirmText, confirmFunc, cancelFunc, metaTitle, metaUrl, handleText, handleRadio, handleCheckbox} = this.props;
     const { headline, category, question, type, polarity, option1, option2, description } = this.props.topic;
 
     const listCategories = () => {

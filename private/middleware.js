@@ -25,8 +25,8 @@ module.exports = {
     }
   },
 
-  /** Check for 'authorized' token */
-  validateRequest: (req, res, next) => {
+  /** Check for 'authorized' header values to validate requests */
+  validateReq: (req, res, next) => {
     if (req.headers['authorization'] !== 'authorized'){
       res.sendStatus(403);
     } else {
@@ -34,13 +34,15 @@ module.exports = {
     }
   },
 
-  /** Check authorisation */
+  /** Check authorisation before performing action */
   checkAuth: (req, res, next) => {
-    let user = req.auth;
-      
-    if (!(user && user.clearance >= CLEARANCES.ACTIONS.CRUD_SESSIONS)){
+    const clearance = req.auth.user.clearance;
+    const threshold = parseInt(req.headers.clearance);
+
+    if (clearance >= threshold){
+      next();
+    } else {
       res.status(401).send(`You are not authorised to perform such an action.`);
-      return;
     }
   },
 

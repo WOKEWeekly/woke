@@ -1,6 +1,7 @@
 import React, { Component, PureComponent } from 'react';
-import { Button, Container, Col, Dropdown, Row, ToggleButton, ToggleButtonGroup } from 'react-bootstrap';
+import { Button, ButtonGroup, Dropdown } from 'react-bootstrap';
 import Link from 'next/link';
+import Router from 'next/router';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { saveTopicSort } from '~/reducers/actions';
@@ -10,10 +11,12 @@ import classNames from 'classnames';
 import Cover from '~/components/cover.js';
 import { Icon } from '~/components/icon.js';
 import { Shader } from '~/components/layout.js';
+import { ConfirmModal } from '~/components/modal.js';
 import { Title, Subtitle } from '~/components/text.js';
 import Toolbar from '~/components/toolbar.js';
 
 import { categories } from '~/constants/categories.js';
+import CLEARANCES from '~/constants/clearances.js';
 
 import Meta from '~/partials/meta.js';
 import css from '~/styles/topics.scss';
@@ -26,7 +29,8 @@ class TopicBank extends Component {
     this.state = {
       topics: [],
       isLoaded: false,
-      sort: props.topic.sort
+      sort: props.topic.sort,
+      modalVisible: false
     }
   }
 
@@ -101,6 +105,7 @@ class TopicBank extends Component {
     });
   }
 
+  /** Switch the sort value */
   switchSort = (value) => {
     this.props.saveTopicSort(value);
     this.sortTopics(value);
@@ -161,7 +166,33 @@ class TopicBank extends Component {
 	}
 }
 
-class Topic extends PureComponent {
+class _Topic extends PureComponent {
+  constructor(){
+    super();
+    this.state = {
+      modalVisible: false
+    }
+  }
+
+  /** Show and hide confirmation modal */
+  showModal = () => { this.setState({modalVisible: true})}
+  hideModal = () => { this.setState({modalVisible: false})}
+
+  /** Delete topic from database */
+  deleteTopic = () => {
+    fetch('/deleteTopic', {
+      method: 'DELETE',
+      body: JSON.stringify(this.props.item),
+      headers: {
+        'Authorization': `Bearer ${this.props.user.token}`,
+        'Content-Type': 'application/json',
+        'Clearance': CLEARANCES.ACTIONS.CRUD_TOPICS
+      }
+    }).then(res => {
+      if (res.ok) location.reload();
+    }).catch(error => console.error(error));
+  }
+
   render(){
     const { item } = this.props;
     const category = categories.find(category => category.label === item.category).short;
@@ -172,6 +203,20 @@ class Topic extends PureComponent {
         <Title className={css.headline}>{item.headline}</Title>
         <Subtitle className={css.question}>{item.question}</Subtitle>
         <Subtitle className={css.details}>{item.type} • {item.category}</Subtitle>
+        <ButtonGroup className={css.buttons}>
+          <Button variant={'success'} onClick={() => Router.push(`/topics/edit/${item.id}`)}>Edit</Button>
+          <Button variant={'danger'} onClick={this.showModal}>Delete</Button>
+        </ButtonGroup>
+
+        <ConfirmModal
+          visible={this.state.modalVisible}
+          message={
+            `Are you sure you want to delete the topic:
+            "${item.headline}: ${item.question}"?`
+          }
+          confirmFunc={this.deleteTopic}
+          confirmText={'Delete'}
+          close={this.hideModal} />
       </div>
     ); 
   }
@@ -188,4 +233,5 @@ const mapDispatchToProps = dispatch => (
   }, dispatch)
 );
 
+const Topic = connect(mapStateToProps)(_Topic);
 export default connect(mapStateToProps, mapDispatchToProps)(TopicBank);

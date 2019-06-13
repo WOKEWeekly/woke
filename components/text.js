@@ -36,6 +36,7 @@ export class Paragraph extends Component {
           color: 'white',
           display: 'inline',
           fontFamily: fonts.body,
+          fontSize: '1rem',
           whiteSpace: 'pre-line'
         }}>{this.props.children}</pre>
     )

@@ -1,11 +1,11 @@
 const async = require('async');
 const fs = require('fs');
-const { verifyToken, validateRequest, upload } = require('./middleware.js');
+const { verifyToken, validateReq, checkAuth, upload } = require('./middleware.js');
 
 module.exports = function(app, conn){
 
   /** Retrieve all sessions */
-  app.get('/getSessions', validateRequest, function(req, res){
+  app.get('/getSessions', validateReq, function(req, res){
     conn.query("SELECT * FROM sessions", function (err, result) {
       resToClient(res, err, result)
     });
@@ -24,7 +24,7 @@ module.exports = function(app, conn){
         const sql = "INSERT INTO sessions (title, dateHeld, image, slug, description) VALUES ?";
         const values = [[session.title, session.dateHeld, session.image, session.slug, session.description]];
         
-        conn.query(sql, [values], function (err, result, fields) {
+        conn.query(sql, [values], function (err) {
           err ? callback(err) : callback(null);
         });
       }
@@ -46,7 +46,7 @@ module.exports = function(app, conn){
         const sql = "UPDATE sessions SET title = ?, dateHeld = ?, image = ?, slug = ?, description = ? WHERE id = ?";
         const values = [session2.title, session2.dateHeld, session2.image, session2.slug, session2.description, session1.id];
         
-        conn.query(sql, values, function (err, result, fields) {
+        conn.query(sql, values, function (err) {
           if (!err){
             const image = `./static/images/sessions/${session1.image}`;
             
@@ -76,7 +76,7 @@ module.exports = function(app, conn){
         const session = req.body;
         const sql = "DELETE FROM sessions WHERE id = ?";
 
-        conn.query(sql, session.id, function (err, result, fields) {
+        conn.query(sql, session.id, function (err) {
           err ? callback(err) : callback(null, session.image);
         });
       },
@@ -107,6 +107,29 @@ module.exports = function(app, conn){
     
     conn.query(sql, [values], function (err) {
       resToClient(res, err);
+    });
+  });
+
+  /** Update topic in database */
+  app.put('/updateTopic', verifyToken, function(req, res){
+    const topic = req.body;
+    const sql = `UPDATE topics SET headline = ?, category = ?, question = ?, description = ?, type = ?, polarity = ?, option1 = ?, option2 = ? WHERE id = ?`;
+    const values = [topic.headline, topic.category, topic.question, topic.description, topic.type,
+      topic.polarity, topic.option1, topic.option2, topic.id];
+    
+    conn.query(sql, values, function (err) {
+      resToClient(res, err);
+    });
+  });
+
+  /** Delete an existing topic from database */
+  app.delete('/deleteTopic', verifyToken, checkAuth, function(req, res){
+    const topic = req.body;
+    const sql = "DELETE FROM topics WHERE id = ?";
+    
+    conn.query(sql, topic.id, function (err) {
+      resToClient(res, err);
+      // emails.sendTopicDeletionEmail(topic);
     });
   });
 
@@ -551,71 +574,6 @@ module.exports = function(app, conn){
         }
       });
     }
-  });
-
-  /** Update topic in database */
-  app.put('/updateTopic', verifyToken, function(req, res){
-    jwt.verify(req.token, process.env.JWT_SECRET, (err, auth) => {
-      if (err){
-        res.sendStatus(403);
-      } else {
-        if (!(auth.user && auth.user.clearance >= CLEARANCES.ACTIONS.CRUD_TOPICS)){
-          res.status(401).send(`You are not authorised to perform such an action.`);
-          return;
-        }
-
-        var topic = req.body;
-
-        if (!topic.polarity){
-          topic.option1 = topic.option2 = null;
-        }
-
-        var sql = `UPDATE topics SET headline = ?, category = ?, question = ?, description = ?, type = ?, polarity = ?, option1 = ?, option2 = ? WHERE id = ?`;
-        var values = [topic.headline, topic.category, topic.question, topic.description, topic.type,
-          topic.polarity, topic.option1, topic.option2, topic.id];
-        
-        conn.query(sql, values, function (err, result, fields) {
-          if (!err){
-            req.flash('success', `You've updated the details of session: ${topic.headline}:${topic.question}.`);
-            res.sendStatus(200);
-          } else {
-            if (err.toString().includes("Incorrect string")){
-              res.status(422).send(`Please do not use emojis during input.`)
-            } else {
-              res.status(400).send(err.toString());
-            }
-          }
-        });
-      }
-    });
-  });
-
-  /** Delete an existing topic from database */
-  app.delete('/deleteTopic', verifyToken, function(req, res){
-    jwt.verify(req.token, process.env.JWT_SECRET, (err, auth) => {
-      if (err){
-        res.sendStatus(403);
-      } else {
-        if (!(auth.user && auth.user.clearance >= CLEARANCES.ACTIONS.CRUD_TOPICS)){
-          res.status(401).send(`You are not authorised to perform such an action.`);
-          return;
-        }
-
-        var topic = req.body;
-        var sql = "DELETE FROM topics WHERE id = ?";
-        
-        conn.query(sql, topic.id, function (err, result, fields) {
-          if (!err){
-            // emails.sendTopicDeletionEmail(topic);
-            
-            req.flash('success', `You've deleted topic: ${topic.headline}:${topic.question}.`);
-            res.sendStatus(200);
-          } else {
-            res.status(400).send(err.toString());
-          }
-        });
-      }
-    });
   });
 
   /** Retrieve all suggestions */

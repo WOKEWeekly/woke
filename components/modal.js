@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Modal } from 'react-bootstrap';
 
 import { DeleteButton, CloseButton } from '~/components/button.js';
+import { Paragraph } from '~/components/text.js';
 import css from '~/styles/_components.scss';
 
 export class ConfirmModal extends Component {
@@ -14,7 +15,7 @@ export class ConfirmModal extends Component {
         show={visible}
         centered>
         <Modal.Body className={css.modal_body}>
-          <p className={css.text}>{message}</p>
+          <Paragraph className={css.text}>{message}</Paragraph>
         </Modal.Body>
 
         <Modal.Footer className={css.modal_footer}>

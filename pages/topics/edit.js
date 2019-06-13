@@ -17,10 +17,10 @@ class TopicEdit extends Component {
       category: props.topic.category,
       question: props.topic.question,
       type: props.topic.type,
-      description: props.topic.description,
+      description: props.topic.description || '',
       polarity: props.topic.polarity,
-      option1: props.topic.option1,
-      option2: props.topic.option2
+      option1: props.topic.option1 || '',
+      option2: props.topic.option2 || ''
     };
   }
  
@@ -47,24 +47,22 @@ class TopicEdit extends Component {
     if (!isValidTopic(this.state)) return;
     const { headline, category, question, type, description, polarity, option1, option2 } = this.state;
     
-    const topics = {
-      topic1: this.props.topic,
-      topic2: {
-        headline: headline.trim(),
-        category: category,
-        question: question.trim(),
-        type: type,
-        description: description.trim(),
-        polarity: polarity,
-        option1: polarity ? option1.trim() : null,
-        option2: polarity ? option2.trim() : null
-      }
-    };
+    const topic = {
+      id: this.props.topic.id,
+      headline: headline.trim(),
+      category: category,
+      question: question.trim(),
+      type: type,
+      description: description.trim(),
+      polarity: polarity,
+      option1: polarity ? option1.trim() : null,
+      option2: polarity ? option2.trim() : null
+    }
 
     /** Update topic in database */
     fetch('/updateTopic', {
       method: 'PUT',
-      body: JSON.stringify(topics),
+      body: JSON.stringify(topic),
       headers: {
         'Authorization': `Bearer ${this.props.user.token}`,
         'Content-Type': 'application/json'
@@ -88,8 +86,7 @@ class TopicEdit extends Component {
         cancelFunc={Router.back}
 
         metaTitle={'Edit Topic'}
-        metaUrl={'/edit'}
-         />
+        metaUrl={'/edit'} />
     );
   }
 }

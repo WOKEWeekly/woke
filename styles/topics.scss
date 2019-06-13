@@ -15,7 +15,7 @@
     border: $secondary-border;
     cursor: pointer;
     display: grid;
-    grid-template-rows: auto 1fr auto;
+    grid-template-rows: auto 1fr auto auto;
     min-height: 12em;
     margin: .1em;
     padding: .5em;
@@ -31,6 +31,15 @@
       font-size: .8em;
       border-top: 1px solid white;
       padding-top: .5em; }
+    .buttons {
+      border-radius: 15px;
+      margin-top: .7em;
+      width: 100%;
+      button {
+        font-size: 70%;
+        width: 50%;
+      }
+    }
   }
 }
 
