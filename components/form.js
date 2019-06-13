@@ -2,7 +2,6 @@ import React, { Component} from 'react';
 import { Form, Row } from 'react-bootstrap';
 import Textarea from 'react-textarea-autosize';
 import classNames from 'classnames';
-
 import css from '~/styles/_components.scss';
 
 /** For the form heading */
@@ -53,6 +52,7 @@ export class Input extends Component {
         name={this.props.name}
         placeholder={this.props.placeholder}
         className={css.input}
+        autoComplete={'off'}
         value={this.props.value || ''}
         onChange={this.props.onChange} />
     )
@@ -89,6 +89,7 @@ export class TextArea extends Component {
   }
 }
 
+/** For dropdown menus */
 export class Select extends Component {
   render(){
     const { placeholder, items } = this.props;

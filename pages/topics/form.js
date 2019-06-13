@@ -1,8 +1,8 @@
 import React, { Component} from 'react';
-import { Col, ToggleButton, ToggleButtonGroup } from 'react-bootstrap';
+import { Col } from 'react-bootstrap';
 
-import { SubmitButton, CancelButton } from '~/components/button.js';
-import { Heading, Group, Label, Input, TextArea, Select, Checkbox } from '~/components/form.js';
+import { SubmitButton, CancelButton, CheckboxButton, RadioButtonGroup } from '~/components/button.js';
+import { Heading, Group, Label, Input, TextArea, Select } from '~/components/form.js';
 import { Shader, Spacer } from '~/components/layout.js';
 
 import {categories} from '~/constants/categories.js';
@@ -65,21 +65,18 @@ export default class TopicForm extends Component {
             <Group>
               <Col md={5}>
                 <Label>Type:</Label>
-                <ToggleButtonGroup
+                <RadioButtonGroup
                   name={'type'}
-                  type={'radio'}
-                  className={css.type}
                   defaultValue={type}
-                  onChange={handleRadio}>
-                  <ToggleButton variant="dark" value={'Debate'}>Debate</ToggleButton>
-                  <ToggleButton variant="dark" value={'Discussion'}>Discussion</ToggleButton>
-                </ToggleButtonGroup>
+                  onChange={handleRadio}
+                  items={['Debate', 'Discussion']} />
               </Col>
               <Col md={7}>
                 <Label>Polarity:</Label>
                 <CheckboxButton
                   name={'polarity'}
-                  onChange={handleCheckbox} />
+                  onChange={handleCheckbox}
+                  label={'This is a polar question.'} />
               </Col>
             </Group>
             <Group className={css.options} style={{ display: polarity ? 'flex' : 'none' }}>
@@ -123,18 +120,5 @@ export default class TopicForm extends Component {
         </Spacer>
       </Shader>
     );
-  }
-}
-
-class CheckboxButton extends Component {
-  render(){
-    return (
-      <ToggleButtonGroup
-        type={'checkbox'}
-        className={css.polarity}
-        {...this.props}>
-        <ToggleButton variant="dark" value={true}>This is a polar question.</ToggleButton>
-      </ToggleButtonGroup>
-    )
   }
 }

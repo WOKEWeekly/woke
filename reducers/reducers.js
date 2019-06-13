@@ -49,7 +49,7 @@ const sessionReducer = (state = defaultSession, action) => {
 };
 
 const defaultTopic = {
-  sort: '2'
+  sort: '3'
 }
 
 const topicReducer = (state = defaultTopic, action) => {

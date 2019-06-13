@@ -1,10 +1,12 @@
 import React, { Component, PureComponent } from 'react';
-import { Button, Container, Col, Dropdown, Row, ToggleButton, ToggleButtonGroup } from 'react-bootstrap';
+import { Container, Col, Row } from 'react-bootstrap';
 import Link from 'next/link';
+import Router from 'next/router';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { saveSessionSort, saveSessionView } from '~/reducers/actions';
 
+import { AddButton, DropdownButton, RadioButtonGroup } from '~/components/button.js';
 import Cover from '~/components/cover.js';
 import { Icon } from '~/components/icon.js';
 import { Shader } from '~/components/layout.js';
@@ -116,6 +118,12 @@ class Sessions extends Component {
       </Container>;
     };
 
+    const sortItems = ['Sort By Date (Ascending)', 'Sort by Date (Descending)'];
+    const radioItems = [
+      <div><Icon name={'th-large'} />Grid</div>,
+      <div><Icon name={'list-ul'} />List</div>
+    ];
+
     return (
       <Shader>
         <Meta
@@ -132,29 +140,17 @@ class Sessions extends Component {
         {!isLoaded ? null : view === 1 ? <SessionGrid/> : <SessionList/>}
 
         <Toolbar>
-          <Link href={'/sessions/add'}>
-            <Button variant="dark">
-              <Icon name={'plus'} />Add Session
-            </Button>
-          </Link>
+          <AddButton
+            title={'Add Session'}
+            onClick={() => Router.push('/sessions/add')} />
 
-          <ToggleButtonGroup
-            className={css.view}
-            type={'radio'}
+          <RadioButtonGroup
             name={'view'}
+            items={radioItems}
             defaultValue={view}
-            onChange={this.switchView}>
-            <ToggleButton variant="dark" value={1}><Icon name={'th-large'} />Grid</ToggleButton>
-            <ToggleButton variant="dark" value={2}><Icon name={'list-ul'} />List</ToggleButton>
-          </ToggleButtonGroup>
+            onChange={this.switchView} />
     
-          <Dropdown className={css.sort} onSelect={this.switchSort}>
-            <Dropdown.Toggle variant="dark"><Icon name={'sort-amount-down'} />Sort</Dropdown.Toggle>
-            <Dropdown.Menu>
-              <Dropdown.Item eventKey={1}>Sort Ascending</Dropdown.Item>
-              <Dropdown.Item eventKey={2}>Sort Descending</Dropdown.Item>
-            </Dropdown.Menu>
-          </Dropdown>
+          <DropdownButton items={sortItems} onSelect={this.switchSort} />
         </Toolbar>
       </Shader>
     );

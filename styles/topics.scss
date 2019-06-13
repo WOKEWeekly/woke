@@ -5,6 +5,7 @@
   border-bottom: $border;
   display: grid;
   grid-template-columns: repeat(6, calc(100% / 6));
+  padding: .2em;
   width: 100%;
   @media (max-width: $break-xl) { grid-template-columns: repeat(5, 20%); }
   @media (max-width: $break-lg) { grid-template-columns: repeat(4, 25%); }
