@@ -19,7 +19,7 @@ export class Spacer extends Component {
       style={{
         display: 'grid',
         height: '100%',
-        gridTemplateRows: '1fr auto'
+        gridTemplateRows: this.props.gridrows || '1fr auto'
       }}>{this.props.children}</div>
     );
   }

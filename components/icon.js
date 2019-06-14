@@ -7,7 +7,7 @@ export class Icon extends Component {
     return (
       <FontAwesomeIcon
         icon={['fas', this.props.name]}
-        color={'white'}
+        color={this.props.color || 'white'}
         style={{ marginRight: 8 }} />
     ) 
   }

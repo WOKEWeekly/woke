@@ -8,8 +8,10 @@ import classNames from 'classnames';
 
 import { AddButton, DropdownButton } from '~/components/button.js';
 import Cover from '~/components/cover.js';
-import { Shader } from '~/components/layout.js';
+import { Shader, Spacer } from '~/components/layout.js';
+import Loader from '~/components/loader.js';
 import { ConfirmModal } from '~/components/modal.js';
+import SearchBar from '~/components/searchbar.js';
 import { Title, Subtitle } from '~/components/text.js';
 import Toolbar from '~/components/toolbar.js';
 
@@ -111,7 +113,7 @@ class TopicBank extends Component {
 
 	render(){
 
-    const { isLoaded } = this.state;
+    const { isLoaded, topics } = this.state;
     const sortItems = [
       'Sort Oldest To Newest',
       'Sort Newest To Oldest',
@@ -119,7 +121,15 @@ class TopicBank extends Component {
       'Sort Headline (Descending',
       'Sort Category (Ascending)',
       'Sort Category (Descending'
-    ]
+    ];
+
+    const TopicGrid = () => {
+      if (isLoaded){
+        return <div className={css.grid}>{this.renderTopics()}</div>;
+      } else {
+        return <Loader/>;
+      }
+    };
 
     return (
       <Shader>
@@ -128,25 +138,33 @@ class TopicBank extends Component {
 					description={'The currency of the franchise.'}
 					url={'/topics'} />
 
-        <Cover
-          title={'Topic Bank'}
-          subtitle={'The currency of the franchise.'}
-          image={'topics-header.jpg'}
-          height={200} />
+        <Spacer gridrows={'auto auto 1fr auto'}>
+          <Cover
+            title={'Topic Bank'}
+            subtitle={'The currency of the franchise.'}
+            image={'topics-header.jpg'}
+            height={200} />
 
-        <div className={css.grid}>
-          {isLoaded ? this.renderTopics() : null}
-        </div>
+          <Toolbar>
+            <SearchBar
+              placeholder={'Search a topic or keyword...'}
+              width={'20em'} />
 
-        <Toolbar>
-          <AddButton
-            title={'Add Topic'}
-            onClick={() => Router.push('/topics/add')} />
-    
-          <DropdownButton
-            items={sortItems}
-            onSelect={this.switchSort} />
-        </Toolbar>
+            <label className={css.count}>{topics.length} topics</label>
+          </Toolbar>
+
+          <TopicGrid/>
+
+          <Toolbar>
+            <AddButton
+              title={'Add Topic'}
+              onClick={() => Router.push('/topics/add')} />
+      
+            <DropdownButton
+              items={sortItems}
+              onSelect={this.switchSort} />
+          </Toolbar>
+        </Spacer>
       </Shader>
     );
 	}

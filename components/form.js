@@ -98,8 +98,8 @@ export class Select extends Component {
         className={css.select}
         {...this.props}>
         <option value={''} disabled>{placeholder}</option>
-        {React.Children.map(items, (item) => {
-          return <option value={item}>{item}</option>
+        {items.map((item) => {
+          return <option value={item.label}>{item.label}</option>
         })}
       </select>
     )

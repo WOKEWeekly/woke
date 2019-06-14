@@ -30,7 +30,7 @@ const userReducer = (state = initialUser, action) => {
 
 /** Reducer for session settings */
 const defaultSession = {
-  view: 1,
+  view: 'grid',
   sort: '2'
 }
 

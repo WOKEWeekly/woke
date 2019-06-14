@@ -15,13 +15,10 @@ export default class TopicForm extends Component {
     const { heading, confirmText, confirmFunc, cancelFunc, metaTitle, metaUrl, handleText, handleRadio, handleCheckbox} = this.props;
     const { headline, category, question, type, polarity, option1, option2, description } = this.props.topic;
 
-    const listCategories = () => {
-      const items = [];
-      categories.forEach(category => {
-        items.push(category.label);
-      });
-      return items;
-    }
+    const radioItems = [
+      { label: 'Debate', value: 'Debate' },
+      { label: 'Discussion', value: 'Discussion' }
+    ];
 
     return (
       <Shader>
@@ -48,7 +45,7 @@ export default class TopicForm extends Component {
                   name={'category'}
                   value={category}
                   placeholder={'Select a category.'}
-                  items={listCategories()}
+                  items={categories}
                   onChange={handleText} />
               </Col>
             </Group>
@@ -69,7 +66,7 @@ export default class TopicForm extends Component {
                   name={'type'}
                   defaultValue={type}
                   onChange={handleRadio}
-                  items={['Debate', 'Discussion']} />
+                  items={radioItems} />
               </Col>
               <Col md={7}>
                 <Label>Polarity:</Label>

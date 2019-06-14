@@ -9,7 +9,8 @@ import { saveSessionSort, saveSessionView } from '~/reducers/actions';
 import { AddButton, DropdownButton, RadioButtonGroup } from '~/components/button.js';
 import Cover from '~/components/cover.js';
 import { Icon } from '~/components/icon.js';
-import { Shader } from '~/components/layout.js';
+import { Shader, Spacer } from '~/components/layout.js';
+import Loader from '~/components/loader.js';
 import { Title, Subtitle, Paragraph, Divider } from '~/components/text.js';
 import Toolbar from '~/components/toolbar.js';
 import { formatDate } from '~/constants/date.js';
@@ -106,23 +107,27 @@ class Sessions extends Component {
 
     const { isLoaded, view } = this.state;
 
-    /** Render sessions in grid */
-    const SessionGrid = () => {
-      return <div className={css.grid}>{this.renderSessions()}</div>;
-    };
-
-    /** Render sessions in list */
-    const SessionList = () => {
-      return <Container className={css.list}>
-        {this.renderSessions()}
-      </Container>;
-    };
-
     const sortItems = ['Sort By Date (Ascending)', 'Sort by Date (Descending)'];
     const radioItems = [
-      <div><Icon name={'th-large'} />Grid</div>,
-      <div><Icon name={'list-ul'} />List</div>
+      { label: <div><Icon name={'th-large'} />Grid</div>, value: 'grid' },
+      { label: <div><Icon name={'list-ul'} />List</div>, value: 'list' }
     ];
+
+    const SessionCollection = () => {
+      if (isLoaded){
+        if (view === 'grid'){
+          /** Render sessions in grid */
+          return <div className={css.grid}>{this.renderSessions()}</div>;
+        } else {
+          /** Render sessions in list */
+          return <Container className={css.list}>
+            {this.renderSessions()}
+          </Container>;
+        }
+      } else {
+        return <Loader/>;
+      }
+    }
 
     return (
       <Shader>
@@ -131,27 +136,29 @@ class Sessions extends Component {
 					description={'Where we do the magic...'}
 					url={'/sessions'} />
 
-        <Cover
-          title={'Sessions'}
-          subtitle={'Where we do the magic...'}
-          image={'sessions-header.jpg'}
-          height={200} />
+        <Spacer gridrows={'auto 1fr auto'}>
+          <Cover
+            title={'Sessions'}
+            subtitle={'Where we do the magic...'}
+            image={'sessions-header.jpg'}
+            height={200} />
 
-        {!isLoaded ? null : view === 1 ? <SessionGrid/> : <SessionList/>}
+          <SessionCollection/>
 
-        <Toolbar>
-          <AddButton
-            title={'Add Session'}
-            onClick={() => Router.push('/sessions/add')} />
+          <Toolbar>
+            <AddButton
+              title={'Add Session'}
+              onClick={() => Router.push('/sessions/add')} />
 
-          <RadioButtonGroup
-            name={'view'}
-            items={radioItems}
-            defaultValue={view}
-            onChange={this.switchView} />
-    
-          <DropdownButton items={sortItems} onSelect={this.switchSort} />
-        </Toolbar>
+            <RadioButtonGroup
+              name={'view'}
+              items={radioItems}
+              defaultValue={view}
+              onChange={this.switchView} />
+      
+            <DropdownButton items={sortItems} onSelect={this.switchSort} />
+          </Toolbar>
+        </Spacer>
       </Shader>
     );
 	}
@@ -161,7 +168,7 @@ class Session extends PureComponent {
   render(){
     const { item, view } = this.props;
     
-    if (view === 1){
+    if (view === 'grid'){
       return (
         <Link href={`/session/${item.slug}`}>
           <div className={css.cell}>

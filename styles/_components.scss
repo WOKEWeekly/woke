@@ -85,9 +85,9 @@
     border: none;
     border-bottom: $underline;
     font-size: 1.2em;
+    outline: none;
     padding: .4em;
     width: 100%;
-    &:focus { outline: none; }
   }
   .textarea {
     @extend .input;
@@ -146,6 +146,24 @@
 :global(.react-datepicker__day--outside-month){ color: #a9a9a9; }
 
 /****************/
+/** loader.js **/
+/****************/
+
+.loader {
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  height: 100%;
+  justify-content: center;
+  width: 100%;
+  .spinner {
+    color: white;
+    font-family: $body-font;
+    padding-left: .5em;
+  }
+}
+
+/****************/
 /** modal.js **/
 /****************/
 .modal_header, .modal_body, .modal_footer {
@@ -159,6 +177,23 @@
 :global(.modal-content) {
   border: 1px solid $faded-white !important;
   overflow: hidden;
+}
+
+/****************/
+/** searchbar.js **/
+/****************/
+
+.searchContainer {
+  background: $dark;
+  border-radius: 30px;
+  padding: .3em .7em;
+  .searchBar {
+    @extend .text;
+    background: none;
+    border: none;
+    font-size: 90%;
+    outline: none;
+  }
 }
 
 /****************/

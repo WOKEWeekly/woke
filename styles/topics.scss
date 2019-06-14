@@ -1,6 +1,11 @@
 
 @import "variables";
 
+.count {
+  color: white;
+  font-family: $title-font;
+}
+
 .grid {
   border-bottom: $border;
   display: grid;

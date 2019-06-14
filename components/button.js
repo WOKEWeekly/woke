@@ -126,8 +126,8 @@ export class RadioButtonGroup extends Component {
         name={this.props.name}
         defaultValue={this.props.defaultValue}
         onChange={this.props.onChange}>
-          {React.Children.map(this.props.items, (item, index) => {
-            return <ToggleButton variant="dark" value={index+1}>{item}</ToggleButton>
+          {this.props.items.map((item, index) => {
+            return <ToggleButton variant="dark" key={index} value={item.value}>{item.label}</ToggleButton>;
           })}
       </ToggleButtonGroup>
     )
