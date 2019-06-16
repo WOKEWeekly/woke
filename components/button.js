@@ -91,7 +91,7 @@ export class CloseButton extends Component {
 export class DropdownButton extends Component {
   render(){
     return (
-      <Dropdown className={css.widgets} onSelect={this.props.onSelect}>
+      <Dropdown className={css.widgets} onSelect={this.props.onSelect} alignRight>
         <Dropdown.Toggle variant="dark"><Icon name={'sort-amount-down'} />Sort</Dropdown.Toggle>
         <Dropdown.Menu>
           {React.Children.map(this.props.items, (item, index) => {

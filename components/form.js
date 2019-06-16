@@ -98,8 +98,8 @@ export class Select extends Component {
         className={css.select}
         {...this.props}>
         <option value={''} disabled>{placeholder}</option>
-        {items.map((item) => {
-          return <option value={item.label}>{item.label}</option>
+        {items.map((item, index) => {
+          return <option key={index} value={item.label}>{item.label}</option>
         })}
       </select>
     )

@@ -28,9 +28,14 @@ class TopicBank extends Component {
     super(props);
     this.state = {
       topics: [],
-      isLoaded: false,
+      filtered: [],
+      results: [],
+
       sort: props.topic.sort,
-      modalVisible: false
+      filters: {},
+      searchWord: '',
+
+      isLoaded: false
     }
   }
 
@@ -52,6 +57,7 @@ class TopicBank extends Component {
     .then(topics => {
       this.setState({
         topics: topics,
+        filtered: topics,
         isLoaded: true
       });
 
@@ -60,21 +66,9 @@ class TopicBank extends Component {
     .catch(error => console.error(error));
   }
 
-  /** Render all topics */
-  renderTopics = () => {
-    const { topics } = this.state;
-    const items = [];
-
-    for (const [index, item] of topics.entries()) {
-      items.push(<Topic key={index} item={item} />);
-    }
-
-    return items;
-  }
-
   /** Sort topics according to value */
   sortTopics = (sort) => {
-    const { topics } = this.state;
+    const {topics} = this.state;
     let key, order = '';
 
 		switch (sort){
@@ -102,7 +96,43 @@ class TopicBank extends Component {
 		this.setState({
       topics: order === 'DESC' ? topics.reverse() : topics,
       sort: sort
+    }, () => {
+      this.filterTopics();
     });
+  }
+  
+  /** Filter topics */
+	filterTopics = () => {
+    const { topics, filters, searchWord } = this.state;
+
+		let results = topics.filter((topic, index, topics) => {
+      if (Object.keys(filters).length > 0){
+        return (filters.categories.length > 0 ? filters.categories.includes(topic.category) : true)
+          && (filters.types.length > 0 ? filters.types.includes(topic.type) : true)
+          && (filters.polarity.length > 0 ? filters.polarity.includes(topic.polarity) : true);
+      } else {
+        return topics;
+      }      
+    });
+
+    this.setState({ filtered: results }, () => {
+      this.searchTopics(searchWord);
+    });
+  }
+  
+  /** Search through the topics, filtering via user input */
+  searchTopics = (text) => {
+    const { filtered } = this.state;
+
+		const searched = filtered.filter(topic =>
+			(topic.headline.toLowerCase().indexOf(text.toLowerCase()) > -1
+			|| topic.question.toLowerCase().indexOf(text.toLowerCase()) > -1)
+		);
+
+		this.setState({
+			results: searched,
+			searchWord: text
+		});
   }
 
   /** Switch the sort value */
@@ -111,9 +141,12 @@ class TopicBank extends Component {
     this.sortTopics(value);
   }
 
+  handleSearchWord = (event) => { this.searchTopics(event.target.value); }
+
 	render(){
 
-    const { isLoaded, topics } = this.state;
+    const { isLoaded, searchWord, results } = this.state;
+
     const sortItems = [
       'Sort Oldest To Newest',
       'Sort Newest To Oldest',
@@ -125,7 +158,13 @@ class TopicBank extends Component {
 
     const TopicGrid = () => {
       if (isLoaded){
-        return <div className={css.grid}>{this.renderTopics()}</div>;
+        const items = [];
+
+        for (const [index, item] of results.entries()) {
+          items.push(<Topic key={index} item={item} getTopics={this.getTopics} />);
+        }
+
+        return <div className={css.grid}>{items}</div>;
       } else {
         return <Loader/>;
       }
@@ -147,10 +186,12 @@ class TopicBank extends Component {
 
           <Toolbar>
             <SearchBar
+              onChange={this.handleSearchWord}
               placeholder={'Search a topic or keyword...'}
-              width={'20em'} />
+              width={'20em'}
+              value={searchWord} />
 
-            <label className={css.count}>{topics.length} topics</label>
+            <label className={css.count}>{results.length} topics</label>
           </Toolbar>
 
           <TopicGrid/>
@@ -193,7 +234,7 @@ class _Topic extends PureComponent {
         'Clearance': CLEARANCES.ACTIONS.CRUD_TOPICS
       }
     }).then(res => {
-      if (res.ok) location.reload();
+      if (res.ok) this.props.getTopics();
     }).catch(error => console.error(error));
   }
 

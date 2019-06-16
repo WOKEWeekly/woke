@@ -11,7 +11,9 @@ export default class SearchBar extends Component {
         <input
           type={'text'}
           className={css.searchBar}
+          onChange={this.props.onChange}
           placeholder={this.props.placeholder}
+          value={this.props.value}
           style={{
             width: this.props.width
           }} />

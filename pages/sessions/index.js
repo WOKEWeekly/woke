@@ -56,18 +56,6 @@ class Sessions extends Component {
     .catch(error => console.error(error));
   }
 
-  /** Render all sessions */
-  renderSessions = () => {
-    const { sessions, view } = this.state;
-    const items = [];
-
-    for (const [index, item] of sessions.entries()) {
-      items.push(<Session key={index} item={item} view={view} />);
-    }
-
-    return items;
-  }
-
   sortSessions = (sort) => {
     const { sessions } = this.state;
 
@@ -115,14 +103,19 @@ class Sessions extends Component {
 
     const SessionCollection = () => {
       if (isLoaded){
+        const { sessions, view } = this.state;
+        const items = [];
+
+        for (const [index, item] of sessions.entries()) {
+          items.push(<Session key={index} item={item} view={view} />);
+        }
+
         if (view === 'grid'){
           /** Render sessions in grid */
-          return <div className={css.grid}>{this.renderSessions()}</div>;
+          return <div className={css.grid}>{items}</div>;
         } else {
           /** Render sessions in list */
-          return <Container className={css.list}>
-            {this.renderSessions()}
-          </Container>;
+          return <Container className={css.list}>{items}</Container>;
         }
       } else {
         return <Loader/>;
