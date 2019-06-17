@@ -2,8 +2,9 @@
   "scripts": {
     "dev": "node server.js",
     "build": "next build",
-    "start": "NODE_ENV=production node server.js",
-    "export": "next export"
+    "start": "next start",
+    "export": "next export",
+    "prod": "NODE_ENV=production node server.js"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^1.2.18",
@@ -44,6 +45,7 @@
     "react-datepicker": "^2.5.0",
     "react-dom": "^16.8.6",
     "react-redux": "^7.0.3",
+    "react-scroll": "^1.7.12",
     "react-textarea-autosize": "^7.1.0",
     "redux": "^4.0.1",
     "redux-persist": "^5.10.0",

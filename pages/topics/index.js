@@ -1,5 +1,6 @@
 import React, { Component, PureComponent } from 'react';
 import { Button, ButtonGroup } from 'react-bootstrap';
+import Link from 'next/link';
 import Router from 'next/router';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -9,7 +10,7 @@ import classNames from 'classnames';
 import { AddButton, DropdownButton } from '~/components/button.js';
 import Cover from '~/components/cover.js';
 import { Shader, Spacer } from '~/components/layout.js';
-import Loader from '~/components/loader.js';
+import { Loader, Empty } from '~/components/loader.js';
 import { ConfirmModal } from '~/components/modal.js';
 import SearchBar from '~/components/searchbar.js';
 import { Title, Subtitle } from '~/components/text.js';
@@ -151,13 +152,17 @@ class TopicBank extends Component {
       'Sort Oldest To Newest',
       'Sort Newest To Oldest',
       'Sort Headline (Ascending)',
-      'Sort Headline (Descending',
+      'Sort Headline (Descending)',
       'Sort Category (Ascending)',
-      'Sort Category (Descending'
+      'Sort Category (Descending)'
     ];
 
     const TopicGrid = () => {
-      if (isLoaded){
+      if (!isLoaded){
+        return <Loader/>;
+      } else if (results.length === 0){
+        return <Empty message={'No topics found.'}/>;
+      } else {
         const items = [];
 
         for (const [index, item] of results.entries()) {
@@ -165,8 +170,6 @@ class TopicBank extends Component {
         }
 
         return <div className={css.grid}>{items}</div>;
-      } else {
-        return <Loader/>;
       }
     };
 

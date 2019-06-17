@@ -3,8 +3,13 @@ import { Container, Col, Row, Nav, Navbar } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { HeaderIcon } from '~/components/icon';
 
+
+import { bindActionCreators } from 'redux';
+import { clearUser } from '~/reducers/actions';
+
 import Login from './login';
 import { accounts, emails } from '~/constants/settings.js';
+import CLEARANCES from '~/constants/clearances.js';
 import css from '~/styles/_partials.scss';
 
 /** Little top bar for social media icons and account details */
@@ -20,6 +25,17 @@ class PreNavbar extends Component {
   showModal = () => { this.setState({modalVisible: true}); }
   hideModal = () => { this.setState({modalVisible: false}); }
 
+  /** Log out, de-authenticating the user */
+  logOut = () => {
+    fetch('/logout', { method: 'POST' })
+    .then(res => {
+      if (res.ok){
+        this.props.clearUser();
+        location.reload();
+      }
+    }).catch(error => console.error(error));
+  }
+
   render(){
 
     /** If authenticated, show name. Else, show option to login/register */
@@ -30,6 +46,7 @@ class PreNavbar extends Component {
         return (
           <Col xs={6} className={css.auth}>
             <a href="#signup">{fullname}</a>
+            <button onClick={this.logOut}>Log Out</button>
           </Col>
         );
       } else {
@@ -65,8 +82,11 @@ class PreNavbar extends Component {
 }
 
 /** Main navigation bar with routes */
-export class MainNavBar extends Component {
+export class MainNavbar extends Component {
   render(){
+    const { user } = this.props;
+
+
     return (
       <Navbar className={css.nav} variant="dark" expand="lg" sticky="top">
         <Navbar.Brand href="/home">
@@ -75,12 +95,13 @@ export class MainNavBar extends Component {
             height="40"
             alt="#WOKEWeekly Logo" />
         </Navbar.Brand>
-        <Navbar.Toggle aria-controls="basic-navbar-nav" />
-        <Navbar.Collapse id="basic-navbar-nav">
+        <Navbar.Toggle />
+        <Navbar.Collapse>
           <Nav className="ml-auto">
             <Nav.Link href="/sessions" className={css.links}>Sessions</Nav.Link>
-            <Nav.Link href="/topics" className={css.links}>Topic Bank</Nav.Link>
-            <Nav.Link href="#link" className={css.links}>Forum</Nav.Link>
+            {user.clearance >= CLEARANCES.ACTIONS.VIEW_TOPICS ?
+            <Nav.Link href="/topics" className={css.links}>Topic Bank</Nav.Link> : null}
+            {/* <Nav.Link href="#link" className={css.links}>Forum</Nav.Link> */}
             <Nav.Link href="#link" className={css.links}>#BlackExcellence</Nav.Link>
             <Nav.Link href="#link" className={css.links}>The Exec.</Nav.Link>
             <Nav.Link href="#link" className={css.links}>About</Nav.Link>
@@ -96,4 +117,11 @@ const mapStateToProps = state => ({
   user: state.user
 });
 
-export const PreNavBar = connect(mapStateToProps)(PreNavbar);
+const mapDispatchToProps = dispatch => (
+  bindActionCreators({
+    clearUser
+  }, dispatch)
+);
+
+export const PreNavBar = connect(mapStateToProps, mapDispatchToProps)(PreNavbar);
+export const MainNavBar = connect(mapStateToProps, mapDispatchToProps)(MainNavbar);

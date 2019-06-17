@@ -33,6 +33,7 @@ class LoginModal extends Component {
     .then(res => res.json())
     .then(user => {
       this.props.saveUser(user);
+      this.props.close();
       location.reload();
     }).catch(error => console.error(error));
   }

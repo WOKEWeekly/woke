@@ -10,7 +10,7 @@ import { AddButton, DropdownButton, RadioButtonGroup } from '~/components/button
 import Cover from '~/components/cover.js';
 import { Icon } from '~/components/icon.js';
 import { Shader, Spacer } from '~/components/layout.js';
-import Loader from '~/components/loader.js';
+import { Loader, Empty } from '~/components/loader.js';
 import { Title, Subtitle, Paragraph, Divider } from '~/components/text.js';
 import Toolbar from '~/components/toolbar.js';
 import { formatDate } from '~/constants/date.js';
@@ -93,7 +93,7 @@ class Sessions extends Component {
 
 	render(){
 
-    const { isLoaded, view } = this.state;
+    const { isLoaded, sessions, view } = this.state;
 
     const sortItems = ['Sort By Date (Ascending)', 'Sort by Date (Descending)'];
     const radioItems = [
@@ -102,8 +102,11 @@ class Sessions extends Component {
     ];
 
     const SessionCollection = () => {
-      if (isLoaded){
-        const { sessions, view } = this.state;
+      if (!isLoaded){
+        return <Loader/>;
+      } else if (sessions.length === 0) {
+        return <Empty message={'No sessions found.'} />;
+      } else {
         const items = [];
 
         for (const [index, item] of sessions.entries()) {
@@ -111,14 +114,10 @@ class Sessions extends Component {
         }
 
         if (view === 'grid'){
-          /** Render sessions in grid */
           return <div className={css.grid}>{items}</div>;
         } else {
-          /** Render sessions in list */
           return <Container className={css.list}>{items}</Container>;
         }
-      } else {
-        return <Loader/>;
       }
     }
 

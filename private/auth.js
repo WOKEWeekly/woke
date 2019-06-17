@@ -82,8 +82,7 @@ module.exports = function(app, conn, passport){
   /** Log user out */
   app.post('/logout', function(req, res){
     req.logout();
-    req.flash('positive', 'You are now logged out.');
-    res.redirect('/');
+    res.sendStatus(200);
   });
   
   /** Sign up a new user */

@@ -3,7 +3,7 @@ import { Spinner } from 'react-bootstrap';
 
 import css from '~/styles/_components.scss';
 
-export default class Loader extends Component {
+export class Loader extends Component {
   render(){
     return (
       <div className={css.loader}>
@@ -12,6 +12,16 @@ export default class Loader extends Component {
           className={css.spinner}
           size={'sm'} />
         <span className={css.spinner}>Loading...</span>
+      </div>
+    )
+  }
+}
+
+export class Empty extends Component {
+  render(){
+    return (
+      <div className={css.loader}>
+        <span className={css.spinner}>{this.props.message}</span>
       </div>
     )
   }

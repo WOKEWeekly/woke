@@ -7,8 +7,7 @@ const initialUser = {
   fullname: '',
   username: '',
   clearance: 0,
-  isAuthenticated: false,
-  hasClearance: function(){},
+  isAuthenticated: false
 };
 
 const userReducer = (state = initialUser, action) => {
@@ -18,12 +17,10 @@ const userReducer = (state = initialUser, action) => {
 
       user.isAuthenticated = true;
       user.fullname = `${user.firstname} ${user.lastname}`;
-      user.hasClearance = function(value){
-        return action.payload.clearance >= value ? true : false;
-      }
       
       return user;
-    case 'CLEAR_USER': return state;
+    case 'CLEAR_USER':
+      return initialUser;
     default: return state;
   }
 };
