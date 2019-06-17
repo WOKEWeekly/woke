@@ -1,6 +1,5 @@
 import React, { Component, PureComponent } from 'react';
 import { Button, ButtonGroup } from 'react-bootstrap';
-import Link from 'next/link';
 import Router from 'next/router';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';

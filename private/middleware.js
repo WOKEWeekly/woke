@@ -36,13 +36,22 @@ module.exports = {
 
   /** Check authorisation before performing action */
   checkAuth: (req, res, next) => {
-    const clearance = req.auth.user.clearance;
+    const clearance = req.auth ? req.auth.user.clearance : 0;
     const threshold = parseInt(req.headers.clearance);
-
     if (clearance >= threshold){
       next();
     } else {
       res.status(401).send(`You are not authorised to perform such an action.`);
+    }
+  },
+
+  /** Check authorisation before accessing a route, redirect to home if unauthorised */
+  checkAuthRoute: (req, res, next, threshold) => {
+    const clearance = req.auth ? req.auth.user.clearance : 0;
+    if (clearance >= threshold){
+      next();
+    } else {
+      res.redirect('/');
     }
   },
 

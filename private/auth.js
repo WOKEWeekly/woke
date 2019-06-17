@@ -14,7 +14,7 @@ module.exports = function(app, conn, passport){
   });
   
   /* Used to deserialize the user */
-  passport.deserializeUser(function(id, done) {
+  passport.deserializeUser(function(id, callback) {
     conn.query(`SELECT * FROM user WHERE ID = ?`, id, function(err, rows){
       done(err, rows[0]);
     });
@@ -44,16 +44,14 @@ module.exports = function(app, conn, passport){
       }
       
       /** Everything's okay. Return successful user */
-      return done(null, rows[0]);			
-      
+      return done(null, rows[0]);
     });
   }));
   
   /* Authenticate user login */
   app.post('/login', passport.authenticate('login'), function(req, res){
-    
     if (req.user){
-      console.log("Logging in for user " + req.user.firstname + ".");
+      console.log(`Logging in for user ${req.user.firstname}.`);
     } else {
       res.status(400).send("Invalid user");
     }
@@ -67,13 +65,14 @@ module.exports = function(app, conn, passport){
     
     /** Pass authenticated user information to mobile app */
     jwt.sign({user: req.user}, process.env.JWT_SECRET, (err, token) => {
-      const user = {};
-      user.id = req.user.id;
-      user.firstname = req.user.firstname;
-      user.lastname = req.user.lastname;
-      user.username = req.user.username;
-      user.clearance = req.user.clearance;
-      user.token = token;
+      const user = {
+        id: req.user.id,
+        firstname: req.user.firstname,
+        lastname: req.user.lastname,
+        username: req.user.username,
+        clearance: req.user.clearance,
+        token: token
+      };
       
       res.json(user);
     });  

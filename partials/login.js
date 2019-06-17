@@ -5,7 +5,7 @@ import { bindActionCreators } from 'redux';
 import { saveUser } from '~/reducers/actions';
 
 import { SubmitButton, CancelButton } from '~/components/button.js';
-import { Group, Label, Input, Checkbox } from '~/components/form.js';
+import { Group, Label, Input, PasswordInput, Checkbox } from '~/components/form.js';
 import css from '~/styles/_components.scss';
 
 class LoginModal extends Component {
@@ -62,7 +62,7 @@ class LoginModal extends Component {
             </Group>
             <Group>
               <Label>Password:</Label>
-              <Input
+              <PasswordInput
                 value={password}
                 onChange={this.handlePassword}
                 placeholder={"Enter password"} />

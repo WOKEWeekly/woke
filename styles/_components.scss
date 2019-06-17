@@ -175,6 +175,7 @@
 }
 :global(.modal-content) {
   border: 1px solid $faded-white !important;
+  border-radius: 15px !important;
   overflow: hidden;
 }
 

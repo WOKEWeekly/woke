@@ -39,16 +39,26 @@ export class Label extends Component {
 
 /** For inline text inputs */
 export class Input extends Component {
-  constructor(props){
-    super(props);
-    this.state = {
-      value: props.value
-    }
-  }
   render(){
     return (
       <input
         type={'text'}
+        name={this.props.name}
+        placeholder={this.props.placeholder}
+        className={css.input}
+        autoComplete={'off'}
+        value={this.props.value || ''}
+        onChange={this.props.onChange} />
+    )
+  }
+}
+
+/** For password inputs */
+export class PasswordInput extends Component {
+  render(){
+    return (
+      <input
+        type={'password'}
         name={this.props.name}
         placeholder={this.props.placeholder}
         className={css.input}

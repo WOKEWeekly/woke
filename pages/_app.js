@@ -39,6 +39,7 @@ export default class WOKE extends App {
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossOrigin="anonymous" />
         <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Raleway:400,700" />
         <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Patua+One:400,700" />
+        <link rel="icon" href="static/images/logos/favicon.jpg" />
 
         <Provider store={store}>
           <PersistGate loading={null} persistor={persistor}>

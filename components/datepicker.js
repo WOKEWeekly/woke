@@ -8,11 +8,12 @@ import { creationDate } from '~/constants/settings.js';
 class DateInput extends Component {
   render(){
     return (
-      <Input
-        type={'button'}
-        onClick={this.props.onClick}
-        defaultValue={this.props.value}
-        style={{textAlign: 'left'}} />
+      <button onClick={this.props.onClick} style={{all: 'initial'}}>
+        <Input
+          value={this.props.value}
+          placeholder={'Select a date.'}
+          style={{textAlign: 'left'}} />
+      </button>
     );
   }
 }

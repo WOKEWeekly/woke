@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Container, Col, Row, Nav, Navbar } from 'react-bootstrap';
+import { Container, Col, Row, Dropdown, Nav, Navbar } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { HeaderIcon } from '~/components/icon';
 
@@ -45,8 +45,14 @@ class PreNavbar extends Component {
       if (isAuthenticated){
         return (
           <Col xs={6} className={css.auth}>
-            <a href="#signup">{fullname}</a>
-            <button onClick={this.logOut}>Log Out</button>
+            <Dropdown style={{zIndex: 1050}}>
+              <Dropdown.Toggle variant="dark">{fullname}</Dropdown.Toggle>
+              <Dropdown.Menu>
+                <Dropdown.Item eventKey={'1'}>Your Account</Dropdown.Item>
+                <Dropdown.Divider />
+                <Dropdown.Item onClick={this.logOut}>Log Out</Dropdown.Item>
+              </Dropdown.Menu>
+            </Dropdown>
           </Col>
         );
       } else {
@@ -85,7 +91,6 @@ class PreNavbar extends Component {
 export class MainNavbar extends Component {
   render(){
     const { user } = this.props;
-
 
     return (
       <Navbar className={css.nav} variant="dark" expand="lg" sticky="top">
