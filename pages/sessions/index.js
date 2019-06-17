@@ -133,7 +133,8 @@ class Sessions extends Component {
             title={'Sessions'}
             subtitle={'Where we do the magic...'}
             image={'sessions-header.jpg'}
-            height={200} />
+            height={200}
+            backgroundPosition={'0 -70px'} />
 
           <SessionCollection/>
 

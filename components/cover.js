@@ -7,15 +7,18 @@ import css from '~/styles/_components.scss';
 
 export default class Cover extends Component {
 	render(){
+    const { backgroundAttachment, backgroundPosition, height, image, title, subtitle} = this.props;
 		return (
       <Container fluid={true} className={css.cover} style={{
-        backgroundImage: `url(/static/images/bg/${this.props.image})`,
-        height: this.props.height,
+        backgroundAttachment: backgroundAttachment,
+        backgroundPosition: backgroundPosition,
+        backgroundImage: `url(/static/images/bg/${image})`,
+        minHeight: height,
         textAlign: 'center'
       }}>
         <div>
-          <Title>{this.props.title}</Title>
-          <Subtitle>{this.props.subtitle}</Subtitle>
+          <Title>{title}</Title>
+          <Subtitle>{subtitle}</Subtitle>
         </div>
       </Container>
 		);

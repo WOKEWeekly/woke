@@ -185,7 +185,8 @@ class TopicBank extends Component {
             title={'Topic Bank'}
             subtitle={'The currency of the franchise.'}
             image={'topics-header.jpg'}
-            height={200} />
+            height={200}
+            backgroundPosition={'0 -70px'} />
 
           <Toolbar>
             <SearchBar
