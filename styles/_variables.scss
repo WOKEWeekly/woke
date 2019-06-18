@@ -24,7 +24,8 @@ $cancel-button: rgba(142, 116, 171, .5);
 $cancel-hover: rgba(190, 155, 229, .3);
 $cancel-active: rgba(173, 127, 224, .5);
 
-$toolbar: black;
+$toolbar: rgba(0,0,0,.95);
+$navbar-height: 9vh;
 
 /** Media queries */
 $break-sm: 576px; // Small devices (landscape phones)

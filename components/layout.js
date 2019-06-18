@@ -6,6 +6,10 @@ export const Tablet = props => <Responsive {...props} minWidth={768} maxWidth={9
 export const Mobile = props => <Responsive {...props} maxWidth={767} />;
 export const Default = props => <Responsive {...props} minWidth={768} />;
 
+export const zIndices = {
+  accountMenu: 1050
+}
+
 export class Shader extends Component {
   render(){
     return (

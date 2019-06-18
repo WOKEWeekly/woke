@@ -7,7 +7,7 @@ import { EditButton, DeleteButton } from '~/components/button.js';
 import { Icon } from '~/components/icon.js';
 import { ConfirmModal } from '~/components/modal.js';
 import { Title, Subtitle, Paragraph, Divider } from '~/components/text.js';
-import Toolbar from '~/components/toolbar.js';
+import {BottomToolbar} from '~/components/toolbar.js';
 import { Shader, Spacer } from '~/components/layout.js';
 
 import { formatDate } from '~/constants/date.js';
@@ -77,7 +77,7 @@ export default class TopicPage extends Component {
         </Shader>
 
         {true /** Admin */ ? 
-          <Toolbar>
+          <BottomToolbar>
             <Link href={`/topics/edit/${topic.id}`}>
               <EditButton><Icon name={'edit'} />Edit Topic</EditButton>
             </Link>
@@ -85,7 +85,7 @@ export default class TopicPage extends Component {
             <DeleteButton onClick={this.showModal}>
               <Icon name={'trash'} />Delete Topic
             </DeleteButton>
-          </Toolbar>
+          </BottomToolbar>
         : null}
 
         <ConfirmModal

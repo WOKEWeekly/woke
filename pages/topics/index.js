@@ -13,7 +13,7 @@ import { Loader, Empty } from '~/components/loader.js';
 import { ConfirmModal } from '~/components/modal.js';
 import SearchBar from '~/components/searchbar.js';
 import { Title, Subtitle } from '~/components/text.js';
-import Toolbar from '~/components/toolbar.js';
+import { TopToolbar, BottomToolbar } from '~/components/toolbar.js';
 
 import { categories } from '~/constants/categories.js';
 import CLEARANCES from '~/constants/clearances.js';
@@ -191,18 +191,18 @@ class TopicBank extends Component {
             height={200}
             backgroundPosition={'0 -70px'} />
 
-          <Toolbar>
+          <TopToolbar>
             <SearchBar
               onChange={this.handleSearchWord}
               placeholder={'Search a topic or keyword...'}
               value={searchWord} />
 
             <label className={css.count}>{results.length} topics</label>
-          </Toolbar>
+          </TopToolbar>
 
           <TopicGrid/>
 
-          <Toolbar>
+          <BottomToolbar>
             <AddButton
               title={'Add Topic'}
               mobileTitle={'Add'}
@@ -211,7 +211,7 @@ class TopicBank extends Component {
             <DropdownButton
               items={sortItems}
               onSelect={this.switchSort} />
-          </Toolbar>
+          </BottomToolbar>
         </Spacer>
       </Shader>
     );

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Container, Col, Row, Dropdown, Nav, Navbar } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { HeaderIcon } from '~/components/icon';
-
+import { zIndices } from '~/components/layout';
 
 import { bindActionCreators } from 'redux';
 import { clearUser } from '~/reducers/actions';
@@ -45,7 +45,7 @@ class PreNavbar extends Component {
       if (isAuthenticated){
         return (
           <Col xs={6} className={css.auth}>
-            <Dropdown style={{zIndex: 1050}}>
+            <Dropdown style={{zIndex: zIndices.accountMenu}}>
               <Dropdown.Toggle variant="dark">{fullname}</Dropdown.Toggle>
               <Dropdown.Menu>
                 <Dropdown.Item eventKey={'1'}>Your Account</Dropdown.Item>
@@ -89,6 +89,7 @@ class PreNavbar extends Component {
 
 /** Main navigation bar with routes */
 export class MainNavbar extends Component {
+
   render(){
     const { user } = this.props;
 

@@ -1,7 +1,10 @@
 @import "variables";
 
 .cover {
-  @media (max-width: $break-md) { text-align: left; }
+  @media (max-width: $break-md) {
+    background-position: center;
+    text-align: left;
+  }
 }
 
 .threepart {
@@ -20,7 +23,7 @@
       padding-bottom: 1.5em;
       text-align: center;
       width: 100%;
-      @media (max-width: $break-md) { height: 75vw; }
+      @media (max-width: $break-md) { height: 100vw; }
       .caption {
         vertical-align: top;
         width: 80%;

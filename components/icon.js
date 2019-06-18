@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { colors } from '~/constants/theme.js';
 
+import css from '~/styles/_components.scss';
+
 export class Icon extends Component {
   render(){
     return (
@@ -58,14 +60,7 @@ export class FooterIcon extends Component {
   render(){
     if (this.state.isLoaded){
       return (
-        <div style={{
-          backgroundColor: 'black',
-          borderRadius: '30px',
-          display: 'inline-block',
-          padding: '1em 0',
-          textAlign: 'center',
-          width: '5.5em'
-        }}>
+        <div className={css.footer_socials}>
           <a href={this.props.href}>
             <FontAwesomeIcon
               icon={["fab", this.props.icon]}

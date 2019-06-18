@@ -12,7 +12,7 @@ import { Icon } from '~/components/icon.js';
 import { Shader, Spacer } from '~/components/layout.js';
 import { Loader, Empty } from '~/components/loader.js';
 import { Title, Subtitle, Paragraph, Divider } from '~/components/text.js';
-import Toolbar from '~/components/toolbar.js';
+import {BottomToolbar} from '~/components/toolbar.js';
 
 import { formatDate } from '~/constants/date.js';
 import CLEARANCES from '~/constants/clearances.js';
@@ -141,7 +141,7 @@ class Sessions extends Component {
 
           <SessionCollection/>
 
-          <Toolbar>
+          <BottomToolbar>
             {user.clearance >= CLEARANCES.ACTIONS.CRUD_TOPICS ?
             <AddButton
               title={'Add Session'}
@@ -155,7 +155,7 @@ class Sessions extends Component {
               onChange={this.switchView} />
       
             <DropdownButton items={sortItems} onSelect={this.switchSort} />
-          </Toolbar>
+          </BottomToolbar>
         </Spacer>
       </Shader>
     );

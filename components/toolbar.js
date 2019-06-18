@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Container } from 'react-bootstrap';
 import css from '~/styles/_components.scss';
 
-export default class Toolbar extends Component {
+class Toolbar extends Component {
   constructor(props){
     super(props);
     this.state = {
@@ -20,7 +20,7 @@ export default class Toolbar extends Component {
 
     if (isLoaded){
       return (
-        <div className={css.toolbar}>
+        <div className={this.props.className}>
           <Container className={css.container}>
             {this.props.children}
           </Container>
@@ -30,5 +30,23 @@ export default class Toolbar extends Component {
       return null;
     }
     
+  }
+}
+
+export class TopToolbar extends Component {
+  render(){
+    return (
+      <Toolbar
+        className={css.top_toolbar}
+        children={this.props.children} />
+    )
+  }
+}
+
+export class BottomToolbar extends Component {
+  render(){
+    return (
+      <Toolbar className={css.bottom_toolbar} children={this.props.children} />
+    )
   }
 }

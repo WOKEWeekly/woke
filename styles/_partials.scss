@@ -17,19 +17,17 @@
   .no_auth {
     color: $primary;
     font-size: 1.1em;
-    font-family: $title-font;
+    font-family: $body-font;
     text-align: right;
     a {
       color: inherit;
       margin: 0 3px;
-      text-transform: uppercase;
       vertical-align: middle; }
     button {
       background: none;
       border: none;
       color: inherit;
       outline: none;
-      text-transform: uppercase;
       vertical-align: middle;
       &:hover { text-decoration: underline; }
     }
@@ -38,6 +36,8 @@
 
 .nav {
   background-color: $dark;
+  height: $navbar-height;
+  @media (max-width: $break-md) { height: initial; }
   .links {
     font-family: $body-font;
     font-weight: 700;

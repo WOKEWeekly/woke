@@ -8,7 +8,7 @@ import { EditButton, DeleteButton } from '~/components/button.js';
 import { Icon } from '~/components/icon.js';
 import { ConfirmModal } from '~/components/modal.js';
 import { Title, Subtitle, Paragraph, Divider } from '~/components/text.js';
-import Toolbar from '~/components/toolbar.js';
+import {BottomToolbar} from '~/components/toolbar.js';
 import { Shader, Spacer } from '~/components/layout.js';
 
 import { formatDate } from '~/constants/date.js';
@@ -78,7 +78,7 @@ class SessionPage extends Component {
         </Shader>
 
         {true /** Admin */ ? 
-          <Toolbar>
+          <BottomToolbar>
             <Link href={`/sessions/edit/${session.id}`}>
               <EditButton><Icon name={'edit'} />Edit Session</EditButton>
             </Link>
@@ -86,7 +86,7 @@ class SessionPage extends Component {
             <DeleteButton onClick={this.showModal}>
               <Icon name={'trash'} />Delete Session
             </DeleteButton>
-          </Toolbar>
+          </BottomToolbar>
         : null}
 
         <ConfirmModal
