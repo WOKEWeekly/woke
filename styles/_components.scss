@@ -54,6 +54,25 @@
 
 .widgets { font-family: $body-font; }
 
+.dropdown_menu {
+  background-color: $dark !important;
+  a {
+    color: white; 
+  }
+}
+
+.filter_menu {
+  background-color: $dark !important;
+  padding: 1em !important;
+  label {
+    color: white;
+    display: block;
+  }
+  input[type="checkbox"] {
+    margin-right: .5em;
+  }
+}
+
 /****************/
 /** cover .js **/
 /****************/
@@ -89,18 +108,23 @@
   @extend .text;
   font-size: 2.2em;
   margin-bottom: .5em;
-  @media (max-width: $break-md) { text-align: center; }
+  @media (max-width: $break-md) {
+    font-size: 1.8em;
+    text-align: center;
+  }
 }
 
 .group {
   padding: .2em 0;
-  @media (max-width: $break-md) { margin-bottom: 0 !important; padding: 0; }
+  @media (max-width: $break-md) {
+    margin-bottom: 0 !important;
+    padding: 0;
+  }
   .label {
     color: white;
     display: block;
     font-family: $title-font;
     font-size: 1.1em;
-    @media (max-width: $break-md) { font-size: 1.4em; }
   }
   .input {
     @extend .text;
@@ -111,6 +135,7 @@
     outline: none;
     padding: .4em;
     width: 100%;
+    @media (max-width: $break-md) { font-size: 1em; }
   }
   .textarea {
     @extend .input;
@@ -252,6 +277,7 @@
   position: -webkit-sticky;
   position: sticky;
   width: 100%;
+  z-index: 1;
   .container {
     align-items: center;
     display: flex;
@@ -263,7 +289,6 @@
 .top_toolbar {
   @extend .toolbar;
   top: $navbar-height;
-  z-index: 1000;
   @media (max-width: $break-md) { top: 8vh; }
 }
 

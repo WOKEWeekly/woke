@@ -6,7 +6,7 @@ import { bindActionCreators } from 'redux';
 import { saveTopicSort } from '~/reducers/actions';
 import classNames from 'classnames';
 
-import { AddButton, DropdownButton } from '~/components/button.js';
+import { AddButton, FilterButton, SortButton } from '~/components/button.js';
 import Cover from '~/components/cover.js';
 import { Shader, Spacer } from '~/components/layout.js';
 import { Loader, Empty } from '~/components/loader.js';
@@ -41,7 +41,7 @@ class TopicBank extends Component {
 
   /** Get topics on mount */
   componentDidMount() {
-    if (this.props.user.clearance < CLEARANCES.ACTIONS.CRUD_TOPICS){
+    if (this.props.user.clearance < CLEARANCES.ACTIONS.VIEW_TOPICS){
       Router.push('/');
     } else {
       this.getTopics();
@@ -150,6 +150,7 @@ class TopicBank extends Component {
 	render(){
 
     const { isLoaded, searchWord, results } = this.state;
+    const { user } = this.props;
 
     const sortItems = [
       'Sort Oldest To Newest',
@@ -203,14 +204,20 @@ class TopicBank extends Component {
           <TopicGrid/>
 
           <BottomToolbar>
+            {user.clearance >= CLEARANCES.ACTIONS.CRUD_TOPICS ?
             <AddButton
               title={'Add Topic'}
               mobileTitle={'Add'}
-              onClick={() => Router.push('/topics/add')} />
+              onClick={() => Router.push('/topics/add')} /> : null}
       
-            <DropdownButton
+            <SortButton
               items={sortItems}
+              title={'Sort'}
               onSelect={this.switchSort} />
+
+            <FilterButton
+              items={categories}
+              title={'Filter'} />
           </BottomToolbar>
         </Spacer>
       </Shader>
@@ -246,7 +253,7 @@ class _Topic extends PureComponent {
   }
 
   render(){
-    const { item } = this.props;
+    const { item, user } = this.props;
     const category = categories.find(category => category.label === item.category).short;
     const classes = classNames(css.cell, category);
 
@@ -255,10 +262,11 @@ class _Topic extends PureComponent {
         <Title className={css.headline}>{item.headline}</Title>
         <Subtitle className={css.question}>{item.question}</Subtitle>
         <Subtitle className={css.details}>{item.type} • {item.category}</Subtitle>
+        {user.clearance >= CLEARANCES.ACTIONS.CRUD_TOPICS ?
         <ButtonGroup className={css.buttons}>
           <Button variant={'success'} onClick={() => Router.push(`/topics/edit/${item.id}`)}>Edit</Button>
           <Button variant={'danger'} onClick={this.showModal}>Delete</Button>
-        </ButtonGroup>
+        </ButtonGroup> : null}
 
         <ConfirmModal
           visible={this.state.modalVisible}

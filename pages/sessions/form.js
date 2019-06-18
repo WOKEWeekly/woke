@@ -1,17 +1,28 @@
 import React, { Component} from 'react';
 import { Col } from 'react-bootstrap';
+import { connect } from 'react-redux';
+import Router from 'next/router';
 
 import { SubmitButton, CancelButton } from '~/components/button.js';
 import { EventDatePicker } from '~/components/datepicker.js';
 import { Heading, Group, Label, Input, TextArea, FileSelector } from '~/components/form.js';
 import { Shader, Spacer } from '~/components/layout.js';
 
+import CLEARANCES from '~/constants/clearances.js';
 import { getFilename } from '~/constants/file.js';
 
 import Meta from '~/partials/meta.js';
 import css from '~/styles/sessions.scss'
 
-export default class SessionForm extends Component {
+class SessionForm extends Component {
+  constructor(props){
+    super(props);
+
+    if (props.user.clearance < CLEARANCES.ACTIONS.CRUD_SESSIONS){
+      Router.push('/sessions');
+    }
+  }
+
   render(){
     const { heading, confirmText, confirmFunc, cancelFunc, metaTitle, metaUrl,
       handleTitle, handleDate, handleDescription, handleImage } = this.props;
@@ -75,3 +86,9 @@ export default class SessionForm extends Component {
     );
   }
 }
+
+const mapStateToProps = state => ({
+  user: state.user
+});
+
+export default connect(mapStateToProps)(SessionForm);

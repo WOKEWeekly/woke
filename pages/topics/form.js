@@ -1,16 +1,27 @@
 import React, { Component} from 'react';
 import { Col } from 'react-bootstrap';
+import { connect } from 'react-redux';
+import Router from 'next/router';
 
 import { SubmitButton, CancelButton, CheckboxButton, RadioButtonGroup } from '~/components/button.js';
 import { Heading, Group, Label, Input, TextArea, ShortTextArea, Select } from '~/components/form.js';
 import { Shader, Spacer } from '~/components/layout.js';
 
 import {categories} from '~/constants/categories.js';
+import CLEARANCES from '~/constants/clearances.js';
 
 import Meta from '~/partials/meta.js';
 import css from '~/styles/topics.scss'
 
-export default class TopicForm extends Component {
+class TopicForm extends Component {
+  constructor(props){
+    super(props);
+
+    if (props.user.clearance < CLEARANCES.ACTIONS.CRUD_TOPICS){
+      Router.push('/topics');
+    }
+  }
+
   render(){
     const { heading, confirmText, confirmFunc, cancelFunc, metaTitle, metaUrl, handleText, handleRadio, handleCheckbox} = this.props;
     const { headline, category, question, type, polarity, option1, option2, description } = this.props.topic;
@@ -119,3 +130,9 @@ export default class TopicForm extends Component {
     );
   }
 }
+
+const mapStateToProps = state => ({
+  user: state.user
+});
+
+export default connect(mapStateToProps)(TopicForm);

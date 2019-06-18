@@ -28,6 +28,8 @@ export default class Meta extends Component {
         <meta property="og:site_name" content="#WOKEWeekly" />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:image:alt" content={alt} />
+
+        <link rel="icon" href="/static/images/logos/favicon.jpg" />
       </Head>
     )
   }

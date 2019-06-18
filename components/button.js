@@ -6,6 +6,8 @@ import css from '~/styles/_components.scss';
 import { Icon } from '~/components/icon.js';
 import { Default, Mobile } from '~/components/layout.js';
 
+import { Checkbox } from '~/components/form.js';
+import { zIndices } from './layout';
 
 /*****************
  * CUSTOM BUTTONS
@@ -88,15 +90,15 @@ export class CloseButton extends Component {
 }
 
 /***********************
- * WIDGET BUTTONS
+ * DROPDOWNS BUTTONS
  ***********************/
 
 export class DropdownButton extends Component {
   render(){
     return (
-      <Dropdown className={css.widgets} onSelect={this.props.onSelect} alignRight>
-        <Dropdown.Toggle variant="dark"><Icon name={'sort-amount-down'} />Sort</Dropdown.Toggle>
-        <Dropdown.Menu>
+      <Dropdown className={css.widgets} onSelect={this.props.onSelect}>
+        <Dropdown.Toggle variant="dark">{this.props.children}</Dropdown.Toggle>
+        <Dropdown.Menu className={css.dropdown_menu}>
           {React.Children.map(this.props.items, (item, index) => {
             return <Dropdown.Item eventKey={index+1}>{item}</Dropdown.Item>
           })}
@@ -105,6 +107,40 @@ export class DropdownButton extends Component {
     )
   }
 }
+
+export class SortButton extends Component {
+  render(){
+    return (
+      <DropdownButton
+        items={this.props.items}
+        onSelect={this.props.onSelect}
+        alignRight>
+        <Icon name={'sort-amount-down'} />{this.props.title}
+      </DropdownButton>
+    )
+  }
+}
+
+export class FilterButton extends Component {
+  render(){
+    return (
+      <Dropdown className={css.widgets} alignRight>
+        <Dropdown.Toggle variant="dark"><Icon name={'filter'} />{this.props.title}</Dropdown.Toggle>
+        <Dropdown.Menu className={css.filter_menu} style={{zIndex: zIndices.filterMenu}}>
+        <Dropdown.Item disabled>Filter by category</Dropdown.Item>
+        <Dropdown.Divider />
+          {this.props.items.map((item, index) => {
+            return <Checkbox key={index} label={item.label} />
+          })}
+        </Dropdown.Menu>
+      </Dropdown>
+    )
+  }
+}
+
+/***********************
+ * WIDGET BUTTONS
+ ***********************/
 
 export class CheckboxButton extends Component {
   render(){

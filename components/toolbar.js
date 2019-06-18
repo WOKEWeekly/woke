@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Container } from 'react-bootstrap';
 import css from '~/styles/_components.scss';
+import { zIndices } from './layout';
 
 class Toolbar extends Component {
   constructor(props){

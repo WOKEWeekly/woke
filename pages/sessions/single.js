@@ -11,6 +11,7 @@ import { Title, Subtitle, Paragraph, Divider } from '~/components/text.js';
 import {BottomToolbar} from '~/components/toolbar.js';
 import { Shader, Spacer } from '~/components/layout.js';
 
+import CLEARANCES from '~/constants/clearances.js';
 import { formatDate } from '~/constants/date.js';
 import Meta from '~/partials/meta.js';
 import css from '~/styles/sessions.scss';
@@ -49,7 +50,7 @@ class SessionPage extends Component {
   hideModal = () => { this.setState({modalVisible: false})}
 
   render(){
-    const { session } = this.props;
+    const { session, user } = this.props;
     session.description = session.description.trim().length > 0 ? session.description : 'No description.';
 
     return (
@@ -77,7 +78,7 @@ class SessionPage extends Component {
 
         </Shader>
 
-        {true /** Admin */ ? 
+        {user.clearance >= CLEARANCES.ACTIONS.CRUD_SESSIONS ? 
           <BottomToolbar>
             <Link href={`/sessions/edit/${session.id}`}>
               <EditButton><Icon name={'edit'} />Edit Session</EditButton>
