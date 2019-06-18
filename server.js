@@ -1,9 +1,15 @@
 const express = require('express');
 const app = express();
 
+const next = require('next');
+const port = parseInt(process.env.PORT, 10) || 3000;
+const dev = process.env.NODE_ENV !== 'production';
+const server = next({ dev });
+const handle = server.getRequestHandler();
+
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
-const dotenv = require('dotenv').config({path: './config.env'});
+const dotenv = require('dotenv').config({path: dev ? './config.env' : '/root/config.env'});
 const expressSession = require('express-session');
 const flash = require('connect-flash');
 const mysql = require('mysql');
@@ -11,18 +17,14 @@ const passport = require('passport');
 const request = require('superagent');
 const url = require('url');
 
-const next = require('next');
-const port = parseInt(process.env.PORT, 10) || 3000;
-const dev = process.env.NODE_ENV !== 'production';
-const server = next({ dev });
-const handle = server.getRequestHandler();
+
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 app.use(expressSession({
-  // cookie: {maxAge: 2 * 60 * 60 * 1000},
+  cookie: {maxAge: 2 * 60 * 60 * 1000},
   secret: process.env.SESSION_SECRET || "secret",
   resave: true,
   saveUninitialized: true
@@ -62,7 +64,7 @@ conn.connect(function(err) {
 
 /** Render locals */
 app.use(function (req, res, next) {
-  var user = {};
+  const user = {};
   
   /** Pass authenticated user information to client */
   if (req.user){

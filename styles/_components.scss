@@ -18,22 +18,38 @@
     -webkit-transition-duration: .1s;
     transition-duration: .1s;
   }
+  @media (max-width: $break-md) { min-width: initial; }
+}
+
+.form-buttons {
+  @extend .button;
+  min-width: 200px;
+  @media (max-width: $break-md) {
+    min-width: initial;
+    width: 48%;
+  }
 }
 
 .submit {
-  @extend .button;
+  @extend .form-buttons;
   background-color: $submit-button;
-  min-width: 200px;
   &:hover { box-shadow: inset 0 0 100px 100px $submit-hover; }
   &:active { box-shadow: inset 0 0 100px 100px $submit-active; }
+  
 }
 
 .cancel {
-  @extend .button;
+  @extend .form-buttons;
   background-color: $cancel-button;
-  min-width: 200px;
   &:hover { box-shadow: inset 0 0 100px 100px $cancel-hover; }
   &:active { box-shadow: inset 0 0 100px 100px $cancel-active; }
+}
+
+.add {
+  @extend .button;
+  @media (max-width: $break-md) {
+    font-size: 80%;
+  }
 }
 
 .widgets { font-family: $body-font; }
@@ -52,30 +68,39 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
+  text-align: center;
+
+  .title {
+    @extend .text;
+    font-size: 2.3em;
+    line-height: 1.3; }
+  .subtitle {
+    @extend .title;
+    font-size: 1.4em;
+  }
 }
 
 
 /******************************/
 /** form.js && datepicker.js **/
 /******************************/
-.text {
-  color: white;
-  font-family: $body-font;
-}
 
 .heading {
   @extend .text;
   font-size: 2.2em;
-  margin-bottom: .8em;
+  margin-bottom: .5em;
+  @media (max-width: $break-md) { text-align: center; }
 }
 
 .group {
   padding: .2em 0;
+  @media (max-width: $break-md) { margin-bottom: 0 !important; padding: 0; }
   .label {
     color: white;
     display: block;
     font-family: $title-font;
     font-size: 1.1em;
+    @media (max-width: $break-md) { font-size: 1.4em; }
   }
   .input {
     @extend .text;
@@ -111,6 +136,10 @@
       margin-right: 5px;
     }
   }
+  .datepicker {
+    all: initial;
+    width: 100%;
+  }
   .file {
     border: 1px solid white;
     border-radius: 8px;
@@ -139,6 +168,7 @@
   }
 }
 
+:global(.react-datepicker__input-container) { padding: .4em; }
 :global(.react-datepicker-wrapper),
 :global(.react-datepicker__input-container) { display: block !important; }
 :global(.react-datepicker__day--outside-month){ color: #a9a9a9; }
@@ -165,9 +195,7 @@
 /****************/
 /** modal.js **/
 /****************/
-.modal_header, .modal_body, .modal_footer {
-  background: $dark;
-}
+.modal_header, .modal_body, .modal_footer { background: $dark; }
 
 :global(.modal-open) {
   padding: 0 !important;
@@ -187,12 +215,17 @@
   background: $dark;
   border-radius: 30px;
   padding: .3em .7em;
+  @media (max-width: $break-md) { width: 75%; }
   .searchBar {
     @extend .text;
     background: none;
     border: none;
-    font-size: 90%;
+    min-width: 250px;
     outline: none;
+    @media (max-width: $break-md) {
+      min-width: initial;
+      width: 90%;
+    }
   }
 }
 

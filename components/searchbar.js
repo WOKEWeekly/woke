@@ -14,9 +14,7 @@ export default class SearchBar extends Component {
           onChange={this.props.onChange}
           placeholder={this.props.placeholder}
           value={this.props.value}
-          style={{
-            width: this.props.width
-          }} />
+          style={{ width: this.props.width }} />
       </div>
     )
   }

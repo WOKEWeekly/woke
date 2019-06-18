@@ -41,7 +41,11 @@ class TopicBank extends Component {
 
   /** Get topics on mount */
   componentDidMount() {
-    this.getTopics();
+    if (this.props.user.clearance < CLEARANCES.ACTIONS.CRUD_TOPICS){
+      Router.push('/');
+    } else {
+      this.getTopics();
+    }
   }
 
   /** Retrieve all topics */
@@ -191,7 +195,6 @@ class TopicBank extends Component {
             <SearchBar
               onChange={this.handleSearchWord}
               placeholder={'Search a topic or keyword...'}
-              width={'20em'}
               value={searchWord} />
 
             <label className={css.count}>{results.length} topics</label>
@@ -202,6 +205,7 @@ class TopicBank extends Component {
           <Toolbar>
             <AddButton
               title={'Add Topic'}
+              mobileTitle={'Add'}
               onClick={() => Router.push('/topics/add')} />
       
             <DropdownButton

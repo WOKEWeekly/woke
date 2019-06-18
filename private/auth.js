@@ -14,7 +14,7 @@ module.exports = function(app, conn, passport){
   });
   
   /* Used to deserialize the user */
-  passport.deserializeUser(function(id, callback) {
+  passport.deserializeUser(function(id, done) {
     conn.query(`SELECT * FROM user WHERE ID = ?`, id, function(err, rows){
       done(err, rows[0]);
     });
@@ -29,6 +29,7 @@ module.exports = function(app, conn, passport){
     
     const sql = `SELECT * FROM user WHERE Username = ? OR Email = ?`;
     const values = [username, username];
+    
     conn.query(sql, values, function(err, rows){
       
       if (err) return done(err);

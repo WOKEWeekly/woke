@@ -4,6 +4,7 @@ import classNames from 'classnames';
 
 import css from '~/styles/_components.scss';
 import { Icon } from '~/components/icon.js';
+import { Default, Mobile } from '~/components/layout.js';
 
 
 /*****************
@@ -42,10 +43,12 @@ export class AddButton extends Component {
   render(){
     return (
       <Button
-        className={css.button}
+        className={css.add}
         variant={'dark'}
         onClick={this.props.onClick}>
-        <Icon name={'plus'} /> {this.props.title}
+        <Icon name={'plus'} />
+        <Default>{this.props.title}</Default>
+        <Mobile>{this.props.mobileTitle || this.props.title}</Mobile>
       </Button>
     )
   }

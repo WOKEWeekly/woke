@@ -1,20 +1,17 @@
 import React, { Component } from 'react';
 import {Container} from 'react-bootstrap';
-
+import classNames from 'classnames';
 import { fonts } from '~/constants/theme.js';
-
 import css from '~/styles/_components.scss';
 
 export default class Cover extends Component {
 	render(){
-    const { backgroundAttachment, backgroundPosition, height, image, title, subtitle} = this.props;
+    const { height, image, title, subtitle} = this.props;
+    const classes = classNames(css.cover, this.props.className);
 		return (
-      <Container fluid={true} className={css.cover} style={{
-        backgroundAttachment: backgroundAttachment,
-        backgroundPosition: backgroundPosition,
+      <Container fluid={true} className={classes} style={{
         backgroundImage: `url(/static/images/bg/${image})`,
         minHeight: height,
-        textAlign: 'center'
       }}>
         <div>
           <Title>{title}</Title>
@@ -28,12 +25,7 @@ export default class Cover extends Component {
 class Title extends Component {
   render(){
     return (
-      <div style={{
-        color: 'white',
-        fontFamily: fonts.body,
-        fontSize: 40,
-        lineHeight: 1.3
-      }}>{this.props.children}</div>
+      <div className={css.title}>{this.props.children}</div>
     );
   }
 }
@@ -41,11 +33,7 @@ class Title extends Component {
 class Subtitle extends Component {
   render(){
     return (
-      <div style={{
-        color: 'white',
-        fontFamily: fonts.body,
-        fontSize: 20,
-      }}>{this.props.children}</div>
+      <div className={css.subtitle}>{this.props.children}</div>
     );
   }
 }

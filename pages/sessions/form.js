@@ -30,14 +30,14 @@ export default class SessionForm extends Component {
             <Heading>{heading}</Heading>
 
             <Group>
-              <Col md={8}>
+              <Col md={7}>
                 <Label>Title:</Label>
                 <Input
                   value={title}
                   onChange={handleTitle}
                   placeholder={"Enter the title."} />
               </Col>
-              <Col md={4}>
+              <Col md={5}>
                 <Label>Date Held:</Label>
                 <EventDatePicker
                   date={date}

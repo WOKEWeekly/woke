@@ -1,5 +1,9 @@
 @import "variables";
 
+.cover {
+  @media (max-width: $break-md) { text-align: left; }
+}
+
 .threepart {
   @media (min-width: $break-md) { height: 32vw; }
   .colpart {

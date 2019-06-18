@@ -6,7 +6,7 @@ import { saveUser } from '~/reducers/actions';
 
 import { SubmitButton, CancelButton } from '~/components/button.js';
 import { Group, Label, Input, PasswordInput, Checkbox } from '~/components/form.js';
-import css from '~/styles/_components.scss';
+import css from '~/styles/login.scss';
 
 class LoginModal extends Component {
   constructor(){
@@ -77,8 +77,10 @@ class LoginModal extends Component {
         </Modal.Body>
 
         <Modal.Footer className={css.modal_footer}>
-          <SubmitButton onClick={this.logIn}>Log In</SubmitButton>
-          <CancelButton onClick={this.props.close}>Cancel</CancelButton>
+          <div>
+            <SubmitButton onClick={this.logIn}>Log In</SubmitButton>
+            <CancelButton onClick={this.props.close}>Cancel</CancelButton>
+          </div>
         </Modal.Footer>
     </Modal>
     )

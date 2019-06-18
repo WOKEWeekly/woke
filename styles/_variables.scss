@@ -32,3 +32,9 @@ $break-md: 768px; // Medium devices (tablets)
 $break-lg: 992px; // Large devices (desktops)
 $break-xl: 1200px; // Extra large devices (large desktops)
 $break-xxl: 1408px; // Extra large devices (large desktops)
+
+
+.text {
+  color: white;
+  font-family: $body-font;
+}

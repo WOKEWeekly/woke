@@ -4,11 +4,14 @@ import "react-datepicker/dist/react-datepicker.css";
 
 import { Input } from '~/components/form.js';
 import { creationDate } from '~/constants/settings.js';
+import css from '~/styles/_components.scss';
 
 class DateInput extends Component {
   render(){
     return (
-      <button onClick={this.props.onClick} style={{all: 'initial'}}>
+      <button
+        onClick={this.props.onClick}
+        className={css.datepicker}>
         <Input
           value={this.props.value}
           placeholder={'Select a date.'}

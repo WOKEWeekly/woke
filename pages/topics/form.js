@@ -2,7 +2,7 @@ import React, { Component} from 'react';
 import { Col } from 'react-bootstrap';
 
 import { SubmitButton, CancelButton, CheckboxButton, RadioButtonGroup } from '~/components/button.js';
-import { Heading, Group, Label, Input, TextArea, Select } from '~/components/form.js';
+import { Heading, Group, Label, Input, TextArea, ShortTextArea, Select } from '~/components/form.js';
 import { Shader, Spacer } from '~/components/layout.js';
 
 import {categories} from '~/constants/categories.js';
@@ -52,7 +52,7 @@ export default class TopicForm extends Component {
             <Group>
               <Col>
                 <Label>Question:</Label>
-                <Input
+                <ShortTextArea
                   name={'question'}
                   value={question}
                   onChange={handleText}

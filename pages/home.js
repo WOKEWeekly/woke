@@ -19,7 +19,8 @@ export default class Home extends Component {
 					title={'Awakening Through Conversation.'}
 					subtitle={'Debates and discussions centered around and beyond the UK black community.'}
 					image={'home-header.jpg'}
-					height={575} />
+          height={575}
+          className={css.cover} />
 
 				<Container fluid={true}>
 					<Row className={css.threepart}>

@@ -13,7 +13,9 @@ import { Shader, Spacer } from '~/components/layout.js';
 import { Loader, Empty } from '~/components/loader.js';
 import { Title, Subtitle, Paragraph, Divider } from '~/components/text.js';
 import Toolbar from '~/components/toolbar.js';
+
 import { formatDate } from '~/constants/date.js';
+import CLEARANCES from '~/constants/clearances.js';
 
 import Meta from '~/partials/meta.js';
 import css from '~/styles/sessions.scss';
@@ -94,6 +96,7 @@ class Sessions extends Component {
 	render(){
 
     const { isLoaded, sessions, view } = this.state;
+    const { user } = this.props;
 
     const sortItems = ['Sort By Date (Ascending)', 'Sort by Date (Descending)'];
     const radioItems = [
@@ -139,9 +142,11 @@ class Sessions extends Component {
           <SessionCollection/>
 
           <Toolbar>
+            {user.clearance >= CLEARANCES.ACTIONS.CRUD_TOPICS ?
             <AddButton
               title={'Add Session'}
-              onClick={() => Router.push('/sessions/add')} />
+              mobileTitle={'Add'}
+              onClick={() => Router.push('/sessions/add')} /> : null}
 
             <RadioButtonGroup
               name={'view'}
@@ -204,6 +209,7 @@ class Session extends PureComponent {
 
 const mapStateToProps = state => ({
   session: state.session,
+  user: state.user
 });
 
 const mapDispatchToProps = dispatch => (

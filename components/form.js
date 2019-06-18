@@ -70,6 +70,20 @@ export class PasswordInput extends Component {
 }
 
 /** For long text inputs */
+export class ShortTextArea extends Component {
+  render(){
+    return (
+      <Textarea
+        name={this.props.name}
+        placeholder={this.props.placeholder}
+        className={css.textarea}
+        value={this.props.value || ''}
+        onChange={this.props.onChange} />
+    )
+  }
+}
+
+/** For long text inputs */
 export class TextArea extends Component {
   constructor(props){
     super(props);

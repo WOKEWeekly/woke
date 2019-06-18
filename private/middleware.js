@@ -5,10 +5,9 @@ module.exports = {
 
   /** Verify access tokens */
   verifyToken: (req, res, next) => {
-    const bearerHeader = req.headers['authorization'];
+    const bearerHeader = req.headers.authorization;
     if (typeof bearerHeader !== 'undefined'){
-      const bearer = bearerHeader.split(' ');
-      const token = bearer[1];
+      const token = bearerHeader.split(' ')[1];
       req.token = token;
       jwt.verify(req.token, process.env.JWT_SECRET, (err, auth) => {
         if (!err){
@@ -42,16 +41,6 @@ module.exports = {
       next();
     } else {
       res.status(401).send(`You are not authorised to perform such an action.`);
-    }
-  },
-
-  /** Check authorisation before accessing a route, redirect to home if unauthorised */
-  checkAuthRoute: (req, res, next, threshold) => {
-    const clearance = req.auth ? req.auth.user.clearance : 0;
-    if (clearance >= threshold){
-      next();
-    } else {
-      res.redirect('/');
     }
   },
 

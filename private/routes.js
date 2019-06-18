@@ -1,7 +1,3 @@
-
-const CLEARANCES = require('../constants/clearances.js');
-const { checkAuthRoute } = require('./middleware.js');
-
 module.exports = function(app, conn, server){
 
   /** Render individual session detail page */
@@ -32,13 +28,6 @@ module.exports = function(app, conn, server){
         res.status(400).send(err.toString());
       }
     });
-  });
-
-  /** Render Topic Bank page only if authorised */
-  app.get('/topics', function(req, res){
-    checkAuthRoute(req, res, () => {
-      return server.render(req, res, '/topics');
-    }, CLEARANCES.ACTIONS.VIEW_TOPICS);
   });
 
   /** Render edit topic page */
