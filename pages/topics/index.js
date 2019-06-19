@@ -1,13 +1,15 @@
 import React, { Component, PureComponent } from 'react';
-import { Button, ButtonGroup } from 'react-bootstrap';
+import { Button, ButtonGroup, Dropdown } from 'react-bootstrap';
 import Router from 'next/router';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { saveTopicSort } from '~/reducers/actions';
+import { saveTopicSort, saveTopicFilters } from '~/reducers/actions';
 import classNames from 'classnames';
 
-import { AddButton, FilterButton, SortButton } from '~/components/button.js';
+import { AddButton } from '~/components/button.js';
+import { SortDropdown, FilterDropdown } from '~/components/dropdown.js';
 import Cover from '~/components/cover.js';
+import { Checkbox } from '~/components/form.js';
 import { Shader, Spacer } from '~/components/layout.js';
 import { Loader, Empty } from '~/components/loader.js';
 import { ConfirmModal } from '~/components/modal.js';
@@ -32,11 +34,11 @@ class TopicBank extends Component {
       results: [],
 
       sort: props.topic.sort,
-      filters: {},
+      filters: props.topic.filters,
       searchWord: '',
 
       isLoaded: false
-    }
+    };
   }
 
   /** Get topics on mount */
@@ -120,6 +122,7 @@ class TopicBank extends Component {
     });
 
     this.setState({ filtered: results }, () => {
+      this.props.saveTopicFilters(filters);
       this.searchTopics(searchWord);
     });
   }
@@ -146,10 +149,25 @@ class TopicBank extends Component {
   }
 
   handleSearchWord = (event) => { this.searchTopics(event.target.value); }
+  handleFilter = (event) => {
+    const {filters} = this.state;
+    const { name, checked } = event.target;
+
+    if (checked){
+      filters.categories.push(name);
+    } else {
+      let idx = filters.categories.indexOf(name);
+      filters.categories.splice(idx, 1);
+    }
+
+    this.setState({ filters }, () => {
+      this.filterTopics();
+    });
+  }
 
 	render(){
 
-    const { isLoaded, searchWord, results } = this.state;
+    const { isLoaded, searchWord, results, filters } = this.state;
     const { user } = this.props;
 
     const sortItems = [
@@ -197,7 +215,6 @@ class TopicBank extends Component {
               onChange={this.handleSearchWord}
               placeholder={'Search a topic or keyword...'}
               value={searchWord} />
-
             <label className={css.count}>{results.length} topics</label>
           </TopToolbar>
 
@@ -210,14 +227,23 @@ class TopicBank extends Component {
               mobileTitle={'Add'}
               onClick={() => Router.push('/topics/add')} /> : null}
       
-            <SortButton
+            <SortDropdown
               items={sortItems}
               title={'Sort'}
               onSelect={this.switchSort} />
 
-            <FilterButton
-              items={categories}
-              title={'Filter'} />
+            <FilterDropdown title={'Filter'}>
+              <Dropdown.Item style={{padding: 0}} disabled>Filter by category</Dropdown.Item>
+              <Dropdown.Divider />
+                {categories.map((item, index) => {
+                  return <Checkbox
+                    name={item.label}
+                    key={index}
+                    label={item.label}
+                    checked={filters.categories.includes(item.label)}
+                    onChange={this.handleFilter} />
+                })}
+            </FilterDropdown>
           </BottomToolbar>
         </Spacer>
       </Shader>
@@ -289,7 +315,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => (
   bindActionCreators({
-    saveTopicSort
+    saveTopicSort, saveTopicFilters
   }, dispatch)
 );
 

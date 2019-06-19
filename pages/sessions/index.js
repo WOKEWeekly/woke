@@ -6,7 +6,8 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { saveSessionSort, saveSessionView } from '~/reducers/actions';
 
-import { AddButton, SortButton, RadioButtonGroup } from '~/components/button.js';
+import { AddButton, RadioButtonGroup } from '~/components/button.js';
+import { SortDropdown } from '~/components/dropdown.js';
 import Cover from '~/components/cover.js';
 import { Icon } from '~/components/icon.js';
 import { Shader, Spacer } from '~/components/layout.js';
@@ -154,7 +155,7 @@ class Sessions extends Component {
               defaultValue={view}
               onChange={this.switchView} />
       
-            <SortButton
+            <SortDropdown
               items={sortItems}
               title={'Sort'}
               onSelect={this.switchSort} />

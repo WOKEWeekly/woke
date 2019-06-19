@@ -9,8 +9,8 @@ import { Group, Label, Input, PasswordInput, Checkbox } from '~/components/form.
 import css from '~/styles/login.scss';
 
 class LoginModal extends Component {
-  constructor(){
-    super();
+  constructor(props){
+    super(props);
     this.state = {
       username: '',
       password: '',
@@ -21,7 +21,7 @@ class LoginModal extends Component {
   /** Handle login fields */
   handleUsername = (event) => { this.setState({username: event.target.value}); }
   handlePassword = (event) => { this.setState({password: event.target.value}); }
-  handleRemember = (event) => { this.setState({remember: event.target.checked}); }
+  handleRemember = (event) => { console.log(event.target.checked); this.setState({remember: event.target.checked}); }
 
   /** Log in as registered user */
   logIn = () => {
@@ -32,6 +32,7 @@ class LoginModal extends Component {
     })
     .then(res => res.json())
     .then(user => {
+      user.remember = this.state.remember
       this.props.saveUser(user);
       this.props.close();
       location.reload();
@@ -45,6 +46,7 @@ class LoginModal extends Component {
     return (
       <Modal
         show={this.props.visible}
+        onHide={null}
         centered>
           
         <Modal.Header className={css.modal_header}>
@@ -67,7 +69,7 @@ class LoginModal extends Component {
                 onChange={this.handlePassword}
                 placeholder={"Enter password"} />
             </Group>
-            <Group>
+            <Group style={{marginBottom: 0}}>
               <Checkbox
                 checked={remember}
                 label={'Remember me'}
@@ -87,10 +89,14 @@ class LoginModal extends Component {
   }
 }
 
+const mapStateToProps = state => ({
+  user: state.user
+});
+
 const mapDispatchToProps = dispatch => (
   bindActionCreators({
     saveUser
   }, dispatch)
 );
 
-export default connect(null, mapDispatchToProps)(LoginModal);
+export default connect(mapStateToProps, mapDispatchToProps)(LoginModal);

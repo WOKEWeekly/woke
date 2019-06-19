@@ -5,14 +5,20 @@
   background-color: black;
   padding: 3px 2em;
   .auth {
-    color: $primary;
     font-size: 1.1em;
     font-family: $body-font;
     text-align: right;
-    a {
-      color: inherit;
-      font-weight: 900;
-      margin: 0 3px; }
+    .dropdown_menu {
+      background-color: $dark;
+      border-radius: 10px;
+      overflow: hidden;
+      padding: 0;
+      .dropdown_item {
+        color: white;
+        padding: 1em;
+        &:hover { color: inherit;}}
+      .divider { margin: 0; }
+    }
   }
   .no_auth {
     color: $primary;

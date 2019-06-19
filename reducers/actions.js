@@ -23,3 +23,8 @@ export const saveTopicSort = sort => ({
   type: 'SAVE_TOPIC_SORT',
   payload: sort,
 });
+
+export const saveTopicFilters = filters => ({
+  type: 'SAVE_TOPIC_FILTERS',
+  payload: filters,
+});

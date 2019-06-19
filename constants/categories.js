@@ -50,12 +50,6 @@ export const types = [
 
 /** Topic polarity options */
 export const polarity = [
-  { label: 'Polar', short: 'polarity'},
+  { label: 'Polar', short: 'polar'},
   { label: 'Non-Polar', short: 'nonpolar'},
 ]
-
-/** Retrieve array of colours for specific category */
-export const getTextColor = (value) => {
-  const found = categories.find(category => category.label === value);
-  return found ? found.textColor : 'black';
-}

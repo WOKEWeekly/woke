@@ -1,4 +1,5 @@
 import { combineReducers } from 'redux';
+import { categories, types, polarity } from '~/constants/categories.js';
 
 /** Reducer for user authentication */
 const initialUser = {
@@ -7,6 +8,7 @@ const initialUser = {
   fullname: '',
   username: '',
   clearance: 0,
+  remember: false,
   isAuthenticated: false
 };
 
@@ -46,7 +48,12 @@ const sessionReducer = (state = defaultSession, action) => {
 };
 
 const defaultTopic = {
-  sort: '3'
+  filters: {
+    categories: [],
+    types: [],
+    polarity: [],
+  },
+  sort: '3',
 }
 
 const topicReducer = (state = defaultTopic, action) => {
@@ -55,7 +62,12 @@ const topicReducer = (state = defaultTopic, action) => {
       return Object.assign({}, state, {
         sort: action.payload
       });
-    default: return state;
+    case 'SAVE_TOPIC_FILTERS':
+      return Object.assign({}, state, {
+        filters: action.payload
+      });
+    default:
+      return state;
   }
 };
 

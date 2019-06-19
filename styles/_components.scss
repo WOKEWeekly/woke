@@ -54,25 +54,6 @@
 
 .widgets { font-family: $body-font; }
 
-.dropdown_menu {
-  background-color: $dark !important;
-  a {
-    color: white; 
-  }
-}
-
-.filter_menu {
-  background-color: $dark !important;
-  padding: 1em !important;
-  label {
-    color: white;
-    display: block;
-  }
-  input[type="checkbox"] {
-    margin-right: .5em;
-  }
-}
-
 /****************/
 /** cover .js **/
 /****************/
@@ -99,6 +80,33 @@
   }
 }
 
+/****************/
+/** dropdown .js **/
+/****************/
+
+.dropdown_menu {
+  background-color: $dark !important;
+  border-radius: 10px;
+  overflow: hidden;
+  width: max-content;
+  .dropdown_item { padding: 0.5em 1em; }
+  a { color: white; }
+}
+
+.filter_menu {
+  background-color: $dark !important;
+  border-radius: 10px;
+  padding: 1em !important;
+  overflow: hidden;
+  width: max-content;
+  label {
+    color: white;
+    display: block;
+  }
+  input[type="checkbox"] {
+    margin-right: .5em;
+  }
+}
 
 /******************************/
 /** form.js && datepicker.js **/

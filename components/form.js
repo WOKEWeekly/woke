@@ -131,20 +131,15 @@ export class Select extends Component {
 }
 
 export class Checkbox extends Component {
-  constructor(props){
-    super(props);
-    this.state = {
-      checked: props.checked
-    }
-  }
   render(){
     return (
       <label className={css.checkbox}>
         <input
           type={'checkbox'}
-          checked={this.state.checked}
+          checked={this.props.checked}
           onChange={this.props.onChange}
-          className={css.box} />
+          className={css.box}
+          {...this.props} />
           {this.props.label}
       </label>
     )

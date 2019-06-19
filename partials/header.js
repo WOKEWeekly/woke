@@ -45,12 +45,12 @@ class PreNavbar extends Component {
       if (isAuthenticated){
         return (
           <Col xs={6} className={css.auth}>
-            <Dropdown style={{zIndex: zIndices.accountMenu}}>
+            <Dropdown style={{zIndex: zIndices.accountMenu}} alignRight>
               <Dropdown.Toggle variant="dark">{fullname}</Dropdown.Toggle>
-              <Dropdown.Menu>
-                <Dropdown.Item eventKey={'1'}>Your Account</Dropdown.Item>
-                <Dropdown.Divider />
-                <Dropdown.Item onClick={this.logOut}>Log Out</Dropdown.Item>
+              <Dropdown.Menu className={css.dropdown_menu}>
+                <Dropdown.Item className={css.dropdown_item} eventKey={'1'}>Your Account</Dropdown.Item>
+                <Dropdown.Divider className={css.divider}/>
+                <Dropdown.Item className={css.dropdown_item} onClick={this.logOut}>Log Out</Dropdown.Item>
               </Dropdown.Menu>
             </Dropdown>
           </Col>

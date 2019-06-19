@@ -13,6 +13,7 @@ export class ConfirmModal extends Component {
     return (
       <Modal
         show={visible}
+        onHide={null}
         centered>
         <Modal.Body className={css.modal_body}>
           <Paragraph className={css.text}>{message}</Paragraph>
