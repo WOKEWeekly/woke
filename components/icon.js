@@ -31,11 +31,10 @@ export class HeaderIcon extends Component {
       return (
         <a
           href={this.props.href}
-          style={{fontSize: 24}}>
+          className={css.header_socials}>
           <FontAwesomeIcon
             icon={['fab', this.props.icon]}
-            color={colors.primary}
-            style={{margin: '0 3px'}} />
+            color={colors.primary} />
         </a>
       )
     } else {

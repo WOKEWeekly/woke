@@ -1,15 +1,15 @@
 import React, { Component } from 'react';
 import { Container, Col, Row, Dropdown, Nav, Navbar } from 'react-bootstrap';
 import { connect } from 'react-redux';
-import { HeaderIcon } from '~/components/icon';
-import { zIndices } from '~/components/layout';
-
 import { bindActionCreators } from 'redux';
 import { clearUser } from '~/reducers/actions';
 
-import Login from './login';
+import { Icon, HeaderIcon } from '~/components/icon';
+import { Default, Mobile, zIndices } from '~/components/layout';
+
 import { accounts, emails } from '~/constants/settings.js';
 import CLEARANCES from '~/constants/clearances.js';
+import Login from './login';
 import css from '~/styles/_partials.scss';
 
 /** Little top bar for social media icons and account details */
@@ -40,13 +40,17 @@ class PreNavbar extends Component {
 
     /** If authenticated, show name. Else, show option to login/register */
     const renderAccount = () => {
-      const { fullname, isAuthenticated } = this.props.user;
+      const { firstname, lastname, fullname, isAuthenticated } = this.props.user;
   
       if (isAuthenticated){
         return (
           <Col xs={6} className={css.auth}>
             <Dropdown style={{zIndex: zIndices.accountMenu}} alignRight>
-              <Dropdown.Toggle variant="dark">{fullname}</Dropdown.Toggle>
+              <Dropdown.Toggle variant="dark">
+                <Icon name={'user'} />
+                <Default>{fullname}</Default>
+                <Mobile>{firstname} {lastname.substring(0,1)}.</Mobile>
+              </Dropdown.Toggle>
               <Dropdown.Menu className={css.dropdown_menu}>
                 <Dropdown.Item className={css.dropdown_item} eventKey={'1'}>Your Account</Dropdown.Item>
                 <Dropdown.Divider className={css.divider}/>
