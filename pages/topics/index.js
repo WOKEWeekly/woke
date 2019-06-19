@@ -109,22 +109,27 @@ class TopicBank extends Component {
   
   /** Filter topics */
 	filterTopics = () => {
-    const { topics, filters, searchWord } = this.state;
+    if (!this.state.filters){
+      const { topics, filters, searchWord } = this.state;
 
-		let results = topics.filter((topic, index, topics) => {
-      if (Object.keys(filters).length > 0){
-        return (filters.categories.length > 0 ? filters.categories.includes(topic.category) : true)
-          && (filters.types.length > 0 ? filters.types.includes(topic.type) : true)
-          && (filters.polarity.length > 0 ? filters.polarity.includes(topic.polarity) : true);
-      } else {
-        return topics;
-      }      
-    });
+      let results = topics.filter((topic, index, topics) => {
+        if (Object.keys(filters).length > 0){
+          return (filters.categories.length > 0 ? filters.categories.includes(topic.category) : true)
+            && (filters.types.length > 0 ? filters.types.includes(topic.type) : true)
+            && (filters.polarity.length > 0 ? filters.polarity.includes(topic.polarity) : true);
+        } else {
+          return topics;
+        }      
+      });
 
-    this.setState({ filtered: results }, () => {
-      this.props.saveTopicFilters(filters);
-      this.searchTopics(searchWord);
-    });
+      this.setState({ filtered: results }, () => {
+        this.props.saveTopicFilters(filters);
+        this.searchTopics(searchWord);
+      });
+    } else {
+      this.searchTopics(this.state.searchWord);
+    }
+    
   }
   
   /** Search through the topics, filtering via user input */

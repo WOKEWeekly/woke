@@ -55,14 +55,14 @@ class LoginModal extends Component {
 
         <Modal.Body className={css.modal_body}>
           <div style={{padding: '0 1em'}}>
-            <Group>
+            <Group className={css.group}>
               <Label>Username / Email Address:</Label>
               <Input
                 value={username}
                 onChange={this.handleUsername}
                 placeholder={"Enter username"} />
             </Group>
-            <Group>
+            <Group className={css.group}>
               <Label>Password:</Label>
               <PasswordInput
                 value={password}
