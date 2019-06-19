@@ -3,7 +3,10 @@
 
 .prenav {
   background-color: black;
-  padding: 3px 0;
+  padding: .2em 0 !important;
+  @media (max-width: $break-md) {
+    padding: 3px 0 !important;
+    width: 100% !important; }
   .auth {
     font-size: 1.1em;
     font-family: $body-font;
@@ -25,16 +28,19 @@
     font-size: 1.1em;
     font-family: $body-font;
     text-align: right;
-    a {
+    @media (max-width: $break-md) { font-size: 1em; }
+    .link {
       color: inherit;
-      margin: 0 3px;
+      font-weight: 900;
       vertical-align: middle; }
+    .divider { 
+      font-weight: 900;
+      padding: 0 .3em; }
     button {
       background: none;
       border: none;
-      color: inherit;
       outline: none;
-      vertical-align: middle;
+      padding: 0;
       &:hover { text-decoration: underline; }
     }
   }

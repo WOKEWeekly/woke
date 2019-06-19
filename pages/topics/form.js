@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import Router from 'next/router';
 
 import { SubmitButton, CancelButton, CheckboxButton, RadioButtonGroup } from '~/components/button.js';
-import { Heading, Group, Label, Input, TextArea, ShortTextArea, Select } from '~/components/form.js';
+import { Heading, Group, Label, TextInput, TextArea, ShortTextArea, Select } from '~/components/form.js';
 import { Shader, Spacer } from '~/components/layout.js';
 
 import {categories} from '~/constants/categories.js';
@@ -44,7 +44,7 @@ class TopicForm extends Component {
             <Group>
               <Col md={7}>
                 <Label>Headline:</Label>
-                <Input
+                <TextInput
                   name={'headline'}
                   value={headline}
                   onChange={handleText}
@@ -90,7 +90,7 @@ class TopicForm extends Component {
             <Group className={css.options} style={{ display: polarity ? 'flex' : 'none' }}>
               <Col md={6}>
                 <Label>Option 1:</Label>
-                <Input
+                <TextInput
                   name={'option1'}
                   value={option1}
                   onChange={handleText}
@@ -98,7 +98,7 @@ class TopicForm extends Component {
               </Col>
               <Col md={6}>
                 <Label>Option 2:</Label>
-                <Input
+                <TextInput
                   name={'option2'}
                   value={option2}
                   onChange={handleText}

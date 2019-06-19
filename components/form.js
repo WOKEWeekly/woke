@@ -38,11 +38,11 @@ export class Label extends Component {
 }
 
 /** For inline text inputs */
-export class Input extends Component {
+class Input extends Component {
   render(){
     return (
       <input
-        type={'text'}
+        type={this.props.type}
         name={this.props.name}
         placeholder={this.props.placeholder}
         className={css.input}
@@ -53,18 +53,35 @@ export class Input extends Component {
   }
 }
 
+/** For inline text inputs */
+export class TextInput extends Component {
+  render(){
+    return (
+      <Input
+        {...this.props}
+        type={'text'} />
+    )
+  }
+}
+
+/** For username inputs */
+export class UsernameInput extends Component {
+  render(){
+    return (
+      <Input
+        {...this.props}
+        autoCapitalize={'off'} />
+    )
+  }
+}
+
 /** For password inputs */
 export class PasswordInput extends Component {
   render(){
     return (
-      <input
-        type={'password'}
-        name={this.props.name}
-        placeholder={this.props.placeholder}
-        className={css.input}
-        autoComplete={'off'}
-        value={this.props.value || ''}
-        onChange={this.props.onChange} />
+      <Input
+        {...this.props}
+        type={'password'} />
     )
   }
 }

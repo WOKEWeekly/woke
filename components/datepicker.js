@@ -2,7 +2,7 @@ import React, { Component} from 'react';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
-import { Input } from '~/components/form.js';
+import { TextInput } from '~/components/form.js';
 import { creationDate } from '~/constants/settings.js';
 import css from '~/styles/_components.scss';
 
@@ -12,7 +12,7 @@ class DateInput extends Component {
       <button
         onClick={this.props.onClick}
         className={css.datepicker}>
-        <Input
+        <TextInput
           value={this.props.value}
           placeholder={'Select a date.'}
           style={{textAlign: 'left'}} />

@@ -62,16 +62,16 @@ class PreNavbar extends Component {
       } else {
         return (
           <Col xs={6} className={css.no_auth}>
-            <button onClick={this.showModal}>Login</button>
-            <a>|</a>
-            <a href="#signup">Sign Up</a>
+            <button className={css.link}onClick={this.showModal}>Login</button>
+            <a className={css.divider}>|</a>
+            <a className={css.link} href="#signup">Sign Up</a>
           </Col>
         );
       }
     }
 
     return (
-      <Container className={css.prenav} fluid={true}>
+      <div className={css.prenav}>
         <Container>
           <Row>
             <Col xs={6}>
@@ -86,7 +86,7 @@ class PreNavbar extends Component {
         </Container>
 
         <Login visible={this.state.modalVisible} close={this.hideModal} />
-      </Container>
+      </div>
     );
   }
 }

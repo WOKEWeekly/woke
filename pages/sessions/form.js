@@ -5,7 +5,7 @@ import Router from 'next/router';
 
 import { SubmitButton, CancelButton } from '~/components/button.js';
 import { EventDatePicker } from '~/components/datepicker.js';
-import { Heading, Group, Label, Input, TextArea, FileSelector } from '~/components/form.js';
+import { Heading, Group, Label, TextInput, TextArea, FileSelector } from '~/components/form.js';
 import { Shader, Spacer } from '~/components/layout.js';
 
 import CLEARANCES from '~/constants/clearances.js';
@@ -43,7 +43,7 @@ class SessionForm extends Component {
             <Group>
               <Col md={7}>
                 <Label>Title:</Label>
-                <Input
+                <TextInput
                   value={title}
                   onChange={handleTitle}
                   placeholder={"Enter the title."} />
