@@ -156,8 +156,7 @@ module.exports = function(app, conn, passport){
             // Send welcome email with verification link to user's email address
             // emails.sendWelcomeEmail(user, salt);
             
-            req.flash('positive', `Congratulations, ${user.firstname}, you have successfully signed up to the #WOKEWeekly website!`);
-            res.sendStatus(200);
+                        res.sendStatus(200);
           } else {
             res.status(400).send(err.toString());
           }
@@ -238,8 +237,7 @@ module.exports = function(app, conn, passport){
       }
     ], function(err){
       if (!err){
-        req.flash('positive', `You've successfully verified your account.`);
-        res.redirect('/');
+                res.redirect('/');
       } else {
         res.sendStatus(400);
         console.log(err.toString());
@@ -304,8 +302,7 @@ module.exports = function(app, conn, passport){
         
         conn.query(sql, values, function(err, result){	
           if (!err){
-            req.flash('success', `You've successfully changed your username.`);
-            res.sendStatus(200);
+                        res.sendStatus(200);
           } else {
             res.status(400).send(err.toString());
           }
@@ -337,8 +334,7 @@ module.exports = function(app, conn, passport){
                 
                 conn.query(sql, values, function(err1, result){
                   if (!err1){
-                    req.flash('success', `You've successfully changed your password.`);
-                    res.sendStatus(200);
+                                        res.sendStatus(200);
                   } else {
                     res.status(400).send(err1.toString());
                   }
@@ -390,8 +386,7 @@ module.exports = function(app, conn, passport){
         
         conn.query("DELETE FROM user WHERE id = ?", req.body.id, function(err, result){	
           if (!err){
-            req.flash('success', `Your account has successfully been deleted.`);
-            res.sendStatus(200);
+                        res.sendStatus(200);
           } else {
             res.status(400).send(err.toString());
             console.error(err.toString());

@@ -15,7 +15,8 @@ class DateInput extends Component {
         <TextInput
           value={this.props.value}
           placeholder={'Select a date.'}
-          style={{textAlign: 'left'}} />
+          style={{textAlign: 'left'}}
+          readOnly />
       </button>
     );
   }

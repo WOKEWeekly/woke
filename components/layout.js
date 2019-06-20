@@ -10,6 +10,7 @@ export const zIndices = {
   topicTopToolbar: 0,
   filterMenu: 1010,
   accountMenu: 1050,
+  alerts: 1100
 }
 
 export class Shader extends Component {

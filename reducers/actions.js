@@ -28,3 +28,8 @@ export const saveTopicFilters = filters => ({
   type: 'SAVE_TOPIC_FILTERS',
   payload: filters,
 });
+
+export const composeAlert = (variant, message) => ({
+  type: 'COMPOSE_ALERT',
+  payload: {variant, message}
+});

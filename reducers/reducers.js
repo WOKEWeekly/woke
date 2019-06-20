@@ -1,5 +1,4 @@
 import { combineReducers } from 'redux';
-import { categories, types, polarity } from '~/constants/categories.js';
 
 /** Reducer for user authentication */
 const initialUser = {
@@ -71,8 +70,23 @@ const topicReducer = (state = defaultTopic, action) => {
   }
 };
 
+const defaultAlert = {
+  variant: '',
+  message: ''
+}
+
+const alertReducer = (state = defaultAlert, action) => {
+  switch (action.type) {
+    case 'COMPOSE_ALERT':
+      return action.payload;
+    default:
+      return state;
+  }
+};
+
 export default combineReducers({
   user: userReducer,
   session: sessionReducer,
-  topic: topicReducer
+  topic: topicReducer,
+  alert: alertReducer
 });

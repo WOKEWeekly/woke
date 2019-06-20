@@ -1,24 +1,49 @@
 import React, { Component} from 'react';
-import { Alert as alert } from 'react-bootstrap';
+import { Alert as Template, Container } from 'react-bootstrap';
+import { connect } from 'react-redux';
 
-export default class Alert extends Component {
+import css from '~/styles/_components.scss';
+import { zIndices } from './layout';
+
+class _Alert extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      show: true,
+      show: false,
     };
   }
 
+  componentWillReceiveProps(nextProps) {
+    this.setState({ show: nextProps.visible });  
+  }
+
+  handleDismiss = () => this.setState({ show: false });
+
   render() {
-
-    const handleDismiss = () => this.setState({ show: false });
-
     if (this.state.show) {
+      const { alert } = this.props;
+
       return (
-        <alert variant={this.props.variant} onClose={handleDismiss} dismissible>
-          {this.props.children}
-        </alert>
+        <Container className={css.alert_container}>
+          <Template
+            className={css.alert}
+            variant={alert.variant}
+            onClose={this.handleDismiss}
+            dismissible
+            style={{ zIndex: zIndices.alerts}}
+            {...this.props}>
+            {alert.message}
+          </Template>
+        </Container>
       );
+    } else {
+      return null;
     }
   }
 }
+
+const mapStateToProps = state => ({
+  alert: state.alert
+});
+
+export const Alert = connect(mapStateToProps)(_Alert);

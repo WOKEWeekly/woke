@@ -109,7 +109,7 @@ class TopicBank extends Component {
   
   /** Filter topics */
 	filterTopics = () => {
-    if (!this.state.filters){
+    if (this.state.filters){
       const { topics, filters, searchWord } = this.state;
 
       let results = topics.filter((topic, index, topics) => {
@@ -129,7 +129,6 @@ class TopicBank extends Component {
     } else {
       this.searchTopics(this.state.searchWord);
     }
-    
   }
   
   /** Search through the topics, filtering via user input */

@@ -11,7 +11,6 @@ const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const dotenv = require('dotenv').config({path: dev ? './config.env' : '/root/config.env'});
 const expressSession = require('express-session');
-const flash = require('connect-flash');
 const mysql = require('mysql');
 const passport = require('passport');
 const request = require('superagent');
@@ -29,7 +28,6 @@ app.use(expressSession({
   resave: true,
   saveUninitialized: true
 }));
-app.use(flash());
 app.use(passport.initialize());
 app.use(passport.session());
 

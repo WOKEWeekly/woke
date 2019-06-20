@@ -52,9 +52,9 @@ class Sessions extends Component {
       this.setState({
         sessions: sessions,
         isLoaded: true
+      }, () => {
+        this.sortSessions(this.state.sort);
       });
-
-      this.sortSessions(this.state.sort);
     })
     .catch(error => console.error(error));
   }
@@ -213,7 +213,8 @@ class Session extends PureComponent {
 
 const mapStateToProps = state => ({
   session: state.session,
-  user: state.user
+  user: state.user,
+  alert: state.alert
 });
 
 const mapDispatchToProps = dispatch => (

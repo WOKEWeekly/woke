@@ -12,6 +12,7 @@ import {PreNavBar, MainNavBar} from "~/partials/header.js";
 import Footer from "~/partials/footer.js";
 
 import css from '~/styles/_app.scss';
+import { Alert } from '~/components/alert.js';
 
 library.add(fab, fas);
 const { store, persistor } = configureStore();
@@ -27,9 +28,13 @@ export default class WOKE extends App {
     return { pageProps };
   }
 
+  state = { alertVisible: false }
+
   componentDidMount(){
     document.body.className = css.body;
   }
+
+  showAlert = () => { this.setState({alertVisible: true}) }
 
   render() {
     const { Component, pageProps } = this.props;
@@ -43,10 +48,11 @@ export default class WOKE extends App {
         <Provider store={store}>
           <PersistGate loading={null} persistor={persistor}>
             <PreNavBar/> <MainNavBar/>
-            <Component {...pageProps} />
+            <Component {...pageProps} showAlert={this.showAlert} />
             <Footer/>
+            <Alert visible={this.state.alertVisible}>Beautiful</Alert>
           </PersistGate>
-        </Provider>        
+        </Provider> 
       </Container>
     );
   }

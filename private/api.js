@@ -82,7 +82,7 @@ module.exports = function(app, conn){
       },
       function(image, callback){ // Delete image from directory
         fs.unlink(`./static/images/sessions/${image}`, function(err) {
-          if (err) console.warn(`${session.image} not found in /sessions directory.`);
+          if (err) console.warn(`${image} not found in /sessions directory.`);
           callback(null);
         });
       }
@@ -195,8 +195,7 @@ module.exports = function(app, conn){
         
         conn.query(sql, [values], function (err, result, fields) {
           if (!err){
-            req.flash('success', `You've added candidate ${candidate.name}.`);
-            res.sendStatus(200);
+                        res.sendStatus(200);
             console.log("Added #BlackExcellence candidate successfully.");
           } else {
             if (err.toString().includes("Duplicate entry")){
@@ -233,8 +232,7 @@ module.exports = function(app, conn){
         
         conn.query(sql, values, function (err, result, fields) {
           if (!err){
-            req.flash('success', `You've updated the details of ${candidate2.name}.`);
-            
+                        
             let image = `./public/images/blackexcellence/${candidate1.image}`;
             
             /** Delete first image from file system if there was an image change */
@@ -289,8 +287,7 @@ module.exports = function(app, conn){
         
         conn.query(sql, candidate.id, function (err, result, fields) {
           if (!err){
-            req.flash('success', `You've deleted candidate ${candidate.name}.`);
-            
+                        
             /** Delete image from file system */
             fs.unlink('./public/images/blackexcellence/' + candidate.image, function(err1) {
               if (!err1) {
@@ -371,8 +368,7 @@ module.exports = function(app, conn){
         
         conn.query(sql, [values], function (err, result, fields) {
           if (!err){
-            req.flash('success', `You've added team member ${member.name}.`);
-            res.sendStatus(200);
+                        res.sendStatus(200);
           } else {
             if (err.toString().includes("Incorrect string")){
               res.status(422).send(`Please do not use emojis during input.`)
@@ -406,8 +402,7 @@ module.exports = function(app, conn){
         
         conn.query(sql, values, function (err, result, fields) {
           if (!err){
-            req.flash('success', `You've updated the details of ${member2.name}.`);
-            
+                        
             let image = `.${team_dir}${member1.image}`;
             
             /** Delete first image from file system if there was an image change */
@@ -459,8 +454,7 @@ module.exports = function(app, conn){
         
         conn.query(sql, member.id, function (err, result, fields) {
           if (!err){
-            req.flash('success', `You've deleted team member ${member.firstname} ${member.lastname}.`);
-            
+                        
             /** Delete image from file system if exists */
             if (member.image){
               fs.unlink(`.${team_dir}${member.image}`, function(err1) {
@@ -685,8 +679,7 @@ module.exports = function(app, conn){
       let message = `${name} just made a suggestion.`;
       notifications.exec(conn, title, message);
 
-      req.flash('success', `Your suggestion has successfully been submitted and will be reviewed.`);
-      res.sendStatus(200);
+            res.sendStatus(200);
     })
   });
 
@@ -701,8 +694,7 @@ module.exports = function(app, conn){
         
         conn.query(sql, suggestion.id, function (err, result, fields) {
           if (!err){
-            req.flash('success', `You've deleted suggestion: ${suggestion.question}.`);
-            res.sendStatus(200);
+                        res.sendStatus(200);
           } else {
             res.status(400).send(err.toString());
             console.error(err.toString())
@@ -749,8 +741,7 @@ module.exports = function(app, conn){
 
       notifications.one(conn, title, message, id);
 
-      req.flash('success', `Suggestion approved.`);
-      res.sendStatus(200);
+            res.sendStatus(200);
     });
   });
 
@@ -791,8 +782,7 @@ module.exports = function(app, conn){
 
       notifications.one(conn, title, message, id);
 
-      req.flash('success', `Suggestion rejected.`);
-      res.sendStatus(200);
+            res.sendStatus(200);
     });
   });
 

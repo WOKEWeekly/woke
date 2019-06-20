@@ -1,4 +1,3 @@
-import { Alert } from '~/components/alert.js';
 
 /** Ensure valid session is added or updated */
 export const isValidSession = (session) => {

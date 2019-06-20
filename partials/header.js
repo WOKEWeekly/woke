@@ -53,7 +53,6 @@ class PreNavbar extends Component {
               </Dropdown.Toggle>
               <Dropdown.Menu className={css.dropdown_menu}>
                 <Dropdown.Item className={css.dropdown_item} eventKey={'1'}>Your Account</Dropdown.Item>
-                <Dropdown.Divider className={css.divider}/>
                 <Dropdown.Item className={css.dropdown_item} onClick={this.logOut}>Log Out</Dropdown.Item>
               </Dropdown.Menu>
             </Dropdown>
