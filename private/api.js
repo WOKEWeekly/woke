@@ -133,24 +133,18 @@ module.exports = function(app, conn){
     });
   });
 
+  /** Retrieve all candidates */
+  app.get('/getCandidates', function(req, res){
+    conn.query("SELECT * FROM blackex", function (err, result) {
+      resToClient(res, err, result)
+    });
+  });
+
   /****************************
    * CHECKPOINT
    ***************************/
 
-  /** Retrieve all candidates */
-  app.get('/getBlackEx', function(req, res){
-    if (req.headers['authorization'] !== 'authorized'){
-      res.sendStatus(403);
-    } else {
-      conn.query("SELECT * FROM blackex", function (err, result, fields) {
-        if (!err){
-          res.json(result);
-        } else {
-          res.status(400).send(err.toString());
-        }
-      });
-    }
-  });
+  
 
   /** Get random candidate */
   app.get('/getRandomCandidate', function(req, res){

@@ -70,6 +70,21 @@ const topicReducer = (state = defaultTopic, action) => {
   }
 };
 
+const defaultBlackEx = {
+  view: '1'
+}
+
+const blackexReducer = (state = defaultBlackEx, action) => {
+  switch (action.type) {
+    case 'SAVE_CANDIDATE_SORT':
+      return Object.assign({}, state, {
+        sort: action.payload
+      });
+    default:
+      return state;
+  }
+};
+
 const defaultAlert = {
   variant: '',
   message: ''
@@ -88,5 +103,6 @@ export default combineReducers({
   user: userReducer,
   session: sessionReducer,
   topic: topicReducer,
+  blackex: blackexReducer,
   alert: alertReducer
 });

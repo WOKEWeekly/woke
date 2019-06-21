@@ -29,6 +29,11 @@ export const saveTopicFilters = filters => ({
   payload: filters,
 });
 
+export const saveCandidateSort = sort => ({
+  type: 'SAVE_CANDIDATE_SORT',
+  payload: sort,
+});
+
 export const composeAlert = (variant, message) => ({
   type: 'COMPOSE_ALERT',
   payload: {variant, message}

@@ -65,9 +65,9 @@ class TopicBank extends Component {
         topics: topics,
         filtered: topics,
         isLoaded: true
+      }, () => {
+         this.sortTopics(this.state.sort);
       });
-
-      this.sortTopics(this.state.sort);
     })
     .catch(error => console.error(error));
   }

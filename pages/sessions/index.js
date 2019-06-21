@@ -61,26 +61,22 @@ class Sessions extends Component {
 
   sortSessions = (sort) => {
     const { sessions } = this.state;
+    let order = '';
 
-    switch(sort){
-      case '1':
-        sessions.sort(function (a,b) {
-          a = a.dateHeld;
-          b = b.dateHeld;
-          return a < b ? -1 : a > b ? 1 : 0;
-        });
-        break;
-      case '2':
-        sessions.sort(function (a,b) {
-          a = a.dateHeld;
-          b = b.dateHeld;
-          return a < b ? 1 : a > b ? -1 : 0;
-        });
-        break;
-    }  
+    switch (sort){
+			case '1': order = 'ASC'; break;
+			case '2': order = 'DESC'; break;
+			default: order = 'DESC'; break;
+		}
+
+    sessions.sort(function (a,b) {
+      a = a.dateHeld;
+      b = b.dateHeld;
+      return a < b ? -1 : a > b ? 1 : 0
+		});
 
     this.setState({
-      sessions: sessions,
+      sessions: order === 'DESC' ? sessions.reverse() : sessions,
       sort: sort
     });
   }
