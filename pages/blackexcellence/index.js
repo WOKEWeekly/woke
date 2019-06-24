@@ -40,7 +40,7 @@ class BlackExcellence extends Component {
     fetch('/getCandidates', {
       method: 'GET',
       headers: {
-        'Authorization': `authorized`,
+        'Authorization': process.env.AUTH_KEY,
         'Content-Type': 'application/json',
       }
     })
@@ -144,7 +144,7 @@ class BlackExcellence extends Component {
             <AddButton
               title={'Add Candidate'}
               mobileTitle={'Add'}
-              onClick={() => Router.push('/blackex/add')} /> : null}
+              onClick={() => Router.push('/blackexcellence/add')} /> : null}
       
             <SortDropdown
               items={sortItems}
@@ -162,11 +162,8 @@ class _Candidate extends PureComponent {
     const { item } = this.props;
     const label = `#${item.id}: ${item.name}`;
 
-
-    console.log(typeof item.birthday);
-
     return (
-      <Link href={`/blackexcellence/${item.id}`}>
+      <Link href={`/blackexcellence/candidate/${item.id}`}>
         <div className={css.cell}>
           <img
             src={`/static/images/blackexcellence/${item.image}`}

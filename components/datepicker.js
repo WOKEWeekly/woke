@@ -34,7 +34,7 @@ export class EventDatePicker extends Component {
         minDate={creationDate}
         peekNextMonth={false}
         fixedHeight
-        locale="en" />
+        locale={'en'} />
     );
   }
 }
@@ -43,16 +43,17 @@ export class BirthdayPicker extends Component {
   render(){
     return (
       <DatePicker
-        locale="en"
-        dateFormat="d MMMM yyyy"
-        placeholderText="Click to select a date"
+        selected={this.props.date}
+        onChange={this.props.onChange}
+        customInput={<DateInput />}
+        dateFormat={'d MMMM yyyy'}
+        placeholderText={'Select the date of birth.'}
         maxDate={new Date()}
-        selected={new Date()}
-        peekNextMonth
+        peekNextMonth={false}
         showMonthDropdown
         showYearDropdown
-        dropdownMode="select"
-        onChange={this.handleChange} />
+        dropdownMode={'select'}
+        locale={'en'} />
     );
   }
 }

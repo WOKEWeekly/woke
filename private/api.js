@@ -1,4 +1,5 @@
 const async = require('async');
+const request = require('superagent');
 const fs = require('fs');
 const { verifyToken, validateReq, checkAuth, upload } = require('./middleware.js');
 
@@ -12,7 +13,7 @@ module.exports = function(app, conn){
   });
 
   /** Add new session to database */
-  app.post('/addSession', verifyToken, function(req, res){
+  app.post('/addSession', verifyToken, checkAuth, function(req, res){
     async.waterfall([
       function(callback){ // Upload file to directory
         upload(req, res, function(err){
@@ -34,7 +35,7 @@ module.exports = function(app, conn){
   });
 
   /** Update details of existing session in database */
-  app.put('/updateSession', verifyToken, function(req, res){
+  app.put('/updateSession', verifyToken, checkAuth, function(req, res){
     async.waterfall([
       function(callback){ // Upload new image to directory
         upload(req, res, function(err){
@@ -70,7 +71,7 @@ module.exports = function(app, conn){
   });
 
   /** Delete an existing session from database */
-  app.delete('/deleteSession', verifyToken, function(req, res){
+  app.delete('/deleteSession', verifyToken, checkAuth, function(req, res){
     async.waterfall([
       function(callback){ // Delete session from database
         const session = req.body;
@@ -99,7 +100,7 @@ module.exports = function(app, conn){
   });
 
   /** Add new topic to database */
-  app.post('/addTopic', verifyToken, function(req, res){
+  app.post('/addTopic', verifyToken, checkAuth, function(req, res){
     const topic = req.body;
     const sql = "INSERT INTO topics (headline, category, question, description, type, polarity, option1, option2, user_id) VALUES ?";
     const values = [[topic.headline, topic.category, topic.question, topic.description, topic.type,
@@ -111,7 +112,7 @@ module.exports = function(app, conn){
   });
 
   /** Update topic in database */
-  app.put('/updateTopic', verifyToken, function(req, res){
+  app.put('/updateTopic', verifyToken, checkAuth, function(req, res){
     const topic = req.body;
     const sql = `UPDATE topics SET headline = ?, category = ?, question = ?, description = ?, type = ?, polarity = ?, option1 = ?, option2 = ? WHERE id = ?`;
     const values = [topic.headline, topic.category, topic.question, topic.description, topic.type,
@@ -134,9 +135,60 @@ module.exports = function(app, conn){
   });
 
   /** Retrieve all candidates */
-  app.get('/getCandidates', function(req, res){
+  app.get('/getCandidates', validateReq, function(req, res){
     conn.query("SELECT * FROM blackex", function (err, result) {
       resToClient(res, err, result)
+    });
+  });
+
+   /** Find last candidate ID */
+  app.get('/newCandidateID', function(req, res){
+    conn.query("SELECT MAX(ID) FROM blackex", function (err, result) {
+      resToClient(res, err, result[0]['MAX(ID)'] + 1)
+    });
+  });
+
+  /** Add new candidate to database */
+  app.post('/addCandidate', verifyToken, checkAuth, function(req, res){
+    async.waterfall([
+      function(callback){ // Upload file to directory
+        upload(req, res, function(err){
+          err ? callback(err) : callback(null);
+        });
+      },
+      function(callback){ // Add candidate to databse
+        const candidate = JSON.parse(req.body.candidate);
+        const sql = "INSERT INTO blackex (id, name, image, birthday, ethnicity, socials, occupation, description) VALUES ?";
+        const values = [[candidate.id, candidate.name, candidate.image, candidate.birthday, candidate.ethnicity, candidate.socials, candidate.occupation, candidate.description]];
+    
+        conn.query(sql, [values], function (err) {
+          err ? callback(err) : callback(null);
+        });
+      }
+    ], function(err){
+      resToClient(res, err);
+    });
+  });
+
+  /** Delete an existing candidate from database */
+  app.delete('/deleteCandidate', verifyToken, checkAuth, function(req, res){
+    async.waterfall([
+      function(callback){ // Delete candidate from database
+        const candidate = req.body;
+        const sql = "DELETE FROM blackex WHERE id = ?";
+
+        conn.query(sql, candidate.id, function (err) {
+          err ? callback(err) : callback(null, candidate.image);
+        });
+      },
+      function(image, callback){ // Delete image from directory
+        fs.unlink(`./static/images/blackexcellence/${image}`, function(err) {
+          if (err) console.warn(`${image} not found in /blackexcellence directory.`);
+          callback(null);
+        });
+      }
+    ], function(err){
+      resToClient(res, err);
     });
   });
 
@@ -159,50 +211,6 @@ module.exports = function(app, conn){
         }
       });
     }
-  });
-
-  /** Find last candidate ID */
-  app.get('/newCandidateID', function(req, res){
-    conn.query("SELECT MAX(ID) FROM blackex", function (err, result, fields) {
-      if (!err){
-        res.json(result[0]['MAX(ID)'] + 1);
-      } else {
-        res.status(400).send(err.toString());
-      }
-    });
-  });
-
-  /** Add new candidate to database */
-  app.post('/addBlackEx', verifyToken, function(req, res){
-    jwt.verify(req.token, process.env.JWT_SECRET, (err, auth) => {
-      if (err){
-        res.sendStatus(403);
-      } else {
-        if (!(auth.user && auth.user.clearance >= CLEARANCES.ACTIONS.CRUD_BLACKEX)){
-          res.status(401).send(`You are not authorised to perform such an action.`);
-          return;
-        }
-
-        var candidate = req.body;
-        var sql = "INSERT INTO blackex (id, name, image, birthday, ethnicity, socials, occupation, text, description, delta) VALUES ?";
-        var values = [[candidate.id, candidate.name, candidate.image, candidate.birthday, candidate.ethnicity, candidate.socials, candidate.occupation, candidate.text, candidate.description, candidate.delta]];
-        
-        conn.query(sql, [values], function (err, result, fields) {
-          if (!err){
-                        res.sendStatus(200);
-            console.log("Added #BlackExcellence candidate successfully.");
-          } else {
-            if (err.toString().includes("Duplicate entry")){
-              res.status(409).send(`There\'s already a candidate with ID number ${candidate.id}.`)
-            } else if (err.toString().includes("Incorrect string")){
-              res.status(422).send(`Please do not use emojis during input.`)
-            } else {
-              res.status(400).send(err.toString());
-            }
-          }
-        });
-      }
-    });
   });
 
   /** Update details of existing candidate in database */
@@ -263,41 +271,6 @@ module.exports = function(app, conn){
     });
     
     
-  });
-
-  /** Delete an existing candidate from database */
-  app.delete('/deleteBlackEx', verifyToken, function(req, res){
-    jwt.verify(req.token, process.env.JWT_SECRET, (err, auth) => {
-      if (err){
-        res.sendStatus(403);
-      } else {
-        if (!(auth.user && auth.user.clearance >= CLEARANCES.ACTIONS.CRUD_BLACKEX)){
-          res.status(401).send(`You are not authorised to perform such an action.`);
-          return;
-        }
-
-        var candidate = req.body;
-        var sql = "DELETE FROM blackex WHERE id = ?";
-        
-        conn.query(sql, candidate.id, function (err, result, fields) {
-          if (!err){
-                        
-            /** Delete image from file system */
-            fs.unlink('./public/images/blackexcellence/' + candidate.image, function(err1) {
-              if (!err1) {
-                res.sendStatus(200);
-                console.log(`Deleted ${candidate.image} from the /blackexcellence directory.` );
-              } else {
-                console.warn(`${candidate.image} not found in /blackexcellence directory.` );
-                res.sendStatus(200);
-              }
-            });
-          } else {
-            res.status(400).send(err.toString());
-          }
-        });
-      }
-    });
   });
 
   /** Retrieve all team members */
@@ -688,7 +661,7 @@ module.exports = function(app, conn){
         
         conn.query(sql, suggestion.id, function (err, result, fields) {
           if (!err){
-                        res.sendStatus(200);
+            res.sendStatus(200);
           } else {
             res.status(400).send(err.toString());
             console.error(err.toString())
@@ -734,8 +707,7 @@ module.exports = function(app, conn){
       let message = 'Your suggestion has been approved.'
 
       notifications.one(conn, title, message, id);
-
-            res.sendStatus(200);
+      res.sendStatus(200);
     });
   });
 
@@ -775,11 +747,9 @@ module.exports = function(app, conn){
       let message = 'Your suggestion has been rejected.'
 
       notifications.one(conn, title, message, id);
-
-            res.sendStatus(200);
+      res.sendStatus(200);
     });
   });
-
 }
 
 function resToClient(res, err, json){

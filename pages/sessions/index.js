@@ -43,7 +43,7 @@ class Sessions extends Component {
     fetch('/getSessions', {
       method: 'GET',
       headers: {
-        'Authorization': 'authorized',
+        'Authorization': process.env.AUTH_KEY,
         'Content-Type': 'application/json',
       }
     })

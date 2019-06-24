@@ -2,12 +2,12 @@ import React from 'react';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 import configureStore from '~/reducers/store.js';
+import App, { Container } from 'next/app';
 
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { fab } from '@fortawesome/free-brands-svg-icons';
 import { fas } from '@fortawesome/free-solid-svg-icons';
 
-import App, { Container } from 'next/app';
 import {PreNavBar, MainNavBar} from "~/partials/header.js";
 import Footer from "~/partials/footer.js";
 
@@ -28,7 +28,9 @@ export default class WOKE extends App {
     return { pageProps };
   }
 
-  state = { alertVisible: false }
+  state = {
+    alertVisible: false
+  }
 
   componentDidMount(){
     document.body.className = css.body;

@@ -65,3 +65,22 @@ const getDateSuffix = (day) => {
   
   return suffix;
 }
+
+/** Calculate the age from a birth date */
+export const calculateAge = (bday) => {
+  const birthday = new Date(bday);
+  
+  const dd = birthday.getDate();
+  const mm = birthday.getMonth();
+  const yy = birthday.getFullYear();
+  
+  const td = new Date().getDate();
+  const tm = new Date().getMonth();
+  const ty = new Date().getFullYear();
+  
+  let age = ty - yy;
+  age += (tm - mm) / 12;
+  age += (td - dd) / 310;
+  
+  return Math.floor(age);
+}

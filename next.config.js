@@ -1,8 +1,12 @@
+require('dotenv').config()
 
-const withSass = require("@zeit/next-sass")
-const withCss = require("@zeit/next-css")
-const withPlugins = require("next-compose-plugins")
+const withSass = require("@zeit/next-sass");
+const withCss = require("@zeit/next-css");
+const withPlugins = require("next-compose-plugins");
 const shebang_loader = require('shebang-loader');
+
+const path = require('path');
+const DotEnv = require('dotenv-webpack');
 
 module.exports = withPlugins([
   [
@@ -29,7 +33,17 @@ module.exports = withPlugins([
           use: {
             loader: 'shebang-loader'
           }
-        })
+        });
+
+        config.plugins = config.plugins || []
+        config.plugins = [
+          ...config.plugins,
+          new DotEnv({
+            path: path.join(__dirname, 'config.env'),
+            systemvars: true
+          })
+        ];
+
         return config
       },
     },
@@ -43,5 +57,5 @@ module.exports = withPlugins([
         localIdentName: "[local]___[hash:base64:5]",
       },
     },
-  ],
+  ]
 ])

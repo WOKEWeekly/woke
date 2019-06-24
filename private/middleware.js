@@ -26,7 +26,7 @@ module.exports = {
 
   /** Check for 'authorized' header values to validate requests */
   validateReq: (req, res, next) => {
-    if (req.headers['authorization'] !== 'authorized'){
+    if (req.headers['authorization'] !== process.env.AUTH_KEY){
       res.sendStatus(403);
     } else {
       next();

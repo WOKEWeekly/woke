@@ -9,18 +9,17 @@ const handle = server.getRequestHandler();
 
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
+const cors = require('cors');
 const dotenv = require('dotenv').config({path: dev ? './config.env' : '/root/config.env'});
 const expressSession = require('express-session');
 const mysql = require('mysql');
 const passport = require('passport');
-const request = require('superagent');
 const url = require('url');
-
-
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
+app.use(cors());
 
 app.use(expressSession({
   cookie: {maxAge: 2 * 60 * 60 * 1000},
@@ -54,30 +53,6 @@ const conn = mysql.createConnection({
 /** Connect to MySQL database */
 conn.connect(function(err) {
   err ? (console.log(err.toString())) : console.log("Connected to database.");
-});
-
-/*******************************************
-* Templates & Locals
-*******************************************/
-
-/** Render locals */
-app.use(function (req, res, next) {
-  const user = {};
-  
-  /** Pass authenticated user information to client */
-  if (req.user){
-    user.firstname = req.user.firstname;
-    user.lastname = req.user.lastname;
-    user.username = req.user.username;
-    user.clearance = req.user.clearance;
-  }
-  
-  res.locals = {
-    user: JSON.stringify(user),
-    isAuth: req.isAuthenticated()
-  };
-
-  next();
 });
 
 /*******************************************

@@ -37,7 +37,11 @@ export class Label extends Component {
   }
 }
 
-/** For inline text inputs */
+/***************************
+ * INPUTS
+ **************************/
+
+/** Template for inputs */
 class Input extends Component {
   render(){
     return (
@@ -87,6 +91,22 @@ export class PasswordInput extends Component {
   }
 }
 
+/** For number selections */
+export class NumberPicker extends Component {
+  render(){
+    return (
+      <Input
+        {...this.props}
+        type={'number'}
+        min={1} />
+    )
+  }
+}
+
+/***************************
+ * TEXTAREAS
+ **************************/
+
 /** For long text inputs */
 export class ShortTextArea extends Component {
   render(){
@@ -131,14 +151,21 @@ export class TextArea extends Component {
   }
 }
 
+/***************************
+ * OTHERS
+ **************************/
+
 /** For dropdown menus */
 export class Select extends Component {
   render(){
-    const { placeholder, items } = this.props;
+    const { name, placeholder, items, value, onChange } = this.props;
     return (
       <select
         className={css.select}
-        {...this.props}>
+        name={name}
+        value={value || ''}
+        onChange={onChange}
+        style={{ color: value === '' && '#8E8E8E' }}>
         <option value={''} disabled>{placeholder}</option>
         {items.map((item, index) => {
           return <option key={index} value={item.label}>{item.label}</option>

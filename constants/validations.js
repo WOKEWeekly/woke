@@ -7,7 +7,7 @@ export const isValidSession = (session) => {
   return true;
 }
 
-/** Ensure valid session is added or updated */
+/** Ensure valid topic is added or updated */
 export const isValidTopic = (topic) => {
   if (!ifExists(topic.headline.trim(), 'Enter the topic headline.')) return false;
   if (!ifExists(topic.category, 'Select the topic category.')) return false;
@@ -20,12 +20,33 @@ export const isValidTopic = (topic) => {
   return true;
 }
 
+/** Ensure valid candidate is added or updated */
+export const isValidCandidate = (candidate) => {
+  if (!ifExists(candidate.name.trim(), 'Enter the candidate\'s name.')) return false;
+  if (!isValidID(candidate.id)) return false;
+  if (!ifExists(candidate.birthday, 'Select the candidate\'s date of birth.')) return false;
+  if (!ifExists(candidate.occupation.trim(), 'Please select an image for the session.')) return false;
+  return true;
+}
+
 /** Check for the presence of a value */
 const ifExists = (value, message) => {
   if (!value || value.length == 0){
     alert(message);
     return false;
+  } else {
+    return true;
   }
+}
 
-  return true;
+const isValidID = (x) => {
+  if (!x){
+    alert(`ID number is missing.`); return false;
+  } else if (x < 1) {
+    alert(`ID number needs to be a positive non-zero number.`); return false;
+  } else if (!Number.isInteger(x)){
+    alert(`ID number needs to be an integer.`); return false;
+  } else {
+    return true;
+  }
 }
