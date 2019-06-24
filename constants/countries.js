@@ -1,20 +1,15 @@
+import fetch from 'isomorphic-fetch';
 
-/** Load all country information */
-export const loadCountries = () => {
-  return fetch('https://restcountries.eu/rest/v2/all')
-  .then(res => res.json())
-  .then(json => {
-    const countries = [];
+export const COUNTRIES = [];
 
-    json.forEach(country => {
-      countries.push({ label: country.name, demonym: country.demonym });
-    });
-    
-    return countries;
-  })
-  .catch(error => console.error(error));
-}
-
+fetch('https://restcountries.eu/rest/v2/all')
+.then(res => res.json())
+.then(json => {
+  json.forEach(country => {
+    COUNTRIES.push({ label: country.name, demonym: country.demonym });
+  });
+})
+.catch(error => console.error(error));
 
 /** Retrieve demonym from country */
 export const getDemonym = (value) => {
@@ -24,6 +19,8 @@ export const getDemonym = (value) => {
 
 /** Display sentence of countries from array */
 export const countriesToString = (countries) => {
+  if (!countries) return '';
+
   const array = [];
   countries.forEach(country => array.push(getDemonym(country)));
 

@@ -44,8 +44,6 @@ const isValidID = (x) => {
     alert(`ID number is missing.`); return false;
   } else if (x < 1) {
     alert(`ID number needs to be a positive non-zero number.`); return false;
-  } else if (!Number.isInteger(x)){
-    alert(`ID number needs to be an integer.`); return false;
   } else {
     return true;
   }

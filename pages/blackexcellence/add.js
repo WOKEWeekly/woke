@@ -47,11 +47,16 @@ class CandidateAdd extends Component {
     const { id, name, occupation, image, birthday, description,
     ethnicity1, ethnicity2, ethnicity3, ethnicity4 } = this.state;
 
-    /** Generate slugs and filenames from title and data */
+    /** Generate slugs and filenames from name and data */
     let slug = generateSlug(name);
     let filename = generateCandidateFilename(id, slug, image);
 
-    const ethnicities = [ethnicity1, ethnicity2, ethnicity3, ethnicity4];
+    /** Add ethncities to array */
+    const ethnicities = [];
+    if (ethnicity1) ethnicities.push(ethnicity1);
+    if (ethnicity2) ethnicities.push(ethnicity2);
+    if (ethnicity3) ethnicities.push(ethnicity3);
+    if (ethnicity4) ethnicities.push(ethnicity4);
     
     const candidate = {
       id: id,
@@ -59,12 +64,13 @@ class CandidateAdd extends Component {
       occupation: occupation.trim(),
       image: filename,
       birthday: formatISODate(birthday),
-      ethnicities: ethnicities,
+      ethnicity: JSON.stringify(ethnicities),
       description: description
     };
 
     const data = new FormData();
     data.append('candidate', JSON.stringify(candidate));
+    data.append('changed', true);
     data.append('file', image, filename);
 
     /** Add candidate to database */
@@ -85,7 +91,6 @@ class CandidateAdd extends Component {
     return (
       <CandidateForm
         heading={'Add New Candidate'}
-        candidate={this.state}
         handleText={this.handleText}
         handleDate={this.handleDate}
         handleImage={this.handleImage}

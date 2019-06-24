@@ -21,7 +21,7 @@ class LoginModal extends Component {
   /** Handle login fields */
   handleUsername = (event) => { this.setState({username: event.target.value}); }
   handlePassword = (event) => { this.setState({password: event.target.value}); }
-  handleRemember = (event) => { console.log(event.target.checked); this.setState({remember: event.target.checked}); }
+  handleRemember = (event) => { this.setState({remember: event.target.checked}); }
 
   /** Log in as registered user */
   logIn = () => {

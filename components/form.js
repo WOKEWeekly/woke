@@ -126,8 +126,12 @@ export class TextArea extends Component {
   constructor(props){
     super(props);
     this.state = {
-      wordCount: props.value ? props.value.length : 0
+      wordCount: 0
     }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.setState({ wordCount: nextProps.value.length });  
   }
 
   handleTextChange = (event) => {

@@ -59,4 +59,19 @@ module.exports = function(app, conn, server){
       }
     });
   });
+
+  /** Render edit candidate page */
+  app.get('/blackexcellence/edit/:id', function(req, res){
+    const id = req.params.id;
+    const sql = "SELECT * FROM blackex WHERE id = ?";
+    
+    conn.query(sql, [id], function (err, result) {
+      if (!err){
+        const candidate = result[0];
+        return server.render(req, res, '/blackexcellence/edit', { candidate });
+      } else {
+        res.status(400).send(err.toString());
+      }
+    });
+  });
 }

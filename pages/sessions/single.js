@@ -38,7 +38,8 @@ class SessionPage extends Component {
       body: JSON.stringify(this.props.session),
       headers: {
         'Authorization': `Bearer ${this.props.user.token}`,
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Clearance': CLEARANCES.ACTIONS.CRUD_SESSIONS,
       }
     }).then(res => {
       if (res.ok) Router.push('/sessions');

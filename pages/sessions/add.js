@@ -6,6 +6,7 @@ import { generateSlug, generateSessionFilename } from '~/constants/file.js';
 import { isValidSession } from '~/constants/validations.js';
 
 import SessionForm from './form.js';
+import CLEARANCES from '~/constants/clearances';
 
 class SessionAdd extends Component {
   constructor() {
@@ -44,6 +45,7 @@ class SessionAdd extends Component {
 
     const data = new FormData();
     data.append('session', JSON.stringify(session));
+    data.append('changed', true);
     data.append('file', image, filename);
 
     /** Add session to database */
@@ -52,6 +54,7 @@ class SessionAdd extends Component {
       body: data,
       headers: {
         'Authorization': `Bearer ${this.props.user.token}`,
+        'Clearance': CLEARANCES.ACTIONS.CRUD_SESSIONS,
         'Path': 'sessions'
       }
     }).then(res => {

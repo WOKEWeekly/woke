@@ -6,6 +6,7 @@ import { generateSlug, generateSessionFilename } from '~/constants/file.js';
 import { isValidSession } from '~/constants/validations.js';
 
 import SessionForm from './form.js';
+import CLEARANCES from '~/constants/clearances';
 
 class SessionEdit extends Component {
   static async getInitialProps({ query }) {
@@ -61,6 +62,7 @@ class SessionEdit extends Component {
       body: data,
       headers: {
         'Authorization': `Bearer ${this.props.user.token}`,
+        'Clearance': CLEARANCES.ACTIONS.CRUD_SESSIONS,
         'Path': 'sessions'
       }
     }).then(res => {

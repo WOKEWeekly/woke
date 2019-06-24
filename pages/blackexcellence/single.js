@@ -12,6 +12,7 @@ import {BottomToolbar} from '~/components/toolbar.js';
 import { Shader, Spacer } from '~/components/layout.js';
 
 import CLEARANCES from '~/constants/clearances.js';
+import { countriesToString } from '~/constants/countries.js';
 import { calculateAge } from '~/constants/date.js';
 import Meta from '~/partials/meta.js';
 import css from '~/styles/blackex.scss';
@@ -53,6 +54,9 @@ class CandidatePage extends Component {
     const { candidate, user } = this.props;
     candidate.description = candidate.description.trim().length > 0 ? candidate.description : 'No description.';
 
+    candidate.age = calculateAge(candidate.birthday);
+    candidate.demonyms = countriesToString(JSON.parse(candidate.ethnicity));
+
     return (
       <Spacer>
         <Meta
@@ -71,7 +75,7 @@ class CandidatePage extends Component {
           <div className={css.details}>
             <Title className={css.title}>{candidate.name}</Title>
             <Subtitle className={css.subtitle}>
-             {candidate.occupation} • {calculateAge(candidate.birthday)}
+            {candidate.age} • {candidate.occupation} • {candidate.demonyms}
             </Subtitle>
             <Divider />
             <Paragraph className={css.description}>{candidate.description}</Paragraph>

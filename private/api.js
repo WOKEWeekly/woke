@@ -170,6 +170,42 @@ module.exports = function(app, conn){
     });
   });
 
+  /** Update details of existing candidate in database */
+  app.put('/updateCandidate', verifyToken, function(req, res){
+    async.waterfall([
+      function(callback){ // Upload new image to directory
+        upload(req, res, function(err){
+          err ? callback(err) : callback(null);
+        });
+      },
+      function(callback){ // Update candidate in database
+        const { candidate1, candidate2 } = JSON.parse(req.body.candidates);
+        const sql = "UPDATE blackex SET id = ?, name = ?, image = ?, birthday = ?, ethnicity = ?, socials = ?, occupation = ?, description = ? WHERE id = ?";
+        const values = [candidate2.id, candidate2.name, candidate2.image, candidate2.birthday, candidate2.ethnicity, candidate2.socials, candidate2.occupation, candidate2.description, candidate1.id];
+        
+        conn.query(sql, values, function (err) {
+          if (!err){
+            const image = `./static/images/blackexcellence/${candidate1.image}`;
+            
+            if (req.body.changed){
+              if (candidate1.image !== candidate2.image){
+                callback(null, image);
+              } else { callback(true); }
+            } else { callback(true); }
+          } else { callback(err); }
+        });
+      },
+      function(image, callback){ // Delete original image from directory
+        fs.unlink(image, function(err) {
+          if (err) console.warn(err.toString());
+          callback(null);
+        });
+      }
+    ], function(err){
+      resToClient(res, err);
+    });
+  });
+
   /** Delete an existing candidate from database */
   app.delete('/deleteCandidate', verifyToken, checkAuth, function(req, res){
     async.waterfall([
@@ -211,66 +247,6 @@ module.exports = function(app, conn){
         }
       });
     }
-  });
-
-  /** Update details of existing candidate in database */
-  app.put('/updateBlackEx', verifyToken, function(req, res){
-    jwt.verify(req.token, process.env.JWT_SECRET, (err, auth) => {
-      if (err){
-        res.sendStatus(403);
-      } else {
-        if (!(auth.user && auth.user.clearance >= CLEARANCES.ACTIONS.CRUD_BLACKEX)){
-          res.status(401).send(`You are not authorised to perform such an action.`);
-          return;
-        }
-
-        var candidates = req.body.candidates;
-    
-        var candidate1 = candidates[0];
-        var candidate2 = candidates[1];
-        
-        var sql = "UPDATE blackex SET id = ?, name = ?, image = ?, birthday = ?, ethnicity = ?, socials = ?, occupation = ?, text = ?, description = ?, delta = ? WHERE id = ?";
-        var values = [candidate2.id, candidate2.name, candidate2.image, candidate2.birthday, candidate2.ethnicity, candidate2.socials, candidate2.occupation, candidate2.text, candidate2.description, candidate2.delta, candidate1.id];
-        
-        conn.query(sql, values, function (err, result, fields) {
-          if (!err){
-                        
-            let image = `./public/images/blackexcellence/${candidate1.image}`;
-            
-            /** Delete first image from file system if there was an image change */
-            if (candidate2.change == true){
-              if (candidate1.image !== candidate2.image){
-                fs.unlink(image, function(err1) {
-                  if (!err1) {
-                    console.log(`Deleted first ${candidate1.image} from the /blackexcellence directory.` );
-                    res.sendStatus(200);
-                  } else {
-                    console.error(err1.toString());
-                    res.sendStatus(200);
-                  }
-                });
-              } else {
-                console.log("Same slugs. Image is being replaced rather than deleted.");
-                res.sendStatus(200);
-              }
-            } else {
-              console.log("No image change, hence, no deletion.");
-              res.sendStatus(200);
-            }
-          } else {
-            if (err.toString().includes("Duplicate entry")){
-              res.status(409).send(`There\'s already a candidate with ID number ${candidate2.id}.`)
-            } else if (err.toString().includes("Incorrect string")){
-              res.status(422).send(`Please do not use emojis during input.`)
-            } else {
-              res.status(400).send(err.toString());
-            }
-          }
-        });
-      }
-    });
-    
-    
   });
 
   /** Retrieve all team members */
