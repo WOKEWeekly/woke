@@ -19,7 +19,6 @@ import css from '~/styles/blackex.scss';
 class CandidatePage extends Component {
   constructor(){
     super();
-
     this.state = {
       modalVisible: false
     }
