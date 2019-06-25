@@ -47,14 +47,14 @@ export class EthnicModal extends Component {
               value={ethnicity1}
               onChange={handleSelect}
               clearSelection={clearSelection}
-              placeholder={'Select first country'} />
+              placeholder={'Select first country...'} />
             <EthnicSelect
               label={'Second ethnicity'}
               name={'ethnicity2'}
               value={ethnicity2}
               onChange={handleSelect}
               clearSelection={clearSelection}
-              placeholder={'Select second country'} />
+              placeholder={'Select second country...'} />
           </Group>
           <Group>
             <EthnicSelect 
@@ -63,14 +63,14 @@ export class EthnicModal extends Component {
               value={ethnicity3}
               onChange={handleSelect}
               clearSelection={clearSelection}
-              placeholder={'Select third country'} />
+              placeholder={'Select third country...'} />
             <EthnicSelect
               label={'Fourth ethnicity'}
               name={'ethnicity4'}
               value={ethnicity4}
               onChange={handleSelect}
               clearSelection={clearSelection}
-              placeholder={'Select fourth country'} />
+              placeholder={'Select fourth country...'} />
           </Group>
         </Modal.Body>
 

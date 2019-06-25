@@ -3,8 +3,7 @@ import { Container } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import Router from 'next/router';
 
-import { EditButton, DeleteButton } from '~/components/button.js';
-import { Icon } from '~/components/icon.js';
+import { EditButton, DeleteButton, BackButton } from '~/components/button.js';
 import { ConfirmModal } from '~/components/modal.js';
 import { Title, Subtitle, Paragraph, Divider } from '~/components/text.js';
 import {BottomToolbar} from '~/components/toolbar.js';
@@ -78,17 +77,24 @@ class SessionPage extends Component {
 
         </Shader>
 
-        {user.clearance >= CLEARANCES.ACTIONS.CRUD_SESSIONS ? 
-          <BottomToolbar>
-            <EditButton
-              title={'Edit Session'}
-              onClick={() => Router.push(`/sessions/edit/${session.id}`)} />
-      
-            <DeleteButton
-              title={'Delete Session'}
-              onClick={this.showModal}/>
-          </BottomToolbar>
-        : null}
+        
+        <BottomToolbar>
+          <BackButton
+            title={'Back to Sessions'}
+            onClick={() => Router.push('/sessions')} />
+
+          {user.clearance >= CLEARANCES.ACTIONS.CRUD_SESSIONS ? 
+            <React.Fragment>
+              <EditButton
+                title={'Edit Session'}
+                onClick={() => Router.push(`/sessions/edit/${session.id}`)} />
+        
+              <DeleteButton
+                title={'Delete Session'}
+                onClick={this.showModal}/>
+            </React.Fragment>
+          : null}
+        </BottomToolbar>
 
         <ConfirmModal
           visible={this.state.modalVisible}

@@ -89,14 +89,14 @@ class CandidatePage extends Component {
               onClick={() => Router.push('/blackexcellence')} />
 
             {user.clearance >= CLEARANCES.ACTIONS.CRUD_SESSIONS ? 
-              <div>
+              <React.Fragment>
                 <EditButton
                   title={'Edit Candidate'}
                   onClick={() => Router.push(`/blackexcellence/edit/${candidate.id}`)}/>
                 <DeleteButton
                   title={'Delete Candidate'}
                   onClick={this.showModal} />
-              </div>
+              </React.Fragment>
             : null}
           </BottomToolbar>
 
