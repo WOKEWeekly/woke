@@ -74,3 +74,31 @@ export class FooterIcon extends Component {
    
   }
 }
+
+export class PromoIcon extends Component {
+  constructor(){
+    super();
+    this.state = {
+      isLoaded: false
+    }
+  }
+
+  componentDidMount(){
+    this.setState({ isLoaded: true });
+  }
+
+  render(){
+    if (this.state.isLoaded){
+      return (
+        <a href={this.props.href} className={css.promo_socials}>
+          <FontAwesomeIcon
+            icon={["fab", this.props.icon]}
+            color={colors.primary} />
+        </a>
+      )
+    } else {
+      return null;
+    }
+   
+  }
+}

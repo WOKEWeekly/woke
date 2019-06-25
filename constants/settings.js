@@ -15,4 +15,13 @@ module.exports = {
 
     director: "zavidegbue@gmail.com"
   },
+  socialPlatforms: {
+    facebook: { name: 'Facebook', icon: 'facebook-f', domain: '' },
+    twitter: { name: 'Twitter', icon: 'twitter', domain: 'https://www.twitter.com/' },
+    instagram: { name: 'Instagram', icon: 'instagram', domain: 'https://www.instagram.com/' },
+    linkedin: { name: 'LinkedIn', icon: 'linkedin-in', domain: '' },
+    snapchat: { name: 'Snapchat', icon: 'snapchat-ghost', domain: 'https://www.snapchat.com/add/' },
+    youtube: { name: 'Youtube', icon: 'youtube', domain: '' },
+    soundcloud: { name: 'SoundCloud', icon: 'soundcloud', domain: 'https://www.soundcloud.com/' }
+  }
 }

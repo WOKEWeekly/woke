@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
 import { Col, Modal } from 'react-bootstrap';
 
-import { DeleteButton2, CloseButton } from '~/components/button.js';
-import { Group, Label, Select } from '~/components/form.js';
+import { DeleteButton2, ConfirmButton, CloseButton } from '~/components/button.js';
+import { Group, Label, Select, TextInput } from '~/components/form.js';
 import { Paragraph } from '~/components/text.js';
 import css from '~/styles/_components.scss';
 import { COUNTRIES } from '~/constants/countries';
+
+import { socialPlatforms } from '~/constants/settings';
 
 export class ConfirmModal extends Component {
   render(){
@@ -103,6 +105,79 @@ class EthnicSelect extends Component {
           </button>
         </div>
       </Col>
+    )
+  }
+}
+
+export class SocialsModal extends Component {
+  constructor(props){
+    super(props);
+
+    this.state = {}
+    for (const idx of Object.keys(socialPlatforms)) {
+      this.state[idx] = '';
+    }
+  }
+
+  componentWillReceiveProps(props) {
+    this.setState((state) => {
+      for (const idx of Object.keys(socialPlatforms)) {
+        let social = props.socials[idx];
+        state[idx] = social ? social : state[idx];
+      }
+      return state;
+    });  
+  }
+
+  handleText = (event) => {
+    const { name, value } = event.target;
+    this.setState({[name]: value}); }
+
+  confirmSocials = () => {
+    this.props.confirm(this.state);
+    this.props.close();
+  }
+
+  render(){
+    const { close, visible } = this.props;
+
+    const renderFields = () => {
+      const items = [];
+      
+      for (const idx of Object.keys(socialPlatforms)) {
+        let social = socialPlatforms[idx];
+        items.push(
+          <Col md={6} key={idx} style={{marginBottom: '1em'}}>
+            <Label>{social.name}</Label>
+            <TextInput
+              name={idx}
+              value={this.state[idx]}
+              onChange={this.handleText}
+              placeholder={`Enter ${social.name} ${social.domain === '' ? 'URL' : 'username'}...`} />
+          </Col>
+        );
+      }
+      
+      return items;
+    }
+
+    return (
+      <Modal
+        show={visible}
+        onHide={null}
+        centered
+        scrollable>
+        <Modal.Body
+          className={css.modal_body}
+          style={{ maxHeight: '75vh' }}>
+          <Group>{renderFields()}</Group>
+        </Modal.Body>
+
+        <Modal.Footer className={css.modal_footer}>
+          <ConfirmButton onClick={this.confirmSocials}>Confirm</ConfirmButton>
+          <CloseButton onClick={close}>Close</CloseButton>
+        </Modal.Footer>
+      </Modal>
     )
   }
 }

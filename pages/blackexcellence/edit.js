@@ -27,11 +27,12 @@ class CandidateEdit extends Component {
       ethnicity2: '',
       ethnicity3: '',
       ethnicity4: '',
+      socials: {}
     };
   }
 
   componentDidMount(){
-    const { id, name, occupation, image, birthday, description, ethnicity } = this.props.candidate;
+    const { id, name, occupation, image, birthday, description, ethnicity, socials } = this.props.candidate;
 
     this.setState({
       id: id,
@@ -40,6 +41,7 @@ class CandidateEdit extends Component {
       birthday: new Date(birthday),
       description: description,
       image: image,
+      socials: JSON.parse(socials)
     }, () => {
       const ethnicities = JSON.parse(ethnicity);
       if (ethnicities){
@@ -59,6 +61,7 @@ class CandidateEdit extends Component {
     this.setState({[name]: value}); }
   handleDate = (birthday) => { this.setState({birthday}); }
   handleImage = (event) => { this.setState({image: event.target.files[0], imageChanged: true}); }
+  confirmSocials = (socials) => {this.setState({socials})}
 
   clearSelection = (name) => { this.setState({[name]: ''})}
 
@@ -66,7 +69,7 @@ class CandidateEdit extends Component {
   updateCandidate = () => {
     if (!isValidCandidate(this.state)) return;
     
-    const { id, name, occupation, image, birthday, description,
+    const { id, name, occupation, image, birthday, description, socials,
       ethnicity1, ethnicity2, ethnicity3, ethnicity4, imageChanged } = this.state;
 
     /** Generate slugs and filenames from name and data */
@@ -89,7 +92,8 @@ class CandidateEdit extends Component {
         image: filename,
         birthday: formatISODate(birthday),
         ethnicity: JSON.stringify(ethnicities),
-        description: description
+        description: description,
+        socials: JSON.stringify(socials)
       }
     };
 
@@ -120,6 +124,8 @@ class CandidateEdit extends Component {
         handleText={this.handleText}
         handleDate={this.handleDate}
         handleImage={this.handleImage}
+
+        confirmSocials={this.confirmSocials}
         clearSelection={this.clearSelection}
 
         confirmText={'Update'}
@@ -127,8 +133,7 @@ class CandidateEdit extends Component {
         cancelFunc={Router.back}
 
         metaTitle={'Edit Candidate'}
-        metaUrl={'/edit'}
-         />
+        metaUrl={'/edit'} />
     );
   }
 }

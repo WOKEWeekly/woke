@@ -7,11 +7,12 @@ import { SubmitButton, CancelButton, AddButton } from '~/components/button.js';
 import { BirthdayPicker } from '~/components/datepicker.js';
 import { Heading, Group, Label, TextInput, ClickInput, NumberPicker, TextArea, FileSelector } from '~/components/form.js';
 import { Shader, Spacer } from '~/components/layout.js';
-import { EthnicModal } from '~/components/modal.js';
+import { EthnicModal, SocialsModal } from '~/components/modal.js';
 
 import { countriesToString } from '~/constants/countries.js';
 import CLEARANCES from '~/constants/clearances.js';
 import { getFilename } from '~/constants/file.js';
+import { socialPlatforms } from '~/constants/settings.js';
 
 import Meta from '~/partials/meta.js';
 import css from '~/styles/blackex.scss';
@@ -31,18 +32,39 @@ class CandidateForm extends Component {
 
   showEthnicModal = () => { this.setState({ ethnicModalVisible: true})}
   hideEthnicModal = () => { this.setState({ ethnicModalVisible: false})}
+  showSocialsModal = () => { this.setState({ socialsModalVisible: true})}
+  hideSocialsModal = () => { this.setState({ socialsModalVisible: false})}
 
   render(){
     const { heading, confirmText, confirmFunc, cancelFunc, metaTitle, metaUrl,
-      handleText, handleDate, handleImage, clearSelection } = this.props;
+      handleText, handleDate, handleImage, clearSelection, confirmSocials } = this.props;
 
-    const { id, name, description, occupation, birthday, image,
+    const { id, name, description, occupation, birthday, image, socials,
       ethnicity1, ethnicity2, ethnicity3, ethnicity4 } = this.props.candidate;
 
-    const { ethnicModalVisible } = this.state;
+    const { ethnicModalVisible, socialsModalVisible } = this.state;
 
     const filename = getFilename(image);
     const ethnicities = countriesToString([ethnicity1, ethnicity2, ethnicity3, ethnicity4]);
+
+    const listSocials = () => {
+      if (socials){
+        const items = [];
+        for (const [idx, item] of Object.entries(socials)) {
+          if (item && item !== ''){
+            let social = socialPlatforms[idx];
+            items.push(
+              <div>{social.name}:
+                <a href={`${social.domain}${item}`}>{item}</a>
+              </div>
+            );
+          }
+        }
+        return items;
+      } else {
+        return null;
+      }
+    }
 
     return (
       <Shader>
@@ -99,7 +121,10 @@ class CandidateForm extends Component {
             <Group>
               <Col md={3}>
                 <Label>Socials:</Label>
-                <AddButton title={'Add Socials'} />
+                <AddButton
+                  title={'Add Socials'}
+                  onClick={this.showSocialsModal} />
+                {listSocials()}
               </Col>
             </Group>
             <Group>
@@ -137,6 +162,13 @@ class CandidateForm extends Component {
           handleSelect={handleText}
           clearSelection={clearSelection}
           close={this.hideEthnicModal} />
+
+        <SocialsModal
+          visible={socialsModalVisible}
+          socials={socials}
+          handleText={handleText}
+          confirm={confirmSocials}
+          close={this.hideSocialsModal} />
       </Shader>
     );
   }
