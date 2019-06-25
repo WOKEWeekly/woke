@@ -17,6 +17,45 @@ export class Icon extends Component {
 
 /** Header social media icons */
 export class HeaderIcon extends Component {
+  render(){
+    return (
+      <SocialIcon
+        icon={this.props.icon}
+        href={this.props.href}
+        className={css.header_socials} />
+    )
+  }
+}
+
+/** Footer social media icons */
+export class FooterIcon extends Component {
+  render(){
+    return (
+      <div className={css.footer_socials}>
+        <SocialIcon
+          icon={this.props.icon}
+          href={this.props.href}
+          size={'3x'} />
+      </div>
+    )
+  }
+}
+
+/** Mini icons for social promotion on profiles */
+export class PromoIcon extends Component {
+  render(){
+    return (
+      <SocialIcon
+        className={css.promo_socials}
+        icon={this.props.icon}
+        href={this.props.href}
+        {...this.props} />
+    )
+  }
+}
+
+/** Template for social icons */
+export class SocialIcon extends Component {
   constructor(){
     super();
     this.state = { isLoaded: false }
@@ -29,88 +68,15 @@ export class HeaderIcon extends Component {
   render(){
     if (this.state.isLoaded){
       return (
-        <a
-          href={this.props.href}
-          className={css.header_socials}>
+        <a {...this.props}>
           <FontAwesomeIcon
             icon={['fab', this.props.icon]}
-            color={colors.primary} />
+            color={colors.primary}
+            size={this.props.size} />
         </a>
-      )
+      );
     } else {
       return null;
     }
-  }
-}
-
-/** Footer social media icons */
-export class FooterIcon extends Component {
-  constructor(){
-    super();
-    this.state = {
-      isLoaded: false
-    }
-  }
-
-  componentDidMount(){
-    this.setState({ isLoaded: true });
-  }
-
-  render(){
-    if (this.state.isLoaded){
-      return (
-        <div className={css.footer_socials}>
-          <a href={this.props.href}>
-            <FontAwesomeIcon
-              icon={["fab", this.props.icon]}
-              color={colors.primary}
-              size={'3x'} />
-          </a>
-        </div>
-      )
-    } else {
-      return null;
-    }
-   
-  }
-}
-
-export class PromoIcon extends Component {
-  constructor(){
-    super();
-    this.state = {
-      isLoaded: false
-    }
-  }
-
-  componentDidMount(){
-    this.setState({ isLoaded: true });
-  }
-
-  render(){
-    if (this.state.isLoaded){
-      return (
-        <a href={this.props.href} className={css.promo_socials} {...this.props}>
-          <FontAwesomeIcon
-            icon={["fab", this.props.icon]}
-            color={colors.primary} />
-        </a>
-      )
-    } else {
-      return null;
-    }
-   
-  }
-}
-
-export class SocialIcon extends Component {
-  render(){
-    return (
-      <a {...this.props}>
-        <FontAwesomeIcon
-          icon={["fab", this.props.icon]}
-          color={this.props.colors || colors.primary} />
-      </a>
-    );
   }
 }

@@ -227,6 +227,24 @@
   }
 }
 
+.searchContainer {
+  background: $dark;
+  border-radius: 30px;
+  padding: .3em .7em;
+  @media (max-width: $break-md) { width: 75%; }
+  .searchBar {
+    @extend .text;
+    background: none;
+    border: none;
+    min-width: 250px;
+    outline: none;
+    @media (max-width: $break-md) {
+      min-width: initial;
+      width: 90%;
+    }
+  }
+}
+
 :global(.react-datepicker__input-container) { padding: .4em; }
 :global(.react-datepicker-wrapper),
 :global(.react-datepicker__input-container) { display: block !important; }
@@ -311,28 +329,6 @@
   margin-top: .4em;
   text-align: right;
   &:hover { text-decoration: underline; }
-}
-
-/****************/
-/** searchbar.js **/
-/****************/
-
-.searchContainer {
-  background: $dark;
-  border-radius: 30px;
-  padding: .3em .7em;
-  @media (max-width: $break-md) { width: 75%; }
-  .searchBar {
-    @extend .text;
-    background: none;
-    border: none;
-    min-width: 250px;
-    outline: none;
-    @media (max-width: $break-md) {
-      min-width: initial;
-      width: 90%;
-    }
-  }
 }
 
 /****************/

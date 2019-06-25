@@ -2,6 +2,8 @@ import React, { Component} from 'react';
 import { Form, Row } from 'react-bootstrap';
 import Textarea from 'react-textarea-autosize';
 import classNames from 'classnames';
+
+import { Icon } from '~/components/icon.js';
 import css from '~/styles/_components.scss';
 
 /** For the form heading */
@@ -115,6 +117,23 @@ export class NumberPicker extends Component {
         {...this.props}
         type={'number'}
         min={1} />
+    )
+  }
+}
+
+export class SearchBar extends Component {
+  render(){
+    return (
+      <div className={css.searchContainer}>
+        <Icon name={'search'} color={'grey'} />
+        <input
+          type={'text'}
+          className={css.searchBar}
+          onChange={this.props.onChange}
+          placeholder={this.props.placeholder}
+          value={this.props.value}
+          style={{ width: this.props.width }} />
+      </div>
     )
   }
 }
