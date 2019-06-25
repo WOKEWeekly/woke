@@ -1,7 +1,6 @@
 import React, { Component} from 'react';
 import { Container } from 'react-bootstrap';
 import { connect } from 'react-redux';
-import Link from 'next/link';
 import Router from 'next/router';
 
 import { EditButton, DeleteButton } from '~/components/button.js';
@@ -81,13 +80,13 @@ class SessionPage extends Component {
 
         {user.clearance >= CLEARANCES.ACTIONS.CRUD_SESSIONS ? 
           <BottomToolbar>
-            <Link href={`/sessions/edit/${session.id}`}>
-              <EditButton><Icon name={'edit'} />Edit Session</EditButton>
-            </Link>
+            <EditButton
+              title={'Edit Session'}
+              onClick={() => Router.push(`/sessions/edit/${session.id}`)} />
       
-            <DeleteButton onClick={this.showModal}>
-              <Icon name={'trash'} />Delete Session
-            </DeleteButton>
+            <DeleteButton
+              title={'Delete Session'}
+              onClick={this.showModal}/>
           </BottomToolbar>
         : null}
 

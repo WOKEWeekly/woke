@@ -1,7 +1,6 @@
 import React, { Component} from 'react';
 import { Container } from 'react-bootstrap';
 import { connect } from 'react-redux';
-import Link from 'next/link';
 import Router from 'next/router';
 
 import { EditButton, DeleteButton } from '~/components/button.js';
@@ -84,17 +83,19 @@ class CandidatePage extends Component {
 
         </Shader>
 
-        {user.clearance >= CLEARANCES.ACTIONS.CRUD_SESSIONS ? 
+        
           <BottomToolbar>
-            <Link href={`/blackexcellence/edit/${candidate.id}`}>
-              <EditButton><Icon name={'edit'} />Edit Candidate</EditButton>
-            </Link>
-      
-            <DeleteButton onClick={this.showModal}>
-              <Icon name={'trash'} />Delete Candidate
-            </DeleteButton>
+          {user.clearance >= CLEARANCES.ACTIONS.CRUD_SESSIONS ? 
+            <div>
+              <EditButton
+                title={'Edit Candidate'}
+                onClick={() => Router.push(`/blackexcellence/edit/${candidate.id}`)}/>
+              <DeleteButton
+                title={'Delete Candidate'}
+                onClick={this.showModal} />
+            </div>
+          : null}
           </BottomToolbar>
-        : null}
 
         <ConfirmModal
           visible={this.state.modalVisible}

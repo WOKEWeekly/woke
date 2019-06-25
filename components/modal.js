@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Col, Modal } from 'react-bootstrap';
 
-import { EditButton, DeleteButton, CloseButton } from '~/components/button.js';
+import { ConfirmButton, DeleteButton2, CloseButton } from '~/components/button.js';
 import { Group, Label, Select } from '~/components/form.js';
 import { Paragraph } from '~/components/text.js';
 import css from '~/styles/_components.scss';
@@ -22,7 +22,7 @@ export class ConfirmModal extends Component {
         </Modal.Body>
 
         <Modal.Footer className={css.modal_footer}>
-          <DeleteButton onClick={confirmFunc}>{confirmText}</DeleteButton>
+          <DeleteButton2 onClick={confirmFunc}>{confirmText}</DeleteButton2>
           <CloseButton onClick={close}>Cancel</CloseButton>
         </Modal.Footer>
      </Modal>
@@ -71,7 +71,7 @@ export class EthnicModal extends Component {
         </Modal.Body>
 
         <Modal.Footer className={css.modal_footer}>
-          <EditButton onClick={confirm}>Confirm</EditButton>
+          <ConfirmButton onClick={confirm}>Confirm</ConfirmButton>
           <CloseButton onClick={close}>Cancel</CloseButton>
         </Modal.Footer>
       </Modal>

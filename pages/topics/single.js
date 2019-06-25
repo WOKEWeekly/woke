@@ -1,6 +1,5 @@
 import React, { Component} from 'react';
 import { Container } from 'react-bootstrap';
-import Link from 'next/link';
 import Router from 'next/router';
 
 import { EditButton, DeleteButton } from '~/components/button.js';
@@ -78,13 +77,13 @@ export default class TopicPage extends Component {
 
         {true /** Admin */ ? 
           <BottomToolbar>
-            <Link href={`/topics/edit/${topic.id}`}>
-              <EditButton><Icon name={'edit'} />Edit Topic</EditButton>
-            </Link>
+            <EditButton
+              title={'Edit Topic'}
+              onClick={() => Router.push(`/topics/edit/${topic.id}`)} />
       
-            <DeleteButton onClick={this.showModal}>
-              <Icon name={'trash'} />Delete Topic
-            </DeleteButton>
+            <DeleteButton
+              title={'Delete Topic'}
+              onClick={this.showModal} />
           </BottomToolbar>
         : null}
 

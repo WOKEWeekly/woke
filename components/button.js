@@ -47,7 +47,7 @@ export class AddButton extends Component {
         onClick={this.props.onClick}>
         <Icon name={'plus'} />
         <Default>{this.props.title}</Default>
-        <Mobile>{this.props.mobileTitle || this.props.title}</Mobile>
+        <Mobile>Add</Mobile>
       </Button>
     )
   }
@@ -59,12 +59,46 @@ export class EditButton extends Component {
       <Button
         {...this.props}
         className={css.button}
-        variant={'success'}>{this.props.children}</Button>
+        variant={'success'}>
+        <Icon name={'edit'} />
+        <Default>{this.props.title}</Default>
+        <Mobile>Edit</Mobile>
+      </Button>
     )
   }
 }
 
 export class DeleteButton extends Component {
+  render(){
+    return (
+      <Button
+        {...this.props}
+        className={css.button}
+        variant={'danger'}>
+        <Icon name={'trash'} />
+        <Default>{this.props.title}</Default>
+        <Mobile>Delete</Mobile>
+      </Button>
+    )
+  }
+}
+
+/*************************
+ * MODAL BUTTONS 
+ *************************/
+
+export class ConfirmButton extends Component {
+  render(){
+    return (
+      <Button
+        {...this.props}
+        className={css.button}
+        variant={'success'}>{this.props.children}</Button>
+    )
+  }
+}
+
+export class DeleteButton2 extends Component {
   render(){
     return (
       <Button
