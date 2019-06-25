@@ -36,7 +36,7 @@ export class CancelButton extends Component {
 }
 
 /*************************
- * BOOTSTRAP CRUD BUTTONS 
+ * PAGE BUTTONS 
  *************************/
 export class AddButton extends Component {
   render(){
@@ -78,6 +78,21 @@ export class DeleteButton extends Component {
         <Icon name={'trash'} />
         <Default>{this.props.title}</Default>
         <Mobile>Delete</Mobile>
+      </Button>
+    )
+  }
+}
+
+export class BackButton extends Component {
+  render(){
+    return (
+      <Button
+        {...this.props}
+        className={css.button}
+        variant={'light'}>
+        <Icon color={'#212529'} name={'chevron-left'} />
+        <Default>{this.props.title}</Default>
+        <Mobile>Back</Mobile>
       </Button>
     )
   }

@@ -40,6 +40,7 @@ class CandidateAdd extends Component {
     this.setState({[name]: value}); }
   handleDate = (birthday) => { this.setState({birthday}); }
   handleImage = (event) => { this.setState({image: event.target.files[0]}); }
+  clearSelection = (name) => { this.setState({[name]: ''})}
 
   /** POST candidate to the server */
   submitCandidate = () => {
@@ -91,9 +92,11 @@ class CandidateAdd extends Component {
     return (
       <CandidateForm
         heading={'Add New Candidate'}
+        candidate={this.state}
         handleText={this.handleText}
         handleDate={this.handleDate}
         handleImage={this.handleImage}
+        clearSelection={this.clearSelection}
 
         confirmText={'Submit'}
         confirmFunc={this.submitCandidate}

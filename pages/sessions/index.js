@@ -142,7 +142,6 @@ class Sessions extends Component {
             {user.clearance >= CLEARANCES.ACTIONS.CRUD_TOPICS ?
             <AddButton
               title={'Add Session'}
-              mobileTitle={'Add'}
               onClick={() => Router.push('/sessions/add')} /> : null}
 
             <RadioButtonGroup

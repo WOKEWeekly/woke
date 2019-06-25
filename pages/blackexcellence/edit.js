@@ -44,10 +44,10 @@ class CandidateEdit extends Component {
       const ethnicities = JSON.parse(ethnicity);
       if (ethnicities){
         this.setState({
-          ethnicity1: ethnicities[0],
-          ethnicity2: ethnicities[1],
-          ethnicity3: ethnicities[2],
-          ethnicity4: ethnicities[3],
+          ethnicity1: ethnicities[0] || '',
+          ethnicity2: ethnicities[1] || '',
+          ethnicity3: ethnicities[2] || '',
+          ethnicity4: ethnicities[3] || '',
         })
       }
     })
@@ -59,6 +59,8 @@ class CandidateEdit extends Component {
     this.setState({[name]: value}); }
   handleDate = (birthday) => { this.setState({birthday}); }
   handleImage = (event) => { this.setState({image: event.target.files[0], imageChanged: true}); }
+
+  clearSelection = (name) => { this.setState({[name]: ''})}
 
   /** Update session details */
   updateCandidate = () => {
@@ -118,6 +120,7 @@ class CandidateEdit extends Component {
         handleText={this.handleText}
         handleDate={this.handleDate}
         handleImage={this.handleImage}
+        clearSelection={this.clearSelection}
 
         confirmText={'Update'}
         confirmFunc={this.updateCandidate}

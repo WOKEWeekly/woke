@@ -49,6 +49,7 @@
     "react-redux": "^7.0.3",
     "react-responsive": "^7.0.0",
     "react-textarea-autosize": "^7.1.0",
+    "react-transition-group": "^4.1.1",
     "redux": "^4.0.1",
     "redux-persist": "^5.10.0",
     "regenerate": "^1.4.0",

@@ -32,7 +32,7 @@ export class ConfirmModal extends Component {
 
 export class EthnicModal extends Component {
   render(){
-    const { confirm, close, visible, handleSelect, entity } = this.props;
+    const { confirm, close, visible, handleSelect, clearSelection, entity } = this.props;
     const { ethnicity1, ethnicity2, ethnicity3, ethnicity4 } = entity;
     return (
       <Modal
@@ -46,12 +46,14 @@ export class EthnicModal extends Component {
               name={'ethnicity1'}
               value={ethnicity1}
               onChange={handleSelect}
+              clearSelection={clearSelection}
               placeholder={'Select first country'} />
             <EthnicSelect
               label={'Second ethnicity'}
               name={'ethnicity2'}
               value={ethnicity2}
               onChange={handleSelect}
+              clearSelection={clearSelection}
               placeholder={'Select second country'} />
           </Group>
           <Group>
@@ -60,12 +62,14 @@ export class EthnicModal extends Component {
               name={'ethnicity3'}
               value={ethnicity3}
               onChange={handleSelect}
+              clearSelection={clearSelection}
               placeholder={'Select third country'} />
             <EthnicSelect
               label={'Fourth ethnicity'}
               name={'ethnicity4'}
               value={ethnicity4}
               onChange={handleSelect}
+              clearSelection={clearSelection}
               placeholder={'Select fourth country'} />
           </Group>
         </Modal.Body>
@@ -81,22 +85,24 @@ export class EthnicModal extends Component {
 
 class EthnicSelect extends Component {
   render(){
-    const { label, name, value, onChange, placeholder } = this.props;
+    const { label, name, value, onChange, clearSelection, placeholder } = this.props;
     return (
       <Col md={6}>
         <Label>{label}:</Label>
-          <Select
-            name={name}
-            value={value}
-            items={COUNTRIES}
-            onChange={onChange}
-            placeholder={placeholder} />
-          <a style={{
-            fontSize: 12,
-            color: 'skyblue',
-            textAlign: 'right',
-            width: '100%'
-          }}>Clear</a>
+        <Select
+          name={name}
+          value={value}
+          items={COUNTRIES}
+          onChange={onChange}
+          placeholder={placeholder}
+          ref={this.select} />
+        <div>
+          <button
+            onClick={() => clearSelection(name)}
+            className={css.clear}>
+            Clear
+          </button>
+        </div>
       </Col>
     )
   }

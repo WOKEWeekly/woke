@@ -280,6 +280,17 @@
   overflow: hidden;
 }
 
+.clear {
+  all: inherit;
+  font-size: .8em;
+  color: skyblue;
+  margin-top: .4em;
+  text-align: right;
+  width: 100%;
+  &:hover { text-decoration: underline; }
+  &:focus { outline: none; }
+}
+
 /****************/
 /** searchbar.js **/
 /****************/

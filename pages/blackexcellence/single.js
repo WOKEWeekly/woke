@@ -3,8 +3,7 @@ import { Container } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import Router from 'next/router';
 
-import { EditButton, DeleteButton } from '~/components/button.js';
-import { Icon } from '~/components/icon.js';
+import { EditButton, DeleteButton, BackButton } from '~/components/button.js';
 import { ConfirmModal } from '~/components/modal.js';
 import { Title, Subtitle, Paragraph, Divider } from '~/components/text.js';
 import {BottomToolbar} from '~/components/toolbar.js';
@@ -85,16 +84,20 @@ class CandidatePage extends Component {
 
         
           <BottomToolbar>
-          {user.clearance >= CLEARANCES.ACTIONS.CRUD_SESSIONS ? 
-            <div>
-              <EditButton
-                title={'Edit Candidate'}
-                onClick={() => Router.push(`/blackexcellence/edit/${candidate.id}`)}/>
-              <DeleteButton
-                title={'Delete Candidate'}
-                onClick={this.showModal} />
-            </div>
-          : null}
+            <BackButton
+              title={'Back to Candidates'}
+              onClick={() => Router.push('/blackexcellence')} />
+
+            {user.clearance >= CLEARANCES.ACTIONS.CRUD_SESSIONS ? 
+              <div>
+                <EditButton
+                  title={'Edit Candidate'}
+                  onClick={() => Router.push(`/blackexcellence/edit/${candidate.id}`)}/>
+                <DeleteButton
+                  title={'Delete Candidate'}
+                  onClick={this.showModal} />
+              </div>
+            : null}
           </BottomToolbar>
 
         <ConfirmModal

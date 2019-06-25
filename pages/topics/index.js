@@ -228,7 +228,6 @@ class TopicBank extends Component {
             {user.clearance >= CLEARANCES.ACTIONS.CRUD_TOPICS ?
             <AddButton
               title={'Add Topic'}
-              mobileTitle={'Add'}
               onClick={() => Router.push('/topics/add')} /> : null}
       
             <SortDropdown

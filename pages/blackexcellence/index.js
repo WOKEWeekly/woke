@@ -143,7 +143,6 @@ class BlackExcellence extends Component {
             {user.clearance >= CLEARANCES.ACTIONS.CRUD_BLACKEX ?
             <AddButton
               title={'Add Candidate'}
-              mobileTitle={'Add'}
               onClick={() => Router.push('/blackexcellence/add')} /> : null}
       
             <SortDropdown

@@ -34,7 +34,7 @@ class CandidateForm extends Component {
 
   render(){
     const { heading, confirmText, confirmFunc, cancelFunc, metaTitle, metaUrl,
-      handleText, handleDate, handleImage } = this.props;
+      handleText, handleDate, handleImage, clearSelection } = this.props;
     const { id, name, description, occupation, birthday, image } = this.props.candidate;
     const { ethnicModalVisible } = this.state;
 
@@ -128,6 +128,7 @@ class CandidateForm extends Component {
           visible={ethnicModalVisible}
           entity={this.props.candidate}
           handleSelect={handleText}
+          clearSelection={clearSelection}
           confirm={this.hideEthnicModal}
           close={this.hideEthnicModal} />
       </Shader>
