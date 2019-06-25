@@ -3,6 +3,7 @@ import { Col, Modal } from 'react-bootstrap';
 
 import { DeleteButton2, ConfirmButton, CloseButton } from '~/components/button.js';
 import { Group, Label, Select, TextInput } from '~/components/form.js';
+import { SocialIcon } from '~/components/icon.js';
 import { Paragraph } from '~/components/text.js';
 import css from '~/styles/_components.scss';
 import { COUNTRIES } from '~/constants/countries';
@@ -20,7 +21,7 @@ export class ConfirmModal extends Component {
         onHide={null}
         centered>
         <Modal.Body className={css.modal_body}>
-          <Paragraph className={css.text}>{message}</Paragraph>
+          <Paragraph className={css.text} style={{fontSize: '1.1em'}}>{message}</Paragraph>
         </Modal.Body>
 
         <Modal.Footer className={css.modal_footer}>
@@ -40,7 +41,8 @@ export class EthnicModal extends Component {
       <Modal
         show={visible}
         onHide={null}
-        centered>
+        centered
+        scrollable>
         <Modal.Body className={css.modal_body}>
           <Group>
             <EthnicSelect
@@ -119,11 +121,14 @@ export class SocialsModal extends Component {
     }
   }
 
+  /** Receive socials from props and populate state */
   componentWillReceiveProps(props) {
     this.setState((state) => {
-      for (const idx of Object.keys(socialPlatforms)) {
-        let social = props.socials[idx];
-        state[idx] = social ? social : state[idx];
+      if (props.socials){
+        for (const idx of Object.keys(socialPlatforms)) {
+          let social = props.socials[idx];
+          state[idx] = social ? social : state[idx];
+        }
       }
       return state;
     });  
@@ -149,11 +154,14 @@ export class SocialsModal extends Component {
         items.push(
           <Col md={6} key={idx} style={{marginBottom: '1em'}}>
             <Label>{social.name}</Label>
-            <TextInput
-              name={idx}
-              value={this.state[idx]}
-              onChange={this.handleText}
-              placeholder={`Enter ${social.name} ${social.domain === '' ? 'URL' : 'username'}...`} />
+            <div className={css.social_fields}>
+              <SocialIcon icon={social.icon} className={css.icons} />
+              <TextInput
+                name={idx}
+                value={this.state[idx]}
+                onChange={this.handleText}
+                placeholder={`${social.name} ${social.domain === '' ? 'URL' : 'username'}`} />
+            </div>
           </Col>
         );
       }

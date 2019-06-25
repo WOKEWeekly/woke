@@ -16,7 +16,7 @@ module.exports = {
     director: "zavidegbue@gmail.com"
   },
   socialPlatforms: {
-    facebook: { name: 'Facebook', icon: 'facebook-f', domain: '' },
+    facebook: { name: 'Facebook', icon: 'facebook-f', domain: 'https://www.facebook.com/' },
     twitter: { name: 'Twitter', icon: 'twitter', domain: 'https://www.twitter.com/' },
     instagram: { name: 'Instagram', icon: 'instagram', domain: 'https://www.instagram.com/' },
     linkedin: { name: 'LinkedIn', icon: 'linkedin-in', domain: '' },

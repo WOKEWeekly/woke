@@ -53,9 +53,10 @@ class CandidateForm extends Component {
         for (const [idx, item] of Object.entries(socials)) {
           if (item && item !== ''){
             let social = socialPlatforms[idx];
+            let link = `${social.domain}${item}`;
             items.push(
-              <div>{social.name}:
-                <a href={`${social.domain}${item}`}>{item}</a>
+              <div className={css.socials}>{social.name}:
+                <a href={link}>{link}</a>
               </div>
             );
           }
@@ -83,7 +84,7 @@ class CandidateForm extends Component {
                   name={'name'}
                   value={name}
                   onChange={handleText}
-                  placeholder={"Enter the candidate's name."} />
+                  placeholder={"Enter candidate's name."} />
               </Col>
               <Col md={2}>
                 <Label>Number:</Label>
@@ -91,7 +92,7 @@ class CandidateForm extends Component {
                   name={'id'}
                   value={id}
                   onChange={handleText}
-                  placeholder={"Enter the candidate's ID number."} />
+                  placeholder={"ID No."} />
               </Col>
               <Col md={4}>
                 <Label>Birthday:</Label>
@@ -108,7 +109,7 @@ class CandidateForm extends Component {
                   name={'occupation'}
                   value={occupation}
                   onChange={handleText}
-                  placeholder={"Enter the candidate's occupation."} />
+                  placeholder={"Enter candidate's occupation."} />
               </Col>
               <Col md={7}>
                 <Label>Ethnic Origin:</Label>
@@ -124,7 +125,7 @@ class CandidateForm extends Component {
                 <AddButton
                   title={'Add Socials'}
                   onClick={this.showSocialsModal} />
-                {listSocials()}
+                <div className={'mt-2'}>{listSocials()}</div>
               </Col>
             </Group>
             <Group>

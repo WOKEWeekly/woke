@@ -90,7 +90,7 @@ export class PromoIcon extends Component {
   render(){
     if (this.state.isLoaded){
       return (
-        <a href={this.props.href} className={css.promo_socials}>
+        <a href={this.props.href} className={css.promo_socials} {...this.props}>
           <FontAwesomeIcon
             icon={["fab", this.props.icon]}
             color={colors.primary} />
@@ -100,5 +100,17 @@ export class PromoIcon extends Component {
       return null;
     }
    
+  }
+}
+
+export class SocialIcon extends Component {
+  render(){
+    return (
+      <a {...this.props}>
+        <FontAwesomeIcon
+          icon={["fab", this.props.icon]}
+          color={this.props.colors || colors.primary} />
+      </a>
+    );
   }
 }

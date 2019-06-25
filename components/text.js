@@ -33,6 +33,7 @@ export class Paragraph extends Component {
       <pre
         {...this.props}
         style={{
+          ...this.props.style,
           color: 'white',
           display: 'inline',
           fontFamily: fonts.body,

@@ -281,6 +281,9 @@
 /****************/
 .modal_header, .modal_body, .modal_footer { background: $dark; }
 
+:global(.modal-dialog) {
+  max-width: 600px !important;
+}
 :global(.modal-open) {
   padding: 0 !important;
   overflow-y: auto
@@ -289,6 +292,16 @@
   border: 1px solid $faded-white !important;
   border-radius: 15px !important;
   overflow: hidden;
+}
+
+.social_fields {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  .icons {
+    font-size: 1.4em;
+    width: 35px;
+  }
 }
 
 .clear {

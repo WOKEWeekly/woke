@@ -81,3 +81,14 @@
   @media (max-width: $break-lg) { width: 80%; }
   @media (max-width: $break-md) { width: 100%; }
 }
+
+.socials {
+  color: #8E8E8E;
+  font-family: $title-font;
+  a {
+    color: $primary;
+    font-family: $body-font;
+    font-weight: bold;
+    margin-left: .5em;
+  }
+}

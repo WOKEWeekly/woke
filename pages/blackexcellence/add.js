@@ -23,6 +23,7 @@ class CandidateAdd extends Component {
       ethnicity2: '',
       ethnicity3: '',
       ethnicity4: '',
+      socials: {}
     };
   }
 
@@ -40,12 +41,14 @@ class CandidateAdd extends Component {
     this.setState({[name]: value}); }
   handleDate = (birthday) => { this.setState({birthday}); }
   handleImage = (event) => { this.setState({image: event.target.files[0]}); }
+
+  confirmSocials = (socials) => {this.setState({socials})}
   clearSelection = (name) => { this.setState({[name]: ''})}
 
   /** POST candidate to the server */
   submitCandidate = () => {
     if (!isValidCandidate(this.state)) return;
-    const { id, name, occupation, image, birthday, description,
+    const { id, name, occupation, image, birthday, description, socials,
     ethnicity1, ethnicity2, ethnicity3, ethnicity4 } = this.state;
 
     /** Generate slugs and filenames from name and data */
@@ -66,7 +69,8 @@ class CandidateAdd extends Component {
       image: filename,
       birthday: formatISODate(birthday),
       ethnicity: JSON.stringify(ethnicities),
-      description: description
+      description: description,
+      socials: JSON.stringify(socials)
     };
 
     const data = new FormData();
@@ -96,6 +100,8 @@ class CandidateAdd extends Component {
         handleText={this.handleText}
         handleDate={this.handleDate}
         handleImage={this.handleImage}
+
+        confirmSocials={this.confirmSocials}
         clearSelection={this.clearSelection}
 
         confirmText={'Submit'}
