@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import {Container} from 'react-bootstrap';
-import classNames from 'classnames';
-import { fonts } from '~/constants/theme.js';
+import classNames from 'classnames';;
 import css from '~/styles/_components.scss';
 
 export default class Cover extends Component {

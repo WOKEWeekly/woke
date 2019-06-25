@@ -184,13 +184,13 @@ class Session extends PureComponent {
       return (
         <Link href={`/session/${item.slug}`}>
           <Row className={css.item}>
-            <Col xs={4} className={'p-0'}>
+            <Col md={4} className={'p-0'}>
               <img
                 src={`/static/images/sessions/${item.image}`}
                 alt={item.title}
                 className={css.image} />
             </Col>
-            <Col xs={8}>
+            <Col md={8}>
               <div className={css.details}>
                 <Title className={css.title}>{item.title}</Title>
                 <Subtitle className={css.date}>{formatDate(item.dateHeld, true)}</Subtitle>

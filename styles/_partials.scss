@@ -47,7 +47,9 @@
 }
 
 .nav {
-  background-color: $dark;
+  background-image: url('/static/images/bg/nav-bg.jpg');
+  background-size: cover;
+  // background-color: $dark;
   height: $navbar-height;
   @media (max-width: $break-md) { height: initial; }
   .links {

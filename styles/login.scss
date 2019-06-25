@@ -4,6 +4,10 @@
   margin-bottom: 1em !important;
 }
 
+:global(.modal-dialog) {
+  max-width: 500px !important;
+}
+
 .modal_header, .modal_body, .modal_footer { background: $dark; }
 .modal_footer {
   flex-direction: column;

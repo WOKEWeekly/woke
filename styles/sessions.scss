@@ -26,20 +26,8 @@
       justify-content: center;
       padding: 0.8em 0.5em;
       text-align: center;
-      .title {
-        font-size: 1.1vw;
-        @media (max-width: $break-xl) { font-size: 1.3vw; }
-        @media (max-width: $break-lg) { font-size: 1.8vw; }
-        @media (max-width: $break-md) { font-size: 2.5vw; }
-        @media (max-width: $break-sm) { font-size: 3.5vw; }
-      }
-      .date {
-        font-size: 0.9vw;
-        @media (max-width: $break-xl) { font-size: 1vw; }
-        @media (max-width: $break-lg) { font-size: 1.2vw; }
-        @media (max-width: $break-md) { font-size: 1.9vw; }
-        @media (max-width: $break-sm) { font-size: 2.2vw; }
-      }
+      .title { font-size: .9em; }
+      .date { font-size: .8em; }
     }
   }
 }
@@ -55,24 +43,10 @@
     .image { width: 100%; }
     .details {
       padding: 1em;
-      .title {
-        font-size: 1.5em;
-        @media (max-width: $break-lg) { font-size: 1.8vw; }
-        @media (max-width: $break-md) { font-size: 2.5vw; }
-        @media (max-width: $break-sm) { font-size: 3.5vw; }
-      }
-      .date {
-        font-size: 0.9vw;
-        @media (max-width: $break-lg) { font-size: 1.5vw; }
-        @media (max-width: $break-md) { font-size: 1.9vw; }
-        @media (max-width: $break-sm) { font-size: 2.2vw; }
-      }
-      .description {
-        font-size: 1.1vw;
-        @media (max-width: $break-lg) { font-size: 1.8vw; }
-        @media (max-width: $break-md) { font-size: 1.8vw; }
-        @media (max-width: $break-sm) { font-size: 2.1vw; }
-      }
+      @media (max-width: $break-md) { padding: 1em 0; }
+      .title { font-size: 1.5em; }
+      .date { font-size: .9em; }
+      .description { font-size: 1em; }
     }
   }
 }
