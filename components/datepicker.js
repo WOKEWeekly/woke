@@ -2,6 +2,7 @@ import React, { Component} from 'react';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
+import { formatDate } from '~/constants/date.js';
 import { TextInput } from '~/components/form.js';
 import { creationDate } from '~/constants/settings.js';
 import css from '~/styles/_components.scss';
@@ -13,7 +14,7 @@ class DateInput extends Component {
         onClick={this.props.onClick}
         className={css.datepicker}>
         <TextInput
-          value={this.props.value}
+          value={formatDate(this.props.value, this.props.withDay)}
           placeholder={'Select a date.'}
           style={{textAlign: 'left'}}
           readOnly />
@@ -28,8 +29,7 @@ export class EventDatePicker extends Component {
       <DatePicker
         selected={this.props.date}
         onChange={this.props.onChange}
-        customInput={<DateInput />}
-        dateFormat={'EEEE d MMMM yyyy'}
+        customInput={<DateInput withDay />}
         placeholderText={'Select a date.'}
         minDate={creationDate}
         peekNextMonth={false}
@@ -46,7 +46,6 @@ export class BirthdayPicker extends Component {
         selected={this.props.date}
         onChange={this.props.onChange}
         customInput={<DateInput />}
-        dateFormat={'d MMMM yyyy'}
         placeholderText={'Select the date of birth.'}
         maxDate={new Date()}
         peekNextMonth={false}

@@ -22,7 +22,10 @@ export const countriesToString = (countries) => {
   if (!countries) return '';
 
   const array = [];
-  countries.forEach(country => array.push(getDemonym(country)));
+  countries.forEach(country => {
+    if (!country || country === '') return;
+    array.push(getDemonym(country));
+  });
 
   const str = [array.slice(0, -1).join(', '), array.slice(-1)[0]].join(array.length < 2 ? '' : ' & ');
   return str;

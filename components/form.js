@@ -44,13 +44,14 @@ export class Label extends Component {
 /** Template for inputs */
 class Input extends Component {
   render(){
+    const classes = classNames(css.input, this.props.className);
     return (
       <input
         {...this.props}
         type={this.props.type}
         name={this.props.name}
         placeholder={this.props.placeholder}
-        className={css.input}
+        className={classes}
         autoComplete={'off'}
         value={this.props.value || ''}
         onChange={this.props.onChange} />
@@ -87,6 +88,21 @@ export class PasswordInput extends Component {
       <Input
         {...this.props}
         type={'password'} />
+    )
+  }
+}
+
+export class ClickInput extends Component {
+  render(){
+    return (
+      <button
+        onClick={this.props.onClick}
+        className={css.invisible_button}
+        style={{width: '100%', padding: '0'}}>
+        <Input
+          {...this.props}
+          readOnly />
+      </button>
     )
   }
 }

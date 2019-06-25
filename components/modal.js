@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Col, Modal } from 'react-bootstrap';
 
-import { ConfirmButton, DeleteButton2, CloseButton } from '~/components/button.js';
+import { DeleteButton2, CloseButton } from '~/components/button.js';
 import { Group, Label, Select } from '~/components/form.js';
 import { Paragraph } from '~/components/text.js';
 import css from '~/styles/_components.scss';
@@ -32,7 +32,7 @@ export class ConfirmModal extends Component {
 
 export class EthnicModal extends Component {
   render(){
-    const { confirm, close, visible, handleSelect, clearSelection, entity } = this.props;
+    const { close, visible, handleSelect, clearSelection, entity } = this.props;
     const { ethnicity1, ethnicity2, ethnicity3, ethnicity4 } = entity;
     return (
       <Modal
@@ -75,8 +75,7 @@ export class EthnicModal extends Component {
         </Modal.Body>
 
         <Modal.Footer className={css.modal_footer}>
-          <ConfirmButton onClick={confirm}>Confirm</ConfirmButton>
-          <CloseButton onClick={close}>Cancel</CloseButton>
+          <CloseButton onClick={close}>Close</CloseButton>
         </Modal.Footer>
       </Modal>
     )

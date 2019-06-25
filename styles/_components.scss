@@ -40,6 +40,12 @@
   @media (max-width: $break-md) { min-width: initial; }
 }
 
+.invisible_button {
+  background: none;
+  border: none;
+  &:focus { outline: none; }
+}
+
 .form-buttons {
   @extend .button;
   min-width: 200px;
@@ -281,14 +287,12 @@
 }
 
 .clear {
-  all: inherit;
+  @extend .invisible_button;
   font-size: .8em;
   color: skyblue;
   margin-top: .4em;
   text-align: right;
-  width: 100%;
   &:hover { text-decoration: underline; }
-  &:focus { outline: none; }
 }
 
 /****************/

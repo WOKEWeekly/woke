@@ -7,6 +7,7 @@ const shebang_loader = require('shebang-loader');
 
 const path = require('path');
 const DotEnv = require('dotenv-webpack');
+const dev = process.env.NODE_ENV !== 'production';
 
 module.exports = withPlugins([
   [
@@ -39,7 +40,7 @@ module.exports = withPlugins([
         config.plugins = [
           ...config.plugins,
           new DotEnv({
-            path: path.join(__dirname, 'config.env'),
+            path: dev ? './config.env' : '/root/config.env',
             systemvars: true
           })
         ];

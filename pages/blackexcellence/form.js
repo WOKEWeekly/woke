@@ -5,12 +5,12 @@ import Router from 'next/router';
 
 import { SubmitButton, CancelButton, AddButton } from '~/components/button.js';
 import { BirthdayPicker } from '~/components/datepicker.js';
-import { Heading, Group, Label, TextInput, NumberPicker, TextArea, FileSelector } from '~/components/form.js';
+import { Heading, Group, Label, TextInput, ClickInput, NumberPicker, TextArea, FileSelector } from '~/components/form.js';
 import { Shader, Spacer } from '~/components/layout.js';
 import { EthnicModal } from '~/components/modal.js';
 
+import { countriesToString } from '~/constants/countries.js';
 import CLEARANCES from '~/constants/clearances.js';
-
 import { getFilename } from '~/constants/file.js';
 
 import Meta from '~/partials/meta.js';
@@ -35,10 +35,14 @@ class CandidateForm extends Component {
   render(){
     const { heading, confirmText, confirmFunc, cancelFunc, metaTitle, metaUrl,
       handleText, handleDate, handleImage, clearSelection } = this.props;
-    const { id, name, description, occupation, birthday, image } = this.props.candidate;
+
+    const { id, name, description, occupation, birthday, image,
+      ethnicity1, ethnicity2, ethnicity3, ethnicity4 } = this.props.candidate;
+
     const { ethnicModalVisible } = this.state;
 
     const filename = getFilename(image);
+    const ethnicities = countriesToString([ethnicity1, ethnicity2, ethnicity3, ethnicity4]);
 
     return (
       <Shader>
@@ -76,7 +80,7 @@ class CandidateForm extends Component {
               </Col>
             </Group>
             <Group>
-              <Col md={6}>
+              <Col md={5}>
                 <Label>Occupation:</Label>
                 <TextInput
                   name={'occupation'}
@@ -84,12 +88,15 @@ class CandidateForm extends Component {
                   onChange={handleText}
                   placeholder={"Enter the candidate's occupation."} />
               </Col>
-              <Col md={3}>
+              <Col md={7}>
                 <Label>Ethnic Origin:</Label>
-                <AddButton
+                <ClickInput
                   onClick={this.showEthnicModal}
-                  title={'Add Countries'} />
+                  value={ethnicities}
+                  placeholder={'Click to select countries of origin...'} />
               </Col>
+            </Group>
+            <Group>
               <Col md={3}>
                 <Label>Socials:</Label>
                 <AddButton title={'Add Socials'} />
@@ -129,7 +136,6 @@ class CandidateForm extends Component {
           entity={this.props.candidate}
           handleSelect={handleText}
           clearSelection={clearSelection}
-          confirm={this.hideEthnicModal}
           close={this.hideEthnicModal} />
       </Shader>
     );
