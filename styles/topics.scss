@@ -1,6 +1,11 @@
 
 @import "variables";
 
+.cover {
+  background-position: 0 -70px;
+  @media (max-width: $break-md) { background-position: initial; }
+}
+
 .count {
   color: white;
   font-family: $title-font;

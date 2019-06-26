@@ -17,6 +17,19 @@ export class Loader extends Component {
   }
 }
 
+export class LoaderIcon extends Component {
+  render(){
+    return (
+      <div className={css.loader}>
+      <Spinner
+        animation="grow"
+        className={css.spinner}
+        size={'sm'} />
+        </div>
+    )
+  }
+}
+
 export class Empty extends Component {
   render(){
     return (

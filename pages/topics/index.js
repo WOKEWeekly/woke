@@ -15,6 +15,7 @@ import { Loader, Empty } from '~/components/loader.js';
 import { ConfirmModal } from '~/components/modal.js';
 import { Title, Subtitle } from '~/components/text.js';
 import { TopToolbar, BottomToolbar } from '~/components/toolbar.js';
+import { FadeTransitioner } from '~/components/transitioner.js';
 
 import { categories } from '~/constants/categories.js';
 import CLEARANCES from '~/constants/clearances.js';
@@ -173,6 +174,8 @@ class TopicBank extends Component {
     const { isLoaded, searchWord, results, filters } = this.state;
     const { user } = this.props;
 
+    const hasPrivileges = user.clearance >= CLEARANCES.ACTIONS.CRUD_TOPICS;
+
     const sortItems = [
       'Sort Oldest To Newest',
       'Sort Newest To Oldest',
@@ -191,7 +194,13 @@ class TopicBank extends Component {
         const items = [];
 
         for (const [index, item] of results.entries()) {
-          items.push(<Topic key={index} item={item} getTopics={this.getTopics} />);
+          items.push(
+            <Topic
+              key={index}
+              idx={index}
+              item={item}
+              getTopics={this.getTopics}
+              hasPrivileges={hasPrivileges} />);
         }
 
         return <div className={css.grid}>{items}</div>;
@@ -211,7 +220,7 @@ class TopicBank extends Component {
             subtitle={'The currency of the franchise.'}
             image={'topics-header.jpg'}
             height={200}
-            backgroundPosition={'0 -70px'} />
+            className={css.cover} />
 
           <TopToolbar>
             <SearchBar
@@ -224,7 +233,7 @@ class TopicBank extends Component {
           <TopicGrid/>
 
           <BottomToolbar>
-            {user.clearance >= CLEARANCES.ACTIONS.CRUD_TOPICS ?
+            {hasPrivileges ?
             <AddButton
               title={'Add Topic'}
               onClick={() => Router.push('/topics/add')} /> : null}
@@ -253,12 +262,17 @@ class TopicBank extends Component {
 	}
 }
 
-class _Topic extends PureComponent {
+class Topic extends PureComponent {
   constructor(){
     super();
     this.state = {
-      modalVisible: false
+      modalVisible: false,
+      isLoaded: false
     }
+  }
+
+  componentDidMount(){
+    this.setState({ isLoaded: true });
   }
 
   /** Show and hide confirmation modal */
@@ -281,20 +295,28 @@ class _Topic extends PureComponent {
   }
 
   render(){
-    const { item, user } = this.props;
+    const { item, idx, hasPrivileges } = this.props;
     const category = categories.find(category => category.label === item.category).short;
     const classes = classNames(css.cell, category);
 
     return (
-      <div className={classes}>
-        <Title className={css.headline}>{item.headline}</Title>
-        <Subtitle className={css.question}>{item.question}</Subtitle>
-        <Subtitle className={css.details}>{item.type} • {item.category}</Subtitle>
-        {user.clearance >= CLEARANCES.ACTIONS.CRUD_TOPICS ?
-        <ButtonGroup className={css.buttons}>
-          <Button variant={'success'} onClick={() => Router.push(`/topics/edit/${item.id}`)}>Edit</Button>
-          <Button variant={'danger'} onClick={this.showModal}>Delete</Button>
-        </ButtonGroup> : null}
+      <React.Fragment>
+        <FadeTransitioner
+          key={idx}
+          determinant={this.state.isLoaded}
+          duration={500}
+          delay={0}
+          className={classes}>
+          <Title className={css.headline}>{item.headline}</Title>
+          <Subtitle className={css.question}>{item.question}</Subtitle>
+          <Subtitle className={css.details}>{item.type} • {item.category}</Subtitle>
+
+          {hasPrivileges ?
+          <ButtonGroup className={css.buttons}>
+            <Button variant={'success'} onClick={() => Router.push(`/topics/edit/${item.id}`)}>Edit</Button>
+            <Button variant={'danger'} onClick={this.showModal}>Delete</Button>
+          </ButtonGroup> : null}
+        </FadeTransitioner>
 
         <ConfirmModal
           visible={this.state.modalVisible}
@@ -305,7 +327,7 @@ class _Topic extends PureComponent {
           confirmFunc={this.deleteTopic}
           confirmText={'Delete'}
           close={this.hideModal} />
-      </div>
+      </React.Fragment>
     ); 
   }
 }
@@ -321,5 +343,4 @@ const mapDispatchToProps = dispatch => (
   }, dispatch)
 );
 
-const Topic = connect(mapStateToProps)(_Topic);
 export default connect(mapStateToProps, mapDispatchToProps)(TopicBank);

@@ -14,6 +14,7 @@ import { Shader, Spacer } from '~/components/layout.js';
 import { Loader, Empty } from '~/components/loader.js';
 import { Title, Subtitle, Paragraph, Divider } from '~/components/text.js';
 import {BottomToolbar} from '~/components/toolbar.js';
+import { ZoomTransitioner, SlideTransitioner } from '~/components/transitioner.js';
 
 import { formatDate } from '~/constants/date.js';
 import CLEARANCES from '~/constants/clearances.js';
@@ -110,7 +111,7 @@ class Sessions extends Component {
         const items = [];
 
         for (const [index, item] of sessions.entries()) {
-          items.push(<Session key={index} item={item} view={view} />);
+          items.push(<Session key={index} idx={index} item={item} view={view} />);
         }
 
         if (view === 'grid'){
@@ -134,7 +135,7 @@ class Sessions extends Component {
             subtitle={'Where we do the magic...'}
             image={'sessions-header.jpg'}
             height={200}
-            backgroundPosition={'0 -70px'} />
+            className={css.cover} />
 
           <SessionCollection/>
 
@@ -162,44 +163,66 @@ class Sessions extends Component {
 }
 
 class Session extends PureComponent {
+  constructor(){
+    super();
+    this.state = {
+      isLoaded: false
+    }
+  }
+
+  componentDidMount(){
+    this.setState({ isLoaded: true });
+  }
+
   render(){
-    const { item, view } = this.props;
+    const { item, idx, view } = this.props;
     
     if (view === 'grid'){
       return (
-        <Link href={`/session/${item.slug}`}>
-          <div className={css.cell}>
-            <img
-              src={`/static/images/sessions/${item.image}`}
-              alt={item.title}
-              className={css.image} />
-            <div className={css.details}>
-              <Title className={css.title}>{item.title}</Title>
-              <Subtitle className={css.date}>{formatDate(item.dateHeld, true)}</Subtitle>
-            </div>
-          </div>
-        </Link>
-      );
-    } else {
-      return (
-        <Link href={`/session/${item.slug}`}>
-          <Row className={css.item}>
-            <Col md={4} className={'p-0'}>
+        <ZoomTransitioner
+          determinant={this.state.isLoaded}
+          duration={400}
+          delay={75 * idx}>
+          <Link href={`/session/${item.slug}`}>
+            <div className={css.cell}>
               <img
                 src={`/static/images/sessions/${item.image}`}
                 alt={item.title}
                 className={css.image} />
-            </Col>
-            <Col md={8}>
               <div className={css.details}>
                 <Title className={css.title}>{item.title}</Title>
                 <Subtitle className={css.date}>{formatDate(item.dateHeld, true)}</Subtitle>
-                <Divider />
-                <Paragraph className={css.description}>{item.description}</Paragraph>
               </div>
-            </Col>
-          </Row>
-        </Link>
+            </div>
+          </Link>
+        </ZoomTransitioner>
+      );
+    } else {
+      return (
+        <SlideTransitioner
+          determinant={this.state.isLoaded}
+          duration={400}
+          delay={75 * idx}
+          direction={'left'}>
+          <Link href={`/session/${item.slug}`}>
+            <Row className={css.item}>
+              <Col md={4} className={'p-0'}>
+                <img
+                  src={`/static/images/sessions/${item.image}`}
+                  alt={item.title}
+                  className={css.image} />
+              </Col>
+              <Col md={8}>
+                <div className={css.details}>
+                  <Title className={css.title}>{item.title}</Title>
+                  <Subtitle className={css.date}>{formatDate(item.dateHeld, true)}</Subtitle>
+                  <Divider />
+                  <Paragraph className={css.description}>{item.description}</Paragraph>
+                </div>
+              </Col>
+            </Row>
+          </Link>
+        </SlideTransitioner>
       );
     }
     

@@ -12,6 +12,7 @@ import { Shader, Spacer } from '~/components/layout.js';
 import { Loader, Empty } from '~/components/loader.js';
 import { Title, Subtitle } from '~/components/text.js';
 import { BottomToolbar } from '~/components/toolbar.js';
+import { FadeTransitioner } from '~/components/transitioner.js';
 
 import CLEARANCES from '~/constants/clearances.js';
 
@@ -47,11 +48,8 @@ class BlackExcellence extends Component {
     .then(response => response.json())
     .then(candidates => {
       this.setState({
-        candidates: candidates,
-        isLoaded: true
-      }, () => {
-        this.sortCandidates(this.state.sort);
-      });
+        candidates: candidates
+      }, () => this.sortCandidates(this.state.sort));
     })
     .catch(error => console.error(error));
   }
@@ -79,7 +77,8 @@ class BlackExcellence extends Component {
 
 		this.setState({
       candidates: order === 'DESC' ? candidates.reverse() : candidates,
-      sort: sort
+      sort: sort,
+      isLoaded: true
     });
   }
 
@@ -112,7 +111,7 @@ class BlackExcellence extends Component {
         const items = [];
 
         for (const [index, item] of candidates.entries()) {
-          items.push(<Candidate key={index} item={item} getCandidates={this.getCandidates} />);
+          items.push(<Candidate key={index} idx={index} item={item} getCandidates={this.getCandidates} />);
         }
 
         return <div className={css.grid}>{items}</div>;
@@ -156,25 +155,42 @@ class BlackExcellence extends Component {
 	}
 }
 
-class _Candidate extends PureComponent {
+class Candidate extends PureComponent {
+  constructor(){
+    super();
+    this.state = {
+      isLoaded: false
+    }
+  }
+
+  componentDidMount(){
+    this.setState({ isLoaded: true });
+  }
+
   render(){
-    const { item } = this.props;
-    const label = `#${item.id}: ${item.name}`;
+    const { item, idx } = this.props;
+    const label = `#${item.id}: ${item.name}`;    
 
     return (
-      <Link href={`/blackexcellence/candidate/${item.id}`}>
-        <div className={css.cell}>
-          <img
-            src={`/static/images/blackexcellence/${item.image}`}
-            alt={label}
-            className={css.image} />
-          <div className={css.details}>
-            <Title className={css.title}>{label}</Title>
-            <Subtitle className={css.date}></Subtitle>
+      <FadeTransitioner
+        key={idx}
+        determinant={this.state.isLoaded}
+        duration={500}
+        delay={75 * idx}>
+        <Link href={`/blackexcellence/candidate/${item.id}`}>
+          <div className={css.cell}>
+            <img
+              src={`/static/images/blackexcellence/${item.image}`}
+              alt={label}
+              className={css.image} />
+            <div className={css.details}>
+              <Title className={css.title}>{label}</Title>
+              <Subtitle className={css.date}></Subtitle>
+            </div>
           </div>
-        </div>
-      </Link>
-    ); 
+        </Link>
+      </FadeTransitioner>
+    );
   }
 }
 
@@ -189,5 +205,4 @@ const mapDispatchToProps = dispatch => (
   }, dispatch)
 );
 
-const Candidate = connect(mapStateToProps)(_Candidate);
 export default connect(mapStateToProps, mapDispatchToProps)(BlackExcellence);

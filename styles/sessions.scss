@@ -1,6 +1,11 @@
 
 @import "variables";
 
+.cover {
+  background-position: 0 -70px;
+  @media (max-width: $break-md) { background-position: initial; }
+}
+
 .grid {
   border-bottom: $border;
   display: grid;
@@ -43,6 +48,7 @@
     .image { width: 100%; }
     .details {
       padding: 1em;
+      overflow: hidden;
       @media (max-width: $break-md) { padding: 1em 0; }
       .title { font-size: 1.5em; }
       .date { font-size: .9em; }
