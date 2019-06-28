@@ -49,10 +49,12 @@
 .nav {
   background-image: url('/static/images/bg/nav-bg.jpg');
   background-size: cover;
-  // background-color: $dark;
+  border-top: $border;
+  border-bottom: $border;
   height: $navbar-height;
   @media (max-width: $break-md) { height: initial; }
   .links {
+    color: #d5bde0 !important;
     font-family: $body-font;
     font-weight: 700;
   }

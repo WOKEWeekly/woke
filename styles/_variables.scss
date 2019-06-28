@@ -11,7 +11,7 @@ $dark: #0D0C0E;
 $faded-white: rgba(255, 255, 255, .7);
 
 /** Borders */
-$border: 2px solid $primary;
+$border: 1px solid $primary;
 $secondary-border: 1px solid rgb(245, 222, 179);
 
 $underline: 1px solid $faded-white;
@@ -38,4 +38,11 @@ $break-xxl: 1408px; // Extra large devices (large desktops)
 .text {
   color: white;
   font-family: $body-font;
+}
+
+
+@mixin scale-on-hover($scale) {
+  transition: transform .2s ease-in-out;
+  -webkit-transition: transform .2s ease-in-out;
+  &:hover { transform: scale($scale); }
 }

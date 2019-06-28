@@ -7,20 +7,22 @@
 }
 
 .grid {
-  border-bottom: $border;
+  border: .5em solid #2d203b;
   display: grid;
   grid-template-columns: repeat(6, calc(100% / 6));
   width: 100%;
   @media (max-width: $break-xl) { grid-template-columns: repeat(5, 20%); }
   @media (max-width: $break-lg) { grid-template-columns: repeat(4, 25%); }
-  @media (max-width: $break-md) { grid-template-columns: repeat(3, calc(100% / 3)); }
+  @media (max-width: $break-md) { grid-template-columns: repeat(3, calc(100% / 3)); border: none; }
   @media (max-width: $break-sm) { grid-template-columns: repeat(2, 50%); }
   .cell {
+    @include scale-on-hover(1.07);
     border: $secondary-border;
     cursor: pointer;
     display: flex;
     flex-direction: column;
     height: 100%;
+    overflow: hidden;
     .image { width: 100%; }
     .details {
       background-color: $primary-dark;
@@ -38,17 +40,17 @@
 }
 
 .list {
-  cursor: pointer;
   .item {
+    @include scale-on-hover(1.04);
     background-color: $primary-dark;
     border-radius: 10px;
     border: 1px solid $faded-white;
-    margin: 0.5em 0;
+    cursor: pointer;
+    margin: 0.8em 0;
     overflow: hidden;
     .image { width: 100%; }
     .details {
       padding: 1em;
-      overflow: hidden;
       @media (max-width: $break-md) { padding: 1em 0; }
       .title { font-size: 1.5em; }
       .date { font-size: .9em; }

@@ -5,31 +5,23 @@
   border-bottom: $border;
   display: grid;
   grid-template-columns: repeat(6, calc(100% / 6));
+  padding: .4em;
   width: 100%;
   @media (max-width: $break-xl) { grid-template-columns: repeat(5, 20%); }
   @media (max-width: $break-lg) { grid-template-columns: repeat(4, 25%); }
   @media (max-width: $break-md) { grid-template-columns: repeat(3, calc(100% / 3)); }
   @media (max-width: $break-sm) { grid-template-columns: repeat(2, 50%); }
   .cell {
+    @include scale-on-hover(1.08);
     border: $secondary-border;
     border-radius: 10px;
     cursor: pointer;
     display: flex;
     flex-direction: column;
     height: 100%;
+    margin: .2em;
     overflow: hidden;
     .image { width: 100%; }
-    .details {
-      background-color: $primary-dark;
-      border-top: $secondary-border;
-      display: flex;
-      flex-direction: column;
-      height: 100%;
-      justify-content: center;
-      padding: 0.8em 0.5em;
-      text-align: center;
-      .title { font-size: .9em; }
-    }
   }
 }
 

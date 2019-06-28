@@ -112,7 +112,11 @@ class CandidateEdit extends Component {
         'Path': 'blackexcellence'
       }
     }).then(res => {
-      if (res.ok) Router.push(`/blackexcellence/candidate/${id}`);
+      if (res.ok){
+        Router.push(`/blackexcellence/candidate/${id}`);
+      } else {
+        console.log(res);
+      }
     }).catch(error => console.error(error));
   }
 

@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Truncate from 'react-truncate';
 import { fonts } from '~/constants/theme.js';
 
 export class Title extends Component {
@@ -50,6 +51,24 @@ export class Divider extends Component {
         backgroundColor: 'white',
         overflow: 'hidden'
       }} />
+    )
+  }
+}
+
+export class Truncator extends Component {
+  render(){
+    return (
+      <Truncate lines={this.props.lines} ellipsis={this.props.ellipsis || '...'} trimWhitespace>
+        {this.props.children.split('\n').map((ln, i, arr) => {
+          const line = <span key={i}>{ln}</span>;
+  
+          if (i === arr.length - 1) {
+            return line;
+          } else {
+            return [line, <br key={i + 'br'} />];
+          }
+        })}
+      </Truncate>
     )
   }
 }

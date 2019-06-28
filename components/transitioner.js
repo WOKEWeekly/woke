@@ -4,10 +4,10 @@ import { Transition } from 'react-transition-group';
 export class FadeTransitioner extends Component {
   render(){
 
-    const { duration, delay } = this.props;
+    const { duration, delay, style } = this.props;
 
     const defaultStyle = {
-      transition: `all ${duration}ms ease ${delay}ms`,
+      transition: `opacity ${duration}ms ease ${delay}ms`,
       opacity: 0,
     }
 
@@ -27,10 +27,10 @@ export class FadeTransitioner extends Component {
 export class ZoomTransitioner extends Component {
   render(){
 
-    const { duration, delay } = this.props;
+    const { duration, delay, style } = this.props;
 
     const defaultStyle = {
-      transition: `all ${duration}ms ease ${delay}ms`,
+      transition: `transform ${duration}ms ease ${delay}ms`,
       transform: 'scale(0)'
     }
 
@@ -50,10 +50,10 @@ export class ZoomTransitioner extends Component {
 export class SlideTransitioner extends Component {
   render(){
 
-    const { duration, delay, direction } = this.props;
+    const { duration, delay, direction, style } = this.props;
 
     const defaultStyle = {
-      transition: `all ${duration}ms ease ${delay}ms`,
+      transition: `${direction} ${duration}ms ease ${delay}ms`,
       [direction]: '-100vw',
       position: 'relative'
     }
@@ -74,7 +74,7 @@ export class SlideTransitioner extends Component {
 
 class Template extends Component {
   render(){
-    const { duration, determinant, className, defaultStyle, transitionStyles } = this.props;
+    const { duration, determinant, className, defaultStyle, transitionStyles, style } = this.props;
 
     return (
       <Transition
@@ -84,12 +84,9 @@ class Template extends Component {
           enter: duration,
           exit: duration
         }}
-        appear
-        mountOnEnter
-        unmountOnExit
         {...this.props}>
         {state => (
-          <div className={className} style={{...defaultStyle, ...transitionStyles[state]}}>
+          <div className={className} style={{...defaultStyle, ...transitionStyles[state], ...style}}>
             {this.props.children}
           </div>
         )}

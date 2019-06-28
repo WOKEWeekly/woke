@@ -61,8 +61,6 @@ module.exports = {
         callback(new Error('Invalid file type. Only jpg, png and gif image files are allowed.'));
       }
 
-      console.log(req.body);
-
       /** If no image change, skip */
       if (!req.body.changed){
         return callback(null, false);

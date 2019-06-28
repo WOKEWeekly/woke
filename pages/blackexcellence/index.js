@@ -163,9 +163,7 @@ class Candidate extends PureComponent {
     }
   }
 
-  componentDidMount(){
-    this.setState({ isLoaded: true });
-  }
+  showImage = () => this.setState({isLoaded: true});
 
   render(){
     const { item, idx } = this.props;
@@ -182,11 +180,9 @@ class Candidate extends PureComponent {
             <img
               src={`/static/images/blackexcellence/${item.image}`}
               alt={label}
-              className={css.image} />
-            <div className={css.details}>
-              <Title className={css.title}>{label}</Title>
-              <Subtitle className={css.date}></Subtitle>
-            </div>
+              className={css.image}
+              onLoad={this.showImage}
+              onError={this.showImage} />
           </div>
         </Link>
       </FadeTransitioner>

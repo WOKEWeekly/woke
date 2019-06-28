@@ -10,9 +10,9 @@ import { AddButton, RadioButtonGroup } from '~/components/button.js';
 import { SortDropdown } from '~/components/dropdown.js';
 import Cover from '~/components/cover.js';
 import { Icon } from '~/components/icon.js';
-import { Shader, Spacer } from '~/components/layout.js';
+import { Shader, Spacer, Default, Mobile } from '~/components/layout.js';
 import { Loader, Empty } from '~/components/loader.js';
-import { Title, Subtitle, Paragraph, Divider } from '~/components/text.js';
+import { Title, Subtitle, Paragraph, Divider, Truncator } from '~/components/text.js';
 import {BottomToolbar} from '~/components/toolbar.js';
 import { ZoomTransitioner, SlideTransitioner } from '~/components/transitioner.js';
 
@@ -170,12 +170,17 @@ class Session extends PureComponent {
     }
   }
 
-  componentDidMount(){
-    this.setState({ isLoaded: true });
-  }
-
   render(){
     const { item, idx, view } = this.props;
+
+    const more = (
+      <React.Fragment>
+        ...
+        <div style={{color: 'skyblue', display: 'block', marginTop: '.5em'}}>
+          Read More
+        </div>
+      </React.Fragment>
+    );
     
     if (view === 'grid'){
       return (
@@ -188,7 +193,8 @@ class Session extends PureComponent {
               <img
                 src={`/static/images/sessions/${item.image}`}
                 alt={item.title}
-                className={css.image} />
+                className={css.image}
+                onLoad={() => this.setState({isLoaded: true})} />
               <div className={css.details}>
                 <Title className={css.title}>{item.title}</Title>
                 <Subtitle className={css.date}>{formatDate(item.dateHeld, true)}</Subtitle>
@@ -206,18 +212,23 @@ class Session extends PureComponent {
           direction={'left'}>
           <Link href={`/session/${item.slug}`}>
             <Row className={css.item}>
-              <Col md={4} className={'p-0'}>
+              <Col md={3} className={'p-0'}>
                 <img
                   src={`/static/images/sessions/${item.image}`}
                   alt={item.title}
-                  className={css.image} />
+                  className={css.image}
+                  onLoad={() => this.setState({isLoaded: true})} />
               </Col>
-              <Col md={8}>
+              <Col md={9}>
                 <div className={css.details}>
                   <Title className={css.title}>{item.title}</Title>
                   <Subtitle className={css.date}>{formatDate(item.dateHeld, true)}</Subtitle>
                   <Divider />
-                  <Paragraph className={css.description}>{item.description}</Paragraph>
+                  <Paragraph className={css.description}>
+                    {item.description.trim().length > 0 ?
+                      <Truncator lines={5} ellipsis={more}>{item.description}</Truncator>
+                      : `No description.`}
+                  </Paragraph>
                 </div>
               </Col>
             </Row>
