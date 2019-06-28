@@ -12,7 +12,7 @@ import { Shader, Spacer } from '~/components/layout.js';
 import { Loader, Empty } from '~/components/loader.js';
 import { Title, Subtitle } from '~/components/text.js';
 import { BottomToolbar } from '~/components/toolbar.js';
-import { FadeTransitioner } from '~/components/transitioner.js';
+import { Fader } from '~/components/transitioner.js';
 
 import CLEARANCES from '~/constants/clearances.js';
 
@@ -170,7 +170,7 @@ class Candidate extends PureComponent {
     const label = `#${item.id}: ${item.name}`;    
 
     return (
-      <FadeTransitioner
+      <Fader
         key={idx}
         determinant={this.state.isLoaded}
         duration={500}
@@ -185,7 +185,7 @@ class Candidate extends PureComponent {
               onError={this.showImage} />
           </div>
         </Link>
-      </FadeTransitioner>
+      </Fader>
     );
   }
 }

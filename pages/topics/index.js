@@ -15,7 +15,7 @@ import { Loader, Empty } from '~/components/loader.js';
 import { ConfirmModal } from '~/components/modal.js';
 import { Title, Subtitle } from '~/components/text.js';
 import { TopToolbar, BottomToolbar } from '~/components/toolbar.js';
-import { FadeTransitioner } from '~/components/transitioner.js';
+import { Fader } from '~/components/transitioner.js';
 
 import { categories } from '~/constants/categories.js';
 import CLEARANCES from '~/constants/clearances.js';
@@ -301,7 +301,7 @@ class Topic extends PureComponent {
 
     return (
       <React.Fragment>
-        <FadeTransitioner
+        <Fader
           key={idx}
           determinant={this.state.isLoaded}
           duration={500}
@@ -316,7 +316,7 @@ class Topic extends PureComponent {
             <Button variant={'success'} onClick={() => Router.push(`/topics/edit/${item.id}`)}>Edit</Button>
             <Button variant={'danger'} onClick={this.showModal}>Delete</Button>
           </ButtonGroup> : null}
-        </FadeTransitioner>
+        </Fader>
 
         <ConfirmModal
           visible={this.state.modalVisible}

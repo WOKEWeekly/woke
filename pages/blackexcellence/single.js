@@ -9,6 +9,7 @@ import { PromoIcon } from '~/components/icon.js';
 import { Title, Subtitle, Paragraph, Divider } from '~/components/text.js';
 import {BottomToolbar} from '~/components/toolbar.js';
 import { Shader, Spacer } from '~/components/layout.js';
+import { Fader, Slider } from '~/components/transitioner.js';
 
 import CLEARANCES from '~/constants/clearances.js';
 import { countriesToString } from '~/constants/countries.js';
@@ -22,7 +23,9 @@ class CandidatePage extends Component {
   constructor(){
     super();
     this.state = {
-      modalVisible: false
+      modalVisible: false,
+      isLoaded: false,
+      imageLoaded: false
     }
   }
 
@@ -31,6 +34,9 @@ class CandidatePage extends Component {
     return { candidate: query.candidate };
   }
 
+  componentDidMount(){
+    this.setState({isLoaded: true})
+  }
   
   /** Delete candidate from database */
   deleteCandidate = () => {
@@ -54,9 +60,10 @@ class CandidatePage extends Component {
   render(){
     const { candidate, user } = this.props;
     candidate.description = candidate.description.trim().length > 0 ? candidate.description : 'No description.';
-
     candidate.age = calculateAge(candidate.birthday);
     candidate.demonyms = countriesToString(JSON.parse(candidate.ethnicity));
+
+    const { isLoaded, imageLoaded } = this.state;
 
     return (
       <Spacer>
@@ -64,26 +71,45 @@ class CandidatePage extends Component {
           title={`#${candidate.id}: ${candidate.name} | #WOKEWeekly`}
           description={candidate.description}
           url={`/blackexcellence/candidate/${candidate.id}`}
-          image={`static/images/blackexcellence/${candidate.image}`}
+          image={`/static/images/blackexcellence/${candidate.image}`}
           alt={candidate.title} />
 
         <Shader>
-        <Container className={css.entity}>
-          <img
-            src={`/static/images/blackexcellence/${candidate.image}`}
-            alt={candidate.name}
-            className={css.image} />
-          <div className={css.details}>
-            <Title className={css.title}>{candidate.name}</Title>
-            <Subtitle className={css.subtitle}>
-            {candidate.age} • {candidate.occupation} • {candidate.demonyms}
-            </Subtitle>
-            <PromoBar socials={candidate.socials} />
-            <Divider />
-            <Paragraph className={css.description}>{candidate.description}</Paragraph>
-          </div>
-        </Container>
-
+          <Container className={css.entity}>
+            <Slider
+              determinant={imageLoaded}
+              duration={800}
+              direction={'left'}> 
+              <img
+                src={`/static/images/blackexcellence/${candidate.image}`}
+                alt={candidate.name}
+                className={css.image}
+                onLoad={() => this.setState({imageLoaded: true})} />
+            </Slider>
+            <div className={css.details}>
+              <Fader
+                determinant={isLoaded}
+                duration={500}>
+                <Title className={css.title}>{candidate.name}</Title>
+              </Fader>
+              <Fader
+                determinant={isLoaded}
+                duration={500}
+                delay={500}>
+                <Subtitle className={css.subtitle}>
+                  {candidate.age} • {candidate.occupation} • {candidate.demonyms}
+                </Subtitle>
+                <PromoBar socials={candidate.socials} />
+              </Fader>
+              <Fader
+                determinant={isLoaded}
+                duration={500}
+                delay={1000}>
+                <Divider />
+                <Paragraph className={css.description}>{candidate.description}</Paragraph>
+              </Fader>
+            </div>
+          </Container>
         </Shader>
         
         <BottomToolbar>

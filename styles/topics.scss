@@ -12,15 +12,10 @@
 }
 
 .grid {
+  @include responsive-grid;
   border-bottom: $border;
-  display: grid;
-  grid-template-columns: repeat(6, calc(100% / 6));
   padding: .2em;
   width: 100%;
-  @media (max-width: $break-xl) { grid-template-columns: repeat(5, 20%); }
-  @media (max-width: $break-lg) { grid-template-columns: repeat(4, 25%); }
-  @media (max-width: $break-md) { grid-template-columns: repeat(3, calc(100% / 3)); }
-  @media (max-width: $break-sm) { grid-template-columns: repeat(2, 50%); }
   .cell {
     border-radius: 15px;
     border: $secondary-border;
@@ -59,12 +54,7 @@
 *************/
 
 .form {
-  padding: 2em;
-  margin: 0 auto;
-  width: 60%;
-  @media (max-width: $break-xl) { width: 70%; }
-  @media (max-width: $break-lg) { width: 80%; }
-  @media (max-width: $break-md) { width: 100%; }
+  @include responsive-form;
   .options {
     -webkit-transition-duration: .3s;
     transition-duration: .3s;

@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 import { Transition } from 'react-transition-group';
 
-export class FadeTransitioner extends Component {
+export class Fader extends Component {
   render(){
 
-    const { duration, delay, style } = this.props;
+    const { duration, delay } = this.props;
 
     const defaultStyle = {
-      transition: `opacity ${duration}ms ease ${delay}ms`,
+      transition: `opacity ${duration}ms ease ${delay || 0}ms`,
       opacity: 0,
     }
 
@@ -24,13 +24,13 @@ export class FadeTransitioner extends Component {
   }
 }
 
-export class ZoomTransitioner extends Component {
+export class Zoomer extends Component {
   render(){
 
     const { duration, delay, style } = this.props;
 
     const defaultStyle = {
-      transition: `transform ${duration}ms ease ${delay}ms`,
+      transition: `transform ${duration}ms ease ${delay || 0}ms`,
       transform: 'scale(0)'
     }
 
@@ -47,13 +47,13 @@ export class ZoomTransitioner extends Component {
   }
 }
 
-export class SlideTransitioner extends Component {
+export class Slider extends Component {
   render(){
 
-    const { duration, delay, direction, style } = this.props;
+    const { duration, delay, direction } = this.props;
 
     const defaultStyle = {
-      transition: `${direction} ${duration}ms ease ${delay}ms`,
+      transition: `${direction} ${duration}ms ease ${delay || 0}ms`,
       [direction]: '-100vw',
       position: 'relative'
     }
@@ -81,8 +81,8 @@ class Template extends Component {
         in={determinant}
         timeout={{
           appear: 0,
-          enter: duration,
-          exit: duration
+          enter: 0,
+          exit: 0
         }}
         {...this.props}>
         {state => (

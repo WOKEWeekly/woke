@@ -3,7 +3,6 @@ import { Container } from 'react-bootstrap';
 import Router from 'next/router';
 
 import { EditButton, DeleteButton } from '~/components/button.js';
-import { Icon } from '~/components/icon.js';
 import { ConfirmModal } from '~/components/modal.js';
 import { Title, Subtitle, Paragraph, Divider } from '~/components/text.js';
 import {BottomToolbar} from '~/components/toolbar.js';

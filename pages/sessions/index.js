@@ -10,11 +10,11 @@ import { AddButton, RadioButtonGroup } from '~/components/button.js';
 import { SortDropdown } from '~/components/dropdown.js';
 import Cover from '~/components/cover.js';
 import { Icon } from '~/components/icon.js';
-import { Shader, Spacer, Default, Mobile } from '~/components/layout.js';
+import { Shader, Spacer } from '~/components/layout.js';
 import { Loader, Empty } from '~/components/loader.js';
 import { Title, Subtitle, Paragraph, Divider, Truncator } from '~/components/text.js';
 import {BottomToolbar} from '~/components/toolbar.js';
-import { ZoomTransitioner, SlideTransitioner } from '~/components/transitioner.js';
+import { Zoomer, Slider } from '~/components/transitioner.js';
 
 import { formatDate } from '~/constants/date.js';
 import CLEARANCES from '~/constants/clearances.js';
@@ -184,10 +184,11 @@ class Session extends PureComponent {
     
     if (view === 'grid'){
       return (
-        <ZoomTransitioner
+        <Zoomer
           determinant={this.state.isLoaded}
           duration={400}
-          delay={75 * idx}>
+          delay={75 * idx}
+          className={css.container}>
           <Link href={`/session/${item.slug}`}>
             <div className={css.cell}>
               <img
@@ -201,11 +202,11 @@ class Session extends PureComponent {
               </div>
             </div>
           </Link>
-        </ZoomTransitioner>
+        </Zoomer>
       );
     } else {
       return (
-        <SlideTransitioner
+        <Slider
           determinant={this.state.isLoaded}
           duration={400}
           delay={75 * idx}
@@ -233,7 +234,7 @@ class Session extends PureComponent {
               </Col>
             </Row>
           </Link>
-        </SlideTransitioner>
+        </Slider>
       );
     }
     

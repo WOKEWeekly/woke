@@ -34,15 +34,33 @@ $break-lg: 992px; // Large devices (desktops)
 $break-xl: 1200px; // Extra large devices (large desktops)
 $break-xxl: 1408px; // Extra large devices (large desktops)
 
-
+/** Global template styles */
 .text {
   color: white;
   font-family: $body-font;
 }
 
-
+/** Mixins */
 @mixin scale-on-hover($scale) {
   transition: transform .2s ease-in-out;
   -webkit-transition: transform .2s ease-in-out;
   &:hover { transform: scale($scale); }
+}
+
+@mixin responsive-grid {
+  display: grid;
+  grid-template-columns: repeat(6, calc(100% / 6));
+  @media (max-width: $break-xl) { grid-template-columns: repeat(5, 20%); }
+  @media (max-width: $break-lg) { grid-template-columns: repeat(4, 25%); }
+  @media (max-width: $break-md) { grid-template-columns: repeat(3, calc(100% / 3)); }
+  @media (max-width: $break-sm) { grid-template-columns: repeat(2, 50%); }
+}
+
+@mixin responsive-form {
+  margin: 0 auto;
+  padding: 2em;
+  width: 60%;
+  @media (max-width: $break-xl) { width: 70%; }
+  @media (max-width: $break-lg) { width: 80%; }
+  @media (max-width: $break-md) { width: 100%; }
 }

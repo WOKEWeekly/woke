@@ -8,6 +8,7 @@ import { ConfirmModal } from '~/components/modal.js';
 import { Title, Subtitle, Paragraph, Divider } from '~/components/text.js';
 import {BottomToolbar} from '~/components/toolbar.js';
 import { Shader, Spacer } from '~/components/layout.js';
+import { Fader, Slider } from '~/components/transitioner.js';
 
 import CLEARANCES from '~/constants/clearances.js';
 import { formatDate } from '~/constants/date.js';
@@ -19,7 +20,9 @@ class SessionPage extends Component {
     super();
 
     this.state = {
-      modalVisible: false
+      modalVisible: false,
+      isLoaded: false,
+      imageLoaded: false
     }
   }
 
@@ -28,6 +31,9 @@ class SessionPage extends Component {
     return { session: query.session };
   }
 
+  componentDidMount(){
+    this.setState({isLoaded: true})
+  }
   
   /** Delete session from database */
   deleteSession = () => {
@@ -50,6 +56,7 @@ class SessionPage extends Component {
 
   render(){
     const { session, user } = this.props;
+    const { isLoaded, imageLoaded } = this.state;
     session.description = session.description.trim().length > 0 ? session.description : 'No description.';
 
     return (
@@ -58,23 +65,42 @@ class SessionPage extends Component {
           title={`${session.title} | #WOKEWeekly`}
           description={session.description}
           url={`/sessions/${session.slug}`}
-          image={`static/images/sessions/${session.image}`}
+          image={`/static/images/sessions/${session.image}`}
           alt={session.title} />
 
         <Shader>
-        <Container className={css.entity}>
-          <img
-            src={`/static/images/sessions/${session.image}`}
-            alt={session.title}
-            className={css.image} />
-          <div className={css.details}>
-            <Title className={css.title}>{session.title}</Title>
-            <Subtitle className={css.subtitle}>{formatDate(session.dateHeld, true)}</Subtitle>
-            <Divider />
-            <Paragraph className={css.description}>{session.description}</Paragraph>
-          </div>
-        </Container>
-
+          <Container className={css.entity}>
+            <Slider
+              determinant={imageLoaded}
+              duration={800}
+              direction={'right'}> 
+              <img
+                src={`/static/images/sessions/${session.image}`}
+                alt={session.title}
+                className={css.image}
+                onLoad={() => this.setState({imageLoaded: true})} />
+            </Slider>
+            <div className={css.details}>
+              <Fader
+                determinant={isLoaded}
+                duration={500}>
+                <Title className={css.title}>{session.title}</Title>
+              </Fader>
+              <Fader
+                determinant={isLoaded}
+                duration={500}
+                delay={500}>
+                <Subtitle className={css.subtitle}>{formatDate(session.dateHeld, true)}</Subtitle>
+              </Fader>
+              <Fader
+                determinant={isLoaded}
+                duration={500}
+                delay={1000}>
+                <Divider />
+                <Paragraph className={css.description}>{session.description}</Paragraph>
+              </Fader>
+            </div>
+          </Container>
         </Shader>
 
         
