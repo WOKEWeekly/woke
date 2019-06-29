@@ -7,10 +7,8 @@ import Router from 'next/router';
 
 import { AddButton } from '~/components/button.js';
 import { SortDropdown } from '~/components/dropdown.js';
-import Cover from '~/components/cover.js';
-import { Shader, Spacer } from '~/components/layout.js';
+import { Cover, Shader, Spacer } from '~/components/layout.js';
 import { Loader, Empty } from '~/components/loader.js';
-import { Title, Subtitle } from '~/components/text.js';
 import { BottomToolbar } from '~/components/toolbar.js';
 import { Fader } from '~/components/transitioner.js';
 

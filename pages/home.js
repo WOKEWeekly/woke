@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import {Container, Col, Row} from 'react-bootstrap';
 
-import Cover from '~/components/cover.js';
+import { Cover } from '~/components/layout.js';
 import css from "~/styles/home.scss";
 
 import Meta from '~/partials/meta.js';

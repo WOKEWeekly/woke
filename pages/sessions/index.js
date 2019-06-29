@@ -8,9 +8,8 @@ import { saveSessionSort, saveSessionView } from '~/reducers/actions';
 
 import { AddButton, RadioButtonGroup } from '~/components/button.js';
 import { SortDropdown } from '~/components/dropdown.js';
-import Cover from '~/components/cover.js';
 import { Icon } from '~/components/icon.js';
-import { Shader, Spacer } from '~/components/layout.js';
+import { Cover, Shader, Spacer } from '~/components/layout.js';
 import { Loader, Empty } from '~/components/loader.js';
 import { Title, Subtitle, Paragraph, Divider, Truncator } from '~/components/text.js';
 import {BottomToolbar} from '~/components/toolbar.js';

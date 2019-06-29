@@ -8,9 +8,8 @@ import classNames from 'classnames';
 
 import { AddButton } from '~/components/button.js';
 import { SortDropdown, FilterDropdown } from '~/components/dropdown.js';
-import Cover from '~/components/cover.js';
 import { Checkbox, SearchBar } from '~/components/form.js';
-import { Shader, Spacer } from '~/components/layout.js';
+import { Cover, Shader, Spacer } from '~/components/layout.js';
 import { Loader, Empty } from '~/components/loader.js';
 import { ConfirmModal } from '~/components/modal.js';
 import { Title, Subtitle } from '~/components/text.js';
