@@ -7,8 +7,8 @@ export default class Meta extends Component {
   render(){
 
     let { title, description, url, image, alt} = this.props;
-    image = (image === undefined) && 'images/logos/wokeweekly-logo.jpg';
-    alt = (alt === undefined) && '#WOKEWeekly Logo';
+    image = (image === undefined) ? '/static/images/logos/wokeweekly-logo.jpg' : image;
+    alt = (alt === undefined) ? '#WOKEWeekly Logo' : alt;
 
     return (
       <Head>
@@ -22,12 +22,16 @@ export default class Meta extends Component {
         <meta property="og:description" content={description} />
         <meta property="og:type" content="website" />
         <meta property="og:url" content={`${domain}${url}`} />
-        <meta property="og:image" content={image} />
+        <meta property="og:image" content={`${domain}${image}`} />
         <meta property="og:image:type" content="image/jpeg" />
         <meta property="og:image:alt" content={alt} />
         <meta property="og:site_name" content="#WOKEWeekly" />
+
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:image:alt" content={alt} />
+        {/* <meta name="twitter:title" content={title} />
+        <meta name="twitter:description" content={description} />
+        <meta name="twitter:image" content={`${domain}${image}`} />
+        <meta name="twitter:image:alt" content={alt} /> */}
 
         <link rel="icon" href="/static/images/logos/favicon.jpg" />
       </Head>

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Col, Modal } from 'react-bootstrap';
 
 import { DeleteButton2, ConfirmButton, CloseButton } from '~/components/button.js';
-import { Group, Label, Select, TextInput } from '~/components/form.js';
+import { Group, Label, Select, UsernameInput } from '~/components/form.js';
 import { SocialIcon } from '~/components/icon.js';
 import { Paragraph } from '~/components/text.js';
 import css from '~/styles/_components.scss';
@@ -156,7 +156,7 @@ export class SocialsModal extends Component {
             <Label>{social.name}</Label>
             <div className={css.social_fields}>
               <SocialIcon icon={social.icon} className={css.icons} />
-              <TextInput
+              <UsernameInput
                 name={idx}
                 value={this.state[idx]}
                 onChange={this.handleText}

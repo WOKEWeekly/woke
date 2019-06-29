@@ -1,3 +1,5 @@
+const path = require('path');
+
 module.exports = function(app, conn, server){
 
   /** Render individual session detail page */

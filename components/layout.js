@@ -27,10 +27,10 @@ export class Cover extends Component {
           minHeight: height,
         }}>
           <div>
-            <Fader determinant={this.state.isLoaded} duration={500} delay={500}>
+            <Fader determinant={this.state.isLoaded} duration={500} delay={1000}>
               <div className={css.title}>{title}</div>
             </Fader>
-            <Fader determinant={this.state.isLoaded} duration={500} delay={1000}>
+            <Fader determinant={this.state.isLoaded} duration={500} delay={1500}>
               <div className={css.subtitle}>{subtitle}</div>
             </Fader>
           </div>

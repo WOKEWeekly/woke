@@ -40,6 +40,7 @@ class TopicAdd extends Component {
 
   /** POST session to the server */
   submitTopic = () => {
+
     if (!isValidTopic(this.state)) return;
     const { headline, category, question, type, description, polarity, option1, option2 } = this.state;
     

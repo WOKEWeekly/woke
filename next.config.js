@@ -5,7 +5,6 @@ const withCss = require("@zeit/next-css");
 const withPlugins = require("next-compose-plugins");
 const shebang_loader = require('shebang-loader');
 
-const path = require('path');
 const DotEnv = require('dotenv-webpack');
 const dev = process.env.NODE_ENV !== 'production';
 

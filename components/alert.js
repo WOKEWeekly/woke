@@ -9,12 +9,19 @@ class _Alert extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      show: false,
+      show: props.visible,
     };
   }
 
-  componentWillReceiveProps(nextProps) {
-    this.setState({ show: nextProps.visible });  
+  componentWillReceiveProps(props) {
+    console.log(props);
+    this.setState({ show: props.visible }, () => {
+      if (props.visible === true){
+        setTimeout(() => {
+          this.setState({ show: false }); 
+        }, 3000);
+      }
+    }); 
   }
 
   handleDismiss = () => this.setState({ show: false });
