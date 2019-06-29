@@ -76,4 +76,39 @@ module.exports = function(app, conn, server){
       }
     });
   });
+
+  /** Render executives page */
+  app.get('/executives', function(req, res){
+    return server.render(req, res, '/team/exec');
+  });
+
+  /** Render individual executive profile page */
+  app.get('/executives/:slug', function(req, res){
+    const slug = req.params.slug;
+    const sql = "SELECT * FROM team WHERE slug = ?";
+    
+    conn.query(sql, [slug], function (err, result) {
+      if (!err){
+        const exec = result[0];
+        return server.render(req, res, '/team/exec.single', { exec });
+      } else {
+        res.status(400).send(err.toString());
+      }
+    });
+  });
+
+  /** Render edit team member page */
+  app.get('/team/edit/:id', function(req, res){
+    const id = req.params.id;
+    const sql = "SELECT * FROM team WHERE id = ?";
+    
+    conn.query(sql, [id], function (err, result) {
+      if (!err){
+        const member = result[0];
+        return server.render(req, res, '/team/edit', { member });
+      } else {
+        res.status(400).send(err.toString());
+      }
+    });
+  });
 }

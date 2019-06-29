@@ -109,7 +109,7 @@ class BlackExcellence extends Component {
         const items = [];
 
         for (const [index, item] of candidates.entries()) {
-          items.push(<Candidate key={index} idx={index} item={item} getCandidates={this.getCandidates} />);
+          items.push(<Candidate key={index} idx={index} item={item} />);
         }
 
         return <div className={css.grid}>{items}</div>;

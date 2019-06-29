@@ -5,7 +5,7 @@ import Router from 'next/router';
 
 import { EditButton, DeleteButton, BackButton } from '~/components/button.js';
 import { ConfirmModal } from '~/components/modal.js';
-import { PromoIcon } from '~/components/icon.js';
+import { PromoIconsBar } from '~/components/icon.js';
 import { Title, Subtitle, Paragraph, Divider } from '~/components/text.js';
 import {BottomToolbar} from '~/components/toolbar.js';
 import { Shader, Spacer } from '~/components/layout.js';
@@ -16,8 +16,6 @@ import { countriesToString } from '~/constants/countries.js';
 import { calculateAge } from '~/constants/date.js';
 import Meta from '~/partials/meta.js';
 import css from '~/styles/blackex.scss';
-
-import { socialPlatforms } from '~/constants/settings.js';
 
 class CandidatePage extends Component {
   constructor(){
@@ -99,7 +97,7 @@ class CandidatePage extends Component {
                 <Subtitle className={css.subtitle}>
                   {candidate.age} • {candidate.occupation} • {candidate.demonyms}
                 </Subtitle>
-                <PromoBar socials={candidate.socials} />
+                <PromoIconsBar socials={candidate.socials} />
               </Fader>
               <Fader
                 determinant={isLoaded}
@@ -117,7 +115,7 @@ class CandidatePage extends Component {
             title={'Back to Candidates'}
             onClick={() => Router.push('/blackexcellence')} />
 
-          {user.clearance >= CLEARANCES.ACTIONS.CRUD_SESSIONS ? 
+          {user.clearance >= CLEARANCES.ACTIONS.CRUD_BLACKEX ? 
             <React.Fragment>
               <EditButton
                 title={'Edit Candidate'}
@@ -137,35 +135,6 @@ class CandidatePage extends Component {
           close={this.hideModal} />
       </Spacer>
     );
-  }
-}
-
-class PromoBar extends Component {
-  render(){
-    const socials = JSON.parse(this.props.socials);
-
-    const renderIcons = () => {
-      const items = [];
-      
-      if (socials){
-        for (const [index, item] of Object.entries(socials)) {
-          if (item && item !== ''){
-            let social = socialPlatforms[index];
-            items.push(
-              <PromoIcon
-                key={index}
-                icon={social.icon}
-                href={`${social.domain}${item}`} />
-            );
-          }
-        }  
-      }
-      return items;
-    }
-
-    return (
-      <React.Fragment>{renderIcons()}</React.Fragment>
-    )
   }
 }
 

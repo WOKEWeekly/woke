@@ -158,15 +158,15 @@ export class ShortTextArea extends Component {
 
 /** For long text inputs */
 export class TextArea extends Component {
-  constructor(props){
-    super(props);
+  constructor(){
+    super();
     this.state = {
       wordCount: 0
     }
   }
 
-  componentWillReceiveProps(nextProps) {
-    this.setState({ wordCount: nextProps.value.length });  
+  componentWillReceiveProps(props) {
+    this.setState({ wordCount: props.value ? props.value.length : 0 });  
   }
 
   handleTextChange = (event) => {
@@ -207,7 +207,7 @@ export class Select extends Component {
         style={{ color: value === '' && '#8E8E8E' }}>
         <option value={''} disabled>{placeholder}</option>
         {items.map((item, index) => {
-          return <option key={index} value={item.label}>{item.label}</option>
+          return <option key={index} value={item.value || item.label}>{item.label}</option>
         })}
       </select>
     )

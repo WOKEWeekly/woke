@@ -137,7 +137,7 @@ module.exports = function(app, conn){
   /** Retrieve all candidates */
   app.get('/getCandidates', validateReq, function(req, res){
     conn.query("SELECT * FROM blackex", function (err, result) {
-      resToClient(res, err, result)
+      resToClient(res, err, result);
     });
   });
 
@@ -171,7 +171,7 @@ module.exports = function(app, conn){
   });
 
   /** Update details of existing candidate in database */
-  app.put('/updateCandidate', verifyToken, function(req, res){
+  app.put('/updateCandidate', verifyToken, checkAuth, function(req, res){
     async.waterfall([
       function(callback){ // Upload new image to directory
         upload(req, res, function(err){
@@ -228,6 +228,49 @@ module.exports = function(app, conn){
     });
   });
 
+  /** Retrieve only executive team members */
+  app.get('/getExec', validateReq, function(req, res){
+    conn.query("SELECT * FROM team WHERE level = 'Executive'", function (err, result, fields) {
+      resToClient(res, err, result);
+    });
+  });
+
+  /** Update details of existing team member in database */
+  app.put('/updateMember', verifyToken, checkAuth, function(req, res){
+    async.waterfall([
+      function(callback){ // Upload new image to directory
+        upload(req, res, function(err){
+          err ? callback(err) : callback(null);
+        });
+      },
+      function(callback){ // Update member in database
+        const { member1, member2 } = JSON.parse(req.body.members);
+        const sql = "UPDATE team SET firstname = ?, lastname = ?, image = ?, level = ?, birthday = ?, role = ?, ethnicity = ?, socials = ?, slug = ?, description = ? WHERE id = ?";
+        const values = [member2.firstname, member2.lastname, member2.image, member2.level, member2.birthday, member2.role, member2.ethnicity, member2.socials, member2.slug, member2.description, member1.id];
+        
+        conn.query(sql, values, function (err) {
+          if (!err){
+            const image = `./static/images/team/${member1.image}`;
+            
+            if (req.body.changed){
+              if (member1.image !== member2.image){
+                callback(null, image);
+              } else { callback(true); }
+            } else { callback(true); }
+          } else { callback(err); }
+        });
+      },
+      function(image, callback){ // Delete original image from directory
+        fs.unlink(image, function(err) {
+          if (err) console.warn(err.toString());
+          callback(null);
+        });
+      }
+    ], function(err){
+      resToClient(res, err);
+    });
+  });
+
   /****************************
    * CHECKPOINT
    ***************************/
@@ -255,21 +298,6 @@ module.exports = function(app, conn){
       res.sendStatus(403);
     } else {
       conn.query("SELECT * FROM team", function (err, result, fields) {
-        if (!err){
-          res.json(result);
-        } else {
-          res.status(400).send(err.toString());
-        }
-      });
-    }
-  });
-
-  /** Retrieve only executive team members */
-  app.get('/getExecTeam', function(req, res){
-    if (req.headers['authorization'] !== 'authorized'){
-      res.sendStatus(403);
-    } else {
-      conn.query("SELECT * FROM team WHERE level = 'Executive'", function (err, result, fields) {
         if (!err){
           res.json(result);
         } else {
@@ -313,63 +341,6 @@ module.exports = function(app, conn){
           if (!err){
                         res.sendStatus(200);
           } else {
-            if (err.toString().includes("Incorrect string")){
-              res.status(422).send(`Please do not use emojis during input.`)
-            } else {
-              res.status(400).send(err.toString());
-            }
-          }
-        });
-      }
-    });
-  });
-
-  /** Update details of existing team member in database */
-  app.put('/updateMember', verifyToken, function(req, res){
-    jwt.verify(req.token, process.env.JWT_SECRET, (err, auth) => {
-      if (err){
-        res.sendStatus(403);
-      } else {
-        if (!(auth.user && auth.user.clearance >= CLEARANCES.ACTIONS.CRUD_TEAM)){
-          res.status(401).send(`You are not authorised to perform such an action.`);
-          return;
-        }
-
-        var members = req.body.members;
-    
-        var member1 = members[0];
-        var member2 = members[1];
-        
-        var sql = "UPDATE team SET firstname = ?, lastname = ?, image = ?, level = ?, birthday = ?, role = ?, ethnicity = ?, socials = ?, slug = ?, text = ?, description = ?, delta = ? WHERE id = ?";
-        var values = [member2.firstname, member2.lastname, member2.image, member2.level, member2.birthday, member2.role, member2.ethnicity, member2.socials, member2.slug, member2.text, member2.description, member2.delta, member1.id];
-        
-        conn.query(sql, values, function (err, result, fields) {
-          if (!err){
-                        
-            let image = `.${team_dir}${member1.image}`;
-            
-            /** Delete first image from file system if there was an image change */
-            if (member2.change == true){
-              if (member1.image !== member2.image){
-                fs.unlink(image, function(err1) {
-                  if (!err1) {
-                    console.log(`Deleted first ${member1.image} from the /team directory.` );
-                    res.sendStatus(200);
-                  } else {
-                    console.error(err1.toString());
-                    res.sendStatus(200);
-                  }
-                });
-              } else {
-                console.log("Same slugs. Image is being replaced rather than deleted.");
-                res.sendStatus(200);
-              }
-            } else {
-              console.log("No image change, hence, no deletion.");
-              res.sendStatus(200);
-            }
-          } else {
-            console.error(err.toString());
             if (err.toString().includes("Incorrect string")){
               res.status(422).send(`Please do not use emojis during input.`)
             } else {

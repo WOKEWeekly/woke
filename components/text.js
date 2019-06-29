@@ -72,3 +72,16 @@ export class Truncator extends Component {
     )
   }
 }
+
+export class ReadMore extends Component {
+  render(){
+    return (
+      <React.Fragment>
+        ...
+        <div style={{color: 'skyblue', display: 'block', marginTop: '.5em'}}>
+          Read More
+        </div>
+      </React.Fragment>
+    )
+  }
+}

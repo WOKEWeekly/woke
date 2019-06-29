@@ -23,6 +23,11 @@ export const generateCandidateFilename = (id, slug, image) => {
   return `${id}_${slug}.${getExtension(image)}`;
 }
 
+/** Generate the filename for candidates */
+export const generateMemberFilename = (slug, image) => {
+  return `${slug}.${getExtension(image)}`;
+}
+
 
 /** Retrieve file extension via string manipulation */
 const getExtension = (file) => {

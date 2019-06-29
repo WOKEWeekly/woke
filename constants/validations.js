@@ -29,6 +29,16 @@ export const isValidCandidate = (candidate) => {
   return true;
 }
 
+/** Ensure valid team member is added or updated */
+export const isValidMember = (member) => {
+  if (!ifExists(member.firstname.trim(), 'Enter the member\'s firstname.')) return false;
+  if (!ifExists(member.lastname.trim(), 'Enter the member\'s lastname.')) return false;
+  if (!ifExists(member.level, 'Select the member\'s level.')) return false;
+  if (!ifExists(member.role.trim(), 'Enter the candidate\'s role.')) return false;
+  if (!ifExists(member.birthday, 'Select the candidate\'s date of birth.')) return false;
+  return true;
+}
+
 /** Check for the presence of a value */
 const ifExists = (value, message) => {
   if (!value || value.length == 0){

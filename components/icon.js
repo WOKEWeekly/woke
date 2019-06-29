@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { colors } from '~/constants/theme.js';
 
 import css from '~/styles/_components.scss';
+import { socialPlatforms } from '~/constants/settings.js';
 
 export class Icon extends Component {
   render(){
@@ -50,6 +51,37 @@ export class PromoIcon extends Component {
         icon={this.props.icon}
         href={this.props.href}
         {...this.props} />
+    )
+  }
+}
+
+export class PromoIconsBar extends Component {
+  render(){
+    const socials = JSON.parse(this.props.socials);
+
+    const renderIcons = () => {
+      const items = [];
+      
+      if (socials){
+        for (const [index, item] of Object.entries(socials)) {
+          if (item && item !== ''){
+            let social = socialPlatforms[index];
+            if (social){
+              items.push(
+                <PromoIcon
+                  key={index}
+                  icon={social.icon}
+                  href={`${social.domain}${item}`} />
+              );
+            }
+          }
+        }  
+      }
+      return items;
+    }
+
+    return (
+      <React.Fragment>{renderIcons()}</React.Fragment>
     )
   }
 }

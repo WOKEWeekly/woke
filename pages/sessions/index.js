@@ -11,7 +11,7 @@ import { SortDropdown } from '~/components/dropdown.js';
 import { Icon } from '~/components/icon.js';
 import { Cover, Shader, Spacer } from '~/components/layout.js';
 import { Loader, Empty } from '~/components/loader.js';
-import { Title, Subtitle, Paragraph, Divider, Truncator } from '~/components/text.js';
+import { Title, Subtitle, Paragraph, Divider, Truncator, ReadMore } from '~/components/text.js';
 import {BottomToolbar} from '~/components/toolbar.js';
 import { Zoomer, Slider } from '~/components/transitioner.js';
 
@@ -171,15 +171,6 @@ class Session extends PureComponent {
 
   render(){
     const { item, idx, view } = this.props;
-
-    const more = (
-      <React.Fragment>
-        ...
-        <div style={{color: 'skyblue', display: 'block', marginTop: '.5em'}}>
-          Read More
-        </div>
-      </React.Fragment>
-    );
     
     if (view === 'grid'){
       return (
@@ -226,7 +217,7 @@ class Session extends PureComponent {
                   <Divider />
                   <Paragraph className={css.description}>
                     {item.description.trim().length > 0 ?
-                      <Truncator lines={5} ellipsis={more}>{item.description}</Truncator>
+                      <Truncator lines={5} ellipsis={<ReadMore/>}>{item.description}</Truncator>
                       : `No description.`}
                   </Paragraph>
                 </div>
