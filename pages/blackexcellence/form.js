@@ -55,8 +55,8 @@ class CandidateForm extends Component {
             let social = socialPlatforms[idx];
             let link = `${social.domain}${item}`;
             items.push(
-              <div className={css.socials}>{social.name}:
-                <a href={link}>{link}</a>
+              <div key={idx} className={css.socials}>{social.name}:
+                <a href={link}>{!social.domain ? link : `@${item}`}</a>
               </div>
             );
           }

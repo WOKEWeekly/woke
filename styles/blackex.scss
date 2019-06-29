@@ -59,6 +59,7 @@
 .socials {
   color: #8E8E8E;
   font-family: $title-font;
+  word-break: break-all;
   a {
     color: $primary;
     font-family: $body-font;
