@@ -133,7 +133,7 @@ class MemberForm extends Component {
               </Col>
             </Group>
             <Group>
-              <Col md={3}>
+              <Col md={12}>
                 <Label>Socials:</Label>
                 <AddButton
                   title={'Add Socials'}

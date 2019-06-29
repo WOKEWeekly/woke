@@ -42,19 +42,7 @@ export class FooterIcon extends Component {
   }
 }
 
-/** Mini icons for social promotion on profiles */
-export class PromoIcon extends Component {
-  render(){
-    return (
-      <SocialIcon
-        className={css.promo_socials}
-        icon={this.props.icon}
-        href={this.props.href}
-        {...this.props} />
-    )
-  }
-}
-
+/** Bar of mini icons for social promotion on profiles */
 export class PromoIconsBar extends Component {
   render(){
     const socials = JSON.parse(this.props.socials);
@@ -68,10 +56,11 @@ export class PromoIconsBar extends Component {
             let social = socialPlatforms[index];
             if (social){
               items.push(
-                <PromoIcon
-                  key={index}
+                <SocialIcon
+                  className={css.promo_socials}
                   icon={social.icon}
-                  href={`${social.domain}${item}`} />
+                  href={`${social.domain}${item}`}
+                  {...this.props} />
               );
             }
           }
@@ -81,7 +70,7 @@ export class PromoIconsBar extends Component {
     }
 
     return (
-      <React.Fragment>{renderIcons()}</React.Fragment>
+      <div className={css.promo_bar}>{renderIcons()}</div>
     )
   }
 }

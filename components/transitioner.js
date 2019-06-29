@@ -72,9 +72,35 @@ export class Slider extends Component {
   }
 }
 
+export class FadeSlider extends Component {
+  render(){
+
+    const { duration, delay, direction } = this.props;
+
+    const defaultStyle = {
+      transition: `all ${duration}ms ease ${delay || 0}ms`,
+      [direction]: '-100vw',
+      opacity: 0,
+      position: 'relative'
+    }
+
+    const transitionStyles = {
+      entering: { [direction]: '-100vw', opacity: 0 },
+      entered:  { [direction]: '0', opacity: 1 },
+    };
+
+    return (
+      <Template
+        {...this.props}
+        defaultStyle={defaultStyle}
+        transitionStyles={transitionStyles} />
+    )
+  }
+}
+
 class Template extends Component {
   render(){
-    const { duration, determinant, className, defaultStyle, transitionStyles, style } = this.props;
+    const { determinant, className, defaultStyle, transitionStyles, style } = this.props;
 
     return (
       <Transition

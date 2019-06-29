@@ -269,9 +269,11 @@
   width: 5.5em;
 }
 
-.promo_socials {
-  font-size: 1.2em;
-  margin: 0 .1em;
+.promo_bar {
+  .promo_socials {
+    font-size: 1.2em;
+    margin: .2em;
+  }
 }
 
 /****************/
