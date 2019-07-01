@@ -4,7 +4,7 @@ import Link from 'next/link';
 
 import { Cover, Shader, Spacer } from '~/components/layout.js';
 import { Loader, Empty } from '~/components/loader.js';
-import { Title, Subtitle, Paragraph, Divider, Truncator, ReadMore } from '~/components/text.js';
+import { Title, Subtitle, Paragraph, Divider, TruncatedParagraph, ReadMore } from '~/components/text.js';
 import { FadeSlider } from '~/components/transitioner.js';
 
 import Meta from '~/partials/meta.js';
@@ -124,9 +124,7 @@ class Exec extends PureComponent {
                   <Title className={css.title}>{item.fullname}</Title>
                   <Subtitle className={css.date}>{item.role}</Subtitle>
                   <Divider />
-                  <Paragraph className={css.description}>
-                    <Truncator lines={6} ellipsis={<ReadMore/>}>{item.description}</Truncator>
-                  </Paragraph>
+                  <TruncatedParagraph className={css.description}>{item.description}</TruncatedParagraph>
                 </div>
               </Col>
             </Row>

@@ -40,6 +40,13 @@ $break-xxl: 1408px; // Extra large devices (large desktops)
   font-family: $body-font;
 }
 
+.responsive-container {
+  width: 60%;
+  @media (max-width: $break-xl) { width: 70%; }
+  @media (max-width: $break-lg) { width: 80%; }
+  @media (max-width: $break-md) { width: 100%; }
+}
+
 /** Mixins */
 @mixin scale-on-hover($scale) {
   transition: transform .2s ease-in-out;
@@ -57,10 +64,7 @@ $break-xxl: 1408px; // Extra large devices (large desktops)
 }
 
 @mixin responsive-form {
+  @extend .responsive-container;
   margin: 0 auto;
   padding: 2em;
-  width: 60%;
-  @media (max-width: $break-xl) { width: 70%; }
-  @media (max-width: $break-lg) { width: 80%; }
-  @media (max-width: $break-md) { width: 100%; }
 }

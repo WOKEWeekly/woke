@@ -78,34 +78,6 @@
 .widgets { font-family: $body-font; }
 
 /****************/
-/** cover .js **/
-/****************/
-.cover {
-  background: {  
-    repeat: no-repeat;
-    size: cover;
-  }
-  align-items: center;
-  border-bottom: $border;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  text-align: center;
-
-  .title {
-    @extend .text;
-    font-size: 2.3em;
-    line-height: 1.3;
-    padding-bottom: .2em;
-    @media (max-width: $break-md) { font-size: 2em; } }
-  .subtitle {
-    @extend .title;
-    font-size: 1.4em;
-    @media (max-width: $break-md) { font-size: 1.1em; }
-  }
-}
-
-/****************/
 /** dropdown .js **/
 /****************/
 
@@ -134,7 +106,7 @@
 }
 
 /******************************/
-/** form.js && datepicker.js **/
+/** form.js, datepicker.js **/
 /******************************/
 
 .heading {
@@ -273,6 +245,38 @@
   .promo_socials {
     font-size: 1.2em;
     margin: .2em;
+  }
+}
+
+/****************/
+/** layout.js **/
+/****************/
+
+.cover {
+  background: {  
+    repeat: no-repeat;
+    size: cover;
+  }
+  align-items: center;
+  border-bottom: $border;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+  .coverText {
+    padding-bottom: 1em;
+    @extend .responsive-container;
+    .title {
+      @extend .text;
+      font-size: 2.3em;
+      line-height: 1.3;
+      padding-bottom: .2em;
+      @media (max-width: $break-md) { font-size: 2em; } }
+    .subtitle {
+      @extend .title;
+      font-size: 1.4em;
+      @media (max-width: $break-md) { font-size: 1.1em; }
+    }
   }
 }
 

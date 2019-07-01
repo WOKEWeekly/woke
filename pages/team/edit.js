@@ -74,7 +74,7 @@ class MemberEdit extends Component {
   updateMember = () => {
     if (!isValidMember(this.state)) return;
     
-    const { id, firstname, lastname, fullname, role, level, image, birthday, description, socials,
+    const { firstname, lastname, fullname, role, level, image, birthday, description, socials,
       ethnicity1, ethnicity2, ethnicity3, ethnicity4, imageChanged } = this.state;
 
     /** Generate slugs and filenames from name and data */
@@ -107,7 +107,7 @@ class MemberEdit extends Component {
     const data = new FormData();
     data.append('members', JSON.stringify(members));
     data.append('changed', imageChanged);
-    data.append('file', image, filename);
+    imageChanged && data.append('file', image, filename);
 
     /** Update member in database */
     fetch('/updateMember', {

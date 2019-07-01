@@ -100,7 +100,7 @@ class CandidateEdit extends Component {
     const data = new FormData();
     data.append('candidates', JSON.stringify(candidates));
     data.append('changed', imageChanged);
-    data.append('file', image, filename);
+    imageChanged && data.append('file', image, filename);
 
     /** Update candidate in database */
     fetch('/updateCandidate', {

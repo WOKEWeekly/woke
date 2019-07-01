@@ -11,7 +11,7 @@ import { SortDropdown } from '~/components/dropdown.js';
 import { Icon } from '~/components/icon.js';
 import { Cover, Shader, Spacer } from '~/components/layout.js';
 import { Loader, Empty } from '~/components/loader.js';
-import { Title, Subtitle, Paragraph, Divider, Truncator, ReadMore } from '~/components/text.js';
+import { Title, Subtitle, Paragraph, Divider, TruncatedParagraph, ReadMore } from '~/components/text.js';
 import {BottomToolbar} from '~/components/toolbar.js';
 import { Zoomer, Slider } from '~/components/transitioner.js';
 
@@ -171,6 +171,7 @@ class Session extends PureComponent {
 
   render(){
     const { item, idx, view } = this.props;
+    item.description = item.description && item.description.trim().length > 0 ? item.description : 'No description.';
     
     if (view === 'grid'){
       return (
@@ -215,11 +216,7 @@ class Session extends PureComponent {
                   <Title className={css.title}>{item.title}</Title>
                   <Subtitle className={css.date}>{formatDate(item.dateHeld, true)}</Subtitle>
                   <Divider />
-                  <Paragraph className={css.description}>
-                    {item.description.trim().length > 0 ?
-                      <Truncator lines={5} ellipsis={<ReadMore/>}>{item.description}</Truncator>
-                      : `No description.`}
-                  </Paragraph>
+                  <TruncatedParagraph className={css.description} lines={5} ellipsis={<ReadMore/>}>{item.description}</TruncatedParagraph>
                 </div>
               </Col>
             </Row>

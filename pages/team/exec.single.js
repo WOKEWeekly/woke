@@ -14,7 +14,7 @@ import CLEARANCES from '~/constants/clearances.js';
 import { countriesToString } from '~/constants/countries.js';
 import { calculateAge } from '~/constants/date.js';
 import Meta from '~/partials/meta.js';
-import css from '~/styles/blackex.scss';
+import css from '~/styles/team.scss';
 
 class ExecPage extends Component {
 

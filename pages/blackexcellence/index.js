@@ -132,7 +132,15 @@ class BlackExcellence extends Component {
             subtitle={description}
             image={'blackex-header.jpg'}
             height={200}
-            backgroundPosition={'center'} />
+            backgroundPosition={'center'}
+            imageTitle={
+              <img
+                src={`/static/images/logos/blackex-logo.png`}
+                alt={'#BlackExcellence logo'}
+                className={css.image}
+                onLoad={this.showImage}
+                height={150}
+                onError={this.showImage} />} />
 
           <CandidateGrid/>
 

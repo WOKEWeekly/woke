@@ -54,7 +54,7 @@ class SessionEdit extends Component {
     const data = new FormData();
     data.append('sessions', JSON.stringify(sessions));
     data.append('changed', imageChanged);
-    data.append('file', image, filename);
+    imageChanged && data.append('file', image, filename);
 
     /** Update session in database */
     fetch('/updateSession', {

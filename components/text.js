@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import Truncate from 'react-truncate';
 import { fonts } from '~/constants/theme.js';
 
 export class Title extends Component {
@@ -39,7 +38,45 @@ export class Paragraph extends Component {
           display: 'inline',
           fontFamily: fonts.body,
           whiteSpace: 'pre-line'
-        }}>{this.props.children}</pre>
+        }}>
+        {this.props.children.split('\n').map((paragraph, i, arr) => {
+          const line = <p key={i}>{paragraph}</p>;
+  
+          if (paragraph.length > 0) {
+            return line;
+          } else {
+            return null;
+          }
+        })}
+      </pre>
+    )
+  }
+}
+
+export class TruncatedParagraph extends Component {
+  render(){
+    return (
+      <pre {...this.props}
+        style={{
+          ...this.props.style,
+          color: 'white',
+          display: 'inline',
+          fontFamily: fonts.body,
+          whiteSpace: 'pre-line'
+        }}>
+        {this.props.children.split('\n').map((ln, i, arr) => {
+          const line = <span key={i}>{ln}</span>;
+
+          if (i > 2) return;
+  
+          if (i === arr.length - 1) {
+            return line;
+          } else {
+            return [line, <br key={i + 'br'} />];
+          }
+        })}
+        <ReadMore />
+      </pre>
     )
   }
 }
@@ -55,31 +92,12 @@ export class Divider extends Component {
   }
 }
 
-export class Truncator extends Component {
-  render(){
-    return (
-      <Truncate lines={this.props.lines} ellipsis={this.props.ellipsis || '...'} trimWhitespace>
-        {this.props.children.split('\n').map((ln, i, arr) => {
-          const line = <span key={i}>{ln}</span>;
-  
-          if (i === arr.length - 1) {
-            return line;
-          } else {
-            return [line, <br key={i + 'br'} />];
-          }
-        })}
-      </Truncate>
-    )
-  }
-}
-
 export class ReadMore extends Component {
   render(){
     return (
       <React.Fragment>
-        ...
         <div style={{color: 'skyblue', display: 'block', marginTop: '.5em'}}>
-          Read More
+          Read More...
         </div>
       </React.Fragment>
     )

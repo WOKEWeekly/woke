@@ -17,7 +17,7 @@ export class Cover extends Component {
   }
 
 	render(){
-    const { backgroundPosition, height, image, title, subtitle} = this.props;
+    const { backgroundPosition, height, image, title, subtitle, imageTitle} = this.props;
     const classes = classNames(css.cover, this.props.className);
 		return (
       <Fader determinant={this.state.isLoaded} duration={1000} delay={0}>
@@ -26,9 +26,9 @@ export class Cover extends Component {
           backgroundPosition: backgroundPosition,
           minHeight: height,
         }}>
-          <div>
+          <div className={css.coverText}>
             <Fader determinant={this.state.isLoaded} duration={500} delay={1000}>
-              <div className={css.title}>{title}</div>
+              {imageTitle || <div className={css.title}>{title}</div>}
             </Fader>
             <Fader determinant={this.state.isLoaded} duration={500} delay={1500}>
               <div className={css.subtitle}>{subtitle}</div>
