@@ -17,8 +17,13 @@ class PreNavbar extends Component {
   constructor(){
     super();
     this.state = {
+      isLoaded: false,
       modalVisible: false
     }
+  }
+
+  componentDidMount(){
+    this.setState({isLoaded: true})
   }
 
   /** Show and hide login modal */
@@ -69,56 +74,80 @@ class PreNavbar extends Component {
       }
     }
 
-    return (
-      <div className={css.prenav}>
-        <Container>
-          <Row>
-            <Col xs={6}>
-              <HeaderIcon icon={"facebook-f"} href={accounts.facebook} />
-              <HeaderIcon icon={"twitter"} href={accounts.twitter} />
-              <HeaderIcon icon={"instagram"} href={accounts.instagram} />
-              <HeaderIcon icon={"linkedin-in"} href={accounts.linkedin} />
-              <HeaderIcon icon={"youtube"} href={accounts.youtube} />
-            </Col>
-            {renderAccount()}
-          </Row>
-        </Container>
-
-        <Login visible={this.state.modalVisible} close={this.hideModal} />
-      </div>
-    );
+    if (this.state.isLoaded){
+      return (
+        <div className={css.prenav}>
+          <Container>
+            <Row>
+              <Col xs={6}>
+                <HeaderIcon icon={"facebook-f"} href={accounts.facebook} />
+                <HeaderIcon icon={"twitter"} href={accounts.twitter} />
+                <HeaderIcon icon={"instagram"} href={accounts.instagram} />
+                <HeaderIcon icon={"linkedin-in"} href={accounts.linkedin} />
+                <HeaderIcon icon={"youtube"} href={accounts.youtube} />
+              </Col>
+              {renderAccount()}
+            </Row>
+          </Container>
+  
+          <Login visible={this.state.modalVisible} close={this.hideModal} />
+        </div>
+      );
+    } else {
+      return null;
+    }
+    
   }
 }
 
 /** Main navigation bar with routes */
 export class MainNavbar extends Component {
+  constructor(){
+    super();
+    this.state = {
+      imageLoaded: false,
+      imageSrc: ''
+    }
+  }
+
+  componentDidMount(){
+    const image = new Image();
+    image.src = '/static/images/bg/nav-bg.jpg';
+    image.onload = () => this.setState({imageLoaded: true, imageSrc: image.src});
+  }
 
   render(){
     const { user } = this.props;
+    const { imageLoaded, imageSrc } = this.state;
 
-    return (
-      <Navbar className={css.nav} variant="dark" expand="lg" sticky="top">
-        <Navbar.Brand href="/home">
-          <img
-            src="/static/images/logos/wokeweekly-logo.png"
-            height="40"
-            alt="#WOKEWeekly Logo" />
-        </Navbar.Brand>
-        <Navbar.Toggle />
-        <Navbar.Collapse>
-          <Nav className="ml-auto">
-            <Nav.Link href="/sessions" className={css.links}>Sessions</Nav.Link>
-            {user.clearance >= CLEARANCES.ACTIONS.VIEW_TOPICS ?
-            <Nav.Link href="/topics" className={css.links}>Topic Bank</Nav.Link> : null}
-            {/* <Nav.Link href="#link" className={css.links}>Forum</Nav.Link> */}
-            <Nav.Link href="/blackexcellence" className={css.links}>#BlackExcellence</Nav.Link>
-            <Nav.Link href="/executives" className={css.links}>The Executives</Nav.Link>
-            <Nav.Link href="#link" className={css.links}>About</Nav.Link>
-            <Nav.Link href={`mailto: ${emails.enquiries}`} className={css.links}>Contact</Nav.Link>
-          </Nav>
-        </Navbar.Collapse>
-      </Navbar>
-    )
+    if (imageLoaded){
+      return (
+        <Navbar className={css.nav} variant="dark" expand="lg" sticky="top" style={{backgroundImage: `url(${imageSrc})`}}>
+          <Navbar.Brand href="/home">
+            <img
+              src="/static/images/logos/wokeweekly-logo.png"
+              height="40"
+              alt="#WOKEWeekly Logo" />
+          </Navbar.Brand>
+          <Navbar.Toggle />
+          <Navbar.Collapse>
+            <Nav className="ml-auto">
+              <Nav.Link href="/sessions" className={css.links}>Sessions</Nav.Link>
+              {user.clearance >= CLEARANCES.ACTIONS.VIEW_TOPICS ?
+              <Nav.Link href="/topics" className={css.links}>Topic Bank</Nav.Link> : null}
+              {/* <Nav.Link href="#link" className={css.links}>Forum</Nav.Link> */}
+              <Nav.Link href="/blackexcellence" className={css.links}>#BlackExcellence</Nav.Link>
+              <Nav.Link href="/executives" className={css.links}>The Executives</Nav.Link>
+              <Nav.Link href="#link" className={css.links}>About</Nav.Link>
+              <Nav.Link href={`mailto: ${emails.enquiries}`} className={css.links}>Contact</Nav.Link>
+            </Nav>
+          </Navbar.Collapse>
+        </Navbar>
+      );
+    } else {
+      return null;
+    }
+    
   }
 }
 

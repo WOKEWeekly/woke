@@ -9,34 +9,43 @@ import { Fader } from '~/components/transitioner.js';
 export class Cover extends Component {
   constructor(){
     super();
-    this.state = { isLoaded: false };
+    this.state = {
+      imageLoaded: false,
+      imageSrc: ''
+    }
   }
 
   componentDidMount(){
-    this.setState({isLoaded: true});
+    const image = new Image();
+    image.src = `/static/images/bg/${this.props.image}`;
+    image.onload = () => this.setState({imageLoaded: true, imageSrc: image.src});
   }
 
 	render(){
-    const { backgroundPosition, height, image, title, subtitle, imageTitle} = this.props;
+    const { backgroundPosition, height, title, subtitle, imageTitle} = this.props;
+    const { imageLoaded, imageSrc } = this.state;
+
     const classes = classNames(css.cover, this.props.className);
-		return (
-      <Fader determinant={this.state.isLoaded} duration={1000} delay={0}>
+
+    return (
+      <Fader determinant={imageLoaded} duration={1000} delay={0}>
         <Container fluid={true} className={classes} style={{
-          backgroundImage: `url(/static/images/bg/${image})`,
+          backgroundImage: `url(${imageSrc})`,
           backgroundPosition: backgroundPosition,
           minHeight: height,
         }}>
           <div className={css.coverText}>
-            <Fader determinant={this.state.isLoaded} duration={500} delay={1000}>
+            <Fader determinant={imageLoaded} duration={500} delay={1000}>
               {imageTitle || <div className={css.title}>{title}</div>}
             </Fader>
-            <Fader determinant={this.state.isLoaded} duration={500} delay={1500}>
+            <Fader determinant={imageLoaded} duration={500} delay={1500}>
               <div className={css.subtitle}>{subtitle}</div>
             </Fader>
           </div>
         </Container>
       </Fader>
-		);
+    );
+		
 	}
 }
 

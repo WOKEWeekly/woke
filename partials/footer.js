@@ -8,12 +8,28 @@ import css from '~/styles/_partials.scss';
 
 
 export default class Footer extends Component {
+  constructor(){
+    super();
+    this.state = {
+      isLoaded: false
+    }
+  }
+
+  componentDidMount(){
+    this.setState({isLoaded: true})
+  }
+
 	render(){
-		return (
-			<div className={css.footer} >
-        <Col md={4}><Socials/></Col>
-			</div>
-		);
+    if (this.state.isLoaded){
+      return (
+        <div className={css.footer} >
+          <Col md={4}><Socials/></Col>
+        </div>
+      );
+    } else {
+      return null;
+    }
+		
 	}
 }
 
