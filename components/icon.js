@@ -57,6 +57,7 @@ export class PromoIconsBar extends Component {
             if (social){
               items.push(
                 <SocialIcon
+                  key={index}
                   className={css.promo_socials}
                   icon={social.icon}
                   href={`${social.domain}${item}`}
@@ -75,6 +76,26 @@ export class PromoIconsBar extends Component {
   }
 }
 
+export const listSocials = (socials) => {
+  if (socials){
+    const items = [];
+    for (const [idx, item] of Object.entries(socials)) {
+      if (item && item !== ''){
+        let social = socialPlatforms[idx];
+        let link = `${social.domain}${item}`;
+        items.push(
+          <div key={idx} className={css.socials}>{social.name}:
+            <a href={link}>{!social.domain ? link : `@${item}`}</a>
+          </div>
+        );
+      }
+    }
+    return items;
+  } else {
+    return null;
+  }
+}
+
 /** Template for social icons */
 export class SocialIcon extends Component {
   constructor(){
@@ -89,7 +110,7 @@ export class SocialIcon extends Component {
   render(){
     if (this.state.isLoaded){
       return (
-        <a {...this.props}>
+        <a target={'_blank'} {...this.props}>
           <FontAwesomeIcon
             icon={['fab', this.props.icon]}
             color={colors.primary}

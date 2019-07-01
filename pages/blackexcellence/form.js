@@ -6,13 +6,13 @@ import Router from 'next/router';
 import { SubmitButton, CancelButton, AddButton } from '~/components/button.js';
 import { BirthdayPicker } from '~/components/datepicker.js';
 import { Heading, Group, Label, TextInput, ClickInput, NumberPicker, TextArea, FileSelector } from '~/components/form.js';
+import { listSocials } from '~/components/icon.js';
 import { Shader, Spacer } from '~/components/layout.js';
 import { EthnicModal, SocialsModal } from '~/components/modal.js';
 
 import { countriesToString } from '~/constants/countries.js';
 import CLEARANCES from '~/constants/clearances.js';
 import { getFilename } from '~/constants/file.js';
-import { socialPlatforms } from '~/constants/settings.js';
 
 import Meta from '~/partials/meta.js';
 import css from '~/styles/blackex.scss';
@@ -47,25 +47,7 @@ class CandidateForm extends Component {
     const filename = getFilename(image);
     const ethnicities = countriesToString([ethnicity1, ethnicity2, ethnicity3, ethnicity4]);
 
-    const listSocials = () => {
-      if (socials){
-        const items = [];
-        for (const [idx, item] of Object.entries(socials)) {
-          if (item && item !== ''){
-            let social = socialPlatforms[idx];
-            let link = `${social.domain}${item}`;
-            items.push(
-              <div key={idx} className={css.socials}>{social.name}:
-                <a href={link}>{!social.domain ? link : `@${item}`}</a>
-              </div>
-            );
-          }
-        }
-        return items;
-      } else {
-        return null;
-      }
-    }
+    
 
     return (
       <Shader>
@@ -120,12 +102,12 @@ class CandidateForm extends Component {
               </Col>
             </Group>
             <Group>
-              <Col md={3}>
+              <Col md={12}>
                 <Label>Socials:</Label>
                 <AddButton
                   title={'Add Socials'}
                   onClick={this.showSocialsModal} />
-                <div className={'mt-2'}>{listSocials()}</div>
+                <div className={'mt-2'}>{listSocials(socials)}</div>
               </Col>
             </Group>
             <Group>

@@ -29,33 +29,41 @@ export default class WOKE extends App {
   }
 
   state = {
-    alertVisible: false
+    alertVisible: false,
+    isLoaded: false,
   }
 
   componentDidMount(){
     document.body.className = css.body;
+    this.setState({isLoaded: true})
   }
 
-  showAlert = () => { this.setState({alertVisible: true}) }
+  showAlert = () => this.setState({alertVisible: true});
 
   render() {
     const { Component, pageProps } = this.props;
 
-    return (
-      <Container>
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossOrigin="anonymous" />
-        <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Raleway:400,700" />
-        <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Patua+One:400,700" />
-
-        <Provider store={store}>
-          <PersistGate loading={null} persistor={persistor}>
-            <PreNavBar/> <MainNavBar/>
-            <Component {...pageProps} showAlert={this.showAlert} />
-            <Footer/>
-            <Alert visible={this.state.alertVisible}>Beautiful</Alert>
-          </PersistGate>
-        </Provider> 
-      </Container>
-    );
+    
+    if (this.state.isLoaded){
+      return (
+        <Container>
+          <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossOrigin="anonymous" />
+          <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Raleway:400,700" />
+          <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Patua+One:400,700" />
+  
+          <Provider store={store}>
+            <PersistGate loading={null} persistor={persistor}>
+              <PreNavBar/> <MainNavBar/>
+              <Component {...pageProps} showAlert={this.showAlert} />
+              <Footer/>
+              <Alert visible={this.state.alertVisible}>Beautiful</Alert>
+            </PersistGate>
+          </Provider> 
+        </Container>
+      );
+    } else {
+      return null;
+    }
+    
   }
 }
