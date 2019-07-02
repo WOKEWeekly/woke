@@ -1,3 +1,4 @@
+import { alert } from '~/components/alert.js';
 
 /** Ensure valid session is added or updated */
 export const isValidSession = (session) => {
@@ -42,7 +43,7 @@ export const isValidMember = (member) => {
 /** Check for the presence of a value */
 const ifExists = (value, message) => {
   if (!value || value.length == 0){
-    alert(message);
+    alert.error(message);
     return false;
   } else {
     return true;

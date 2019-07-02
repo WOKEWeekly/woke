@@ -230,8 +230,7 @@ class Session extends PureComponent {
 
 const mapStateToProps = state => ({
   session: state.session,
-  user: state.user,
-  alert: state.alert
+  user: state.user
 });
 
 const mapDispatchToProps = dispatch => (

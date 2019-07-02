@@ -85,24 +85,9 @@ const blackexReducer = (state = defaultBlackEx, action) => {
   }
 };
 
-const defaultAlert = {
-  variant: '',
-  message: ''
-}
-
-const alertReducer = (state = defaultAlert, action) => {
-  switch (action.type) {
-    case 'COMPOSE_ALERT':
-      return action.payload;
-    default:
-      return state;
-  }
-};
-
 export default combineReducers({
   user: userReducer,
   session: sessionReducer,
   topic: topicReducer,
-  blackex: blackexReducer,
-  alert: alertReducer
+  blackex: blackexReducer
 });

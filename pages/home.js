@@ -1,10 +1,8 @@
 import React, { Component } from 'react';
 import {Container, Col, Row} from 'react-bootstrap';
-
+import Meta from '~/partials/meta.js';
 import { Cover } from '~/components/layout.js';
 import css from "~/styles/home.scss";
-
-import Meta from '~/partials/meta.js';
 
 export default class Home extends Component {
 	render(){

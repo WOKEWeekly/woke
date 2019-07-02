@@ -1,25 +1,6 @@
 @import "variables";
 
 /****************/
-/** alert .js **/
-/****************/
-
-.alert_container {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-}
-
-.alert {
-  bottom: 0;
-  font-family: $body-font;
-  font-weight: 900;
-  margin-bottom: 2em;
-  position: fixed !important;
-  width: fit-content;
-}
-
-/****************/
 /** button .js **/
 /****************/
 

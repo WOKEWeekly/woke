@@ -11,10 +11,13 @@ import { fas } from '@fortawesome/free-solid-svg-icons';
 import {PreNavBar, MainNavBar} from "~/partials/header.js";
 import Footer from "~/partials/footer.js";
 
+import { alert } from '~/components/alert.js';
+
+import 'react-toastify/dist/ReactToastify.min.css';
 import css from '~/styles/_app.scss';
-import { Alert } from '~/components/alert.js';
 
 library.add(fab, fas);
+
 const { store, persistor } = configureStore();
 
 export default class WOKE extends App {
@@ -28,17 +31,12 @@ export default class WOKE extends App {
     return { pageProps };
   }
 
-  state = {
-    alertVisible: false,
-    isLoaded: false,
-  }
+  state = { isLoaded: false }
 
   componentDidMount(){
     document.body.className = css.body;
     this.setState({isLoaded: true})
   }
-
-  showAlert = () => this.setState({alertVisible: true});
 
   render() {
     const { Component, pageProps } = this.props;
@@ -54,9 +52,8 @@ export default class WOKE extends App {
           <Provider store={store}>
             <PersistGate loading={null} persistor={persistor}>
               <PreNavBar/> <MainNavBar/>
-              <Component {...pageProps} showAlert={this.showAlert} />
+              <Component toast={alert} {...pageProps} />
               <Footer/>
-              <Alert visible={this.state.alertVisible}>Beautiful</Alert>
             </PersistGate>
           </Provider> 
         </Container>
@@ -64,6 +61,5 @@ export default class WOKE extends App {
     } else {
       return null;
     }
-    
   }
 }

@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { saveUser } from '~/reducers/actions';
 
+import { alert } from '~/components/alert.js';
 import { SubmitButton, CancelButton } from '~/components/button.js';
 import { Group, Label, UsernameInput, PasswordInput, Checkbox } from '~/components/form.js';
 import css from '~/styles/login.scss';
@@ -32,10 +33,11 @@ class LoginModal extends Component {
     })
     .then(res => res.json())
     .then(user => {
-      user.remember = this.state.remember
+      user.remember = this.state.remember;
       this.props.saveUser(user);
       this.props.close();
       location.reload();
+      alert.success('noce!');
     }).catch(error => console.error(error));
   }
 
