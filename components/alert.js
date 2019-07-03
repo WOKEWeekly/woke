@@ -1,19 +1,32 @@
-import { toast } from 'react-toastify';
-import { Fader } from '~/components/transitioner.js';
+import { toast, cssTransition } from 'react-toastify';
+import classNames from 'classnames';
+import css from '~/styles/_components.scss';
+
+const animation = cssTransition({
+  enter: css.fadeIn,
+  exit: css.fadeOut,
+  duration: 500
+});
 
 toast.configure({
-  autoClose: 3000,
+  autoClose: 2000,
   draggable: false,
   hideProgressBar: true,
   position: toast.POSITION.BOTTOM_CENTER,
-  // transition: (<Fader determinant={true} duration={1000} delay={0} />)
+  toastStyle: {
+    borderRadius: '10px',
+    fontFamily: 'Raleway'
+  },
+  transition: animation
 });
+
+const defaultClasses = ['alert', css.message];
 
 export const alert = {
   success: (message) => {
-    toast(message, { className: 'alert alert-success' });
+    toast(message, { className: classNames('alert-success', defaultClasses) });
   },
   error: (message) => {
-    toast(message, { className: 'alert alert-danger' });
+    toast(message, { className: classNames('alert-danger', defaultClasses) });
   },
 }

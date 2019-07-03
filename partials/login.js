@@ -37,7 +37,6 @@ class LoginModal extends Component {
       this.props.saveUser(user);
       this.props.close();
       location.reload();
-      alert.success('noce!');
     }).catch(error => console.error(error));
   }
 

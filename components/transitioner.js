@@ -100,7 +100,7 @@ export class FadeSlider extends Component {
 
 class Template extends Component {
   render(){
-    const { determinant, className, defaultStyle, transitionStyles, style } = this.props;
+    const { notDiv, determinant, className, defaultStyle, transitionStyles, style, children } = this.props;
 
     return (
       <Transition
@@ -111,11 +111,20 @@ class Template extends Component {
           exit: 0
         }}
         {...this.props}>
-        {state => (
-          <div className={className} style={{...defaultStyle, ...transitionStyles[state], ...style}}>
-            {this.props.children}
-          </div>
-        )}
+        {state => {
+          if (notDiv){
+            return React.cloneElement(children, {
+              style: {...defaultStyle, ...transitionStyles[state], ...style}
+            });
+          } else {
+            return (
+            <div className={className} style={{...defaultStyle, ...transitionStyles[state], ...style}}>
+              {this.props.children}
+            </div>
+            )
+          }
+          
+        }}
         </Transition>
     )
   }

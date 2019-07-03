@@ -28,7 +28,7 @@ export class Cover extends Component {
     const classes = classNames(css.cover, this.props.className);
 
     return (
-      <Fader determinant={imageLoaded} duration={1000} delay={0}>
+      <Fader determinant={imageLoaded} duration={1500} delay={500}>
         <Container fluid={true} className={classes} style={{
           backgroundImage: `url(${imageSrc})`,
           backgroundPosition: backgroundPosition,

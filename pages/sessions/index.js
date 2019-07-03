@@ -11,9 +11,9 @@ import { SortDropdown } from '~/components/dropdown.js';
 import { Icon } from '~/components/icon.js';
 import { Cover, Shader, Spacer } from '~/components/layout.js';
 import { Loader, Empty } from '~/components/loader.js';
-import { Title, Subtitle, Paragraph, Divider, TruncatedParagraph, ReadMore } from '~/components/text.js';
+import { Title, Subtitle, Divider, TruncatedParagraph, ReadMore } from '~/components/text.js';
 import {BottomToolbar} from '~/components/toolbar.js';
-import { Zoomer, Slider } from '~/components/transitioner.js';
+import { Zoomer, Slider, Fader } from '~/components/transitioner.js';
 
 import { formatDate } from '~/constants/date.js';
 import CLEARANCES from '~/constants/clearances.js';
@@ -136,7 +136,9 @@ class Sessions extends Component {
             height={200}
             className={css.cover} />
 
-          <SessionCollection/>
+          <Fader determinant={isLoaded} duration={1500}>
+            <SessionCollection/>
+          </Fader>
 
           <BottomToolbar>
             {user.clearance >= CLEARANCES.ACTIONS.CRUD_TOPICS ?
@@ -164,9 +166,7 @@ class Sessions extends Component {
 class Session extends PureComponent {
   constructor(){
     super();
-    this.state = {
-      isLoaded: false
-    }
+    this.state = { isLoaded: false }
   }
 
   render(){

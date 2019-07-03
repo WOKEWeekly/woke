@@ -3,6 +3,7 @@ import {Container, Col, Row} from 'react-bootstrap';
 import Meta from '~/partials/meta.js';
 import { Cover } from '~/components/layout.js';
 import css from "~/styles/home.scss";
+import { FadeSlider } from '~/components/transitioner.js';
 
 export default class Home extends Component {
 	render(){
@@ -42,16 +43,33 @@ export default class Home extends Component {
 }
 
 class Part extends Component {
+  constructor(){
+    super();
+    this.state = {
+      imageLoaded: false,
+      imageSrc: ''
+    }
+  }
+
+  componentDidMount(){
+    const image = new Image();
+    image.src = `/static/images/bg/${this.props.image}`;
+    image.onload = () => this.setState({imageLoaded: true, imageSrc: image.src});
+  }
+
 	render(){
+    const { imageLoaded, imageSrc } = this.state;
 		return (
-			<Col md={4} className={css.colpart}>
-				<div className={css.part} style={{backgroundImage: `url(/static/images/bg/${this.props.image})`}}>
-					<div className={css.caption}>
-						<div className={css.headline}>{this.props.headline}</div>
-						<div className={css.description}>{this.props.description}</div>
-					</div>
-				</div>
-			</Col>
+      <FadeSlider determinant={imageLoaded} duration={1000} delay={500} direction={'bottom'} notDiv>
+        <Col md={4} className={css.colpart}>
+          <div className={css.part} style={{backgroundImage: `url(${imageSrc})`}}>
+            <div className={css.caption}>
+              <div className={css.headline}>{this.props.headline}</div>
+              <div className={css.description}>{this.props.description}</div>
+            </div>
+          </div>
+        </Col>
+      </FadeSlider>
 		);
 	}
 }
