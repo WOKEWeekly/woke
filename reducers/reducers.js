@@ -22,7 +22,8 @@ const userReducer = (state = initialUser, action) => {
       return user;
     case 'CLEAR_USER':
       return initialUser;
-    default: return state;
+    default:
+      return state;
   }
 };
 
@@ -85,21 +86,9 @@ const blackexReducer = (state = defaultBlackEx, action) => {
   }
 };
 
-const alertReducer = (state = false, action) => {
-  switch (action.type) {
-    case 'TRIGGER_ALERT':
-      return true;
-    case 'CLEAR_ALERT':
-        return false;
-    default:
-      return state;
-  }
-}
-
 export default combineReducers({
   user: userReducer,
   session: sessionReducer,
   topic: topicReducer,
-  blackex: blackexReducer,
-  alert: alertReducer
+  blackex: blackexReducer
 });

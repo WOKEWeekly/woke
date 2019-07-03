@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Modal } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { saveUser, triggerAlert } from '~/reducers/actions';
+import { saveUser } from '~/reducers/actions';
 
 import { alert, universalErrorMsg } from '~/components/alert.js';
 import { SubmitButton, CancelButton } from '~/components/button.js';
@@ -39,10 +39,11 @@ class LoginModal extends Component {
     .then(user => {
       user.remember = this.state.remember;
       this.props.saveUser(user);
+      sessionStorage.setItem('alert', `Welcome, ${user.firstname}!`);
       this.props.close();
-      // this.props.triggerAlert();
       location.reload();
-    }).catch(error => {
+    })
+    .catch(error => {
       alert.error(universalErrorMsg);
     });
   }
@@ -103,7 +104,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => (
   bindActionCreators({
-    saveUser, triggerAlert
+    saveUser
   }, dispatch)
 );
 

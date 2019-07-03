@@ -24,12 +24,17 @@ class PreNavbar extends Component {
   }
 
   componentDidMount(){
+    const message = sessionStorage.getItem('alert');
+    if (message){
+      alert.success(message);
+      sessionStorage.clear();
+    }
     this.setState({isLoaded: true})
   }
 
   /** Show and hide login modal */
-  showModal = () => { this.setState({modalVisible: true}); }
-  hideModal = () => { this.setState({modalVisible: false}); }
+  showModal = () => this.setState({modalVisible: true});
+  hideModal = () => this.setState({modalVisible: false});
 
   /** Log out, de-authenticating the user */
   logOut = () => {
@@ -37,6 +42,7 @@ class PreNavbar extends Component {
     .then(res => {
       if (res.ok){
         this.props.clearUser();
+        sessionStorage.setItem('alert', 'You have successfully logged out.');
         location.reload();
       } else {
         alert.error(res.statusText);
