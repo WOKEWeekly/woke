@@ -9,7 +9,7 @@ const animation = cssTransition({
 });
 
 toast.configure({
-  autoClose: 2000,
+  autoClose: 2500,
   draggable: false,
   hideProgressBar: true,
   position: toast.POSITION.BOTTOM_CENTER,

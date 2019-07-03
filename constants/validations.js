@@ -1,5 +1,12 @@
 import { alert } from '~/components/alert.js';
 
+/** Ensure valid login credentials */
+export const isValidLogin = (user) => {
+  if (!ifExists(user.username.trim(), 'Enter your username or email address.')) return false;
+  if (!ifExists(user.password.trim(), 'Enter your password.')) return false;
+  return true;
+}
+
 /** Ensure valid session is added or updated */
 export const isValidSession = (session) => {
   if (!ifExists(session.title.trim(), 'Enter the session title.')) return false;

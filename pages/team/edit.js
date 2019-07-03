@@ -125,7 +125,6 @@ class MemberEdit extends Component {
       res.ok ? Router.push(`/executives/${slug}`) : alert.error(res.statusText);
     }).catch(error => {
       alert.error(universalErrorMsg);
-      console.error(error);
     });
   }
 

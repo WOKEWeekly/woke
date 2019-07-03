@@ -72,7 +72,6 @@ class SessionEdit extends Component {
       res.ok ? Router.push(`/session/${slug}`) : alert.error(res.statusText);
     }).catch(error => {
       alert.error(universalErrorMsg);
-      console.error(error);
     });
   }
 

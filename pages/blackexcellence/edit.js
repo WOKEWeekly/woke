@@ -118,7 +118,6 @@ class CandidateEdit extends Component {
       res.ok ? Router.push(`/blackexcellence/candidate/${id}`) : alert.error(res.statusText);
     }).catch(error => {
       alert.error(universalErrorMsg);
-      console.error(error);
     });
   }
 

@@ -50,7 +50,6 @@ class SessionPage extends Component {
       res.ok ? Router.push('/sessions') : alert.error(res.statusText);
     }).catch(error => {
       alert.error(universalErrorMsg);
-      console.error(error);
     });
   }
 

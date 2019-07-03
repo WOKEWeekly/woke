@@ -7,6 +7,8 @@ import { saveUser, triggerAlert } from '~/reducers/actions';
 import { alert, universalErrorMsg } from '~/components/alert.js';
 import { SubmitButton, CancelButton } from '~/components/button.js';
 import { Group, Label, UsernameInput, PasswordInput, Checkbox } from '~/components/form.js';
+
+import { isValidLogin } from '~/constants/validations.js';
 import css from '~/styles/login.scss';
 
 class LoginModal extends Component {
@@ -26,21 +28,23 @@ class LoginModal extends Component {
 
   /** Log in as registered user */
   logIn = () => {
+    if (!isValidLogin(this.state)) return;
+
     fetch('/login', {
       method: 'POST',
       body: JSON.stringify(this.state),
       headers: { 'Content-Type': 'application/json' }
     })
-    .then(res => {
-      return res.ok ? res.json() : alert.error(res.statusText);
-    })
+    .then(res => res.json())
     .then(user => {
       user.remember = this.state.remember;
       this.props.saveUser(user);
       this.props.close();
       // this.props.triggerAlert();
       location.reload();
-    }).catch(error => console.error(error));
+    }).catch(error => {
+      alert.error(universalErrorMsg);
+    });
   }
 
   render(){

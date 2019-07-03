@@ -43,7 +43,6 @@ class PreNavbar extends Component {
       }
     }).catch(error => {
       alert.error(universalErrorMsg);
-      console.error(error);
     });
   }
 

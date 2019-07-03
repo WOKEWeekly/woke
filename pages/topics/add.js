@@ -72,7 +72,6 @@ class TopicAdd extends Component {
       res.ok ? Router.push('/topics') : alert.error(res.statusText);
     }).catch(error => {
       alert.error(universalErrorMsg);
-      console.error(error);
     });
   }
 

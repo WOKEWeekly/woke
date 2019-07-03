@@ -293,7 +293,6 @@ class _Topic extends PureComponent {
       res.ok ? this.props.getTopics() : alert.error(res.statusText);
     }).catch(error => {
       alert.error(universalErrorMsg);
-      console.error(error);
     });
   }
 

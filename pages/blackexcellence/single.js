@@ -51,7 +51,6 @@ class CandidatePage extends Component {
       res.ok ? Router.push('/blackexcellence') : alert.error(res.statusText);
     }).catch(error => {
       alert.error(universalErrorMsg);
-      console.error(error);
     });
   }
 
