@@ -3,6 +3,7 @@ import { Container } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import Router from 'next/router';
 
+import { alert, universalErrorMsg } from '~/components/alert.js';
 import { EditButton, DeleteButton, BackButton } from '~/components/button.js';
 import { ConfirmModal } from '~/components/modal.js';
 import { Title, Subtitle, Paragraph, Divider } from '~/components/text.js';
@@ -46,8 +47,11 @@ class SessionPage extends Component {
         'Clearance': CLEARANCES.ACTIONS.CRUD_SESSIONS,
       }
     }).then(res => {
-      if (res.ok) Router.push('/sessions');
-    }).catch(error => console.error(error));
+      res.ok ? Router.push('/sessions') : alert.error(res.statusText);
+    }).catch(error => {
+      alert.error(universalErrorMsg);
+      console.error(error);
+    });
   }
 
   /** Show and hide confirmation modal */

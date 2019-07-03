@@ -30,3 +30,5 @@ export const alert = {
     toast(message, { className: classNames('alert-danger', defaultClasses) });
   },
 }
+
+export const universalErrorMsg = 'Something went wrong. Please try again later.';

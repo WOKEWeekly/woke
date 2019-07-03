@@ -14,7 +14,7 @@ module.exports = {
           req.auth = auth;
           next();
         } else {
-          res.status(400);
+          res.status(400).send(error.toString());
           console.error(err.toString());
         }
       });

@@ -1,12 +1,15 @@
 import React, { Component} from 'react';
 import Router from 'next/router';
 import { connect } from 'react-redux';
+
+import { alert, universalErrorMsg } from '~/components/alert.js';
+
+import CLEARANCES from '~/constants/clearances';
 import { formatISODate } from '~/constants/date.js';
 import { generateSlug, generateSessionFilename } from '~/constants/file.js';
 import { isValidSession } from '~/constants/validations.js';
 
 import SessionForm from './form.js';
-import CLEARANCES from '~/constants/clearances';
 
 class SessionAdd extends Component {
   constructor() {
@@ -58,8 +61,11 @@ class SessionAdd extends Component {
         'Path': 'sessions'
       }
     }).then(res => {
-      if (res.ok) Router.push('/sessions');
-    }).catch(error => console.error(error));
+      res.ok ? Router.push('/sessions') : alert.error(res.statusText);
+    }).catch(error => {
+      alert.error(universalErrorMsg);
+      console.error(error);
+    });
   }
 
   render(){

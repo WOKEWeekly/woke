@@ -6,6 +6,7 @@ import { bindActionCreators } from 'redux';
 import { saveTopicSort, saveTopicFilters } from '~/reducers/actions';
 import classNames from 'classnames';
 
+import { alert, universalErrorMsg } from '~/components/alert.js';
 import { AddButton } from '~/components/button.js';
 import { SortDropdown, FilterDropdown } from '~/components/dropdown.js';
 import { Checkbox, SearchBar } from '~/components/form.js';
@@ -261,7 +262,7 @@ class TopicBank extends Component {
 	}
 }
 
-class Topic extends PureComponent {
+class _Topic extends PureComponent {
   constructor(){
     super();
     this.state = {
@@ -289,8 +290,11 @@ class Topic extends PureComponent {
         'Clearance': CLEARANCES.ACTIONS.CRUD_TOPICS
       }
     }).then(res => {
-      if (res.ok) this.props.getTopics();
-    }).catch(error => console.error(error));
+      res.ok ? this.props.getTopics() : alert.error(res.statusText);
+    }).catch(error => {
+      alert.error(universalErrorMsg);
+      console.error(error);
+    });
   }
 
   render(){
@@ -342,4 +346,5 @@ const mapDispatchToProps = dispatch => (
   }, dispatch)
 );
 
+const Topic = connect(mapStateToProps)(_Topic);
 export default connect(mapStateToProps, mapDispatchToProps)(TopicBank);

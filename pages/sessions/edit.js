@@ -1,12 +1,15 @@
 import React, { Component} from 'react';
 import { connect } from 'react-redux';
 import Router from 'next/router';
+
+import { alert, universalErrorMsg } from '~/components/alert.js';
+
+import CLEARANCES from '~/constants/clearances';
 import { formatISODate } from '~/constants/date.js';
 import { generateSlug, generateSessionFilename } from '~/constants/file.js';
 import { isValidSession } from '~/constants/validations.js';
 
 import SessionForm from './form.js';
-import CLEARANCES from '~/constants/clearances';
 
 class SessionEdit extends Component {
   static async getInitialProps({ query }) {
@@ -66,8 +69,11 @@ class SessionEdit extends Component {
         'Path': 'sessions'
       }
     }).then(res => {
-      if (res.ok) Router.push(`/session/${slug}`);
-    }).catch(error => console.error(error));
+      res.ok ? Router.push(`/session/${slug}`) : alert.error(res.statusText);
+    }).catch(error => {
+      alert.error(universalErrorMsg);
+      console.error(error);
+    });
   }
 
   render(){

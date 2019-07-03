@@ -11,8 +11,6 @@ import { fas } from '@fortawesome/free-solid-svg-icons';
 import {PreNavBar, MainNavBar} from "~/partials/header.js";
 import Footer from "~/partials/footer.js";
 
-import { alert } from '~/components/alert.js';
-
 import 'react-toastify/dist/ReactToastify.min.css';
 import css from '~/styles/_app.scss';
 
@@ -52,7 +50,7 @@ export default class WOKE extends App {
           <Provider store={store}>
             <PersistGate loading={null} persistor={persistor}>
               <PreNavBar/> <MainNavBar/>
-              <Component toast={alert} {...pageProps} />
+              <Component {...pageProps} />
               <Footer/>
             </PersistGate>
           </Provider> 

@@ -1,6 +1,9 @@
 import React, { Component} from 'react';
 import Router from 'next/router';
 import { connect } from 'react-redux';
+
+import { alert, universalErrorMsg } from '~/components/alert.js';
+import CLEARANCES from '~/constants/clearances.js';
 import { isValidTopic } from '~/constants/validations.js';
 
 import TopicForm from './form.js';
@@ -65,11 +68,15 @@ class TopicEdit extends Component {
       body: JSON.stringify(topic),
       headers: {
         'Authorization': `Bearer ${this.props.user.token}`,
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Clearance': CLEARANCES.ACTIONS.CRUD_TOPICS
       }
     }).then(res => {
-      if (res.ok) Router.push(`/topics`);
-    }).catch(error => console.error(error));
+      res.ok ? Router.push('/topics') : alert.error(res.statusText);
+    }).catch(error => {
+      alert.error(universalErrorMsg);
+      console.error(error);
+    });
   }
 
   render(){

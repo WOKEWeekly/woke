@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { clearUser } from '~/reducers/actions';
 
+import { alert, universalErrorMsg } from '~/components/alert.js';
 import { Icon, HeaderIcon } from '~/components/icon';
 import { Default, Mobile, zIndices } from '~/components/layout';
 
@@ -37,8 +38,13 @@ class PreNavbar extends Component {
       if (res.ok){
         this.props.clearUser();
         location.reload();
+      } else {
+        alert.error(res.statusText);
       }
-    }).catch(error => console.error(error));
+    }).catch(error => {
+      alert.error(universalErrorMsg);
+      console.error(error);
+    });
   }
 
   render(){

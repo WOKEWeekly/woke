@@ -2,6 +2,8 @@ import React, { Component} from 'react';
 import { connect } from 'react-redux';
 import Router from 'next/router';
 
+import { alert, universalErrorMsg } from '~/components/alert.js';
+
 import { formatISODate } from '~/constants/date.js';
 import { isValidCandidate } from '~/constants/validations.js';
 import CLEARANCES from '~/constants/clearances.js';
@@ -88,8 +90,11 @@ class CandidateAdd extends Component {
         'Path': 'blackexcellence'
       }
     }).then(res => {
-      if (res.ok) Router.push('/blackexcellence');
-    }).catch(error => console.error(error));
+      res.ok ? Router.push('/blackexcellence') : alert.error(res.statusText);
+    }).catch(error => {
+      alert.error(universalErrorMsg);
+      console.error(error);
+    });
   }
 
   render(){

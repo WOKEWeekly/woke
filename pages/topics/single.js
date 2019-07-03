@@ -2,12 +2,14 @@ import React, { Component} from 'react';
 import { Container } from 'react-bootstrap';
 import Router from 'next/router';
 
+import { alert, universalErrorMsg } from '~/components/alert.js';
 import { EditButton, DeleteButton } from '~/components/button.js';
 import { ConfirmModal } from '~/components/modal.js';
 import { Title, Subtitle, Paragraph, Divider } from '~/components/text.js';
 import {BottomToolbar} from '~/components/toolbar.js';
 import { Shader, Spacer } from '~/components/layout.js';
 
+import CLEARANCES from '~/constants/clearances.js';
 import { formatDate } from '~/constants/date.js';
 import Meta from '~/partials/meta.js';
 import css from '~/styles/topics.scss';
@@ -34,11 +36,15 @@ export default class TopicPage extends Component {
       body: JSON.stringify(this.props.topic),
       headers: {
         'Authorization': `Bearer ${this.props.user.token}`,
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Clearance': CLEARANCES.ACTIONS.CRUD_TOPICS
       }
     }).then(res => {
-      if (res.ok) Router.push('/topics');
-    }).catch(error => console.error(error));
+      res.ok ? Router.push('/topics') : alert.error(res.statusText);
+    }).catch(error => {
+      alert.error(universalErrorMsg);
+      console.error(error);
+    });
   }
 
   /** Show and hide confirmation modal */

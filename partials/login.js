@@ -2,9 +2,9 @@ import React, { Component } from 'react';
 import { Modal } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { saveUser } from '~/reducers/actions';
+import { saveUser, triggerAlert } from '~/reducers/actions';
 
-import { alert } from '~/components/alert.js';
+import { alert, universalErrorMsg } from '~/components/alert.js';
 import { SubmitButton, CancelButton } from '~/components/button.js';
 import { Group, Label, UsernameInput, PasswordInput, Checkbox } from '~/components/form.js';
 import css from '~/styles/login.scss';
@@ -31,11 +31,14 @@ class LoginModal extends Component {
       body: JSON.stringify(this.state),
       headers: { 'Content-Type': 'application/json' }
     })
-    .then(res => res.json())
+    .then(res => {
+      return res.ok ? res.json() : alert.error(res.statusText);
+    })
     .then(user => {
       user.remember = this.state.remember;
       this.props.saveUser(user);
       this.props.close();
+      // this.props.triggerAlert();
       location.reload();
     }).catch(error => console.error(error));
   }
@@ -96,7 +99,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => (
   bindActionCreators({
-    saveUser
+    saveUser, triggerAlert
   }, dispatch)
 );
 

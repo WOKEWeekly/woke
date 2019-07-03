@@ -1,12 +1,15 @@
 import React, { Component} from 'react';
 import { connect } from 'react-redux';
 import Router from 'next/router';
+
+import { alert, universalErrorMsg } from '~/components/alert.js';
+
+import CLEARANCES from '~/constants/clearances';
 import { formatISODate } from '~/constants/date.js';
 import { generateSlug, generateCandidateFilename } from '~/constants/file.js';
 import { isValidCandidate } from '~/constants/validations.js';
 
 import CandidateForm from './form.js';
-import CLEARANCES from '~/constants/clearances';
 
 class CandidateEdit extends Component {
   static async getInitialProps({ query }) {
@@ -112,12 +115,11 @@ class CandidateEdit extends Component {
         'Path': 'blackexcellence'
       }
     }).then(res => {
-      if (res.ok){
-        Router.push(`/blackexcellence/candidate/${id}`);
-      } else {
-        console.log(res);
-      }
-    }).catch(error => console.error(error));
+      res.ok ? Router.push(`/blackexcellence/candidate/${id}`) : alert.error(res.statusText);
+    }).catch(error => {
+      alert.error(universalErrorMsg);
+      console.error(error);
+    });
   }
 
   render(){

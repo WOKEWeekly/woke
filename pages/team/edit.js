@@ -1,12 +1,15 @@
 import React, { Component} from 'react';
 import { connect } from 'react-redux';
 import Router from 'next/router';
+
+import { alert, universalErrorMsg } from '~/components/alert.js';
+
+import CLEARANCES from '~/constants/clearances';
 import { formatISODate } from '~/constants/date.js';
 import { generateSlug, generateMemberFilename } from '~/constants/file.js';
 import { isValidMember } from '~/constants/validations.js';
 
 import MemberForm from './form.js';
-import CLEARANCES from '~/constants/clearances';
 
 class MemberEdit extends Component {
   static async getInitialProps({ query }) {
@@ -119,12 +122,11 @@ class MemberEdit extends Component {
         'Path': 'team'
       }
     }).then(res => {
-      if (res.ok){
-        Router.push(`/executives/${slug}`);
-      } else {
-        console.log(res);
-      }
-    }).catch(error => console.error(error));
+      res.ok ? Router.push(`/executives/${slug}`) : alert.error(res.statusText);
+    }).catch(error => {
+      alert.error(universalErrorMsg);
+      console.error(error);
+    });
   }
 
   render(){
