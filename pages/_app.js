@@ -6,6 +6,7 @@ import App, { Container } from 'next/app';
 
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { fab } from '@fortawesome/free-brands-svg-icons';
+import { far } from '@fortawesome/free-regular-svg-icons';
 import { fas } from '@fortawesome/free-solid-svg-icons';
 
 import {PreNavBar, MainNavBar} from "~/partials/header.js";
@@ -14,7 +15,7 @@ import Footer from "~/partials/footer.js";
 import 'react-toastify/dist/ReactToastify.min.css';
 import css from '~/styles/_app.scss';
 
-library.add(fab, fas);
+library.add(fab, far, fas);
 
 const { store, persistor } = configureStore();
 

@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { clearUser } from '~/reducers/actions';
 
-import { alert, universalErrorMsg } from '~/components/alert.js';
+import { alert, setAlert, checkAlert, universalErrorMsg } from '~/components/alert.js';
 import { Icon, HeaderIcon } from '~/components/icon';
 import { Default, Mobile, zIndices } from '~/components/layout';
 
@@ -24,11 +24,7 @@ class PreNavbar extends Component {
   }
 
   componentDidMount(){
-    const message = sessionStorage.getItem('alert');
-    if (message){
-      alert.success(message);
-      sessionStorage.clear();
-    }
+    checkAlert();
     this.setState({isLoaded: true})
   }
 
@@ -42,7 +38,7 @@ class PreNavbar extends Component {
     .then(res => {
       if (res.ok){
         this.props.clearUser();
-        sessionStorage.setItem('alert', 'You have successfully logged out.');
+        setAlert({ type: 'info', message: 'You have successfully logged out.' });
         location.reload();
       } else {
         alert.error(res.statusText);

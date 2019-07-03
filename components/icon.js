@@ -9,7 +9,7 @@ export class Icon extends Component {
   render(){
     return (
       <FontAwesomeIcon
-        icon={['fas', this.props.name]}
+        icon={[this.props.prefix || 'fas', this.props.name]}
         color={this.props.color || 'white'}
         style={{ marginRight: '0.4em' }} />
     ) 

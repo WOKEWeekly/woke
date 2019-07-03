@@ -4,10 +4,20 @@
 /** alert .js **/
 /****************/
 
+.toastContainer {
+  left: 0 !important;
+  margin: 0 !important;
+  padding: 0 1em !important;
+  width: 100% !important;
+}
+
 .message {
   border-radius: 10px !important;
   font-family: $body-font !important;
   font-weight: bold;
+  text-align: center;
+  margin: 0 auto;
+  @extend .responsive-container;
 }
 
 .fadeIn { animation-name: fadeIn; }
@@ -173,6 +183,12 @@
   .datepicker {
     all: initial;
     width: 100%;
+    display: flex;
+    align-items: center;
+    border-bottom: $underline;
+    .dateinput {
+      border: none;
+    }
   }
   .file {
     border: 1px solid white;

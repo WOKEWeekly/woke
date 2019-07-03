@@ -6,6 +6,7 @@ import { formatDate } from '~/constants/date.js';
 import { TextInput } from '~/components/form.js';
 import { creationDate } from '~/constants/settings.js';
 import css from '~/styles/_components.scss';
+import { Icon } from './icon';
 
 class DateInput extends Component {
   render(){
@@ -13,10 +14,14 @@ class DateInput extends Component {
       <button
         onClick={this.props.onClick}
         className={css.datepicker}>
+        <Icon
+          prefix={'far'}
+          name={'calendar-alt'} />
         <TextInput
           value={formatDate(this.props.value, this.props.withDay)}
           placeholder={'Select a date.'}
           style={{textAlign: 'left'}}
+          className={css.dateinput}
           readOnly />
       </button>
     );

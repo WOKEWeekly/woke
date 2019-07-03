@@ -10,14 +10,11 @@ const animation = cssTransition({
 
 toast.configure({
   autoClose: 2500,
+  className: css.toastContainer,
   closeButton: false,
   draggable: false,
   hideProgressBar: true,
   position: toast.POSITION.BOTTOM_CENTER,
-  toastStyle: {
-    borderRadius: '10px',
-    fontFamily: 'Raleway'
-  },
   transition: animation
 });
 
@@ -30,6 +27,22 @@ export const alert = {
   error: (message) => {
     toast(message, { className: classNames('alert-danger', defaultClasses) });
   },
+  info: (message) => {
+    toast(message, { className: classNames('alert-primary', defaultClasses) });
+  }
+}
+
+export const setAlert = (alert) => {
+  sessionStorage.setItem('alert', JSON.stringify(alert));
+}
+
+export const checkAlert = () => {
+  const notification = JSON.parse(sessionStorage.getItem('alert'));
+  if (notification){
+    const { type, message } = notification;
+    alert[type](message);
+    sessionStorage.clear();
+  }
 }
 
 export const universalErrorMsg = 'Something went wrong. Please try again later.';
