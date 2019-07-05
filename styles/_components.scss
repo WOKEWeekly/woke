@@ -154,7 +154,7 @@
     outline: none;
     padding: .4em;
     width: 100%;
-    @media (max-width: $break-md) { font-size: 1em; }
+    @media (max-width: $break-md) { font-size: 1em; padding: .4em 0}
   }
   .textarea {
     @extend .input;
@@ -236,7 +236,7 @@
   }
 }
 
-:global(.react-datepicker__input-container) { padding: .4em; }
+:global(.react-datepicker__input-container) { padding: .4em 0; }
 :global(.react-datepicker-wrapper),
 :global(.react-datepicker__input-container) { display: block !important; }
 :global(.react-datepicker__day--outside-month){ color: #a9a9a9; }

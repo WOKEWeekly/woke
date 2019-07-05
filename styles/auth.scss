@@ -30,3 +30,13 @@
   border-radius: 15px !important;
   overflow: hidden;
 }
+
+/*************
+*** signup.js
+*************/
+
+.background {
+  @include body-customizer('sessions-bg.jpg');
+}
+
+.form { @include responsive-form; width: 50%; }

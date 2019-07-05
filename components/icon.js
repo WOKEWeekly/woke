@@ -11,7 +11,7 @@ export class Icon extends Component {
       <FontAwesomeIcon
         icon={[this.props.prefix || 'fas', this.props.name]}
         color={this.props.color || 'white'}
-        style={{ marginRight: '0.4em' }} />
+        style={{ marginRight: '0.4em', ...this.props.style }} />
     ) 
   }
 }

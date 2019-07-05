@@ -1,6 +1,10 @@
 
 @import "variables";
 
+.body {
+  @include body-customizer('body-bg.jpg');
+}
+
 .prenav {
   background-color: black;
   padding: .2em 0 !important;

@@ -16,7 +16,8 @@ class DateInput extends Component {
         className={css.datepicker}>
         <Icon
           prefix={'far'}
-          name={'calendar-alt'} />
+          name={'calendar-alt'}
+          style={{margin: '0 .2em 0 .4em'}} />
         <TextInput
           value={formatDate(this.props.value, this.props.withDay)}
           placeholder={'Select a date.'}

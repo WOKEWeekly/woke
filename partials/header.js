@@ -3,6 +3,7 @@ import { Container, Col, Row, Dropdown, Nav, Navbar } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { clearUser } from '~/reducers/actions';
+import Router from 'next/router';
 
 import { alert, setAlert, checkAlert, universalErrorMsg } from '~/components/alert.js';
 import { Icon, HeaderIcon } from '~/components/icon';
@@ -73,9 +74,9 @@ class PreNavbar extends Component {
       } else {
         return (
           <Col xs={6} className={css.no_auth}>
-            <button className={css.link}onClick={this.showModal}>Login</button>
+            <button className={css.link} onClick={this.showModal}>Login</button>
             <a className={css.divider}>|</a>
-            <a className={css.link} href="#signup">Sign Up</a>
+            <button className={css.link} onClick={() => Router.push('/signup')}>Sign Up</button>
           </Col>
         );
       }

@@ -9,7 +9,7 @@ import { SubmitButton, CancelButton } from '~/components/button.js';
 import { Group, Label, UsernameInput, PasswordInput, Checkbox } from '~/components/form.js';
 
 import { isValidLogin } from '~/constants/validations.js';
-import css from '~/styles/login.scss';
+import css from '~/styles/auth.scss';
 
 class LoginModal extends Component {
   constructor(props){

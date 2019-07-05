@@ -13,7 +13,7 @@ import {PreNavBar, MainNavBar} from "~/partials/header.js";
 import Footer from "~/partials/footer.js";
 
 import 'react-toastify/dist/ReactToastify.min.css';
-import css from '~/styles/_app.scss';
+import css from '~/styles/_partials.scss';
 
 library.add(fab, far, fas);
 

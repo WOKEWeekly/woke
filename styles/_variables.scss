@@ -47,11 +47,31 @@ $break-xxl: 1408px; // Extra large devices (large desktops)
   @media (max-width: $break-md) { width: 100%; }
 }
 
-/** Mixins */
+/***********
+** Mixins **
+***********/
 @mixin scale-on-hover($scale) {
   transition: transform .2s ease-in-out;
   -webkit-transition: transform .2s ease-in-out;
   &:hover { transform: scale($scale); }
+}
+
+@mixin body-customizer($image){
+  background: {  
+    attachment: fixed;
+    color: black;
+    image: url('/static/images/bg/' + $image);
+    position: center;
+    repeat: no-repeat;
+    size: cover;
+  }
+  height: 100vh;
+
+  + div {
+    display: grid;
+    grid-template-rows: auto auto 1fr auto;
+    min-height: 100%;
+  }
 }
 
 @mixin responsive-grid {

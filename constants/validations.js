@@ -1,5 +1,6 @@
 import { alert } from '~/components/alert.js';
 
+
 /** Ensure valid login credentials */
 export const isValidLogin = (user) => {
   if (!ifExists(user.username.trim(), 'Enter your username or email address.')) return false;
