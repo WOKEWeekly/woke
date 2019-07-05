@@ -1,4 +1,4 @@
-const path = require('path');
+const fs = require('fs');
 
 module.exports = function(app, conn, server){
 
@@ -111,4 +111,14 @@ module.exports = function(app, conn, server){
       }
     });
   });
+
+  /** Render constitution */
+  app.get('/constitution', function(req, res){
+    const file = './static/resources/Constitution.pdf';
+    fs.readFile(file, function (err, data){
+      res.contentType("application/pdf");
+      res.send(data);
+    });
+  });
+
 }
