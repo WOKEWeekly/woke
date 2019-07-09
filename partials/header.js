@@ -22,10 +22,11 @@ class PreNavbar extends Component {
       isLoaded: false,
       modalVisible: false
     }
+
+    checkAlert();
   }
 
   componentDidMount(){
-    checkAlert();
     this.setState({isLoaded: true})
   }
 

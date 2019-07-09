@@ -4,6 +4,9 @@ const async = require('async');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const { verifyToken } = require('./middleware.js');
+const emails = require('./emails.js');
+const { validateReq} = require('./middleware.js');
+const { resToClient } = require('./response.js');
 
 module.exports = function(app, conn, passport){
   
@@ -86,27 +89,22 @@ module.exports = function(app, conn, passport){
   });
   
   /** Sign up a new user */
-  app.post('/signup', function(req, res){
+  app.post('/signup', validateReq, function(req, res){
     const user = req.body;
     
-    if (!validator.validate(user.email)) res.status(400).send("Your email address is invalid.");
-    if (user.password !== user.password2) res.status(400).send("Your passwords do not match.");
+    if (!validator.validate(user.email)) return resToClient(res, new Error("Your email address is invalid."));
+    if (user.password1 !== user.password2) return resToClient(res, new Error("Your passwords do not match."));
     
     async.waterfall([
-      function(callback){
-        /** Hash entered password */
-        bcrypt.hash(user.password, 8, function(err, hash) {
-          if (!err){
-            const sql = "INSERT INTO user (firstname, lastname, clearance, email, username, password) VALUES ?";
-            const values = [[user.firstname, user.lastname, 1, user.email, user.username, hash]];
-            callback(null, sql, values);
-          } else {
-            throw err;
-          } 
+      function(callback){  /** Hash entered password */
+        bcrypt.hash(user.password1, 8, function(err, hash) {
+          err ? callback(err) : callback(null, hash);
         });
       },
-      /** Insert new user into database */
-      function(sql, values, callback){
+      function(hash, callback){ /** Insert new user into database */
+        const sql = "INSERT INTO user (firstname, lastname, clearance, email, username, password) VALUES ?";
+        const values = [[user.firstname, user.lastname, 1, user.email, user.username, hash]];
+
         conn.query(sql, [values], function(err, result){	
           if (!err){
             console.log(`New user ${user.firstname} ${user.lastname} signed up.`);
@@ -116,57 +114,59 @@ module.exports = function(app, conn, passport){
             if (user.subscribe) subscribeUserToMailingList(user);
             callback(null, user.id);
           } else {
-            // Addition of user to database failed
-            if (err.toString().includes("Duplicate entry")){
-              res.status(409).send(`A user with this email already exists. Please use a different email address.`);
-            } else {
-              throw err;
-            }
+            callback(err);
           }
         });
       },
-      /** Generate verification token to be sent via email */
-      function(id, callback){
+      function(id, callback){ /** Generate verification token to be sent via email */
         bcrypt.genSalt(8, function(err, salt) {
-          if (!err){
-            callback(null, id, salt);
-          } else {
-            throw err;
-          } 
+          err ? callback(err) : callback(null, id, salt);
         });
       },
-      /** Store verification token in database */
-      function(id, salt, callback){
+      function(id, salt, callback){ /** Store verification token in database */
         const sql = "INSERT INTO user_tokens (user_id, token_string, type) VALUES ?";
         const values = [[id, salt, 'verification']];
         
         conn.query(sql, [values], function(err, result){	
-          if (!err){
-            callback(null, salt);
-          } else {
-            throw err;
-          }
+          err ? callback(err) : callback(null, salt);
         });
-      }
-    ], function(error, salt){
-      /** Log user in */
-      if (!error){
+      },
+      function(salt, callback){ // Send welcome email with verification link to user's email address
         req.login(user, function(err) {
-          if (!err) {
-            // Send welcome email with verification link to user's email address
-            // emails.sendWelcomeEmail(user, salt);
-            
-                        res.sendStatus(200);
+          if (!err){
+            emails.sendWelcomeEmail(user, salt);
+            callback(null);
           } else {
-            res.status(400).send(err.toString());
+            callback(err);
           }
         });
-      } else {
-        res.status(400).send(error.toString());
-        console.error(error.toString());
+      },
+      function(callback){ // Pass authenticated user information to client
+        jwt.sign({user: req.user}, process.env.JWT_SECRET, (err, token) => {
+          if (!err){
+            const user = {
+              id: req.user.id,
+              firstname: req.user.firstname,
+              lastname: req.user.lastname,
+              username: req.user.username,
+              clearance: req.user.clearance,
+              token: token
+            };
+            
+            callback(null, user);
+          } else {
+            callback(err)
+          }
+        });
       }
+    ], function(err, user){
+      resToClient(res, err, user);
     });
   });
+
+  /****************************
+   * CHECKPOINT
+   ***************************/
   
   /** Change user's username in database */
   app.get('/verifyAccount/:id/:token', function(req, res){
@@ -396,21 +396,6 @@ module.exports = function(app, conn, passport){
     ], function(err){
       
     });
-  });
-  
-  /** Get all email address and usernames of users signed up to website */
-  app.get('/getAllUserLogins', function(req, res){
-    if (req.headers['authorization'] !== 'authorized'){
-      res.sendStatus(403);
-    } else {
-      conn.query("SELECT email, username FROM user;", function (err, result, fields) {
-        if (!err){
-          res.json(result);
-        } else {
-          res.status(400).send(err.toString());
-        }
-      });
-    }
   });
   
   /** Retrieve all users */

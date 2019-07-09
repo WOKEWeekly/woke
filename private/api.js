@@ -2,6 +2,7 @@ const async = require('async');
 const request = require('superagent');
 const fs = require('fs');
 const { verifyToken, validateReq, checkAuth, upload } = require('./middleware.js');
+const { resToClient } = require('./response.js');
 
 module.exports = function(app, conn){
 
@@ -697,13 +698,4 @@ module.exports = function(app, conn){
       res.sendStatus(200);
     });
   });
-}
-
-function resToClient(res, err, json){
-  if (err && err !== true){
-    res.status(400).send(err.toString());
-    console.error(err.toString());
-  } else {
-    json ? res.json(json) : res.sendStatus(200);
-  }
 }

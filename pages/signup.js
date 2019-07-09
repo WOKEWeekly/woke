@@ -5,12 +5,14 @@ import { bindActionCreators } from 'redux';
 import { saveUser } from '~/reducers/actions';
 import Router from 'next/router';
 
+import { alert, setAlert, universalErrorMsg } from '~/components/alert.js';
 import { SubmitButton } from '~/components/button.js';
-import { Heading, Group, Label, TextInput } from '~/components/form.js';
+import { Heading, Group, Label, TextInput, PasswordInput, Checkbox } from '~/components/form.js';
 import { Shader, Spacer } from '~/components/layout.js';
 
 import Meta from '~/partials/meta.js';
 import css from '~/styles/auth.scss';
+import { isValidSignup } from '~/constants/validations';
 
 class Signup extends Component {
   constructor(props){
@@ -21,7 +23,9 @@ class Signup extends Component {
       email: '',
       username: '',
       password1: '',
-      password2: ''
+      password2: '',
+      privacy: false,
+      subscribe: false
     }
 
     if (props.user.isAuthenticated){
@@ -31,14 +35,60 @@ class Signup extends Component {
     document.body.className = css.background;
   }
 
+  componentDidMount(){
+
+  }
+
+  fill = () => {
+    this.setState({
+      firstname: 'David',
+      lastname: 'Egbue',
+      email: 'd.master700@gmail.com',
+      username: 'david',
+      password1: 'Spunkus604',
+      password2: 'Spunkus604',
+      privacy: true,
+      subscribe: false
+    });
+  }
+
   /** Handle text changes */
   handleText = (event) => {
     const { name, value } = event.target;
-    this.setState({[name]: value});
+    this.setState({[name]: value}); }
+  handleCheck = (event) => {
+    const { name, checked } = event.target;
+    this.setState({[name]: checked});}
+
+  signUp = () => {
+    if (!isValidSignup(this.state)) return;
+
+    fetch('/signup', {
+      method: 'POST',
+      body: JSON.stringify(this.state),
+      headers: {
+        'Authorization': process.env.AUTH_KEY,
+        'Content-Type': 'application/json'
+      }
+    })
+    .then(res => Promise.all([res, res.json()]))
+    .then(([status, response]) => {
+      if (status.ok){
+        const user = response;
+        this.props.saveUser(user);
+        setAlert({ type: 'info', message: `Welcome, ${user.firstname}! Thank you for registering to the #WOKEWeekly website.` });
+        location.href = '/';
+      } else {
+        alert.error(response.message);
+      }
+    })
+    .catch(error => {
+      alert.error(universalErrorMsg);
+    });
   }
 
   render(){
-    const { firstname, lastname, email, username, password1, password2 } = this.state;
+    const { firstname, lastname, email, username, password1, password2, privacy, subscribe } = this.state;
     
 
     return (
@@ -92,7 +142,7 @@ class Signup extends Component {
             <Group>
               <Col md={12}>
                 <Label>Password:</Label>
-                <TextInput
+                <PasswordInput
                   name={'password1'}
                   value={password1}
                   onChange={this.handleText}
@@ -102,11 +152,25 @@ class Signup extends Component {
             <Group>
               <Col md={12}>
                 <Label>Confirm Your Password:</Label>
-                <TextInput
+                <PasswordInput
                   name={'password2'}
                   value={password2}
                   onChange={this.handleText}
                   placeholder={"Confirm your choice password."} />
+              </Col>
+            </Group>
+            <Group style={{marginBottom: 0}}>
+              <Col md={12}>
+                <Checkbox
+                  checked={subscribe}
+                  label={'I would like to subscribe to regular news and updates about #WOKEWeekly.'}
+                  onChange={this.handleCheck} />
+              </Col>
+              <Col md={12}>
+                <Checkbox
+                  checked={privacy}
+                  label={'I agree to the terms and conditions stated in the Privacy Policy.'}
+                  onChange={this.handleCheck} />
               </Col>
             </Group>
           </div>
@@ -114,7 +178,10 @@ class Signup extends Component {
           <div>
             <Group>
               <Col>
-                <SubmitButton onClick={() => console.log('hi')} className={'mr-2'}>Sign Up</SubmitButton>
+                <SubmitButton onClick={this.signUp} className={'mr-2'}>Sign Up</SubmitButton>
+                {process.env.NODE_ENV !== 'production' ?
+                  <button onClick={this.fill}>Fill</button>
+                : null}
               </Col>
             </Group>
           </div>

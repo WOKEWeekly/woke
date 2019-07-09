@@ -65,5 +65,4 @@ require('./private/cron.js')(conn);
 require('./private/mobile.js')(app, conn);
 require('./private/routes.js')(app, conn, server);
 
-const emails = require('./private/emails.js');
 const notifications = require('./private/notifications.js');

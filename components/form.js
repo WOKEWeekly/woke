@@ -224,7 +224,7 @@ export class Checkbox extends Component {
           onChange={this.props.onChange}
           className={css.box}
           {...this.props} />
-          {this.props.label}
+          <div>{this.props.label}</div>
       </label>
     )
   }

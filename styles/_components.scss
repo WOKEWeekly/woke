@@ -176,8 +176,10 @@
   }
   .checkbox {
     @extend .text;
+    display: flex;
+    align-items: baseline;
     .box {
-      margin-right: 5px;
+      margin-right: .5em;
     }
   }
   .datepicker {

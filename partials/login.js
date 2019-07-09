@@ -35,7 +35,10 @@ class LoginModal extends Component {
       body: JSON.stringify(this.state),
       headers: { 'Content-Type': 'application/json' }
     })
-    .then(res => res.json())
+    .then(res => {
+      console.log(res);
+      return res.json();
+    })
     .then(user => {
       user.remember = this.state.remember;
       this.props.saveUser(user);
