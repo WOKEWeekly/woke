@@ -34,7 +34,6 @@ module.exports = function(app, conn, passport){
     const values = [username, username];
     
     conn.query(sql, values, function(err, rows){
-      
       if (err) return done(err);
       
       /** If the user isn't found... */
@@ -53,33 +52,49 @@ module.exports = function(app, conn, passport){
   }));
   
   /* Authenticate user login */
-  app.post('/login', passport.authenticate('login'), function(req, res){
-    if (req.user){
-      console.log(`Logging in for user ${req.user.firstname}.`);
-    } else {
-      res.status(400).send("Invalid user");
-    }
-    
-    /** If remember checked, maintain session for 30 days */
-    if (req.body.remember) {
-      req.session.cookie.maxAge = 30 * 24 * 60 * 60 * 1000;
-    } else {
-      req.session.cookie.expires = false;
-    }
-    
-    /** Pass authenticated user information to mobile app */
-    jwt.sign({user: req.user}, process.env.JWT_SECRET, (err, token) => {
-      const user = {
-        id: req.user.id,
-        firstname: req.user.firstname,
-        lastname: req.user.lastname,
-        username: req.user.username,
-        clearance: req.user.clearance,
-        token: token
-      };
-      
-      res.json(user);
-    });  
+  app.post('/login', function(req, res, next){
+    async.waterfall([
+      function(callback){
+        passport.authenticate('login', function(err, user){ // Authenticate user
+          if (err) return callback(err);
+          if (!user) return callback(new Error('Incorrect username or password.'));
+          
+          callback(null, user);
+        })(req, res, next);
+      },
+      function(user, callback){ // Log user session
+        req.login(user, function(err) {
+          if (err) callback(err);
+
+          /** If remember checked, maintain session for 30 days */
+          if (req.body.remember) {
+            req.session.cookie.maxAge = 30 * 24 * 60 * 60 * 1000;
+          } else {
+            req.session.cookie.expires = false;
+          }
+
+          callback(null);
+        });
+      },
+      function(callback){ // Pass authenticated user information to mobile app */
+        jwt.sign({user: req.user}, process.env.JWT_SECRET, (err, token) => {
+          if (err) callback(err);
+
+          const user = {
+            id: req.user.id,
+            firstname: req.user.firstname,
+            lastname: req.user.lastname,
+            username: req.user.username,
+            clearance: req.user.clearance,
+            token: token
+          };
+          
+          callback(null, user);
+        });
+      }
+    ], function(err, user){
+      resToClient(res, err, user);
+    });
   });
   
   /** Log user out */
@@ -106,16 +121,14 @@ module.exports = function(app, conn, passport){
         const values = [[user.firstname, user.lastname, 1, user.email, user.username, hash]];
 
         conn.query(sql, [values], function(err, result){	
-          if (!err){
-            console.log(`New user ${user.firstname} ${user.lastname} signed up.`);
-            user.id = result.insertId;
-            
-            // Subscribe user to mailing list if allowed
-            if (user.subscribe) subscribeUserToMailingList(user);
-            callback(null, user.id);
-          } else {
-            callback(err);
-          }
+          if (err) callback(err);
+
+          console.log(`New user ${user.firstname} ${user.lastname} signed up.`);
+          user.id = result.insertId;
+          
+          // Subscribe user to mailing list if allowed
+          if (user.subscribe) subscribeUserToMailingList(user);
+          callback(null, user.id);
         });
       },
       function(id, callback){ /** Generate verification token to be sent via email */
@@ -133,30 +146,25 @@ module.exports = function(app, conn, passport){
       },
       function(salt, callback){ // Send welcome email with verification link to user's email address
         req.login(user, function(err) {
-          if (!err){
-            emails.sendWelcomeEmail(user, salt);
-            callback(null);
-          } else {
-            callback(err);
-          }
+          if (err) callback(err);
+          emails.sendWelcomeEmail(user, salt);
+          callback(null);
         });
       },
       function(callback){ // Pass authenticated user information to client
         jwt.sign({user: req.user}, process.env.JWT_SECRET, (err, token) => {
-          if (!err){
-            const user = {
-              id: req.user.id,
-              firstname: req.user.firstname,
-              lastname: req.user.lastname,
-              username: req.user.username,
-              clearance: req.user.clearance,
-              token: token
-            };
-            
-            callback(null, user);
-          } else {
-            callback(err)
-          }
+          if (err) callback(err);
+          
+          const user = {
+            id: req.user.id,
+            firstname: req.user.firstname,
+            lastname: req.user.lastname,
+            username: req.user.username,
+            clearance: req.user.clearance,
+            token: token
+          };
+          
+          callback(null, user);
         });
       }
     ], function(err, user){

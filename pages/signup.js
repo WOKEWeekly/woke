@@ -35,10 +35,6 @@ class Signup extends Component {
     document.body.className = css.background;
   }
 
-  componentDidMount(){
-
-  }
-
   fill = () => {
     this.setState({
       firstname: 'David',

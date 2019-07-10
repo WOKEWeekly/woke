@@ -49,15 +49,14 @@ module.exports = function(app, conn){
         const values = [session2.title, session2.dateHeld, session2.image, session2.slug, session2.description, session1.id];
         
         conn.query(sql, values, function (err) {
-          if (!err){
-            const image = `./static/images/sessions/${session1.image}`;
-            
-            if (req.body.changed){
-              if (session1.image !== session2.image){
-                callback(null, image);
-              } else { callback(true); }
+          if (err) callback(err);
+          const image = `./static/images/sessions/${session1.image}`;
+          
+          if (req.body.changed){
+            if (session1.image !== session2.image){
+              callback(null, image);
             } else { callback(true); }
-          } else { callback(err); }
+          } else { callback(true); }
         });
       },
       function(image, callback){ // Delete original image from directory
@@ -130,8 +129,8 @@ module.exports = function(app, conn){
     const sql = "DELETE FROM topics WHERE id = ?";
     
     conn.query(sql, topic.id, function (err) {
-      resToClient(res, err);
       // emails.sendTopicDeletionEmail(topic);
+      resToClient(res, err);
     });
   });
 
@@ -185,15 +184,14 @@ module.exports = function(app, conn){
         const values = [candidate2.id, candidate2.name, candidate2.image, candidate2.birthday, candidate2.ethnicity, candidate2.socials, candidate2.occupation, candidate2.description, candidate1.id];
         
         conn.query(sql, values, function (err) {
-          if (!err){
-            const image = `./static/images/blackexcellence/${candidate1.image}`;
-            
-            if (req.body.changed){
-              if (candidate1.image !== candidate2.image){
-                callback(null, image);
-              } else { callback(true); }
+          if (err) callback(err);
+          const image = `./static/images/blackexcellence/${candidate1.image}`;
+          
+          if (req.body.changed){
+            if (candidate1.image !== candidate2.image){
+              callback(null, image);
             } else { callback(true); }
-          } else { callback(err); }
+          } else { callback(true); }
         });
       },
       function(image, callback){ // Delete original image from directory
@@ -250,15 +248,14 @@ module.exports = function(app, conn){
         const values = [member2.firstname, member2.lastname, member2.image, member2.level, member2.birthday, member2.role, member2.ethnicity, member2.socials, member2.slug, member2.description, member1.id];
         
         conn.query(sql, values, function (err) {
-          if (!err){
-            const image = `./static/images/team/${member1.image}`;
-            
-            if (req.body.changed){
-              if (member1.image !== member2.image){
-                callback(null, image);
-              } else { callback(true); }
+          if (err) callback(err);
+          const image = `./static/images/team/${member1.image}`;
+          
+          if (req.body.changed){
+            if (member1.image !== member2.image){
+              callback(null, image);
             } else { callback(true); }
-          } else { callback(err); }
+          } else { callback(true); }
         });
       },
       function(image, callback){ // Delete original image from directory

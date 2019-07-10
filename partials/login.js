@@ -35,16 +35,18 @@ class LoginModal extends Component {
       body: JSON.stringify(this.state),
       headers: { 'Content-Type': 'application/json' }
     })
-    .then(res => {
-      console.log(res);
-      return res.json();
-    })
-    .then(user => {
-      user.remember = this.state.remember;
-      this.props.saveUser(user);
-      this.props.close();
-      setAlert({ type: 'info', message: `Welcome, ${user.firstname}!` });
-      location.reload();
+    .then(res => Promise.all([res, res.json()]))
+    .then(([status, response]) => { 
+      if (status.ok){
+        const user = response;
+        user.remember = this.state.remember;
+        this.props.saveUser(user);
+        this.props.close();
+        setAlert({ type: 'info', message: `Welcome, ${user.firstname}!` });
+        location.reload();
+      } else {
+        alert.error(response.message)
+      }
     })
     .catch(error => {
       alert.error(universalErrorMsg);

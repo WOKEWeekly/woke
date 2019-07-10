@@ -2,8 +2,9 @@ import React, { Component } from 'react';
 import {Container, Col, Row} from 'react-bootstrap';
 import Meta from '~/partials/meta.js';
 import { Cover } from '~/components/layout.js';
-import css from '~/styles/home.scss';
 import { FadeSlider } from '~/components/transitioner.js';
+
+import css from '~/styles/home.scss';
 
 export default class Home extends Component {
   constructor(){

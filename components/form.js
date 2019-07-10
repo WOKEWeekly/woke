@@ -6,26 +6,50 @@ import classNames from 'classnames';
 import { Icon } from '~/components/icon.js';
 import css from '~/styles/_components.scss';
 
+import { Fader } from '~/components/transitioner.js';
+
 /** For the form heading */
 export class Heading extends Component {
+  constructor(){
+    super();
+    this.state = { isLoaded: false}
+  }
+
+  componentDidMount(){
+    this.setState({ isLoaded: true})
+  }
+
   render(){
     return (
-      <div className={css.heading}>{this.props.children}</div>
+      <Fader determinant={this.state.isLoaded} duration={750}>
+        <div className={css.heading}>{this.props.children}</div>
+      </Fader>
     )
   }
 }
 
 /** For grouping form components */
 export class Group extends Component {
+  constructor(){
+    super();
+    this.state = { isLoaded: false}
+  }
+
+  componentDidMount(){
+    this.setState({ isLoaded: true})
+  }
+
   render(){
     const classes = classNames(css.group, this.props.className);
     return (
-      <Form.Group
-        as={Row}
-        className={classes}
-        style={this.props.style}>
-        {this.props.children}
-      </Form.Group>
+      <Fader determinant={this.state.isLoaded} duration={750}>
+        <Form.Group
+          as={Row}
+          className={classes}
+          style={this.props.style}>
+          {this.props.children}
+        </Form.Group>
+      </Fader>
     )
   }
 }

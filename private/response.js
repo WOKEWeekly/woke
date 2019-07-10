@@ -19,5 +19,6 @@ getErrMsg = (err) => {
     }
   }
   
+  console.log(err);
   return err.toString(); 
 }
