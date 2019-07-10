@@ -20,8 +20,8 @@ sendMail = (from, to, subject, message) => {
     to: to,
     subject: subject,
     html: message
-  }, function(error, response){
-    if (error) console.error(error);
+  }, function(err){
+    if (err) console.error(err);
   });
 }
 

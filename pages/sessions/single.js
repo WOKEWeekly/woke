@@ -3,7 +3,7 @@ import { Container } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import Router from 'next/router';
 
-import { alert, universalErrorMsg } from '~/components/alert.js';
+import { alert, setAlert, displayErrorMessage } from '~/components/alert.js';
 import { EditButton, DeleteButton, BackButton } from '~/components/button.js';
 import { ConfirmModal } from '~/components/modal.js';
 import { Title, Subtitle, Paragraph, Divider } from '~/components/text.js';
@@ -38,18 +38,27 @@ class SessionPage extends Component {
   
   /** Delete session from database */
   deleteSession = () => {
+    const { session, user } = this.props;
     fetch('/deleteSession', {
       method: 'DELETE',
-      body: JSON.stringify(this.props.session),
+      body: JSON.stringify(session),
       headers: {
-        'Authorization': `Bearer ${this.props.user.token}`,
+        'Authorization': `Bearer ${user.token}`,
         'Content-Type': 'application/json',
         'Clearance': CLEARANCES.ACTIONS.CRUD_SESSIONS,
       }
-    }).then(res => {
-      res.ok ? Router.push('/sessions') : alert.error(res.statusText);
-    }).catch(error => {
-      alert.error(universalErrorMsg);
+    })
+    .then(res => Promise.all([res, res.json()]))
+    .then(([status, response]) => { 
+      if (status.ok){
+        setAlert({ type: 'success', message: `You've successfully deleted: ${session.title}.` });
+        location.href = '/sessions';
+      } else {
+        alert.error(response.message)
+      }
+    })
+    .catch(error => {
+      displayErrorMessage(error);
     });
   }
 

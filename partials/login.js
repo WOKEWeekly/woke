@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { saveUser } from '~/reducers/actions';
 
-import { alert, setAlert, universalErrorMsg } from '~/components/alert.js';
+import { alert, setAlert, displayErrorMessage } from '~/components/alert.js';
 import { SubmitButton, CancelButton } from '~/components/button.js';
 import { Group, Label, UsernameInput, PasswordInput, Checkbox } from '~/components/form.js';
 
@@ -49,7 +49,7 @@ class LoginModal extends Component {
       }
     })
     .catch(error => {
-      alert.error(universalErrorMsg);
+      displayErrorMessage(error);
     });
   }
 

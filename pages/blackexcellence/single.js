@@ -3,7 +3,7 @@ import { Container } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import Router from 'next/router';
 
-import { alert, universalErrorMsg } from '~/components/alert.js';
+import { alert, setAlert, displayErrorMessage } from '~/components/alert.js';
 import { EditButton, DeleteButton, BackButton } from '~/components/button.js';
 import { ConfirmModal } from '~/components/modal.js';
 import { PromoIconsBar } from '~/components/icon.js';
@@ -39,18 +39,28 @@ class CandidatePage extends Component {
   
   /** Delete candidate from database */
   deleteCandidate = () => {
+    const { candidate, user } = this.props;
+
     fetch('/deleteCandidate', {
       method: 'DELETE',
-      body: JSON.stringify(this.props.candidate),
+      body: JSON.stringify(candidate),
       headers: {
-        'Authorization': `Bearer ${this.props.user.token}`,
+        'Authorization': `Bearer ${user.token}`,
         'Content-Type': 'application/json',
         'Clearance': CLEARANCES.ACTIONS.CRUD_BLACKEX
       }
-    }).then(res => {
-      res.ok ? Router.push('/blackexcellence') : alert.error(res.statusText);
-    }).catch(error => {
-      alert.error(universalErrorMsg);
+    })
+    .then(res => Promise.all([res, res.json()]))
+    .then(([status, response]) => { 
+      if (status.ok){
+        setAlert({ type: 'success', message: `You've successfully deleted ${candidate.name}.` });
+        location.href = '/blackexcellence';
+      } else {
+        alert.error(response.message)
+      }
+    })
+    .catch(error => {
+      displayErrorMessage(error);
     });
   }
 

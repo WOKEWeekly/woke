@@ -6,7 +6,7 @@ import { bindActionCreators } from 'redux';
 import { saveTopicSort, saveTopicFilters } from '~/reducers/actions';
 import classNames from 'classnames';
 
-import { alert, universalErrorMsg } from '~/components/alert.js';
+import { alert, checkAlert, setAlert, displayErrorMessage } from '~/components/alert.js';
 import { AddButton } from '~/components/button.js';
 import { SortDropdown, FilterDropdown } from '~/components/dropdown.js';
 import { Checkbox, SearchBar } from '~/components/form.js';
@@ -39,15 +39,15 @@ class TopicBank extends Component {
 
       isLoaded: false
     };
+
+    if (props.user.clearance < CLEARANCES.ACTIONS.VIEW_TOPICS){
+      Router.push('/');
+    }
   }
 
   /** Get topics on mount */
   componentDidMount() {
-    if (this.props.user.clearance < CLEARANCES.ACTIONS.VIEW_TOPICS){
-      Router.push('/');
-    } else {
-      this.getTopics();
-    }
+    this.getTopics();
   }
 
   /** Retrieve all topics */
@@ -67,6 +67,7 @@ class TopicBank extends Component {
         isLoaded: true
       }, () => {
          this.sortTopics(this.state.sort);
+         checkAlert();
       });
     })
     .catch(error => console.error(error));
@@ -281,18 +282,26 @@ class _Topic extends PureComponent {
 
   /** Delete topic from database */
   deleteTopic = () => {
+    const { item, user } = this.props;
     fetch('/deleteTopic', {
       method: 'DELETE',
-      body: JSON.stringify(this.props.item),
+      body: JSON.stringify(item),
       headers: {
-        'Authorization': `Bearer ${this.props.user.token}`,
+        'Authorization': `Bearer ${user.token}`,
         'Content-Type': 'application/json',
         'Clearance': CLEARANCES.ACTIONS.CRUD_TOPICS
       }
-    }).then(res => {
-      res.ok ? this.props.getTopics() : alert.error(res.statusText);
+    })
+    .then(res => Promise.all([res, res.json()]))
+    .then(([status, response]) => { 
+      if (status.ok){
+        setAlert({ type: 'success', message: `You've successfully deleted "${item.headline}: ${item.question}".` });
+        this.props.getTopics();
+      } else {
+        alert.error(response.message)
+      }
     }).catch(error => {
-      alert.error(universalErrorMsg);
+      displayErrorMessage(error);
     });
   }
 

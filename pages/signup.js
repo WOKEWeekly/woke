@@ -5,7 +5,7 @@ import { bindActionCreators } from 'redux';
 import { saveUser } from '~/reducers/actions';
 import Router from 'next/router';
 
-import { alert, setAlert, universalErrorMsg } from '~/components/alert.js';
+import { alert, setAlert, displayErrorMessage } from '~/components/alert.js';
 import { SubmitButton } from '~/components/button.js';
 import { Heading, Group, Label, TextInput, PasswordInput, Checkbox } from '~/components/form.js';
 import { Shader, Spacer } from '~/components/layout.js';
@@ -79,7 +79,7 @@ class Signup extends Component {
       }
     })
     .catch(error => {
-      alert.error(universalErrorMsg);
+      displayErrorMessage(error);
     });
   }
 

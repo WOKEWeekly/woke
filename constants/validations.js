@@ -8,13 +8,14 @@ export const isValidLogin = (user) => {
   return true;
 }
 
+/** Ensure valid registration credentials */
 export const isValidSignup = (user) => {
-  const { firstname, lastname, email, username, password1, password2, privacy, allEmails, allUsernames } = user;
+  const { firstname, lastname, email, username, password1, password2, privacy } = user;
 
   if (!ifExists(firstname.trim(), 'Please enter your first name.')) return false;
   if (!ifExists(lastname.trim(), 'Please enter your last name.')) return false;
-  if (!isValidEmail(email, allEmails)) return false;
-  if (!isValidUsername(username, allUsernames)) return false;
+  if (!isValidEmail(email)) return false;
+  if (!isValidUsername(username)) return false;
   if (!isValidPassword(password1, password2)) return false;
   if (!privacy){ alert.error('You have not read or agreed to the Privacy Policy.'); return false; }
 
@@ -44,10 +45,13 @@ export const isValidTopic = (topic) => {
 
 /** Ensure valid candidate is added or updated */
 export const isValidCandidate = (candidate) => {
+  if (!ifExists(candidate.id, 'Please enter the ID number of the candidate.')) return false;
+  if (candidate.id < 1) return alert.error(`ID number needs to be a positive non-zero number.`);
+
   if (!ifExists(candidate.name.trim(), 'Enter the candidate\'s name.')) return false;
-  if (!isValidID(candidate.id)) return false;
   if (!ifExists(candidate.birthday, 'Select the candidate\'s date of birth.')) return false;
   if (!ifExists(candidate.occupation.trim(), 'Please select an image for the session.')) return false;
+  if (!ifExists(candidate.image, 'Please select an image for the candidate.')) return false;
   return true;
 }
 
@@ -61,41 +65,17 @@ export const isValidMember = (member) => {
   return true;
 }
 
-/** Check for the presence of a value */
-const ifExists = (value, message) => {
-  if (!value || value.length == 0){
-    alert.error(message);
-    return false;
-  } else {
-    return true;
-  }
-}
-
-const isValidID = (x) => {
-  if (!x){
-    alert.error(`ID number is missing.`); return false;
-  } else if (x < 1) {
-    alert.error(`ID number needs to be a positive non-zero number.`); return false;
-  } else {
-    return true;
-  }
-}
-
 /** Check signup form */
-export const isValidEmail = (email, allEmails) => {
+export const isValidEmail = (email) => {
   const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   const valid = re.test(String(email).toLowerCase());
-
   if (!valid) { alert.error('Please enter a valid email address.'); return false; }
-  // if (allEmails.includes(email.trim())){ alert.error('A user with this email address already exists.'); return false; }
-
   return true;
 }
 
-export const isValidUsername = (username, allUsernames) => {
+export const isValidUsername = (username) => {
   if (!ifExists(username.trim(), 'Please enter a username.')) return false;
   if (username.trim().length < 3){ alert.error('Your username must be at least 3 characters long.'); return false; }
-  // if (allUsernames.includes(username.trim())){ alert.error('A user with this username already exists. Please pick another username.'); return false; }
   return true;
 }
 
@@ -106,4 +86,14 @@ const isValidPassword = (password1, password2) => {
   if (password1.trim().length < 7){ Alert.alert(null, 'Your password must be at least 8 characters long.'); return false; }
   if (password1 !== password2){ Alert.alert(null, 'Please ensure your passwords match.'); return false; }
   return true;
+}
+
+/** Check for the presence of a value */
+const ifExists = (value, message) => {
+  if (!value || value.length == 0){
+    alert.error(message);
+    return false;
+  } else {
+    return true;
+  }
 }

@@ -2,7 +2,7 @@ import React, { Component} from 'react';
 import { connect } from 'react-redux';
 import Router from 'next/router';
 
-import { alert, universalErrorMsg } from '~/components/alert.js';
+import { alert, setAlert, displayErrorMessage } from '~/components/alert.js';
 
 import { formatISODate } from '~/constants/date.js';
 import { isValidCandidate } from '~/constants/validations.js';
@@ -89,10 +89,17 @@ class CandidateAdd extends Component {
         'Clearance': CLEARANCES.ACTIONS.CRUD_BLACKEX,
         'Path': 'blackexcellence'
       }
-    }).then(res => {
-      res.ok ? Router.push('/blackexcellence') : alert.error(res.statusText);
+    })
+    .then(res => Promise.all([res, res.json()]))
+    .then(([status, response]) => { 
+      if (status.ok){
+        setAlert({ type: 'success', message: `You've successfully added candidate ${candidate.name}.` });
+        location.href = '/blackexcellence';
+      } else {
+        alert.error(response.message)
+      }
     }).catch(error => {
-      alert.error(universalErrorMsg);
+      displayErrorMessage(error);
     });
   }
 

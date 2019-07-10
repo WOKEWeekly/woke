@@ -2,7 +2,7 @@ import React, { Component} from 'react';
 import { connect } from 'react-redux';
 import Router from 'next/router';
 
-import { alert, universalErrorMsg } from '~/components/alert.js';
+import { alert, setAlert, displayErrorMessage } from '~/components/alert.js';
 
 import CLEARANCES from '~/constants/clearances';
 import { formatISODate } from '~/constants/date.js';
@@ -121,10 +121,16 @@ class MemberEdit extends Component {
         'Clearance': CLEARANCES.ACTIONS.CRUD_TEAM,
         'Path': 'team'
       }
-    }).then(res => {
-      res.ok ? Router.push(`/executives/${slug}`) : alert.error(res.statusText);
+    }).then(res => Promise.all([res, res.json()]))
+    .then(([status, response]) => { 
+      if (status.ok){
+        setAlert({ type: 'success', message: `You've successfully edited the details of ${firstname} ${lastname}.` });
+        location.href = `/executives/${slug}`;
+      } else {
+        alert.error(response.message)
+      }
     }).catch(error => {
-      alert.error(universalErrorMsg);
+      displayErrorMessage(error);
     });
   }
 

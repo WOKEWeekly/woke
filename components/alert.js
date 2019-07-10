@@ -45,4 +45,10 @@ export const checkAlert = () => {
   }
 }
 
-export const universalErrorMsg = 'Something went wrong. Please try again later.';
+export const displayErrorMessage = (err) => {
+  if (process.env.NODE_ENV !== 'production'){
+    alert.error(err.toString());
+  } else {
+    alert.error('Something went wrong. Please try again later.');
+  }
+}

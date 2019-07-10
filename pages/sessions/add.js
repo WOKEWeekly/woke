@@ -2,7 +2,7 @@ import React, { Component} from 'react';
 import Router from 'next/router';
 import { connect } from 'react-redux';
 
-import { alert, universalErrorMsg } from '~/components/alert.js';
+import { alert, setAlert, displayErrorMessage } from '~/components/alert.js';
 
 import CLEARANCES from '~/constants/clearances';
 import { formatISODate } from '~/constants/date.js';
@@ -60,10 +60,17 @@ class SessionAdd extends Component {
         'Clearance': CLEARANCES.ACTIONS.CRUD_SESSIONS,
         'Path': 'sessions'
       }
-    }).then(res => {
-      res.ok ? Router.push('/sessions') : alert.error(res.statusText);
+    })
+    .then(res => Promise.all([res, res.json()]))
+    .then(([status, response]) => { 
+      if (status.ok){
+        setAlert({ type: 'success', message: `You've successfully added: ${session.title}.` });
+        location.href = '/sessions';
+      } else {
+        alert.error(response.message)
+      }
     }).catch(error => {
-      alert.error(universalErrorMsg);
+      displayErrorMessage(error);
     });
   }
 

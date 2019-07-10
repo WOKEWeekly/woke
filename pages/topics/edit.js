@@ -2,7 +2,7 @@ import React, { Component} from 'react';
 import Router from 'next/router';
 import { connect } from 'react-redux';
 
-import { alert, universalErrorMsg } from '~/components/alert.js';
+import { alert, setAlert, displayErrorMessage } from '~/components/alert.js';
 import CLEARANCES from '~/constants/clearances.js';
 import { isValidTopic } from '~/constants/validations.js';
 
@@ -71,10 +71,17 @@ class TopicEdit extends Component {
         'Content-Type': 'application/json',
         'Clearance': CLEARANCES.ACTIONS.CRUD_TOPICS
       }
-    }).then(res => {
-      res.ok ? Router.push('/topics') : alert.error(res.statusText);
+    })
+    .then(res => Promise.all([res, res.json()]))
+    .then(([status, response]) => { 
+      if (status.ok){
+        setAlert({ type: 'success', message: `You've successfully edited the details of "${headline}: ${question}".` });
+        location.href = '/topics';
+      } else {
+        alert.error(response.message)
+      }
     }).catch(error => {
-      alert.error(universalErrorMsg);
+      displayErrorMessage(error);
     });
   }
 

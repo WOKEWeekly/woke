@@ -5,7 +5,7 @@ import { bindActionCreators } from 'redux';
 import { clearUser } from '~/reducers/actions';
 import Router from 'next/router';
 
-import { alert, setAlert, checkAlert, universalErrorMsg } from '~/components/alert.js';
+import { alert, setAlert, checkAlert, displayErrorMessage } from '~/components/alert.js';
 import { Icon, HeaderIcon } from '~/components/icon';
 import { Default, Mobile, zIndices } from '~/components/layout';
 
@@ -46,7 +46,7 @@ class PreNavbar extends Component {
         alert.error(res.statusText);
       }
     }).catch(error => {
-      alert.error(universalErrorMsg);
+      displayErrorMessage(error);
     });
   }
 
