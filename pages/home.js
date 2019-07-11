@@ -4,7 +4,7 @@ import Meta from '~/partials/meta.js';
 
 import { Cover, Shader } from '~/components/layout.js';
 import { Fader, FadeSlider } from '~/components/transitioner.js';
-import { Title, Subtitle, Paragraph, Divider, TruncatedParagraph, ReadMore } from '~/components/text.js';
+import { Title, Subtitle, Divider, TruncatedParagraph, ReadMore } from '~/components/text.js';
 
 import { countriesToString } from '~/constants/countries.js';
 import { formatDate, calculateAge } from '~/constants/date.js';
@@ -23,47 +23,49 @@ export default class Home extends Component {
   }
 
 	render(){
-    if (this.state.isLoaded){
-      return (
-        <Shader>
-          <Meta
-            title={'#WOKEWeekly - Awakening Through Conversation'}
-            description={'Debates and discussions centered around and beyond the UK black community at university campuses. Providing a safe-space for expression and opinions to be heard and encouraging unity amongst the community through conversation, bringing together those divided by social status, religion and interest.'}
-            url={'/'} />
-  
-          <Cover
-            title={'Awakening Through Conversation.'}
-            subtitle={'Debates and discussions centered around and beyond the UK black community.'}
-            image={'home-header.jpg'}
-            height={575}
-            className={css.cover} />
-  
-          <Container fluid={true}>
-            <Row className={css.threepart}>
-              <Part
-                headline={'Enlightenment'}
-                description={'Facilitating open-floor conversation to shape the minds and alter the perspectives of participants.'}
-                image={'three-part-1.jpg'} />
-              <Part
-                headline={'Expression'}
-                description={'Providing a safe-space for freedom of expression and opinions to be heard.'}
-                image={'three-part-2.jpg'} />
-              <Part
-                headline={'Community'}
-                description={'Encouraging unity amongst the community irrespective of social status or background.'}
-                image={'three-part-3.jpg'} />
-            </Row>
+    if (!this.state.isLoaded) return null;
 
-            <Row>
-              <Col md={6}><UpcomingSession/></Col>
-              <Col md={6}><RandomCandidate/></Col>
-            </Row>
-          </Container>
-        </Shader>
-      );
-    } else {
-      return null;
-    }
+    return (
+      <Shader>
+        <Meta
+          title={'#WOKEWeekly - Awakening Through Conversation'}
+          description={'Debates and discussions centered around and beyond the UK black community at university campuses. Providing a safe-space for expression and opinions to be heard and encouraging unity amongst the community through conversation, bringing together those divided by social status, religion and interest.'}
+          url={'/'} />
+
+        <Cover
+          title={'Awakening Through Conversation.'}
+          subtitle={'Debates and discussions centered around and beyond the UK black community.'}
+          image={'home-header.jpg'}
+          height={575}
+          className={css.cover} />
+
+        <Container fluid={true}>
+          <Row className={css.threepart}>
+            <Part
+              headline={'Enlightenment'}
+              description={'Facilitating open-floor conversation to shape the minds and alter the perspectives of participants.'}
+              image={'three-part-1.jpg'} />
+            <Part
+              headline={'Expression'}
+              description={'Providing a safe-space for freedom of expression and opinions to be heard.'}
+              image={'three-part-2.jpg'} />
+            <Part
+              headline={'Community'}
+              description={'Encouraging unity amongst the community irrespective of social status or background.'}
+              image={'three-part-3.jpg'} />
+          </Row>
+
+          <Row>
+            <Col md={6} className={'p-0'}><UpcomingSession/></Col>
+            <Col md={6} className={'p-0'}><RandomCandidate/></Col>
+          </Row>
+
+          <Row>
+            {/* <Voter/> */}
+          </Row>
+        </Container>
+      </Shader>
+    );
 	}
 }
 
@@ -133,7 +135,12 @@ class UpcomingSession extends Component {
     const { session } = this.state;
     const heading = session.upcoming ? 'Most Upcoming Session' : 'Latest Session'; 
     return (
-      <Fader determinant={session.loaded} duration={1000} delay={500} className={css.upcomingSession}>
+      <FadeSlider
+        determinant={session.loaded}
+        duration={750}
+        delay={1000}
+        direction={'left'}
+        className={css.upcomingSession}>
         <Title className={css.heading}>{heading}</Title>
         <div>
           <img
@@ -144,10 +151,13 @@ class UpcomingSession extends Component {
             <Title className={css.title}>{session.title}</Title>
             <Subtitle className={css.subtitle}>{formatDate(session.dateHeld, true)}</Subtitle>
             <Divider/>
-            <TruncatedParagraph className={css.paragraph}>{session.description}</TruncatedParagraph>
+            <TruncatedParagraph
+              paragraphs={1}
+              link={`/session/${session.slug}`}
+              className={css.paragraph}>{session.description}</TruncatedParagraph>
           </div>
         </div>
-      </Fader>
+      </FadeSlider>
     )
   }
 }
@@ -183,14 +193,20 @@ class RandomCandidate extends Component {
   render(){
     const { candidate } = this.state;
 
-    if (!candidate.loaded) return null;
-
-    candidate.description = candidate.description.trim().length > 0 ? candidate.description : 'No description.';
-    candidate.age = calculateAge(candidate.birthday);
-    candidate.demonyms = countriesToString(JSON.parse(candidate.ethnicity));
+    if (candidate.loaded){
+      candidate.firstname = candidate.name.split(' ')[0];
+      candidate.age = calculateAge(candidate.birthday);
+      candidate.description = candidate.description.trim().length > 0 ? candidate.description : 'No description.';
+      candidate.demonyms = countriesToString(JSON.parse(candidate.ethnicity));
+    }
 
     return (
-      <Fader determinant={candidate.loaded} duration={1000} delay={500} className={css.upcomingSession}>
+      <FadeSlider
+        determinant={candidate.loaded}
+        duration={750}
+        delay={1000}
+        direction={'right'}
+        className={css.randomCandidate}>
         <Title className={css.heading}>Check out our candidate:</Title>
         <div>
           <img
@@ -203,10 +219,14 @@ class RandomCandidate extends Component {
               {candidate.age} • {candidate.occupation} • {candidate.demonyms}
             </Subtitle>
             <Divider/>
-            <TruncatedParagraph blocks={3} className={css.paragraph}>{candidate.description}</TruncatedParagraph>
+            <TruncatedParagraph
+              paragraphs={1}
+              link={`/blackexcellence/candidate/${candidate.id}`}
+              readMoreText={`Read more on ${candidate.firstname}...`}
+              className={css.paragraph}>{candidate.description}</TruncatedParagraph>
           </div>
         </div>
-      </Fader>
+      </FadeSlider>
     )
   }
 }

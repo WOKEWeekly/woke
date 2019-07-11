@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import Responsive from 'react-responsive';
 import {Container} from 'react-bootstrap';
-import classNames from 'classnames';;
+import classNames from 'classnames';
 import css from '~/styles/_components.scss';
 import { Fader } from '~/components/transitioner.js';
 
@@ -36,10 +36,10 @@ export class Cover extends Component {
         }}>
           <div className={css.coverText}>
             <Fader determinant={imageLoaded} duration={500} delay={1000}>
-              {imageTitle || <div className={css.title}>{title}</div>}
+              {imageTitle || <div className={css.coverTitle}>{title}</div>}
             </Fader>
             <Fader determinant={imageLoaded} duration={500} delay={1500}>
-              <div className={css.subtitle}>{subtitle}</div>
+              <div className={css.coverSubtitle}>{subtitle}</div>
             </Fader>
           </div>
         </Container>

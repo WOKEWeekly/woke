@@ -1,28 +1,30 @@
 import React, { Component } from 'react';
-import { fonts } from '~/constants/theme.js';
+import Link from 'next/link';
+import classNames from 'classnames';
+import css from '~/styles/_components.scss';
 
 export class Title extends Component {
   render(){
+    const classes = classNames(css.title, this.props.className);
     return (
       <div
         {...this.props}
-        style={{
-          color: 'white',
-          fontFamily: fonts.title,
-        }}>{this.props.children}</div>
+        className={classes}>
+        {this.props.children}
+      </div>
     )
   }
 }
 
 export class Subtitle extends Component {
   render(){
+    const classes = classNames(css.subtitle, this.props.className);
     return (
       <div
         {...this.props}
-        style={{
-          color: 'white',
-          fontFamily: fonts.body,
-        }}>{this.props.children}</div>
+        className={classes}>
+        {this.props.children}
+      </div>
     )
   }
 }
@@ -30,19 +32,14 @@ export class Subtitle extends Component {
 export class Paragraph extends Component {
   render(){
 
-    let { style, children } = this.props;
+    let { children } = this.props;
     if (!children) children = '';
+    const classes = classNames(css.paragraph, this.props.className);
 
     return (
       <pre
         {...this.props}
-        style={{
-          ...style,
-          color: 'white',
-          display: 'inline',
-          fontFamily: fonts.body,
-          whiteSpace: 'pre-line'
-        }}>
+        className={classes}>
         {children.split('\n').map((paragraph, i, arr) => {
           const line = <p key={i}>{paragraph}</p>;
   
@@ -59,22 +56,20 @@ export class Paragraph extends Component {
 
 export class TruncatedParagraph extends Component {
   render(){
-    let { style, children, blocks } = this.props;
+    let { children, paragraphs, link, readMoreText } = this.props;
     if (!children) children = '';
+    const classes = classNames(css.paragraph, this.props.className);
+
+    const blocks = paragraphs ? (paragraphs * 2) - 2 : 2
+
     return (
       <pre
         {...this.props}
-        style={{
-          ...style,
-          color: 'white',
-          display: 'inline',
-          fontFamily: fonts.body,
-          whiteSpace: 'pre-line'
-        }}>
+        className={classes}>
         {children.split('\n').map((ln, i, arr) => {
           const line = <span key={i}>{ln}</span>;
 
-          if (i > 1) return;
+          if (i > blocks) return;
   
           if (i === arr.length - 1) {
             return line;
@@ -82,7 +77,7 @@ export class TruncatedParagraph extends Component {
             return [line, <br key={i + 'br'} />];
           }
         })}
-        <ReadMore />
+        <ReadMore link={link} text={readMoreText} />
       </pre>
     )
   }
@@ -90,23 +85,19 @@ export class TruncatedParagraph extends Component {
 
 export class Divider extends Component {
   render(){
-    return (
-      <hr style={{
-        backgroundColor: 'white',
-        overflow: 'hidden'
-      }} />
-    )
+    return <hr className={css.divider} />
   }
 }
 
 export class ReadMore extends Component {
   render(){
+    const text = this.props.text || 'Read more...';
     return (
-      <React.Fragment>
-        <div style={{color: 'skyblue', display: 'block', marginTop: '.5em'}}>
-          Read More...
+      <Link href={this.props.link}>
+        <div className={css.readmore}>
+          {text}
         </div>
-      </React.Fragment>
+      </Link>
     )
   }
 }

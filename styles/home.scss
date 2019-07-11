@@ -42,13 +42,18 @@
   }
 }
 
-.upcomingSession {
+.advertiser {
+  height: 100%;
   text-align: center;
+  padding: .5em 1em;
+  &:hover { transition: all .3s ease 0s !important; }
   .heading {
     text-transform: uppercase;
     font-size: 1.5em;
     margin: .5em 0; }
   .image {
+    border: $secondary-border;
+    border-radius: 5px;
     margin-bottom: .8em;
     width: 60%;
     @media (max-width: $break-md) { width: 100%; } }
@@ -60,4 +65,17 @@
     .subtitle { font-size: 1em; }
     .paragraph { font-size: 1em;}
   }
+}
+
+.upcomingSession {
+  @extend .advertiser;
+  background-color: rgba(156, 0, 43, .2);
+  &:hover { background-color: rgba(156, 0, 43, .35); }
+}
+
+.randomCandidate {
+  @extend .advertiser;
+  background-color: rgba(0, 141, 158, .2);
+  transition: all 1s ease;
+  &:hover { background-color: rgba(0, 141, 158, .35);}
 }
