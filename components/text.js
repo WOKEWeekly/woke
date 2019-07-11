@@ -29,17 +29,21 @@ export class Subtitle extends Component {
 
 export class Paragraph extends Component {
   render(){
+
+    let { style, children } = this.props;
+    if (!children) children = '';
+
     return (
       <pre
         {...this.props}
         style={{
-          ...this.props.style,
+          ...style,
           color: 'white',
           display: 'inline',
           fontFamily: fonts.body,
           whiteSpace: 'pre-line'
         }}>
-        {this.props.children.split('\n').map((paragraph, i, arr) => {
+        {children.split('\n').map((paragraph, i, arr) => {
           const line = <p key={i}>{paragraph}</p>;
   
           if (paragraph.length > 0) {
@@ -55,19 +59,22 @@ export class Paragraph extends Component {
 
 export class TruncatedParagraph extends Component {
   render(){
+    let { style, children, blocks } = this.props;
+    if (!children) children = '';
     return (
-      <pre {...this.props}
+      <pre
+        {...this.props}
         style={{
-          ...this.props.style,
+          ...style,
           color: 'white',
           display: 'inline',
           fontFamily: fonts.body,
           whiteSpace: 'pre-line'
         }}>
-        {this.props.children.split('\n').map((ln, i, arr) => {
+        {children.split('\n').map((ln, i, arr) => {
           const line = <span key={i}>{ln}</span>;
 
-          if (i > 2) return;
+          if (i > 1) return;
   
           if (i === arr.length - 1) {
             return line;

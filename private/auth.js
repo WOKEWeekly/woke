@@ -64,7 +64,7 @@ module.exports = function(app, conn, passport){
       },
       function(user, callback){ // Log user session
         req.login(user, function(err) {
-          if (err) callback(err);
+          if (err) return callback(err);
 
           /** If remember checked, maintain session for 30 days */
           if (req.body.remember) {
@@ -78,7 +78,7 @@ module.exports = function(app, conn, passport){
       },
       function(callback){ // Pass authenticated user information to mobile app */
         jwt.sign({user: req.user}, process.env.JWT_SECRET, (err, token) => {
-          if (err) callback(err);
+          if (err) return callback(err);
 
           const user = {
             id: req.user.id,
@@ -121,7 +121,7 @@ module.exports = function(app, conn, passport){
         const values = [[user.firstname, user.lastname, 1, user.email, user.username, hash]];
 
         conn.query(sql, [values], function(err, result){	
-          if (err) callback(err);
+          if (err) return callback(err);
 
           console.log(`New user ${user.firstname} ${user.lastname} signed up.`);
           user.id = result.insertId;
@@ -146,14 +146,14 @@ module.exports = function(app, conn, passport){
       },
       function(salt, callback){ // Send welcome email with verification link to user's email address
         req.login(user, function(err) {
-          if (err) callback(err);
+          if (err) return callback(err);
           emails.sendWelcomeEmail(user, salt);
           callback(null);
         });
       },
       function(callback){ // Pass authenticated user information to client
         jwt.sign({user: req.user}, process.env.JWT_SECRET, (err, token) => {
-          if (err) callback(err);
+          if (err) return callback(err);
           
           const user = {
             id: req.user.id,

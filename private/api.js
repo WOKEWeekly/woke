@@ -9,7 +9,7 @@ module.exports = function(app, conn){
   /** Retrieve all sessions */
   app.get('/getSessions', validateReq, function(req, res){
     conn.query("SELECT * FROM sessions", function (err, result) {
-      resToClient(res, err, result)
+      resToClient(res, err, result);
     });
   });
 
@@ -49,7 +49,7 @@ module.exports = function(app, conn){
         const values = [session2.title, session2.dateHeld, session2.image, session2.slug, session2.description, session1.id];
         
         conn.query(sql, values, function (err) {
-          if (err) callback(err);
+          if (err) return callback(err);
           const image = `./static/images/sessions/${session1.image}`;
           
           if (req.body.changed){
@@ -184,7 +184,7 @@ module.exports = function(app, conn){
         const values = [candidate2.id, candidate2.name, candidate2.image, candidate2.birthday, candidate2.ethnicity, candidate2.socials, candidate2.occupation, candidate2.description, candidate1.id];
         
         conn.query(sql, values, function (err) {
-          if (err) callback(err);
+          if (err) return callback(err);
           const image = `./static/images/blackexcellence/${candidate1.image}`;
           
           if (req.body.changed){
@@ -248,7 +248,7 @@ module.exports = function(app, conn){
         const values = [member2.firstname, member2.lastname, member2.image, member2.level, member2.birthday, member2.role, member2.ethnicity, member2.socials, member2.slug, member2.description, member1.id];
         
         conn.query(sql, values, function (err) {
-          if (err) callback(err);
+          if (err) return callback(err);
           const image = `./static/images/team/${member1.image}`;
           
           if (req.body.changed){
@@ -269,26 +269,45 @@ module.exports = function(app, conn){
     });
   });
 
+  /** Get upcoming session */
+  app.get('/getUpcomingSession', validateReq, function(req, res){
+    async.waterfall([
+      function(callback){ // Get most upcoming session
+        const sql = "SELECT * FROM sessions WHERE dateHeld > NOW() ORDER BY dateHeld LIMIT 1;";
+        conn.query(sql, function (err, result) {
+          if (err) return callback(err);
+          if (result.length === 0) return callback(null);
+          callback(true, {
+            session: result[0],
+            upcoming: true
+          });
+        });
+      },
+      function(callback){ // If not, get latest session
+        const sql = "SELECT * FROM sessions ORDER BY dateHeld DESC LIMIT 1;";
+        conn.query(sql, function (err, result) {
+          if (err) return callback(err);
+          callback(null, {
+            session: result[0],
+            upcoming: false
+          });
+        });
+      }
+    ], function(err, result){
+      resToClient(res, err, result);
+    });
+  });
+
+   /** Get random candidate */
+   app.get('/getRandomCandidate', validateReq, function(req, res){
+    conn.query("SELECT * FROM blackex ORDER BY RAND() LIMIT 1", function (err, result, fields) {
+      resToClient(res, err, result[0]);
+    });
+  });
+
   /****************************
    * CHECKPOINT
    ***************************/
-
-  
-
-  /** Get random candidate */
-  app.get('/getRandomCandidate', function(req, res){
-    if (req.headers['authorization'] !== 'authorized'){
-      res.sendStatus(403);
-    } else {
-      conn.query("SELECT * FROM blackex ORDER BY RAND() LIMIT 1", function (err, result, fields) {
-        if (!err){
-          res.json(result[0]);
-        } else {
-          res.status(400).send(err.toString());
-        }
-      });
-    }
-  });
 
   /** Retrieve all team members */
   app.get('/getTeam', function(req, res){
@@ -388,37 +407,6 @@ module.exports = function(app, conn){
         });
       }
     });
-  });
-
-  /** Get upcoming session */
-  app.get('/getUpcomingSession', function(req, res){
-    if (req.headers['authorization'] !== 'authorized'){
-      res.sendStatus(403);
-    } else {
-      conn.query("SELECT * FROM sessions WHERE dateHeld > NOW() ORDER BY dateHeld LIMIT 1;", function (err, result, fields) {
-        if (!err){
-          if (result.length == 0){
-            conn.query("SELECT * FROM sessions ORDER BY dateHeld DESC LIMIT 1;", function (err, result, fields) {
-              if (!err){
-                res.json({
-                  result: result[0],
-                  session: true
-                });
-              } else {
-                res.status(400).send(err.toString());
-              }
-            });
-          } else {
-            res.json({
-              result: result[0],
-              session: false
-            });
-          }
-        } else {
-          res.status(400).send(err.toString());
-        }
-      });
-    }
   });
 
   

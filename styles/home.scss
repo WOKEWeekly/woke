@@ -41,3 +41,23 @@
     }
   }
 }
+
+.upcomingSession {
+  text-align: center;
+  .heading {
+    text-transform: uppercase;
+    font-size: 1.5em;
+    margin: .5em 0; }
+  .image {
+    margin-bottom: .8em;
+    width: 60%;
+    @media (max-width: $break-md) { width: 100%; } }
+  .details {
+    margin: 0 auto 2em;
+    width: 90%;
+    @media (max-width: $break-md) { width: 100%; }
+    .title { font-size: 1.4em; }
+    .subtitle { font-size: 1em; }
+    .paragraph { font-size: 1em;}
+  }
+}
