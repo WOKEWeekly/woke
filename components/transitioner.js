@@ -4,7 +4,7 @@ import { Transition } from 'react-transition-group';
 export class Fader extends Component {
   render(){
 
-    const { duration, delay } = this.props;
+    const { duration, delay, postTransitions } = this.props;
 
     const defaultStyle = {
       transition: `opacity ${duration}ms ease ${delay || 0}ms`,
@@ -12,7 +12,7 @@ export class Fader extends Component {
     }
 
     const transitionStyles = {
-      entered:  { opacity: 1 },
+      entered: { opacity: 1 },
     };
 
     return (
@@ -27,7 +27,7 @@ export class Fader extends Component {
 export class Zoomer extends Component {
   render(){
 
-    const { duration, delay, style } = this.props;
+    const { duration, delay } = this.props;
 
     const defaultStyle = {
       transition: `transform ${duration}ms ease ${delay || 0}ms`,
@@ -50,32 +50,7 @@ export class Zoomer extends Component {
 export class Slider extends Component {
   render(){
 
-    const { duration, delay, direction } = this.props;
-
-    const defaultStyle = {
-      transition: `${direction} ${duration}ms ease ${delay || 0}ms`,
-      [direction]: '-100vw',
-      position: 'relative'
-    }
-
-    const transitionStyles = {
-      entering: { [direction]: '-100vw' },
-      entered:  { [direction]: '0' },
-    };
-
-    return (
-      <Template
-        {...this.props}
-        defaultStyle={defaultStyle}
-        transitionStyles={transitionStyles} />
-    )
-  }
-}
-
-export class FadeSlider extends Component {
-  render(){
-
-    const { duration, delay, direction } = this.props;
+    const { duration, delay, direction, postTransitions } = this.props;
 
     const defaultStyle = {
       transition: `all ${duration}ms ease ${delay || 0}ms`,
@@ -85,8 +60,12 @@ export class FadeSlider extends Component {
     }
 
     const transitionStyles = {
-      entering: { [direction]: '-100vw', opacity: 0 },
-      entered:  { [direction]: '0', opacity: 1 },
+      entering: defaultStyle,
+      entered:  {
+        [direction]: '0',
+        opacity: 1,
+        transition: `${defaultStyle.transition}, ${postTransitions}`,
+      },
     };
 
     return (

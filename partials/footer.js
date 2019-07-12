@@ -20,16 +20,13 @@ export default class Footer extends Component {
   }
 
 	render(){
-    if (this.state.isLoaded){
-      return (
-        <div className={css.footer} >
-          <Col md={4}><Socials/></Col>
-        </div>
-      );
-    } else {
-      return null;
-    }
-		
+    if (!this.state.isLoaded) return null;
+
+    return (
+      <div className={css.footer} >
+        <Col md={4}><Socials/></Col>
+      </div>
+    );
 	}
 }
 

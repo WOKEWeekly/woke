@@ -56,7 +56,7 @@ export class Paragraph extends Component {
 
 export class TruncatedParagraph extends Component {
   render(){
-    let { children, paragraphs, link, readMoreText } = this.props;
+    let { children, paragraphs, link, more } = this.props;
     if (!children) children = '';
     const classes = classNames(css.paragraph, this.props.className);
 
@@ -77,7 +77,7 @@ export class TruncatedParagraph extends Component {
             return [line, <br key={i + 'br'} />];
           }
         })}
-        <ReadMore link={link} text={readMoreText} />
+        <ReadMore link={link} text={more} />
       </pre>
     )
   }

@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { Cover, Shader, Spacer } from '~/components/layout.js';
 import { Loader, Empty } from '~/components/loader.js';
 import { Title, Subtitle, Paragraph, Divider, TruncatedParagraph, ReadMore } from '~/components/text.js';
-import { FadeSlider } from '~/components/transitioner.js';
+import { Slider } from '~/components/transitioner.js';
 
 import Meta from '~/partials/meta.js';
 import css from '~/styles/team.scss';
@@ -102,7 +102,7 @@ class Exec extends PureComponent {
     const isEven = (idx % 2 == 0);
 
     return (
-      <FadeSlider
+      <Slider
         key={idx}
         determinant={this.state.isLoaded}
         duration={750}
@@ -130,7 +130,7 @@ class Exec extends PureComponent {
             </Row>
           </div>
         </Link>
-      </FadeSlider>
+      </Slider>
     );
   }
 }

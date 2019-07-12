@@ -238,6 +238,32 @@
   }
 }
 
+.voter {
+  border-radius: 30px;
+  display: flex;
+  margin: 0 auto;
+  overflow: hidden;
+  min-height: 6em;
+  .options {
+    align-items: center;
+    color: white;
+    cursor: pointer;
+    display: flex;
+    font-family: $body-font;
+    font-size: 1.4em;
+    justify-content: center;
+    transition: all .3s ease;
+    width: 50%; }
+  .yes {
+    @extend .options;
+    background-color: rgba(0, 128, 0, .4);
+    &:hover { background-color: rgba(0, 128, 0, .8); }}
+  .no {
+    @extend .options;
+    background-color: rgba(255, 0, 0, .4);
+    &:hover { background-color: rgba(255, 0, 0, .8) } }
+}
+
 :global(.react-datepicker__input-container) { padding: .4em 0; }
 :global(.react-datepicker-wrapper),
 :global(.react-datepicker__input-container) { display: block !important; }

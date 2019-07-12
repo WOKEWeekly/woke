@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
 import {Container, Col, Row} from 'react-bootstrap';
+import Link from 'next/link';
 import Meta from '~/partials/meta.js';
 
+import { Voter } from '~/components/form.js';
 import { Cover, Shader } from '~/components/layout.js';
-import { Fader, FadeSlider } from '~/components/transitioner.js';
-import { Title, Subtitle, Divider, TruncatedParagraph, ReadMore } from '~/components/text.js';
+import { Fader, Slider } from '~/components/transitioner.js';
+import { Title, Subtitle, Divider, TruncatedParagraph } from '~/components/text.js';
 
 import { countriesToString } from '~/constants/countries.js';
 import { formatDate, calculateAge } from '~/constants/date.js';
@@ -61,7 +63,7 @@ export default class Home extends Component {
           </Row>
 
           <Row>
-            {/* <Voter/> */}
+            <TopicVoter/>
           </Row>
         </Container>
       </Shader>
@@ -87,7 +89,13 @@ class Part extends Component {
 	render(){
     const { imageLoaded, imageSrc } = this.state;
 		return (
-      <FadeSlider determinant={imageLoaded} duration={1000} delay={500} direction={'bottom'} notDiv>
+      <Slider
+        determinant={imageLoaded}
+        duration={1000}
+        delay={500}
+        direction={'bottom'}
+        postTransitions={'background-color .3s ease 0s'}
+        notDiv>
         <Col md={4} className={css.colpart}>
           <div className={css.part} style={{backgroundImage: `url(${imageSrc})`}}>
             <div className={css.caption}>
@@ -96,7 +104,7 @@ class Part extends Component {
             </div>
           </div>
         </Col>
-      </FadeSlider>
+      </Slider>
 		);
 	}
 }
@@ -133,31 +141,35 @@ class UpcomingSession extends Component {
 
   render(){
     const { session } = this.state;
-    const heading = session.upcoming ? 'Most Upcoming Session' : 'Latest Session'; 
+    const heading = session.upcoming ? 'Most Upcoming Session' : 'Latest Session';
+    const link = `/session/${session.slug}` || '/';
     return (
-      <FadeSlider
+      <Slider
         determinant={session.loaded}
         duration={750}
         delay={1000}
         direction={'left'}
+        postTransitions={'background-color .3s ease 0s'}
         className={css.upcomingSession}>
         <Title className={css.heading}>{heading}</Title>
         <div>
-          <img
-            src={`/static/images/sessions/${session.image}`}
-            alt={session.title}
-            className={css.image} />
+          <Link href={link}>
+            <img
+              src={`/static/images/sessions/${session.image}`}
+              alt={session.title}
+              className={css.image} />
+          </Link>
           <div className={css.details}>
             <Title className={css.title}>{session.title}</Title>
             <Subtitle className={css.subtitle}>{formatDate(session.dateHeld, true)}</Subtitle>
             <Divider/>
             <TruncatedParagraph
               paragraphs={1}
-              link={`/session/${session.slug}`}
+              link={link}
               className={css.paragraph}>{session.description}</TruncatedParagraph>
           </div>
         </div>
-      </FadeSlider>
+      </Slider>
     )
   }
 }
@@ -200,19 +212,24 @@ class RandomCandidate extends Component {
       candidate.demonyms = countriesToString(JSON.parse(candidate.ethnicity));
     }
 
+    const link = `/blackexcellence/candidate/${candidate.id}`;
+
     return (
-      <FadeSlider
+      <Slider
         determinant={candidate.loaded}
         duration={750}
         delay={1000}
         direction={'right'}
+        postTransitions={'background-color .3s ease 0s'}
         className={css.randomCandidate}>
         <Title className={css.heading}>Check out our candidate:</Title>
         <div>
-          <img
-            src={`/static/images/blackexcellence/${candidate.image}`}
-            alt={candidate.name}
-            className={css.image} />
+          <Link href={link}>
+            <img
+              src={`/static/images/blackexcellence/${candidate.image}`}
+              alt={candidate.name}
+              className={css.image} />
+          </Link>
           <div className={css.details}>
             <Title className={css.title}>{candidate.name}</Title>
             <Subtitle className={css.subtitle}>
@@ -221,12 +238,62 @@ class RandomCandidate extends Component {
             <Divider/>
             <TruncatedParagraph
               paragraphs={1}
-              link={`/blackexcellence/candidate/${candidate.id}`}
-              readMoreText={`Read more on ${candidate.firstname}...`}
+              link={link}
+              more={`Read more on ${candidate.firstname}...`}
               className={css.paragraph}>{candidate.description}</TruncatedParagraph>
           </div>
         </div>
-      </FadeSlider>
+      </Slider>
+    )
+  }
+}
+
+class TopicVoter extends Component {
+  constructor(){
+    super();
+    this.state = {
+      topic: {}
+    }
+  }
+
+  componentDidMount(){
+    this.getRandomTopic();
+  }
+
+  getRandomTopic = () => {
+    fetch('/getRandomTopic', {
+      method: 'GET',
+      headers: {
+        'Authorization': process.env.AUTH_KEY,
+        'Content-Type': 'application/json',
+      }
+    })
+    .then(res => res.json())
+    .then(topic => {
+      topic.loaded = true;
+      this.setState({topic})
+    })
+    .catch(error => console.error(error));
+  }
+
+  render(){
+    const { topic } = this.state;
+    return (
+      <Fader
+        determinant={topic.loaded}
+        duration={750}
+        delay={1000}
+        postTransitions={{ transition: 'all .3s ease 0s' }}
+        className={css.topicVoter}>
+        <Container>
+          <Subtitle className={css.heading}>Quick Question:</Subtitle>
+          <div className={css.container}>
+            <Title className={css.headline}>{topic.headline}</Title>
+            <Subtitle className={css.question}>{topic.question}</Subtitle>
+            <Voter className={css.voter} />
+          </div>
+        </Container>
+        </Fader>
     )
   }
 }

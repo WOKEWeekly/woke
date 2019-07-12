@@ -298,9 +298,20 @@ module.exports = function(app, conn){
     });
   });
 
-   /** Get random candidate */
-   app.get('/getRandomCandidate', validateReq, function(req, res){
+  /** Get random candidate */
+  app.get('/getRandomCandidate', validateReq, function(req, res){
     conn.query("SELECT * FROM blackex ORDER BY RAND() LIMIT 1", function (err, result, fields) {
+      resToClient(res, err, result[0]);
+    });
+  });
+
+  /** Get random Topic */
+  app.get('/getRandomTopic', validateReq, function(req, res){
+    const sql = `SELECT id, headline, category, question, option1, option2, yes, no FROM topics
+      WHERE polarity = 1 AND category != 'Christian' AND category != 'Mental Health'
+      ORDER BY RAND() LIMIT 1;`;
+
+    conn.query(sql, function (err, result, fields) {
       resToClient(res, err, result[0]);
     });
   });
@@ -407,27 +418,6 @@ module.exports = function(app, conn){
         });
       }
     });
-  });
-
-  
-
-  /** Get Random Topic */
-  app.get('/getRandomTopic', function(req, res){
-    if (req.headers['authorization'] !== 'authorized'){
-      res.sendStatus(403);
-    } else {
-      let sql = `SELECT id, headline, category, question, option1, option2, yes, no FROM topics
-        WHERE polarity = 1 AND category != 'Christian' AND category != 'Mental Health'
-        ORDER BY RAND() LIMIT 1;`;
-
-      conn.query(sql, function (err, result, fields) {
-        if (!err){
-          res.json(result[0]);
-        } else {
-          res.status(400).send(err.toString());
-        }
-      });
-    }
   });
 
   /** Add new topic to database */

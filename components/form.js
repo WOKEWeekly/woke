@@ -276,3 +276,15 @@ export class FileSelector extends Component {
     )
   }
 }
+
+export class Voter extends Component {
+  render(){
+    const classes = classNames(css.voter, this.props.className);
+    return (
+      <div className={classes}>
+        <div className={css.yes}>Yes</div>
+        <div className={css.no}>No</div>
+      </div>
+    )
+  }
+}
