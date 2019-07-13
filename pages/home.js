@@ -3,10 +3,11 @@ import {Container, Col, Row} from 'react-bootstrap';
 import Link from 'next/link';
 import Meta from '~/partials/meta.js';
 
-import { Voter } from '~/components/form.js';
+import { alert, displayErrorMessage } from '~/components/alert.js';
 import { Cover, Shader } from '~/components/layout.js';
-import { Fader, Slider } from '~/components/transitioner.js';
 import { Title, Subtitle, Divider, TruncatedParagraph } from '~/components/text.js';
+import { Fader, Slider } from '~/components/transitioner.js';
+import { Voter } from '~/components/voter.js';
 
 import { countriesToString } from '~/constants/countries.js';
 import { formatDate, calculateAge } from '~/constants/date.js';
@@ -149,7 +150,7 @@ class UpcomingSession extends Component {
         duration={750}
         delay={1000}
         direction={'left'}
-        postTransitions={'background-color .3s ease 0s'}
+        postTransitions={'background-color .3s'}
         className={css.upcomingSession}>
         <Title className={css.heading}>{heading}</Title>
         <div>
@@ -220,7 +221,7 @@ class RandomCandidate extends Component {
         duration={750}
         delay={1000}
         direction={'right'}
-        postTransitions={'background-color .3s ease 0s'}
+        postTransitions={'background-color .3s'}
         className={css.randomCandidate}>
         <Title className={css.heading}>Check out our candidate:</Title>
         <div>
@@ -252,14 +253,32 @@ class TopicVoter extends Component {
   constructor(){
     super();
     this.state = {
-      topic: {}
+      topic: {},
+      votes: 0,
+      result1: 0,
+      result2: 0,
+      hasVoted: false,
+      isLoaded: false
     }
+
+    this.baseState = this.state;
   }
 
   componentDidMount(){
+    this.setState({ isLoaded: true})
     this.getRandomTopic();
   }
 
+  resetVoter = () => {
+    this.setState({
+      topic: {},
+      votes: 0,
+      // hasVoted: false,
+      isLoaded: true
+    });
+  }
+
+  /** Retrieve a random polar topic from database */
   getRandomTopic = () => {
     fetch('/getRandomTopic', {
       method: 'GET',
@@ -271,27 +290,79 @@ class TopicVoter extends Component {
     .then(res => res.json())
     .then(topic => {
       topic.loaded = true;
-      this.setState({topic})
+      this.setState({
+        topic: topic,
+        votes: topic.yes + topic.no,
+        hasVoted: false
+      })
     })
     .catch(error => console.error(error));
   }
 
+  submitVote = (event) => {
+    let { topic, votes } = this.state;
+    const option = event.target.name;
+
+    topic.vote = option;
+
+    /** Update the vote count on topic */
+    fetch('/incrementVote', {
+      method: 'PUT',
+      body: JSON.stringify(topic),
+      headers: {
+        'Authorization': process.env.AUTH_KEY,
+        'Content-Type': 'application/json',
+      }
+    })
+    .then(res => Promise.all([res, res.json()]))
+    .then(([status, response]) => { 
+      if (status.ok){
+        topic[option]++;
+        votes++;
+        const result1 = (topic.yes / votes) * 100;
+        const result2 = (topic.no / votes) * 100;
+        this.setState({votes, result1, result2, hasVoted: true}, () => {
+          setTimeout(() => { // Wait 5 seconds before loading new topic
+            this.setState({ topic: { ...this.state.topic, loaded: false } });
+            setTimeout(() => { this.getRandomTopic(); }, 1500);
+          }, 3500);
+        });
+      } else {
+        alert.error(response.message)
+      }
+    }).catch(error => {
+      displayErrorMessage(error);
+    });
+  }
+
   render(){
-    const { topic } = this.state;
+    const { topic, votes, result1, result2, hasVoted, isLoaded } = this.state;
     return (
       <Fader
-        determinant={topic.loaded}
+        determinant={isLoaded}
         duration={750}
         delay={1000}
-        postTransitions={{ transition: 'all .3s ease 0s' }}
+        postTransitions={'background .3s'}
         className={css.topicVoter}>
         <Container>
           <Subtitle className={css.heading}>Quick Question:</Subtitle>
-          <div className={css.container}>
+          <Fader determinant={topic.loaded} duration={400} delay={500}
+          className={css.container} postTransitions={'height .3s'}>
             <Title className={css.headline}>{topic.headline}</Title>
             <Subtitle className={css.question}>{topic.question}</Subtitle>
-            <Voter className={css.voter} />
-          </div>
+            <Voter
+              className={css.voter}
+              option1={topic.option1}
+              option2={topic.option2}
+              result1={result1}
+              result2={result2}
+              hasVoted={hasVoted}
+              onVote={this.submitVote} />
+            <div className={css.voteCount}>{votes} {votes === 1 ? 'vote' : 'votes'}</div>
+            <Fader determinant={hasVoted} duration={750} className={css.voteThanks}>
+              Thank you for your vote!
+            </Fader>
+          </Fader>
         </Container>
         </Fader>
     )

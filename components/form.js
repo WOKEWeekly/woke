@@ -238,6 +238,7 @@ export class Select extends Component {
   }
 }
 
+/** For checkboxes */
 export class Checkbox extends Component {
   render(){
     return (
@@ -272,18 +273,6 @@ export class FileSelector extends Component {
           value={this.props.value}
           placeholder={'Choose a file'}
           className={css.file_input} />
-      </div>
-    )
-  }
-}
-
-export class Voter extends Component {
-  render(){
-    const classes = classNames(css.voter, this.props.className);
-    return (
-      <div className={classes}>
-        <div className={css.yes}>Yes</div>
-        <div className={css.no}>No</div>
       </div>
     )
   }

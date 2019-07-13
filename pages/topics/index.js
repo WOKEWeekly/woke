@@ -316,7 +316,6 @@ class _Topic extends PureComponent {
           key={idx}
           determinant={this.state.isLoaded}
           duration={500}
-          delay={0}
           className={classes}>
           <Title className={css.headline}>{item.headline}</Title>
           <Subtitle className={css.question}>{item.question}</Subtitle>

@@ -86,23 +86,25 @@
   background-color: rgba(14, 27, 179, 0.2);
   display: flex;
   justify-content: center;
-  padding: 3em 0;
+  padding: 2em 0;
   text-align: center;
   width: 100%;
   &:hover { background-color: rgba(14, 27, 179, 0.35); }
   .heading {
     font-size: 1.8em;
     text-transform: uppercase;
-    margin-bottom: 1em;
-  }
+    margin-bottom: 1em; }
   .container {
     @extend .responsive-container;
     margin: 0 auto;
     .headline {
       font-size: 2em;
       @media (max-width: $break-md) { font-size: 1.6em; }}
-    .question { font-size: 1.4em;
+    .question {
+      font-size: 1.4em;
       @media (max-width: $break-md) { font-size: 1.1em; }}
-    .voter { margin-top: 1em;}
+    .voter { margin: 1em 0;}
+    .voteCount { @extend .text; }
+    .voteThanks { @extend .text; margin-top: 1em; }
   }
 }

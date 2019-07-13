@@ -316,6 +316,15 @@ module.exports = function(app, conn){
     });
   });
 
+  /** Increment the vote */
+  app.put('/incrementVote', validateReq, function(req, res){
+    const topic = req.body;
+    const sql = `UPDATE topics SET ${topic.vote}=${topic.vote}+1 WHERE id = ${topic.id};`;
+    conn.query(sql, function (err) {
+      resToClient(res, err);
+    });
+  });
+
   /****************************
    * CHECKPOINT
    ***************************/
@@ -418,46 +427,6 @@ module.exports = function(app, conn){
         });
       }
     });
-  });
-
-  /** Add new topic to database */
-  app.put('/updateTopicVote', function(req, res){
-    if (req.headers['authorization'] !== 'authorized'){
-      res.sendStatus(403);
-    } else {
-      var topic = req.body;
-      var sql = `UPDATE topics SET ${topic.vote}=${topic.vote}+1 WHERE id = ${topic.id};`;
-      
-      conn.query(sql, function (err) {
-        if (!err){
-          conn.query(`SELECT yes, no FROM topics WHERE id = ${topic.id};`, function (err, result) {
-            if (!err){
-
-              let topic = result[0];
-
-              /** Calculate total votes and percentages */
-              let totalVotes = topic.yes + topic.no;
-              let pctYes = (topic.yes / totalVotes) * 100;
-              let pctNo = (topic.no / totalVotes) * 100;
-
-              res.json({
-                countYes: topic.yes,
-                countNo: topic.no,
-                pctYes: pctYes,
-                pctNo: pctNo,
-                stringYes: `${Math.ceil(pctYes)}%`,
-                stringNo: `${Math.floor(pctNo)}%`,
-                totalVotes: totalVotes,
-              });
-            } else {
-              res.status(400).send(err.toString());
-            }
-          });
-        } else {
-          res.status(400).send(err.toString());
-        }
-      });
-    }
   });
 
   /** Retrieve all suggestions */

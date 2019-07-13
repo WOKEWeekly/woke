@@ -12,7 +12,10 @@ export class Fader extends Component {
     }
 
     const transitionStyles = {
-      entered: { opacity: 1 },
+      entered: {
+        opacity: 1,
+        transition: `${defaultStyle.transition}, ${postTransitions}` },
+      exited: defaultStyle,
     };
 
     return (
@@ -60,7 +63,6 @@ export class Slider extends Component {
     }
 
     const transitionStyles = {
-      entering: defaultStyle,
       entered:  {
         [direction]: '0',
         opacity: 1,
@@ -77,10 +79,33 @@ export class Slider extends Component {
   }
 }
 
+export class Mover extends Component {
+  render(){
+
+    const { duration, delay, width } = this.props;
+
+    const defaultStyle = {
+      transition: `all ${duration}ms ease ${delay || 0}ms`,
+      width: '50%'
+    }
+
+    const transitionStyles = {
+      entered: { width: `${width}%` },
+      exited: defaultStyle,
+    };
+
+    return (
+      <Template
+        {...this.props}
+        defaultStyle={defaultStyle}
+        transitionStyles={transitionStyles} />
+    )
+  }
+}
+
 class Template extends Component {
   render(){
     const { notDiv, determinant, className, defaultStyle, transitionStyles, style, children } = this.props;
-
     return (
       <Transition
         in={determinant}
