@@ -9,6 +9,8 @@ import { Shader, Spacer } from '~/components/layout.js';
 import { Paragraph } from '~/components/text.js';
 import { BottomToolbar } from '~/components/toolbar.js';
 
+import Meta from '~/partials/meta.js';
+
 import css from '~/styles/about.scss';
 
 class About extends Component {
@@ -39,11 +41,15 @@ class About extends Component {
 
     return (
       <Spacer>
+        <Meta
+          title={'About Us'}
+          description={text}
+          url={'/about'} />
 
         <Shader>
-        <div className={css.container}>
-          <Paragraph className={css.text}>{text}</Paragraph>
-        </div>
+          <div className={css.container}>
+            <Paragraph className={css.text}>{text}</Paragraph>
+          </div>
         </Shader>
 
         <BottomToolbar>

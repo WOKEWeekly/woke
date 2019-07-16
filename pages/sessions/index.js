@@ -124,7 +124,7 @@ class Sessions extends Component {
     return (
       <Shader>
         <Meta
-					title={'Sessions | #WOKEWeekly'}
+					title={'Sessions'}
 					description={'Where we do the magic...'}
 					url={'/sessions'} />
 

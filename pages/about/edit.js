@@ -72,6 +72,10 @@ class EditAbout extends Component {
 
     return (
       <Shader>
+        <Meta
+          title={'Edit About'}
+          url={'/about/edit'} />
+
         <Spacer className={css.form}>
           <div>
             <Heading>Edit About</Heading>

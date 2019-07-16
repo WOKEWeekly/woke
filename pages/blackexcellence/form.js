@@ -52,7 +52,7 @@ class CandidateForm extends Component {
     return (
       <Shader>
         <Meta
-					title={`${metaTitle} | #WOKEWeekly`}
+					title={metaTitle}
           url={`/blackexcellence${metaUrl}`} />
 
         <Spacer className={css.form}>

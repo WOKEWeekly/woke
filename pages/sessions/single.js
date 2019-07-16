@@ -74,7 +74,7 @@ class SessionPage extends Component {
     return (
       <Spacer>
         <Meta
-          title={`${session.title} | #WOKEWeekly`}
+          title={session.title}
           description={session.description}
           url={`/sessions/${session.slug}`}
           image={`/static/images/sessions/${session.image}`}

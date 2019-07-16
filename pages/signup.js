@@ -90,7 +90,7 @@ class Signup extends Component {
     return (
       <Shader>
         <Meta
-					title={`Sign Up | #WOKEWeekly`}
+					title={'Sign Up'}
           url={`/signup`} />
 
         <Spacer className={css.form}>

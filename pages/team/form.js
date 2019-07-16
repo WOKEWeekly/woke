@@ -50,7 +50,7 @@ class MemberForm extends Component {
     return (
       <Shader>
         <Meta
-					title={`${metaTitle} | #WOKEWeekly`}
+					title={metaTitle}
           url={`/team${metaUrl}`} />
 
         <Spacer className={css.form}>

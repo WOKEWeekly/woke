@@ -79,7 +79,7 @@ class CandidatePage extends Component {
     return (
       <Spacer>
         <Meta
-          title={`#${candidate.id}: ${candidate.name} | #WOKEWeekly`}
+          title={`#${candidate.id}: ${candidate.name}`}
           description={candidate.description}
           url={`/blackexcellence/candidate/${candidate.id}`}
           image={`/static/images/blackexcellence/${candidate.image}`}

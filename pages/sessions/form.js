@@ -33,7 +33,7 @@ class SessionForm extends Component {
     return (
       <Shader>
         <Meta
-					title={`${metaTitle} | #WOKEWeekly`}
+					title={metaTitle}
           url={`/sessions${metaUrl}`} />
 
         <Spacer className={css.form}>

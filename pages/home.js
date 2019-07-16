@@ -32,7 +32,8 @@ export default class Home extends Component {
         <Meta
           title={'#WOKEWeekly - Awakening Through Conversation'}
           description={'Debates and discussions centered around and beyond the UK black community at university campuses. Providing a safe-space for expression and opinions to be heard and encouraging unity amongst the community through conversation, bringing together those divided by social status, religion and interest.'}
-          url={'/'} />
+          url={'/'}
+          isHome />
 
         <Cover
           title={'Awakening Through Conversation.'}

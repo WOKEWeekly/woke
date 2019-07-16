@@ -6,13 +6,13 @@ import { domain } from '~/constants/settings.js';
 export default class Meta extends Component {
   render(){
 
-    let { title, description, url, image, alt} = this.props;
+    let { title, description, url, image, alt, isHome} = this.props;
     image = (image === undefined) ? '/static/images/logos/wokeweekly-logo.jpg' : image;
     alt = (alt === undefined) ? '#WOKEWeekly Logo' : alt;
 
     return (
       <Head>
-        <title>{title}</title>
+        <title>{isHome ? title : `${title} | #WOKEWeekly`}</title>
         <meta name="description" content={description} />
 
         <meta charSet="UTF-8" name="author" content="Zavid Egbue" />

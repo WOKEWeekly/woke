@@ -47,7 +47,7 @@ class ExecPage extends Component {
     return (
       <Spacer>
         <Meta
-          title={`${exec.fullname} | #WOKEWeekly`}
+          title={exec.fullname}
           description={exec.description}
           url={`/executives/${exec.slug}`}
           image={`/static/images/team/${exec.image}`}

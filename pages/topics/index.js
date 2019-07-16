@@ -212,7 +212,7 @@ class TopicBank extends Component {
     return (
       <Shader>
         <Meta
-					title={'Topic Bank | #WOKEWeekly'}
+					title={'Topic Bank'}
 					description={'The currency of the franchise.'}
 					url={'/topics'} />
 

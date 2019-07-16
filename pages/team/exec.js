@@ -65,7 +65,7 @@ export default class Executives extends Component {
     return (
       <Shader>
         <Meta
-					title={`${heading} | #WOKEWeekly`}
+					title={heading}
 					description={description}
 					url={'/executives'} />
 
