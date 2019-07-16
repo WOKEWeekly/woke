@@ -54,16 +54,15 @@ export class PromoIconsBar extends Component {
         for (const [index, item] of Object.entries(socials)) {
           if (item && item !== ''){
             let social = socialPlatforms[index];
-            if (social){
-              items.push(
-                <SocialIcon
-                  key={index}
-                  className={css.promo_socials}
-                  icon={social.icon}
-                  href={`${social.domain}${item}`}
-                  {...this.props} />
-              );
-            }
+            if (!social) return;
+            items.push(
+              <SocialIcon
+                key={index}
+                className={css.promo_socials}
+                icon={social.icon}
+                href={`${social.domain}${item}`}
+                {...this.props} />
+            );
           }
         }  
       }
@@ -82,10 +81,11 @@ export const listSocials = (socials) => {
     for (const [idx, item] of Object.entries(socials)) {
       if (item && item !== ''){
         let social = socialPlatforms[idx];
+        if (!social) return;
         let link = `${social.domain}${item}`;
         items.push(
           <div key={idx} className={css.socials}>{social.name}:
-            <a href={link}>{!social.domain ? link : `@${item}`}</a>
+            <a href={link}>{social.domain ? `@${item}` : link}</a>
           </div>
         );
       }

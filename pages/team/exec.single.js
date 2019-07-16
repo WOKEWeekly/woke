@@ -38,11 +38,11 @@ class ExecPage extends Component {
   render(){
     const { isLoaded, imageLoaded } = this.state;
 
-    const { exec, user } = this.props;
+    const { exec, user, countries } = this.props;
     exec.fullname = `${exec.firstname} ${exec.lastname}`;
     exec.description = exec.description && exec.description.trim().length > 0 ? exec.description : 'No description.';
     exec.age = calculateAge(exec.birthday);
-    exec.demonyms = countriesToString(JSON.parse(exec.ethnicity));
+    exec.demonyms = countriesToString(JSON.parse(exec.ethnicity), countries);
 
     return (
       <Spacer>
@@ -109,7 +109,8 @@ class ExecPage extends Component {
 }
 
 const mapStateToProps = state => ({
-  user: state.user
+  user: state.user,
+  countries: state.countries
 });
 
 export default connect(mapStateToProps)(ExecPage);

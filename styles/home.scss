@@ -50,7 +50,8 @@
   .heading {
     text-transform: uppercase;
     font-size: 1.5em;
-    margin: .5em 0; }
+    margin: .5em 0;
+    @media (max-width: $break-md) { font-size: 1.4em; }}
   .image {
     @include scale-on-hover(1.03);
     border: $secondary-border;
@@ -106,5 +107,42 @@
     .voter { margin: 1em 0;}
     .voteCount { @extend .text; }
     .voteThanks { @extend .text; margin-top: 1em; }
+  }
+}
+
+.randomExecutive {
+  background-color: rgba(97, 72, 0, .2);
+  padding: .5em 1em;
+  &:hover { background-color: rgba(97, 72, 0, .35);}
+  @media (max-width: $break-md) { text-align: center; }
+  .container {
+    margin: 2em auto;
+    width: 90%;
+    @media (max-width: $break-md) { width: 100%; }
+    .heading {
+      text-transform: uppercase;
+      font-size: 1.8em;
+      margin-bottom: 1em;
+      @media (max-width: $break-md) { font-size: 1.4em; }}
+    .image {
+      @include scale-on-hover(1.03);
+      border: $secondary-border;
+      border-radius: 45%;
+      cursor: pointer;
+      width: 100%;
+      @media (max-width: $break-md) { margin-bottom: 1em; }}
+    .details {
+      margin: 0 auto;
+      @media (max-width: $break-md) { width: 100%;}
+      .title {
+        font-size: 1.6em;
+        @media (max-width: $break-md) { font-size: 1.4em; }}
+      .subtitle {
+        font-size: 1.2em;
+        @media (max-width: $break-md) { font-size: 1em; }}
+      .paragraph {
+        font-size: 1.2em;
+        @media (max-width: $break-md) { font-size: 1em; }}
+    }
   }
 }

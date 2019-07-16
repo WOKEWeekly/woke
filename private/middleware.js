@@ -58,7 +58,7 @@ module.exports = {
       /** Limit to certain image types */
       let allowedMimes = ['image/jpeg', 'image/pjpeg', 'image/png', 'image/gif'];
       if (!allowedMimes.includes(file.mimetype)){
-        callback(new Error('Invalid file type. Only jpg, png and gif image files are allowed.'));
+        return callback(new Error('Invalid file type. Only jpg, png and gif image files are allowed.'));
       }
 
       /** If no image change, skip */

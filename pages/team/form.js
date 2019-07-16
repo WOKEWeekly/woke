@@ -37,7 +37,7 @@ class MemberForm extends Component {
 
   render(){
     const { heading, confirmText, confirmFunc, cancelFunc, metaTitle, metaUrl,
-      handleText, handleDate, handleImage, clearSelection, confirmSocials } = this.props;
+      handleText, handleDate, handleImage, clearSelection, confirmSocials, countries } = this.props;
 
     const { firstname, lastname, level, role, description, birthday, image, socials,
       ethnicity1, ethnicity2, ethnicity3, ethnicity4 } = this.props.candidate;
@@ -45,7 +45,7 @@ class MemberForm extends Component {
     const { ethnicModalVisible, socialsModalVisible } = this.state;
 
     const filename = getFilename(image);
-    const ethnicities = countriesToString([ethnicity1, ethnicity2, ethnicity3, ethnicity4]);
+    const ethnicities = countriesToString([ethnicity1, ethnicity2, ethnicity3, ethnicity4], countries);
 
     return (
       <Shader>
@@ -167,7 +167,8 @@ class MemberForm extends Component {
 }
 
 const mapStateToProps = state => ({
-  user: state.user
+  user: state.user,
+  countries: state.countries
 });
 
 export default connect(mapStateToProps)(MemberForm);

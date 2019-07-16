@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import {Container, Col, Row} from 'react-bootstrap';
 import Link from 'next/link';
 import Meta from '~/partials/meta.js';
 
 import { alert, displayErrorMessage } from '~/components/alert.js';
-import { Cover, Shader } from '~/components/layout.js';
+import { Cover, Shader, Default, Mobile } from '~/components/layout.js';
 import { Title, Subtitle, Divider, TruncatedParagraph } from '~/components/text.js';
 import { Fader, Slider } from '~/components/transitioner.js';
 import { Voter } from '~/components/voter.js';
@@ -16,9 +17,7 @@ import css from '~/styles/home.scss';
 export default class Home extends Component {
   constructor(){
     super();
-    this.state = {
-      isLoaded: false
-    }
+    this.state = { isLoaded: false }
   }
 
   componentDidMount(){
@@ -63,9 +62,8 @@ export default class Home extends Component {
             <Col md={6} className={'p-0'}><RandomCandidate/></Col>
           </Row>
 
-          <Row>
-            <TopicVoter/>
-          </Row>
+          <Row><TopicVoter/></Row>
+          <Row><RandomExecutive/></Row>
         </Container>
       </Shader>
     );
@@ -113,9 +111,7 @@ class Part extends Component {
 class UpcomingSession extends Component {
   constructor(){
     super();
-    this.state = {
-      session: {}
-    }
+    this.state = { session: {} }
   }
 
   componentDidMount(){
@@ -175,12 +171,10 @@ class UpcomingSession extends Component {
   }
 }
 
-class RandomCandidate extends Component {
+class _RandomCandidate extends Component {
   constructor(){
     super();
-    this.state = {
-      candidate: {}
-    }
+    this.state = { candidate: {} }
   }
 
   componentDidMount(){
@@ -205,12 +199,13 @@ class RandomCandidate extends Component {
 
   render(){
     const { candidate } = this.state;
+    const { countries } = this.props;
 
     if (candidate.loaded){
       candidate.firstname = candidate.name.split(' ')[0];
       candidate.age = calculateAge(candidate.birthday);
       candidate.description = candidate.description.trim().length > 0 ? candidate.description : 'No description.';
-      candidate.demonyms = countriesToString(JSON.parse(candidate.ethnicity));
+      candidate.demonyms = countriesToString(JSON.parse(candidate.ethnicity), countries);
     }
 
     const link = `/blackexcellence/candidate/${candidate.id}`;
@@ -260,22 +255,11 @@ class TopicVoter extends Component {
       hasVoted: false,
       isLoaded: false
     }
-
-    this.baseState = this.state;
   }
 
   componentDidMount(){
     this.setState({ isLoaded: true})
     this.getRandomTopic();
-  }
-
-  resetVoter = () => {
-    this.setState({
-      topic: {},
-      votes: 0,
-      // hasVoted: false,
-      isLoaded: true
-    });
   }
 
   /** Retrieve a random polar topic from database */
@@ -341,13 +325,12 @@ class TopicVoter extends Component {
       <Fader
         determinant={isLoaded}
         duration={750}
-        delay={1000}
+        delay={1250}
         postTransitions={'background .3s'}
         className={css.topicVoter}>
         <Container>
-          <Subtitle className={css.heading}>Quick Question:</Subtitle>
-          <Fader determinant={topic.loaded} duration={400} delay={500}
-          className={css.container} postTransitions={'height .3s'}>
+          <Subtitle className={css.heading}>Quick Question</Subtitle>
+          <Fader determinant={topic.loaded} duration={400} delay={500} className={css.container}>
             <Title className={css.headline}>{topic.headline}</Title>
             <Subtitle className={css.question}>{topic.question}</Subtitle>
             <Voter
@@ -368,3 +351,83 @@ class TopicVoter extends Component {
     )
   }
 }
+
+class RandomExecutive extends Component{
+  constructor(){
+    super();
+    this.state = { exec: {} }
+  }
+
+  componentDidMount(){
+    this.getRandomExecutive();
+  }
+
+  getRandomExecutive = () => {
+    fetch('/getRandomExecutive', {
+      method: 'GET',
+      headers: {
+        'Authorization': process.env.AUTH_KEY,
+        'Content-Type': 'application/json',
+      }
+    })
+    .then(res => res.json())
+    .then(exec => {
+      exec.loaded = true;
+      this.setState({exec})
+    })
+    .catch(error => console.error(error));
+  }
+
+  render(){
+    const { exec } = this.state;
+
+    if (exec.loaded){
+      exec.fullname = `${exec.firstname} ${exec.lastname}`;
+      exec.description = exec.description.trim().length > 0 ? exec.description : 'No description.';
+    }
+
+    const link = `/executives/${exec.slug}`;
+
+    return (
+      <Fader
+        determinant={exec.loaded}
+        duration={750}
+        delay={1500}
+        postTransitions={'background-color .3s'}
+        className={css.randomExecutive}>
+        <div className={css.container}>
+        <Mobile><Title className={css.heading}>Have you met our executive?</Title></Mobile>
+          <Row>
+            <Col md={4}>
+              <Link href={link}>
+                <img
+                  src={`/static/images/team/${exec.image}`}
+                  alt={exec.fullname}
+                  className={css.image} />
+              </Link>
+            </Col>
+            <Col md={8}>
+            <Default><Title className={css.heading}>Have you met our executive?</Title></Default>
+              <div className={css.details}>
+                <Title className={css.title}>{exec.fullname}</Title>
+                <Subtitle className={css.subtitle}>{exec.role}</Subtitle>
+                <Divider/>
+                <TruncatedParagraph
+                  paragraphs={1}
+                  link={link}
+                  more={`Read more on ${exec.firstname}...`}
+                  className={css.paragraph}>{exec.description}</TruncatedParagraph>
+              </div>
+            </Col>
+          </Row>
+        </div>
+      </Fader>
+    )
+  }
+}
+
+const mapStateToProps = state => ({
+  countries: state.countries
+});
+
+const RandomCandidate = connect(mapStateToProps)(_RandomCandidate);

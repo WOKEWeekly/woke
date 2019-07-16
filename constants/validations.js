@@ -26,7 +26,7 @@ export const isValidSignup = (user) => {
 export const isValidSession = (session) => {
   if (!ifExists(session.title.trim(), 'Enter the session title.')) return false;
   if (!ifExists(session.date, 'Select the date when the session will be held.')) return false;
-  if (!ifExists(session.image, 'Please select an image for the session.')) return false;
+  if (!isValidFile(session.image, 'session')) return false;
   return true;
 }
 
@@ -51,7 +51,7 @@ export const isValidCandidate = (candidate) => {
   if (!ifExists(candidate.name.trim(), 'Enter the candidate\'s name.')) return false;
   if (!ifExists(candidate.birthday, 'Select the candidate\'s date of birth.')) return false;
   if (!ifExists(candidate.occupation.trim(), 'Please select an image for the session.')) return false;
-  if (!ifExists(candidate.image, 'Please select an image for the candidate.')) return false;
+  if (!isValidFile(candidate.image, 'candidate')) return false;
   return true;
 }
 
@@ -65,7 +65,7 @@ export const isValidMember = (member) => {
   return true;
 }
 
-/** Check signup form */
+/** Ensure a valid email address */
 export const isValidEmail = (email) => {
   const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   const valid = re.test(String(email).toLowerCase());
@@ -73,9 +73,17 @@ export const isValidEmail = (email) => {
   return true;
 }
 
+/** Ensure a valid username */
 export const isValidUsername = (username) => {
   if (!ifExists(username.trim(), 'Please enter a username.')) return false;
   if (username.trim().length < 3){ alert.error('Your username must be at least 3 characters long.'); return false; }
+  return true;
+}
+
+/** Ensure a valid file */
+export const isValidFile = (file, entity) => {
+  if (!ifExists(file, `Please select an image for the ${entity}.`)) return false;
+  if (file.size > 5 * 1024 * 1024) return alert.error('The image you selected is too large.');
   return true;
 }
 

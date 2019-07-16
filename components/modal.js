@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import { Col, Modal } from 'react-bootstrap';
 
 import { DeleteButton2, ConfirmButton, CloseButton } from '~/components/button.js';
@@ -6,7 +7,6 @@ import { Group, Label, Select, UsernameInput } from '~/components/form.js';
 import { SocialIcon } from '~/components/icon.js';
 import { Paragraph } from '~/components/text.js';
 import css from '~/styles/_components.scss';
-import { COUNTRIES } from '~/constants/countries';
 
 import { socialPlatforms } from '~/constants/settings';
 
@@ -86,19 +86,18 @@ export class EthnicModal extends Component {
   }
 }
 
-class EthnicSelect extends Component {
+class _EthnicSelect extends Component {
   render(){
-    const { label, name, value, onChange, clearSelection, placeholder } = this.props;
+    const { label, name, value, onChange, clearSelection, placeholder, countries } = this.props;
     return (
       <Col md={6}>
         <Label>{label}:</Label>
         <Select
           name={name}
           value={value}
-          items={COUNTRIES}
+          items={countries}
           onChange={onChange}
-          placeholder={placeholder}
-          ref={this.select} />
+          placeholder={placeholder} />
         <div>
           <button
             onClick={() => clearSelection(name)}
@@ -189,3 +188,9 @@ export class SocialsModal extends Component {
     )
   }
 }
+
+const mapStateToProps = state => ({
+  countries: state.countries
+});
+
+const EthnicSelect = connect(mapStateToProps)(_EthnicSelect);

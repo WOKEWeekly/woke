@@ -33,3 +33,8 @@ export const saveCandidateSort = sort => ({
   type: 'SAVE_CANDIDATE_SORT',
   payload: sort,
 });
+
+export const saveCountries = countries => ({
+  type: 'SAVE_COUNTRIES',
+  payload: countries,
+});

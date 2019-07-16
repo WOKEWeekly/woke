@@ -46,12 +46,13 @@
   padding: 1em;
   -webkit-transition-duration: .3s;
   transition-duration: .3s;
+  user-select: none;
   &:focus { outline: none; }
   &:active {
     -webkit-transition-duration: .1s;
-    transition-duration: .1s;
-  }
-  @media (max-width: $break-md) { min-width: initial; }
+    transition-duration: .1s; }
+  @media (max-width: $break-md) {
+    min-width: initial; }
 }
 
 .invisible_button {
@@ -111,8 +112,9 @@
   overflow: hidden;
   width: max-content;
   label {
+    align-items: baseline;
     color: white;
-    display: block;
+    display: flex;
   }
   input[type="checkbox"] {
     margin-right: .5em;
@@ -253,8 +255,10 @@
     font-family: $body-font;
     font-size: 1.4em;
     justify-content: center;
-    transition: all .3s ease;
-    width: 50%; }
+    user-select: none;
+    transition: all .3s;
+    width: 50%;
+    &:focus { outline: none; }}
   .yes {
     @extend .options;
     background-color: rgba(0, 128, 0, .4);
@@ -462,4 +466,7 @@
 .bottom_toolbar {
   @extend .toolbar;
   bottom: 0%;
+  button, label {
+    @media (max-width: $break-md) { font-size: .8em !important; }
+  }
 }

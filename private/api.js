@@ -229,7 +229,7 @@ module.exports = function(app, conn){
 
   /** Retrieve only executive team members */
   app.get('/getExec', validateReq, function(req, res){
-    conn.query("SELECT * FROM team WHERE level = 'Executive'", function (err, result, fields) {
+    conn.query("SELECT * FROM team WHERE level = 'Executive'", function (err, result) {
       resToClient(res, err, result);
     });
   });
@@ -300,7 +300,16 @@ module.exports = function(app, conn){
 
   /** Get random candidate */
   app.get('/getRandomCandidate', validateReq, function(req, res){
-    conn.query("SELECT * FROM blackex ORDER BY RAND() LIMIT 1", function (err, result, fields) {
+    const sql = "SELECT * FROM blackex ORDER BY RAND() LIMIT 1";
+    conn.query(sql, function (err, result) {
+      resToClient(res, err, result[0]);
+    });
+  });
+
+  /** Get random member of the executive team */
+  app.get('/getRandomExecutive', function(req, res){
+    const sql = "SELECT * FROM team WHERE level = 'Executive' ORDER BY RAND() LIMIT 1";
+    conn.query(sql, function (err, result) {
       resToClient(res, err, result[0]);
     });
   });
@@ -310,8 +319,7 @@ module.exports = function(app, conn){
     const sql = `SELECT id, headline, category, question, option1, option2, yes, no FROM topics
       WHERE polarity = 1 AND category != 'Christian' AND category != 'Mental Health'
       ORDER BY RAND() LIMIT 1;`;
-
-    conn.query(sql, function (err, result, fields) {
+    conn.query(sql, function (err, result) {
       resToClient(res, err, result[0]);
     });
   });
@@ -334,24 +342,9 @@ module.exports = function(app, conn){
     if (req.headers['authorization'] !== 'authorized'){
       res.sendStatus(403);
     } else {
-      conn.query("SELECT * FROM team", function (err, result, fields) {
+      conn.query("SELECT * FROM team", function (err, result) {
         if (!err){
           res.json(result);
-        } else {
-          res.status(400).send(err.toString());
-        }
-      });
-    }
-  });
-
-  /** Get random member of the executive team */
-  app.get('/getRandomExecMember', function(req, res){
-    if (req.headers['authorization'] !== 'authorized'){
-      res.sendStatus(403);
-    } else {
-      conn.query("SELECT * FROM team WHERE level = 'Executive' ORDER BY RAND() LIMIT 1", function (err, result, fields) {
-        if (!err){
-          res.json(result[0]);
         } else {
           res.status(400).send(err.toString());
         }
@@ -374,7 +367,7 @@ module.exports = function(app, conn){
         var sql = "INSERT INTO team (firstname, lastname, image, level, birthday, role, ethnicity, socials, slug, text, description, delta) VALUES ?";
         var values = [[member.firstname, member.lastname, member.image, member.level, member.birthday, member.role, member.ethnicity, member.socials, member.slug, member.text, member.description, member.delta]];
         
-        conn.query(sql, [values], function (err, result, fields) {
+        conn.query(sql, [values], function (err, result) {
           if (!err){
                         res.sendStatus(200);
           } else {
@@ -403,7 +396,7 @@ module.exports = function(app, conn){
         var member = req.body;
         var sql = "DELETE FROM team WHERE id = ?";
         
-        conn.query(sql, member.id, function (err, result, fields) {
+        conn.query(sql, member.id, function (err, result) {
           if (!err){
                         
             /** Delete image from file system if exists */
@@ -507,7 +500,7 @@ module.exports = function(app, conn){
         var sql = "INSERT INTO suggestions (question, category, type, user_id, approved) VALUES ?";
         var values = [[suggestion.question, suggestion.category, suggestion.type, suggestion.user_id, 0]];
         
-        conn.query(sql, [values], function (err, result, fields) {
+        conn.query(sql, [values], function (err, result) {
           if (!err){
             callback(null, suggestion.user_id)
           } else {
@@ -525,7 +518,7 @@ module.exports = function(app, conn){
         let sql = `SELECT CONCAT(firstname, ' ', lastname) AS name FROM user
           WHERE id = ?`;
 
-        conn.query(sql, id, function (err, result, fields) {
+        conn.query(sql, id, function (err, result) {
           if (!err){
             callback(null, result[0].name)
           } else {
@@ -551,7 +544,7 @@ module.exports = function(app, conn){
         var suggestion = req.body;
         var sql = "DELETE FROM suggestions WHERE id = ?";
         
-        conn.query(sql, suggestion.id, function (err, result, fields) {
+        conn.query(sql, suggestion.id, function (err, result) {
           if (!err){
             res.sendStatus(200);
           } else {
@@ -582,7 +575,7 @@ module.exports = function(app, conn){
         var id = req.body.id;
         var sql = "UPDATE suggestions SET approved = 1 WHERE id = ?";
         
-        conn.query(sql, id, function (err, result, fields) {
+        conn.query(sql, id, function (err, result) {
           if (!err){
             callback(null);
           } else {
@@ -622,7 +615,7 @@ module.exports = function(app, conn){
         var id = req.body.id;
         var sql = "UPDATE suggestions SET approved = 2 WHERE id = ?";
         
-        conn.query(sql, id, function (err, result, fields) {
+        conn.query(sql, id, function (err, result) {
           if (!err){
             callback(null);
           } else {

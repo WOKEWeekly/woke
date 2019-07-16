@@ -86,9 +86,23 @@ const blackexReducer = (state = defaultBlackEx, action) => {
   }
 };
 
+const defaultCountries = {
+  countries: []
+}
+
+const countryReducer = (state = defaultCountries, action) => {
+  switch (action.type) {
+    case 'SAVE_COUNTRIES':
+      return action.payload;
+    default:
+      return state;
+  }
+}
+
 export default combineReducers({
   user: userReducer,
   session: sessionReducer,
   topic: topicReducer,
-  blackex: blackexReducer
+  blackex: blackexReducer,
+  countries: countryReducer
 });

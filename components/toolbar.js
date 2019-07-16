@@ -6,9 +6,7 @@ import { zIndices } from './layout';
 class Toolbar extends Component {
   constructor(props){
     super(props);
-    this.state = {
-      isLoaded: false
-    }
+    this.state = { isLoaded: false }
   }
 
   componentDidMount(){
@@ -16,21 +14,15 @@ class Toolbar extends Component {
   }
 
   render(){
+    if (!this.state.isLoaded) return null;
 
-    const { isLoaded } = this.state;
-
-    if (isLoaded){
-      return (
-        <div className={this.props.className}>
-          <Container className={css.container}>
-            {this.props.children}
-          </Container>
-        </div>
-      )
-    } else {
-      return null;
-    }
-    
+    return (
+      <div className={this.props.className}>
+        <Container className={css.container}>
+          {this.props.children}
+        </Container>
+      </div>
+    )
   }
 }
 

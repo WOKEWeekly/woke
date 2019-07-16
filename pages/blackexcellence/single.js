@@ -69,10 +69,10 @@ class CandidatePage extends Component {
   hideModal = () => { this.setState({modalVisible: false})}
 
   render(){
-    const { candidate, user } = this.props;
+    const { candidate, user, countries } = this.props;
     candidate.description = candidate.description.trim().length > 0 ? candidate.description : 'No description.';
     candidate.age = calculateAge(candidate.birthday);
-    candidate.demonyms = countriesToString(JSON.parse(candidate.ethnicity));
+    candidate.demonyms = countriesToString(JSON.parse(candidate.ethnicity), countries);
 
     const { isLoaded, imageLoaded } = this.state;
 
@@ -152,7 +152,8 @@ class CandidatePage extends Component {
 }
 
 const mapStateToProps = state => ({
-  user: state.user
+  user: state.user,
+  countries: state.countries
 });
 
 export default connect(mapStateToProps)(CandidatePage);

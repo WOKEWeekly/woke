@@ -9,6 +9,9 @@ import { fab } from '@fortawesome/free-brands-svg-icons';
 import { far } from '@fortawesome/free-regular-svg-icons';
 import { fas } from '@fortawesome/free-solid-svg-icons';
 
+import { loadCountries } from '~/constants/countries';
+import { saveCountries } from '~/reducers/actions';
+
 import {PreNavBar, MainNavBar} from "~/partials/header.js";
 import Footer from "~/partials/footer.js";
 
@@ -34,31 +37,37 @@ export default class WOKE extends App {
 
   componentDidMount(){
     document.body.className = css.body;
-    this.setState({isLoaded: true})
+
+    /** Load countries and save in Redux store */
+    loadCountries().then(data => {
+      const countries = [];
+      data.forEach(country => {
+        countries.push({ label: country.name, demonym: country.demonym });
+      });
+      store.dispatch(saveCountries(countries));
+      this.setState({isLoaded: true});
+    });
   }
 
   render() {
     const { Component, pageProps } = this.props;
-
     
-    if (this.state.isLoaded){
-      return (
-        <Container>
-          <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossOrigin="anonymous" />
-          <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Raleway:400,700" />
-          <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Patua+One:400,700" />
-  
-          <Provider store={store}>
-            <PersistGate loading={null} persistor={persistor}>
-              <PreNavBar/> <MainNavBar/>
-              <Component {...pageProps} />
-              <Footer/>
-            </PersistGate>
-          </Provider> 
-        </Container>
-      );
-    } else {
-      return null;
-    }
+    if (!this.state.isLoaded) return null;
+
+    return (
+      <Container>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossOrigin="anonymous" />
+        <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Raleway:400,700" />
+        <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Patua+One:400,700" />
+
+        <Provider store={store}>
+          <PersistGate loading={null} persistor={persistor}>
+            <PreNavBar/> <MainNavBar/>
+            <Component {...pageProps} />
+            <Footer/>
+          </PersistGate>
+        </Provider> 
+      </Container>
+    );
   }
 }
