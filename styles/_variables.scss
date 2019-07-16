@@ -41,6 +41,7 @@ $break-xxl: 1408px; // Extra large devices (large desktops)
 }
 
 .responsive-container {
+  margin: 0 auto;
   width: 60%;
   @media (max-width: $break-xl) { width: 70%; }
   @media (max-width: $break-lg) { width: 80%; }
@@ -85,6 +86,5 @@ $break-xxl: 1408px; // Extra large devices (large desktops)
 
 @mixin responsive-form {
   @extend .responsive-container;
-  margin: 0 auto;
   padding: 2em;
 }

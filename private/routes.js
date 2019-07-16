@@ -112,6 +112,11 @@ module.exports = function(app, conn, server){
     });
   });
 
+  /** Render edit about page */
+  app.get('/about/edit', function(req, res){
+    return server.render(req, res, '/about/edit');
+  });
+
   /** Render constitution */
   app.get('/constitution', function(req, res){
     const file = './static/resources/Constitution.pdf';

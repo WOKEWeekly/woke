@@ -14,7 +14,7 @@ module.exports = function(app, conn){
   });
 
   /** Add new session to database */
-  app.post('/addSession', verifyToken, checkAuth, function(req, res){
+  app.post('/addSession', verifyToken, function(req, res){
     async.waterfall([
       function(callback){ // Upload file to directory
         upload(req, res, function(err){
@@ -36,7 +36,7 @@ module.exports = function(app, conn){
   });
 
   /** Update details of existing session in database */
-  app.put('/updateSession', verifyToken, checkAuth, function(req, res){
+  app.put('/updateSession', verifyToken, function(req, res){
     async.waterfall([
       function(callback){ // Upload new image to directory
         upload(req, res, function(err){
@@ -71,7 +71,7 @@ module.exports = function(app, conn){
   });
 
   /** Delete an existing session from database */
-  app.delete('/deleteSession', verifyToken, checkAuth, function(req, res){
+  app.delete('/deleteSession', verifyToken, function(req, res){
     async.waterfall([
       function(callback){ // Delete session from database
         const session = req.body;
@@ -100,7 +100,7 @@ module.exports = function(app, conn){
   });
 
   /** Add new topic to database */
-  app.post('/addTopic', verifyToken, checkAuth, function(req, res){
+  app.post('/addTopic', verifyToken, function(req, res){
     const topic = req.body;
     const sql = "INSERT INTO topics (headline, category, question, description, type, polarity, option1, option2, user_id) VALUES ?";
     const values = [[topic.headline, topic.category, topic.question, topic.description, topic.type,
@@ -112,7 +112,7 @@ module.exports = function(app, conn){
   });
 
   /** Update topic in database */
-  app.put('/updateTopic', verifyToken, checkAuth, function(req, res){
+  app.put('/updateTopic', verifyToken, function(req, res){
     const topic = req.body;
     const sql = `UPDATE topics SET headline = ?, category = ?, question = ?, description = ?, type = ?, polarity = ?, option1 = ?, option2 = ? WHERE id = ?`;
     const values = [topic.headline, topic.category, topic.question, topic.description, topic.type,
@@ -124,7 +124,7 @@ module.exports = function(app, conn){
   });
 
   /** Delete an existing topic from database */
-  app.delete('/deleteTopic', verifyToken, checkAuth, function(req, res){
+  app.delete('/deleteTopic', verifyToken, function(req, res){
     const topic = req.body;
     const sql = "DELETE FROM topics WHERE id = ?";
     
@@ -149,7 +149,7 @@ module.exports = function(app, conn){
   });
 
   /** Add new candidate to database */
-  app.post('/addCandidate', verifyToken, checkAuth, function(req, res){
+  app.post('/addCandidate', verifyToken, function(req, res){
     async.waterfall([
       function(callback){ // Upload file to directory
         upload(req, res, function(err){
@@ -171,7 +171,7 @@ module.exports = function(app, conn){
   });
 
   /** Update details of existing candidate in database */
-  app.put('/updateCandidate', verifyToken, checkAuth, function(req, res){
+  app.put('/updateCandidate', verifyToken, function(req, res){
     async.waterfall([
       function(callback){ // Upload new image to directory
         upload(req, res, function(err){
@@ -206,7 +206,7 @@ module.exports = function(app, conn){
   });
 
   /** Delete an existing candidate from database */
-  app.delete('/deleteCandidate', verifyToken, checkAuth, function(req, res){
+  app.delete('/deleteCandidate', verifyToken, function(req, res){
     async.waterfall([
       function(callback){ // Delete candidate from database
         const candidate = req.body;
@@ -235,7 +235,7 @@ module.exports = function(app, conn){
   });
 
   /** Update details of existing team member in database */
-  app.put('/updateMember', verifyToken, checkAuth, function(req, res){
+  app.put('/updateMember', verifyToken, function(req, res){
     async.waterfall([
       function(callback){ // Upload new image to directory
         upload(req, res, function(err){
@@ -329,6 +329,14 @@ module.exports = function(app, conn){
     const topic = req.body;
     const sql = `UPDATE topics SET ${topic.vote}=${topic.vote}+1 WHERE id = ${topic.id};`;
     conn.query(sql, function (err) {
+      resToClient(res, err);
+    });
+  });
+
+  /** Update about description */
+  app.put('/updateAbout', verifyToken, function(req, res){
+    const text = req.body.text;
+    fs.writeFile('./static/resources/about.txt', text, function(err) {
       resToClient(res, err);
     });
   });

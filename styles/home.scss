@@ -97,7 +97,6 @@
     margin-bottom: 1em; }
   .container {
     @extend .responsive-container;
-    margin: 0 auto;
     .headline {
       font-size: 2em;
       @media (max-width: $break-md) { font-size: 1.6em; }}

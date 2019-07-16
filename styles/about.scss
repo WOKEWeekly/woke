@@ -1,0 +1,13 @@
+
+@import "_variables.scss";
+
+.container {
+  @extend .responsive-container;
+  padding: 2em;
+  .text {
+    @extend .text;
+    font-size: 1.1em;
+  }
+}
+
+.form { @include responsive-form; }

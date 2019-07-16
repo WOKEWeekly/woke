@@ -14,6 +14,7 @@ module.exports = {
     VIEW_USERS: 8,          // View all registered user details
     CHANGE_CLEARANCE: 8,    // Change the clearances of other users
     SEND_NOTIFICATIONS: 8,  // Send notifications to all users
+    EDIT_ABOUT: 8           // Edit about text
   },
   LEVELS: {
     MEMBERS: [
@@ -35,9 +36,3 @@ module.exports = {
     ],
   }
 };
-
-// export const getRole = (clearance) => {
-//   return ROLES.find((role) => {
-//     return role.value === clearance
-//   }).role
-// }

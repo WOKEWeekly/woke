@@ -1,27 +1,39 @@
+const async = require('async');
 const jwt = require('jsonwebtoken');
 const multer = require('multer');
+const { resToClient } = require('./response.js');
 
 module.exports = {
 
   /** Verify access tokens */
   verifyToken: (req, res, next) => {
-    const bearerHeader = req.headers.authorization;
-    if (typeof bearerHeader !== 'undefined'){
-      const token = bearerHeader.split(' ')[1];
-      req.token = token;
-      jwt.verify(req.token, process.env.JWT_SECRET, (err, auth) => {
-        if (!err){
-          req.auth = auth;
-          next();
+    async.waterfall([
+      function(callback){ // Retrieve token from request
+        const bearerHeader = req.headers.authorization;
+        if (typeof bearerHeader !== 'undefined'){
+          const token = bearerHeader.split(' ')[1];
+          callback(null, token);
         } else {
-          res.status(400).send(error.toString());
-          console.error(err.toString());
+          callback(new Error('Unauthorized request.'));
         }
-      });
-    } else {
-      res.status(400);
-      console.error('Unauthorized request.');
-    }
+      },
+      function(token, callback){ // Verify token
+        jwt.verify(token, process.env.JWT_SECRET, (err, auth) => {
+          err ? callback(err) : callback(null, auth);
+        });
+      },
+      function(auth, callback){ // Check authentication
+        const clearance = auth ? auth.user.clearance : 0;
+        const threshold = parseInt(req.headers.clearance);
+        if (clearance >= threshold){
+          callback(null);
+        } else {
+          callback(new Error('You are not authorised to perform such an action.'));
+        }
+      }
+    ], function(err){
+      err ? resToClient(res, err) : next();
+    });
   },
 
   /** Check for 'authorized' header values to validate requests */
@@ -30,17 +42,6 @@ module.exports = {
       res.sendStatus(403);
     } else {
       next();
-    }
-  },
-
-  /** Check authorisation before performing action */
-  checkAuth: (req, res, next) => {
-    const clearance = req.auth ? req.auth.user.clearance : 0;
-    const threshold = parseInt(req.headers.clearance);
-    if (clearance >= threshold){
-      next();
-    } else {
-      res.status(401).send(`You are not authorised to perform such an action.`);
     }
   },
 

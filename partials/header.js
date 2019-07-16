@@ -147,7 +147,7 @@ export class MainNavbar extends Component {
               {/* <Nav.Link href="#link" className={css.links}>Forum</Nav.Link> */}
               <Nav.Link href="/blackexcellence" className={css.links}>#BlackExcellence</Nav.Link>
               <Nav.Link href="/executives" className={css.links}>The Executives</Nav.Link>
-              <Nav.Link href="#link" className={css.links}>About</Nav.Link>
+              <Nav.Link href="/about" className={css.links}>About</Nav.Link>
               <Nav.Link href={`mailto: ${emails.enquiries}`} className={css.links}>Contact</Nav.Link>
             </Nav>
           </Navbar.Collapse>

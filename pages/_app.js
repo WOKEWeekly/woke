@@ -37,7 +37,7 @@ export default class WOKE extends App {
 
   componentDidMount(){
     document.body.className = css.body;
-
+    
     /** Load countries and save in Redux store */
     loadCountries().then(data => {
       const countries = [];

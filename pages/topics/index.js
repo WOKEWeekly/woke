@@ -56,6 +56,7 @@ class TopicBank extends Component {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${this.props.user.token}`,
+        'Clearance': CLEARANCES.ACTIONS.VIEW_TOPICS,
         'Content-Type': 'application/json',
       }
     })
