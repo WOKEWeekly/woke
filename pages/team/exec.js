@@ -4,7 +4,7 @@ import Link from 'next/link';
 
 import { Cover, Shader, Spacer } from '~/components/layout.js';
 import { Loader, Empty } from '~/components/loader.js';
-import { Title, Subtitle, Paragraph, Divider, TruncatedParagraph, ReadMore } from '~/components/text.js';
+import { Title, Subtitle, Divider, TruncatedParagraph } from '~/components/text.js';
 import { Slider } from '~/components/transitioner.js';
 
 import Meta from '~/partials/meta.js';
@@ -92,7 +92,9 @@ class Exec extends PureComponent {
     }
   }
 
-  showImage = () => this.setState({isLoaded: true});
+  componentDidMount(){
+    this.setState({isLoaded: true});
+  }
 
   render(){
     const { item, idx } = this.props;
@@ -106,7 +108,7 @@ class Exec extends PureComponent {
         key={idx}
         determinant={this.state.isLoaded}
         duration={750}
-        delay={500 * idx}
+        delay={1000 + (500 * idx)}
         direction={isEven ? 'left' : 'right'}>
         <Link href={`/executives/${item.slug}`}>
           <div className={css.item}>
@@ -115,9 +117,7 @@ class Exec extends PureComponent {
                 <img
                   src={`/static/images/team/${item.image}`}
                   alt={item.fullname}
-                  className={css.image}
-                  onLoad={this.showImage}
-                  onError={this.showImage} />
+                  className={css.image} />
               </Col>
               <Col md={{span: 8, order: isEven ? 2 : 1}}>
                 <div className={css.details}>

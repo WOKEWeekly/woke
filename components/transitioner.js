@@ -56,7 +56,8 @@ export class Slider extends Component {
     const { duration, delay, direction, postTransitions } = this.props;
 
     const defaultStyle = {
-      transition: `all ${duration}ms ease ${delay || 0}ms`,
+      transition: `${direction} ${duration}ms ease ${delay || 0}ms,
+        opacity ${duration}ms ease ${delay || 0}ms`,
       [direction]: '-100vw',
       opacity: 0,
       position: 'relative'
