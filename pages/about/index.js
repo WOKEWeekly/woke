@@ -10,7 +10,6 @@ import { Paragraph } from '~/components/text.js';
 import { BottomToolbar } from '~/components/toolbar.js';
 
 import Meta from '~/partials/meta.js';
-
 import css from '~/styles/about.scss';
 
 class About extends Component {
@@ -52,13 +51,13 @@ class About extends Component {
           </div>
         </Shader>
 
-        <BottomToolbar>
-          {user.clearance >= CLEARANCES.ACTIONS.EDIT_ABOUT ? 
+        {user.clearance >= CLEARANCES.ACTIONS.EDIT_ABOUT ? 
+          <BottomToolbar>
             <EditButton
               title={'Edit Text'}
               onClick={() => Router.push('/about/edit/')} />
-          : null}
-        </BottomToolbar>
+          </BottomToolbar>
+        : null}
       </Spacer>
     );
   

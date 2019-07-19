@@ -5,14 +5,14 @@ module.exports = {
 
     CRUD_BLACKEX: 6,        // Add, edit and delete #BlackExcellence candidates
     CRUD_SESSIONS: 6,       // Add, edit and delete sessions
-    CRUD_TOPICS: 6,          // Add, edit and delete topics from the Topic Bank
-    CRUD_TEAM: 8,           // Add, edit and delete team member profiles
+    CRUD_TOPICS: 6,         // Add, edit and delete topics from the Topic Bank
+    EDIT_EXEC: 6,           // Add, edit and delete team member profiles
 
     SEE_SUGGESTING_USER: 7, // See author of suggestions
     DELETE_SUGGESTION: 7,   // Delete suggestions for all users
 
     VIEW_USERS: 8,          // View all registered user details
-    CHANGE_CLEARANCE: 8,    // Change the clearances of other users
+    CRUD_USERS: 8,          // Change the clearances of other users
     SEND_NOTIFICATIONS: 8,  // Send notifications to all users
     EDIT_ABOUT: 8           // Edit about text
   },

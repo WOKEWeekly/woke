@@ -118,7 +118,7 @@ class MemberEdit extends Component {
       body: data,
       headers: {
         'Authorization': `Bearer ${this.props.user.token}`,
-        'Clearance': CLEARANCES.ACTIONS.CRUD_TEAM,
+        'Clearance': CLEARANCES.ACTIONS.EDIT_EXEC,
         'Path': 'team'
       }
     }).then(res => Promise.all([res, res.json()]))

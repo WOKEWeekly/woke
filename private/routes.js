@@ -2,6 +2,15 @@ const fs = require('fs');
 
 module.exports = function(app, conn, server){
 
+  app.get('/', function(req, res){
+    server.render(req, res, '/home', { 
+      title: '#WOKEWeekly - Awakening Through Conversation',
+      description: 'Debates and discussions centered around and beyond the UK black community at university campuses. Providing a safe-space for expression and opinions to be heard and encouraging unity amongst the community through conversation, bringing together those divided by social status, religion and interest.',
+      url: '/',
+      isHome: true
+     });
+  });
+
   /** Render individual session detail page */
   app.get('/session/:slug', function(req, res){
     const slug = req.params.slug;
@@ -55,7 +64,15 @@ module.exports = function(app, conn, server){
     conn.query(sql, [id], function (err, result) {
       if (!err){
         const candidate = result[0];
-        return server.render(req, res, '/blackexcellence/single', { candidate });
+        candidate.label = `#${candidate.id}: ${candidate.name}`;
+        return server.render(req, res, '/blackexcellence/single', {
+          title: candidate.label,
+          description: candidate.description,
+          url: `/blackexcellence/candidate/${candidate.id}`,
+          image: `/static/images/blackexcellence/${candidate.image}`,
+          alt: candidate.label,
+          candidate
+        });
       } else {
         res.status(400).send(err.toString());
       }

@@ -182,10 +182,10 @@ export class ShortTextArea extends Component {
 
 /** For long text inputs */
 export class TextArea extends Component {
-  constructor(){
-    super();
+  constructor(props){
+    super(props);
     this.state = {
-      wordCount: 0
+      wordCount: props.value.length
     }
   }
 

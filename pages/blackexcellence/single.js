@@ -15,7 +15,6 @@ import { Fader, Slider } from '~/components/transitioner.js';
 import CLEARANCES from '~/constants/clearances.js';
 import { countriesToString } from '~/constants/countries.js';
 import { calculateAge } from '~/constants/date.js';
-import Meta from '~/partials/meta.js';
 import css from '~/styles/blackex.scss';
 
 class CandidatePage extends Component {
@@ -78,13 +77,6 @@ class CandidatePage extends Component {
 
     return (
       <Spacer>
-        <Meta
-          title={`#${candidate.id}: ${candidate.name}`}
-          description={candidate.description}
-          url={`/blackexcellence/candidate/${candidate.id}`}
-          image={`/static/images/blackexcellence/${candidate.image}`}
-          alt={candidate.title} />
-
         <Shader>
           <Container className={css.entity}>
             <Slider

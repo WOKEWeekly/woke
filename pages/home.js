@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import {Container, Col, Row} from 'react-bootstrap';
 import Link from 'next/link';
-import Meta from '~/partials/meta.js';
 
 import { alert, displayErrorMessage } from '~/components/alert.js';
 import { Cover, Shader, Default, Mobile } from '~/components/layout.js';
@@ -29,12 +28,6 @@ export default class Home extends Component {
 
     return (
       <Shader>
-        <Meta
-          title={'#WOKEWeekly - Awakening Through Conversation'}
-          description={'Debates and discussions centered around and beyond the UK black community at university campuses. Providing a safe-space for expression and opinions to be heard and encouraging unity amongst the community through conversation, bringing together those divided by social status, religion and interest.'}
-          url={'/'}
-          isHome />
-
         <Cover
           title={'Awakening Through Conversation.'}
           subtitle={'Debates and discussions centered around and beyond the UK black community.'}

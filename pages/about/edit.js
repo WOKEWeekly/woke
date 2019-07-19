@@ -10,14 +10,19 @@ import { Shader, Spacer } from '~/components/layout.js';
 
 import CLEARANCES from '~/constants/clearances.js';
 
+import Meta from '~/partials/meta.js';
 import css from '~/styles/about.scss';
 
 class EditAbout extends Component {
-  constructor(){
-    super();
+  constructor(props){
+    super(props);
     this.state = {
       isLoaded: false,
       text: ''
+    }
+
+    if (props.user.clearance < CLEARANCES.ACTIONS.EDIT_ABOUT){
+      Router.push('/about');
     }
   }
 
@@ -87,7 +92,7 @@ class EditAbout extends Component {
                   name={'text'}
                   value={text}
                   onChange={this.handleText}
-                  placeholder={"Enter the description."} />
+                  placeholder={"Write about #WOKEWeekly..."} />
               </Col>
             </Group>
           </div>

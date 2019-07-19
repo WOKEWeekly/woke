@@ -25,7 +25,7 @@ class MemberForm extends Component {
       socialsModalVisible: false
     }
 
-    if (props.user.clearance < CLEARANCES.ACTIONS.CRUD_TEAM){
+    if (props.user.clearance < CLEARANCES.ACTIONS.EDIT_EXEC){
       Router.push('/executives');
     }
   }

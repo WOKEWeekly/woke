@@ -96,7 +96,7 @@ class ExecPage extends Component {
             title={'Back to Executives'}
             onClick={() => Router.push('/executives')} />
 
-          {user.clearance >= CLEARANCES.ACTIONS.CRUD_TEAM ? 
+          {user.clearance >= CLEARANCES.ACTIONS.EDIT_EXEC ? 
             <EditButton
               title={'Edit Executive'}
               onClick={() => Router.push(`/team/edit/${exec.id}`)}/>
