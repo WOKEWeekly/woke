@@ -28,17 +28,17 @@ export class Cover extends Component {
     const classes = classNames(css.cover, this.props.className);
 
     return (
-      <Fader determinant={imageLoaded} duration={1500} delay={500}>
+      <Fader determinant={imageLoaded} duration={1000}>
         <Container fluid={true} className={classes} style={{
           backgroundImage: `url(${imageSrc})`,
           backgroundPosition: backgroundPosition,
           minHeight: height,
         }}>
           <div className={css.coverText}>
-            <Fader determinant={imageLoaded} duration={500} delay={1000}>
+            <Fader determinant={imageLoaded} duration={500} delay={750}>
               {imageTitle || <div className={css.coverTitle}>{title}</div>}
             </Fader>
-            <Fader determinant={imageLoaded} duration={500} delay={1500}>
+            <Fader determinant={imageLoaded} duration={500} delay={1250}>
               <div className={css.coverSubtitle}>{subtitle}</div>
             </Fader>
           </div>

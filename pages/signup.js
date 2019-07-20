@@ -10,7 +10,7 @@ import { SubmitButton } from '~/components/button.js';
 import { Heading, Group, Label, TextInput, PasswordInput, Checkbox } from '~/components/form.js';
 import { Shader, Spacer } from '~/components/layout.js';
 
-import Meta from '~/partials/meta.js';
+
 import css from '~/styles/auth.scss';
 import { isValidSignup } from '~/constants/validations';
 

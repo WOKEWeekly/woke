@@ -13,7 +13,7 @@ import { Fader, Slider } from '~/components/transitioner.js';
 
 import CLEARANCES from '~/constants/clearances.js';
 import { formatDate } from '~/constants/date.js';
-import Meta from '~/partials/meta.js';
+
 import css from '~/styles/sessions.scss';
 
 class SessionPage extends Component {

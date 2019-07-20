@@ -7,7 +7,7 @@ import { Loader, Empty } from '~/components/loader.js';
 import { Title, Subtitle, Divider, TruncatedParagraph } from '~/components/text.js';
 import { Slider } from '~/components/transitioner.js';
 
-import Meta from '~/partials/meta.js';
+
 import css from '~/styles/team.scss';
 import '~/styles/_categories.scss';
 

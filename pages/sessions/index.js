@@ -18,7 +18,7 @@ import { Zoomer, Slider, Fader } from '~/components/transitioner.js';
 import { formatDate } from '~/constants/date.js';
 import CLEARANCES from '~/constants/clearances.js';
 
-import Meta from '~/partials/meta.js';
+
 import css from '~/styles/sessions.scss';
 
 

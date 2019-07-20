@@ -20,7 +20,6 @@ import { Fader } from '~/components/transitioner.js';
 import { categories } from '~/constants/categories.js';
 import CLEARANCES from '~/constants/clearances.js';
 
-import Meta from '~/partials/meta.js';
 import css from '~/styles/topics.scss';
 import '~/styles/_categories.scss';
 
@@ -37,7 +36,8 @@ class TopicBank extends Component {
       filters: props.topic.filters,
       searchWord: '',
 
-      isLoaded: false
+      isLoaded: false,
+      topicsLoaded: false
     };
 
     if (props.user.clearance < CLEARANCES.ACTIONS.VIEW_TOPICS){
@@ -47,6 +47,7 @@ class TopicBank extends Component {
 
   /** Get topics on mount */
   componentDidMount() {
+    this.setState({ isLoaded: true });
     this.getTopics();
   }
 
@@ -65,7 +66,7 @@ class TopicBank extends Component {
       this.setState({
         topics: topics,
         filtered: topics,
-        isLoaded: true
+        topicsLoaded: true
       }, () => {
          this.sortTopics(this.state.sort);
          checkAlert();
@@ -173,7 +174,7 @@ class TopicBank extends Component {
 
 	render(){
 
-    const { isLoaded, searchWord, results, filters } = this.state;
+    const { topicsLoaded, searchWord, results, filters } = this.state;
     const { user } = this.props;
 
     const hasPrivileges = user.clearance >= CLEARANCES.ACTIONS.CRUD_TOPICS;
@@ -188,7 +189,7 @@ class TopicBank extends Component {
     ];
 
     const TopicGrid = () => {
-      if (!isLoaded){
+      if (!topicsLoaded){
         return <Loader/>;
       } else if (results.length === 0){
         return <Empty message={'No topics found.'}/>;

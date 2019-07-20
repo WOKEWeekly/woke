@@ -14,7 +14,7 @@ import { Fader } from '~/components/transitioner.js';
 
 import CLEARANCES from '~/constants/clearances.js';
 
-import Meta from '~/partials/meta.js';
+
 import css from '~/styles/blackex.scss';
 import '~/styles/_categories.scss';
 

@@ -11,7 +11,6 @@ import { Shader, Spacer } from '~/components/layout.js';
 import CLEARANCES from '~/constants/clearances.js';
 import { getFilename } from '~/constants/file.js';
 
-import Meta from '~/partials/meta.js';
 import css from '~/styles/sessions.scss';
 
 class SessionForm extends Component {

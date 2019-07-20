@@ -14,7 +14,6 @@ import { countriesToString } from '~/constants/countries.js';
 import CLEARANCES from '~/constants/clearances.js';
 import { getFilename } from '~/constants/file.js';
 
-import Meta from '~/partials/meta.js';
 import css from '~/styles/blackex.scss';
 
 class CandidateForm extends Component {

@@ -10,7 +10,7 @@ import { Shader, Spacer } from '~/components/layout.js';
 import {categories} from '~/constants/categories.js';
 import CLEARANCES from '~/constants/clearances.js';
 
-import Meta from '~/partials/meta.js';
+
 import css from '~/styles/topics.scss'
 
 class TopicForm extends Component {
