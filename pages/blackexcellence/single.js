@@ -118,7 +118,7 @@ class CandidatePage extends Component {
         <BottomToolbar>
           <BackButton
             title={'Back to Candidates'}
-            onClick={() => Router.push('/blackexcellence')} />
+            onClick={() => location.href = '/blackexcellence'} />
 
           {user.clearance >= CLEARANCES.ACTIONS.CRUD_BLACKEX ? 
             <React.Fragment>

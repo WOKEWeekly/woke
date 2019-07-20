@@ -10,9 +10,7 @@ export default class MyDocument extends Document {
   render() {
     return (
       <Html>
-        <Head>
-          <Meta {...this.props.__NEXT_DATA__.query}/>
-        </Head>
+        <Head><Meta {...this.props.__NEXT_DATA__.query}/></Head>
         <body>
           <Main />
           <NextScript />

@@ -211,11 +211,6 @@ class TopicBank extends Component {
 
     return (
       <Shader>
-        <Meta
-					title={'Topic Bank'}
-					description={'The currency of the franchise.'}
-					url={'/topics'} />
-
         <Spacer gridrows={'auto auto 1fr auto'}>
           <Cover
             title={'Topic Bank'}

@@ -2,8 +2,9 @@ const fs = require('fs');
 
 module.exports = function(app, conn, server){
 
-  app.get('/', function(req, res){
-    server.render(req, res, '/home', { 
+  /** Home */
+  app.get(['/', '/home'], function(req, res){
+    server.render(req, res, '/', { 
       title: '#WOKEWeekly - Awakening Through Conversation',
       description: 'Debates and discussions centered around and beyond the UK black community at university campuses. Providing a safe-space for expression and opinions to be heard and encouraging unity amongst the community through conversation, bringing together those divided by social status, religion and interest.',
       url: '/',
@@ -11,7 +12,16 @@ module.exports = function(app, conn, server){
      });
   });
 
-  /** Render individual session detail page */
+  /** Sessions */
+  app.get('/sessions', function(req, res){
+    server.render(req, res, '/sessions', { 
+      title: 'Sessions',
+      description: 'Where the magic happens...',
+      url: '/sessions',
+     });
+  });
+
+  /** Session:Individual */
   app.get('/session/:slug', function(req, res){
     const slug = req.params.slug;
     const sql = "SELECT * FROM sessions WHERE slug = ?";
@@ -19,14 +29,25 @@ module.exports = function(app, conn, server){
     conn.query(sql, [slug], function (err, result) {
       if (!err){
         const session = result[0];
-        return server.render(req, res, '/sessions/single', { session });
+        return server.render(req, res, '/sessions/single', {
+          title: session.title,
+          description: session.description,
+          url: `/sessions/${session.slug}`,
+          image: `/static/images/sessions/${session.image}`,
+          session
+        });
       } else {
         res.status(400).send(err.toString());
       }
     });
   });
 
-  /** Render edit session page */
+  /** Add New Session */
+  app.get('/sessions/add', function(req, res){
+    server.render(req, res, '/sessions/add', { title: 'Add New Session' });
+  });
+
+  /** Edit Session */
   app.get('/sessions/edit/:id', function(req, res){
     const id = req.params.id;
     const sql = "SELECT * FROM sessions WHERE id = ?";
@@ -34,14 +55,27 @@ module.exports = function(app, conn, server){
     conn.query(sql, [id], function (err, result) {
       if (!err){
         const session = result[0];
-        return server.render(req, res, '/sessions/edit', { session });
+        return server.render(req, res, '/sessions/edit', {
+          title: 'Edit Session',
+          session
+        });
       } else {
         res.status(400).send(err.toString());
       }
     });
   });
 
-  /** Render edit topic page */
+  /** Topic Bank */
+  app.get('/topics', function(req, res){
+    server.render(req, res, '/topics', { title: 'Topic Bank' });
+  });
+
+  /** Add New Topic */
+  app.get('/topics/add', function(req, res){
+    server.render(req, res, '/topics/add', { title: 'Add New Topic' });
+  });
+
+  /** Edit Topic */
   app.get('/topics/edit/:id', function(req, res){
     const id = req.params.id;
     const sql = "SELECT * FROM topics WHERE id = ?";
@@ -49,14 +83,45 @@ module.exports = function(app, conn, server){
     conn.query(sql, [id], function (err, result) {
       if (!err){
         const topic = result[0];
-        return server.render(req, res, '/topics/edit', { topic });
+        return server.render(req, res, '/topics/edit', {
+          title: 'Edit Topic',
+          topic
+        });
       } else {
         res.status(400).send(err.toString());
       }
     });
   });
 
-  /** Render individual candidate detail page */
+  /** #BlackExcellence */
+  app.get('/blackexcellence', function(req, res){
+    server.render(req, res, '/blackexcellence', { title: '#BlackExcellence' });
+  });
+
+  /** Add New Candidate */
+  app.get('/blackexcellence/add', function(req, res){
+    server.render(req, res, '/blackexcellence/add', { title: 'Add New Candidate' });
+  });
+
+  /** Edit Candidate */
+  app.get('/blackexcellence/edit/:id', function(req, res){
+    const id = req.params.id;
+    const sql = "SELECT * FROM blackex WHERE id = ?";
+    
+    conn.query(sql, [id], function (err, result) {
+      if (!err){
+        const candidate = result[0];
+        return server.render(req, res, '/blackexcellence/edit', {
+          title: 'Edit Candidate',
+          candidate
+        });
+      } else {
+        res.status(400).send(err.toString());
+      }
+    });
+  });
+
+  /** Candidate:Individual */
   app.get('/blackexcellence/candidate/:id', function(req, res){
     const id = req.params.id;
     const sql = "SELECT * FROM blackex WHERE id = ?";
@@ -79,27 +144,16 @@ module.exports = function(app, conn, server){
     });
   });
 
-  /** Render edit candidate page */
-  app.get('/blackexcellence/edit/:id', function(req, res){
-    const id = req.params.id;
-    const sql = "SELECT * FROM blackex WHERE id = ?";
-    
-    conn.query(sql, [id], function (err, result) {
-      if (!err){
-        const candidate = result[0];
-        return server.render(req, res, '/blackexcellence/edit', { candidate });
-      } else {
-        res.status(400).send(err.toString());
-      }
+  /** Executives */
+  app.get('/executives', function(req, res){
+    return server.render(req, res, '/team/exec', {
+      title: 'Meet The Executives',
+      description: 'The masterminds behind the cause.',
+      url: '/executives'
     });
   });
 
-  /** Render executives page */
-  app.get('/executives', function(req, res){
-    return server.render(req, res, '/team/exec');
-  });
-
-  /** Render individual executive profile page */
+  /** Executive:Individual */
   app.get('/executives/:slug', function(req, res){
     const slug = req.params.slug;
     const sql = "SELECT * FROM team WHERE slug = ?";
@@ -107,14 +161,20 @@ module.exports = function(app, conn, server){
     conn.query(sql, [slug], function (err, result) {
       if (!err){
         const exec = result[0];
-        return server.render(req, res, '/team/exec.single', { exec });
+        return server.render(req, res, '/team/exec.single', {
+          title: `${exec.firstname} ${exec.lastname}`,
+          description: exec.description,
+          url: `/executives/${exec.slug}`,
+          image: `/static/images/team/${exec.image}`, 
+          exec
+        });
       } else {
         res.status(400).send(err.toString());
       }
     });
   });
 
-  /** Render edit team member page */
+  /** Edit Team Member */
   app.get('/team/edit/:id', function(req, res){
     const id = req.params.id;
     const sql = "SELECT * FROM team WHERE id = ?";
@@ -122,7 +182,10 @@ module.exports = function(app, conn, server){
     conn.query(sql, [id], function (err, result) {
       if (!err){
         const member = result[0];
-        return server.render(req, res, '/team/edit', { member });
+        return server.render(req, res, '/team/edit', { 
+          title: 'Edit Team Member',
+          member
+        });
       } else {
         res.status(400).send(err.toString());
       }
@@ -130,8 +193,13 @@ module.exports = function(app, conn, server){
   });
 
   /** Render edit about page */
+  app.get('/about', function(req, res){
+    server.render(req, res, '/about', { title: 'About Us'});
+  });
+
+  /** Render edit about page */
   app.get('/about/edit', function(req, res){
-    return server.render(req, res, '/about/edit');
+    server.render(req, res, '/about/edit', { title: 'Edit About'});
   });
 
   /** Render constitution */

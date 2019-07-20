@@ -51,10 +51,6 @@ class CandidateForm extends Component {
 
     return (
       <Shader>
-        <Meta
-					title={metaTitle}
-          url={`/blackexcellence${metaUrl}`} />
-
         <Spacer className={css.form}>
           <div>
             <Heading>{heading}</Heading>

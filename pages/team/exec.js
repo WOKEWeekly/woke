@@ -64,11 +64,6 @@ export default class Executives extends Component {
 
     return (
       <Shader>
-        <Meta
-					title={heading}
-					description={description}
-					url={'/executives'} />
-
         <Spacer gridrows={'auto 1fr auto'}>
           <Cover
             title={heading}

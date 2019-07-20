@@ -10,7 +10,6 @@ import { Shader, Spacer } from '~/components/layout.js';
 
 import CLEARANCES from '~/constants/clearances.js';
 
-import Meta from '~/partials/meta.js';
 import css from '~/styles/about.scss';
 
 class EditAbout extends Component {
@@ -77,10 +76,6 @@ class EditAbout extends Component {
 
     return (
       <Shader>
-        <Meta
-          title={'Edit About'}
-          url={'/about/edit'} />
-
         <Spacer className={css.form}>
           <div>
             <Heading>Edit About</Heading>

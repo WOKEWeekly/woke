@@ -13,7 +13,6 @@ import { Fader, Slider } from '~/components/transitioner.js';
 import CLEARANCES from '~/constants/clearances.js';
 import { countriesToString } from '~/constants/countries.js';
 import { calculateAge } from '~/constants/date.js';
-import Meta from '~/partials/meta.js';
 import css from '~/styles/team.scss';
 
 class ExecPage extends Component {
@@ -46,13 +45,6 @@ class ExecPage extends Component {
 
     return (
       <Spacer>
-        <Meta
-          title={exec.fullname}
-          description={exec.description}
-          url={`/executives/${exec.slug}`}
-          image={`/static/images/team/${exec.image}`}
-          alt={exec.fullname} />
-
         <Shader>
           <Container className={css.entity}>
             <Slider
@@ -94,7 +86,7 @@ class ExecPage extends Component {
         <BottomToolbar>
           <BackButton
             title={'Back to Executives'}
-            onClick={() => Router.push('/executives')} />
+            onClick={() => location.href = '/executives'} />
 
           {user.clearance >= CLEARANCES.ACTIONS.EDIT_EXEC ? 
             <EditButton

@@ -123,15 +123,10 @@ class Sessions extends Component {
 
     return (
       <Shader>
-        <Meta
-					title={'Sessions'}
-					description={'Where we do the magic...'}
-					url={'/sessions'} />
-
         <Spacer gridrows={'auto 1fr auto'}>
           <Cover
             title={'Sessions'}
-            subtitle={'Where we do the magic...'}
+            subtitle={'Where the magic happens...'}
             image={'sessions-header.jpg'}
             height={200}
             className={css.cover} />

@@ -49,10 +49,6 @@ class MemberForm extends Component {
 
     return (
       <Shader>
-        <Meta
-					title={metaTitle}
-          url={`/team${metaUrl}`} />
-
         <Spacer className={css.form}>
           <div>
             <Heading>{heading}</Heading>
