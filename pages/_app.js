@@ -51,10 +51,6 @@ export default class WOKE extends App {
     this.preloadCountries();
   }
 
-  componentWillUnmount(){
-    this.unsubscribe();
-  }
-
   /** Save country list in Redux store */
   preloadCountries = () => {
     loadCountries().then(data => {

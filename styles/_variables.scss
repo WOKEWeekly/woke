@@ -37,7 +37,14 @@ $break-xxl: 1408px; // Extra large devices (large desktops)
 /** Global template styles */
 .text {
   color: white;
-  font-family: $body-font;
+  font-family: $body-font;}
+
+.link-button {
+  background: none;
+  border: none;
+  outline: none;
+  padding: 0;
+  &:hover { text-decoration: underline; }
 }
 
 .responsive-container {

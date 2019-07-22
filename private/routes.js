@@ -195,11 +195,19 @@ module.exports = function(app, conn, server){
     });
   });
 
-  /** Add New Candidate */
+  /** Registration */
   app.get('/signup', function(req, res){
     server.render(req, res, '/signup', {
       title: 'Sign Up',
       url: '/signup',
+    });
+  });
+
+  /** Registration */
+  app.get('/account', function(req, res){
+    server.render(req, res, '/account', {
+      title: 'Account',
+      url: '/account',
     });
   });
 
@@ -242,8 +250,8 @@ module.exports = function(app, conn, server){
     })
   ));
 
-  server.get('/sitemap.xml', (req, res) => (
-    res.status(200).sendFile('./static/resources/sitemap.xml', {
+  app.get('/sitemap.xml', (req, res) => (
+    res.status(200).sendFile(path.resolve('./static/resources/sitemap.xml'), {
       headers: { 'Content-Type': 'text/xml;charset=UTF-8', }
     })
   ));

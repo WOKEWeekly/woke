@@ -66,7 +66,7 @@ class PreNavbar extends Component {
                 <Mobile>{firstname} {lastname.substring(0,1)}.</Mobile>
               </Dropdown.Toggle>
               <Dropdown.Menu className={css.dropdown_menu}>
-                <Dropdown.Item className={css.dropdown_item} eventKey={'1'}>Your Account</Dropdown.Item>
+                <Dropdown.Item className={css.dropdown_item} onClick={() => Router.push('/account')} eventKey={'1'}>Your Account</Dropdown.Item>
                 <Dropdown.Item className={css.dropdown_item} onClick={this.logOut}>Log Out</Dropdown.Item>
               </Dropdown.Menu>
             </Dropdown>
