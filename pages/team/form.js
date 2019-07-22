@@ -26,7 +26,7 @@ class MemberForm extends Component {
     }
 
     if (props.user.clearance < CLEARANCES.ACTIONS.EDIT_EXEC){
-      Router.push('/executives');
+      return Router.push('/executives');
     }
   }
 

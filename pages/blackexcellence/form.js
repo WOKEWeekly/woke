@@ -25,7 +25,7 @@ class CandidateForm extends Component {
     }
 
     if (props.user.clearance < CLEARANCES.ACTIONS.CRUD_SESSIONS){
-      Router.push('/blackexcellence');
+      return Router.push('/blackexcellence');
     }
   }
 

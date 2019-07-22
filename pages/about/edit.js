@@ -26,7 +26,7 @@ class EditAbout extends Component {
     }
 
     if (props.user.clearance < CLEARANCES.ACTIONS.EDIT_ABOUT){
-      Router.push('/about');
+      return Router.push('/about');
     }
   }
 

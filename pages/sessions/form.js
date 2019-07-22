@@ -18,7 +18,7 @@ class SessionForm extends Component {
     super(props);
 
     if (props.user.clearance < CLEARANCES.ACTIONS.CRUD_SESSIONS){
-      Router.push('/sessions');
+      return Router.push('/sessions');
     }
   }
 

@@ -28,7 +28,7 @@ class Signup extends Component {
     }
 
     if (props.user.isAuthenticated){
-      Router.push('/');
+      return Router.push('/');
     }
 
     document.body.className = css.background;

@@ -41,7 +41,7 @@ class TopicBank extends Component {
     };
 
     if (props.user.clearance < CLEARANCES.ACTIONS.VIEW_TOPICS){
-      Router.push('/');
+      return Router.push('/');
     }
   }
 
