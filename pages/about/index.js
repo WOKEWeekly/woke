@@ -12,28 +12,23 @@ import { BottomToolbar } from '~/components/toolbar.js';
 import css from '~/styles/about.scss';
 
 class About extends Component {
+  /** Retrieve about description from server */
+  static async getInitialProps({ query }) {
+    return { text: query.description };
+  }
+
   constructor(){
     super();
-    this.state = {
-      isLoaded: false,
-      text: ''
-    }
+    this.state = { isLoaded: false }
   }
 
   componentDidMount(){
-    this.getDescription();
-  }
-
-  /** Retrieve text from about.txt */
-  getDescription = () => {
-    fetch('/static/resources/about.txt')
-    .then(res => res.text())
-    .then(text => this.setState({ text, isLoaded: true}));
+    this.setState({ isLoaded: true })
   }
 
   render(){
-    const { isLoaded, text } = this.state;
-    const { user } = this.props;
+    const { isLoaded } = this.state;
+    const { user, text } = this.props;
 
     if (!isLoaded) return null;
 

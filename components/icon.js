@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { colors } from '~/constants/theme.js';
 
 import css from '~/styles/_components.scss';
 import { socialPlatforms } from '~/constants/settings.js';
@@ -113,7 +112,7 @@ export class SocialIcon extends Component {
         <a target={'_blank'} {...this.props}>
           <FontAwesomeIcon
             icon={['fab', this.props.icon]}
-            color={colors.primary}
+            color={'#6C4D90'}
             size={this.props.size} />
         </a>
       );

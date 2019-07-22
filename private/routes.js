@@ -1,4 +1,7 @@
 const fs = require('fs');
+const path = require('path');
+const about = './static/resources/about.txt';
+const constitution = './static/resources/Constitution.pdf';
 
 module.exports = function(app, conn, server){
 
@@ -192,23 +195,57 @@ module.exports = function(app, conn, server){
     });
   });
 
-  /** Render edit about page */
+  /** Add New Candidate */
+  app.get('/signup', function(req, res){
+    server.render(req, res, '/signup', {
+      title: 'Sign Up',
+      url: '/signup',
+    });
+  });
+
+  /** About Us */
   app.get('/about', function(req, res){
-    server.render(req, res, '/about', { title: 'About Us'});
+    fs.readFile(about, 'utf8', function (err, data){
+      return server.render(req, res, '/about', {
+        title: 'About Us',
+        description: data,
+        url: '/about'
+      });
+    });
   });
 
-  /** Render edit about page */
+  /** Edit About */
   app.get('/about/edit', function(req, res){
-    server.render(req, res, '/about/edit', { title: 'Edit About'});
+    fs.readFile(about, 'utf8', function (err, data){
+      return server.render(req, res, '/about/edit', {
+        title: 'Edit About',
+        description: data
+      });
+    });
   });
 
-  /** Render constitution */
+  /***************************************************************
+   * RESOURCES
+   **************************************************************/
+     
   app.get('/constitution', function(req, res){
-    const file = './static/resources/Constitution.pdf';
-    fs.readFile(file, function (err, data){
+    fs.readFile(constitution, function (err, data){
+      if (err) res.sendStatus(404);
       res.contentType("application/pdf");
       res.send(data);
     });
   });
+
+  app.get('/robots.txt', (req, res) => (
+    res.status(200).sendFile(path.resolve('./static/resources/robots.txt'), {
+      headers: { 'Content-Type': 'text/plain;charset=UTF-8', }
+    })
+  ));
+
+  server.get('/sitemap.xml', (req, res) => (
+    res.status(200).sendFile('./static/resources/sitemap.xml', {
+      headers: { 'Content-Type': 'text/xml;charset=UTF-8', }
+    })
+  ));
 
 }

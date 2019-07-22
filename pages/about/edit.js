@@ -13,11 +13,16 @@ import CLEARANCES from '~/constants/clearances.js';
 import css from '~/styles/about.scss';
 
 class EditAbout extends Component {
+  /** Retrieve about description from server */
+  static async getInitialProps({ query }) {
+    return { text: query.description };
+  }
+
   constructor(props){
     super(props);
     this.state = {
       isLoaded: false,
-      text: ''
+      text: props.text
     }
 
     if (props.user.clearance < CLEARANCES.ACTIONS.EDIT_ABOUT){
@@ -26,14 +31,12 @@ class EditAbout extends Component {
   }
 
   componentDidMount(){
-    this.getDescription();
+    this.setState({isLoaded: true})
   }
 
   /** Update about description */
   updateAbout = () => {
-    const about = {
-      text: this.state.text
-    }
+    const about = { text: this.state.text }
 
     fetch('/updateAbout', {
       method: 'PUT',
@@ -62,15 +65,9 @@ class EditAbout extends Component {
     const { name, value } = event.target;
     this.setState({[name]: value}); }
 
-  /** Retrieve text from about.txt */
-  getDescription = () => {
-    fetch('/static/resources/about.txt')
-    .then(res => res.text())
-    .then(text => this.setState({ text, isLoaded: true}));
-  }
-
   render(){
     const { isLoaded, text } = this.state;
+    console.log(text);
 
     if (!isLoaded) return null;
 

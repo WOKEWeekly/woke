@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import {Col, Row } from 'react-bootstrap';
+import Link from 'next/link';
 import { FooterIcon } from '~/components/icon';
 
 import { accounts } from '~/constants/settings.js';
@@ -24,10 +25,31 @@ export default class Footer extends Component {
 
     return (
       <div className={css.footer} >
-        <Col md={4}><Socials/></Col>
+        <Row>
+          <Col md={4}><Links/></Col>
+          <Col md={4}></Col>
+          <Col md={4}><Socials/></Col>
+        </Row>
       </div>
     );
 	}
+}
+
+/** Links for all necessary */
+class Links extends Component {
+  render(){
+    return (
+      <div style={{
+        color: 'white',
+        fontFamily: 'Raleway',
+        display: 'grid'
+      }}>
+        <Link>Privacy Policy</Link>
+        <Link>Cookies</Link>
+        <Link>FAQs</Link>
+      </div>
+    )
+  }
 }
 
 /** Social media icons in footer */

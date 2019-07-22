@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { Transition } from 'react-transition-group';
 
+
+/** Fade transition */
 export class Fader extends Component {
   render(){
 
@@ -27,6 +29,7 @@ export class Fader extends Component {
   }
 }
 
+/** Zoom transition */
 export class Zoomer extends Component {
   render(){
 
@@ -50,6 +53,7 @@ export class Zoomer extends Component {
   }
 }
 
+/** Slide transition */
 export class Slider extends Component {
   render(){
 

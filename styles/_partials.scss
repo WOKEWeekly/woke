@@ -23,7 +23,9 @@
       .dropdown_item {
         color: white;
         padding: .8em;
-        &:hover { color: inherit;}}
+        &:focus { background: inherit; }
+        &:hover { background: white; color: black;}
+        &:active { background: #007bff; color: white; } }
       .divider { margin: 0; }
     }
   }
@@ -68,6 +70,6 @@
   background-color: rgba(13, 12, 14, .95);
   bottom: 0%;
   clear: both;
-  padding: 1.6em 0;
+  padding: 1.6em;
   width: 100%;
 }
