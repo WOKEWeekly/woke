@@ -38,17 +38,11 @@ export default class WOKE extends App {
   componentDidMount(){
     document.body.className = css.body;
 
-    /** Retrieve all countries just once */
-    // this.unsubscribe = store.subscribe(() => {
-    //   const countries = store.getState().countries;
-    //   if (!countries || countries.length === 0){
-    //     this.preloadCountries();
-    //   }
-    // });
-
-    // this.setState({isLoaded: true});
-
-    this.preloadCountries();
+    if (!localStorage.getItem('countriesLoaded')){
+      this.preloadCountries();
+    } else {
+      this.setState({isLoaded: true});
+    }
   }
 
   /** Save country list in Redux store */
@@ -59,8 +53,8 @@ export default class WOKE extends App {
         countries.push({ label: country.name, demonym: country.demonym });
       });
       store.dispatch(saveCountries(countries));
+      localStorage.setItem('countriesLoaded', true);
       this.setState({isLoaded: true});
-      // this.unsubscribe();
     });
   }
 
