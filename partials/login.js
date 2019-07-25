@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { Modal } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { saveUser } from '~/reducers/actions';
@@ -7,6 +6,7 @@ import { saveUser } from '~/reducers/actions';
 import { alert, setAlert, displayErrorMessage } from '~/components/alert.js';
 import { SubmitButton, CancelButton } from '~/components/button.js';
 import { Group, Label, UsernameInput, PasswordInput, Checkbox } from '~/components/form.js';
+import { Modal } from '~/components/modal.js';
 
 import { isValidLogin } from '~/constants/validations.js';
 import css from '~/styles/auth.scss';
@@ -57,48 +57,46 @@ class LoginModal extends Component {
 
     const { username, password, remember } = this.state;
 
+    const header = (
+      <h2 className={css.text}>Log In</h2>
+    );
+    const body = (
+      <div style={{padding: '0 1em'}}>
+        <Group className={css.group}>
+          <Label>Username / Email Address:</Label>
+          <UsernameInput
+            value={username}
+            onChange={this.handleUsername}
+            placeholder={"Enter username"} />
+        </Group>
+        <Group className={css.group}>
+          <Label>Password:</Label>
+          <PasswordInput
+            value={password}
+            onChange={this.handlePassword}
+            placeholder={"Enter password"} />
+        </Group>
+        <Group style={{marginBottom: 0}}>
+          <Checkbox
+            checked={remember}
+            label={'Remember me'}
+            onChange={this.handleRemember} />
+        </Group>
+      </div>
+    );
+    const footer = (
+      <React.Fragment>
+        <SubmitButton onClick={this.logIn}>Log In</SubmitButton>
+        <CancelButton onClick={this.props.close}>Cancel</CancelButton>
+      </React.Fragment>
+    )
+
     return (
       <Modal
-        show={this.props.visible}
-        onHide={null}
-        centered>
-          
-        <Modal.Header className={css.modal_header}>
-          <h2 className={css.text}>Log In</h2>
-        </Modal.Header>
-
-        <Modal.Body className={css.modal_body}>
-          <div style={{padding: '0 1em'}}>
-            <Group className={css.group}>
-              <Label>Username / Email Address:</Label>
-              <UsernameInput
-                value={username}
-                onChange={this.handleUsername}
-                placeholder={"Enter username"} />
-            </Group>
-            <Group className={css.group}>
-              <Label>Password:</Label>
-              <PasswordInput
-                value={password}
-                onChange={this.handlePassword}
-                placeholder={"Enter password"} />
-            </Group>
-            <Group style={{marginBottom: 0}}>
-              <Checkbox
-                checked={remember}
-                label={'Remember me'}
-                onChange={this.handleRemember} />
-            </Group>
-          </div>
-        </Modal.Body>
-
-        <Modal.Footer className={css.modal_footer}>
-          <div>
-            <SubmitButton onClick={this.logIn}>Log In</SubmitButton>
-            <CancelButton onClick={this.props.close}>Cancel</CancelButton>
-          </div>
-        </Modal.Footer>
-    </Modal>
+        visible={this.props.visible}
+        header={header}
+        body={body}
+        footer={footer} />
     )
   }
 }

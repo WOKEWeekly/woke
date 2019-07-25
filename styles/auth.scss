@@ -12,29 +12,6 @@
   max-width: 500px !important;
 }
 
-.modal_header, .modal_body, .modal_footer { background: $dark; }
-.modal_footer {
-  flex-direction: column;
-  justify-content: center;
-
-  div {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    width: 100%;
-  }
-}
-
-:global(.modal-open) {
-  padding: 0 !important;
-  overflow-y: auto
-}
-:global(.modal-content) {
-  border: 1px solid $faded-white !important;
-  border-radius: 15px !important;
-  overflow: hidden;
-}
-
 /******************************************
 *** signup.js
 ******************************************/

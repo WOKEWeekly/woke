@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Col, Modal } from 'react-bootstrap';
+import { Col, Modal as DefaultModal } from 'react-bootstrap';
 
 import { DeleteButton2, ConfirmButton, CloseButton } from '~/components/button.js';
 import { Group, Label, Select, UsernameInput } from '~/components/form.js';
@@ -10,25 +10,65 @@ import css from '~/styles/_components.scss';
 
 import { socialPlatforms } from '~/constants/settings';
 
+export class Modal extends Component {
+  render(){
+
+    const { visible, header, body, footer,
+    bodyStyle } = this.props;
+
+    const modalHeader = (
+      <DefaultModal.Header className={css.modal_header}>
+        {header}
+      </DefaultModal.Header>
+    );
+
+    const modalBody = (
+      <DefaultModal.Body className={css.modal_body}>
+        {body}
+      </DefaultModal.Body>
+    );
+
+    const modalFooter = (
+      <DefaultModal.Footer className={css.modal_footer}>
+        {footer}
+      </DefaultModal.Footer>
+    );
+
+    return (
+      <DefaultModal
+        show={visible}
+        onHide={null}
+        centered
+        {...this.props}>
+        {header ? modalHeader : null}
+        {modalBody}
+        {footer ? modalFooter : null}
+     </DefaultModal>
+    )
+  }
+}
+
 export class ConfirmModal extends Component {
   render(){
 
     const { message, confirmFunc, confirmText, close, visible } = this.props;
 
+    const body = (
+      <Paragraph className={css.text} style={{fontSize: '1.1em'}}>{message}</Paragraph>
+    );
+
+    const footer = (
+      <React.Fragment>
+        <DeleteButton2 onClick={confirmFunc}>{confirmText}</DeleteButton2>
+        <CloseButton onClick={close}>Cancel</CloseButton>
+      </React.Fragment>
+    )
+
     return (
       <Modal
         show={visible}
-        onHide={null}
-        centered>
-        <Modal.Body className={css.modal_body}>
-          <Paragraph className={css.text} style={{fontSize: '1.1em'}}>{message}</Paragraph>
-        </Modal.Body>
-
-        <Modal.Footer className={css.modal_footer}>
-          <DeleteButton2 onClick={confirmFunc}>{confirmText}</DeleteButton2>
-          <CloseButton onClick={close}>Cancel</CloseButton>
-        </Modal.Footer>
-     </Modal>
+        body={body}
+        footer={footer} />
     )
   }
 }
@@ -37,51 +77,54 @@ export class EthnicModal extends Component {
   render(){
     const { close, visible, handleSelect, clearSelection, entity } = this.props;
     const { ethnicity1, ethnicity2, ethnicity3, ethnicity4 } = entity;
+
+    const body = (
+      <React.Fragment>
+        <Group>
+          <EthnicSelect
+            label={'First ethnicity'}
+            name={'ethnicity1'}
+            value={ethnicity1}
+            onChange={handleSelect}
+            clearSelection={clearSelection}
+            placeholder={'Select first country...'} />
+          <EthnicSelect
+            label={'Second ethnicity'}
+            name={'ethnicity2'}
+            value={ethnicity2}
+            onChange={handleSelect}
+            clearSelection={clearSelection}
+            placeholder={'Select second country...'} />
+        </Group>
+        <Group>
+          <EthnicSelect 
+            label={'Third ethnicity'}
+            name={'ethnicity3'}
+            value={ethnicity3}
+            onChange={handleSelect}
+            clearSelection={clearSelection}
+            placeholder={'Select third country...'} />
+          <EthnicSelect
+            label={'Fourth ethnicity'}
+            name={'ethnicity4'}
+            value={ethnicity4}
+            onChange={handleSelect}
+            clearSelection={clearSelection}
+            placeholder={'Select fourth country...'} />
+        </Group>
+      </React.Fragment>
+    );
+
+    const footer = (
+      <CloseButton onClick={close}>Close</CloseButton>
+    );
+
     return (
       <Modal
         show={visible}
-        onHide={null}
-        centered
-        scrollable>
-        <Modal.Body className={css.modal_body}>
-          <Group>
-            <EthnicSelect
-              label={'First ethnicity'}
-              name={'ethnicity1'}
-              value={ethnicity1}
-              onChange={handleSelect}
-              clearSelection={clearSelection}
-              placeholder={'Select first country...'} />
-            <EthnicSelect
-              label={'Second ethnicity'}
-              name={'ethnicity2'}
-              value={ethnicity2}
-              onChange={handleSelect}
-              clearSelection={clearSelection}
-              placeholder={'Select second country...'} />
-          </Group>
-          <Group>
-            <EthnicSelect 
-              label={'Third ethnicity'}
-              name={'ethnicity3'}
-              value={ethnicity3}
-              onChange={handleSelect}
-              clearSelection={clearSelection}
-              placeholder={'Select third country...'} />
-            <EthnicSelect
-              label={'Fourth ethnicity'}
-              name={'ethnicity4'}
-              value={ethnicity4}
-              onChange={handleSelect}
-              clearSelection={clearSelection}
-              placeholder={'Select fourth country...'} />
-          </Group>
-        </Modal.Body>
-
-        <Modal.Footer className={css.modal_footer}>
-          <CloseButton onClick={close}>Close</CloseButton>
-        </Modal.Footer>
-      </Modal>
+        scrollable
+        body={body}
+        footer={footer} />
     )
   }
 }
@@ -98,13 +141,11 @@ class _EthnicSelect extends Component {
           items={countries}
           onChange={onChange}
           placeholder={placeholder} />
-        <div>
           <button
             onClick={() => clearSelection(name)}
             className={css.clear}>
             Clear
           </button>
-        </div>
       </Col>
     )
   }
@@ -168,23 +209,24 @@ export class SocialsModal extends Component {
       return items;
     }
 
+    const body = (
+      <Group>{renderFields()}</Group>
+    );
+
+    const footer = (
+      <React.Fragment>
+        <ConfirmButton onClick={this.confirmSocials}>Confirm</ConfirmButton>
+        <CloseButton onClick={close}>Close</CloseButton>
+      </React.Fragment>
+    );
+
     return (
       <Modal
         show={visible}
-        onHide={null}
-        centered
-        scrollable>
-        <Modal.Body
-          className={css.modal_body}
-          style={{ maxHeight: '75vh' }}>
-          <Group>{renderFields()}</Group>
-        </Modal.Body>
-
-        <Modal.Footer className={css.modal_footer}>
-          <ConfirmButton onClick={this.confirmSocials}>Confirm</ConfirmButton>
-          <CloseButton onClick={close}>Close</CloseButton>
-        </Modal.Footer>
-      </Modal>
+        scrollable
+        body={body}
+        footer={footer}
+        bodyStyle={{maxHeight: '75vh'}} />
     )
   }
 }
