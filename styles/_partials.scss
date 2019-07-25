@@ -66,4 +66,18 @@
   clear: both;
   padding: 1.6em;
   width: 100%;
+  .footerLinks {
+    @extend .text;
+    display: flex;
+    width: 100%;
+    @media (max-width: $break-md) {
+      display: grid;
+      grid-template-columns: repeat(2, 50%);
+      font-size: .9em;
+      text-align: center;}
+    a {
+      color: white;
+      margin: 0 .5em;
+    }
+  }
 }

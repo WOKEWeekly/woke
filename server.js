@@ -22,10 +22,11 @@ app.use(cookieParser());
 app.use(cors());
 
 app.use(expressSession({
-  cookie: {maxAge: 2 * 60 * 60 * 1000},
-  secret: process.env.SESSION_SECRET || "secret",
+  name: 'wokeSession',
+  secret: process.env.SESSION_SECRET,
   resave: true,
-  saveUninitialized: true
+  saveUninitialized: true,
+  unset: 'destroy'
 }));
 app.use(passport.initialize());
 app.use(passport.session());

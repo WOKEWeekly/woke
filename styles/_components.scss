@@ -19,6 +19,31 @@
   @extend .responsive-container;
 }
 
+.cookiePrompt {
+  align-items: center;
+  background-color: rgba(0,0,0,0.95);
+  bottom: 0%;
+  display: flex;
+  height: 5vh;
+  padding: 1.5em 1em;
+  position: -webkit-sticky;
+  position: sticky;
+  width: 100%;
+  z-index: 1100;
+  span { 
+    color: white;
+    margin: 0 auto; }
+  button {
+    border: 1px solid black;
+    border-radius: 5px;
+    font-family: $title-font;
+    padding: .3em 1em;
+    -webkit-transition-duration: .3s;
+    transition-duration: .3s;
+    user-select: none;
+  }
+}
+
 .fadeIn { animation-name: fadeIn; }
 .fadeOut { animation-name: fadeOut; }
 
@@ -240,43 +265,6 @@
   }
 }
 
-.voter {
-  border-radius: 30px;
-  display: flex;
-  margin: 0 auto;
-  overflow: hidden;
-  min-height: 6em;
-  .options {
-    all: initial;
-    align-items: center;
-    color: white;
-    cursor: pointer;
-    display: flex;
-    font-family: $body-font;
-    font-size: 1.4em;
-    justify-content: center;
-    user-select: none;
-    transition: all .3s;
-    width: 50%;
-    &:focus { outline: none; }}
-  .yes {
-    @extend .options;
-    background-color: rgba(0, 128, 0, .4);
-    &:hover { background-color: rgba(0, 128, 0, .8); }}
-  .yesVoted {
-    @extend .options;
-    background-color: rgba(0, 128, 0, .8);
-    cursor: initial;}
-  .no {
-    @extend .options;
-    background-color: rgba(255, 0, 0, .4);
-    &:hover { background-color: rgba(255, 0, 0, .8) } }
-  .noVoted {
-    @extend .options;
-    background-color: rgba(255, 0, 0, .8);
-    cursor: initial; }
-}
-
 :global(.react-datepicker__input-container) { padding: .4em 0; }
 :global(.react-datepicker-wrapper),
 :global(.react-datepicker__input-container) { display: block !important; }
@@ -469,4 +457,45 @@
   button, label {
     @media (max-width: $break-md) { font-size: .8em !important; }
   }
+}
+
+/****************/
+/** voter.js **/
+/****************/
+
+.voter {
+  border-radius: 30px;
+  display: flex;
+  margin: 0 auto;
+  overflow: hidden;
+  min-height: 6em;
+  .options {
+    all: initial;
+    align-items: center;
+    color: white;
+    cursor: pointer;
+    display: flex;
+    font-family: $body-font;
+    font-size: 1.4em;
+    justify-content: center;
+    user-select: none;
+    transition: all .3s;
+    width: 50%;
+    &:focus { outline: none; }}
+  .yes {
+    @extend .options;
+    background-color: rgba(0, 128, 0, .4);
+    &:hover { background-color: rgba(0, 128, 0, .8); }}
+  .yesVoted {
+    @extend .options;
+    background-color: rgba(0, 128, 0, .8);
+    cursor: initial;}
+  .no {
+    @extend .options;
+    background-color: rgba(255, 0, 0, .4);
+    &:hover { background-color: rgba(255, 0, 0, .8) } }
+  .noVoted {
+    @extend .options;
+    background-color: rgba(255, 0, 0, .8);
+    cursor: initial; }
 }

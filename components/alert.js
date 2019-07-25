@@ -1,5 +1,7 @@
+import React, { Component } from 'react';
 import { toast, cssTransition } from 'react-toastify';
 import classNames from 'classnames';
+import { Fader } from '~/components/transitioner.js';
 import css from '~/styles/_components.scss';
 
 const animation = cssTransition({
@@ -50,5 +52,31 @@ export const displayErrorMessage = (err) => {
     alert.error(err.toString());
   } else {
     alert.error('Something went wrong. Please try again later.');
+  }
+}
+
+export class CookiePrompt extends Component {
+  constructor(){
+    super();
+    this.state = { isLoaded: false }
+  }
+
+  componentDidMount(){
+    setTimeout(() => {
+      this.setState({ isLoaded: true});
+    }, 2000);
+  }
+
+  render(){
+    const { isLoaded } = this.state;
+
+    return (
+      <Fader determinant={isLoaded} duration={500} notDiv>
+        <div className={css.cookiePrompt}>
+          <span>This site uses cookies to ensure a smooth user experience.</span>
+          <button variant={'light'} onClick={this.props.acceptCookies}>Accept</button>
+        </div>
+      </Fader>
+    )
   }
 }

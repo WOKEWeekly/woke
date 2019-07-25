@@ -1,19 +1,17 @@
 import React, { Component } from 'react';
 import {Col, Row } from 'react-bootstrap';
-import Link from 'next/link';
-import { FooterIcon } from '~/components/icon';
 
-import { accounts } from '~/constants/settings.js';
+import { FooterIcon } from '~/components/icon';
+import { Divider } from '~/components/text.js';
+
+import { accounts, emails } from '~/constants/settings.js';
 
 import css from '~/styles/_partials.scss';
-
 
 export default class Footer extends Component {
   constructor(){
     super();
-    this.state = {
-      isLoaded: false
-    }
+    this.state = { isLoaded: false }
   }
 
   componentDidMount(){
@@ -24,11 +22,15 @@ export default class Footer extends Component {
     if (!this.state.isLoaded) return null;
 
     return (
-      <div className={css.footer} >
+      <div className={css.footer}>
         <Row>
-          <Col md={4}><Links/></Col>
+          <Col md={4}></Col>
           <Col md={4}></Col>
           <Col md={4}><Socials/></Col>
+        </Row>
+        <Divider />
+        <Row>
+          <Links/>
         </Row>
       </div>
     );
@@ -39,14 +41,13 @@ export default class Footer extends Component {
 class Links extends Component {
   render(){
     return (
-      <div style={{
-        color: 'white',
-        fontFamily: 'Raleway',
-        display: 'grid'
-      }}>
-        <Link>Privacy Policy</Link>
-        <Link>Cookies</Link>
-        <Link>FAQs</Link>
+      <div className={css.footerLinks}>
+        <a href={'/about'}>About #WOKEWeekly</a>
+        <a href={`mailto: ${emails.enquiries}`}>Contact Us</a>
+        <a>Privacy Policy</a>
+        <a>Cookies</a>
+        <a>FAQs</a>
+        <a>Site Map</a>
       </div>
     )
   }

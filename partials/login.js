@@ -17,7 +17,7 @@ class LoginModal extends Component {
     this.state = {
       username: '',
       password: '',
-      remember: false
+      remember: getCookie('remember')
     }
   }
 
@@ -39,7 +39,7 @@ class LoginModal extends Component {
     .then(([status, response]) => { 
       if (status.ok){
         const user = response;
-        user.remember = this.state.remember;
+        setCookie('remember', this.state.remember);
         this.props.saveUser(user);
         this.props.close();
         setAlert({ type: 'info', message: `Welcome, ${user.firstname}!` });
@@ -101,6 +101,26 @@ class LoginModal extends Component {
     </Modal>
     )
   }
+}
+
+function setCookie(name, value, hours) {
+  const date = new Date();
+  date.setTime(date.getTime() + (hours * 60 * 60 * 1000));
+  const expires = `${expires}${date.toUTCString()}`;
+  document.cookie = `${name}=${value};${expires};path=/`;
+}
+
+function getCookie(cname) {
+  const name = `${cname}=`;
+  const ca = document.cookie.split(';');
+  for (let i = 0; i < ca.length; i++) {
+    let c = ca[i];
+    while (c.charAt(0) == ' ') c = c.substring(1);
+    if (c.indexOf(name) == 0) {
+      return c.substring(name.length, c.length);
+    }
+  }
+  return "";
 }
 
 const mapStateToProps = state => ({

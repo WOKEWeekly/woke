@@ -9,6 +9,7 @@ import { fab } from '@fortawesome/free-brands-svg-icons';
 import { far } from '@fortawesome/free-regular-svg-icons';
 import { fas } from '@fortawesome/free-solid-svg-icons';
 
+import { CookiePrompt } from '~/components/alert';
 import { loadCountries } from '~/constants/countries';
 import { saveCountries } from '~/reducers/actions';
 
@@ -33,7 +34,10 @@ export default class WOKE extends App {
     return { pageProps };
   }
 
-  state = { isLoaded: false }
+  state = {
+    isLoaded: false,
+    cookiesAccepted: false
+  }
 
   componentDidMount(){
     document.body.className = css.body;
@@ -58,10 +62,15 @@ export default class WOKE extends App {
     });
   }
 
+  acceptCookies = () => {
+    this.setState({ cookiesAccepted: true});
+  }
+
   render() {
+    const { isLoaded, cookiesAccepted } = this.state;
     const { Component, pageProps } = this.props;
     
-    if (!this.state.isLoaded) return null;
+    if (!isLoaded) return null;
 
     return (
       <Container>
@@ -74,6 +83,7 @@ export default class WOKE extends App {
             <PreNavBar/> <MainNavBar/>
             <Component {...pageProps} />
             <Footer/>
+            {!cookiesAccepted ? <CookiePrompt acceptCookies={this.acceptCookies} /> :null}
           </PersistGate>
         </Provider> 
       </Container>
