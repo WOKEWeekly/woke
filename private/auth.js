@@ -183,6 +183,68 @@ module.exports = function(app, conn, passport){
     });
   });
 
+  /** Change user's password in database */
+  app.put('/changePassword', validateReq, function(req, res){
+    const { id, oldPassword, newPassword } = req.body;
+    const sql = `SELECT * FROM user WHERE ID = ?`;
+
+    async.waterfall([
+      function(callback){
+        conn.query(sql, id, function(err, result){
+          err ? callback(err) : callback(null, result[0].password);
+        });
+      },
+      function(password, callback){
+        if (!(bcrypt.compareSync(oldPassword, password) || oldPassword == password)) {
+          callback(new Error(`Your current password is incorrect.`));
+        } else {
+          callback(null);
+        } 
+      },
+      function(callback){
+        bcrypt.hash(newPassword, 8, function(err, hash) {
+          err ? callback(err) : callback(null, hash);
+        });
+      },
+      function(hash, callback){
+        const sql = "UPDATE user SET password = ? WHERE id = ?";
+        const values = [hash, id];
+        conn.query(sql, values, function(err){
+          err ? callback(err) : callback(null);
+        });
+      }
+    ], function(err){
+      resToClient(res, err);
+    });
+  });
+
+  /** Delete user account */
+  app.delete('/deleteAccount', validateReq, function(req, res){
+    const { id } = req.body;
+
+    async.waterfall([
+      function(callback){
+        conn.query('DELETE FROM user_tokens WHERE user_id = ?', id, function(err){	
+          err ? callback(err) : callback(null);
+        });
+      },
+      function(callback){
+        conn.query('DELETE FROM suggestions WHERE user_id = ?', id, function(err){	
+          err ? callback(err) : callback(null);
+        });
+      },
+      function(callback){
+        req.logout();
+        
+        conn.query("DELETE FROM user WHERE id = ?", id, function(err){	
+          err ? callback(err) : callback(null);
+        });
+      }
+    ], function(err){
+      resToClient(res, err);
+    });
+  });
+
   /****************************
    * CHECKPOINT
    ***************************/
@@ -306,93 +368,6 @@ module.exports = function(app, conn, passport){
         res.status(400).send(error.toString());
         console.error(err.toString);
       }
-    });
-  });
-  
-  /** Change user's password in database */
-  app.put('/changePassword', verifyToken, function(req, res){
-    jwt.verify(req.token, process.env.JWT_SECRET, (err, auth) => {
-      if (err){
-        res.sendStatus(403);
-      } else {
-        const old_password = req.body.old_password;
-        const new_password = req.body.new_password;
-        
-        const sql = `SELECT * FROM user WHERE ID = ?`;
-        const id = auth.user.id;
-        
-        conn.query(sql, id, function(err, result){
-          if (!(bcrypt.compareSync(old_password, result[0].password) || old_password == result[0].password)) {
-            res.status(400).send(`Your current password is incorrect.`);
-          } else {
-            bcrypt.hash(new_password, 8, function(err, hash) {
-              if (!err){
-                const sql = "UPDATE user SET password = ? WHERE id = ?";
-                const values = [hash, id];
-                
-                conn.query(sql, values, function(err1, result){
-                  if (!err1){
-                                        res.sendStatus(200);
-                  } else {
-                    res.status(400).send(err1.toString());
-                  }
-                });
-              } else {
-                res.status(400).send(err.toString());
-              }
-            });
-          } 
-        });
-      }
-    });
-  });
-  
-  /** Delete user account */
-  app.delete('/deleteUser', verifyToken, function(req, res){
-    async.waterfall([
-      function(callback){
-        jwt.verify(req.token, process.env.JWT_SECRET, (err, auth) => {
-          if (err){
-            res.sendStatus(403);
-          } else {
-            callback(null)
-          }
-        });
-      },
-      function(callback){
-        conn.query('DELETE FROM user_tokens WHERE user_id = ?', req.body.id, function(err, result){	
-          if (!err){
-            callback(null);
-          } else {
-            res.status(400).send(err.toString());
-            console.error(err.toString());
-          }
-        });
-      },
-      function(callback){
-        conn.query('DELETE FROM suggestions WHERE user_id = ?', req.body.id, function(err, result){	
-          if (!err){
-            callback(null);
-          } else {
-            res.status(400).send(err.toString());
-            console.error(err.toString());
-          }
-        });
-      },
-      function(callback){
-        req.logout();
-        
-        conn.query("DELETE FROM user WHERE id = ?", req.body.id, function(err, result){	
-          if (!err){
-                        res.sendStatus(200);
-          } else {
-            res.status(400).send(err.toString());
-            console.error(err.toString());
-          }
-        });
-      }
-    ], function(err){
-      
     });
   });
   

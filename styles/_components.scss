@@ -364,6 +364,7 @@
 /** modal.js **/
 /****************/
 .modal_header, .modal_body, .modal_footer { background: $dark; }
+.modal_body, .modal_footer { border: none !important; }
 
 :global(.modal-dialog) {
   max-width: 600px !important;

@@ -82,19 +82,23 @@ export const isValidUsername = (username) => {
   return true;
 }
 
+/** Check passwords */
+export const isValidPassword = (password1, password2, oldPassword) => {
+  if (!ifExists(password1.trim(), 'Please enter a password.')) return false;
+  if (!ifExists(password2.trim(), 'Please confirm your password.')) return false;
+  if (password1.trim().length < 5) return alert.error('Your password must be at least 8 characters long.');
+  if (password1 !== password2) return alert.error('Please ensure your passwords match.');
+
+  if (oldPassword){
+    if (oldPassword === password1) return alert.error('Your new password cannot be the same as your current password.');
+  }
+  return true;
+}
+
 /** Ensure a valid file */
 export const isValidFile = (file, entity) => {
   if (!ifExists(file, `Please select an image for the ${entity}.`)) return false;
   if (file.size > 5 * 1024 * 1024) return alert.error('The image you selected is too large.');
-  return true;
-}
-
-/** Check passwords */
-const isValidPassword = (password1, password2) => {
-  if (!ifExists(password1.trim(), 'Please enter a password.')) return false;
-  if (!ifExists(password2.trim(), 'Please confirm your password.')) return false;
-  if (password1.trim().length < 7){ Alert.alert(null, 'Your password must be at least 8 characters long.'); return false; }
-  if (password1 !== password2){ Alert.alert(null, 'Please ensure your passwords match.'); return false; }
   return true;
 }
 
