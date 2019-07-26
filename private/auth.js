@@ -172,6 +172,17 @@ module.exports = function(app, conn, passport){
     });
   });
 
+  /** Change user's username in database */
+  app.put('/changeUsername', validateReq, function(req, res){
+    const { id, username } = req.body;
+    const sql = "UPDATE user SET username = ? WHERE id = ?";
+    const values = [username, id];
+    
+    conn.query(sql, values, function(err, result){
+      resToClient(res, err);
+    });
+  });
+
   /****************************
    * CHECKPOINT
    ***************************/
@@ -294,27 +305,6 @@ module.exports = function(app, conn, passport){
       } else {
         res.status(400).send(error.toString());
         console.error(err.toString);
-      }
-    });
-  });
-  
-  
-  /** Change user's username in database */
-  app.put('/changeUsername', verifyToken, function(req, res){
-    jwt.verify(req.token, process.env.JWT_SECRET, (err, auth) => {
-      if (err){
-        res.sendStatus(403);
-      } else {
-        const sql = "UPDATE user SET username = ? WHERE id = ?";
-        const values = [req.body.username, auth.user.id];
-        
-        conn.query(sql, values, function(err, result){	
-          if (!err){
-                        res.sendStatus(200);
-          } else {
-            res.status(400).send(err.toString());
-          }
-        });
       }
     });
   });

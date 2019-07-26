@@ -9,7 +9,7 @@ import { fab } from '@fortawesome/free-brands-svg-icons';
 import { far } from '@fortawesome/free-regular-svg-icons';
 import { fas } from '@fortawesome/free-solid-svg-icons';
 
-import { CookiePrompt } from '~/components/alert';
+import { CookiePrompt, setCookie, getCookie } from '~/constants/cookies';
 import { loadCountries } from '~/constants/countries';
 import { saveCountries } from '~/reducers/actions';
 
@@ -35,12 +35,13 @@ export default class WOKE extends App {
   }
 
   state = {
-    isLoaded: false,
-    cookiesAccepted: false
+    isLoaded: false
   }
 
   componentDidMount(){
     document.body.className = css.body;
+
+    this.setState({cookiesAccepted: getCookie('cookiesAccepted')});
 
     if (!localStorage.getItem('countriesLoaded')){
       this.preloadCountries();
@@ -63,6 +64,7 @@ export default class WOKE extends App {
   }
 
   acceptCookies = () => {
+    setCookie('cookiesAccepted', true);
     this.setState({ cookiesAccepted: true});
   }
 

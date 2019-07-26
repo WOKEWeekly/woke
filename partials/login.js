@@ -8,6 +8,7 @@ import { SubmitButton, CancelButton } from '~/components/button.js';
 import { Group, Label, UsernameInput, PasswordInput, Checkbox } from '~/components/form.js';
 import { Modal } from '~/components/modal.js';
 
+import { setCookie, getCookie } from '~/constants/cookies';
 import { isValidLogin } from '~/constants/validations.js';
 import css from '~/styles/auth.scss';
 
@@ -99,26 +100,6 @@ class LoginModal extends Component {
         footer={footer} />
     )
   }
-}
-
-function setCookie(name, value, hours) {
-  const date = new Date();
-  date.setTime(date.getTime() + (hours * 60 * 60 * 1000));
-  const expires = `${expires}${date.toUTCString()}`;
-  document.cookie = `${name}=${value};${expires};path=/`;
-}
-
-function getCookie(cname) {
-  const name = `${cname}=`;
-  const ca = document.cookie.split(';');
-  for (let i = 0; i < ca.length; i++) {
-    let c = ca[i];
-    while (c.charAt(0) == ' ') c = c.substring(1);
-    if (c.indexOf(name) == 0) {
-      return c.substring(name.length, c.length);
-    }
-  }
-  return "";
 }
 
 const mapStateToProps = state => ({

@@ -1,7 +1,9 @@
 import { combineReducers } from 'redux';
+import { checkCookies } from '~/constants/cookies';
 
 /** Reducer for user authentication */
 const initialUser = {
+  id: 0,
   firstname: '',
   lastname: '',
   fullname: '',
@@ -22,6 +24,10 @@ const userReducer = (state = initialUser, action) => {
       return user;
     case 'CLEAR_USER':
       return initialUser;
+    case 'CHANGE_USERNAME':
+      return Object.assign({}, state, {
+        username: action.payload
+      });
     default:
       return state;
   }

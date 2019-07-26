@@ -6,7 +6,7 @@ import { bindActionCreators } from 'redux';
 import { saveTopicSort, saveTopicFilters } from '~/reducers/actions';
 import classNames from 'classnames';
 
-import { alert, checkAlert, setAlert, displayErrorMessage } from '~/components/alert.js';
+import { alert, setAlert, displayErrorMessage } from '~/components/alert.js';
 import { AddButton } from '~/components/button.js';
 import { SortDropdown, FilterDropdown } from '~/components/dropdown.js';
 import { Checkbox, SearchBar } from '~/components/form.js';
@@ -69,7 +69,6 @@ class TopicBank extends Component {
         topicsLoaded: true
       }, () => {
          this.sortTopics(this.state.sort);
-         checkAlert();
       });
     })
     .catch(error => console.error(error));

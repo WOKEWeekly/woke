@@ -9,6 +9,12 @@ export const clearUser = () => ({
   type: 'CLEAR_USER'
 });
 
+/** Change username */
+export const changeUsername = username => ({
+  type: 'CHANGE_USERNAME',
+  payload: username
+});
+
 export const saveSessionView = view => ({
   type: 'SAVE_SESSION_VIEW',
   payload: view,

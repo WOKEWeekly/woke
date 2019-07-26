@@ -1,8 +1,10 @@
 import { alert } from '~/components/alert.js';
+import { checkCookies } from './cookies';
 
 
 /** Ensure valid login credentials */
 export const isValidLogin = (user) => {
+  if (!checkCookies('We cannot allow you to log in without accepting our Cookie Policy.')) return false;
   if (!ifExists(user.username.trim(), 'Enter your username or email address.')) return false;
   if (!ifExists(user.password.trim(), 'Enter your password.')) return false;
   return true;
