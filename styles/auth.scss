@@ -4,15 +4,20 @@
 *** login.js
 ******************************************/
 
+.group { margin: 1em 0; }
+
 :global(.modal-dialog) {
   max-width: 500px !important;
+}
+
+:global(.modal-body) {
+  padding: 0 1rem !important;
 }
 
 /******************************************
 *** signup.js
 ******************************************/
 
-.background { @include body-customizer('sessions-bg.jpg'); }
 .form { @include responsive-form; width: 50%; }
 
 /******************************************

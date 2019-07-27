@@ -45,7 +45,7 @@ class Links extends Component {
         <a href={'/about'}>About #WOKEWeekly</a>
         <a href={`mailto: ${emails.enquiries}`}>Contact Us</a>
         <a>Privacy Policy</a>
-        <a>Cookies</a>
+        <a href={'/cookies'}>Cookies</a>
         <a>FAQs</a>
         <a>Site Map</a>
       </div>

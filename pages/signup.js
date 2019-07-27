@@ -30,8 +30,6 @@ class Signup extends Component {
     if (props.user.isAuthenticated){
       location.href = '/';
     }
-
-    document.body.className = css.background;
   }
 
   fill = () => {

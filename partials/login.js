@@ -68,16 +68,16 @@ class LoginModal extends Component {
           <UsernameInput
             value={username}
             onChange={this.handleUsername}
-            placeholder={"Enter username"} />
+            placeholder={"Enter your username"} />
         </Group>
         <Group className={css.group}>
           <Label>Password:</Label>
           <PasswordInput
             value={password}
             onChange={this.handlePassword}
-            placeholder={"Enter password"} />
+            placeholder={"Enter your password"} />
         </Group>
-        <Group style={{marginBottom: 0}}>
+        <Group style={{marginTop: '1em'}}>
           <Checkbox
             checked={remember}
             label={'Remember me'}

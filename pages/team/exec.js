@@ -117,9 +117,9 @@ class Exec extends PureComponent {
               <Col md={{span: 8, order: isEven ? 2 : 1}}>
                 <div className={css.details}>
                   <Title className={css.title}>{item.fullname}</Title>
-                  <Subtitle className={css.date}>{item.role}</Subtitle>
+                  <Subtitle className={css.subtitle}>{item.role}</Subtitle>
                   <Divider />
-                  <TruncatedParagraph className={css.description}>{item.description}</TruncatedParagraph>
+                  <TruncatedParagraph className={css.paragraph} paragraphs={1}>{item.description}</TruncatedParagraph>
                 </div>
               </Col>
             </Row>

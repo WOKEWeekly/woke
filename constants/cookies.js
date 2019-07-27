@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { alert } from '~/components/alert.js';
+import { Icon } from '~/components/icon';
 import { Fader } from '~/components/transitioner.js';
 import css from '~/styles/_components.scss';
 
@@ -21,8 +22,10 @@ export class CookiePrompt extends Component {
     return (
       <Fader determinant={isLoaded} duration={500} notDiv>
         <div className={css.cookiePrompt}>
-          <span>This site uses cookies to ensure a smooth user experience.</span>
-          <button variant={'light'} onClick={this.props.acceptCookies}>Accept</button>
+          <div>
+            <span>This site uses cookies and similar technologies to recognise your preferences. Stay woke on cookies by viewing our <a href={'/cookies'}>Cookie Policy</a>. By closing this pop-up, you consent to our usage of cookies.</span>
+            <button onClick={this.props.acceptCookies}><Icon name={'times'} /></button>
+          </div>
         </div>
       </Fader>
     )

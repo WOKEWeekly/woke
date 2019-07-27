@@ -20,27 +20,31 @@
 }
 
 .cookiePrompt {
-  align-items: center;
   background-color: rgba(0,0,0,0.95);
   bottom: 0%;
-  display: flex;
-  height: 5vh;
-  padding: 1.5em 1em;
+  font-size: 1em;
+  padding: .7em;
+  margin: 0;
   position: -webkit-sticky;
   position: sticky;
   width: 100%;
   z-index: 1100;
-  span { 
-    color: white;
-    margin: 0 auto; }
-  button {
-    border: 1px solid black;
-    border-radius: 5px;
-    font-family: $title-font;
-    padding: .3em 1em;
-    -webkit-transition-duration: .3s;
-    transition-duration: .3s;
-    user-select: none;
+  @media (max-width: $break-md) { font-size: .8em; }
+  div {
+    @extend .responsive-container;
+    display: flex;
+    align-items: center;
+    span {
+      color: white;
+      font-family: $title-font;
+      margin: 0 auto;
+      padding-right: 1em;
+      a {
+        color: white;
+        text-decoration: underline;
+      }
+    }
+    button { @extend .invisible_button; }
   }
 }
 
@@ -75,8 +79,7 @@
   &:active {
     -webkit-transition-duration: .1s;
     transition-duration: .1s; }
-  @media (max-width: $break-md) {
-    min-width: initial; }
+  @media (max-width: $break-md) { min-width: initial; }
 }
 
 .invisible_button {
@@ -365,6 +368,7 @@
 /****************/
 .modal_header, .modal_body, .modal_footer { background: $dark; }
 .modal_body, .modal_footer { border: none !important; }
+.modal_footer { padding-top: 0 !important; }
 
 :global(.modal-dialog) {
   max-width: 600px !important;

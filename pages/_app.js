@@ -17,7 +17,6 @@ import {PreNavBar, MainNavBar} from "~/partials/header.js";
 import Footer from "~/partials/footer.js";
 
 import 'react-toastify/dist/ReactToastify.min.css';
-import css from '~/styles/_partials.scss';
 
 library.add(fab, far, fas);
 
@@ -26,21 +25,24 @@ const { store, persistor } = configureStore();
 export default class WOKE extends App {
   static async getInitialProps({ Component, ctx }) {
     let pageProps = {};
-
     if (Component.getInitialProps) {
       pageProps = await Component.getInitialProps(ctx);
     }
-
     return { pageProps };
   }
 
-  state = {
-    isLoaded: false
-  }
-
+  state = { isLoaded: false }
+  
   componentDidMount(){
-    document.body.className = css.body;
+    const { backgroundImage = 'body-bg.jpg' } = this.props.router.query;
 
+    const image = new Image();
+    image.src = `/static/images/bg/${backgroundImage}`;
+    image.onload = () => {
+      document.body.style.backgroundImage = `url(${image.src})`;
+      document.body.style.opacity = 1;
+    };
+    
     this.setState({cookiesAccepted: getCookie('cookiesAccepted')});
 
     if (!localStorage.getItem('countriesLoaded')){

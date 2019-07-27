@@ -11,7 +11,8 @@ module.exports = function(app, conn, server){
       title: '#WOKEWeekly - Awakening Through Conversation',
       description: 'Debates and discussions centered around and beyond the UK black community at university campuses. Providing a safe-space for expression and opinions to be heard and encouraging unity amongst the community through conversation, bringing together those divided by social status, religion and interest.',
       url: '/',
-      isHome: true
+      isHome: true,
+      backgroundImage: 'body-bg.jpg'
      });
   });
 
@@ -21,6 +22,7 @@ module.exports = function(app, conn, server){
       title: 'Sessions',
       description: 'Where the magic happens...',
       url: '/sessions',
+      backgroundImage: 'sessions-bg.jpg'
      });
   });
 
@@ -37,6 +39,7 @@ module.exports = function(app, conn, server){
           description: session.description,
           url: `/sessions/${session.slug}`,
           image: `/static/images/sessions/${session.image}`,
+          backgroundImage: 'sessions-bg.jpg',
           session
         });
       } else {
@@ -47,7 +50,10 @@ module.exports = function(app, conn, server){
 
   /** Add New Session */
   app.get('/sessions/add', function(req, res){
-    server.render(req, res, '/sessions/add', { title: 'Add New Session' });
+    server.render(req, res, '/sessions/add', {
+      title: 'Add New Session',
+      backgroundImage: 'sessions-bg.jpg'
+    });
   });
 
   /** Edit Session */
@@ -60,6 +66,7 @@ module.exports = function(app, conn, server){
         const session = result[0];
         return server.render(req, res, '/sessions/edit', {
           title: 'Edit Session',
+          backgroundImage: 'sessions-bg.jpg',
           session
         });
       } else {
@@ -70,12 +77,16 @@ module.exports = function(app, conn, server){
 
   /** Topic Bank */
   app.get('/topics', function(req, res){
-    server.render(req, res, '/topics', { title: 'Topic Bank' });
+    server.render(req, res, '/topics', {
+      title: 'Topic Bank'
+    });
   });
 
   /** Add New Topic */
   app.get('/topics/add', function(req, res){
-    server.render(req, res, '/topics/add', { title: 'Add New Topic' });
+    server.render(req, res, '/topics/add', {
+      title: 'Add New Topic'
+    });
   });
 
   /** Edit Topic */
@@ -152,7 +163,8 @@ module.exports = function(app, conn, server){
     return server.render(req, res, '/team/exec', {
       title: 'Meet The Executives',
       description: 'The masterminds behind the cause.',
-      url: '/executives'
+      url: '/executives',
+      backgroundImage: 'team-bg.jpg',
     });
   });
 
@@ -168,7 +180,8 @@ module.exports = function(app, conn, server){
           title: `${exec.firstname} ${exec.lastname}`,
           description: exec.description,
           url: `/executives/${exec.slug}`,
-          image: `/static/images/team/${exec.image}`, 
+          image: `/static/images/team/${exec.image}`,
+          backgroundImage: 'team-bg.jpg',
           exec
         });
       } else {
@@ -187,6 +200,7 @@ module.exports = function(app, conn, server){
         const member = result[0];
         return server.render(req, res, '/team/edit', { 
           title: 'Edit Team Member',
+          backgroundImage: 'team-bg.jpg',
           member
         });
       } else {
@@ -199,6 +213,7 @@ module.exports = function(app, conn, server){
   app.get('/signup', function(req, res){
     server.render(req, res, '/signup', {
       title: 'Sign Up',
+      backgroundImage: 'signup-bg.jpg',
       url: '/signup',
     });
   });

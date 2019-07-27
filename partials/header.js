@@ -77,7 +77,7 @@ class PreNavbar extends Component {
           <Col xs={6} className={css.no_auth}>
             <button className={css.link} onClick={this.showModal}>Login</button>
             <a className={css.divider}>|</a>
-            <button className={css.link} onClick={() => Router.push('/signup')}>Sign Up</button>
+            <button className={css.link} onClick={() => location.href = '/signup'}>Sign Up</button>
           </Col>
         );
       }

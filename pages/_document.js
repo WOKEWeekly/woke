@@ -1,5 +1,6 @@
 import Document, { Html, Head, Main, NextScript } from 'next/document';
 import Meta from '~/partials/meta.js';
+import css from '~/styles/_partials.scss';
 
 export default class MyDocument extends Document {
   static async getInitialProps(ctx) {
@@ -8,10 +9,12 @@ export default class MyDocument extends Document {
   }
 
   render() {
+    const { query } = this.props.__NEXT_DATA__;
+    
     return (
       <Html>
-        <Head><Meta {...this.props.__NEXT_DATA__.query}/></Head>
-        <body>
+        <Head><Meta {...query}/></Head>
+        <body className={css.body}>
           <Main />
           <NextScript />
         </body>

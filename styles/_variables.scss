@@ -64,24 +64,6 @@ $break-xxl: 1408px; // Extra large devices (large desktops)
   &:hover { transform: scale($scale); }
 }
 
-@mixin body-customizer($image){
-  background: {  
-    attachment: fixed;
-    color: black;
-    image: url('/static/images/bg/' + $image);
-    position: center;
-    repeat: no-repeat;
-    size: cover;
-  }
-  height: 100vh;
-
-  > div:first-child {
-    display: grid;
-    grid-template-rows: auto auto 1fr auto;
-    min-height: 100%;
-  }
-}
-
 @mixin responsive-grid {
   display: grid;
   grid-template-columns: repeat(6, calc(100% / 6));
