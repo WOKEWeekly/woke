@@ -47,7 +47,6 @@ class Links extends Component {
         <a>Privacy Policy</a>
         <a href={'/cookies'}>Cookies</a>
         <a>FAQs</a>
-        <a>Site Map</a>
       </div>
     )
   }

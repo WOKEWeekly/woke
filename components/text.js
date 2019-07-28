@@ -41,7 +41,12 @@ export class Paragraph extends Component {
         {...this.props}
         className={classes}>
         {children.split('\n').map((paragraph, i, arr) => {
-          const line = <p key={i}>{paragraph}</p>;
+          let line;
+          if (paragraph.charAt(0) !== '•'){
+            line = <p key={i}>{paragraph}</p>;
+          } else {
+            line = <div key={i}>{paragraph}</div>;
+          }
   
           if (paragraph.length > 0) {
             return line;

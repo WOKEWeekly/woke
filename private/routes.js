@@ -1,5 +1,9 @@
+const async = require('async');
 const fs = require('fs');
 const path = require('path');
+const sm = require('sitemap');
+const { domain } = require('../constants/settings.js');
+
 const about = './static/resources/about.txt';
 const constitution = './static/resources/Constitution.pdf';
 
@@ -265,10 +269,54 @@ module.exports = function(app, conn, server){
     })
   ));
 
-  app.get('/sitemap.xml', (req, res) => (
-    res.status(200).sendFile(path.resolve('./static/resources/sitemap.xml'), {
-      headers: { 'Content-Type': 'text/xml;charset=UTF-8', }
-    })
-  ));
+  app.get('/sitemap.xml', (req, res) => {
+    const routes = [ '/', '/home', '/sessions', '/blackexcellence',
+    '/executives', '/signup', '/about' ];
+
+    async.parallel([
+      function(callback){
+        conn.query('SELECT slug FROM sessions', function (err, result) {
+          if (err) callback(err);
+          result.forEach(session => {
+            routes.push(`/session/${session.slug}`)
+          });
+          callback(null);
+        });
+      },
+      function(callback){
+        conn.query('SELECT id FROM blackex', function (err, result) {
+          if (err) callback(err);
+          result.forEach(candidate => {
+            routes.push(`/blackexcellence/candidate/${candidate.id}`)
+          });
+          callback(null);
+        });
+      },
+      function(callback){
+        conn.query(`SELECT slug FROM team WHERE level = 'Executive'`, function (err, result) {
+          if (err) callback(err);
+          result.forEach(exec => {
+            routes.push(`/executives/${exec.slug}`)
+          });
+          callback(null);
+        });
+      }
+    ], function(){
+      const sitemap = sm.createSitemap ({
+        hostname: domain,
+        cacheTime: 10 * 60 * 1000,  // 10 minutes,
+      });
+
+      routes.forEach(route => {
+        sitemap.add({ url: route, changefreq: 'weekly' })
+      });
+
+      sitemap.toXML(function(err, xml) {
+        if (err) return res.status(500).end()
+        res.header('Content-Type', 'application/xml');
+        res.send(xml);
+      });
+    });
+  });
 
 }

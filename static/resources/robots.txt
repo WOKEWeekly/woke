@@ -1,2 +1,15 @@
-User-agent: * 
+User-agent: *
 Disallow: /
+
+Disallow: /sessions/add
+Disallow: /sessions/edit
+Disallow: /blackexcellence/add
+Disallow: /blackexcellence/edit
+Disallow: /topics
+Disallow: /team
+Disallow: /account
+Disallow: /about/edit
+Disallow: /constitution
+Disallow: /static
+
+Sitemap: https://www.wokeweekly.co.uk/sitemap.xml

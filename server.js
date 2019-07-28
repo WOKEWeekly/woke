@@ -53,7 +53,7 @@ const conn = mysql.createConnection({
 
 /** Connect to MySQL database */
 conn.connect(function(err) {
-  err ? (console.log(err.toString())) : console.log("Connected to database.");
+  console.log(err ? err.toString() : 'Connected to database.');
 });
 
 /*******************************************
@@ -64,6 +64,5 @@ require('./private/api.js')(app, conn);
 require('./private/auth.js')(app, conn, passport);
 require('./private/cron.js')(conn);
 require('./private/mobile.js')(app, conn);
+require('./private/notifications.js');
 require('./private/routes.js')(app, conn, server);
-
-const notifications = require('./private/notifications.js');
