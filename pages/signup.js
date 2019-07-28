@@ -51,6 +51,7 @@ class Signup extends Component {
     this.setState({[name]: value}); }
   handleCheck = (event) => {
     const { name, checked } = event.target;
+    console.log(name, checked);
     this.setState({[name]: checked});}
 
   signUp = () => {
@@ -151,12 +152,14 @@ class Signup extends Component {
             <Group style={{marginBottom: 0}}>
               <Col md={12}>
                 <Checkbox
+                  name={'subscribe'}
                   checked={subscribe}
                   label={'I would like to subscribe to regular news and updates about #WOKEWeekly.'}
                   onChange={this.handleCheck} />
               </Col>
               <Col md={12}>
                 <Checkbox
+                  name={'privacy'}
                   checked={privacy}
                   label={'I agree to the terms and conditions stated in the Privacy Policy.'}
                   onChange={this.handleCheck} />

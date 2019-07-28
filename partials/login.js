@@ -22,6 +22,17 @@ class LoginModal extends Component {
     }
   }
 
+  /** When 'Enter' pressed, trigger login */
+  _handleKeyPress = (e) => {
+    if (e.key === 'Enter') {
+      this.logIn();
+    }
+  }
+
+  /** Register key events */
+  componentDidMount(){ document.addEventListener("keypress", this._handleKeyPress, false); }
+  componentWillUnmount(){ document.removeEventListener("keypress", this._handleKeyPress, false); }
+
   /** Handle login fields */
   handleUsername = (event) => { this.setState({username: event.target.value}); }
   handlePassword = (event) => { this.setState({password: event.target.value}); }
@@ -97,7 +108,8 @@ class LoginModal extends Component {
         visible={this.props.visible}
         header={header}
         body={body}
-        footer={footer} />
+        footer={footer}
+        onKeyPress={this._handleKeyPress} />
     )
   }
 }

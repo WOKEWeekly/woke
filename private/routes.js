@@ -276,7 +276,7 @@ module.exports = function(app, conn, server){
     async.parallel([
       function(callback){
         conn.query('SELECT slug FROM sessions', function (err, result) {
-          if (err) callback(err);
+          if (err) return callback(err);
           result.forEach(session => {
             routes.push(`/session/${session.slug}`)
           });
@@ -285,7 +285,7 @@ module.exports = function(app, conn, server){
       },
       function(callback){
         conn.query('SELECT id FROM blackex', function (err, result) {
-          if (err) callback(err);
+          if (err) return callback(err);
           result.forEach(candidate => {
             routes.push(`/blackexcellence/candidate/${candidate.id}`)
           });
@@ -294,7 +294,7 @@ module.exports = function(app, conn, server){
       },
       function(callback){
         conn.query(`SELECT slug FROM team WHERE level = 'Executive'`, function (err, result) {
-          if (err) callback(err);
+          if (err) return callback(err);
           result.forEach(exec => {
             routes.push(`/executives/${exec.slug}`)
           });

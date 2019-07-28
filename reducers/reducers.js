@@ -10,7 +10,8 @@ const initialUser = {
   username: '',
   clearance: 0,
   remember: false,
-  isAuthenticated: false
+  isAuthenticated: false,
+  isVerified: false
 };
 
 const userReducer = (state = initialUser, action) => {
@@ -20,6 +21,7 @@ const userReducer = (state = initialUser, action) => {
 
       user.isAuthenticated = true;
       user.fullname = `${user.firstname} ${user.lastname}`;
+      user.isVerified = user.clearance > 1;
       
       return user;
     case 'CLEAR_USER':

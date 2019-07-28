@@ -245,131 +245,80 @@ module.exports = function(app, conn, passport){
     });
   });
 
-  /****************************
-   * CHECKPOINT
-   ***************************/
-  
-  /** Change user's username in database */
-  app.get('/verifyAccount/:id/:token', function(req, res){
-    const { id, token } = req.params;
-    
-    async.waterfall([
-      /** Determine user account */
-      function(callback){
-        const sql = "SELECT * FROM user_tokens WHERE (user_id, token_string) = (?, ?)";
-        const values = [id, token];
-        
-        conn.query(sql, values, function(err, result){	
-          if (!err){
-            callback(null, result.length);
-          } else {
-            res.sendStatus(400);
-            console.log(err.toString());
-          }
-        });
-      },
-      /** Determine user clearance level */
-      function(length, callback){
-        const sql = "SELECT clearance FROM user WHERE id = ?";
-        
-        if (length > 0){
-          conn.query(sql, id, function(err, result){	
-            if (!err){
-              callback(null, result[0].clearance);
-            } else {
-              res.sendStatus(400);
-              console.log(err.toString());
-            }
-          });
-        } else {
-          res.sendStatus(400);
-        }
-      },
-      /** Verify account by changing user clearance to verified */
-      function(clearance, callback){
-        if (clearance < 2){
-          
-          const sql = "UPDATE user SET clearance = 2 WHERE id = ?";
-          
-          conn.query(sql, id, function(err, result){	
-            if (!err){
-              callback(null);
-            } else {
-              res.sendStatus(400);
-              console.log(err.toString());
-            }
-          });
-        } else {
-          res.sendStatus(200);
-        }
-      },
-      /** Delete verification token */
-      function(callback){
-        const sql = "DELETE FROM user_tokens WHERE user_id = ?";
-        
-        conn.query(sql, id, function(err, result){	
-          if (!err){
-            callback(null);
-          } else {
-            res.sendStatus(400);
-            console.log(err.toString());
-          }
-        });
-      }
-    ], function(err){
-      if (!err){
-                res.redirect('/');
-      } else {
-        res.sendStatus(400);
-        console.log(err.toString());
-      }
-    });
-  });
-  
   /** Resend the verification email to user's email address */
-  app.post('/resendVerificationEmail', verifyToken, function(req, res){
-    const id = req.body.id;
+  app.notify('/resendVerificationEmail', validateReq, function(req, res){
+    const { id } = req.body;
     
     async.waterfall([
-      /** Verify token */
-      function(callback){
-        jwt.verify(req.token, process.env.JWT_SECRET, (err, auth) => {
-          if (err){
-            res.sendStatus(403);
-            console.error(err.toString());
-          } else {
-            callback(null);
-          }
-        });
-      },
-      /** Retrieve user and token string from database */
-      function(callback){
+      function(callback){ // Retrieve user and token string from database
         const sql = `SELECT * from user
         INNER JOIN user_tokens on user.id = user_tokens.user_id
         WHERE (user.id, user_tokens.type) = (?, ?)`;
         const values = [id, 'verification'];
         
         conn.query(sql, values, function(err, result){	
-          if (!err){
-            const user = result[0];
-            callback(null, user, user.token_string);
+          if (err) return callback(err);
+          const user = result[0];
+          callback(null, user, user.token_string);
+        });
+      },
+      function(user, salt, callback){ // Resend verification email to user
+        emails.resendVerificationEmail(user, salt);
+        callback(null);
+      }
+    ], function(err){
+      resToClient(res, err);
+    });
+  });
+
+  /** Change user's username in database */
+  app.get('/verifyAccount/:id/:token', function(req, res){
+    const { id, token } = req.params;
+    
+    async.waterfall([
+      function(callback){ /** Determine user account */
+        const sql = "SELECT * FROM user_tokens WHERE (user_id, token_string) = (?, ?)";
+        const values = [id, token];
+        
+        conn.query(sql, values, function(err, result){
+          if (result.length > 0){
+            err ? callback(err) : callback(null);
           } else {
-            res.status(400).send(error.toString());
-            console.error(err.toString());
+            callback(new Error(`User account doesn't exist.`));
           }
         });
       },
-      /** Resend verification email to user */
-    ], function(err, user, salt){
+      function(callback){ /** Determine user clearance level */
+        conn.query('SELECT clearance FROM user WHERE id = ?', id, function(err, result){
+          err ? callback(err) : callback(null, result[0].clearance);	
+        });
+      },
+      function(clearance, callback){ /** Verify account by changing user clearance to verified */
+        if (clearance < 2){
+          conn.query('UPDATE user SET clearance = 2 WHERE id = ?', id, function(err){	
+            err ? callback(err) : callback(null);
+          });
+        } else {
+          callback(new Error(`Verification not required.`))
+        }
+      },
+      function(callback){ /** Delete verification token */
+        conn.query('DELETE FROM user_tokens WHERE user_id = ?', id, function(err){	
+          err ? callback(err) : callback(null);
+        });
+      }
+    ], function(err){
       if (!err){
-        emails.resendVerificationEmail(user, salt);
-        res.sendStatus(200);
+        res.redirect('/account');
       } else {
-        res.status(400).send(error.toString());
-        console.error(err.toString);
+        resToClient(res, err);
       }
     });
   });
+
+  /****************************
+   * CHECKPOINT
+   ***************************/
   
   /** Retrieve all users */
   app.get('/getRegisteredUsers', verifyToken, function(req, res){

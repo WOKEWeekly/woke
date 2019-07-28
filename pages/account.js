@@ -7,6 +7,7 @@ import { Col } from 'react-bootstrap';
 import { alert, setAlert, displayErrorMessage } from '~/components/alert.js';
 import { ConfirmButton, CloseButton } from '~/components/button.js';
 import { Group, UsernameInput, PasswordInput } from '~/components/form.js';
+import { Icon } from '~/components/icon.js';
 import { Shader } from '~/components/layout.js';
 import { Modal, ConfirmModal } from '~/components/modal.js';
 
@@ -60,6 +61,29 @@ class Account extends Component {
     });
   }
 
+  resendVerificationEmail = () => {
+    const { id } = this.state;
+
+    fetch('/resendVerificationEmail', {
+      method: 'NOTIFY',
+      body: JSON.stringify({id}),
+      headers: {
+        'Authorization': process.env.AUTH_KEY,
+        'Content-Type': 'application/json'
+      }
+    })
+    .then(res => Promise.all([res, res.json()]))
+    .then(([status, response]) => { 
+      if (status.ok){
+        alert.success('Resend successful. Check your email for the verification link.');
+      } else {
+        alert.error(response.message)
+      }
+    }).catch(error => {
+      displayErrorMessage(error);
+    });
+  }
+
   showUsernameModal = () => { this.setState({usernameModal: true})}
   hideUsernameModal = () => { this.setState({usernameModal: false})}
   showPasswordModal = () => { this.setState({passwordModal: true})}
@@ -68,8 +92,8 @@ class Account extends Component {
   hideDeleteAccountModal = () => { this.setState({deleteAccModal: false})}
 
   render(){
-    const { fullname, username, clearance = 1, isLoaded,
-    usernameModal, passwordModal, deleteAccModal } = this.state
+    const { fullname, username, clearance = 1, isVerified,
+      isLoaded, usernameModal, passwordModal, deleteAccModal } = this.state
     const level = (CLEARANCES.LEVELS.USERS).find(level => level.value === clearance).label;
     if (!isLoaded) return null;
 
@@ -82,8 +106,21 @@ class Account extends Component {
             <div className={css.clearance}>{level}</div>
 
             <div className={css.links}>
-              <button onClick={this.showUsernameModal}>Change Username</button>
-              <button onClick={this.showPasswordModal}>Change Password</button>
+
+              {isVerified ?
+              <React.Fragment>
+                <button onClick={this.showUsernameModal}>Change Username</button>
+                <button onClick={this.showPasswordModal}>Change Password</button>
+              </React.Fragment>
+              :
+              <React.Fragment>
+                <div style={{display: 'flex', alignItems: 'baseline'}}>
+                  <Icon name={'exclamation-circle'} />
+                  <p className={css.warning}>You have not verified your account.</p>
+                </div>
+                <button onClick={this.resendVerificationEmail}>Resend Verification Email</button>
+              </React.Fragment>}
+              
               <button onClick={this.showDeleteAccountModal}>Delete Your Account</button>
             </div>
           </div>

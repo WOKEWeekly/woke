@@ -10,10 +10,6 @@
   max-width: 500px !important;
 }
 
-:global(.modal-body) {
-  padding: 0 1rem !important;
-}
-
 /******************************************
 *** signup.js
 ******************************************/
@@ -47,6 +43,10 @@
       font-family: $body-font;
       font-size: 1.1em;
       text-align: left;
+    }
+    .warning {
+      color: white;
+      font-family: $body-font;
     }
   }
 }

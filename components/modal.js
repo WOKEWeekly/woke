@@ -13,8 +13,7 @@ import { socialPlatforms } from '~/constants/settings';
 export class Modal extends Component {
   render(){
 
-    const { visible, header, body, footer,
-    bodyStyle } = this.props;
+    const { visible, header, body, footer, onlyBody } = this.props;
 
     const modalHeader = (
       <DefaultModal.Header className={css.modal_header}>
@@ -23,7 +22,9 @@ export class Modal extends Component {
     );
 
     const modalBody = (
-      <DefaultModal.Body className={css.modal_body}>
+      <DefaultModal.Body
+        className={css.modal_body}
+        style={{ padding: onlyBody ? '1rem' : '0 1rem' }}>
         {body}
       </DefaultModal.Body>
     );
@@ -68,7 +69,8 @@ export class ConfirmModal extends Component {
       <Modal
         show={visible}
         body={body}
-        footer={footer} />
+        footer={footer}
+        onlyBody />
     )
   }
 }
