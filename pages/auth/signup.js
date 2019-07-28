@@ -3,7 +3,6 @@ import { Col } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { saveUser } from '~/reducers/actions';
-import Router from 'next/router';
 
 import { alert, setAlert, displayErrorMessage } from '~/components/alert.js';
 import { SubmitButton } from '~/components/button.js';
@@ -51,7 +50,6 @@ class Signup extends Component {
     this.setState({[name]: value}); }
   handleCheck = (event) => {
     const { name, checked } = event.target;
-    console.log(name, checked);
     this.setState({[name]: checked});}
 
   signUp = () => {

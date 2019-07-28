@@ -11,7 +11,7 @@ import { Default, Mobile, zIndices } from '~/components/layout';
 
 import { accounts, emails } from '~/constants/settings.js';
 import CLEARANCES from '~/constants/clearances.js';
-import Login from './login';
+import Login from '~/pages/auth/login';
 import css from '~/styles/_partials.scss';
 
 /** Little top bar for social media icons and account details */

@@ -11,7 +11,7 @@ module.exports = function(app, conn, server){
 
   /** Home */
   app.get(['/', '/home'], function(req, res){
-    server.render(req, res, '/', { 
+    server.render(req, res, '/home', { 
       title: '#WOKEWeekly - Awakening Through Conversation',
       description: 'Debates and discussions centered around and beyond the UK black community at university campuses. Providing a safe-space for expression and opinions to be heard and encouraging unity amongst the community through conversation, bringing together those divided by social status, religion and interest.',
       url: '/',
@@ -215,7 +215,7 @@ module.exports = function(app, conn, server){
 
   /** Registration */
   app.get('/signup', function(req, res){
-    server.render(req, res, '/signup', {
+    server.render(req, res, '/auth/signup', {
       title: 'Sign Up',
       backgroundImage: 'signup-bg.jpg',
       url: '/signup',
@@ -224,7 +224,7 @@ module.exports = function(app, conn, server){
 
   /** Registration */
   app.get('/account', function(req, res){
-    server.render(req, res, '/account', {
+    server.render(req, res, '/auth/account', {
       title: 'Account',
       url: '/account',
     });
