@@ -13,7 +13,7 @@ import { CookiePrompt, setCookie, getCookie } from '~/constants/cookies';
 import { loadCountries } from '~/constants/countries';
 import { saveCountries } from '~/reducers/actions';
 
-import {PreNavBar, MainNavBar} from "~/partials/header.js";
+import { PreNavBar, MainNavBar } from "~/partials/header.js";
 import Footer from "~/partials/footer.js";
 
 import 'react-toastify/dist/ReactToastify.min.css';

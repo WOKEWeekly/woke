@@ -215,7 +215,7 @@ module.exports = function(app, conn, server){
 
   /** Registration */
   app.get('/signup', function(req, res){
-    server.render(req, res, '/auth/signup', {
+    server.render(req, res, '/_auth/signup', {
       title: 'Sign Up',
       backgroundImage: 'signup-bg.jpg',
       url: '/signup',
@@ -224,7 +224,7 @@ module.exports = function(app, conn, server){
 
   /** Registration */
   app.get('/account', function(req, res){
-    server.render(req, res, '/auth/account', {
+    server.render(req, res, '/_auth/account', {
       title: 'Account',
       url: '/account',
     });

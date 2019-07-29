@@ -144,12 +144,13 @@ class UpcomingSession extends Component {
         className={css.upcomingSession}>
         <Title className={css.heading}>{heading}</Title>
         <div>
+          {session.image ?
           <Link href={link}>
             <img
               src={`/static/images/sessions/${session.image}`}
               alt={session.title}
               className={css.image} />
-          </Link>
+          </Link> : null}
           <div className={css.details}>
             <Title className={css.title}>{session.title}</Title>
             <Subtitle className={css.subtitle}>{formatDate(session.dateHeld, true)}</Subtitle>
@@ -214,12 +215,13 @@ class _RandomCandidate extends Component {
         className={css.randomCandidate}>
         <Title className={css.heading}>Check out our candidate:</Title>
         <div>
+          {candidate.image ?
           <Link href={link}>
             <img
               src={`/static/images/blackexcellence/${candidate.image}`}
               alt={candidate.name}
               className={css.image} />
-          </Link>
+          </Link> : null}
           <div className={css.details}>
             <Title className={css.title}>{candidate.name}</Title>
             <Subtitle className={css.subtitle}>
@@ -393,12 +395,13 @@ class RandomExecutive extends Component{
         <Mobile><Title className={css.heading}>Have you met our executive?</Title></Mobile>
           <Row>
             <Col md={4}>
+              {exec.image ?
               <Link href={link}>
                 <img
                   src={`/static/images/team/${exec.image}`}
                   alt={exec.fullname}
                   className={css.image} />
-              </Link>
+              </Link> : null}
             </Col>
             <Col md={8}>
             <Default><Title className={css.heading}>Have you met our executive?</Title></Default>

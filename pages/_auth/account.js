@@ -217,7 +217,8 @@ class _NewUsernameModal extends Component {
         scrollable
         header={header}
         body={body}
-        footer={footer} />
+        footer={footer}
+        onlyBody />
     )
   }
 }
@@ -318,7 +319,8 @@ class _NewPasswordModal extends Component {
         scrollable
         header={header}
         body={body}
-        footer={footer} />
+        footer={footer}
+        onlyBody />
     )
   }
 }

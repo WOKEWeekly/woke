@@ -285,6 +285,7 @@
 }
 
 .footer_socials {
+  @include scale-on-hover(1.1);
   background-color: black;
   border-radius: 30px;
   display: inline-block;

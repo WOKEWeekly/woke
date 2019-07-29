@@ -53,7 +53,7 @@ export class Shader extends Component {
   render(){
     return (
       <div style={{
-        backgroundColor: 'rgba(0, 0, 0, .7)',
+        backgroundColor: 'rgba(0, 0, 0, .5)',
         width: '100%'
       }}>{this.props.children}</div>
     );

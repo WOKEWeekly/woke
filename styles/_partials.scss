@@ -21,6 +21,31 @@
   }
 }
 
+.error {
+  @extend .text;
+  background: {  
+    attachment: fixed;
+    image: url('/static/images/bg/404.jpg');
+    position: top;
+    repeat: no-repeat;
+    size: cover;
+  }
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 80vh;
+  text-align: center;
+  .errorText {
+    padding: 1.5em;
+    .message {
+      font-size: 1.6em;
+      margin-bottom: 1em;}
+    button {
+      @extend .link-button;
+      color: white; }
+  } 
+}
+
 .prenav {
   background-color: black;
   padding: .2em 0 !important;

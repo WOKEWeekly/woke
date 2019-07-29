@@ -36,7 +36,6 @@ class TopicBank extends Component {
       filters: props.topic.filters,
       searchWord: '',
 
-      isLoaded: false,
       topicsLoaded: false
     };
 
@@ -47,7 +46,6 @@ class TopicBank extends Component {
 
   /** Get topics on mount */
   componentDidMount() {
-    this.setState({ isLoaded: true });
     this.getTopics();
   }
 
