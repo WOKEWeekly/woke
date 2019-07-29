@@ -24,9 +24,8 @@ class LoginModal extends Component {
 
   /** When 'Enter' pressed, trigger login */
   _handleKeyPress = (e) => {
-    if (e.key === 'Enter') {
-      this.logIn();
-    }
+    if (!this.props.visible) return;
+    if (e.key === 'Enter') this.logIn();
   }
 
   /** Register key events */

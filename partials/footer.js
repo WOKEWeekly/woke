@@ -44,7 +44,7 @@ class Links extends Component {
       <div className={css.footerLinks}>
         <a href={'/about'}>About #WOKEWeekly</a>
         <a href={`mailto: ${emails.enquiries}`}>Contact Us</a>
-        <a>Privacy Policy</a>
+        <a href={'/privacy'}>Privacy Policy</a>
         <a href={'/cookies'}>Cookies</a>
         <a>FAQs</a>
       </div>

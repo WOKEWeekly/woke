@@ -9,12 +9,12 @@ import { Shader, Spacer } from '~/components/layout.js';
 import { Paragraph } from '~/components/text.js';
 import { BottomToolbar } from '~/components/toolbar.js';
 
-import css from '~/styles/about.scss';
+import css from '~/styles/info.scss';
 
-class About extends Component {
-  /** Retrieve about description from server */
+class Info extends Component {
+  /** Retrieve information from server */
   static async getInitialProps({ query }) {
-    return { text: query.description };
+    return { ...query };
   }
 
   constructor(){
@@ -28,7 +28,7 @@ class About extends Component {
 
   render(){
     const { isLoaded } = this.state;
-    const { user, text } = this.props;
+    const { user, description, url } = this.props;
 
     if (!isLoaded) return null;
 
@@ -36,15 +36,15 @@ class About extends Component {
       <Spacer>
         <Shader>
           <div className={css.container}>
-            <Paragraph className={css.text}>{text}</Paragraph>
+            <Paragraph className={css.text}>{description}</Paragraph>
           </div>
         </Shader>
 
-        {user.clearance >= CLEARANCES.ACTIONS.EDIT_ABOUT ? 
+        {user.clearance >= CLEARANCES.ACTIONS.EDIT_INFO ? 
           <BottomToolbar>
             <EditButton
               title={'Edit Text'}
-              onClick={() => Router.push('/about/edit/')} />
+              onClick={() => Router.push(`${url}/edit/`)} />
           </BottomToolbar>
         : null}
       </Spacer>
@@ -57,4 +57,4 @@ const mapStateToProps = state => ({
   user: state.user
 });
 
-export default connect(mapStateToProps)(About);
+export default connect(mapStateToProps)(Info);

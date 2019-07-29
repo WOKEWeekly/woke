@@ -9,24 +9,23 @@ import { Heading, Group, Label, TextArea } from '~/components/form.js';
 import { Shader, Spacer } from '~/components/layout.js';
 
 import CLEARANCES from '~/constants/clearances.js';
+import css from '~/styles/info.scss';
 
-import css from '~/styles/about.scss';
-
-class EditAbout extends Component {
-  /** Retrieve about description from server */
+class EditInfo extends Component {
+  /** Retrieve informaiton from server */
   static async getInitialProps({ query }) {
-    return { text: query.description };
+    return { ...query };
   }
 
   constructor(props){
     super(props);
     this.state = {
       isLoaded: false,
-      text: props.text
+      text: props.description
     }
 
-    if (props.user.clearance < CLEARANCES.ACTIONS.EDIT_ABOUT){
-      return Router.push('/about');
+    if (props.user.clearance < CLEARANCES.ACTIONS.EDIT_INFO){
+      location.href = '/';
     }
   }
 
@@ -34,24 +33,26 @@ class EditAbout extends Component {
     this.setState({isLoaded: true})
   }
 
-  /** Update about description */
-  updateAbout = () => {
-    const about = { text: this.state.text }
+  /** Update information */
+  updateInfo = () => {
+    const { user, title, file } = this.props;
+    const { text } = this.state;
 
-    fetch('/updateAbout', {
+    fetch('/updateInfo', {
       method: 'PUT',
-      body: JSON.stringify(about),
+      body: JSON.stringify({text, file}),
       headers: {
-        'Authorization': `Bearer ${this.props.user.token}`,
-        'Clearance': CLEARANCES.ACTIONS.EDIT_ABOUT,
+        'Authorization': `Bearer ${user.token}`,
+        'Clearance': CLEARANCES.ACTIONS.EDIT_INFO,
         'Content-Type': 'application/json'
       }
     })
     .then(res => Promise.all([res, res.json()]))
     .then(([status, response]) => { 
       if (status.ok){
-        setAlert({ type: 'success', message: `You've successfully updated the "About" description.` });
-        location.href = '/about';
+        setAlert({ type: 'success', message: `You've successfully updated the '${title.substring(5)}'.` });
+        const path = location.pathname;
+        location.href = path.substring(0, path.indexOf('/', 1));
       } else {
         alert.error(response.message)
       }
@@ -67,7 +68,7 @@ class EditAbout extends Component {
 
   render(){
     const { isLoaded, text } = this.state;
-    console.log(text);
+    const { title, placeholder } = this.props;
 
     if (!isLoaded) return null;
 
@@ -75,7 +76,7 @@ class EditAbout extends Component {
       <Shader>
         <Spacer className={css.form}>
           <div>
-            <Heading>Edit About</Heading>
+            <Heading>{title}</Heading>
 
             <Group>
               <Col>
@@ -84,7 +85,7 @@ class EditAbout extends Component {
                   name={'text'}
                   value={text}
                   onChange={this.handleText}
-                  placeholder={"Write about #WOKEWeekly..."} />
+                  placeholder={placeholder} />
               </Col>
             </Group>
           </div>
@@ -92,7 +93,7 @@ class EditAbout extends Component {
           <div>
             <Group>
               <Col>
-                <SubmitButton onClick={this.updateAbout} className={'mr-2'}>Update</SubmitButton>
+                <SubmitButton onClick={this.updateInfo} className={'mr-2'}>Update</SubmitButton>
                 <CancelButton onClick={Router.back}>Cancel</CancelButton>
               </Col>
             </Group>
@@ -107,4 +108,4 @@ const mapStateToProps = state => ({
   user: state.user
 });
 
-export default connect(mapStateToProps)(EditAbout);
+export default connect(mapStateToProps)(EditInfo);

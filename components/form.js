@@ -166,7 +166,7 @@ export class SearchBar extends Component {
  * TEXTAREAS
  **************************/
 
-/** For long text inputs */
+/** For inline long text inputs */
 export class ShortTextArea extends Component {
   render(){
     return (
@@ -180,12 +180,12 @@ export class ShortTextArea extends Component {
   }
 }
 
-/** For long text inputs */
+/** For long text inputs with word counters */
 export class TextArea extends Component {
   constructor(props){
     super(props);
     this.state = {
-      wordCount: props.value.length
+      wordCount: props.value ? props.value.length : 0
     }
   }
 

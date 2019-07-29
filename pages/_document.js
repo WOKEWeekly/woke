@@ -26,7 +26,7 @@ export default class MyDocument extends Document {
 /** Add metadata to each webpage */
 const Meta = ({
   title,
-  isHome,
+  noSuffix,
   url = null,
   description = '',
   image = '/static/images/logos/woke-card.jpg'
@@ -35,7 +35,7 @@ const Meta = ({
     <meta charSet="UTF-8" name="author" content="Zavid Egbue" />
     <meta name="viewport" content="initial-scale=1.0, width=device-width" />
 
-    <title>{title ? (isHome ? title : `${title} | #WOKEWeekly`) : 'Page Not Found'}</title>
+    <title>{title ? (noSuffix ? title : `${title} | #WOKEWeekly`) : 'Page Not Found'}</title>
     <meta name="description" content={description} />
 
     <meta property="og:title" content={title} />

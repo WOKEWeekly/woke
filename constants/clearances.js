@@ -14,7 +14,7 @@ module.exports = {
     VIEW_USERS: 8,          // View all registered user details
     CRUD_USERS: 8,          // Change the clearances of other users
     SEND_NOTIFICATIONS: 8,  // Send notifications to all users
-    EDIT_ABOUT: 8           // Edit about text
+    EDIT_INFO: 8           // Edit about text
   },
   LEVELS: {
     MEMBERS: [

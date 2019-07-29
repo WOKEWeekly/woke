@@ -41,15 +41,13 @@ export class Paragraph extends Component {
         {...this.props}
         className={classes}>
         {children.split('\n').map((paragraph, i, arr) => {
-          let line;
-          if (paragraph.charAt(0) !== '•'){
-            line = <p key={i}>{paragraph}</p>;
-          } else {
-            line = <div key={i}>{paragraph}</div>;
-          }
-  
           if (paragraph.length > 0) {
-            return line;
+            switch (paragraph.charAt(0)){
+              case '*': return <div className={css.heading} key={i}>{paragraph.substring(1)}</div>;
+              case '>': return <div className={css.subheading} key={i}>{paragraph.substring(1)}</div>;
+              case '•': return <li className={css.listitem} key={i}>{paragraph.substring(1).trim()}</li>;
+              default: return <p className={css.body} key={i}>{paragraph}</p>;
+            }
           } else {
             return null;
           }

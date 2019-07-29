@@ -8,6 +8,8 @@ const { renderErrPage } = require('./response.js');
 
 const about = './static/resources/about.txt';
 const constitution = './static/resources/Constitution.pdf';
+const cookies = './static/resources/cookies.txt';
+const privacy = './static/resources/privacy.txt';
 
 module.exports = function(app, conn, server){
 
@@ -17,7 +19,7 @@ module.exports = function(app, conn, server){
       title: '#WOKEWeekly - Awakening Through Conversation',
       description: 'Debates and discussions centered around and beyond the UK black community at university campuses. Providing a safe-space for expression and opinions to be heard and encouraging unity amongst the community through conversation, bringing together those divided by social status, religion and interest.',
       url: '/',
-      isHome: true,
+      noSuffix: true,
       backgroundImage: 'body-bg.jpg'
      });
   });
@@ -84,14 +86,16 @@ module.exports = function(app, conn, server){
   /** Topic Bank */
   app.get('/topics', function(req, res){
     server.render(req, res, '/topics', {
-      title: 'Topic Bank'
+      title: 'Topic Bank',
+      backgroundImage: 'topics-bg.jpg'
     });
   });
 
   /** Add New Topic */
   app.get('/topics/add', function(req, res){
     server.render(req, res, '/topics/add', {
-      title: 'Add New Topic'
+      title: 'Add New Topic',
+      backgroundImage: 'topics-bg.jpg'
     });
   });
 
@@ -105,6 +109,7 @@ module.exports = function(app, conn, server){
         const topic = result[0];
         return server.render(req, res, '/topics/edit', {
           title: 'Edit Topic',
+          backgroundImage: 'topics-bg.jpg',
           topic
         });
       } else {
@@ -235,10 +240,11 @@ module.exports = function(app, conn, server){
   /** About Us */
   app.get('/about', function(req, res){
     fs.readFile(about, 'utf8', function (err, data){
-      return server.render(req, res, '/about', {
-        title: 'About Us',
+      return server.render(req, res, '/info', {
+        title: 'About #WOKEWeekly',
         description: data,
-        url: '/about'
+        url: '/about',
+        noSuffix: true
       });
     });
   });
@@ -246,9 +252,59 @@ module.exports = function(app, conn, server){
   /** Edit About */
   app.get('/about/edit', function(req, res){
     fs.readFile(about, 'utf8', function (err, data){
-      return server.render(req, res, '/about/edit', {
+      return server.render(req, res, '/info/edit', {
         title: 'Edit About',
-        description: data
+        description: data,
+        file: 'about.txt',
+        placeholder: `Write about #WOKEWeekly...`
+      });
+    });
+  });
+
+  /** Privacy Policy */
+  app.get('/privacy', function(req, res){
+    fs.readFile(privacy, 'utf8', function (err, data){
+      return server.render(req, res, '/info', {
+        title: 'Privacy Policy',
+        description: data,
+        url: '/privacy',
+        noSuffix: true
+      });
+    });
+  });
+
+  /** Edit Privacy Policy */
+  app.get('/privacy/edit', function(req, res){
+    fs.readFile(privacy, 'utf8', function (err, data){
+      return server.render(req, res, '/info/edit', {
+        title: 'Edit Privacy Policy',
+        description: data,
+        file: 'privacy.txt',
+        placeholder: `Detail this website's Privacy Policy...`
+      });
+    });
+  });
+
+  /** Cookie Policy */
+  app.get('/cookies', function(req, res){
+    fs.readFile(cookies, 'utf8', function (err, data){
+      return server.render(req, res, '/info', {
+        title: 'Cookie Policy',
+        description: data,
+        url: '/cookies',
+        noSuffix: true
+      });
+    });
+  });
+
+  /** Edit Cookie Policy */
+  app.get('/cookies/edit', function(req, res){
+    fs.readFile(cookies, 'utf8', function (err, data){
+      return server.render(req, res, '/info/edit', {
+        title: 'Edit Cookie Policy',
+        description: data,
+        file: 'cookies.txt',
+        placeholder: `Detail this website's Cookie Policy...`
       });
     });
   });

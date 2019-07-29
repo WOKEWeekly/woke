@@ -334,9 +334,9 @@ module.exports = function(app, conn){
   });
 
   /** Update about description */
-  app.put('/updateAbout', verifyToken, function(req, res){
-    const text = req.body.text;
-    fs.writeFile('./static/resources/about.txt', text, function(err) {
+  app.put('/updateInfo', verifyToken, function(req, res){
+    const { text, file } = req.body;
+    fs.writeFile(`./static/resources/${file}`, text, function(err) {
       resToClient(res, err);
     });
   });

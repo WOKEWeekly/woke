@@ -159,7 +159,8 @@ class Signup extends Component {
                 <Checkbox
                   name={'privacy'}
                   checked={privacy}
-                  label={'I agree to the terms and conditions stated in the Privacy Policy.'}
+                  label={
+                  <span>I agree to the terms and conditions stated in the <a style={{color: '#bc83ff'}} href={'/privacy'}>Privacy Policy</a>.</span>}
                   onChange={this.handleCheck} />
               </Col>
             </Group>

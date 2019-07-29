@@ -419,6 +419,15 @@
   display: inline;
   font-family: $body-font;
   white-space: pre-line;
+  .heading {
+    font-family: $title-font;
+    font-size: 1.8em;}
+  .subheading {
+    font-family: $title-font;
+    font-size: 1.2em;}
+  .body {
+    margin: 1rem 0;
+  }
 }
 .divider {
   background-color: white;
