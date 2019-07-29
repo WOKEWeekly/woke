@@ -40,7 +40,5 @@ export default class Error extends React.Component {
         </Shader>
       )
     }
-
-    
   }
 }

@@ -4,6 +4,8 @@ const path = require('path');
 const sm = require('sitemap');
 const { domain } = require('../constants/settings.js');
 
+const { renderErrPage } = require('./response.js');
+
 const about = './static/resources/about.txt';
 const constitution = './static/resources/Constitution.pdf';
 
@@ -36,7 +38,7 @@ module.exports = function(app, conn, server){
     const sql = "SELECT * FROM sessions WHERE slug = ?";
     
     conn.query(sql, [slug], function (err, result) {
-      if (!err){
+      if (!err && result.length){
         const session = result[0];
         return server.render(req, res, '/sessions/single', {
           title: session.title,
@@ -47,7 +49,7 @@ module.exports = function(app, conn, server){
           session
         });
       } else {
-        res.status(400).send(err.toString());
+        renderErrPage(req, res, err, server);
       }
     });
   });
@@ -66,7 +68,7 @@ module.exports = function(app, conn, server){
     const sql = "SELECT * FROM sessions WHERE id = ?";
     
     conn.query(sql, [id], function (err, result) {
-      if (!err){
+      if (!err && result.length){
         const session = result[0];
         return server.render(req, res, '/sessions/edit', {
           title: 'Edit Session',
@@ -74,7 +76,7 @@ module.exports = function(app, conn, server){
           session
         });
       } else {
-        res.status(400).send(err.toString());
+        renderErrPage(req, res, err, server);
       }
     });
   });
@@ -99,14 +101,14 @@ module.exports = function(app, conn, server){
     const sql = "SELECT * FROM topics WHERE id = ?";
     
     conn.query(sql, [id], function (err, result) {
-      if (!err){
+      if (!err && result.length){
         const topic = result[0];
         return server.render(req, res, '/topics/edit', {
           title: 'Edit Topic',
           topic
         });
       } else {
-        res.status(400).send(err.toString());
+        renderErrPage(req, res, err, server);
       }
     });
   });
@@ -127,14 +129,14 @@ module.exports = function(app, conn, server){
     const sql = "SELECT * FROM blackex WHERE id = ?";
     
     conn.query(sql, [id], function (err, result) {
-      if (!err){
+      if (!err && result.length){
         const candidate = result[0];
         return server.render(req, res, '/blackexcellence/edit', {
           title: 'Edit Candidate',
           candidate
         });
       } else {
-        res.status(400).send(err.toString());
+        renderErrPage(req, res, err, server);
       }
     });
   });
@@ -145,7 +147,7 @@ module.exports = function(app, conn, server){
     const sql = "SELECT * FROM blackex WHERE id = ?";
     
     conn.query(sql, [id], function (err, result) {
-      if (!err){
+      if (!err && result.length){
         const candidate = result[0];
         candidate.label = `#${candidate.id}: ${candidate.name}`;
         return server.render(req, res, '/blackexcellence/single', {
@@ -157,7 +159,7 @@ module.exports = function(app, conn, server){
           candidate
         });
       } else {
-        res.status(400).send(err.toString());
+        renderErrPage(req, res, err, server);
       }
     });
   });
@@ -178,7 +180,7 @@ module.exports = function(app, conn, server){
     const sql = "SELECT * FROM team WHERE slug = ?";
     
     conn.query(sql, [slug], function (err, result) {
-      if (!err){
+      if (!err && result.length){
         const exec = result[0];
         return server.render(req, res, '/team/exec.single', {
           title: `${exec.firstname} ${exec.lastname}`,
@@ -189,7 +191,7 @@ module.exports = function(app, conn, server){
           exec
         });
       } else {
-        res.status(400).send(err.toString());
+        renderErrPage(req, res, err, server);
       }
     });
   });
@@ -200,7 +202,7 @@ module.exports = function(app, conn, server){
     const sql = "SELECT * FROM team WHERE id = ?";
     
     conn.query(sql, [id], function (err, result) {
-      if (!err){
+      if (!err && result.length){
         const member = result[0];
         return server.render(req, res, '/team/edit', { 
           title: 'Edit Team Member',
@@ -208,7 +210,7 @@ module.exports = function(app, conn, server){
           member
         });
       } else {
-        res.status(400).send(err.toString());
+        renderErrPage(req, res, err, server);
       }
     });
   });

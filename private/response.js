@@ -8,6 +8,10 @@ module.exports = {
       json ? res.json(json) : res.status(200).send({ message: 'ok'});
     }
   },
+  renderErrPage: (req, res, err, server) => {
+    if (err) console.error(err.toString());
+    return server.render(req, res, '/error');
+  }
 }
 
 getErrMsg = (err) => {
