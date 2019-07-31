@@ -1,6 +1,6 @@
 *Privacy Policy
 
-The privacy policy explains how #WOKEWeekly uses the personal data we collect from you when you are a registered user of this website.
+We want to ensure the best possible user experience while also assuring and maintaining a transparent level of trust. This privacy policy explains how #WOKEWeekly uses the personal data we collect from you when you are a registered user of this website.
 
 >What data we do collect?
 
@@ -12,4 +12,20 @@ You directly provide us with these details upon registration to the site. We col
 
 >How do we use your data?
 
-We collect your data so that we can...
+We collect your data so that we can manage your account and associate your account with any suggestions you have made.
+
+In the event that you have opted in to our newsletter subscriptions, we will use MailChimp to email any news and updates about #WOKEWeekly to your email address.
+
+By agreeing to opt in to our subscriptions, you permit us to disclose your information for use via the MailChimp service.
+
+At any point, you can request to unsubscribe from our newsletters, at which point your information will be deleted from our MailChimp mailing list. 
+
+>How do we store your data?
+
+Your submitted information is securely stored on our remote database server. Sensitive data such as passwords are hashed using state-of-the-art cryptographic functions before storage to ensure robust security.
+
+Your data is retained for only as long as required. Your data, as well as any contributions you may have made to this site including suggestions and comments, will be erased when you choose to delete your account or you request us to do so.
+
+>Cookies
+
+To read and understand about cookies and how we use them, please view our <(/cookies) Cookie Policy>.

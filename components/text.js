@@ -40,16 +40,39 @@ export class Paragraph extends Component {
       <pre
         {...this.props}
         className={classes}>
-        {children.split('\n').map((paragraph, i, arr) => {
-          if (paragraph.length > 0) {
-            switch (paragraph.charAt(0)){
-              case '*': return <div className={css.heading} key={i}>{paragraph.substring(1)}</div>;
-              case '>': return <div className={css.subheading} key={i}>{paragraph.substring(1)}</div>;
-              case '•': return <li className={css.listitem} key={i}>{paragraph.substring(1).trim()}</li>;
-              default: return <p className={css.body} key={i}>{paragraph}</p>;
-            }
-          } else {
-            return null;
+        {children.split('\n').map((paragraph, key) => {
+          if (paragraph.length === 0) return null;
+
+          switch (paragraph.charAt(0)){
+            // For headings
+            case '*': return <div className={css.heading} key={key}>{paragraph.substring(1)}</div>;
+
+            // For subheadings
+            case '>': return <div className={css.subheading} key={key}>{paragraph.substring(1)}</div>;
+
+            // For images
+            case ';': return (
+              <div className={css.image}>
+                <img src={`/static/images/${paragraph.substring(1)}`} key={key} />
+              </div>
+            );
+
+            // For list items
+            case '•': return <li className={css.listitem} key={key}>{paragraph.substring(1).trim()}</li>;
+
+            // Normal paragraph text
+            default:
+              const regex = new RegExp(/\<\((.*?)\)\s(.*?)\>/g); // Regular expression for links
+              const parts = paragraph.split(regex).map((text, count, array) => {
+                if (text.startsWith('/' || 'http')){
+                  array.splice(count, 1);
+                  return <a href={text} key={count} className={css.linkText}>{array[count]}</a>;
+                } else {
+                  return text;
+                }
+              });
+
+              return <p className={css.body} key={key}>{parts}</p>;
           }
         })}
       </pre>

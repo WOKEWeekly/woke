@@ -160,7 +160,7 @@ class Signup extends Component {
                   name={'privacy'}
                   checked={privacy}
                   label={
-                  <span>I agree to the terms and conditions stated in the <a style={{color: '#bc83ff'}} href={'/privacy'}>Privacy Policy</a>.</span>}
+                  <span>I agree to the terms and conditions stated in the <a target={'_blank'} className={css.linkText} href={'/privacy'}>Privacy Policy</a>.</span>}
                   onChange={this.handleCheck} />
               </Col>
             </Group>
