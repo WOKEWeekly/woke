@@ -23,11 +23,11 @@ export default class Footer extends Component {
 
     return (
       <div className={css.footer}>
-        <Row>
+        {/* <Row>
           <Col md={4}></Col>
           <Col md={4}></Col>
           <Col md={4}><Socials/></Col>
-        </Row>
+        </Row> */}
         <Divider />
         <Row>
           <Links/>

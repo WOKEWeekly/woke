@@ -1,5 +1,38 @@
 @import "variables";
 
+/************
+*** index.js
+*************/
+
+.grid {
+  display: grid;
+  padding: 1em 2em;
+  font-size: 1.1em;
+  .header {
+    align-items: center;
+    border-bottom: 1px solid rgba(255,255,255,.6);
+    color: white;
+    font-family: $title-font;
+    display: grid;
+    grid-template-columns:  .2fr .8fr .6fr 1.3fr 1fr .8fr;
+    padding: .7em 0;
+    span { padding: 0 .5em; } }
+  .row {
+    @extend .header;
+    font-family: $body-font;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    &:hover {
+      background-color: $primary-light;
+    }
+  }
+}
+
+/************
+*** exec.js
+*************/
+
 .list {
   .item {
     @include scale-on-hover(1.03);

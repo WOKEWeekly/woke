@@ -14,7 +14,10 @@
 *** signup.js
 ******************************************/
 
-.form { @include responsive-form; width: 50%; }
+.form {
+  @include responsive-form;
+  @media (min-width: $break-lg) { width: 50%; }
+}
 
 /******************************************
 *** account.js

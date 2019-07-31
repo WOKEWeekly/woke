@@ -1,5 +1,7 @@
 /** Convert date to full string, options of having day of week */
 export const formatDate = (value, withDate) => {
+  if (!value) return '-';
+
   let dt = new Date(value);
 
   let day_number = dt.getDay() + 1;

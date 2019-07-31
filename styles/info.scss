@@ -6,7 +6,8 @@
   padding: 2em;
   .text {
     @extend .text;
-    font-size: 1.1em;
+    font-size: 1.2em;
+    @media (max-width: $break-md) { font-size: 1em; }
   }
 }
 

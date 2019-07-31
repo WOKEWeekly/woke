@@ -201,6 +201,14 @@ module.exports = function(app, conn, server){
     });
   });
 
+  /** Team Members */
+  app.get('/team', function(req, res){
+    return server.render(req, res, '/team', {
+      title: 'Team Members',
+      backgroundImage: 'team-bg.jpg',
+    });
+  });
+
   /** Edit Team Member */
   app.get('/team/edit/:id', function(req, res){
     const id = req.params.id;
@@ -329,7 +337,7 @@ module.exports = function(app, conn, server){
 
   app.get('/sitemap.xml', (req, res) => {
     const routes = [ '/', '/home', '/sessions', '/blackexcellence',
-    '/executives', '/signup', '/about' ];
+    '/executives', '/signup', '/about', '/privacy', '/cookies' ];
 
     async.parallel([
       function(callback){

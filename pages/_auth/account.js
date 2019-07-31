@@ -135,8 +135,7 @@ class Account extends Component {
         <ConfirmModal
           visible={deleteAccModal}
           message={
-            `Are you sure you want to delete your account?
-            This action cannot be undone.`
+            `Are you sure you want to delete your account? Once you're account has been deleted, it cannot be recovered.`
           }
           confirmFunc={this.deleteAccount}
           confirmText={'Yes, delete my account.'}

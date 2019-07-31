@@ -54,7 +54,7 @@ class PreNavbar extends Component {
 
     /** If authenticated, show name. Else, show option to login/register */
     const renderAccount = () => {
-      const { firstname, lastname, fullname, isAuthenticated } = this.props.user;
+      const { firstname, lastname, clearance, fullname, isAuthenticated } = this.props.user;
   
       if (isAuthenticated){
         return (
@@ -66,7 +66,10 @@ class PreNavbar extends Component {
                 <Mobile>{firstname} {lastname.substring(0,1)}.</Mobile>
               </Dropdown.Toggle>
               <Dropdown.Menu className={css.dropdown_menu}>
-                <Dropdown.Item className={css.dropdown_item} onClick={() => Router.push('/account')} eventKey={'1'}>Your Account</Dropdown.Item>
+                <Dropdown.Item className={css.dropdown_item} onClick={() => Router.push('/account')}>Your Account</Dropdown.Item>
+                {clearance >= CLEARANCES.ACTIONS.VIEW_TEAM ?
+                <Dropdown.Item className={css.dropdown_item} onClick={() => location.href = '/team'}>Team Members</Dropdown.Item>
+                :null}
                 <Dropdown.Item className={css.dropdown_item} onClick={this.logOut}>Log Out</Dropdown.Item>
               </Dropdown.Menu>
             </Dropdown>

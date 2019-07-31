@@ -46,6 +46,10 @@
   } 
 }
 
+/***************************************************************
+* header.js
+**************************************************************/
+
 .prenav {
   background-color: black;
   padding: .2em 0 !important;
@@ -88,7 +92,6 @@
 }
 
 .nav {
-  // background-image: url('/static/images/bg/nav-bg.jpg');
   background-size: cover;
   border-top: $border;
   border-bottom: $border;
@@ -98,8 +101,30 @@
     color: #d5bde0 !important;
     font-family: $body-font;
     font-weight: 700;
+    position: relative;
+    &:before {
+      background-color: #D383FF;
+      bottom: 0;
+      content: "";
+      height: 2px;
+      left: 0;
+      position: absolute;
+      transform: scaleX(0);
+      transition: all 0.3s ease-in-out 0s;
+      visibility: hidden;
+      width: 100%;
+      -webkit-transform: scaleX(0);
+      -webkit-transition: all 0.3s ease-in-out 0s;}
+    &:hover:before {
+      -webkit-transform: scaleX(1);
+      transform: scaleX(1);
+      visibility: visible; }
   }
 }
+
+/***************************************************************
+* footer.js
+**************************************************************/
 
 .footer {
   background-color: rgba(11, 10, 12, .95);

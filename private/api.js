@@ -341,24 +341,16 @@ module.exports = function(app, conn){
     });
   });
 
+  /** Retrieve all team members */
+  app.get('/getTeam', verifyToken, function(req, res){
+    conn.query("SELECT * FROM team", function (err, result) {
+      resToClient(res, err, result);
+    });
+  });
+
   /****************************
    * CHECKPOINT
    ***************************/
-
-  /** Retrieve all team members */
-  app.get('/getTeam', function(req, res){
-    if (req.headers['authorization'] !== 'authorized'){
-      res.sendStatus(403);
-    } else {
-      conn.query("SELECT * FROM team", function (err, result) {
-        if (!err){
-          res.json(result);
-        } else {
-          res.status(400).send(err.toString());
-        }
-      });
-    }
-  });
 
   /** Add new team member to database */
   app.post('/addMember', verifyToken, function(req, res){

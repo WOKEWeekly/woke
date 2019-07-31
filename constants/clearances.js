@@ -8,6 +8,7 @@ module.exports = {
     CRUD_TOPICS: 6,         // Add, edit and delete topics from the Topic Bank
     EDIT_EXEC: 6,           // Add, edit and delete team member profiles
 
+    VIEW_TEAM: 7,           // View all team member details
     SEE_SUGGESTING_USER: 7, // See author of suggestions
     DELETE_SUGGESTION: 7,   // Delete suggestions for all users
 
