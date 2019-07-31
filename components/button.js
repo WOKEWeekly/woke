@@ -22,6 +22,19 @@ export class SubmitButton extends Component {
   }
 }
 
+export class DeleteButton extends Component {
+  render(){
+    const classes = classNames(css.delete, this.props.className);
+    return (
+      <button
+        {...this.props}
+        className={classes}>
+        {this.props.children}
+      </button>
+    )
+  }
+}
+
 export class CancelButton extends Component {
   render(){
     return (
@@ -38,7 +51,7 @@ export class CancelButton extends Component {
 /*************************
  * PAGE BUTTONS 
  *************************/
-export class AddButton extends Component {
+export class AddEntityButton extends Component {
   render(){
     return (
       <Button
@@ -53,7 +66,7 @@ export class AddButton extends Component {
   }
 }
 
-export class EditButton extends Component {
+export class EditEntityButton extends Component {
   render(){
     return (
       <Button
@@ -68,7 +81,7 @@ export class EditButton extends Component {
   }
 }
 
-export class DeleteButton extends Component {
+export class DeleteEntityButton extends Component {
   render(){
     return (
       <Button
@@ -94,43 +107,6 @@ export class BackButton extends Component {
         <Default>{this.props.title}</Default>
         <Mobile>Back</Mobile>
       </Button>
-    )
-  }
-}
-
-/*************************
- * MODAL BUTTONS 
- *************************/
-
-export class ConfirmButton extends Component {
-  render(){
-    return (
-      <Button
-        {...this.props}
-        className={css.button}
-        variant={'success'}>{this.props.children}</Button>
-    )
-  }
-}
-
-export class DeleteButton2 extends Component {
-  render(){
-    return (
-      <Button
-        {...this.props}
-        className={css.button}
-        variant={'danger'}>{this.props.children}</Button>
-    )
-  }
-}
-
-export class CloseButton extends Component {
-  render(){
-    return (
-      <Button
-        {...this.props}
-        className={css.button}
-        variant={'secondary'}>{this.props.children}</Button>
     )
   }
 }

@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import Router from 'next/router';
 
 import { alert, setAlert, displayErrorMessage } from '~/components/alert.js';
-import { EditButton, DeleteButton, BackButton } from '~/components/button.js';
+import { EditEntityButton, DeleteEntityButton, BackButton } from '~/components/button.js';
 import { ConfirmModal } from '~/components/modal.js';
 import { PromoIconsBar } from '~/components/icon.js';
 import { Title, Subtitle, Paragraph, Divider } from '~/components/text.js';
@@ -122,10 +122,10 @@ class CandidatePage extends Component {
 
           {user.clearance >= CLEARANCES.ACTIONS.CRUD_BLACKEX ? 
             <React.Fragment>
-              <EditButton
+              <EditEntityButton
                 title={'Edit Candidate'}
                 onClick={() => Router.push(`/blackexcellence/edit/${candidate.id}`)}/>
-              <DeleteButton
+              <DeleteEntityButton
                 title={'Delete Candidate'}
                 onClick={this.showModal} />
             </React.Fragment>

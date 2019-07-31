@@ -4,7 +4,7 @@ import Router from 'next/router';
 
 import CLEARANCES from '~/constants/clearances.js';
 
-import { EditButton } from '~/components/button.js';
+import { EditEntityButton } from '~/components/button.js';
 import { Shader, Spacer } from '~/components/layout.js';
 import { Paragraph } from '~/components/text.js';
 import { BottomToolbar } from '~/components/toolbar.js';
@@ -44,7 +44,7 @@ class Info extends Component {
 
         {user.clearance >= CLEARANCES.ACTIONS.EDIT_INFO ? 
           <BottomToolbar>
-            <EditButton
+            <EditEntityButton
               title={'Edit Text'}
               onClick={() => Router.push(`${url}/edit/`)} />
           </BottomToolbar>

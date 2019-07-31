@@ -3,7 +3,7 @@ import { Container } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import Router from 'next/router';
 
-import { EditButton, BackButton } from '~/components/button.js';
+import { EditEntityButton, BackButton } from '~/components/button.js';
 import { PromoIconsBar } from '~/components/icon.js';
 import { Title, Subtitle, Paragraph, Divider } from '~/components/text.js';
 import {BottomToolbar} from '~/components/toolbar.js';
@@ -89,7 +89,7 @@ class ExecPage extends Component {
             onClick={() => location.href = '/executives'} />
 
           {user.clearance >= CLEARANCES.ACTIONS.EDIT_EXEC ? 
-            <EditButton
+            <EditEntityButton
               title={'Edit Executive'}
               onClick={() => Router.push(`/team/edit/${exec.id}`)}/>
           : null}

@@ -5,7 +5,7 @@ import { changeUsername, clearUser } from '~/reducers/actions';
 import { Col } from 'react-bootstrap';
 
 import { alert, setAlert, displayErrorMessage } from '~/components/alert.js';
-import { ConfirmButton, CloseButton } from '~/components/button.js';
+import { SubmitButton, CancelButton } from '~/components/button.js';
 import { Group, UsernameInput, PasswordInput } from '~/components/form.js';
 import { Icon } from '~/components/icon.js';
 import { Shader } from '~/components/layout.js';
@@ -206,8 +206,8 @@ class _NewUsernameModal extends Component {
 
     const footer = (
       <React.Fragment>
-        <ConfirmButton onClick={this.changeUsername}>Confirm</ConfirmButton>
-        <CloseButton onClick={close}>Close</CloseButton>
+        <SubmitButton onClick={this.changeUsername}>Confirm</SubmitButton>
+        <CancelButton onClick={close}>Close</CancelButton>
       </React.Fragment>
     )
     return (
@@ -308,8 +308,8 @@ class _NewPasswordModal extends Component {
 
     const footer = (
       <React.Fragment>
-        <ConfirmButton onClick={this.changePassword}>Confirm</ConfirmButton>
-        <CloseButton onClick={close}>Close</CloseButton>
+        <SubmitButton onClick={this.changePassword}>Confirm</SubmitButton>
+        <CancelButton onClick={close}>Close</CancelButton>
       </React.Fragment>
     )
     return (

@@ -66,6 +66,7 @@ export class Paragraph extends Component {
               paragraph = parts.map((text, count, array) => {
                 if (parts.length < 2) return text;
 
+                // Hyperlinking text
                 if (text.startsWith('/') || text.startsWith('mailto:') || text.startsWith('https')){
                   array.splice(count, 1);
                   return <a target={'_blank'} href={text} key={count} className={css.linkText}>{array[count]}</a>;
@@ -73,8 +74,6 @@ export class Paragraph extends Component {
                   return text;
                 }
               });
-
-              console.log(parts);
 
               return <p className={css.body} key={key}>{paragraph}</p>;
           }

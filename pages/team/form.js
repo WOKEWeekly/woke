@@ -3,7 +3,7 @@ import { Col } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import Router from 'next/router';
 
-import { SubmitButton, CancelButton, AddButton } from '~/components/button.js';
+import { SubmitButton, CancelButton, AddEntityButton } from '~/components/button.js';
 import { BirthdayPicker } from '~/components/datepicker.js';
 import { Heading, Group, Label, Select, TextInput, ClickInput, TextArea, FileSelector } from '~/components/form.js';
 import { listSocials } from '~/components/icon.js';
@@ -109,7 +109,7 @@ class MemberForm extends Component {
             <Group>
               <Col md={12}>
                 <Label>Socials:</Label>
-                <AddButton
+                <AddEntityButton
                   title={'Add Socials'}
                   onClick={this.showSocialsModal} />
                 <div className={'mt-2'}>{listSocials(socials)}</div>

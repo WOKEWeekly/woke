@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { saveSessionSort, saveSessionView } from '~/reducers/actions';
 
-import { AddButton, RadioButtonGroup } from '~/components/button.js';
+import { AddEntityButton, RadioButtonGroup } from '~/components/button.js';
 import { SortDropdown } from '~/components/dropdown.js';
 import { Icon } from '~/components/icon.js';
 import { Cover, Shader, Spacer } from '~/components/layout.js';
@@ -137,7 +137,7 @@ class Sessions extends Component {
 
           <BottomToolbar>
             {user.clearance >= CLEARANCES.ACTIONS.CRUD_TOPICS ?
-            <AddButton
+            <AddEntityButton
               title={'Add Session'}
               onClick={() => Router.push('/sessions/add')} /> : null}
 

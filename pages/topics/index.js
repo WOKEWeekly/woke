@@ -7,7 +7,7 @@ import { saveTopicSort, saveTopicFilters } from '~/reducers/actions';
 import classNames from 'classnames';
 
 import { alert, setAlert, displayErrorMessage } from '~/components/alert.js';
-import { AddButton } from '~/components/button.js';
+import { AddEntityButton } from '~/components/button.js';
 import { SortDropdown, FilterDropdown } from '~/components/dropdown.js';
 import { Checkbox, SearchBar } from '~/components/form.js';
 import { Cover, Shader, Spacer } from '~/components/layout.js';
@@ -229,7 +229,7 @@ class TopicBank extends Component {
 
           <BottomToolbar>
             {hasPrivileges ?
-            <AddButton
+            <AddEntityButton
               title={'Add Topic'}
               onClick={() => Router.push('/topics/add')} /> : null}
       

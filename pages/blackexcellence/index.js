@@ -5,7 +5,7 @@ import { saveCandidateSort } from '~/reducers/actions';
 import Link from 'next/link';
 import Router from 'next/router';
 
-import { AddButton } from '~/components/button.js';
+import { AddEntityButton } from '~/components/button.js';
 import { SortDropdown } from '~/components/dropdown.js';
 import { Cover, Shader, Spacer } from '~/components/layout.js';
 import { Loader, Empty } from '~/components/loader.js';
@@ -141,7 +141,7 @@ class BlackExcellence extends Component {
 
           <BottomToolbar>
             {user.clearance >= CLEARANCES.ACTIONS.CRUD_BLACKEX ?
-            <AddButton
+            <AddEntityButton
               title={'Add Candidate'}
               onClick={() => Router.push('/blackexcellence/add')} /> : null}
       

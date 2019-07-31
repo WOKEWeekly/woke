@@ -102,7 +102,13 @@
   background-color: $submit-button;
   &:hover { box-shadow: inset 0 0 100px 100px $submit-hover; }
   &:active { box-shadow: inset 0 0 100px 100px $submit-active; }
-  
+}
+
+.delete {
+  @extend .form-buttons;
+  background-color: $delete-button;
+  &:hover { box-shadow: inset 0 0 100px 100px $delete-hover; }
+  &:active { box-shadow: inset 0 0 100px 100px $delete-active; }
 }
 
 .cancel {

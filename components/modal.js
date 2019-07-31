@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Col, Modal as DefaultModal } from 'react-bootstrap';
 
-import { DeleteButton2, ConfirmButton, CloseButton } from '~/components/button.js';
+import { SubmitButton, CancelButton, DeleteButton } from '~/components/button.js';
 import { Group, Label, Select, UsernameInput } from '~/components/form.js';
 import { SocialIcon } from '~/components/icon.js';
 import { Paragraph } from '~/components/text.js';
@@ -60,8 +60,8 @@ export class ConfirmModal extends Component {
 
     const footer = (
       <React.Fragment>
-        <DeleteButton2 onClick={confirmFunc}>{confirmText}</DeleteButton2>
-        <CloseButton onClick={close}>Cancel</CloseButton>
+        <DeleteButton onClick={confirmFunc}>{confirmText}</DeleteButton>
+        <CancelButton onClick={close}>Cancel</CancelButton>
       </React.Fragment>
     )
 
@@ -118,7 +118,7 @@ export class EthnicModal extends Component {
     );
 
     const footer = (
-      <CloseButton onClick={close}>Close</CloseButton>
+      <CancelButton onClick={close}>Close</CancelButton>
     );
 
     return (
@@ -126,7 +126,8 @@ export class EthnicModal extends Component {
         show={visible}
         scrollable
         body={body}
-        footer={footer} />
+        footer={footer}
+        onlyBody />
     )
   }
 }
@@ -143,11 +144,9 @@ class _EthnicSelect extends Component {
           items={countries}
           onChange={onChange}
           placeholder={placeholder} />
-          <button
-            onClick={() => clearSelection(name)}
-            className={css.clear}>
-            Clear
-          </button>
+        <button
+          onClick={() => clearSelection(name)}
+          className={css.clear}>Clear</button>
       </Col>
     )
   }
@@ -217,8 +216,8 @@ export class SocialsModal extends Component {
 
     const footer = (
       <React.Fragment>
-        <ConfirmButton onClick={this.confirmSocials}>Confirm</ConfirmButton>
-        <CloseButton onClick={close}>Close</CloseButton>
+        <SubmitButton onClick={this.confirmSocials}>Confirm</SubmitButton>
+        <CancelButton onClick={close}>Close</CancelButton>
       </React.Fragment>
     );
 
@@ -228,7 +227,7 @@ export class SocialsModal extends Component {
         scrollable
         body={body}
         footer={footer}
-        bodyStyle={{maxHeight: '75vh'}} />
+        onlyBody />
     )
   }
 }

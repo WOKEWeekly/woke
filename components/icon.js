@@ -84,7 +84,7 @@ export const listSocials = (socials) => {
         let link = `${social.domain}${item}`;
         items.push(
           <div key={idx} className={css.socials}>{social.name}:
-            <a href={link}>{social.domain ? `@${item}` : link}</a>
+            <a href={link} target={'_blank'}>{social.domain ? `@${item}` : link}</a>
           </div>
         );
       }

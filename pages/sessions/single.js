@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import Router from 'next/router';
 
 import { alert, setAlert, displayErrorMessage } from '~/components/alert.js';
-import { EditButton, DeleteButton, BackButton } from '~/components/button.js';
+import { EditEntityButton, DeleteEntityButton, BackButton } from '~/components/button.js';
 import { ConfirmModal } from '~/components/modal.js';
 import { Title, Subtitle, Paragraph, Divider } from '~/components/text.js';
 import {BottomToolbar} from '~/components/toolbar.js';
@@ -116,11 +116,11 @@ class SessionPage extends Component {
 
           {user.clearance >= CLEARANCES.ACTIONS.CRUD_SESSIONS ? 
             <React.Fragment>
-              <EditButton
+              <EditEntityButton
                 title={'Edit Session'}
                 onClick={() => Router.push(`/sessions/edit/${session.id}`)} />
         
-              <DeleteButton
+              <DeleteEntityButton
                 title={'Delete Session'}
                 onClick={this.showModal}/>
             </React.Fragment>
