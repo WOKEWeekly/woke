@@ -1,9 +1,10 @@
 import React, { Component, PureComponent } from 'react';
 import { connect } from 'react-redux';
 
-import { Shader } from '~/components/layout.js';
+import { Shader, Default, Mobile } from '~/components/layout.js';
 import { Loader, Empty } from '~/components/loader.js';
 import { Fader } from '~/components/transitioner.js';
+import { Title } from '~/components/text.js';
 
 import { countriesToString } from '~/constants/countries.js';
 import { formatDate } from '~/constants/date.js';
@@ -55,41 +56,55 @@ class Team extends Component {
     const { isLoaded, members } = this.state;
     const { user } = this.props;
 
-    const headerRow = (
-      <div className={css.header}>
-        <span>No.</span>
-        <span>Name</span>
-        <span>Level</span>
-        <span>Role</span>
-        <span>Ethnicity</span>
-        <span>Birthday</span>
-      </div>
-    )
+    if (!isLoaded){
+      return <Loader/>;
+    } else if (members.length === 0) {
+      return <Empty message={'No members found.'} />;
+    }
+
+    const items = [];
+
+    for (const [index, item] of members.entries()) {
+      items.push(<Member key={index} idx={index} item={item} />);
+    }
 
     const MemberTable = () => {
-      if (!isLoaded){
-        return <Loader/>;
-      } else if (members.length === 0) {
-        return <Empty message={'No members found.'} />;
-      } else {
-        const items = [];
+      const headerRow = (
+        <div className={css.header}>
+          <span>No.</span>
+          <span>Name</span>
+          <span>Level</span>
+          <span>Role</span>
+          <span>Ethnicity</span>
+          <span>Birthday</span>
+        </div>
+      )
 
-        for (const [index, item] of members.entries()) {
-          items.push(<Member key={index} idx={index} item={item} />);
-        }
+      return (
+        <div className={css.grid}>
+          {headerRow}
+          {items}
+        </div>
+      );
+    };
 
-        return (
-          <div className={css.grid}>
-            {headerRow}
-            {items}
-          </div>
-        );
-      }
+    const MemberList = () => {
+      return <div className={css.list}>{items}</div>;
+    };
+
+    const MemberCollection = () => {
+      return (
+        <React.Fragment>
+          <Default><MemberTable/></Default>
+          <Mobile><MemberList/></Mobile>
+        </React.Fragment>
+      )
     }
 
     return (
-      <Shader>
-        <MemberTable/>
+      <Shader className={css.container}>
+        <Title className={css.heading}>List of #WOKEWeekly Team Members</Title>
+        <MemberCollection/>
       </Shader>
     );
 	}
@@ -118,12 +133,23 @@ class _Member extends PureComponent {
         duration={500 + (idx * 100)}
         className={css.row}
         postTransitions={'background-color .1s ease'}>
-        <span>{idx+1}</span>
-        <span>{item.firstname} {item.lastname}</span>
-        <span>{item.level}</span>
-        <span>{item.role}</span>
-        <span>{item.demonyms}</span>
-        <span>{formatDate(item.birthday)}</span>
+        <Default>
+          <span>{idx+1}</span>
+          <span>{item.firstname} {item.lastname}</span>
+          <span>{item.level}</span>
+          <span>{item.role}</span>
+          <span>{item.demonyms}</span>
+          <span>{formatDate(item.birthday)}</span>
+        </Default>
+        <Mobile>
+          <Title className={css.name}>{item.firstname} {item.lastname}</Title>
+          <div>{item.level}</div>
+          <div>{item.role}</div>
+          <div>{item.demonyms}</div>
+          <div>{formatDate(item.birthday)}</div>
+          <div className={css.index}>{idx+1}</div>
+        </Mobile>
+        
       </Fader>
     ); 
   }

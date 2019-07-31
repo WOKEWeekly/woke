@@ -271,12 +271,14 @@ module.exports = function(app, conn, server){
 
   /** Privacy Policy */
   app.get('/privacy', function(req, res){
+    const stats = fs.statSync(privacy);
     fs.readFile(privacy, 'utf8', function (err, data){
       return server.render(req, res, '/info', {
         title: 'Privacy Policy',
         description: data,
         url: '/privacy',
-        noSuffix: true
+        noSuffix: true,
+        lastModified: stats.mtime
       });
     });
   });
@@ -293,11 +295,11 @@ module.exports = function(app, conn, server){
     });
   });
 
-  /** Cookie Policy */
+  /** Cookies Policy */
   app.get('/cookies', function(req, res){
     fs.readFile(cookies, 'utf8', function (err, data){
       return server.render(req, res, '/info', {
-        title: 'Cookie Policy',
+        title: 'Cookies Policy',
         description: data,
         url: '/cookies',
         noSuffix: true
@@ -305,11 +307,11 @@ module.exports = function(app, conn, server){
     });
   });
 
-  /** Edit Cookie Policy */
+  /** Edit Cookies Policy */
   app.get('/cookies/edit', function(req, res){
     fs.readFile(cookies, 'utf8', function (err, data){
       return server.render(req, res, '/info/edit', {
-        title: 'Edit Cookie Policy',
+        title: 'Edit Cookies Policy',
         description: data,
         file: 'cookies.txt',
         placeholder: `Detail this website's Cookie Policy...`

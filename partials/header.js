@@ -135,7 +135,7 @@ export class MainNavbar extends Component {
     if (imageLoaded){
       return (
         <Navbar className={css.nav} variant="dark" expand="lg" sticky="top" style={{backgroundImage: `url(${imageSrc})`}}>
-          <Navbar.Brand href="/">
+          <Navbar.Brand className={css.brand} href="/">
             <img
               src="/static/images/logos/wokeweekly-logo.png"
               height="40"

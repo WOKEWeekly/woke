@@ -4,27 +4,52 @@
 *** index.js
 *************/
 
-.grid {
-  display: grid;
+.container {
   padding: 1em 2em;
-  font-size: 1.1em;
-  .header {
-    align-items: center;
-    border-bottom: 1px solid rgba(255,255,255,.6);
-    color: white;
-    font-family: $title-font;
+  @media (max-width: $break-md) { padding: 1em; }
+  .heading {
+    font-size: 2em;
+    margin-bottom: .5em;
+    @media (max-width: $break-md) { font-size: 1.5em; }}
+  .grid {
     display: grid;
-    grid-template-columns:  .2fr .8fr .6fr 1.3fr 1fr .8fr;
-    padding: .7em 0;
-    span { padding: 0 .5em; } }
-  .row {
-    @extend .header;
-    font-family: $body-font;
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
-    &:hover {
-      background-color: $primary-light;
+    font-size: 1.1em;
+    position: relative;
+    .header, .row {
+      align-items: center;
+      color: white;
+      display: grid;
+      grid-template-columns:  .2fr .8fr .6fr 1.3fr 1fr .8fr;
+      padding: .7em 0;
+      span { padding: 0 .5em; } }
+    .header {
+      border-bottom: 1px solid rgba(255,255,255,.6);
+      font-family: $title-font; }
+    .row {
+      font-family: $body-font;
+      border-radius: 10px;
+      cursor: pointer;
+      &:hover { background-color: $primary-light; }
+    }
+  }
+  .list {
+    color: white;
+    display: grid;
+    font-size: 1em;
+    .row {
+      background: $primary-dark;
+      border: 1px solid white;
+      border-radius: 15px;
+      font-family: $body-font;
+      padding: 1em;
+      margin: .5em 0;
+      position: relative;
+      .name { font-size: 1.3em; }
+      .index {
+        position: absolute;
+        top: 5%;
+        right: 5%;
+      }
     }
   }
 }

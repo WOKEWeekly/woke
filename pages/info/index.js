@@ -28,7 +28,7 @@ class Info extends Component {
 
   render(){
     const { isLoaded } = this.state;
-    const { user, description, url } = this.props;
+    const { user, description, url, lastModified } = this.props;
 
     if (!isLoaded) return null;
 
@@ -36,7 +36,9 @@ class Info extends Component {
       <Spacer>
         <Shader>
           <div className={css.container}>
-            <Paragraph className={css.text}>{description}</Paragraph>
+            <Paragraph
+              className={css.text}
+              substitutions={{lastModified}}>{description}</Paragraph>
           </div>
         </Shader>
 

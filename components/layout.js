@@ -52,7 +52,7 @@ export class Cover extends Component {
 export class Shader extends Component {
   render(){
     return (
-      <div style={{
+      <div {...this.props} style={{
         backgroundColor: 'rgba(0, 0, 0, .5)',
         width: '100%'
       }}>{this.props.children}</div>

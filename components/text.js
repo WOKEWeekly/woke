@@ -32,8 +32,7 @@ export class Subtitle extends Component {
 export class Paragraph extends Component {
   render(){
 
-    let { children } = this.props;
-    if (!children) children = '';
+    let { children = '', substitutions } = this.props;
     const classes = classNames(css.paragraph, this.props.className);
 
     return (
@@ -62,17 +61,22 @@ export class Paragraph extends Component {
 
             // Normal paragraph text
             default:
-              const regex = new RegExp(/\<\((.*?)\)\s(.*?)\>/g); // Regular expression for links
-              const parts = paragraph.split(regex).map((text, count, array) => {
-                if (text.startsWith('/' || 'http')){
+              const regex = new RegExp(/\<\[(.*?)\]\s(.*?)\>/g); // Regular expression for links
+              const parts = paragraph.split(regex)
+              paragraph = parts.map((text, count, array) => {
+                if (parts.length < 2) return text;
+
+                if (text.startsWith('/') || text.startsWith('mailto:') || text.startsWith('https')){
                   array.splice(count, 1);
-                  return <a href={text} key={count} className={css.linkText}>{array[count]}</a>;
+                  return <a target={'_blank'} href={text} key={count} className={css.linkText}>{array[count]}</a>;
                 } else {
                   return text;
                 }
               });
 
-              return <p className={css.body} key={key}>{parts}</p>;
+              console.log(parts);
+
+              return <p className={css.body} key={key}>{paragraph}</p>;
           }
         })}
       </pre>
@@ -82,8 +86,7 @@ export class Paragraph extends Component {
 
 export class TruncatedParagraph extends Component {
   render(){
-    let { children, paragraphs, link, more } = this.props;
-    if (!children) children = '';
+    let { children = '', paragraphs, link, more, ellipsis } = this.props;
     const classes = classNames(css.paragraph, this.props.className);
 
     const blocks = paragraphs ? (paragraphs * 2) - 2 : 2
@@ -103,7 +106,7 @@ export class TruncatedParagraph extends Component {
             return [line, <br key={i + 'br'} />];
           }
         })}
-        <ReadMore link={link} text={more} />
+        {children !== 'No description.' ? ellipsis :null}
       </pre>
     )
   }

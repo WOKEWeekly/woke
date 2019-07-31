@@ -97,6 +97,7 @@
   border-bottom: $border;
   height: $navbar-height;
   @media (max-width: $break-md) { height: initial; }
+  .brand { @include scale-on-hover(1.08); }
   .links {
     color: #d5bde0 !important;
     font-family: $body-font;
