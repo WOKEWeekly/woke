@@ -75,7 +75,6 @@
     }
   }
   .no_auth {
-    color: $primary;
     font-size: 1.1em;
     font-family: $body-font;
     text-align: right;
@@ -93,18 +92,14 @@
 
 .nav {
   background-size: cover;
-  border-top: $border;
-  border-bottom: $border;
   height: $navbar-height;
   @media (max-width: $break-md) { height: initial; }
   .brand { @include scale-on-hover(1.08); }
-  .links {
-    color: #d5bde0 !important;
+  a {
     font-family: $body-font;
     font-weight: 700;
     position: relative;
     &:before {
-      background-color: #D383FF;
       bottom: 0;
       content: "";
       height: 2px;
@@ -120,6 +115,14 @@
       -webkit-transform: scaleX(1);
       transform: scaleX(1);
       visibility: visible; }
+  }
+  .default-links {
+    color: #d5bde0 !important;
+    &:before { background-color: #D383FF; }
+  }
+  .mental-links {
+    color: #d9ffeb !important;
+    &:before { background-color: rgb(131, 255, 172); }
   }
 }
 

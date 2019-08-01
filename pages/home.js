@@ -5,7 +5,7 @@ import Link from 'next/link';
 
 import { alert, displayErrorMessage } from '~/components/alert.js';
 import { Cover, Shader, Default, Mobile } from '~/components/layout.js';
-import { Title, Subtitle, Divider, TruncatedParagraph } from '~/components/text.js';
+import { Title, Subtitle, Divider, Paragraph, TruncatedParagraph } from '~/components/text.js';
 import { Fader, Slider } from '~/components/transitioner.js';
 import { Voter } from '~/components/voter.js';
 
@@ -58,6 +58,7 @@ export default class Home extends Component {
 
           <Row><TopicVoter/></Row>
           <Row><RandomExecutive/></Row>
+          <Row><ForumAdvertiser/></Row>
         </Container>
       </Shader>
     );
@@ -417,6 +418,41 @@ class RandomExecutive extends Component{
               </div>
             </Col>
           </Row>
+        </div>
+      </Fader>
+    )
+  }
+}
+
+class ForumAdvertiser extends Component {
+  constructor(){
+    super();
+    this.state = {
+      imageLoaded: false,
+      imageSrc: ''
+    }
+  }
+
+  componentDidMount(){
+    const image = new Image();
+    image.src = `/static/images/bg/home-sugg-bg.jpg`;
+    image.onload = () => this.setState({imageLoaded: true, imageSrc: image.src});
+  }
+
+  render(){
+    const { imageLoaded, imageSrc } = this.state;
+    const text = `Wouldn't it make sense if you could suggest more topics for us to cover at our sessions?\n\nForum coming soon...`;
+    
+    return (
+      <Fader
+        determinant={imageLoaded}
+        duration={750}
+        delay={0}
+        postTransitions={'background-color .3s'}
+        className={css.forumAdvertiser}
+        style={{backgroundImage: `url(${imageSrc})`}}>
+        <div className={css.container}>
+          <Paragraph className={css.coverText}>{text}</Paragraph>
         </div>
       </Fader>
     )

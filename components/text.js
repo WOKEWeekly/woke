@@ -105,7 +105,7 @@ export class TruncatedParagraph extends Component {
             return [line, <br key={i + 'br'} />];
           }
         })}
-        {children !== 'No description.' ? ellipsis :null}
+        {children !== 'No description.' ? <ReadMore link={link} text={more} /> :null}
       </pre>
     )
   }

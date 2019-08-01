@@ -11,6 +11,7 @@ module.exports = {
     VIEW_TEAM: 7,           // View all team member details
     SEE_SUGGESTING_USER: 7, // See author of suggestions
     DELETE_SUGGESTION: 7,   // Delete suggestions for all users
+    EDIT_MENTAL: 7,         // Edit mental health page
 
     VIEW_USERS: 8,          // View all registered user details
     CRUD_USERS: 8,          // Change the clearances of other users

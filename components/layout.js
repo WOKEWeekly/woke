@@ -1,12 +1,14 @@
 import React, {Component} from 'react';
+import { connect } from 'react-redux';
 import Responsive from 'react-responsive';
 import {Container} from 'react-bootstrap';
 import classNames from 'classnames';
 import css from '~/styles/_components.scss';
 import { Fader } from '~/components/transitioner.js';
+import THEME from '~/constants/theme.js';
 
 
-export class Cover extends Component {
+class _Cover extends Component {
   constructor(){
     super();
     this.state = {
@@ -22,7 +24,7 @@ export class Cover extends Component {
   }
 
 	render(){
-    const { backgroundPosition, height, title, subtitle, imageTitle} = this.props;
+    const { backgroundPosition, height, title, subtitle, imageTitle, theme} = this.props;
     const { imageLoaded, imageSrc } = this.state;
 
     const classes = classNames(css.cover, this.props.className);
@@ -32,6 +34,7 @@ export class Cover extends Component {
         <Container fluid={true} className={classes} style={{
           backgroundImage: `url(${imageSrc})`,
           backgroundPosition: backgroundPosition,
+          borderBottom: THEME[theme].border,
           minHeight: height,
         }}>
           <div className={css.coverText}>
@@ -85,3 +88,9 @@ export const zIndices = {
   accountMenu: 1050,
   alerts: 1100
 }
+
+const mapStateToProps = state => ({
+  theme: state.theme
+});
+
+export const Cover = connect(mapStateToProps)(_Cover);

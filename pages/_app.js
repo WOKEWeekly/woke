@@ -11,7 +11,7 @@ import { fas } from '@fortawesome/free-solid-svg-icons';
 
 import { CookiePrompt, setCookie, getCookie } from '~/constants/cookies';
 import { loadCountries } from '~/constants/countries';
-import { saveCountries } from '~/reducers/actions';
+import { saveCountries, setTheme } from '~/reducers/actions';
 
 import { PreNavBar, MainNavBar } from "~/partials/header.js";
 import Footer from "~/partials/footer.js";
@@ -34,8 +34,15 @@ export default class WOKE extends App {
   state = { isLoaded: false }
   
   componentDidMount(){
-    const { backgroundImage = 'body-bg.jpg' } = this.props.router.query;
+    const {
+      backgroundImage = 'body-bg.jpg',
+      theme = 'DEFAULT'
+    } = this.props.router.query;
 
+    // Set the theme
+    store.dispatch(setTheme(theme));
+
+    // Fade background image into view
     const image = new Image();
     image.src = `/static/images/bg/${backgroundImage}`;
     image.onload = () => {
@@ -45,6 +52,7 @@ export default class WOKE extends App {
     
     this.setState({cookiesAccepted: getCookie('cookiesAccepted')});
 
+    // Loaded countries if not already loaded
     if (!localStorage.getItem('countriesLoaded')){
       this.preloadCountries();
     } else {

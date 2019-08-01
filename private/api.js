@@ -227,6 +227,13 @@ module.exports = function(app, conn){
     });
   });
 
+  /** Retrieve all team members */
+  app.get('/getTeam', verifyToken, function(req, res){
+    conn.query("SELECT * FROM team", function (err, result) {
+      resToClient(res, err, result);
+    });
+  });
+
   /** Retrieve only executive team members */
   app.get('/getExec', validateReq, function(req, res){
     conn.query("SELECT * FROM team WHERE level = 'Executive'", function (err, result) {
@@ -333,7 +340,7 @@ module.exports = function(app, conn){
     });
   });
 
-  /** Update about description */
+  /** Update information pages */
   app.put('/updateInfo', verifyToken, function(req, res){
     const { text, file } = req.body;
     fs.writeFile(`./static/resources/${file}`, text, function(err) {
@@ -341,10 +348,11 @@ module.exports = function(app, conn){
     });
   });
 
-  /** Retrieve all team members */
-  app.get('/getTeam', verifyToken, function(req, res){
-    conn.query("SELECT * FROM team", function (err, result) {
-      resToClient(res, err, result);
+  /** Update variant pages */
+  app.put('/updateVariantPage', verifyToken, function(req, res){
+    const { text, file } = req.body;
+    fs.writeFile(`./static/resources/${file}`, text, function(err) {
+      resToClient(res, err);
     });
   });
 

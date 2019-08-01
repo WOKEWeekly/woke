@@ -9,7 +9,8 @@ import { alert, setAlert, checkAlert, displayErrorMessage } from '~/components/a
 import { Icon, HeaderIcon } from '~/components/icon';
 import { Default, Mobile, zIndices } from '~/components/layout';
 
-import { accounts, emails } from '~/constants/settings.js';
+import { accounts } from '~/constants/settings.js';
+import THEME from '~/constants/theme.js';
 import CLEARANCES from '~/constants/clearances.js';
 import Login from '~/pages/_auth/login';
 import css from '~/styles/_partials.scss';
@@ -54,7 +55,8 @@ class PreNavbar extends Component {
 
     /** If authenticated, show name. Else, show option to login/register */
     const renderAccount = () => {
-      const { firstname, lastname, clearance, fullname, isAuthenticated } = this.props.user;
+      const { user, theme } = this.props;
+      const { firstname, lastname, clearance, fullname, isAuthenticated } = user;
   
       if (isAuthenticated){
         return (
@@ -77,7 +79,7 @@ class PreNavbar extends Component {
         );
       } else {
         return (
-          <Col xs={6} className={css.no_auth}>
+          <Col xs={6} className={css.no_auth} style={{color: THEME[theme].links}}>
             <button className={css.link} onClick={this.showModal}>Login</button>
             <a className={css.divider}>|</a>
             <button className={css.link} onClick={() => location.href = '/signup'}>Sign Up</button>
@@ -124,17 +126,24 @@ export class MainNavbar extends Component {
 
   componentDidMount(){
     const image = new Image();
-    image.src = '/static/images/bg/nav-bg.jpg';
+    image.src = `/static/images/bg/${THEME[this.props.theme].nav}`;
     image.onload = () => this.setState({imageLoaded: true, imageSrc: image.src});
   }
 
   render(){
-    const { user } = this.props;
+    const { user, theme } = this.props;
     const { imageLoaded, imageSrc } = this.state;
+
+    const classes = css[`${theme.toLowerCase()}-links`];
 
     if (imageLoaded){
       return (
-        <Navbar className={css.nav} variant="dark" expand="lg" sticky="top" style={{backgroundImage: `url(${imageSrc})`}}>
+        <Navbar className={css.nav} variant="dark" expand="lg" sticky="top"
+          style={{
+            backgroundImage: `url(${imageSrc})`,
+            borderTop: THEME[theme].border,
+            borderBottom: THEME[theme].border,
+          }}>
           <Navbar.Brand className={css.brand} href="/">
             <img
               src="/static/images/logos/wokeweekly-logo.png"
@@ -144,14 +153,14 @@ export class MainNavbar extends Component {
           <Navbar.Toggle />
           <Navbar.Collapse>
             <Nav className="ml-auto">
-              <Nav.Link href="/sessions" className={css.links}>Sessions</Nav.Link>
+              <Nav.Link href="/sessions" className={classes}>Sessions</Nav.Link>
               {user.clearance >= CLEARANCES.ACTIONS.VIEW_TOPICS ?
-              <Nav.Link href="/topics" className={css.links}>Topic Bank</Nav.Link> : null}
-              {/* <Nav.Link href="#link" className={css.links}>Forum</Nav.Link> */}
-              <Nav.Link href="/blackexcellence" className={css.links}>#BlackExcellence</Nav.Link>
-              <Nav.Link href="/executives" className={css.links}>The Executives</Nav.Link>
-              <Nav.Link href="/about" className={css.links}>About Us</Nav.Link>
-              <Nav.Link href={`mailto: ${emails.enquiries}`} className={css.links}>Contact</Nav.Link>
+              <Nav.Link href="/topics" className={classes}>Topic Bank</Nav.Link> : null}
+              {/* <Nav.Link href="#link" className={classes}>Forum</Nav.Link> */}
+              <Nav.Link href="/blackexcellence" className={classes}>#BlackExcellence</Nav.Link>
+              <Nav.Link href="/mentalhealth" className={classes}>Mental Health</Nav.Link>
+              <Nav.Link href="/executives" className={classes}>The Executives</Nav.Link>
+              <Nav.Link href="/about" className={classes}>About Us</Nav.Link>
             </Nav>
           </Navbar.Collapse>
         </Navbar>
@@ -164,7 +173,8 @@ export class MainNavbar extends Component {
 }
 
 const mapStateToProps = state => ({
-  user: state.user
+  user: state.user,
+  theme: state.theme
 });
 
 const mapDispatchToProps = dispatch => (

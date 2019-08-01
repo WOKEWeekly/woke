@@ -44,3 +44,8 @@ export const saveCountries = countries => ({
   type: 'SAVE_COUNTRIES',
   payload: countries,
 });
+
+export const setTheme = theme => ({
+  type: 'SET_THEME',
+  payload: theme,
+});

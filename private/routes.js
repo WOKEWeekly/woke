@@ -9,6 +9,8 @@ const { renderErrPage } = require('./response.js');
 const about = './static/resources/about.txt';
 const constitution = './static/resources/Constitution.pdf';
 const cookies = './static/resources/cookies.txt';
+const faq = './static/resources/faq.txt';
+const mentalhealth = './static/resources/mentalhealth.txt';
 const privacy = './static/resources/privacy.txt';
 
 module.exports = function(app, conn, server){
@@ -245,6 +247,37 @@ module.exports = function(app, conn, server){
     });
   });
 
+   /** Mental Health */
+   app.get('/mentalhealth', function(req, res){
+    fs.readFile(mentalhealth, 'utf8', function (err, data){
+      return server.render(req, res, '/variants', {
+        title: 'Mental Health',
+        description: 'Shattering the stigmata of discussion over our wellbeing through healthy conversation and education.',
+        url: '/mentalhealth',
+        backgroundImage: 'mental-bg.jpg',
+        pageText: data,
+        coverImage: 'mental-header.jpg',
+        imageLogo: 'mentalhealth-logo.png',
+        imageAlt: 'Mental Health logo',
+        theme: 'MENTAL'
+      });
+    });
+  });
+
+  /** Edit Mental Health Page */
+  app.get('/mentalhealth/edit', function(req, res){
+    fs.readFile(mentalhealth, 'utf8', function (err, data){
+      return server.render(req, res, '/variants/edit', {
+        title: 'Edit Mental Health Page',
+        backgroundImage: 'mental-bg.jpg',
+        pageText: data,
+        file: 'mentalhealth.txt',
+        placeholder: `What do we do at #WOKEWeekly Mental Health?`,
+        theme: 'MENTAL'
+      });
+    });
+  });
+
   /** About Us */
   app.get('/about', function(req, res){
     fs.readFile(about, 'utf8', function (err, data){
@@ -319,6 +352,30 @@ module.exports = function(app, conn, server){
     });
   });
 
+  /** FAQs */
+  app.get('/faq', function(req, res){
+    fs.readFile(faq, 'utf8', function (err, data){
+      return server.render(req, res, '/info', {
+        title: 'FAQs',
+        description: data,
+        url: '/faq',
+        noSuffix: true
+      });
+    });
+  });
+
+  /** Edit FAQs */
+  app.get('/faq/edit', function(req, res){
+    fs.readFile(faq, 'utf8', function (err, data){
+      return server.render(req, res, '/info/edit', {
+        title: 'Edit FAQs',
+        description: data,
+        file: 'faq.txt',
+        placeholder: `Ask and answer some frequently asked questions...`
+      });
+    });
+  });
+
   /***************************************************************
    * RESOURCES
    **************************************************************/
@@ -338,8 +395,8 @@ module.exports = function(app, conn, server){
   ));
 
   app.get('/sitemap.xml', (req, res) => {
-    const routes = [ '/', '/home', '/sessions', '/blackexcellence',
-    '/executives', '/signup', '/about', '/privacy', '/cookies' ];
+    const routes = [ '/', '/home', '/sessions', '/blackexcellence', '/mentalhealth',
+    '/executives', '/signup', '/about', '/privacy', '/cookies', '/faq' ];
 
     async.parallel([
       function(callback){

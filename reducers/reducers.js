@@ -1,5 +1,4 @@
 import { combineReducers } from 'redux';
-import { checkCookies } from '~/constants/cookies';
 
 /** Reducer for user authentication */
 const initialUser = {
@@ -107,10 +106,24 @@ const countryReducer = (state = defaultCountries, action) => {
   }
 }
 
+const defaultTheme = {
+  theme: 'default'
+}
+
+const themeReducer = (state = defaultTheme, action) => {
+  switch (action.type) {
+    case 'SET_THEME':
+      return action.payload;
+    default:
+      return state;
+  }
+}
+
 export default combineReducers({
   user: userReducer,
   session: sessionReducer,
   topic: topicReducer,
   blackex: blackexReducer,
-  countries: countryReducer
+  countries: countryReducer,
+  theme: themeReducer
 });

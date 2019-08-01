@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { connect } from 'react-redux';
 
 import css from '~/styles/_components.scss';
 import { socialPlatforms } from '~/constants/settings.js';
+import THEME from '~/constants/theme.js';
 
 export class Icon extends Component {
   render(){
@@ -96,7 +98,7 @@ export const listSocials = (socials) => {
 }
 
 /** Template for social icons */
-export class SocialIcon extends Component {
+class _SocialIcon extends Component {
   constructor(){
     super();
     this.state = { isLoaded: false }
@@ -107,17 +109,22 @@ export class SocialIcon extends Component {
   }
 
   render(){
-    if (this.state.isLoaded){
-      return (
-        <a target={'_blank'} {...this.props}>
-          <FontAwesomeIcon
-            icon={['fab', this.props.icon]}
-            color={'#6C4D90'}
-            size={this.props.size} />
-        </a>
-      );
-    } else {
-      return null;
-    }
+    if (!this.state.isLoaded) return null;
+    const { theme } = this.props
+
+    return (
+      <a target={'_blank'} {...this.props}>
+        <FontAwesomeIcon
+          icon={['fab', this.props.icon]}
+          color={THEME[theme].icon}
+          size={this.props.size} />
+      </a>
+    );
   }
 }
+
+const mapStateToProps = state => ({
+  theme: state.theme
+});
+
+export const SocialIcon = connect(mapStateToProps)(_SocialIcon);

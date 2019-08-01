@@ -31,7 +31,8 @@
         .headline {
           color: white;
           font-family: $title-font;
-          font-size: 2.2em; }
+          font-size: 2.2em;
+          @media (max-width: $break-md) { font-size: 1.8em; }}
         .description {
           color: white;
           font-family: $body-font;
@@ -142,6 +143,33 @@
       .paragraph {
         font-size: 1.2em;
         @media (max-width: $break-md) { font-size: 1em; }}
+    }
+  }
+}
+
+.forumAdvertiser {
+  background: {
+    position: top;
+    size: cover;
+  }
+  min-height: 450px;
+  width: 100%;
+  .container {
+    background-color: rgba(22, 0, 41, 0.3);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: .5em 1em;
+    height: 100%;
+    transition: all .3s;
+    -webkit-transition: all .3s;
+    &:hover { background-color: rgba(22, 0, 41, .5);}
+    .coverText {
+      @extend .text, .responsive-container;
+      font-size: 1.4em;
+      text-align: center;
+      @media (max-width: $break-md) { font-size: 1.2em; }
     }
   }
 }

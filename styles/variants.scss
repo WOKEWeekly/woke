@@ -1,0 +1,10 @@
+
+@import "variables";
+
+.image {
+  @extend .responsive-container
+}
+
+.container {
+  @extend .responsive-container;
+}
