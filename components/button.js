@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import { Button, ToggleButton, ToggleButtonGroup } from 'react-bootstrap';
 import classNames from 'classnames';
 
@@ -9,9 +10,10 @@ import { Default, Mobile } from '~/components/layout.js';
 /*****************
  * CUSTOM BUTTONS
  ****************/
-export class SubmitButton extends Component {
+class _SubmitButton extends Component {
   render(){
-    const classes = classNames(css.submit, this.props.className);
+    const { theme } = this.props;
+    const classes = classNames(css[`submit-${theme.toLowerCase()}`], this.props.className);
     return (
       <button
         {...this.props}
@@ -35,12 +37,14 @@ export class DeleteButton extends Component {
   }
 }
 
-export class CancelButton extends Component {
+class _CancelButton extends Component {
   render(){
+    const { theme } = this.props;
+    const classes = css[`cancel-${theme.toLowerCase()}`];
     return (
       <button
         {...this.props}
-        className={css.cancel}>
+        className={classes}>
         {this.props.children}
       </button>
     )
@@ -145,3 +149,10 @@ export class RadioButtonGroup extends Component {
     )
   }
 }
+
+const mapStateToProps = state => ({
+  theme: state.theme
+});
+
+export const SubmitButton = connect(mapStateToProps)(_SubmitButton);
+export const CancelButton = connect(mapStateToProps)(_CancelButton);

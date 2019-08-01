@@ -98,24 +98,15 @@
 }
 
 .submit {
-  @extend .form-buttons;
-  background-color: $submit-button;
-  &:hover { box-shadow: inset 0 0 100px 100px $submit-hover; }
-  &:active { box-shadow: inset 0 0 100px 100px $submit-active; }
+  &-default { @extend .form-buttons, .submit-button-default; }
+  &-mental { @extend .form-buttons, .submit-button-mental; }
 }
 
-.delete {
-  @extend .form-buttons;
-  background-color: $delete-button;
-  &:hover { box-shadow: inset 0 0 100px 100px $delete-hover; }
-  &:active { box-shadow: inset 0 0 100px 100px $delete-active; }
-}
+.delete { @extend .form-buttons, .delete-button; }
 
 .cancel {
-  @extend .form-buttons;
-  background-color: $cancel-button;
-  &:hover { box-shadow: inset 0 0 100px 100px $cancel-hover; }
-  &:active { box-shadow: inset 0 0 100px 100px $cancel-active; }
+  &-default { @extend .form-buttons, .cancel-button-default; }
+  &-mental { @extend .form-buttons, .cancel-button-mental; }
 }
 
 .add {
@@ -235,16 +226,14 @@
     overflow: hidden;
     width: fit-content;
     .file_button {
-      background-color: $submit-button;
+      @extend .submit-button-default;
       color: white;
       cursor: pointer;
       font-family: $body-font;
       padding: .7em 1.2em;
       margin: 0;
       transition-duration: .3s;
-      -webkit-transition-duration: .3s;
-      &:hover { box-shadow: inset 0 0 100px 100px $submit-hover; }
-      &:active { box-shadow: inset 0 0 100px 100px $submit-active; }}
+      -webkit-transition-duration: .3s;}
     .file_input {
       font-family: $body-font;
       padding: .5em .5em;
@@ -429,14 +418,23 @@
     font-size: 1.8em;}
   .subheading {
     font-family: $title-font;
-    font-size: 1.2em;}
+    font-size: 1.2em;
+    padding: .2em 0;}
   .body { margin: 1rem 0; }
   .image {
     margin: 1.5em 0;
     width: 100%;
     img {
-      border-radius: 30px;
-      width: 90%;
+      border-radius: 50%;
+      border: 2px inset rgba(255,255,255,.8);
+      width: 60%;
+      float: right;
+      margin: 0 0 1em 1em;
+      shape-outside: ellipse(50%);
+      @media (max-width: $break-md) {
+        all: initial;
+        border-radius: 30px;
+        width: 100%; }
     }
   }
 }

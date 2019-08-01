@@ -8,7 +8,6 @@ import { Paragraph } from '~/components/text.js';
 import { BottomToolbar } from '~/components/toolbar.js';
 
 import CLEARANCES from '~/constants/clearances.js';
-
 import css from '~/styles/variants.scss';
 
 class Variants extends Component {
@@ -24,7 +23,7 @@ class Variants extends Component {
     const image = <img
       src={`/static/images/logos/${imageLogo}`}
       alt={imageAlt}
-      className={css.image} />
+      className={css.imageLogo} />
 
     return (
       <Shader>
@@ -37,10 +36,10 @@ class Variants extends Component {
             imageTitle={image} />
 
           <div className={css.container}>
-            <Paragraph>{pageText}</Paragraph>
+            <Paragraph className={css.text}>{pageText}</Paragraph>
           </div>
 
-          {user.clearance >= CLEARANCES.ACTIONS.EDIT_MENTAL ? 
+          {user.clearance >= CLEARANCES.ACTIONS.EDIT_VARIANTS ? 
             <BottomToolbar>
               <EditEntityButton
                 title={'Edit Page'}

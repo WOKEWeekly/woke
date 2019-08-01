@@ -11,12 +11,12 @@ module.exports = {
     VIEW_TEAM: 7,           // View all team member details
     SEE_SUGGESTING_USER: 7, // See author of suggestions
     DELETE_SUGGESTION: 7,   // Delete suggestions for all users
-    EDIT_MENTAL: 7,         // Edit mental health page
+    EDIT_VARIANTS: 7,       // Edit variant pages
 
     VIEW_USERS: 8,          // View all registered user details
     CRUD_USERS: 8,          // Change the clearances of other users
     SEND_NOTIFICATIONS: 8,  // Send notifications to all users
-    EDIT_INFO: 8           // Edit about text
+    EDIT_INFO: 8            // Edit information pages
   },
   LEVELS: {
     MEMBERS: [

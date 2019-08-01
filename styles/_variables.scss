@@ -17,15 +17,35 @@ $secondary-border: 1px solid rgb(245, 222, 179);
 $underline: 1px solid $faded-white;
 
 /** Buttons */
-$submit-button: rgba(57, 17, 68, 0.5);
-$submit-hover: rgba(91, 27, 112, 0.5);
-$submit-active: $primary-dark;
-$delete-button: rgba(220, 0, 0, .5);
-$delete-hover: rgba(255, 55, 55, 0.3);
-$delete-active: rgba(255, 0, 0, 0.5);
-$cancel-button: rgba(142, 116, 171, .5);
-$cancel-hover: rgba(190, 155, 229, .3);
-$cancel-active: rgba(173, 127, 224, .5);
+.submit-button {
+  &-default {
+    background-color: rgba(57, 17, 68, 0.5);
+    &:hover { box-shadow: inset 0 0 100px 100px rgba(91, 27, 112, 0.5); }
+    &:active { box-shadow: inset 0 0 100px 100px $primary-dark; } }
+  &-mental {
+    background-color: rgba(17, 68, 37, 0.5);
+    &:hover { box-shadow: inset 0 0 100px 100px rgba(27, 112, 52, 0.5); }
+    &:active { box-shadow: inset 0 0 100px 100px rgba(8, 34, 16, 0.8); }
+  }
+}
+
+.delete-button {
+  background-color: rgba(220, 0, 0, .5);
+  &:hover { box-shadow: inset 0 0 100px 100px rgba(255, 55, 55, 0.3); }
+  &:active { box-shadow: inset 0 0 100px 100px rgba(255, 0, 0, 0.5);; }
+}
+
+.cancel-button {
+  &-default {
+    background-color: rgba(142, 116, 171, .5);
+    &:hover { box-shadow: inset 0 0 100px 100px rgba(190, 155, 229, .3); }
+    &:active { box-shadow: inset 0 0 100px 100px rgba(173, 127, 224, .5); } }
+  &-mental {
+    background-color: rgba(116, 171, 123, 0.5);
+    &:hover { box-shadow: inset 0 0 100px 100px rgba(155, 229, 177, 0.3); }
+    &:active { box-shadow: inset 0 0 100px 100px rgba(127, 224, 159, 0.5); }
+  }
+}
 
 $toolbar: rgba(0,0,0,.95);
 $navbar-height: 9vh;
