@@ -2,6 +2,7 @@ const async = require('async');
 const fs = require('fs');
 const path = require('path');
 const sm = require('sitemap');
+const { formatDate } = require('../constants/date.js');
 const { domain } = require('../constants/settings.js');
 
 const { renderErrPage } = require('./response.js');
@@ -311,7 +312,7 @@ module.exports = function(app, conn, server){
         description: data,
         url: '/privacy',
         noSuffix: true,
-        lastModified: stats.mtime
+        lastModified: formatDate(stats.mtime)
       });
     });
   });

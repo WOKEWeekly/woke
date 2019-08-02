@@ -38,6 +38,8 @@ This site contains external links to other websites. Clicking on a link will lea
 
 #WOKEWeekly regularly reviews its privacy policy so we ensure that is always kept up-to-date. Updates made to the privacy policy will be reflected on this page and will always be made available for view.
 
+This privacy policy was last updated on <$lastModified$>.
+
 > How to contact us:
 
 If there are any questions or enquiries regarding our privacy policy or the data we manage and keep about you, or if you wish to request a change or deletion of your data in accordance with your data protection rights, feel free to contact us.

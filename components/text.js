@@ -61,13 +61,18 @@ export class Paragraph extends Component {
 
             // Normal paragraph text
             default:
-              const regex = new RegExp(/\<\[(.*?)\]\s(.*?)\>/g); // Regular expression for links
-              const parts = paragraph.split(regex)
+              const linkRegex = new RegExp(/\<\[(.*?)\]\s(.*?)\>/g); // Regular expression for links
+              const subRegex = new RegExp(/\<\$(.*?)\$\>/g); // Regular expression for substitutions
+
+              /** Substitute variables */
+              paragraph = paragraph.replace(subRegex, (match, p1) => substitutions[p1]);
+
+              const parts = paragraph.split(linkRegex);
               paragraph = parts.map((text, count, array) => {
                 if (parts.length < 2) return text;
 
                 // Hyperlinking text
-                if (text.startsWith('/') || text.startsWith('mailto:') || text.startsWith('https')){
+                if (text.startsWith('/') || text.startsWith('mailto:') || text.startsWith('http')){
                   array.splice(count, 1);
                   return <a target={'_blank'} href={text} key={count} className={css.linkText}>{array[count]}</a>;
                 } else {
