@@ -8,6 +8,7 @@ import { EditEntityButton } from '~/components/button.js';
 import { Shader, Spacer } from '~/components/layout.js';
 import { Paragraph } from '~/components/text.js';
 import { BottomToolbar } from '~/components/toolbar.js';
+import { Fader } from '~/components/transitioner.js';
 
 import css from '~/styles/info.scss';
 
@@ -28,28 +29,28 @@ class Info extends Component {
 
   render(){
     const { isLoaded } = this.state;
-    const { user, description, url, lastModified } = this.props;
-
-    if (!isLoaded) return null;
+    const { user, pageText, url, lastModified } = this.props;
 
     return (
-      <Spacer>
-        <Shader>
-          <div className={css.container}>
-            <Paragraph
-              className={css.text}
-              substitutions={{lastModified}}>{description}</Paragraph>
-          </div>
-        </Shader>
+      <Fader determinant={isLoaded} duration={750}>
+        <Spacer>
+          <Shader>
+            <div className={css.container}>
+              <Paragraph
+                className={css.text}
+                substitutions={{lastModified}}>{pageText}</Paragraph>
+            </div>
+          </Shader>
 
-        {user.clearance >= CLEARANCES.ACTIONS.EDIT_INFO ? 
-          <BottomToolbar>
-            <EditEntityButton
-              title={'Edit Text'}
-              onClick={() => Router.push(`${url}/edit/`)} />
-          </BottomToolbar>
-        : null}
-      </Spacer>
+          {user.clearance >= CLEARANCES.ACTIONS.EDIT_INFO ? 
+            <BottomToolbar>
+              <EditEntityButton
+                title={'Edit Text'}
+                onClick={() => Router.push(`${url}/edit/`)} />
+            </BottomToolbar>
+          : null}
+          </Spacer>
+      </Fader>
     );
   
   }

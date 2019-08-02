@@ -8,8 +8,8 @@ $primary-light: rgba(142, 116, 171, .5);
 $primary-dark: rgba(28, 8, 34, .8);
 $dark: rgb(13, 12, 14);
 
-$blackex: #37eaff;
-$mental: #25a773;
+$blackex: #22b2c3;
+$mental: #159e43;
 
 $faded-white: rgba(255, 255, 255, .7);
 
@@ -56,6 +56,11 @@ $break-xxl: 1408px; // Extra large devices (large desktops)
   margin: 0 auto;
   width: 60%;
   @media (max-width: $break-xl) { width: 70%; }
+  @media (max-width: $break-lg) { width: 80%; }
+  @media (max-width: $break-md) { width: 100%; } }
+.responsive-container-70 {
+  margin: 0 auto;
+  width: 70%;
   @media (max-width: $break-lg) { width: 80%; }
   @media (max-width: $break-md) { width: 100%; }
 }

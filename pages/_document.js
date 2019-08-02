@@ -25,24 +25,23 @@ export default class MyDocument extends Document {
 
 /** Add metadata to each webpage */
 const Meta = ({
-  title,
-  noSuffix,
+  title = 'Page Not Found',
   url = null,
   description = '',
-  image = '/static/images/logos/woke-card.jpg'
+  cardImage = '/bg/card-home.jpg'
 }) => (
   <React.Fragment>
     <meta charSet="UTF-8" name="author" content="Zavid Egbue" />
     <meta name="viewport" content="initial-scale=1.0, width=device-width" />
 
-    <title>{title ? (noSuffix ? title : `${title} | #WOKEWeekly`) : 'Page Not Found'}</title>
+    <title>{title}</title>
     <meta name="description" content={description} />
 
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
     <meta property="og:url" content={`${domain}${url}`} />
-    <meta property="og:image" content={`${domain}${image}`} />
+    <meta property="og:image" content={`${domain}/static/images${cardImage}`} />
     <meta property="og:image:type" content="image/jpeg" />
     <meta property="og:image:alt" content={title} />
     <meta property="og:site_name" content="#WOKEWeekly" />

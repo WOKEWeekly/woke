@@ -1,15 +1,22 @@
+User-agent: Twitterbot
+Disallow:
+
 User-agent: *
 Disallow: /
 
-Disallow: /sessions/add
-Disallow: /sessions/edit
-Disallow: /blackexcellence/add
-Disallow: /blackexcellence/edit
+Disallow: /sessions/*
+Disallow: /blackexcellence/*
 Disallow: /topics
 Disallow: /team
 Disallow: /account
-Disallow: /about/edit
+Disallow: /about/*
+Disallow: /cookies/*
+Disallow: /faqs/*
+Disallow: /privacy/*
+Disallow: /mentalhealth/*
 Disallow: /constitution
 Disallow: /static
+
+Allow: /blackexcellence/candidate/*
 
 Sitemap: https://www.wokeweekly.co.uk/sitemap.xml

@@ -3,7 +3,7 @@
 
 .container {
   @extend .responsive-container;
-  padding: 1em;
+  padding: 1.5em 1em;
   .text {
     @extend .text;
     font-size: 1.2em;
@@ -12,3 +12,11 @@
 }
 
 .form { @include responsive-form; }
+
+/******************************************
+*** variants.js
+******************************************/
+
+.imageLogo {
+  @extend .responsive-container
+}

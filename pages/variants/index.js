@@ -6,14 +6,24 @@ import { Cover, Shader, Spacer } from '~/components/layout.js';
 import { EditEntityButton } from '~/components/button.js';
 import { Paragraph } from '~/components/text.js';
 import { BottomToolbar } from '~/components/toolbar.js';
+import { Fader } from '~/components/transitioner.js';
 
 import CLEARANCES from '~/constants/clearances.js';
-import css from '~/styles/variants.scss';
+import css from '~/styles/info.scss';
 
 class Variants extends Component {
   /** Retrieve information from server */
   static async getInitialProps({ query }) {
     return { ...query };
+  }
+
+  constructor(){
+    super();
+    this.state = { isLoaded: false}
+  }
+
+  componentDidMount(){
+    this.setState({isLoaded: true});
   }
 
   render(){
@@ -35,9 +45,11 @@ class Variants extends Component {
             backgroundPosition={'center'}
             imageTitle={image} />
 
-          <div className={css.container}>
-            <Paragraph className={css.text}>{pageText}</Paragraph>
-          </div>
+          <Fader determinant={this.state.isLoaded} duration={750} delay={1500}>
+            <div className={css.container}>
+              <Paragraph className={css.text}>{pageText}</Paragraph>
+            </div>
+          </Fader>
 
           {user.clearance >= CLEARANCES.ACTIONS.EDIT_VARIANTS ? 
             <BottomToolbar>

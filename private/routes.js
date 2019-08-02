@@ -20,9 +20,8 @@ module.exports = function(app, conn, server){
   app.get(['/', '/home'], function(req, res){
     server.render(req, res, '/home', { 
       title: '#WOKEWeekly - Awakening Through Conversation',
-      description: 'Debates and discussions centered around and beyond the UK black community at university campuses. Providing a safe-space for expression and opinions to be heard and encouraging unity amongst the community through conversation, bringing together those divided by social status, religion and interest.',
+      description: 'Debates and discussions centered around and beyond the UK black community.',
       url: '/',
-      noSuffix: true,
       backgroundImage: 'body-bg.jpg'
      });
   });
@@ -30,7 +29,7 @@ module.exports = function(app, conn, server){
   /** Sessions */
   app.get('/sessions', function(req, res){
     server.render(req, res, '/sessions', { 
-      title: 'Sessions',
+      title: 'Sessions | #WOKEWeekly',
       description: 'Where the magic happens...',
       url: '/sessions',
       backgroundImage: 'sessions-bg.jpg'
@@ -46,10 +45,10 @@ module.exports = function(app, conn, server){
       if (!err && result.length){
         const session = result[0];
         return server.render(req, res, '/sessions/single', {
-          title: session.title,
+          title: `${session.title} | #WOKEWeekly`,
           description: session.description,
           url: `/sessions/${session.slug}`,
-          image: `/static/images/sessions/${session.image}`,
+          cardImage: `/sessions/${session.image}`,
           backgroundImage: 'sessions-bg.jpg',
           session
         });
@@ -89,7 +88,7 @@ module.exports = function(app, conn, server){
   /** Topic Bank */
   app.get('/topics', function(req, res){
     server.render(req, res, '/topics', {
-      title: 'Topic Bank',
+      title: 'Topic Bank | #WOKEWeekly',
       backgroundImage: 'topics-bg.jpg'
     });
   });
@@ -124,7 +123,7 @@ module.exports = function(app, conn, server){
   /** #BlackExcellence */
   app.get('/blackexcellence', function(req, res){
     server.render(req, res, '/blackexcellence', {
-      title: '#BlackExcellence',
+      title: '#BlackExcellence | #WOKEWeekly',
       description: 'Recognising the intrinsic potential in young black rising stars who are excelling in their respective fields and walks of life.',
       url: '/blackexcellence',
       backgroundImage: 'blackex-bg.jpg',
@@ -171,10 +170,10 @@ module.exports = function(app, conn, server){
         const candidate = result[0];
         candidate.label = `#${candidate.id}: ${candidate.name}`;
         return server.render(req, res, '/blackexcellence/single', {
-          title: candidate.label,
+          title: `${candidate.label} | #WOKEWeekly`,
           description: candidate.description,
           url: `/blackexcellence/candidate/${candidate.id}`,
-          image: `/static/images/blackexcellence/${candidate.image}`,
+          cardImage: `/blackexcellence/${candidate.image}`,
           alt: candidate.label,
           backgroundImage: 'blackex-bg.jpg',
           theme: 'blackex',
@@ -189,9 +188,10 @@ module.exports = function(app, conn, server){
   /** Executives */
   app.get('/executives', function(req, res){
     return server.render(req, res, '/team/exec', {
-      title: 'Meet The Executives',
+      title: 'Meet The Executives | #WOKEWeekly',
       description: 'The masterminds behind the cause.',
       url: '/executives',
+      cardImage: '/bg/card-team.jpg',
       backgroundImage: 'team-bg.jpg',
     });
   });
@@ -205,10 +205,10 @@ module.exports = function(app, conn, server){
       if (!err && result.length){
         const exec = result[0];
         return server.render(req, res, '/team/exec.single', {
-          title: `${exec.firstname} ${exec.lastname}`,
+          title: `${exec.firstname} ${exec.lastname} | #WOKEWeekly`,
           description: exec.description,
           url: `/executives/${exec.slug}`,
-          image: `/static/images/team/${exec.image}`,
+          cardImage: `/team/${exec.image}`,
           backgroundImage: 'team-bg.jpg',
           exec
         });
@@ -221,7 +221,7 @@ module.exports = function(app, conn, server){
   /** Team Members */
   app.get('/team', function(req, res){
     return server.render(req, res, '/team', {
-      title: 'Team Members',
+      title: 'Team Members | #WOKEWeekly',
       backgroundImage: 'team-bg.jpg',
     });
   });
@@ -248,7 +248,7 @@ module.exports = function(app, conn, server){
   /** Registration */
   app.get('/signup', function(req, res){
     server.render(req, res, '/_auth/signup', {
-      title: 'Sign Up',
+      title: 'Sign Up | #WOKEWeekly',
       backgroundImage: 'signup-bg.jpg',
       url: '/signup',
     });
@@ -257,7 +257,7 @@ module.exports = function(app, conn, server){
   /** Registration */
   app.get('/account', function(req, res){
     server.render(req, res, '/_auth/account', {
-      title: 'Account',
+      title: 'Account | #WOKEWeekly',
       url: '/account',
     });
   });
@@ -269,7 +269,7 @@ module.exports = function(app, conn, server){
         title: '#WOKEWeekly Mental Health',
         description: 'Shattering the stigmata of discussion over our wellbeing through healthy conversation and education.',
         url: '/mentalhealth',
-        noSuffix: true,
+        cardImage: '/bg/card-mental.jpg',
         backgroundImage: 'mental-bg.jpg',
         pageText: data,
         coverImage: 'mental-header.jpg',
@@ -300,8 +300,9 @@ module.exports = function(app, conn, server){
       return server.render(req, res, '/info', {
         title: 'About #WOKEWeekly',
         description: data,
-        url: '/about',
-        noSuffix: true
+        pageText: data,
+        cardImage: '/bg/card-about.jpg',
+        url: '/about'
       });
     });
   });
@@ -323,10 +324,10 @@ module.exports = function(app, conn, server){
     const stats = fs.statSync(privacy);
     fs.readFile(privacy, 'utf8', function (err, data){
       return server.render(req, res, '/info', {
-        title: 'Privacy Policy',
+        title: 'Privacy Policy | #WOKEWeekly',
         description: data,
+        pageText: data,
         url: '/privacy',
-        noSuffix: true,
         lastModified: formatDate(stats.mtime)
       });
     });
@@ -348,10 +349,10 @@ module.exports = function(app, conn, server){
   app.get('/cookies', function(req, res){
     fs.readFile(cookies, 'utf8', function (err, data){
       return server.render(req, res, '/info', {
-        title: 'Cookies Policy',
+        title: 'Cookies Policy | #WOKEWeekly',
         description: data,
+        pageText: data,
         url: '/cookies',
-        noSuffix: true
       });
     });
   });
@@ -372,10 +373,10 @@ module.exports = function(app, conn, server){
   app.get('/faq', function(req, res){
     fs.readFile(faq, 'utf8', function (err, data){
       return server.render(req, res, '/info', {
-        title: 'FAQs',
+        title: 'FAQs | #WOKEWeekly',
         description: data,
-        url: '/faq',
-        noSuffix: true
+        pageText: data, 
+        url: '/faq'
       });
     });
   });
@@ -412,7 +413,7 @@ module.exports = function(app, conn, server){
 
   app.get('/sitemap.xml', (req, res) => {
     const routes = [ '/', '/home', '/sessions', '/blackexcellence', '/mentalhealth',
-    '/executives', '/signup', '/about', '/privacy', '/cookies', '/faq' ];
+    '/executives', '/signup', '/about', '/cookies', '/faq', '/privacy' ];
 
     async.parallel([
       function(callback){
@@ -459,5 +460,4 @@ module.exports = function(app, conn, server){
       });
     });
   });
-
 }

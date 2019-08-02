@@ -99,7 +99,7 @@
   height: $navbar-height;
   @media (max-width: $break-md) { height: initial; }
   .brand { @include scale-on-hover(1.08); }
-  a {
+  a:not(.brand) {
     font-family: $body-font;
     font-weight: 700;
     position: relative;
@@ -124,17 +124,17 @@
   &-default { @extend .nav;
     border-top: 1px solid $primary;
     border-bottom: 1px solid $primary;
-    a { color: #d5bde0 !important;
+    a:not(.brand) { color: #d5bde0 !important;
       &:before { background-color: #D383FF; } } }
   &-blackex { @extend .nav;
     border-top: 1px solid $blackex;
     border-bottom: 1px solid $blackex;
-    a { color: #d9f7ff !important;
+    a:not(.brand) { color: #d9f7ff !important;
       &:before { background-color: $blackex; } } }
   &-mental { @extend .nav;
     border-top: 1px solid $mental;
     border-bottom: 1px solid $mental;
-    a { color: #d9ffeb !important;
+    a:not(.brand) { color: #d9ffeb !important;
       &:before { background-color: #83ffac; } } }
 }
 
