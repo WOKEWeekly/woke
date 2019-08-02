@@ -20,6 +20,11 @@ import '~/styles/_categories.scss';
 
 
 class BlackExcellence extends Component {
+  /** Retrieve information from server */
+  static async getInitialProps({ query }) {
+    return { ...query };
+  }
+
   constructor(props){
     super(props);
     this.state = {
@@ -89,7 +94,7 @@ class BlackExcellence extends Component {
 	render(){
 
     const { isLoaded, candidates } = this.state;
-    const { user } = this.props;
+    const { user, title, description } = this.props;
 
     const sortItems = [
       'Sort by Number (Ascending)',
@@ -116,14 +121,11 @@ class BlackExcellence extends Component {
       }
     };
 
-    const heading = '#BlackExcellence';
-    const description = 'Recognising the intrinsic potential in young black rising stars who are excelling in their respective fields and walks of life.'
-
     return (
       <Shader>
         <Spacer gridrows={'auto 1fr auto'}>
           <Cover
-            title={heading}
+            title={title}
             subtitle={description}
             image={'blackex-header.jpg'}
             height={200}

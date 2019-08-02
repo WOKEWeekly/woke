@@ -10,7 +10,6 @@ import { Icon, HeaderIcon } from '~/components/icon';
 import { Default, Mobile, zIndices } from '~/components/layout';
 
 import { accounts } from '~/constants/settings.js';
-import THEME from '~/constants/theme.js';
 import CLEARANCES from '~/constants/clearances.js';
 import Login from '~/pages/_auth/login';
 import css from '~/styles/_partials.scss';
@@ -79,7 +78,7 @@ class PreNavbar extends Component {
         );
       } else {
         return (
-          <Col xs={6} className={css.no_auth} style={{color: THEME[theme].links}}>
+          <Col xs={6} className={css[`no_auth-${theme}`]}>
             <button className={css.link} onClick={this.showModal}>Login</button>
             <a className={css.divider}>|</a>
             <button className={css.link} onClick={() => location.href = '/signup'}>Sign Up</button>
@@ -126,7 +125,7 @@ export class MainNavbar extends Component {
 
   componentDidMount(){
     const image = new Image();
-    image.src = `/static/images/bg/${THEME[this.props.theme].nav}`;
+    image.src = `/static/images/bg/nav-${this.props.theme}-bg.jpg`;
     image.onload = () => this.setState({imageLoaded: true, imageSrc: image.src});
   }
 
@@ -134,16 +133,12 @@ export class MainNavbar extends Component {
     const { user, theme } = this.props;
     const { imageLoaded, imageSrc } = this.state;
 
-    const classes = css[`${theme.toLowerCase()}-links`];
+    const classes = css[`${theme}-links`];
 
     if (imageLoaded){
       return (
-        <Navbar className={css.nav} variant="dark" expand="lg" sticky="top"
-          style={{
-            backgroundImage: `url(${imageSrc})`,
-            borderTop: THEME[theme].border,
-            borderBottom: THEME[theme].border,
-          }}>
+        <Navbar className={css[`nav-${theme}`]} variant="dark" expand="lg" sticky="top"
+          style={{ backgroundImage: `url(${imageSrc})` }}>
           <Navbar.Brand className={css.brand} href="/">
             <img
               src="/static/images/logos/wokeweekly-logo.png"

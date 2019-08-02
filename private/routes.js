@@ -123,12 +123,22 @@ module.exports = function(app, conn, server){
 
   /** #BlackExcellence */
   app.get('/blackexcellence', function(req, res){
-    server.render(req, res, '/blackexcellence', { title: '#BlackExcellence' });
+    server.render(req, res, '/blackexcellence', {
+      title: '#BlackExcellence',
+      description: 'Recognising the intrinsic potential in young black rising stars who are excelling in their respective fields and walks of life.',
+      url: '/blackexcellence',
+      backgroundImage: 'blackex-bg.jpg',
+      theme: 'blackex'
+    });
   });
 
   /** Add New Candidate */
   app.get('/blackexcellence/add', function(req, res){
-    server.render(req, res, '/blackexcellence/add', { title: 'Add New Candidate' });
+    server.render(req, res, '/blackexcellence/add', {
+      title: 'Add New Candidate',
+      backgroundImage: 'blackex-bg.jpg',
+      theme: 'blackex'
+    });
   });
 
   /** Edit Candidate */
@@ -141,6 +151,8 @@ module.exports = function(app, conn, server){
         const candidate = result[0];
         return server.render(req, res, '/blackexcellence/edit', {
           title: 'Edit Candidate',
+          backgroundImage: 'blackex-bg.jpg',
+          theme: 'blackex',
           candidate
         });
       } else {
@@ -164,6 +176,8 @@ module.exports = function(app, conn, server){
           url: `/blackexcellence/candidate/${candidate.id}`,
           image: `/static/images/blackexcellence/${candidate.image}`,
           alt: candidate.label,
+          backgroundImage: 'blackex-bg.jpg',
+          theme: 'blackex',
           candidate
         });
       } else {
@@ -252,15 +266,16 @@ module.exports = function(app, conn, server){
    app.get('/mentalhealth', function(req, res){
     fs.readFile(mentalhealth, 'utf8', function (err, data){
       return server.render(req, res, '/variants', {
-        title: 'Mental Health',
+        title: '#WOKEWeekly Mental Health',
         description: 'Shattering the stigmata of discussion over our wellbeing through healthy conversation and education.',
         url: '/mentalhealth',
+        noSuffix: true,
         backgroundImage: 'mental-bg.jpg',
         pageText: data,
         coverImage: 'mental-header.jpg',
         imageLogo: 'mentalhealth-logo.png',
         imageAlt: 'Mental Health logo',
-        theme: 'MENTAL'
+        theme: 'mental'
       });
     });
   });
@@ -274,7 +289,7 @@ module.exports = function(app, conn, server){
         pageText: data,
         file: 'mentalhealth.txt',
         placeholder: `What do we do at #WOKEWeekly Mental Health?`,
-        theme: 'MENTAL'
+        theme: 'mental'
       });
     });
   });

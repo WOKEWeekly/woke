@@ -5,7 +5,6 @@ import {Container} from 'react-bootstrap';
 import classNames from 'classnames';
 import css from '~/styles/_components.scss';
 import { Fader } from '~/components/transitioner.js';
-import THEME from '~/constants/theme.js';
 
 
 class _Cover extends Component {
@@ -27,14 +26,13 @@ class _Cover extends Component {
     const { backgroundPosition, height, title, subtitle, imageTitle, theme} = this.props;
     const { imageLoaded, imageSrc } = this.state;
 
-    const classes = classNames(css.cover, this.props.className);
+    const classes = classNames(css[`cover-${theme}`], this.props.className);
 
     return (
       <Fader determinant={imageLoaded} duration={1000}>
         <Container fluid={true} className={classes} style={{
           backgroundImage: `url(${imageSrc})`,
           backgroundPosition: backgroundPosition,
-          borderBottom: THEME[theme].border,
           minHeight: height,
         }}>
           <div className={css.coverText}>

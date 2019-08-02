@@ -50,7 +50,7 @@ class EditVariantPage extends Component {
     .then(res => Promise.all([res, res.json()]))
     .then(([status, response]) => { 
       if (status.ok){
-        setAlert({ type: 'success', message: `You've successfully updated the '${title.substring(5)}' page.` });
+        setAlert({ type: 'success', message: `You've successfully updated the '${title.substring(5)}'.` });
         const path = location.pathname;
         location.href = path.substring(0, path.indexOf('/', 1));
       } else {

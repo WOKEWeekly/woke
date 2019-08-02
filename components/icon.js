@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 
 import css from '~/styles/_components.scss';
 import { socialPlatforms } from '~/constants/settings.js';
-import THEME from '~/constants/theme.js';
 
 export class Icon extends Component {
   render(){
@@ -116,7 +115,7 @@ class _SocialIcon extends Component {
       <a target={'_blank'} {...this.props}>
         <FontAwesomeIcon
           icon={['fab', this.props.icon]}
-          color={THEME[theme].icon}
+          className={css[`socialIcon-${theme}`]}
           size={this.props.size} />
       </a>
     );

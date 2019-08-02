@@ -3,7 +3,7 @@
 
 .grid {
   @include responsive-grid;
-  border-bottom: $border;
+  border-bottom: 1px solid $blackex;
   padding: .4em;
   width: 100%;
   .cell {

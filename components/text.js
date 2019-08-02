@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import Link from 'next/link';
 import classNames from 'classnames';
 import css from '~/styles/_components.scss';
@@ -29,10 +30,10 @@ export class Subtitle extends Component {
   }
 }
 
-export class Paragraph extends Component {
+export class _Paragraph extends Component {
   render(){
 
-    let { children = '', substitutions } = this.props;
+    let { children = '', substitutions, theme } = this.props;
     const classes = classNames(css.paragraph, this.props.className);
 
     return (
@@ -74,7 +75,7 @@ export class Paragraph extends Component {
                 // Hyperlinking text
                 if (text.startsWith('/') || text.startsWith('mailto:') || text.startsWith('http')){
                   array.splice(count, 1);
-                  return <a target={'_blank'} href={text} key={count} className={css.linkText}>{array[count]}</a>;
+                  return <a target={'_blank'} href={text} key={count} className={css[`link-${theme.toLowerCase()}`]}>{array[count]}</a>;
                 } else {
                   return text;
                 }
@@ -134,3 +135,9 @@ export class ReadMore extends Component {
     )
   }
 }
+
+const mapStateToProps = state => ({
+  theme: state.theme
+});
+
+export const Paragraph = connect(mapStateToProps)(_Paragraph);
