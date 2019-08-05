@@ -54,5 +54,5 @@
 *** form.js
 *************/
 
-.form { @include responsive-form; }
+.form { @extend .responsive-form; }
 

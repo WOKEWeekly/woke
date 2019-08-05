@@ -1,4 +1,5 @@
 import React, { Component} from 'react';
+import { connect } from 'react-redux';
 import { Form, Row } from 'react-bootstrap';
 import Textarea from 'react-textarea-autosize';
 import classNames from 'classnames';
@@ -256,11 +257,12 @@ export class Checkbox extends Component {
 }
 
 /** File selector */
-export class FileSelector extends Component {
+export class _FileSelector extends Component {
   render(){
+    const { theme } = this.props;
     return (
       <div className={css.file}>
-        <label className={css.file_button}>
+        <label className={css[`file_button-${theme}`]}>
           Browse...
           <input
             type={'file'}
@@ -277,3 +279,10 @@ export class FileSelector extends Component {
     )
   }
 }
+
+const mapStateToProps = state => ({
+  theme: state.theme
+});
+
+
+export const FileSelector = connect(mapStateToProps)(_FileSelector);

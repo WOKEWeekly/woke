@@ -72,7 +72,7 @@ class LoginModal extends Component {
       <h2 className={css.text}>Log In</h2>
     );
     const body = (
-      <div style={{padding: '0 1em'}}>
+      <div className={css.loginForm}>
         <Group className={css.group}>
           <Label>Username / Email Address:</Label>
           <UsernameInput
@@ -87,7 +87,7 @@ class LoginModal extends Component {
             onChange={this.handlePassword}
             placeholder={"Enter your password"} />
         </Group>
-        <Group style={{marginTop: '1em'}}>
+        <Group className={css.remember}>
           <Checkbox
             checked={remember}
             label={'Remember me'}

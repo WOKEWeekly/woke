@@ -50,6 +50,6 @@ export const types = [
 
 /** Topic polarity options */
 export const polarity = [
-  { label: 'Polar', short: 'polar'},
-  { label: 'Non-Polar', short: 'nonpolar'},
+  { label: 'Polar', short: 'polar', value: 1},
+  { label: 'Non-Polar', short: 'nonpolar', value: 0},
 ]

@@ -9,6 +9,8 @@
 .count {
   color: white;
   font-family: $title-font;
+  margin: 0;
+  @media (max-width: $break-md) { font-size: .9em; }
 }
 
 .grid {
@@ -22,21 +24,23 @@
     cursor: pointer;
     display: grid;
     grid-template-rows: auto 1fr auto auto;
-    min-height: 12em;
     margin: .1em;
     padding: .5em;
     text-align: center;
     .headline {
       font-size: 1.2em;
       border-bottom: 1px solid white;
-      padding-bottom: .5em; }
+      padding-bottom: .5em;
+      @media (max-width: $break-md) { font-size: 1em; }}
     .question {
       font-size: .9em;
-      padding: .7em 0; }
+      padding: .7em 0;
+      @media (max-width: $break-md) { font-size: .8em; }}
     .details {
       font-size: .8em;
       border-top: 1px solid white;
-      padding-top: .5em; }
+      padding-top: .5em;
+      @media (max-width: $break-md) { font-size: .7em; }}
     .buttons {
       border-radius: 15px;
       margin-top: .7em;
@@ -49,12 +53,21 @@
   }
 }
 
+.menuSection {
+  display: flex;
+  > div:first-child { padding-right: 1em; }
+  a {
+    padding: 0;
+    @media (max-width: $break-md) { font-size: .8em; } }
+  .polarityBlock { padding-top: 1em; }
+}
+
 /*************
 *** form.js
 *************/
 
 .form {
-  @include responsive-form;
+  @extend .responsive-form;
   .options {
     -webkit-transition-duration: .3s;
     transition-duration: .3s;

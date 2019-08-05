@@ -11,7 +11,7 @@
   }
 }
 
-.form { @include responsive-form; }
+.form { @extend .responsive-form; }
 
 /******************************************
 *** variants.js

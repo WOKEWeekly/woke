@@ -38,6 +38,9 @@ $break-xxl: 1408px; // Extra large devices (large desktops)
   &-default {
     color: #bc83ff !important;
     text-decoration: underline; }
+  &-blackex {
+    color: #36deea !important;
+    text-decoration: underline; }
   &-mental {
     color: #36ea92 !important;
     text-decoration: underline;
@@ -58,11 +61,10 @@ $break-xxl: 1408px; // Extra large devices (large desktops)
   @media (max-width: $break-xl) { width: 70%; }
   @media (max-width: $break-lg) { width: 80%; }
   @media (max-width: $break-md) { width: 100%; } }
-.responsive-container-70 {
-  margin: 0 auto;
-  width: 70%;
-  @media (max-width: $break-lg) { width: 80%; }
-  @media (max-width: $break-md) { width: 100%; }
+
+.responsive-form {
+  @extend .responsive-container;
+  padding: 2em 1em;
 }
 
 /***********
@@ -81,9 +83,4 @@ $break-xxl: 1408px; // Extra large devices (large desktops)
   @media (max-width: $break-lg) { grid-template-columns: repeat(4, 25%); }
   @media (max-width: $break-md) { grid-template-columns: repeat(3, calc(100% / 3)); }
   @media (max-width: $break-sm) { grid-template-columns: repeat(2, 50%); }
-}
-
-@mixin responsive-form {
-  @extend .responsive-container;
-  padding: 2em;
 }

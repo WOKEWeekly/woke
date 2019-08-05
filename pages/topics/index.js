@@ -17,7 +17,7 @@ import { Title, Subtitle } from '~/components/text.js';
 import { TopToolbar, BottomToolbar } from '~/components/toolbar.js';
 import { Fader } from '~/components/transitioner.js';
 
-import { categories } from '~/constants/categories.js';
+import { categories, types, polarity } from '~/constants/categories.js';
 import CLEARANCES from '~/constants/clearances.js';
 
 import css from '~/styles/topics.scss';
@@ -99,12 +99,11 @@ class TopicBank extends Component {
 			}
 		});
 
+    // Filter topics after setting state
 		this.setState({
       topics: order === 'DESC' ? topics.reverse() : topics,
       sort: sort
-    }, () => {
-      this.filterTopics();
-    });
+    }, () => this.filterTopics());
   }
   
   /** Filter topics */
@@ -112,16 +111,18 @@ class TopicBank extends Component {
     if (this.state.filters){
       const { topics, filters, searchWord } = this.state;
 
+      // Filter upon condition of presence of values in filter arrays
       let results = topics.filter((topic, index, topics) => {
         if (Object.keys(filters).length > 0){
-          return (filters.categories.length > 0 ? filters.categories.includes(topic.category) : true)
-            && (filters.types.length > 0 ? filters.types.includes(topic.type) : true)
-            && (filters.polarity.length > 0 ? filters.polarity.includes(topic.polarity) : true);
+          return (filters.categories.length ? filters.categories.includes(topic.category) : true)
+            && (filters.types.length ? filters.types.includes(topic.type) : true)
+            && (filters.polarity.length ? filters.polarity.includes(topic.polarity === 1 ? 'Polar' : 'Non-Polar') : true);
         } else {
           return topics;
         }      
       });
 
+      // Search topics after filtering
       this.setState({ filtered: results }, () => {
         this.props.saveTopicFilters(filters);
         this.searchTopics(searchWord);
@@ -135,6 +136,7 @@ class TopicBank extends Component {
   searchTopics = (text) => {
     const { filtered } = this.state;
 
+    // If headline or question matches search, include in list. Case-insensitive
 		const searched = filtered.filter(topic =>
 			(topic.headline.toLowerCase().indexOf(text.toLowerCase()) > -1
 			|| topic.question.toLowerCase().indexOf(text.toLowerCase()) > -1)
@@ -152,21 +154,24 @@ class TopicBank extends Component {
     this.sortTopics(value);
   }
 
+  // Handle search on every new character entry
   handleSearchWord = (event) => { this.searchTopics(event.target.value); }
+
+  // Handle filter changes on checkbox check
   handleFilter = (event) => {
-    const {filters} = this.state;
+    const { filters } = this.state;
     const { name, checked } = event.target;
 
+    let [ label, filter ] = name.split(', ');
+
     if (checked){
-      filters.categories.push(name);
+      filters[filter].push(label);
     } else {
-      let idx = filters.categories.indexOf(name);
-      filters.categories.splice(idx, 1);
+      let idx = filters[filter].indexOf(label);
+      filters[filter].splice(idx, 1);
     }
 
-    this.setState({ filters }, () => {
-      this.filterTopics();
-    });
+    this.setState({ filters }, () => this.filterTopics());
   }
 
 	render(){
@@ -239,16 +244,46 @@ class TopicBank extends Component {
               onSelect={this.switchSort} />
 
             <FilterDropdown title={'Filter'}>
-              <Dropdown.Item style={{padding: 0}} disabled>Filter by category</Dropdown.Item>
-              <Dropdown.Divider />
-                {categories.map((item, index) => {
-                  return <Checkbox
-                    name={item.label}
-                    key={index}
-                    label={item.label}
-                    checked={filters.categories.includes(item.label)}
-                    onChange={this.handleFilter} />
-                })}
+              <div className={css.menuSection}>
+                <div>
+                  <Dropdown.Item disabled>Filter by category</Dropdown.Item>
+                  <Dropdown.Divider />
+                    {categories.map((item, index) => {
+                      return <Checkbox
+                        name={`${item.label}, categories`}
+                        key={index}
+                        label={item.label}
+                        checked={filters.categories.includes(item.label)}
+                        onChange={this.handleFilter} />
+                    })}
+                </div>
+                <div>
+                  <div>
+                    <Dropdown.Item disabled>Filter by type</Dropdown.Item>
+                    <Dropdown.Divider />
+                      {types.map((item, index) => {
+                        return <Checkbox
+                          name={`${item.label}, types`}
+                          key={index}
+                          label={item.label}
+                          checked={filters.types.includes(item.label)}
+                          onChange={this.handleFilter} />
+                      })}
+                  </div>
+                  <div className={css.polarityBlock}>
+                    <Dropdown.Item disabled>Filter by polarity</Dropdown.Item>
+                    <Dropdown.Divider />
+                      {polarity.map((item, index) => {
+                        return <Checkbox
+                          name={`${item.label}, polarity`}
+                          key={index}
+                          label={item.label}
+                          checked={filters.polarity.includes(item.label)}
+                          onChange={this.handleFilter} />
+                      })}
+                  </div>
+                </div>
+              </div>
             </FilterDropdown>
           </BottomToolbar>
         </Spacer>
