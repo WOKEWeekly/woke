@@ -127,7 +127,7 @@ class Sessions extends Component {
           <Cover
             title={'Sessions'}
             subtitle={'Where the magic happens...'}
-            image={'sessions-header.jpg'}
+            image={'header-sessions.jpg'}
             height={200}
             className={css.cover} />
 

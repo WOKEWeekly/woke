@@ -127,7 +127,7 @@ class BlackExcellence extends Component {
           <Cover
             title={title}
             subtitle={description}
-            image={'blackex-header.jpg'}
+            image={'header-blackex.jpg'}
             height={200}
             backgroundPosition={'center'}
             imageTitle={

@@ -25,7 +25,7 @@
   @extend .text;
   background: {  
     attachment: fixed;
-    image: url('/static/images/bg/404.jpg');
+    image: url('/static/images/bg/bg-404.jpg');
     position: top;
     repeat: no-repeat;
     size: cover;
@@ -39,7 +39,8 @@
     padding: 1.5em;
     .message {
       font-size: 1.6em;
-      margin-bottom: 1em;}
+      margin-bottom: 1em;
+      @media (max-width: $break-md) { font-size: 1.3em; }}
     button {
       @extend .link-button;
       color: white; }

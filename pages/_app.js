@@ -35,7 +35,7 @@ export default class WOKE extends App {
   
   componentDidMount(){
     const {
-      backgroundImage = 'body-bg.jpg',
+      backgroundImage = 'bg-app.jpg',
       theme = 'default'
     } = this.props.router.query;
 

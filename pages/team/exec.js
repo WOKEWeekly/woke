@@ -68,7 +68,7 @@ export default class Executives extends Component {
           <Cover
             title={heading}
             subtitle={description}
-            image={'team-header.jpg'}
+            image={'header-team.jpg'}
             height={200}
             backgroundPosition={'center'} />
 

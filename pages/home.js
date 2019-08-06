@@ -31,7 +31,7 @@ export default class Home extends Component {
         <Cover
           title={'Awakening Through Conversation.'}
           subtitle={'Debates and discussions centered around and beyond the UK black community.'}
-          image={'home-header.jpg'}
+          image={'header-home.jpg'}
           height={575}
           className={css.cover} />
 
@@ -76,7 +76,7 @@ class Part extends Component {
 
   componentDidMount(){
     const image = new Image();
-    image.src = `/static/images/bg/${this.props.image}`;
+    image.src = `/static/images/fillers/${this.props.image}`;
     image.onload = () => this.setState({imageLoaded: true, imageSrc: image.src});
   }
 
@@ -435,7 +435,7 @@ class ForumAdvertiser extends Component {
 
   componentDidMount(){
     const image = new Image();
-    image.src = `/static/images/bg/home-sugg-bg.jpg`;
+    image.src = `/static/images/bg/bg-home-forum.jpg`;
     image.onload = () => this.setState({imageLoaded: true, imageSrc: image.src});
   }
 

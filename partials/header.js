@@ -125,7 +125,7 @@ export class MainNavbar extends Component {
 
   componentDidMount(){
     const image = new Image();
-    image.src = `/static/images/bg/nav-${this.props.theme}-bg.jpg`;
+    image.src = `/static/images/bg/nav-bg-${this.props.theme}.jpg`;
     image.onload = () => this.setState({imageLoaded: true, imageSrc: image.src});
   }
 

@@ -218,7 +218,7 @@ class TopicBank extends Component {
           <Cover
             title={'Topic Bank'}
             subtitle={'The currency of the franchise.'}
-            image={'topics-header.jpg'}
+            image={'header-topics.jpg'}
             height={200}
             className={css.cover} />
 
