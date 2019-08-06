@@ -7,13 +7,6 @@ const { domain } = require('../constants/settings.js');
 
 const { renderErrPage } = require('./response.js');
 
-const about = './static/resources/about.txt';
-const constitution = './static/resources/Constitution.pdf';
-const cookies = './static/resources/cookies.txt';
-const faq = './static/resources/faq.txt';
-const mentalhealth = './static/resources/mentalhealth.txt';
-const privacy = './static/resources/privacy.txt';
-
 module.exports = function(app, conn, server){
 
   /** Home */
@@ -265,14 +258,17 @@ module.exports = function(app, conn, server){
 
    /** Mental Health */
    app.get('/mentalhealth', function(req, res){
-    fs.readFile(mentalhealth, 'utf8', function (err, data){
+    conn.query(`SELECT * FROM resources WHERE name = 'mentalhealth'`, function (err, result) {
+      if (err || !result.length) return renderErrPage(req, res, err, server);
+
+      const {text} = result[0];
       return server.render(req, res, '/variants', {
         title: '#WOKEWeekly Mental Health',
         description: 'Shattering the stigmata of discussion over our wellbeing through healthy conversation and education.',
         url: '/mentalhealth',
         cardImage: '/bg/card-mental.jpg',
         backgroundImage: 'bg-mental.jpg',
-        pageText: data,
+        pageText: text,
         coverImage: 'header-mental.jpg',
         imageLogo: 'mentalhealth-logo.png',
         imageAlt: 'Mental Health logo',
@@ -283,12 +279,15 @@ module.exports = function(app, conn, server){
 
   /** Edit Mental Health Page */
   app.get('/mentalhealth/edit', function(req, res){
-    fs.readFile(mentalhealth, 'utf8', function (err, data){
+    conn.query(`SELECT * FROM resources WHERE name = 'mentalhealth'`, function (err, result) {
+      if (err || !result.length) return renderErrPage(req, res, err, server);
+
+      const {text} = result[0];
       return server.render(req, res, '/variants/edit', {
         title: 'Edit Mental Health Page',
         backgroundImage: 'bg-mental.jpg',
-        pageText: data,
-        file: 'mentalhealth.txt',
+        pageText: text,
+        resource: 'mentalhealth',
         placeholder: `What do we do at #WOKEWeekly Mental Health?`,
         theme: 'mental'
       });
@@ -297,11 +296,14 @@ module.exports = function(app, conn, server){
 
   /** About Us */
   app.get('/about', function(req, res){
-    fs.readFile(about, 'utf8', function (err, data){
+    conn.query(`SELECT * FROM resources WHERE name = 'about'`, function (err, result) {
+      if (err || !result.length) return renderErrPage(req, res, err, server);
+
+      const {text} = result[0];
       return server.render(req, res, '/info', {
         title: 'About #WOKEWeekly',
-        description: data,
-        pageText: data,
+        description: text,
+        pageText: text,
         cardImage: '/bg/card-about.jpg',
         url: '/about'
       });
@@ -310,11 +312,13 @@ module.exports = function(app, conn, server){
 
   /** Edit About */
   app.get('/about/edit', function(req, res){
-    fs.readFile(about, 'utf8', function (err, data){
+    conn.query(`SELECT * FROM resources WHERE name = 'about'`, function (err, result) {
+      if (err || !result.length) return renderErrPage(req, res, err, server);
+
       return server.render(req, res, '/info/edit', {
         title: 'Edit About',
-        description: data,
-        file: 'about.txt',
+        description: text,
+        resource: 'about',
         placeholder: `Write about #WOKEWeekly...`
       });
     });
@@ -322,25 +326,30 @@ module.exports = function(app, conn, server){
 
   /** Privacy Policy */
   app.get('/privacy', function(req, res){
-    const stats = fs.statSync(privacy);
-    fs.readFile(privacy, 'utf8', function (err, data){
+    conn.query(`SELECT * FROM resources WHERE name = 'privacy'`, function (err, result) {
+      if (err || !result.length) return renderErrPage(req, res, err, server);
+
+      const {text, lastModified} = result[0];
       return server.render(req, res, '/info', {
         title: 'Privacy Policy | #WOKEWeekly',
-        description: data,
-        pageText: data,
+        description: text,
+        pageText: text,
         url: '/privacy',
-        lastModified: formatDate(stats.mtime)
+        lastModified: lastModified
       });
     });
   });
 
   /** Edit Privacy Policy */
   app.get('/privacy/edit', function(req, res){
-    fs.readFile(privacy, 'utf8', function (err, data){
+    conn.query(`SELECT * FROM resources WHERE name = 'privacy'`, function (err, result) {
+      if (err || !result.length) return renderErrPage(req, res, err, server);
+
+      const {text} = result[0];
       return server.render(req, res, '/info/edit', {
         title: 'Edit Privacy Policy',
-        description: data,
-        file: 'privacy.txt',
+        description: text,
+        resource: 'privacy',
         placeholder: `Detail this website's Privacy Policy...`
       });
     });
@@ -348,11 +357,14 @@ module.exports = function(app, conn, server){
 
   /** Cookies Policy */
   app.get('/cookies', function(req, res){
-    fs.readFile(cookies, 'utf8', function (err, data){
+    conn.query(`SELECT * FROM resources WHERE name = 'cookies'`, function (err, result) {
+      if (err || !result.length) return renderErrPage(req, res, err, server);
+
+      const {text} = result[0];
       return server.render(req, res, '/info', {
         title: 'Cookies Policy | #WOKEWeekly',
-        description: data,
-        pageText: data,
+        description: text,
+        pageText: text,
         url: '/cookies',
       });
     });
@@ -360,11 +372,14 @@ module.exports = function(app, conn, server){
 
   /** Edit Cookies Policy */
   app.get('/cookies/edit', function(req, res){
-    fs.readFile(cookies, 'utf8', function (err, data){
+    conn.query(`SELECT * FROM resources WHERE name = 'cookies'`, function (err, result) {
+      if (err || !result.length) return renderErrPage(req, res, err, server);
+
+      const {text} = result[0];
       return server.render(req, res, '/info/edit', {
         title: 'Edit Cookies Policy',
-        description: data,
-        file: 'cookies.txt',
+        description: text,
+        resource: 'cookies',
         placeholder: `Detail this website's Cookie Policy...`
       });
     });
@@ -372,11 +387,14 @@ module.exports = function(app, conn, server){
 
   /** FAQs */
   app.get('/faq', function(req, res){
-    fs.readFile(faq, 'utf8', function (err, data){
+    conn.query(`SELECT * FROM resources WHERE name = 'faq'`, function (err, result) {
+      if (err || !result.length) return renderErrPage(req, res, err, server);
+
+      const {text} = result[0];
       return server.render(req, res, '/info', {
         title: 'FAQs | #WOKEWeekly',
-        description: data,
-        pageText: data, 
+        description: text,
+        pageText: text, 
         url: '/faq'
       });
     });
@@ -384,11 +402,14 @@ module.exports = function(app, conn, server){
 
   /** Edit FAQs */
   app.get('/faq/edit', function(req, res){
-    fs.readFile(faq, 'utf8', function (err, data){
+    conn.query(`SELECT * FROM resources WHERE name = 'faq'`, function (err, result) {
+      if (err || !result.length) return renderErrPage(req, res, err, server);
+
+      const {text} = result[0];
       return server.render(req, res, '/info/edit', {
         title: 'Edit FAQs',
-        description: data,
-        file: 'faq.txt',
+        description: text,
+        resource: 'faq',
         placeholder: `Ask and answer some frequently asked questions...`
       });
     });
@@ -399,7 +420,7 @@ module.exports = function(app, conn, server){
    **************************************************************/
      
   app.get('/constitution', function(req, res){
-    fs.readFile(constitution, function (err, data){
+    fs.readFile('./static/resources/Constitution.pdf', function (err, data){
       if (err) res.sendStatus(404);
       res.contentType("application/pdf");
       res.send(data);

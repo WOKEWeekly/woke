@@ -35,12 +35,12 @@ class EditInfo extends Component {
 
   /** Update information */
   updateInfo = () => {
-    const { user, title, file } = this.props;
+    const { user, title, resource } = this.props;
     const { text } = this.state;
 
     fetch('/updateInfo', {
       method: 'PUT',
-      body: JSON.stringify({text, file}),
+      body: JSON.stringify({text, resource}),
       headers: {
         'Authorization': `Bearer ${user.token}`,
         'Clearance': CLEARANCES.ACTIONS.EDIT_INFO,

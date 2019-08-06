@@ -35,12 +35,12 @@ class EditVariantPage extends Component {
 
   /** Update variant page */
   updateInfo = () => {
-    const { user, title, file } = this.props;
+    const { user, title, resource } = this.props;
     const { text } = this.state;
 
     fetch('/updateVariantPage', {
       method: 'PUT',
-      body: JSON.stringify({text, file}),
+      body: JSON.stringify({text, resource}),
       headers: {
         'Authorization': `Bearer ${user.token}`,
         'Clearance': CLEARANCES.ACTIONS.EDIT_INFO,

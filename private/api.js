@@ -1,7 +1,7 @@
 const async = require('async');
 const request = require('superagent');
 const fs = require('fs');
-const { verifyToken, validateReq, checkAuth, upload } = require('./middleware.js');
+const { verifyToken, validateReq, upload } = require('./middleware.js');
 const { resToClient } = require('./response.js');
 
 module.exports = function(app, conn){
@@ -341,17 +341,11 @@ module.exports = function(app, conn){
   });
 
   /** Update information pages */
-  app.put('/updateInfo', verifyToken, function(req, res){
-    const { text, file } = req.body;
-    fs.writeFile(`./static/resources/${file}`, text, function(err) {
-      resToClient(res, err);
-    });
-  });
-
-  /** Update variant pages */
-  app.put('/updateVariantPage', verifyToken, function(req, res){
-    const { text, file } = req.body;
-    fs.writeFile(`./static/resources/${file}`, text, function(err) {
+  app.put(['/updateInfo', '/updateVariantPage'], verifyToken, function(req, res){
+    const { resource, text } = req.body;
+    const sql = "UPDATE resources SET text = ?, lastModified = ? WHERE name = ?";
+    const values = [text, new Date(), resource];
+    conn.query(sql, values, function (err) {
       resToClient(res, err);
     });
   });

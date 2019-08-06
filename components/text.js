@@ -33,8 +33,10 @@ export class Subtitle extends Component {
 export class _Paragraph extends Component {
   render(){
 
-    let { children = '', substitutions, theme } = this.props;
+    let { children, substitutions, theme } = this.props;
     const classes = classNames(css.paragraph, this.props.className);
+
+    if (!children) children = '';
 
     return (
       <pre
@@ -98,8 +100,10 @@ export class _Paragraph extends Component {
 
 export class TruncatedParagraph extends Component {
   render(){
-    let { children = '', paragraphs, link, more, ellipsis } = this.props;
+    let { children, paragraphs, link, more } = this.props;
     const classes = classNames(css.paragraph, this.props.className);
+
+    if (!children) children = '';
 
     const blocks = paragraphs ? (paragraphs * 2) - 2 : 2
 

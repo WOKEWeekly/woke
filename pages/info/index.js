@@ -10,6 +10,8 @@ import { Paragraph } from '~/components/text.js';
 import { BottomToolbar } from '~/components/toolbar.js';
 import { Fader } from '~/components/transitioner.js';
 
+import { formatDate } from '~/constants/date.js';
+
 import css from '~/styles/info.scss';
 
 class Info extends Component {
@@ -38,7 +40,7 @@ class Info extends Component {
             <div className={css.container}>
               <Paragraph
                 className={css.text}
-                substitutions={{lastModified}}>{pageText}</Paragraph>
+                substitutions={{lastModified: formatDate(lastModified)}}>{pageText}</Paragraph>
             </div>
           </Shader>
 
