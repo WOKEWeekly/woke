@@ -280,7 +280,20 @@
       padding: .5em .5em;
     }
     + .fileImage {
-
+      height: 50vh;
+      margin-top: 1em;
+      @media (max-width: $break-md) {
+        height: initial;
+        width: 100%;
+      }
+      img {
+        border: $secondary-border;
+        height: 100%;
+        @media (max-width: $break-md) {
+          height: initial;
+          width: 100%;
+        }
+      }
     }
   }
 

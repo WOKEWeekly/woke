@@ -7,7 +7,7 @@ import classNames from 'classnames';
 import { Icon } from '~/components/icon.js';
 import css from '~/styles/_components.scss';
 
-import { Fader } from '~/components/transitioner.js';
+import { Fader, Zoomer } from '~/components/transitioner.js';
 
 /** For the form heading */
 export class Heading extends Component {
@@ -258,24 +258,65 @@ export class Checkbox extends Component {
 
 /** File selector */
 export class _FileSelector extends Component {
+  constructor(){
+    super();
+    this.state = { image: '' }
+
+    this.image = React.createRef();
+    this.file = React.createRef();
+  }
+
+  handleImageChange = (event) => {
+    this.props.onChange(event);
+    this.previewImage();
+  }
+
+  previewImage = () => {
+    const preview = this.image.current;
+    const file    = this.file.current.files[0];
+    const reader  = new FileReader();
+
+    reader.addEventListener("load", () => {
+      const source = reader.result;
+      preview.src = source;
+      this.setState({ image: source});
+    }, false);
+
+    if (file) reader.readAsDataURL(file);
+  }
+
   render(){
+    const { image } = this.state;
     const { theme } = this.props;
     return (
-      <div className={css.file}>
-        <label className={css[`file_button-${theme}`]}>
-          Browse...
+      <React.Fragment>
+        <div className={css.file}>
+          <label className={css[`file_button-${theme}`]}>
+            Browse...
+            <input
+              type={'file'}
+              style={{display: 'none'}}
+              onChange={this.handleImageChange}
+              ref={this.file} />
+          </label>
           <input
-            type={'file'}
-            style={{display: 'none'}}
-            onChange={this.props.onChange} />
-        </label>
-        <input
-          type={'text'}
-          disabled
-          value={this.props.value}
-          placeholder={'Choose a file'}
-          className={css.file_input} />
-      </div>
+            type={'text'}
+            disabled
+            value={this.props.value}
+            placeholder={'Choose a file'}
+            className={css.file_input} />
+        </div>
+        <Zoomer
+          determinant={image}
+          duration={400}
+          className={css.fileImage}
+          style={{ display: image ? 'block' : 'none' }}>
+          <img
+            src=''
+            alt={'Image preview...'}
+            ref={this.image} />
+       </Zoomer>
+      </React.Fragment>
     )
   }
 }
