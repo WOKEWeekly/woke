@@ -127,6 +127,7 @@ module.exports = function(app, conn, server){
       description: 'Recognising the intrinsic potential in young black rising stars who are excelling in their respective fields and walks of life.',
       url: '/blackexcellence',
       backgroundImage: 'blackex-bg.jpg',
+      cardImage: `/bg/card-blackex.jpg`,
       theme: 'blackex'
     });
   });

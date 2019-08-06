@@ -75,7 +75,14 @@ export class _Paragraph extends Component {
                 // Hyperlinking text
                 if (text.startsWith('/') || text.startsWith('mailto:') || text.startsWith('http')){
                   array.splice(count, 1);
-                  return <a target={'_blank'} href={text} key={count} className={css[`link-${theme.toLowerCase()}`]}>{array[count]}</a>;
+                  return (
+                  <a
+                    target={'_blank'}
+                    rel={'noreferrer'}
+                    href={text}
+                    key={count}
+                    className={css[`link-${theme.toLowerCase()}`]}>{array[count]}</a>
+                  )
                 } else {
                   return text;
                 }

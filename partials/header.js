@@ -136,7 +136,8 @@ export class MainNavbar extends Component {
     const classes = css[`${theme}-links`];
 
     if (!imageLoaded) return null;
-      return (
+
+    return (
       <Navbar className={css[`nav-${theme}`]} variant="dark" expand="lg" sticky="top"
         style={{ backgroundImage: `url(${imageSrc})` }}>
         <Navbar.Brand className={css.brand} href="/">

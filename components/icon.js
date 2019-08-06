@@ -120,20 +120,21 @@ class _SocialIcon extends Component {
 
   render(){
     if (!this.state.isLoaded) return null;
-    const { theme } = this.props
+
+    const { theme, icon, size } = this.props
 
     return (
       <a target={'_blank'} {...this.props}>
         <FontAwesomeIcon
-          icon={['fab', this.props.icon]}
+          icon={['fab', icon]}
           className={css[`socialIcon-${theme}`]}
-          size={this.props.size} />
+          size={size} />
       </a>
     );
   }
 }
 
-const mapStateToProps = (state, ownProps) => ({
+const mapStateToProps = (state) => ({
   theme: state.theme
 });
 
