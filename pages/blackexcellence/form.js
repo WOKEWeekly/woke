@@ -6,7 +6,7 @@ import Router from 'next/router';
 import { SubmitButton, CancelButton, AddEntityButton } from '~/components/button.js';
 import { BirthdayPicker } from '~/components/datepicker.js';
 import { Heading, Group, Label, TextInput, ClickInput, NumberPicker, TextArea, FileSelector } from '~/components/form.js';
-import { listSocials } from '~/components/icon.js';
+import { SocialsList } from '~/components/icon.js';
 import { Shader, Spacer } from '~/components/layout.js';
 import { EthnicModal, SocialsModal } from '~/components/modal.js';
 
@@ -102,7 +102,7 @@ class CandidateForm extends Component {
                 <AddEntityButton
                   title={'Add Socials'}
                   onClick={this.showSocialsModal} />
-                <div className={'mt-2'}>{listSocials(socials)}</div>
+                <SocialsList socials={socials} />
               </Col>
             </Group>
             <Group>

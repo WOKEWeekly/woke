@@ -35,15 +35,23 @@ $break-xxl: 1408px; // Extra large devices (large desktops)
 }
 
 .link {
+  cursor: pointer;
+  font-family: $body-font;
+  text-decoration: underline;
+  transition: all .2s;
+  -webkit-transition: all .2s;
   &-default {
-    color: #bc83ff !important;
-    text-decoration: underline; }
+    @extend .link;
+    color: #bc83ff;
+    &:hover { color: #9769cc; } }
   &-blackex {
-    color: #36deea !important;
-    text-decoration: underline; }
+    @extend .link;
+    color: #36deea;
+    &:hover { color: #2babb4; } }
   &-mental {
-    color: #36ea92 !important;
-    text-decoration: underline;
+    @extend .link;
+    color: #36ea92;
+    &:hover { color: #29af6e; }
   }
 
   &-button {

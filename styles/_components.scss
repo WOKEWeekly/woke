@@ -352,11 +352,14 @@
   font-family: $title-font;
   word-break: break-all;
   a {
-    color: $primary;
     font-family: $body-font;
     font-weight: bold;
     margin-left: .5em;
   }
+
+  &-default { @extend .socials; a { @extend .link-default; } }
+  &-blackex { @extend .socials; a { @extend .link-blackex; } }
+  &-mental { @extend .socials; a { @extend .link-mental; } }
 }
 
 /****************/

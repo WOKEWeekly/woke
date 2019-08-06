@@ -69,30 +69,41 @@ export class PromoIconsBar extends Component {
       return items;
     }
 
-    return (
-      <div className={css.promo_bar}>{renderIcons()}</div>
-    )
+    return <div className={css.promo_bar}>{renderIcons()}</div>
   }
 }
 
-export const listSocials = (socials) => {
-  if (socials){
-    const items = [];
-    for (const [idx, item] of Object.entries(socials)) {
-      if (item && item !== ''){
-        let social = socialPlatforms[idx];
-        if (!social) return;
-        let link = `${social.domain}${item}`;
-        items.push(
-          <div key={idx} className={css.socials}>{social.name}:
-            <a href={link} target={'_blank'}>{social.domain ? `@${item}` : link}</a>
-          </div>
-        );
+export class _SocialsList extends Component {
+
+  render(){
+
+    const listSocials = (socials) => {
+      if (!socials) return null;
+
+      const items = [];
+      for (const [idx, item] of Object.entries(socials)) {
+        if (item && item !== ''){
+          let social = socialPlatforms[idx];
+          if (!social) return;
+
+          let link = `${social.domain}${item}`;
+          items.push(
+            <div key={idx} className={css[`socials-${theme}`]}>
+              {social.name}:
+              <a href={link} target={'_blank'}>{social.domain ? `@${item}` : link}</a>
+            </div>
+          );
+        }
       }
+
+      return items;
     }
-    return items;
-  } else {
-    return null;
+
+    const { theme, socials } = this.props;
+
+    return (
+      <div className={'mt-2'}>{listSocials(socials)}</div>
+    )
   }
 }
 
@@ -122,8 +133,9 @@ class _SocialIcon extends Component {
   }
 }
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state, ownProps) => ({
   theme: state.theme
 });
 
+export const SocialsList = connect(mapStateToProps)(_SocialsList);
 export const SocialIcon = connect(mapStateToProps)(_SocialIcon);

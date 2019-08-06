@@ -97,6 +97,8 @@
 .nav {
   background-size: cover;
   height: $navbar-height;
+  transition: height 0.3s ease-in-out;
+  -webkit-transition: height 0.3s ease-in-out;
   @media (max-width: $break-md) { height: initial; }
   .brand { @include scale-on-hover(1.08); }
   a:not(.brand) {
