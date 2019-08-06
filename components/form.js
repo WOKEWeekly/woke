@@ -242,8 +242,9 @@ export class Select extends Component {
 /** For checkboxes */
 export class Checkbox extends Component {
   render(){
+    const classes = classNames(css.checkbox, this.props.className);
     return (
-      <label className={css.checkbox}>
+      <label className={classes}>
         <input
           type={'checkbox'}
           checked={this.props.checked}

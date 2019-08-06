@@ -79,9 +79,9 @@ class PreNavbar extends Component {
       } else {
         return (
           <Col xs={6} className={css[`no_auth-${theme}`]}>
-            <button className={css.link} onClick={this.showModal}>Login</button>
+            <button className={css.authLink} onClick={this.showModal}>Login</button>
             <a className={css.divider}>|</a>
-            <button className={css.link} onClick={() => location.href = '/signup'}>Sign Up</button>
+            <button className={css.authLink} onClick={() => location.href = '/signup'}>Sign Up</button>
           </Col>
         );
       }

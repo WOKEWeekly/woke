@@ -23,7 +23,8 @@ class Signup extends Component {
       password1: '',
       password2: '',
       privacy: false,
-      subscribe: false
+      subscribe: false,
+      honeypot: false
     }
 
     if (props.user.isAuthenticated){
@@ -53,6 +54,12 @@ class Signup extends Component {
     this.setState({[name]: checked});}
 
   signUp = () => {
+    // If honeypot checked, fake successful registration
+    if (this.state.honeypot){
+      setAlert({ type: 'info', message: `Welcome! Thank you for registering to the #WOKEWeekly website.` });
+      return location.href = '/';
+    }
+
     if (!isValidSignup(this.state)) return;
 
     fetch('/signup', {
@@ -80,8 +87,7 @@ class Signup extends Component {
   }
 
   render(){
-    const { firstname, lastname, email, username, password1, password2, privacy, subscribe } = this.state;
-    
+    const { firstname, lastname, email, username, password1, password2, privacy, subscribe, honeypot } = this.state;
 
     return (
       <Shader>
@@ -160,8 +166,14 @@ class Signup extends Component {
                   name={'privacy'}
                   checked={privacy}
                   label={
-                  <span>I agree to the terms and conditions stated in the <a target={'_blank'} className={css.linkText} href={'/privacy'}>Privacy Policy</a>.</span>}
+                  <span>I have read and I agree to this site's <a target={'_blank'} className={css['link-default']} href={'/privacy'}>Privacy Policy</a>, including the <a target={'_blank'} className={css['link-default']} href={'/cookies'}>Cookie Policy</a>.</span>}
                   onChange={this.handleCheck} />
+                <Checkbox
+                  name={'honeypot'}
+                  checked={honeypot}
+                  label={'I have read and agreed to the Terms & Conditions.'}
+                  onChange={this.handleCheck}
+                  className={css.honeypot} />
               </Col>
             </Group>
           </div>
