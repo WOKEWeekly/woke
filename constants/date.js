@@ -74,6 +74,19 @@ module.exports = {
     age += (td - dd) / 310;
     
     return Math.floor(age);
+  },
+
+  dateCollections: {
+    dates: () => {
+      const items = [];
+      for (let i = 1; i <= 31; i++) items.push(i);
+      return items;
+    },
+    months: () => {
+      const months = ['January', 'February', 'March', 'April', 'May', 'June',
+        'July', 'August', 'September', 'October', 'November', 'December'];
+      return months;
+    },
   }
 }
 

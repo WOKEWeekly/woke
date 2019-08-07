@@ -2,11 +2,40 @@ import React, { Component} from 'react';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
+import { SubmitButton, CancelButton } from '~/components/button.js';
 import { formatDate } from '~/constants/date.js';
-import { TextInput } from '~/components/form.js';
+import { Select, TextInput } from '~/components/form.js';
 import { creationDate } from '~/constants/settings.js';
 import css from '~/styles/_components.scss';
 import { Icon } from './icon';
+
+// export class DatePicker extends Component {
+//   render(){
+//     const { close, visible, handleSelect, clearSelection, entity } = this.props;
+
+//     const body = (
+//       <div>
+//         <Select items={dates} placeholder={'Date'}></Select>
+//         <Select items={dates} placeholder={'Date'}></Select>
+//         <Select items={dates} placeholder={'Date'}></Select>
+//       </div>
+//     );
+
+//     const footer = (
+//       <SubmitButton onClick={close}>Confirm</SubmitButton>
+//       <CancelButton onClick={close}>Close</CancelButton>
+//     );
+
+//     return (
+//       <Modal
+//         show={visible}
+//         scrollable
+//         body={body}
+//         footer={footer}
+//         onlyBody />
+//     )
+//   }
+// }
 
 class DateInput extends Component {
   render(){

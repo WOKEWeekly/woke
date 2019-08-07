@@ -2,7 +2,6 @@ const async = require('async');
 const fs = require('fs');
 const path = require('path');
 const sm = require('sitemap');
-const { formatDate } = require('../constants/date.js');
 const { domain } = require('../constants/settings.js');
 
 const { renderErrPage } = require('./response.js');
@@ -39,7 +38,7 @@ module.exports = function(app, conn, server){
         const session = result[0];
         return server.render(req, res, '/sessions/single', {
           title: `${session.title} | #WOKEWeekly`,
-          description: session.description,
+          description: serveDescription(session.description),
           url: `/sessions/${session.slug}`,
           cardImage: `/sessions/${session.image}`,
           backgroundImage: 'bg-sessions.jpg',
@@ -165,7 +164,7 @@ module.exports = function(app, conn, server){
         candidate.label = `#${candidate.id}: ${candidate.name}`;
         return server.render(req, res, '/blackexcellence/single', {
           title: `${candidate.label} | #WOKEWeekly`,
-          description: candidate.description,
+          description: serveDescription(candidate.description),
           url: `/blackexcellence/candidate/${candidate.id}`,
           cardImage: `/blackexcellence/${candidate.image}`,
           alt: candidate.label,
@@ -200,7 +199,7 @@ module.exports = function(app, conn, server){
         const exec = result[0];
         return server.render(req, res, '/team/exec.single', {
           title: `${exec.firstname} ${exec.lastname} | #WOKEWeekly`,
-          description: exec.description,
+          description: serveDescription(exec.description),
           url: `/executives/${exec.slug}`,
           cardImage: `/team/${exec.image}`,
           backgroundImage: 'bg-team.jpg',
@@ -302,7 +301,7 @@ module.exports = function(app, conn, server){
       const {text} = result[0];
       return server.render(req, res, '/info', {
         title: 'About #WOKEWeekly',
-        description: text,
+        description: serveDescription(text),
         pageText: text,
         cardImage: '/bg/card-about.jpg',
         url: '/about'
@@ -332,7 +331,7 @@ module.exports = function(app, conn, server){
       const {text, lastModified} = result[0];
       return server.render(req, res, '/info', {
         title: 'Privacy Policy | #WOKEWeekly',
-        description: text,
+        description: serveDescription(text),
         pageText: text,
         url: '/privacy',
         lastModified: lastModified
@@ -363,7 +362,7 @@ module.exports = function(app, conn, server){
       const {text} = result[0];
       return server.render(req, res, '/info', {
         title: 'Cookies Policy | #WOKEWeekly',
-        description: text,
+        description: serveDescription(text),
         pageText: text,
         url: '/cookies',
       });
@@ -393,7 +392,7 @@ module.exports = function(app, conn, server){
       const {text} = result[0];
       return server.render(req, res, '/info', {
         title: 'FAQs | #WOKEWeekly',
-        description: text,
+        description: serveDescription(text),
         pageText: text, 
         url: '/faq'
       });
@@ -482,4 +481,30 @@ module.exports = function(app, conn, server){
       });
     });
   });
+}
+
+
+const serveDescription = (text) => {
+  if (!text) text = '';
+
+  const parts = text.split('\n').map(paragraph => {
+    if (paragraph.length === 0) return null;
+
+    switch (paragraph.charAt(0)){
+      case '*': return null;                    // For headings
+      case '>': return paragraph.substring(1);  // For subheadings
+      case ';': return null;                    // For images
+      case '•': return paragraph;               // For list items
+
+      // Normal paragraph text
+      default:
+        const linkRegex = new RegExp(/\<\[(.*?)\]\s(.*?)\>/g);  // Regular expression for links
+        const subRegex = new RegExp(/\<\$(.*?)\$\>/g);          // Regular expression for substitutions
+        return paragraph.replace(subRegex, null).replace(linkRegex, '$1');
+    }
+  });
+
+  text = parts.filter(e => e != null);
+
+  return text[0];
 }

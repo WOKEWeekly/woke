@@ -10,6 +10,7 @@ export default class MyDocument extends Document {
 
   render() {
     const { query } = this.props.__NEXT_DATA__;
+    console.log(query.description);
     
     return (
       <Html>

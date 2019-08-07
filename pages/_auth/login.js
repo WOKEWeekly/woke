@@ -87,11 +87,14 @@ class LoginModal extends Component {
             onChange={this.handlePassword}
             placeholder={"Enter your password"} />
         </Group>
-        <Group className={css.remember}>
+        <Group className={css.group}>
           <Checkbox
             checked={remember}
             label={'Remember me'}
             onChange={this.handleRemember} />
+        </Group>
+        <Group className={css.group}>
+          <a href={'#'} className={css['link-default']}>Forgotten your password?</a>
         </Group>
       </div>
     );
