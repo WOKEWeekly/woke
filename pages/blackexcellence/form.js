@@ -35,7 +35,7 @@ class CandidateForm extends Component {
   hideSocialsModal = () => { this.setState({ socialsModalVisible: false})}
 
   render(){
-    const { heading, confirmText, confirmFunc, cancelFunc, metaTitle, metaUrl,
+    const { heading, confirmText, confirmFunc, cancelFunc,
       handleText, handleDate, handleImage, clearSelection, confirmSocials, countries } = this.props;
 
     const { id, name, description, occupation, birthday, image, socials,
@@ -44,9 +44,7 @@ class CandidateForm extends Component {
     const { ethnicModalVisible, socialsModalVisible } = this.state;
 
     const filename = getFilename(image);
-    const ethnicities = countriesToString([ethnicity1, ethnicity2, ethnicity3, ethnicity4], countries);
-
-    
+    const ethnicities = countriesToString([ethnicity1, ethnicity2, ethnicity3, ethnicity4], countries);    
 
     return (
       <Shader>
@@ -73,10 +71,7 @@ class CandidateForm extends Component {
               </Col>
               <Col md={4}>
                 <Label>Birthday:</Label>
-                <BirthdayPicker
-                  name={'birthday'}
-                  date={birthday}
-                  onChange={handleDate} />
+                <BirthdayPicker date={birthday} onConfirm={handleDate} />
               </Col>
             </Group>
             <Group>
@@ -118,7 +113,8 @@ class CandidateForm extends Component {
             <Group>
               <Col>
                 <FileSelector
-                  value={filename}
+                  filename={filename}
+                  directory={`blackexcellence`}
                   onChange={handleImage} />
               </Col>
             </Group>

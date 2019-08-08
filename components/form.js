@@ -5,9 +5,10 @@ import Textarea from 'react-textarea-autosize';
 import classNames from 'classnames';
 
 import { Icon } from '~/components/icon.js';
-import css from '~/styles/_components.scss';
-
 import { Fader, Zoomer } from '~/components/transitioner.js';
+import { domain } from '~/constants/settings.js';
+
+import css from '~/styles/_components.scss';
 
 /** For the form heading */
 export class Heading extends Component {
@@ -232,7 +233,7 @@ export class Select extends Component {
         style={{ color: value === '' && '#8E8E8E' }}>
         <option value={''} disabled>{placeholder}</option>
         {items.map((item, index) => {
-          return <option key={index} value={item.value || item.label}>{item.label}</option>
+          return <option key={index} value={item.value || item.label || item}>{item.label || item}</option>
         })}
       </select>
     )
@@ -259,9 +260,14 @@ export class Checkbox extends Component {
 
 /** File selector */
 export class _FileSelector extends Component {
-  constructor(){
-    super();
-    this.state = { image: '' }
+  constructor(props){
+    super(props);
+
+    const { filename, directory } = this.props;
+
+    this.state = {
+      image: filename ? `${domain}/static/images/${directory}/${filename}` : null
+    }
 
     this.image = React.createRef();
     this.file = React.createRef();
@@ -289,6 +295,8 @@ export class _FileSelector extends Component {
   render(){
     const { image } = this.state;
     const { theme } = this.props;
+
+    console.log(image);
     return (
       <React.Fragment>
         <div className={css.file}>
@@ -303,7 +311,7 @@ export class _FileSelector extends Component {
           <input
             type={'text'}
             disabled
-            value={this.props.value}
+            value={this.props.filename}
             placeholder={'Choose a file'}
             className={css.file_input} />
         </div>
@@ -313,7 +321,7 @@ export class _FileSelector extends Component {
           className={css.fileImage}
           style={{ display: image ? 'block' : 'none' }}>
           <img
-            src=''
+            src={image}
             alt={'Image preview...'}
             ref={this.image} />
        </Zoomer>

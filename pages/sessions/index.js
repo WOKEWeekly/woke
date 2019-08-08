@@ -197,7 +197,7 @@ class Session extends PureComponent {
           duration={400}
           delay={75 * idx}
           direction={'left'}>
-          <Link href={`/session/${item.slug}`}>
+          <a href={`/session/${item.slug}`}>
             <Row className={css.item}>
               <Col md={3} className={'p-0'}>
                 <img
@@ -215,7 +215,7 @@ class Session extends PureComponent {
                 </div>
               </Col>
             </Row>
-          </Link>
+          </a>
         </Slider>
       );
     }

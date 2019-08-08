@@ -18,49 +18,20 @@ class MemberEdit extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {
-      id: '',
-      firstname: '',
-      lastname: '',
-      level: '',
-      role: '',
-      birthday: new Date(2000, 0, 1),
-      description: '',
-      image: '',
-      imageChanged: false,
-      ethnicity1: '',
-      ethnicity2: '',
-      ethnicity3: '',
-      ethnicity4: '',
-      socials: {}
-    };
-  }
 
-  componentDidMount(){
     const { id, firstname, lastname, role, level, image, birthday, description, ethnicity, socials } = this.props.member;
+    const ethnicities = JSON.parse(ethnicity);
 
-    this.setState({
-      id: id,
-      firstname: firstname,
-      lastname: lastname,
-      fullname: `${firstname} ${lastname}`,
-      level: level,
-      role: role,
+    this.state = {
+      id, firstname, lastname, level, role, description, image,
+      imageChanged: false,
       birthday: new Date(birthday),
-      description: description,
-      image: image,
+      ethnicity1: ethnicities ? ethnicities[0] : '',
+      ethnicity2: ethnicities ? ethnicities[1] : '',
+      ethnicity3: ethnicities ? ethnicities[2] : '',
+      ethnicity4: ethnicities ? ethnicities[3] : '',
       socials: JSON.parse(socials)
-    }, () => {
-      const ethnicities = JSON.parse(ethnicity);
-      if (ethnicities){
-        this.setState({
-          ethnicity1: ethnicities[0] || '',
-          ethnicity2: ethnicities[1] || '',
-          ethnicity3: ethnicities[2] || '',
-          ethnicity4: ethnicities[3] || '',
-        })
-      }
-    })
+    };
   }
 
   /** Handle text changes */

@@ -23,7 +23,7 @@ class TopicForm extends Component {
   }
 
   render(){
-    const { heading, confirmText, confirmFunc, cancelFunc, metaTitle, metaUrl, handleText, handleRadio, handleCheckbox} = this.props;
+    const { heading, confirmText, confirmFunc, cancelFunc, handleText, handleRadio, handleCheckbox} = this.props;
     const { headline, category, question, type, polarity, option1, option2, description } = this.props.topic;
 
     const radioItems = [

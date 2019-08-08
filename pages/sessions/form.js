@@ -23,7 +23,7 @@ class SessionForm extends Component {
   }
 
   render(){
-    const { heading, confirmText, confirmFunc, cancelFunc, metaTitle, metaUrl,
+    const { heading, confirmText, confirmFunc, cancelFunc,
       handleTitle, handleDate, handleDescription, handleImage } = this.props;
     const {title, date, description, image} = this.props.session;
 
@@ -45,9 +45,7 @@ class SessionForm extends Component {
               </Col>
               <Col md={5}>
                 <Label>Date Held:</Label>
-                <EventDatePicker
-                  date={date}
-                  onChange={handleDate} />
+                <EventDatePicker date={date} onConfirm={handleDate} />
               </Col>
             </Group>
             <Group>
@@ -62,7 +60,8 @@ class SessionForm extends Component {
             <Group>
               <Col>
                 <FileSelector
-                  value={filename}
+                  filename={filename}
+                  directory={`sessions`}
                   onChange={handleImage} />
               </Col>
             </Group>

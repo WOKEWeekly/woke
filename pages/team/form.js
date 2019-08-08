@@ -14,7 +14,6 @@ import { countriesToString } from '~/constants/countries.js';
 import CLEARANCES from '~/constants/clearances.js';
 import { getFilename } from '~/constants/file.js';
 
-
 import css from '~/styles/team.scss';
 
 class MemberForm extends Component {
@@ -36,7 +35,7 @@ class MemberForm extends Component {
   hideSocialsModal = () => { this.setState({ socialsModalVisible: false})}
 
   render(){
-    const { heading, confirmText, confirmFunc, cancelFunc, metaTitle, metaUrl,
+    const { heading, confirmText, confirmFunc, cancelFunc,
       handleText, handleDate, handleImage, clearSelection, confirmSocials, countries } = this.props;
 
     const { firstname, lastname, level, role, description, birthday, image, socials,
@@ -100,10 +99,7 @@ class MemberForm extends Component {
               </Col>
               <Col md={5}>
                 <Label>Birthday:</Label>
-                <BirthdayPicker
-                  name={'birthday'}
-                  date={birthday}
-                  onChange={handleDate} />
+                <BirthdayPicker date={birthday} onConfirm={handleDate} />
               </Col>
             </Group>
             <Group>
@@ -128,7 +124,8 @@ class MemberForm extends Component {
             <Group>
               <Col>
                 <FileSelector
-                  value={filename}
+                  filename={filename}
+                  directory={`team`}
                   onChange={handleImage} />
               </Col>
             </Group>

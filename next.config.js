@@ -6,6 +6,7 @@ const withPlugins = require("next-compose-plugins");
 const shebang_loader = require('shebang-loader');
 
 const DotEnv = require('dotenv-webpack');
+const MomentLocalesPlugin = require('moment-locales-webpack-plugin');
 const dev = process.env.NODE_ENV !== 'production';
 
 module.exports = withPlugins([
@@ -41,7 +42,8 @@ module.exports = withPlugins([
           new DotEnv({
             path: dev ? './config.env' : '/root/config.env',
             systemvars: true
-          })
+          }),
+          new MomentLocalesPlugin(),
         ];
 
         return config

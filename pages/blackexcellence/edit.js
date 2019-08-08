@@ -18,44 +18,24 @@ class CandidateEdit extends Component {
 
   constructor(props) {
     super(props);
+
+    const { id, name, occupation, image, birthday, description, ethnicity, socials } = props.candidate;
+    const ethnicities = JSON.parse(ethnicity);
+
     this.state = {
-      id: 0,
-      name: '',
-      occupation: '',
-      birthday: new Date(2000, 0, 1),
-      description: '',
-      image: '',
-      imageChanged: false,
-      ethnicity1: '',
-      ethnicity2: '',
-      ethnicity3: '',
-      ethnicity4: '',
-      socials: {}
-    };
-  }
-
-  componentDidMount(){
-    const { id, name, occupation, image, birthday, description, ethnicity, socials } = this.props.candidate;
-
-    this.setState({
       id: id,
       name: name,
       occupation: occupation,
       birthday: new Date(birthday),
       description: description,
       image: image,
+      imageChanged: false,
+      ethnicity1: ethnicities ? ethnicities[0] : '',
+      ethnicity2: ethnicities ? ethnicities[1] : '',
+      ethnicity3: ethnicities ? ethnicities[2] : '',
+      ethnicity4: ethnicities ? ethnicities[3] : '',
       socials: JSON.parse(socials)
-    }, () => {
-      const ethnicities = JSON.parse(ethnicity);
-      if (ethnicities){
-        this.setState({
-          ethnicity1: ethnicities[0] || '',
-          ethnicity2: ethnicities[1] || '',
-          ethnicity3: ethnicities[2] || '',
-          ethnicity4: ethnicities[3] || '',
-        })
-      }
-    })
+    };
   }
 
   /** Handle text changes */

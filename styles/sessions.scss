@@ -49,6 +49,7 @@
     cursor: pointer;
     margin: 0.8em 0;
     overflow: hidden;
+    user-select: none;
     .image { width: 100%; }
     .details {
       padding: 1em;

@@ -7,11 +7,13 @@ import { socialPlatforms } from '~/constants/settings.js';
 
 export class Icon extends Component {
   render(){
+    const { prefix, name, color, style, className } = this.props;
     return (
       <FontAwesomeIcon
-        icon={[this.props.prefix || 'fas', this.props.name]}
-        color={this.props.color || 'white'}
-        style={{ marginRight: '0.4em', ...this.props.style }} />
+        icon={[prefix || 'fas', name]}
+        color={color || 'white'}
+        style={{ marginRight: '0.4em', ...style }}
+        className={className} />
     ) 
   }
 }
