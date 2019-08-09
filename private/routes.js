@@ -247,11 +247,29 @@ module.exports = function(app, conn, server){
     });
   });
 
-  /** Registration */
+  /** Account */
   app.get('/account', function(req, res){
     server.render(req, res, '/_auth/account', {
       title: 'Account | #WOKEWeekly',
       url: '/account',
+    });
+  });
+
+  /** Forgot Password */
+  app.get('/account/recovery', function(req, res){
+    server.render(req, res, '/_auth/recovery', {
+      title: 'Forgot Password | #WOKEWeekly',
+      url: '/account/recovery',
+    });
+  });
+
+  /** Reset Password */
+  app.get('/account/reset-password/:id/:token', function(req, res){
+    const { id, token } = req.params;
+    server.render(req, res, '/_auth/reset', {
+      title: 'Reset Password | #WOKEWeekly',
+      userId: id,
+      recoveryToken: token
     });
   });
 

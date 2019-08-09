@@ -61,19 +61,58 @@ module.exports = {
 
   resendVerificationEmail: (user, salt) => {
     const subject = 'Welcome to the #WOKEWeekly Website!'
-    const message = `
-    Dear ${user.firstname},<br><br>
-    
-    Verify your account by
-    <a href="${domain}/verifyAccount/${user.user_id}/${salt}" style="font-weight: bold">
-    clicking on this link</a>.
+    const message = `<div style="${textStyle}">
 
-    <br><br>
-    The #WOKEWeekly Team.
+      Dear ${user.firstname},<br><br>
+      
+      You recently requested to have another verification email sent to you. To verify your account,
+      click on the button below:
+      <br><br>
+
+      <a href="${domain}/verifyAccount/${user.user_id}/${salt}" style="${buttonStyle}">
+      Verify Your Account</a>
+      <br><br>
+
+      Yours truly,
+      <br>
+      The #WOKEWeekly Team.
+      
+      <hr>
+      <img src="${domain}/static/images/logos/email-signature.png" style="width:175px" alt="#WOKEWeekly">
+    </div>
+    `;
     
-    <hr>
+    sendMail(process.env.EMAIL_USER, user.email, subject, message);
+  },
+
+  sendAccountRecoveryEmail: (user, salt) => {
+    const subject = 'Account Recovery'
+    const message = `
+    <div style="${textStyle}">
     
-    <img src="${domain}/static/images/logos/email-signature.png" style="width:175px" alt="#WOKEWeekly">
+      Dear ${user.firstname},
+      <br><br>
+
+      You're receiving this email because you've requested to reset your password to recover your account as you
+      may have forgotten your password. Click the button below to reset it.
+      <br><br>
+      
+      <a href="${domain}/account/reset-password/${user.user_id || user.id}/${salt}" style="${buttonStyle}">
+      Reset Your Password</a>
+      <br><br>
+
+      If you didn't request to reset your password, please ignore this email or respond to tell us there has
+      been an error. This password reset is only valid for the next 30 minutes.
+      <br><br>
+
+      Yours truly,
+      <br>
+      The #WOKEWeekly Team.
+
+      <hr>
+      <img src="${domain}/static/images/logos/email-signature.png" style="width:175px" alt="#WOKEWeekly">
+    
+    </div>
     `;
     
     sendMail(process.env.EMAIL_USER, user.email, subject, message);
@@ -109,3 +148,21 @@ module.exports = {
   }
 
 };
+
+const buttonStyle = `
+  background: #6C4D90;
+  border-radius: 10px;
+  color: white;
+  cursor: pointer;
+  font-weight: bold;
+  margin: 1em 0;
+  padding: 1em;
+  text-decoration: none;
+`;
+
+const textStyle = `
+  background: white;
+  color: black;
+  font-family: 'Raleway', Arial, Helvetica, sans-serif;
+  padding: 1em;
+`;

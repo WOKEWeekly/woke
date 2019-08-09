@@ -94,7 +94,7 @@ class LoginModal extends Component {
             onChange={this.handleRemember} />
         </Group>
         <Group className={css.group}>
-          <a href={'#'} className={css['link-default']}>Forgotten your password?</a>
+          <a href={'/account/recovery'} className={css['link-default']}>Forgotten your password?</a>
         </Group>
       </div>
     );

@@ -86,7 +86,7 @@ export const isValidUsername = (username) => {
 export const isValidPassword = (password1, password2, oldPassword) => {
   if (!ifExists(password1.trim(), 'Please enter a password.')) return false;
   if (!ifExists(password2.trim(), 'Please confirm your password.')) return false;
-  if (password1.trim().length < 5) return alert.error('Your password must be at least 8 characters long.');
+  if (password1.trim().length < 5) return alert.error('Your password must be at least 5 characters long.');
   if (password1 !== password2) return alert.error('Please ensure your passwords match.');
 
   if (oldPassword){
