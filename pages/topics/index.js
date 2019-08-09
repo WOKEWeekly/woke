@@ -40,7 +40,7 @@ class TopicBank extends Component {
     };
 
     if (props.user.clearance < CLEARANCES.ACTIONS.VIEW_TOPICS){
-      location.href = '/';
+      return location.href = '/';
     }
   }
 

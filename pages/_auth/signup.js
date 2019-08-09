@@ -28,7 +28,7 @@ class Signup extends Component {
     }
 
     if (props.user.isAuthenticated){
-      location.href = '/';
+      return location.href = '/';
     }
   }
 

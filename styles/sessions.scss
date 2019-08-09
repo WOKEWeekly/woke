@@ -41,6 +41,7 @@
 }
 
 .list {
+  @extend .responsive-container-70;
   .item {
     @include scale-on-hover(1.04);
     background-color: $primary-dark;

@@ -40,7 +40,7 @@ export class DatePicker extends Component {
   close = () => this.setState({ visible: false})
 
   render(){
-    const { placeholderText, minDate, maxDate } = this.props;
+    const { date, placeholderText, minDate, maxDate, withDayOfWeek } = this.props;
     const { dateOfMonth, month, year, visible } = this.state;
 
     const daysInMonth = moment(`${year}-${moment().month(month).format("M")}`, 'YYYY-MM').daysInMonth();
@@ -107,7 +107,7 @@ export class DatePicker extends Component {
             name={'calendar-alt'}
             className={css.calendarIcon} />
           <TextInput
-            value={formatDate(this.props.date, this.props.withDay) || ''}
+            value={formatDate(date, withDayOfWeek) || ''}
             placeholder={placeholderText}
             style={{textAlign: 'left'}}
             className={css.dateinput}
@@ -131,7 +131,8 @@ export class EventDatePicker extends Component {
         date={this.props.date || ''}
         onConfirm={this.props.onConfirm}
         placeholderText={'Select a date.'}
-        minDate={creationDate} />
+        minDate={creationDate}
+        withDayOfWeek />
     );
   }
 }

@@ -22,7 +22,7 @@ class Team extends Component {
     };
 
     if (props.user.clearance < CLEARANCES.ACTIONS.VIEW_TEAM){
-      location.href = '/';
+      return location.href = '/';
     }
   }
 

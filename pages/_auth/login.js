@@ -67,6 +67,7 @@ class LoginModal extends Component {
   render(){
 
     const { username, password, remember } = this.state;
+    const { theme } = this.props;
 
     const header = (
       <h2 className={css.text}>Log In</h2>
@@ -94,7 +95,7 @@ class LoginModal extends Component {
             onChange={this.handleRemember} />
         </Group>
         <Group className={css.group}>
-          <a href={'/account/recovery'} className={css['link-default']}>Forgotten your password?</a>
+          <a href={'/account/recovery'} className={css[`link-${theme}`]}>Forgotten your password?</a>
         </Group>
       </div>
     );
@@ -117,7 +118,8 @@ class LoginModal extends Component {
 }
 
 const mapStateToProps = state => ({
-  user: state.user
+  user: state.user,
+  theme: state.theme
 });
 
 const mapDispatchToProps = dispatch => (

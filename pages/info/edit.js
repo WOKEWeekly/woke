@@ -25,7 +25,8 @@ class EditInfo extends Component {
     }
 
     if (props.user.clearance < CLEARANCES.ACTIONS.EDIT_INFO){
-      location.href = '/';
+      const path = location.pathname;
+      return location.href = path.substring(0, path.indexOf('/', 1));
     }
   }
 

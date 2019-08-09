@@ -1,5 +1,5 @@
 import React, { Component, PureComponent } from 'react';
-import { Container, Col, Row } from 'react-bootstrap';
+import { Col, Row } from 'react-bootstrap';
 import Link from 'next/link';
 import Router from 'next/router';
 import { connect } from 'react-redux';
@@ -116,7 +116,7 @@ class Sessions extends Component {
         if (view === 'grid'){
           return <div className={css.grid}>{items}</div>;
         } else {
-          return <Container className={css.list}>{items}</Container>;
+          return <div className={css.list}>{items}</div>;
         }
       }
     }
@@ -199,19 +199,19 @@ class Session extends PureComponent {
           direction={'left'}>
           <a href={`/session/${item.slug}`}>
             <Row className={css.item}>
-              <Col md={3} className={'p-0'}>
+              <Col md={4} className={'p-0'}>
                 <img
                   src={`/static/images/sessions/${item.image}`}
                   alt={item.title}
                   className={css.image}
                   onLoad={() => this.setState({isLoaded: true})} />
               </Col>
-              <Col md={9}>
+              <Col md={8}>
                 <div className={css.details}>
                   <Title className={css.title}>{item.title}</Title>
                   <Subtitle className={css.date}>{formatDate(item.dateHeld, true)}</Subtitle>
                   <Divider />
-                  <TruncatedParagraph className={css.description} lines={5} ellipsis={<ReadMore/>}>{item.description}</TruncatedParagraph>
+                  <TruncatedParagraph className={css.description} paragraphs={1} ellipsis={<ReadMore/>}>{item.description}</TruncatedParagraph>
                 </div>
               </Col>
             </Row>

@@ -24,8 +24,11 @@ class EditVariantPage extends Component {
       text: props.pageText
     }
 
+    
+
     if (props.user.clearance < CLEARANCES.ACTIONS.EDIT_VARIANTS){
-      location.href = '/mentalhealth';
+      const path = location.pathname;
+      return location.href = path.substring(0, path.indexOf('/', 1));
     }
   }
 

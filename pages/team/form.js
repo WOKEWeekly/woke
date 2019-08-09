@@ -25,7 +25,7 @@ class MemberForm extends Component {
     }
 
     if (props.user.clearance < CLEARANCES.ACTIONS.EDIT_EXEC){
-      return Router.push('/executives');
+      return location.href = '/executives';
     }
   }
 

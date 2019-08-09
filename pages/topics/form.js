@@ -18,7 +18,7 @@ class TopicForm extends Component {
     super(props);
 
     if (props.user.clearance < CLEARANCES.ACTIONS.CRUD_TOPICS){
-      return Router.push('/topics');
+      return location.href = '/topics';
     }
   }
 
