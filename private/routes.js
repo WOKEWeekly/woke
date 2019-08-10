@@ -238,6 +238,13 @@ module.exports = function(app, conn, server){
     });
   });
 
+  /** Registered Users */
+  app.get('/users', function(req, res){
+    return server.render(req, res, '/users', {
+      title: 'Registered Users | #WOKEWeekly'
+    });
+  });
+
   /** Registration */
   app.get('/signup', function(req, res){
     server.render(req, res, '/_auth/signup', {

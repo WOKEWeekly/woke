@@ -296,7 +296,6 @@ export class _FileSelector extends Component {
     const { image } = this.state;
     const { theme } = this.props;
 
-    console.log(image);
     return (
       <React.Fragment>
         <div className={css.file}>

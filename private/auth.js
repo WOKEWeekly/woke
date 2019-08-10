@@ -73,11 +73,19 @@ module.exports = function(app, conn, passport, server){
             req.session.cookie.expires = false;
           }
 
+          callback(null, user);
+        });
+      },
+      function(user, callback){ // Update last login time for user
+        const sql = `UPDATE user SET last_login = ? WHERE id = ?`;
+        const values = [new Date(), user.id];
+        
+        conn.query(sql, values, function() {
           callback(null);
         });
       },
       function(callback){ // Pass authenticated user information to mobile app */
-        jwt.sign({user: req.user}, process.env.JWT_SECRET, (err, token) => {
+        jwt.sign( { user: req.user }, process.env.JWT_SECRET, (err, token) => {
           if (err) return callback(err);
 
           const user = {
@@ -396,58 +404,6 @@ module.exports = function(app, conn, passport, server){
       }
     ], function(err){
       resToClient(res, err);
-    });
-  });
-
-  /****************************
-   * CHECKPOINT
-   ***************************/
-  
-  /** Retrieve all users */
-  app.get('/getRegisteredUsers', verifyToken, function(req, res){
-    jwt.verify(req.token, process.env.JWT_SECRET, (err, auth) => {
-      if (err){
-        res.sendStatus(403);
-      } else {
-        if (!(auth.user && auth.user.clearance >= CLEARANCES.ACTIONS.VIEW_USERS)){
-          res.status(401).send(`You are not authorised to perform such an action.`);
-          return;
-        }
-        
-        conn.query("SELECT id, firstname, lastname, clearance, username, email, create_time FROM user;", function (err, result, fields) {
-          if (!err){
-            res.json(result);
-          } else {
-            res.status(400).send(err.toString());
-          }
-        });
-      }
-    });
-  });
-  
-  /** Change user's clearance */
-  app.put('/changeClearance', verifyToken, function(req, res){
-    jwt.verify(req.token, process.env.JWT_SECRET, (err, auth) => {
-      if (err){
-        res.sendStatus(403);
-      } else {
-        if (!(auth.user && auth.user.clearance >= CLEARANCES.ACTIONS.CHANGE_CLEARANCE)){
-          res.status(401).send(`You are not authorised to perform such an action.`);
-          return;
-        }
-        
-        const user = req.body;
-        const sql = "UPDATE user SET clearance = ? WHERE id = ?";
-        const values = [user.clearance, user.id];
-        
-        conn.query(sql, values, function(err, result){	
-          if (!err){
-            res.sendStatus(200);
-          } else {
-            res.status(400).send(err.toString());
-          }
-        });
-      }
     });
   });
 }

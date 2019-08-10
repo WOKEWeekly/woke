@@ -6,7 +6,7 @@ import { bindActionCreators } from 'redux';
 import { saveTopicSort, saveTopicFilters } from '~/reducers/actions';
 import classNames from 'classnames';
 
-import { alert, setAlert, displayErrorMessage } from '~/components/alert.js';
+import { alert, displayErrorMessage } from '~/components/alert.js';
 import { AddEntityButton } from '~/components/button.js';
 import { SortDropdown, FilterDropdown } from '~/components/dropdown.js';
 import { Checkbox, SearchBar } from '~/components/form.js';
@@ -317,15 +317,16 @@ class _Topic extends PureComponent {
       body: JSON.stringify(item),
       headers: {
         'Authorization': `Bearer ${user.token}`,
-        'Content-Type': 'application/json',
-        'Clearance': CLEARANCES.ACTIONS.CRUD_TOPICS
+        'Clearance': CLEARANCES.ACTIONS.CRUD_TOPICS,
+        'Content-Type': 'application/json'
       }
     })
     .then(res => Promise.all([res, res.json()]))
     .then(([status, response]) => { 
       if (status.ok){
-        setAlert({ type: 'success', message: `You've successfully deleted "${item.headline}: ${item.question}".` });
+        alert.success(`You've successfully deleted "${item.headline}: ${item.question}".`);
         this.props.getTopics();
+        this.hideModal();
       } else {
         alert.error(response.message)
       }

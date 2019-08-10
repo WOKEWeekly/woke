@@ -276,6 +276,30 @@ module.exports = function(app, conn){
     });
   });
 
+  /** Retrieve all users */
+  app.get('/getRegisteredUsers', verifyToken, function(req, res){
+    const sql = "SELECT id, firstname, lastname, clearance, username, email, create_time, last_login FROM user";
+    conn.query(sql, function (err, result) {
+      resToClient(res, err, result);
+    });
+  });
+  
+  /** Change user's clearance */
+  app.put('/changeClearance', verifyToken, function(req, res){
+    const {id, clearance} = req.body;
+    console.log(req.body);
+    const sql = "UPDATE user SET clearance = ? WHERE id = ?";
+    const values = [clearance, id];
+    
+    conn.query(sql, values, function(err){	
+      resToClient(res, err);
+    });
+  });
+
+  /****************************
+   * HOMEPAGE
+   ***************************/
+
   /** Get upcoming session */
   app.get('/getUpcomingSession', validateReq, function(req, res){
     async.waterfall([

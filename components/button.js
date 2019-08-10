@@ -59,6 +59,7 @@ export class AddEntityButton extends Component {
   render(){
     return (
       <Button
+      {...this.props}
         className={css.add}
         variant={'dark'}
         onClick={this.props.onClick}>

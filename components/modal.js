@@ -70,7 +70,7 @@ export class ConfirmModal extends Component {
         show={visible}
         body={body}
         footer={footer}
-        onlyBody />
+        onlyBody={true} />
     )
   }
 }
@@ -127,7 +127,7 @@ export class EthnicModal extends Component {
         scrollable
         body={body}
         footer={footer}
-        onlyBody />
+        onlyBody={true} />
     )
   }
 }
@@ -227,7 +227,7 @@ export class SocialsModal extends Component {
         scrollable
         body={body}
         footer={footer}
-        onlyBody />
+        onlyBody={true} />
     )
   }
 }

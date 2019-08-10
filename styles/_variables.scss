@@ -62,6 +62,11 @@ $break-xxl: 1408px; // Extra large devices (large desktops)
     &:hover { text-decoration: underline; }
   }
 }
+.invisible_button {
+  background: none;
+  border: none;
+  &:focus { outline: none; }
+}
 
 .responsive-container {
   margin: 0 auto;

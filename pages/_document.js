@@ -60,7 +60,6 @@ const Meta = ({
     <link rel="icon" href="/static/images/logos/favicon.jpg" />
 
     {/* BootStrap and Google Web Fonts importation */}
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossOrigin="anonymous" />
     <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Raleway:400,700|Patua+One:400,700" />
   </React.Fragment>
 )

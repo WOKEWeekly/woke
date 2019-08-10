@@ -68,7 +68,7 @@
       padding: 0;
       .dropdown_item {
         color: white;
-        padding: .8em;
+        padding: .7em .8em;
         &:focus { background: inherit; }
         &:hover { background: white; color: black;}
         &:active { background: #007bff; color: white; } }
