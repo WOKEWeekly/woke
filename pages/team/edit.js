@@ -48,11 +48,11 @@ class MemberEdit extends Component {
   updateMember = () => {
     if (!isValidMember(this.state)) return;
     
-    const { firstname, lastname, fullname, role, level, image, birthday, description, socials,
+    const { firstname, lastname, role, level, image, birthday, description, socials,
       ethnicity1, ethnicity2, ethnicity3, ethnicity4, imageChanged } = this.state;
 
     /** Generate slugs and filenames from name and data */
-    let slug = generateSlug(fullname);
+    let slug = generateSlug(`${firstname} ${lastname}`);
     let filename = imageChanged ? generateMemberFilename(slug, image) : image
 
     /** Add ethncities to array */

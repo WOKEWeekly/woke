@@ -13,7 +13,7 @@ import { Default, Mobile } from '~/components/layout.js';
 class _SubmitButton extends Component {
   render(){
     const { theme } = this.props;
-    const classes = classNames(css[`submit-${theme.toLowerCase()}`], this.props.className);
+    const classes = classNames(css[`submit-${theme}`], this.props.className);
     return (
       <button
         {...this.props}
@@ -40,7 +40,7 @@ export class DeleteButton extends Component {
 class _CancelButton extends Component {
   render(){
     const { theme } = this.props;
-    const classes = css[`cancel-${theme.toLowerCase()}`];
+    const classes = css[`cancel-${theme}`];
     return (
       <button
         {...this.props}
