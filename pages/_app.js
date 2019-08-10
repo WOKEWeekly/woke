@@ -50,6 +50,7 @@ export default class WOKE extends App {
       document.body.style.opacity = 1;
     };
     
+    // Get cookie consent value
     this.setState({cookiesAccepted: getCookie('cookiesAccepted')});
 
     // Loaded countries if not already loaded

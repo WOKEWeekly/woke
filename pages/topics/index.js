@@ -59,23 +59,30 @@ class TopicBank extends Component {
         'Content-Type': 'application/json',
       }
     })
-    .then(response => response.json())
-    .then(topics => {
-      this.setState({
-        topics: topics,
-        filtered: topics,
-        topicsLoaded: true
-      }, () => {
-         this.sortTopics(this.state.sort);
-      });
-    })
-    .catch(error => console.error(error));
+    .then(res => Promise.all([res, res.json()]))
+    .then(([status, response]) => { 
+      if (status.ok){
+        this.setState({
+          topics: response,
+          filtered: response,
+          topicsLoaded: true
+        }, () => {
+           this.sortTopics(this.state.sort);
+        });
+      } else {
+        alert.error(response.message)
+      }
+    }).catch(error => {
+      displayErrorMessage(error);
+    });
   }
 
   /** Sort topics according to value */
   sortTopics = (sort) => {
     const {topics} = this.state;
     let key, order = '';
+
+    if (!topics.length) return;
 
 		switch (sort){
 			case '1': key = 'id'; order = 'ASC'; break;
@@ -87,7 +94,7 @@ class TopicBank extends Component {
 			default: key = 'headline'; order = 'ASC'; break;
 		}
 
-    topics.sort(function (a,b) {
+    topics.sort(function (a, b) {
 			if (typeof a[key] === 'string'){
 				a = a[key].toLowerCase().replace(/[^a-zA-Z 0-9]+/g, '').replace('the ', '');
 				b = b[key].toLowerCase().replace(/[^a-zA-Z 0-9]+/g, '').replace('the ', '');

@@ -19,7 +19,13 @@ module.exports = {
       },
       function(token, callback){ // Verify token
         jwt.verify(token, process.env.JWT_SECRET, (err, auth) => {
-          err ? callback(err) : callback(null, auth);
+          if (err){
+            req.logout();
+            err.type = 'jwt';
+            callback(err);
+          } else {
+            callback(null, auth);
+          }
         });
       },
       function(auth, callback){ // Check authentication

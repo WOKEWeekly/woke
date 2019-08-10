@@ -12,8 +12,9 @@ import { Icon } from '~/components/icon.js';
 import { Fader } from '~/components/transitioner.js';
 import { Title } from '~/components/text.js';
 
-import { formatDate } from '~/constants/date.js';
 import CLEARANCES from '~/constants/clearances.js';
+import { formatDate } from '~/constants/date.js';
+import request from '~/constants/request.js';
 
 import css from '~/styles/users.scss';
 
@@ -38,22 +39,21 @@ class Users extends Component {
 
   /** Retrieve all registered users */
   getRegisteredUsers = () => {
-    fetch('/getRegisteredUsers', {
+    request({
+      url: '/getRegisteredUsers',
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${this.props.user.token}`,
         'Clearance': CLEARANCES.ACTIONS.VIEW_USERS,
         'Content-Type': 'application/json',
+      },
+      onSuccess: (result) => {
+        this.setState({
+          users: result,
+          isLoaded: true
+        });
       }
-    })
-    .then(response => response.json())
-    .then(users => {
-      this.setState({
-        users: users,
-        isLoaded: true
-      });
-    })
-    .catch(error => console.error(error));
+    });
   }
 
 	render(){

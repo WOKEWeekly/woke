@@ -22,7 +22,10 @@ getErrMsg = (err) => {
       return "The username you have chosen already exists.";
     }
   }
-  
-  console.error(err);
+
+  if (err.type === 'jwt'){
+    return 'jwt';
+  }
+
   return err.toString(); 
 }

@@ -24,6 +24,7 @@ const userReducer = (state = initialUser, action) => {
       
       return user;
     case 'CLEAR_USER':
+      console.log('clearing');
       return initialUser;
     case 'CHANGE_USERNAME':
       return Object.assign({}, state, {

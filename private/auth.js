@@ -3,7 +3,6 @@ const validator = require("email-validator");
 const async = require('async');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const { verifyToken } = require('./middleware.js');
 const emails = require('./emails.js');
 const { validateReq} = require('./middleware.js');
 const { resToClient, renderErrPage } = require('./response.js');
@@ -85,7 +84,7 @@ module.exports = function(app, conn, passport, server){
         });
       },
       function(callback){ // Pass authenticated user information to mobile app */
-        jwt.sign( { user: req.user }, process.env.JWT_SECRET, (err, token) => {
+        jwt.sign( { user: req.user, exp: 10000 }, process.env.JWT_SECRET, (err, token) => {
           if (err) return callback(err);
 
           const user = {
