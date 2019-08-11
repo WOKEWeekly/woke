@@ -7,6 +7,7 @@ import { alert, setAlert, displayErrorMessage } from '~/components/alert.js';
 import CLEARANCES from '~/constants/clearances';
 import { formatISODate } from '~/constants/date.js';
 import { generateSlug, generateCandidateFilename } from '~/constants/file.js';
+import request from '~/constants/request.js';
 import { isValidCandidate } from '~/constants/validations.js';
 
 import CandidateForm from './form.js';
@@ -86,25 +87,18 @@ class CandidateEdit extends Component {
     imageChanged && data.append('file', image, filename);
 
     /** Update candidate in database */
-    fetch('/updateCandidate', {
+    request('/updateCandidate', {
       method: 'PUT',
       body: data,
       headers: {
         'Authorization': `Bearer ${this.props.user.token}`,
         'Clearance': CLEARANCES.ACTIONS.CRUD_BLACKEX,
         'Path': 'blackexcellence'
-      }
-    })
-    .then(res => Promise.all([res, res.json()]))
-    .then(([status, response]) => { 
-      if (status.ok){
+      },
+      onSuccess: () => {
         setAlert({ type: 'success', message: `You've successfully edited the details of ${name}.` });
         location.href = `/blackexcellence/candidate/${id}`;
-      } else {
-        alert.error(response.message)
       }
-    }).catch(error => {
-      displayErrorMessage(error);
     });
   }
 

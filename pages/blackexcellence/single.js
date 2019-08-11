@@ -3,7 +3,7 @@ import { Container } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import Router from 'next/router';
 
-import { alert, setAlert, displayErrorMessage } from '~/components/alert.js';
+import { setAlert } from '~/components/alert.js';
 import { EditEntityButton, DeleteEntityButton, BackButton } from '~/components/button.js';
 import { ConfirmModal } from '~/components/modal.js';
 import { PromoIconsBar } from '~/components/icon.js';
@@ -15,6 +15,8 @@ import { Fader, Slider } from '~/components/transitioner.js';
 import CLEARANCES from '~/constants/clearances.js';
 import { countriesToString } from '~/constants/countries.js';
 import { calculateAge } from '~/constants/date.js';
+import request from '~/constants/request.js';
+
 import css from '~/styles/blackex.scss';
 
 class CandidatePage extends Component {
@@ -40,26 +42,19 @@ class CandidatePage extends Component {
   deleteCandidate = () => {
     const { candidate, user } = this.props;
 
-    fetch('/deleteCandidate', {
+    request({
+      url: '/deleteCandidate',
       method: 'DELETE',
       body: JSON.stringify(candidate),
       headers: {
         'Authorization': `Bearer ${user.token}`,
         'Content-Type': 'application/json',
         'Clearance': CLEARANCES.ACTIONS.CRUD_BLACKEX
-      }
-    })
-    .then(res => Promise.all([res, res.json()]))
-    .then(([status, response]) => { 
-      if (status.ok){
+      },
+      onSuccess: () => {
         setAlert({ type: 'success', message: `You've successfully deleted ${candidate.name}.` });
         location.href = '/blackexcellence';
-      } else {
-        alert.error(response.message)
       }
-    })
-    .catch(error => {
-      displayErrorMessage(error);
     });
   }
 

@@ -2,8 +2,9 @@ import React, { Component} from 'react';
 import { connect } from 'react-redux';
 import Router from 'next/router';
 
-import { alert, setAlert, displayErrorMessage } from '~/components/alert.js';
+import { setAlert } from '~/components/alert.js';
 import CLEARANCES from '~/constants/clearances.js';
+import request from '~/constants/request.js';
 import { isValidTopic } from '~/constants/validations.js';
 
 import TopicForm from './form.js';
@@ -60,25 +61,19 @@ class TopicAdd extends Component {
     };
 
     /** Add topic to database */
-    fetch('/addTopic', {
+    request({
+      url: '/addTopic',
       method: 'POST',
       body: JSON.stringify(topic),
       headers: {
         'Authorization': `Bearer ${this.props.user.token}`,
         'Content-Type': 'application/json',
         'Clearance': CLEARANCES.ACTIONS.CRUD_TOPICS
-      }
-    })
-    .then(res => Promise.all([res, res.json()]))
-    .then(([status, response]) => { 
-      if (status.ok){
+      },
+      onSuccess: () => {
         setAlert({ type: 'success', message: `You've successfully added "${headline}: ${question}".` });
         location.href = '/topics';
-      } else {
-        alert.error(response.message)
       }
-    }).catch(error => {
-      displayErrorMessage(error);
     });
   }
 

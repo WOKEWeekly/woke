@@ -2,11 +2,12 @@ import React, { Component} from 'react';
 import { connect } from 'react-redux';
 import { Col } from 'react-bootstrap';
 
-import { alert, setAlert, displayErrorMessage } from '~/components/alert.js';
+import { setAlert } from '~/components/alert.js';
 import { SubmitButton } from '~/components/button.js';
 import { Heading, Group, Label, PasswordInput } from '~/components/form.js';
 import { Shader } from '~/components/layout.js';
 
+import request from '~/constants/request.js';
 import { isValidPassword } from '~/constants/validations.js';
 
 import css from '~/styles/auth.scss';
@@ -39,25 +40,18 @@ class ResetPassword extends Component {
     const { password, password2 } = this.state;
     if (!isValidPassword(password, password2)) return false;
 
-    fetch('/resetPassword', {
+    request({
+      url: '/resetPassword',
       method: 'PUT',
       body: JSON.stringify(this.state),
       headers: {
         'Authorization': process.env.AUTH_KEY,
         'Content-Type': 'application/json'
-      }
-    })
-    .then(res => Promise.all([res, res.json()]))
-    .then(([status, response]) => {
-      if (status.ok){
+      },
+      onSuccess: () => {
         setAlert({ type: 'success', message: `You've successfully set your new password. Log in with your new credentials and enjoy the website!` });
         location.href = '/';
-      } else {
-        alert.error(response.message);
       }
-    })
-    .catch(error => {
-      displayErrorMessage(error);
     });
   }
 

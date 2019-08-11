@@ -9,8 +9,10 @@ import { SubmitButton } from '~/components/button.js';
 import { Heading, Group, Label, TextInput, PasswordInput, Checkbox } from '~/components/form.js';
 import { Shader, Spacer } from '~/components/layout.js';
 
-import css from '~/styles/auth.scss';
+import request from '~/constants/request.js';
 import { isValidSignup } from '~/constants/validations';
+
+import css from '~/styles/auth.scss';
 
 class Signup extends Component {
   constructor(props){
@@ -38,8 +40,8 @@ class Signup extends Component {
       lastname: 'Egbue',
       email: 'd.master700@gmail.com',
       username: 'david',
-      password1: 'Spunkus604',
-      password2: 'Spunkus604',
+      password1: 'wendy',
+      password2: 'wendy',
       privacy: true,
       subscribe: false
     });
@@ -62,27 +64,19 @@ class Signup extends Component {
 
     if (!isValidSignup(this.state)) return;
 
-    fetch('/signup', {
+    request({
+      url: '/signup',
       method: 'POST',
       body: JSON.stringify(this.state),
       headers: {
         'Authorization': process.env.AUTH_KEY,
         'Content-Type': 'application/json'
-      }
-    })
-    .then(res => Promise.all([res, res.json()]))
-    .then(([status, response]) => {
-      if (status.ok){
-        const user = response;
+      },
+      onSuccess: (user) => {
         this.props.saveUser(user);
         setAlert({ type: 'info', message: `Welcome, ${user.firstname}! Thank you for registering to the #WOKEWeekly website.` });
         location.href = '/';
-      } else {
-        alert.error(response.message);
       }
-    })
-    .catch(error => {
-      displayErrorMessage(error);
     });
   }
 

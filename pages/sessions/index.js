@@ -17,7 +17,7 @@ import { Zoomer, Slider, Fader } from '~/components/transitioner.js';
 
 import { formatDate } from '~/constants/date.js';
 import CLEARANCES from '~/constants/clearances.js';
-
+import request from '~/constants/request.js';
 
 import css from '~/styles/sessions.scss';
 
@@ -40,23 +40,22 @@ class Sessions extends Component {
 
   /** Get all sessions */
   getSessions = () => {
-    fetch('/getSessions', {
+    request({
+      url: '/getSessions',
       method: 'GET',
       headers: {
         'Authorization': process.env.AUTH_KEY,
         'Content-Type': 'application/json',
+      },
+      onSuccess: (sessions) => {
+        this.setState({
+          sessions: sessions,
+          isLoaded: true
+        }, () => {
+          this.sortSessions(this.state.sort);
+        });
       }
-    })
-    .then(response => response.json())
-    .then(sessions => {
-      this.setState({
-        sessions: sessions,
-        isLoaded: true
-      }, () => {
-        this.sortSessions(this.state.sort);
-      });
-    })
-    .catch(error => console.error(error));
+    });
   }
 
   sortSessions = (sort) => {

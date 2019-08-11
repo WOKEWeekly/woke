@@ -4,7 +4,7 @@ import { bindActionCreators } from 'redux';
 import { changeUsername, clearUser } from '~/reducers/actions';
 import { Col } from 'react-bootstrap';
 
-import { alert, setAlert, displayErrorMessage } from '~/components/alert.js';
+import { alert, setAlert } from '~/components/alert.js';
 import { SubmitButton, CancelButton } from '~/components/button.js';
 import { Group, UsernameInput, PasswordInput } from '~/components/form.js';
 import { Icon } from '~/components/icon.js';
@@ -13,6 +13,7 @@ import { Modal, ConfirmModal } from '~/components/modal.js';
 
 import CLEARANCES from '~/constants/clearances.js';
 import { isValidUsername, isValidPassword } from '~/constants/validations';
+import request from '~/constants/request.js';
 import css from '~/styles/auth.scss';
 
 class Account extends Component {
@@ -39,48 +40,34 @@ class Account extends Component {
   deleteAccount = () => {
     const { id } = this.state;
 
-    fetch('/deleteAccount', {
+    request({
+      url: '/deleteAccount',
       method: 'DELETE',
       body: JSON.stringify({id}),
       headers: {
         'Authorization': process.env.AUTH_KEY,
         'Content-Type': 'application/json'
-      }
-    })
-    .then(res => Promise.all([res, res.json()]))
-    .then(([status, response]) => { 
-      if (status.ok){
+      },
+      onSuccess: () => {
         setAlert({ type: 'success', message: `Your account has successfully been deleted.` });
         this.props.clearUser();
         location.href = '/';
-      } else {
-        alert.error(response.message)
       }
-    }).catch(error => {
-      displayErrorMessage(error);
     });
   }
 
   resendVerificationEmail = () => {
     const { id } = this.state;
 
-    fetch('/resendVerificationEmail', {
+    request({
+      url: '/resendVerificationEmail',
       method: 'NOTIFY',
       body: JSON.stringify({id}),
       headers: {
         'Authorization': process.env.AUTH_KEY,
         'Content-Type': 'application/json'
-      }
-    })
-    .then(res => Promise.all([res, res.json()]))
-    .then(([status, response]) => { 
-      if (status.ok){
-        alert.success('Resend successful. Check your email for the verification link.');
-      } else {
-        alert.error(response.message)
-      }
-    }).catch(error => {
-      displayErrorMessage(error);
+      },
+      onSuccess: () => alert.success('Resend successful. Check your email for the verification link.')
     });
   }
 
@@ -160,25 +147,19 @@ class _NewUsernameModal extends Component {
       username
     });
 
-    fetch('/changeUsername', {
+    request({
+      url: '/changeUsername',
       method: 'PUT',
       body: body,
       headers: {
         'Authorization': process.env.AUTH_KEY,
         'Content-Type': 'application/json'
-      }
-    })
-    .then(res => Promise.all([res, res.json()]))
-    .then(([status, response]) => { 
-      if (status.ok){
+      },
+      onSuccess: () => {
         this.props.changeUsername(username);
         setAlert({ type: 'success', message: `You've successfully changed your username.` });
         location.reload();
-      } else {
-        alert.error(response.message)
       }
-    }).catch(error => {
-      displayErrorMessage(error);
     });
   }
 
@@ -241,24 +222,18 @@ class _NewPasswordModal extends Component {
       newPassword
     });
 
-    fetch('/changePassword', {
+    request({
+      url:'/changePassword',
       method: 'PUT',
       body: body,
       headers: {
         'Authorization': process.env.AUTH_KEY,
         'Content-Type': 'application/json'
-      }
-    })
-    .then(res => Promise.all([res, res.json()]))
-    .then(([status, response]) => { 
-      if (status.ok){
+      },
+      onSuccess: () => {
         setAlert({ type: 'success', message: `You've successfully changed your password.` });
         location.reload();
-      } else {
-        alert.error(response.message)
       }
-    }).catch(error => {
-      displayErrorMessage(error);
     });
   }
 

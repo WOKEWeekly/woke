@@ -7,6 +7,7 @@ import { Loader, Empty } from '~/components/loader.js';
 import { Title, Subtitle, Divider, TruncatedParagraph } from '~/components/text.js';
 import { Slider } from '~/components/transitioner.js';
 
+import request from '~/constants/request.js';
 
 import css from '~/styles/team.scss';
 import '~/styles/_categories.scss';
@@ -25,21 +26,20 @@ export default class Executives extends Component {
   }
 
   getExec = () => {
-    fetch('/getExec', {
+    request({
+      url: '/getExec',
       method: 'GET',
       headers: {
         'Authorization': process.env.AUTH_KEY,
         'Content-Type': 'application/json',
+      },
+      onSuccess: (exec) => {
+        this.setState({
+          exec: exec,
+          isLoaded: true
+        });
       }
-    })
-    .then(response => response.json())
-    .then(exec => {
-      this.setState({
-        exec: exec,
-        isLoaded: true
-      });
-    })
-    .catch(error => console.error(error));
+    });
   }
 
   render(){

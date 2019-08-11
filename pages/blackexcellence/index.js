@@ -13,7 +13,7 @@ import { BottomToolbar } from '~/components/toolbar.js';
 import { Fader } from '~/components/transitioner.js';
 
 import CLEARANCES from '~/constants/clearances.js';
-
+import request from '~/constants/request.js';
 
 import css from '~/styles/blackex.scss';
 import '~/styles/_categories.scss';
@@ -41,20 +41,19 @@ class BlackExcellence extends Component {
 
   /** Retrieve all candidates */
   getCandidates = () => {
-    fetch('/getCandidates', {
+    request({
+      url: '/getCandidates',
       method: 'GET',
       headers: {
         'Authorization': process.env.AUTH_KEY,
         'Content-Type': 'application/json',
+      },
+      onSuccess: (response) => {
+        this.setState({
+          candidates: response
+        }, () => this.sortCandidates(this.state.sort));
       }
-    })
-    .then(response => response.json())
-    .then(candidates => {
-      this.setState({
-        candidates: candidates
-      }, () => this.sortCandidates(this.state.sort));
-    })
-    .catch(error => console.error(error));
+    });
   }
 
   /** Sort candidates according to value */

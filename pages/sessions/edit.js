@@ -2,11 +2,12 @@ import React, { Component} from 'react';
 import { connect } from 'react-redux';
 import Router from 'next/router';
 
-import { alert, setAlert, displayErrorMessage } from '~/components/alert.js';
+import { setAlert } from '~/components/alert.js';
 
 import CLEARANCES from '~/constants/clearances';
 import { formatISODate } from '~/constants/date.js';
 import { generateSlug, generateSessionFilename } from '~/constants/file.js';
+import request from '~/constants/request.js';
 import { isValidSession } from '~/constants/validations.js';
 
 import SessionForm from './form.js';
@@ -60,25 +61,19 @@ class SessionEdit extends Component {
     imageChanged && data.append('file', image, filename);
 
     /** Update session in database */
-    fetch('/updateSession', {
+    request({
+      url: '/updateSession',
       method: 'PUT',
       body: data,
       headers: {
         'Authorization': `Bearer ${this.props.user.token}`,
         'Clearance': CLEARANCES.ACTIONS.CRUD_SESSIONS,
         'Path': 'sessions'
-      }
-    })
-    .then(res => Promise.all([res, res.json()]))
-    .then(([status, response]) => { 
-      if (status.ok){
+      },
+      onSuccess: () => {
         setAlert({ type: 'success', message: `You've successfully edited the details of ${title}.` });
         location.href = `/session/${slug}`;
-      } else {
-        alert.error(response.message)
       }
-    }).catch(error => {
-      displayErrorMessage(error);
     });
   }
 

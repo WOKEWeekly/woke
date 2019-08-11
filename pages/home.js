@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import {Container, Col, Row} from 'react-bootstrap';
 import Link from 'next/link';
 
-import { alert, displayErrorMessage } from '~/components/alert.js';
 import { Cover, Shader, Default, Mobile } from '~/components/layout.js';
 import { Title, Subtitle, Divider, Paragraph, TruncatedParagraph } from '~/components/text.js';
 import { Fader, Slider } from '~/components/transitioner.js';
@@ -11,6 +10,8 @@ import { Voter } from '~/components/voter.js';
 
 import { countriesToString } from '~/constants/countries.js';
 import { formatDate, calculateAge } from '~/constants/date.js';
+import request from '~/constants/request.js';
+
 import css from '~/styles/home.scss';
 
 export default class Home extends Component {
@@ -114,21 +115,20 @@ class UpcomingSession extends Component {
   }
 
   getUpcomingSession = () => {
-    fetch('/getUpcomingSession', {
+    request({
+      url: '/getUpcomingSession',
       method: 'GET',
       headers: {
         'Authorization': process.env.AUTH_KEY,
         'Content-Type': 'application/json',
+      },
+      onSuccess: (response) => {
+        let { session, upcoming } = response;
+        session.upcoming = upcoming;
+        session.loaded = true;
+        this.setState({session})
       }
-    })
-    .then(res => res.json())
-    .then(result => {
-      let { session, upcoming } = result;
-      session.upcoming = upcoming;
-      session.loaded = true;
-      this.setState({session})
-    })
-    .catch(error => console.error(error));
+    });
   }
 
   render(){
@@ -178,19 +178,18 @@ class _RandomCandidate extends Component {
   }
 
   getRandomCandidate = () => {
-    fetch('/getRandomCandidate', {
+    request({
+      url: '/getRandomCandidate',
       method: 'GET',
       headers: {
         'Authorization': process.env.AUTH_KEY,
         'Content-Type': 'application/json',
+      },
+      onSuccess: (candidate) => {
+        candidate.loaded = true;
+        this.setState({candidate})
       }
-    })
-    .then(res => res.json())
-    .then(candidate => {
-      candidate.loaded = true;
-      this.setState({candidate})
-    })
-    .catch(error => console.error(error));
+    });
   }
 
   render(){
@@ -261,23 +260,22 @@ class TopicVoter extends Component {
 
   /** Retrieve a random polar topic from database */
   getRandomTopic = () => {
-    fetch('/getRandomTopic', {
+    request({
+      url: '/getRandomTopic',
       method: 'GET',
       headers: {
         'Authorization': process.env.AUTH_KEY,
         'Content-Type': 'application/json',
+      },
+      onSuccess: (topic) => {
+        topic.loaded = true;
+        this.setState({
+          topic: topic,
+          votes: topic.yes + topic.no,
+          hasVoted: false
+        });
       }
-    })
-    .then(res => res.json())
-    .then(topic => {
-      topic.loaded = true;
-      this.setState({
-        topic: topic,
-        votes: topic.yes + topic.no,
-        hasVoted: false
-      })
-    })
-    .catch(error => console.error(error));
+    });
   }
 
   submitVote = (event) => {
@@ -287,17 +285,15 @@ class TopicVoter extends Component {
     topic.vote = option;
 
     /** Update the vote count on topic */
-    fetch('/incrementVote', {
+    request({
+      url: '/incrementVote',
       method: 'PUT',
       body: JSON.stringify(topic),
       headers: {
         'Authorization': process.env.AUTH_KEY,
         'Content-Type': 'application/json',
-      }
-    })
-    .then(res => Promise.all([res, res.json()]))
-    .then(([status, response]) => { 
-      if (status.ok){
+      },
+      onSuccess: () => {
         topic[option]++;
         votes++;
         const result1 = (topic.yes / votes) * 100;
@@ -308,11 +304,7 @@ class TopicVoter extends Component {
             setTimeout(() => { this.getRandomTopic(); }, 1500);
           }, 3500);
         });
-      } else {
-        alert.error(response.message)
       }
-    }).catch(error => {
-      displayErrorMessage(error);
     });
   }
 
@@ -360,19 +352,18 @@ class RandomExecutive extends Component{
   }
 
   getRandomExecutive = () => {
-    fetch('/getRandomExecutive', {
+    request({
+      url: '/getRandomExecutive',
       method: 'GET',
       headers: {
         'Authorization': process.env.AUTH_KEY,
         'Content-Type': 'application/json',
+      },
+      onSuccess: (exec) => {
+        exec.loaded = true;
+        this.setState({exec})
       }
-    })
-    .then(res => res.json())
-    .then(exec => {
-      exec.loaded = true;
-      this.setState({exec})
-    })
-    .catch(error => console.error(error));
+    });
   }
 
   render(){

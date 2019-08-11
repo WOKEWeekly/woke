@@ -2,12 +2,13 @@ import React, { Component} from 'react';
 import { connect } from 'react-redux';
 import Router from 'next/router';
 
-import { alert, setAlert, displayErrorMessage } from '~/components/alert.js';
+import { setAlert } from '~/components/alert.js';
 
 import { formatISODate } from '~/constants/date.js';
-import { isValidCandidate } from '~/constants/validations.js';
 import CLEARANCES from '~/constants/clearances.js';
 import { generateSlug, generateCandidateFilename } from '~/constants/file.js';
+import request from '~/constants/request.js';
+import { isValidCandidate } from '~/constants/validations.js';
 
 import CandidateForm from './form.js';
 
@@ -31,10 +32,7 @@ class CandidateAdd extends Component {
 
   /** Get latest candidate ID */
   componentDidMount(){
-    fetch('/newCandidateID')
-    .then(res => res.json())
-    .then(id => this.setState({id}))
-    .catch(error => console.error(error));
+    request({ url: '/newCandidateID', onSuccess: (id) => this.setState({id}) })
   }
  
   /** Handle text changes */
@@ -81,25 +79,19 @@ class CandidateAdd extends Component {
     data.append('file', image, filename);
 
     /** Add candidate to database */
-    fetch('/addCandidate', {
+    request({
+      url:'/addCandidate',
       method: 'POST',
       body: data,
       headers: {
         'Authorization': `Bearer ${this.props.user.token}`,
         'Clearance': CLEARANCES.ACTIONS.CRUD_BLACKEX,
         'Path': 'blackexcellence'
-      }
-    })
-    .then(res => Promise.all([res, res.json()]))
-    .then(([status, response]) => { 
-      if (status.ok){
+      },
+      onSuccess: () => {
         setAlert({ type: 'success', message: `You've successfully added candidate ${candidate.name}.` });
         location.href = '/blackexcellence';
-      } else {
-        alert.error(response.message)
       }
-    }).catch(error => {
-      displayErrorMessage(error);
     });
   }
 

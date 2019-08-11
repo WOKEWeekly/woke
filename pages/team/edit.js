@@ -2,11 +2,12 @@ import React, { Component} from 'react';
 import { connect } from 'react-redux';
 import Router from 'next/router';
 
-import { alert, setAlert, displayErrorMessage } from '~/components/alert.js';
+import { setAlert } from '~/components/alert.js';
 
 import CLEARANCES from '~/constants/clearances';
 import { formatISODate } from '~/constants/date.js';
 import { generateSlug, generateMemberFilename } from '~/constants/file.js';
+import request from '~/constants/request.js';
 import { isValidMember } from '~/constants/validations.js';
 
 import MemberForm from './form.js';
@@ -84,24 +85,19 @@ class MemberEdit extends Component {
     imageChanged && data.append('file', image, filename);
 
     /** Update member in database */
-    fetch('/updateMember', {
+    request({
+      url: '/updateMember',
       method: 'PUT',
       body: data,
       headers: {
         'Authorization': `Bearer ${this.props.user.token}`,
         'Clearance': CLEARANCES.ACTIONS.EDIT_EXEC,
         'Path': 'team'
-      }
-    }).then(res => Promise.all([res, res.json()]))
-    .then(([status, response]) => { 
-      if (status.ok){
+      },
+      onSuccess: () => {
         setAlert({ type: 'success', message: `You've successfully edited the details of ${firstname} ${lastname}.` });
         location.href = `/executives/${slug}`;
-      } else {
-        alert.error(response.message)
       }
-    }).catch(error => {
-      displayErrorMessage(error);
     });
   }
 

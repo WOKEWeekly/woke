@@ -3,12 +3,13 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { saveUser } from '~/reducers/actions';
 
-import { alert, setAlert, displayErrorMessage } from '~/components/alert.js';
+import { setAlert } from '~/components/alert.js';
 import { SubmitButton, CancelButton } from '~/components/button.js';
 import { Group, Label, UsernameInput, PasswordInput, Checkbox } from '~/components/form.js';
 import { Modal } from '~/components/modal.js';
 
 import { setCookie, getCookie } from '~/constants/cookies';
+import request from '~/constants/request.js';
 import { isValidLogin } from '~/constants/validations.js';
 import css from '~/styles/auth.scss';
 
@@ -41,26 +42,18 @@ class LoginModal extends Component {
   logIn = () => {
     if (!isValidLogin(this.state)) return;
 
-    fetch('/login', {
+    request({
+      url: '/login',
       method: 'POST',
       body: JSON.stringify(this.state),
-      headers: { 'Content-Type': 'application/json' }
-    })
-    .then(res => Promise.all([res, res.json()]))
-    .then(([status, response]) => { 
-      if (status.ok){
-        const user = response;
+      headers: { 'Content-Type': 'application/json' },
+      onSuccess: (user) => {
         setCookie('remember', this.state.remember);
         this.props.saveUser(user);
         this.props.close();
         setAlert({ type: 'info', message: `Welcome, ${user.firstname}!` });
         location.reload();
-      } else {
-        alert.error(response.message)
       }
-    })
-    .catch(error => {
-      displayErrorMessage(error);
     });
   }
 

@@ -2,11 +2,11 @@ import React, { Component} from 'react';
 import { connect } from 'react-redux';
 import { Col } from 'react-bootstrap';
 
-import { alert, displayErrorMessage } from '~/components/alert.js';
 import { SubmitButton } from '~/components/button.js';
 import { Heading, Group, Label, TextInput } from '~/components/form.js';
 import { Shader } from '~/components/layout.js';
 
+import request from '~/constants/request.js';
 import { isValidEmail } from '~/constants/validations.js';
 
 import css from '~/styles/auth.scss';
@@ -33,24 +33,14 @@ class Recovery extends Component {
     const { email } = this.state;
     if (!isValidEmail(email)) return false;
 
-    fetch('/sendAccountRecoveryEmail', {
+    request('/sendAccountRecoveryEmail', {
       method: 'NOTIFY',
       body: JSON.stringify(this.state),
       headers: {
         'Authorization': process.env.AUTH_KEY,
         'Content-Type': 'application/json'
-      }
-    })
-    .then(res => Promise.all([res, res.json()]))
-    .then(([status, response]) => {
-      if (status.ok){
-        this.setState({ submitted: true });
-      } else {
-        alert.error(response.message);
-      }
-    })
-    .catch(error => {
-      displayErrorMessage(error);
+      },
+      onSuccess: () => this.setState({ submitted: true })
     });
   }
 

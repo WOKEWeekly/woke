@@ -9,8 +9,10 @@ import { alert, setAlert, checkAlert, displayErrorMessage } from '~/components/a
 import { Icon, HeaderIcon } from '~/components/icon';
 import { Default, Mobile, zIndices } from '~/components/layout';
 
-import { accounts } from '~/constants/settings.js';
 import CLEARANCES from '~/constants/clearances.js';
+import request from '~/constants/request.js';
+import { accounts } from '~/constants/settings.js';
+
 import Login from '~/pages/_auth/login';
 import css from '~/styles/_partials.scss';
 
@@ -36,17 +38,14 @@ class PreNavbar extends Component {
 
   /** Log out, de-authenticating the user */
   logOut = () => {
-    fetch('/logout', { method: 'POST' })
-    .then(res => {
-      if (res.ok){
+    request({
+      url: '/logout',
+      method: 'POST',
+      onSuccess: () => {
         this.props.clearUser();
         setAlert({ type: 'info', message: 'You have successfully logged out.' });
         location.reload();
-      } else {
-        alert.error(res.statusText);
       }
-    }).catch(error => {
-      displayErrorMessage(error);
     });
   }
 

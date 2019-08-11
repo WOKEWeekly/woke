@@ -2,7 +2,7 @@ import React, { Component, PureComponent } from 'react';
 import { connect } from 'react-redux';
 import { Col } from 'react-bootstrap';
 
-import { alert, displayErrorMessage } from '~/components/alert.js';
+import { alert } from '~/components/alert.js';
 import { SubmitButton, CancelButton } from '~/components/button.js';
 import { Group, Label, Select } from '~/components/form.js';
 import { Shader, Default, Mobile } from '~/components/layout.js';
@@ -144,49 +144,39 @@ class _User extends PureComponent {
   /** Change user's clearance */
   changeClearance = () => {
     const { id, firstname, lastname, clearance} = this.state;
-    fetch('/changeClearance', {
+    request({
+      url: '/changeClearance',
       method: 'PUT',
       body: JSON.stringify({id, clearance}),
       headers: {
         'Authorization': `Bearer ${this.props.user.token}`,
         'Clearance': CLEARANCES.ACTIONS.CRUD_USERS,
         'Content-Type': 'application/json',
-      }
-    }).then(res => Promise.all([res, res.json()]))
-    .then(([status, response]) => { 
-      if (status.ok){
+      },
+      onSuccess: () => {
         alert.success(`You've successfully changed ${firstname} ${lastname}'s clearance.`);
         this.closeEdit();
         this.props.getRegisteredUsers();
-      } else {
-        alert.error(response.message)
       }
-    }).catch(error => {
-      displayErrorMessage(error);
     });
   }
 
   /** Delete User */
   deleteUser = () => {
     const { id, firstname, lastname } = this.state;
-    fetch('/deleteAccount', {
+    request({
+      url: '/deleteAccount',
       method: 'DELETE',
       body: JSON.stringify({id}),
       headers: {
         'Authorization': process.env.AUTH_KEY,
         'Content-Type': 'application/json',
-      }
-    }).then(res => Promise.all([res, res.json()]))
-    .then(([status, response]) => { 
-      if (status.ok){
+      },
+      onSuccess: () => {
         alert.success(`You've deleted user: ${firstname} ${lastname}.`);
         this.closeDelete();
         this.props.getRegisteredUsers();
-      } else {
-        alert.error(response.message)
       }
-    }).catch(error => {
-      displayErrorMessage(error);
     });
   }
 

@@ -9,6 +9,7 @@ import { Heading, Group, Label, TextArea } from '~/components/form.js';
 import { Shader, Spacer } from '~/components/layout.js';
 
 import CLEARANCES from '~/constants/clearances.js';
+import request from '~/constants/request.js';
 import css from '~/styles/info.scss';
 
 class EditInfo extends Component {
@@ -39,26 +40,20 @@ class EditInfo extends Component {
     const { user, title, resource } = this.props;
     const { text } = this.state;
 
-    fetch('/updateInfo', {
+    request({
+      url: '/updateInfo',
       method: 'PUT',
       body: JSON.stringify({text, resource}),
       headers: {
         'Authorization': `Bearer ${user.token}`,
         'Clearance': CLEARANCES.ACTIONS.EDIT_INFO,
         'Content-Type': 'application/json'
-      }
-    })
-    .then(res => Promise.all([res, res.json()]))
-    .then(([status, response]) => { 
-      if (status.ok){
+      },
+      onSuccess: () => {
         setAlert({ type: 'success', message: `You've successfully updated the '${title.substring(5)}'.` });
         const path = location.pathname;
         location.href = path.substring(0, path.indexOf('/', 1));
-      } else {
-        alert.error(response.message)
       }
-    }).catch(error => {
-      displayErrorMessage(error);
     });
   }
 

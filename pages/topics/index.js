@@ -6,7 +6,7 @@ import { bindActionCreators } from 'redux';
 import { saveTopicSort, saveTopicFilters } from '~/reducers/actions';
 import classNames from 'classnames';
 
-import { alert, displayErrorMessage } from '~/components/alert.js';
+import { alert } from '~/components/alert.js';
 import { AddEntityButton } from '~/components/button.js';
 import { SortDropdown, FilterDropdown } from '~/components/dropdown.js';
 import { Checkbox, SearchBar } from '~/components/form.js';
@@ -19,6 +19,7 @@ import { Fader } from '~/components/transitioner.js';
 
 import { categories, types, polarity } from '~/constants/categories.js';
 import CLEARANCES from '~/constants/clearances.js';
+import request from '~/constants/request.js';
 
 import css from '~/styles/topics.scss';
 import '~/styles/_categories.scss';
@@ -51,17 +52,15 @@ class TopicBank extends Component {
 
   /** Retrieve all topics */
   getTopics = () => {
-    fetch('/getTopics', {
+    request({
+      url: '/getTopics',
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${this.props.user.token}`,
         'Clearance': CLEARANCES.ACTIONS.VIEW_TOPICS,
         'Content-Type': 'application/json',
-      }
-    })
-    .then(res => Promise.all([res, res.json()]))
-    .then(([status, response]) => { 
-      if (status.ok){
+      },
+      onSuccess: (response) => {
         this.setState({
           topics: response,
           filtered: response,
@@ -69,11 +68,7 @@ class TopicBank extends Component {
         }, () => {
            this.sortTopics(this.state.sort);
         });
-      } else {
-        alert.error(response.message)
       }
-    }).catch(error => {
-      displayErrorMessage(error);
     });
   }
 
@@ -319,26 +314,20 @@ class _Topic extends PureComponent {
   /** Delete topic from database */
   deleteTopic = () => {
     const { item, user } = this.props;
-    fetch('/deleteTopic', {
+    request({
+      url: '/deleteTopic',
       method: 'DELETE',
       body: JSON.stringify(item),
       headers: {
         'Authorization': `Bearer ${user.token}`,
         'Clearance': CLEARANCES.ACTIONS.CRUD_TOPICS,
         'Content-Type': 'application/json'
-      }
-    })
-    .then(res => Promise.all([res, res.json()]))
-    .then(([status, response]) => { 
-      if (status.ok){
+      },
+      onSuccess: () => {
         alert.success(`You've successfully deleted "${item.headline}: ${item.question}".`);
         this.props.getTopics();
         this.hideModal();
-      } else {
-        alert.error(response.message)
       }
-    }).catch(error => {
-      displayErrorMessage(error);
     });
   }
 

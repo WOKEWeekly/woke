@@ -26,8 +26,7 @@ module.exports = function(app, conn, passport, server){
     passReqToCallback: true
   }, function(req, username, password, done) {
     
-    username = req.body.username;
-    password = req.body.password;
+    ({ username, password } = req.body);
     
     const sql = `SELECT * FROM user WHERE Username = ? OR Email = ?`;
     const values = [username, username];
@@ -84,17 +83,11 @@ module.exports = function(app, conn, passport, server){
         });
       },
       function(callback){ // Pass authenticated user information to mobile app */
-        jwt.sign( { user: req.user, exp: 10000 }, process.env.JWT_SECRET, (err, token) => {
+        jwt.sign( { user: req.user }, process.env.JWT_SECRET, { expiresIn: '10s'}, (err, token) => {
           if (err) return callback(err);
 
-          const user = {
-            id: req.user.id,
-            firstname: req.user.firstname,
-            lastname: req.user.lastname,
-            username: req.user.username,
-            clearance: req.user.clearance,
-            token: token
-          };
+          const { id, firstname, lastname, username, clearance } = req.user;
+          const user = { id, firstname, lastname, username, clearance, token };
           
           callback(null, user);
         });
@@ -147,7 +140,7 @@ module.exports = function(app, conn, passport, server){
         const sql = "INSERT INTO user_tokens (user_id, token_string, type) VALUES ?";
         const values = [[id, salt, 'verification']];
         
-        conn.query(sql, [values], function(err, result){	
+        conn.query(sql, [values], function(err){	
           err ? callback(err) : callback(null, salt);
         });
       },
@@ -162,14 +155,8 @@ module.exports = function(app, conn, passport, server){
         jwt.sign({user: req.user}, process.env.JWT_SECRET, (err, token) => {
           if (err) return callback(err);
           
-          const user = {
-            id: req.user.id,
-            firstname: req.user.firstname,
-            lastname: req.user.lastname,
-            username: req.user.username,
-            clearance: req.user.clearance,
-            token: token
-          };
+          const { id, firstname, lastname, username, clearance } = req.user;
+          const user = { id, firstname, lastname, username, clearance, token };
           
           callback(null, user);
         });
@@ -185,7 +172,7 @@ module.exports = function(app, conn, passport, server){
     const sql = "UPDATE user SET username = ? WHERE id = ?";
     const values = [username, id];
     
-    conn.query(sql, values, function(err, result){
+    conn.query(sql, values, function(err){
       resToClient(res, err);
     });
   });

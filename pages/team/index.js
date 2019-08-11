@@ -9,9 +9,9 @@ import { Title } from '~/components/text.js';
 import { countriesToString } from '~/constants/countries.js';
 import { formatDate } from '~/constants/date.js';
 import CLEARANCES from '~/constants/clearances.js';
+import request from '~/constants/request.js';
 
 import css from '~/styles/team.scss';
-
 
 class Team extends Component {
   constructor(props){
@@ -33,22 +33,21 @@ class Team extends Component {
 
   /** Retrieve all team members */
   getTeam = () => {
-    fetch('/getTeam', {
+    request({
+      url: '/getTeam',
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${this.props.user.token}`,
         'Clearance': CLEARANCES.ACTIONS.VIEW_TEAM,
         'Content-Type': 'application/json',
+      },
+      onSuccess: (members) => {
+        this.setState({
+          members: members,
+          isLoaded: true
+        });
       }
-    })
-    .then(response => response.json())
-    .then(members => {
-      this.setState({
-        members: members,
-        isLoaded: true
-      });
-    })
-    .catch(error => console.error(error));
+    });
   }
 
 	render(){
