@@ -91,31 +91,7 @@
 *** single.js
 *************/
 
-.entity {
-  margin: 1em 0;
-  .image {
-    border-radius: 15%;
-    float: left;
-    margin-right: 1.5em;
-    margin-bottom: 1em;
-    width: 55vh;
-    @media (max-width: $break-md) { width: 100%; }
-  }
-  .details {
-    .title {
-      font-size: 2em;
-      @media (max-width: $break-md) { font-size: 1.7em; }
-    }
-    .subtitle {
-      font-size: 1.1em;
-      @media (max-width: $break-md) { font-size: 1em; }
-    }
-    .description {
-      font-size: 1.2em;
-      @media (max-width: $break-md) { font-size: 1em; }
-    }
-  }
-}
+.entity { @include entity(left, 55vh); }
 
 /*************
 *** form.js

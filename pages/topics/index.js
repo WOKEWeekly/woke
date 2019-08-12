@@ -51,7 +51,7 @@ class TopicBank extends Component {
   }
 
   /** Retrieve all topics */
-  getTopics = () => {
+  getTopics = (callback) => {
     request({
       url: '/getTopics',
       method: 'GET',
@@ -67,6 +67,7 @@ class TopicBank extends Component {
           topicsLoaded: true
         }, () => {
            this.sortTopics(this.state.sort);
+           if (callback) callback();
         });
       }
     });
@@ -325,8 +326,7 @@ class _Topic extends PureComponent {
       },
       onSuccess: () => {
         alert.success(`You've successfully deleted "${item.headline}: ${item.question}".`);
-        this.props.getTopics();
-        this.hideModal();
+        this.props.getTopics(() => this.hideModal());
       }
     });
   }

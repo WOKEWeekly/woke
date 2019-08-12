@@ -91,7 +91,7 @@ class Part extends Component {
         direction={'bottom'}
         postTransitions={'background-color .3s ease 0s'}
         notDiv>
-        <Col md={4} className={css.colpart}>
+        <Col lg={4} className={css.colpart}>
           <div className={css.part} style={{backgroundImage: `url(${imageSrc})`}}>
             <div className={css.caption}>
               <div className={css.headline}>{this.props.headline}</div>

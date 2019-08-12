@@ -36,7 +36,7 @@ sendMail = (to, subject, message) => {
 module.exports = {
 
   sendWelcomeEmail: (user, token) => {
-    const subject = 'Welcome to the #WOKEWeekly Website!'
+    const subject = 'Welcome to the our website!'
     const message = designMessage(`
     Hey ${user.firstname}!
     <br><br>
@@ -80,6 +80,9 @@ module.exports = {
         Verify Your Account
       </a>
     </div>
+
+    Please note that this account verification link is only valid for the next 30 minutes.
+    <br><br>
     `, true);
     
     sendMail(user.email, subject, message);
@@ -102,7 +105,7 @@ module.exports = {
     If you didn't request to reset your password, please ignore this email or respond to let us know there has
     been an error.<br><br>
     
-    Please note that this password reset is only valid for the next 30 minutes.
+    Please note that this password reset link is only valid for the next 30 minutes.
     <br><br>
     `, true);
     

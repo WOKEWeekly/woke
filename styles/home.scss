@@ -1,17 +1,17 @@
 @import "variables";
 
 .cover {
-  @media (max-width: $break-md) {
+  @media (max-width: $break-sm) {
     background-position: center;
     text-align: left;
   }
 }
 
 .threepart {
-  @media (min-width: $break-md) { height: 32vw; }
+  @media (min-width: $break-lg) { height: 32vw; }
   .colpart {
     padding: 1em 0.5em;
-    @media (max-width: $break-md) { padding: 1em; }
+    @media (max-width: $break-lg) { padding: 1em; }
     .part {
       @include scale-on-hover(1.04);
       align-items: center;
@@ -24,19 +24,25 @@
       padding-bottom: 1.5em;
       text-align: center;
       width: 100%;
-      @media (max-width: $break-md) { height: 100vw; }
+      @media (max-width: $break-lg) { height: 50vw; }
+      @media (max-width: $break-sm) { height: 100vw; }
+      @media (max-width: $break-lg) and (min-width: $break-md) {
+        background-position-y: -5vh;
+      }
       .caption {
         vertical-align: top;
         width: 80%;
+        @media (max-width: $break-lg) and (min-width: $break-md) {
+          width: 60%;
+        }
         .headline {
+          @include font-scaler(2.2);
           color: white;
-          font-family: $title-font;
-          font-size: 2.2em;
-          @media (max-width: $break-md) { font-size: 1.8em; }}
+          font-family: $title-font;}
         .description {
+          @include font-scaler(1);
           color: white;
           font-family: $body-font;
-          font-size: 1em;
           text-align: center;
         } 
       }
@@ -65,9 +71,9 @@
     margin: 0 auto 2em;
     width: 90%;
     @media (max-width: $break-md) { width: 100%; }
-    .title { font-size: 1.4em; }
-    .subtitle { font-size: 1em; }
-    .paragraph { font-size: 1em;}
+    .title { @include font-scaler(1.4); }
+    .subtitle { @include font-scaler(1); }
+    .paragraph { @include font-scaler(1); }
   }
 }
 
@@ -93,17 +99,15 @@
   width: 100%;
   &:hover { background-color: rgba(14, 27, 179, 0.35); }
   .heading {
-    font-size: 1.8em;
+    @include font-scaler(1.8);
     text-transform: uppercase;
     margin-bottom: 1em; }
   .container {
     @extend .responsive-container;
     .headline {
-      font-size: 2em;
-      @media (max-width: $break-md) { font-size: 1.6em; }}
+      @include font-scaler(2);}
     .question {
-      font-size: 1.4em;
-      @media (max-width: $break-md) { font-size: 1.1em; }}
+      @include font-scaler(1.4);}
     .voter { margin: 1em 0;}
     .voteCount { @extend .text; }
     .voteThanks { @extend .text; margin-top: 1em; }
@@ -114,35 +118,29 @@
   background-color: rgba(97, 72, 0, .2);
   padding: .5em 1em;
   &:hover { background-color: rgba(97, 72, 0, .35);}
-  @media (max-width: $break-md) { text-align: center; }
+  @media (max-width: $break-sm) { text-align: center; }
   .container {
     margin: 2em auto;
     width: 90%;
     @media (max-width: $break-md) { width: 100%; }
     .heading {
-      text-transform: uppercase;
       font-size: 1.8em;
-      margin-bottom: 1em;
-      @media (max-width: $break-md) { font-size: 1.4em; }}
+      text-transform: uppercase;
+      margin-bottom: 1em;}
     .image {
       @include scale-on-hover(1.03);
       border: $secondary-border;
       border-radius: 45%;
+      float: left;
       cursor: pointer;
       width: 100%;
       @media (max-width: $break-md) { margin-bottom: 1em; }}
     .details {
       margin: 0 auto;
       @media (max-width: $break-md) { width: 100%;}
-      .title {
-        font-size: 1.6em;
-        @media (max-width: $break-md) { font-size: 1.4em; }}
-      .subtitle {
-        font-size: 1.2em;
-        @media (max-width: $break-md) { font-size: 1em; }}
-      .paragraph {
-        font-size: 1.2em;
-        @media (max-width: $break-md) { font-size: 1em; }}
+      .title { @include font-scaler(1.6); }
+      .subtitle { @include font-scaler(1.2); }
+      .paragraph { @include font-scaler(1.2); }
     }
   }
 }
@@ -167,9 +165,8 @@
     &:hover { background-color: rgba(24, 22, 26, 0.25);}
     .coverText {
       @extend .text, .responsive-container;
-      font-size: 1.4em;
+      @include font-scaler(1.4);
       text-align: center;
-      @media (max-width: $break-md) { font-size: 1.2em; }
     }
   }
 }

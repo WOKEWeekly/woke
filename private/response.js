@@ -26,5 +26,5 @@ getErrMsg = (err) => {
   if (err.type === 'jwt') return 'jwt';
   if (err.message === 'jwt expired') return `Awkward. The link you followed has expired. Don't say we didn't warn ya!`;
 
-  return err.toString(); 
+  return err.message; 
 }

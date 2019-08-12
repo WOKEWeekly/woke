@@ -73,12 +73,14 @@ $break-xxl: 1408px; // Extra large devices (large desktops)
   width: 60%;
   @media (max-width: $break-xl) { width: 70%; }
   @media (max-width: $break-lg) { width: 80%; }
-  @media (max-width: $break-md) { width: 100%; } }
+  // @media (max-width: $break-md) { width: 90%; }
+  @media (max-width: $break-sm) { width: 100%; } }
 .responsive-container-70 {
   margin: 0 auto;
   width: 70%;
   @media (max-width: $break-lg) { width: 80%; }
-  @media (max-width: $break-md) { width: 100%; } }
+  @media (max-width: $break-md) { width: 90%; }
+  @media (max-width: $break-sm) { width: 100%; } }
 
 .responsive-form {
   @extend .responsive-container;
@@ -92,6 +94,31 @@ $break-xxl: 1408px; // Extra large devices (large desktops)
   transition: transform .2s ease-in-out;
   -webkit-transition: transform .2s ease-in-out;
   &:hover { transform: scale($scale); }
+}
+
+@mixin font-scaler($size) {
+  font-size: ($size) + em;
+  @media (max-width: $break-xl) { font-size: ($size * 1.2) + em; }
+  @media (max-width: $break-lg) { font-size: ($size * 1.17) + em; }
+  @media (max-width: $break-sm) { font-size: ($size * 0.85) + em; }
+}
+
+@mixin entity($float, $width){
+  margin: 1em 0;
+  .image {
+    border-radius: 8px;
+    float: $float;
+    margin-right: 1em;
+    margin-bottom: 1em;
+    width: $width;
+    @media (max-width: $break-xl) { width: 50%; }
+    @media (max-width: $break-sm) { width: 100%; }
+  }
+  .details {
+    .title { @include font-scaler(2); }
+    .subtitle { @include font-scaler(1.1); }
+    .description { @include font-scaler(1.2); }
+  }
 }
 
 @mixin responsive-grid {

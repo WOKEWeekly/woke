@@ -55,8 +55,7 @@
     "redux-persist": "^5.10.0",
     "regenerate": "^1.4.0",
     "shebang-loader": "0.0.1",
-    "sitemap": "^3.2.2",
-    "superagent": "^4.0.0-beta.5"
+    "sitemap": "^3.2.2"
   },
   "devDependencies": {
     "@babel/core": "^7.4.5",
