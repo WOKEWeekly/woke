@@ -4,16 +4,27 @@ import { Shader } from '~/components/layout';
 import css from '~/styles/_partials.scss';
 
 export default class Error extends React.Component {
-  static getInitialProps({ res, err }) {
+  static getInitialProps({ res, err, query }) {
     const statusCode = res ? res.statusCode : err ? err.statusCode : null
-    return { statusCode }
+    return { statusCode, ...query }
   }
 
   render() {
 
-    const { statusCode } = this.props;
+    const { statusCode, message } = this.props;
 
-    if (statusCode === 404){
+    if (message) {
+      return (
+        <Shader>
+          <div className={css.error}>
+            <div className={css.errorText}>
+              <div className={css.message}>{message}</div>
+              <div><button onClick={() => location.href = '/'}>Go to Home</button></div>
+            </div>
+          </div>
+        </Shader>
+      )
+    } else if (statusCode === 404){
       return (
         <Shader>
           <div className={css.error}>

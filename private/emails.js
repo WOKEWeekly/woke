@@ -2,7 +2,10 @@ const dev = process.env.NODE_ENV !== 'production';
 const dotenv = require('dotenv').config({path: dev ? './config.env' : '/root/config.env'});
 const nodemailer = require('nodemailer');
 
-const { domain, emails } = require('../constants/settings.js');
+let { domain, emails } = require('../constants/settings.js');
+
+const main = domain;
+domain = dev ? 'http://localhost:3000' : domain;
 
 /** Pass credentials to transporter */
 const transporter = nodemailer.createTransport({
@@ -31,13 +34,13 @@ sendMail = (from, to, subject, message) => {
 
 module.exports = {
 
-  sendWelcomeEmail: (user, salt) => {
+  sendWelcomeEmail: (user, token) => {
     const subject = 'Welcome to the #WOKEWeekly Website!'
     const message = designMessage(`
     Hey ${user.firstname}!
     <br><br>
     
-    Thank you for joining the #WOKEWeekly's website. We're very honoured to have your support!
+    Thank you for joining the #WOKEWeekly website. We're very honoured to have your support!
     <br><br>
     
     Remember, your username is
@@ -46,10 +49,13 @@ module.exports = {
     You are free to change your username at any point in time by clicking the "Change Username" option on the account pane.
     <br><br>
     
-    There are new features bound to arrive soon such as our Topic Suggestion forum. But in order to have access to these features, you'll need to verify your account by clicking the button below:
+    There are new features bound to arrive soon such as our Topic Suggestion forum. But in order to have access to these features, you'll need to verify your account. So you may as well get ahead of the crowd before they're released.
+    <br><br>
+    
+    Verify your account by clicking the button below:
 
     <div style="${buttonContainerStyle}">
-      <a href="${domain}/verifyAccount/${user.user_id}/${salt}" style="${buttonStyle}">
+      <a href="${domain}/verifyAccount/${token}" style="${buttonStyle}">
         Verify Your Account
       </a>
     </div>
@@ -61,7 +67,7 @@ module.exports = {
     sendMail(emails.website, user.email, subject, message);
   },
 
-  resendVerificationEmail: (user, salt) => {
+  resendVerificationEmail: (user, token) => {
     const subject = 'Account Verification'
     const message = designMessage(`
     Hey ${user.firstname}!<br><br>
@@ -70,7 +76,7 @@ module.exports = {
     click on the button below:
 
     <div style="${buttonContainerStyle}">
-      <a href="${domain}/verifyAccount/${user.user_id}/${salt}" style="${buttonStyle}">
+      <a href="${domain}/verifyAccount/${token}" style="${buttonStyle}">
         Verify Your Account
       </a>
     </div>
@@ -79,7 +85,7 @@ module.exports = {
     sendMail(emails.site, user.email, subject, message);
   },
 
-  sendAccountRecoveryEmail: (user, salt) => {
+  sendAccountRecoveryEmail: (user, token) => {
     const subject = 'Account Recovery'
     const message = designMessage(`
     Hey ${user.firstname}!
@@ -88,13 +94,15 @@ module.exports = {
     You're receiving this email because you've requested to reset your password as you may have forgotten it. Click the button below to reset it.
     
     <div style="${buttonContainerStyle}">
-      <a href="${domain}/account/reset-password/${user.user_id || user.id}/${salt}" style="${buttonStyle}">
+      <a href="${domain}/account/reset/${token}" style="${buttonStyle}">
         Reset Your Password
       </a>
     </div>
 
-    If you didn't request to reset your password, please ignore this email or respond to tell us there has
-    been an error. This password reset is only valid for the next 30 minutes.
+    If you didn't request to reset your password, please ignore this email or respond to let us know there has
+    been an error.<br><br>
+    
+    Please note that this password reset is only valid for the next 30 minutes.
     <br><br>
     `, true);
     
@@ -140,7 +148,7 @@ const designMessage = (content, withFooter) => {
     The #WOKEWeekly Team.
 
     <hr style="margin-top: .8em">
-    <img src="${domain}/static/images/logos/email-signature.png" style="width:175px" alt="#WOKEWeekly">
+    <img src="${main}/static/images/logos/email-signature.png" style="width:175px" alt="#WOKEWeekly">
   `
   return (
     `
@@ -152,16 +160,7 @@ const designMessage = (content, withFooter) => {
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 
-        <link href="https://fonts.googleapis.com/css?family=Raleway|Patua+One" rel="stylesheet" type="text/css">
-
-        <style type="text/css>
-          .email {
-            width: 60%;
-            @media (max-width: 992px) { width: 70%; }
-            @media (max-width: 768px) { width: 80%; }
-            @media (max-width: 576px) { width: 100%; }
-          }
-        </style>
+        <link href="https://fonts.googleapis.com/css?family=Raleway:700|Patua+One" rel="stylesheet" type="text/css">
       </head>
       <div style="${emailStyle}">
         <div style="${textStyle}">
@@ -193,10 +192,7 @@ const textStyle = `
   padding: 1em;
 `;
 
-const textStyleBold = `
-  font-family: 'Patua One', Arial, Helvetica, sans-serif;
-  font-weight: bold;
-`;
+const textStyleBold = `font-weight: bold;`;
 
 const buttonContainerStyle = `
   cursor: pointer;
@@ -208,7 +204,6 @@ const buttonStyle = `
   background: #9769cc;
   border-radius: 10px;
   color: white;
-  font-family: 'Patua One', Arial, Helvetica, sans-serif;
   font-size: .8em;
   font-weight: bold;
   padding: 1em;

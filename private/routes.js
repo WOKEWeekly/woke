@@ -1,5 +1,6 @@
 const async = require('async');
 const fs = require('fs');
+const jwt = require('jsonwebtoken');
 const path = require('path');
 const sm = require('sitemap');
 const { domain } = require('../constants/settings.js');
@@ -271,12 +272,14 @@ module.exports = function(app, conn, server){
   });
 
   /** Reset Password */
-  app.get('/account/reset-password/:id/:token', function(req, res){
-    const { id, token } = req.params;
-    server.render(req, res, '/_auth/reset', {
-      title: 'Reset Password | #WOKEWeekly',
-      userId: id,
-      recoveryToken: token
+  app.get('/account/reset/:token', function(req, res){
+    const { token } = req.params;
+    jwt.verify(token, process.env.JWT_SECRET, (err) => {
+      if (err) return renderErrPage(req, res, err, server);
+      server.render(req, res, '/_auth/reset', {
+        title: 'Reset Password | #WOKEWeekly',
+        recoveryToken: token
+      });
     });
   });
 

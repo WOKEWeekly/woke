@@ -84,7 +84,7 @@ class LoginModal extends Component {
         <Group className={css.group}>
           <Checkbox
             checked={remember}
-            label={'Remember me'}
+            label={'Stay signed in'}
             onChange={this.handleRemember} />
         </Group>
         <Group className={css.group}>

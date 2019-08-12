@@ -33,7 +33,8 @@ class Recovery extends Component {
     const { email } = this.state;
     if (!isValidEmail(email)) return false;
 
-    request('/sendAccountRecoveryEmail', {
+    request({
+      url: '/sendAccountRecoveryEmail',
       method: 'NOTIFY',
       body: JSON.stringify(this.state),
       headers: {

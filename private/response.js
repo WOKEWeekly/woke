@@ -10,7 +10,7 @@ module.exports = {
   },
   renderErrPage: (req, res, err, server) => {
     if (err) console.error(err.toString());
-    return server.render(req, res, '/error');
+    return server.render(req, res, '/error', { message: getErrMsg(err) });
   }
 }
 
@@ -23,9 +23,8 @@ getErrMsg = (err) => {
     }
   }
 
-  if (err.type === 'jwt'){
-    return 'jwt';
-  }
+  if (err.type === 'jwt') return 'jwt';
+  if (err.message === 'jwt expired') return `Awkward. The link you followed has expired. Don't say we didn't warn ya!`;
 
   return err.toString(); 
 }

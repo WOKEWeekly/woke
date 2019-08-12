@@ -5,7 +5,7 @@ import { bindActionCreators } from 'redux';
 import { clearUser } from '~/reducers/actions';
 import Router from 'next/router';
 
-import { alert, setAlert, checkAlert, displayErrorMessage } from '~/components/alert.js';
+import { setAlert, checkAlert } from '~/components/alert.js';
 import { Icon, HeaderIcon } from '~/components/icon';
 import { Default, Mobile, zIndices } from '~/components/layout';
 

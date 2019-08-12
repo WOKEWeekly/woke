@@ -62,16 +62,14 @@ module.exports = function(app, conn, passport, server){
       },
       function(user, callback){ // Log user session
         req.login(user, function(err) {
-          if (err) return callback(err);
+          err ? callback(err) : callback(null, user);
 
-          /** If remember checked, maintain session for 30 days */
-          if (req.body.remember) {
-            req.session.cookie.maxAge = 30 * 24 * 60 * 60 * 1000;
-          } else {
-            req.session.cookie.expires = false;
-          }
-
-          callback(null, user);
+          // /** If remember checked, maintain session for 30 days */
+          // if (req.body.remember) {
+          //   req.session.cookie.maxAge = 30 * 24 * 60 * 60 * 1000;
+          // } else {
+          //   req.session.cookie.expires = false;
+          // }
         });
       },
       function(user, callback){ // Update last login time for user
@@ -83,7 +81,8 @@ module.exports = function(app, conn, passport, server){
         });
       },
       function(callback){ // Pass authenticated user information to mobile app */
-        jwt.sign( { user: req.user }, process.env.JWT_SECRET, { expiresIn: '10s'}, (err, token) => {
+        jwt.sign( { user: req.user }, process.env.JWT_SECRET,
+          { expiresIn: req.body.remember ? '30d' : '2h' }, (err, token) => {
           if (err) return callback(err);
 
           const { id, firstname, lastname, username, clearance } = req.user;
@@ -100,59 +99,55 @@ module.exports = function(app, conn, passport, server){
   /** Log user out */
   app.post('/logout', function(req, res){
     req.logout();
-    res.sendStatus(200);
+    resToClient(res, null);
   });
   
   /** Sign up a new user */
   app.post('/signup', validateReq, function(req, res){
-    const user = req.body;
+    const { firstname, lastname, email, username, password1, password2, subscribe} = req.body;
     
-    if (!validator.validate(user.email)) return resToClient(res, new Error("Your email address is invalid."));
-    if (user.password1 !== user.password2) return resToClient(res, new Error("Your passwords do not match."));
+    if (!validator.validate(email)) return resToClient(res, new Error("Your email address is invalid."));
+    if (password1 !== password2) return resToClient(res, new Error("Your passwords do not match."));
     
     async.waterfall([
       function(callback){  /** Hash entered password */
-        bcrypt.hash(user.password1, 8, function(err, hash) {
+        bcrypt.hash(password1, 8, function(err, hash) {
           err ? callback(err) : callback(null, hash);
         });
       },
       function(hash, callback){ /** Insert new user into database */
         const sql = "INSERT INTO user (firstname, lastname, clearance, email, username, password) VALUES ?";
-        const values = [[user.firstname, user.lastname, 1, user.email, user.username, hash]];
+        const values = [[firstname, lastname, 1, email, username, hash]];
 
         conn.query(sql, [values], function(err, result){	
           if (err) return callback(err);
 
-          console.log(`New user ${user.firstname} ${user.lastname} signed up.`);
-          user.id = result.insertId;
+          console.log(`New user ${firstname} ${lastname} signed up.`);
+          const user = {
+            id: result.insertId,
+            firstname, lastname, username, email,
+            clearance: 1
+          };
           
           // Subscribe user to mailing list if allowed
-          if (user.subscribe) subscribeUserToMailingList(user);
-          callback(null, user.id);
+          if (subscribe) subscribeUserToMailingList(user);
+          callback(null, user);
         });
       },
-      function(id, callback){ /** Generate verification token to be sent via email */
-        bcrypt.genSalt(8, function(err, salt) {
-          err ? callback(err) : callback(null, id, salt);
+      function(user, callback){ /** Generate verification token to be sent via email */
+        jwt.sign({user}, process.env.JWT_SECRET, { expiresIn: '24h'}, (err, token) => {
+          err ? callback(err) : callback(null, user, token);
         });
       },
-      function(id, salt, callback){ /** Store verification token in database */
-        const sql = "INSERT INTO user_tokens (user_id, token_string, type) VALUES ?";
-        const values = [[id, salt, 'verification']];
-        
-        conn.query(sql, [values], function(err){	
-          err ? callback(err) : callback(null, salt);
-        });
-      },
-      function(salt, callback){ // Send welcome email with verification link to user's email address
+      function(user, token, callback){ // Send welcome email with verification link to user's email address
         req.login(user, function(err) {
           if (err) return callback(err);
-          emails.sendWelcomeEmail(user, salt);
+          emails.sendWelcomeEmail(user, token);
           callback(null);
         });
       },
-      function(callback){ // Pass authenticated user information to client
-        jwt.sign({user: req.user}, process.env.JWT_SECRET, (err, token) => {
+      function(callback){ // Pass authenticated user information to client with access token
+        jwt.sign({user: req.user}, process.env.JWT_SECRET, { expiresIn: '2h' }, (err, token) => {
           if (err) return callback(err);
           
           const { id, firstname, lastname, username, clearance } = req.user;
@@ -245,19 +240,19 @@ module.exports = function(app, conn, passport, server){
     
     async.waterfall([
       function(callback){ // Retrieve user and token string from database
-        const sql = `SELECT * from user
-        INNER JOIN user_tokens on user.id = user_tokens.user_id
-        WHERE (user.id, user_tokens.type) = (?, ?)`;
-        const values = [id, 'verification'];
+        const sql = `SELECT id, firstname, lastname, clearance, username, email FROM user WHERE id = ?`;
         
-        conn.query(sql, values, function(err, result){	
-          if (err) return callback(err);
-          const user = result[0];
-          callback(null, user, user.token_string);
+        conn.query(sql, id, function(err, result){	
+          err ? callback(err) : callback(null, result[0]);
         });
       },
-      function(user, salt, callback){ // Resend verification email to user
-        emails.resendVerificationEmail(user, salt);
+      function(user, callback){ // Generate verification token to send via email
+        jwt.sign({user}, process.env.JWT_SECRET, { expiresIn: '30m'}, (err, token) => {
+          err ? callback(err) : callback(null, user, token);
+        });
+      },
+      function(user, token, callback){ // Resend verification email to user
+        emails.resendVerificationEmail(user, token);
         callback(null);
       }
     ], function(err){
@@ -266,42 +261,23 @@ module.exports = function(app, conn, passport, server){
   });
 
   /** Change user's username in database */
-  app.get('/verifyAccount/:id/:token', function(req, res){
-    const { id, token } = req.params;
+  app.get('/verifyAccount/:token', function(req, res){
+    const { token } = req.params;
     
     async.waterfall([
-      function(callback){ /** Determine user account */
-        const sql = "SELECT * FROM user_tokens WHERE (user_id, token_string, type) = (?, ?, ?)";
-        const values = [id, token, 'verification'];
-        
-        conn.query(sql, values, function(err, result){
-          if (result.length > 0){
-            err ? callback(err) : callback(null);
-          } else {
-            callback(new Error(`User account doesn't exist.`));
-          }
+      function(callback){ // Verify the given token
+        jwt.verify(token, process.env.JWT_SECRET, (err, auth) => {
+          err ? callback(err) : callback(null, auth.user);
         });
       },
-      function(callback){ /** Determine user clearance level */
-        conn.query('SELECT clearance FROM user WHERE id = ?', id, function(err, result){
-          err ? callback(err) : callback(null, result[0].clearance);	
-        });
-      },
-      function(clearance, callback){ /** Verify account by changing user clearance to verified */
-        if (clearance === 1){
-          conn.query('UPDATE user SET clearance = 2 WHERE id = ?', id, function(err){	
+      function(user, callback){ /** Verify account by changing user clearance to verified */
+        if (user.clearance === 1){
+          conn.query('UPDATE user SET clearance = 2 WHERE id = ?', user.id, function(err){	
             err ? callback(err) : callback(null);
           });
         } else {
           callback(new Error(`Verification not required.`));
         }
-      },
-      function(callback){ /** Delete verification token */
-        const sql = 'DELETE FROM user_tokens WHERE (user_id, type) = (?, ?)';
-        const values = [id, 'verification'];
-        conn.query(sql, values, function(err){		
-          err ? callback(err) : callback(null);
-        });
       }
     ], function(err){
       err ? renderErrPage(req, res, err, server) : res.redirect('/account');
@@ -314,37 +290,17 @@ module.exports = function(app, conn, passport, server){
     
     async.waterfall([
       function(callback){ /** Retrieve user from email */
-        conn.query(`SELECT * FROM user WHERE email = ?`, email, function(err, result){
+        conn.query(`SELECT id, firstname, lastname, clearance, email, username FROM user WHERE email = ?`, email, function(err, result){
           err ? callback(err) : callback(null, result[0]);
         });
       },
-      function(user, callback){ // Check if email is already in recovery
-        const sql = `SELECT * FROM user_tokens WHERE (user_id, type) = (?, ?)
-          AND create_time > DATE_SUB(NOW(), INTERVAL 30 MINUTE);`;
-        const values = [user.id, 'recovery'];
-
-        conn.query(sql, values, function(err, result){
-          if (err) return callback(err);
-          if (result.length) return callback(new Error('Your account is already attempting to recovery. Please check your email.'));
-          
-          callback(null, user);
-        });
-      },
       function(user, callback){ /** Generate recovery token to be sent via email */
-        bcrypt.genSalt(8, function(err, salt) {
-          err ? callback(err) : callback(null, user, salt);
+        jwt.sign({user}, process.env.JWT_SECRET, { expiresIn: '30m'}, (err, token) => {
+          err ? callback(err) : callback(null, user, token);
         });
       },
-      function(user, salt, callback){ /** Store recovery token in database */
-        const sql = "INSERT INTO user_tokens (user_id, token_string, type) VALUES ?";
-        const values = [[user.id, salt, 'recovery']];
-        
-        conn.query(sql, [values], function(err){	
-          err ? callback(err) : callback(null, user, salt);
-        });
-      },
-      function(user, salt, callback){ // Send account recovery email with link to reset password
-        emails.sendAccountRecoveryEmail(user, salt);
+      function(user, token, callback){ // Send account recovery email with link to reset password
+        emails.sendAccountRecoveryEmail(user, token);
         callback(null);
       },
     ], function(err){
@@ -354,37 +310,23 @@ module.exports = function(app, conn, passport, server){
 
   /** Reset user password */
   app.put('/resetPassword', function(req, res){
-    const { id, token, password } = req.body;
+    const { token, password } = req.body;
     
     async.waterfall([
-      function(callback){ /** Determine user account */
-        const sql = "SELECT * FROM user_tokens WHERE (user_id, token_string, type) = (?, ?, ?)";
-        const values = [id, token, 'recovery'];
-        
-        conn.query(sql, values, function(err, result){
-          if (result.length > 0){
-            err ? callback(err) : callback(null);
-          } else {
-            callback(new Error(`User account doesn't exist.`));
-          }
+      function(callback){ // Verify the given token
+        jwt.verify(token, process.env.JWT_SECRET, (err, result) => {
+          err ? callback(err) : callback(null, result.user);
         });
       },
-      function(callback){ // Hash new password
+      function(user, callback){ // Hash new password
         bcrypt.hash(password, 8, function(err, hash) {
-          err ? callback(err) : callback(null, hash);
+          err ? callback(err) : callback(null, user.id, hash);
         });
       },
-      function(hash, callback){
+      function(id, hash, callback){
         const sql = "UPDATE user SET password = ? WHERE id = ?";
         const values = [hash, id];
         conn.query(sql, values, function(err){
-          err ? callback(err) : callback(null);
-        });
-      },
-      function(callback){ /** Delete recovery token */
-        const sql = 'DELETE FROM user_tokens WHERE (user_id, type) = (?, ?)';
-        const values = [id, 'recovery'];
-        conn.query(sql, values, function(err){	
           err ? callback(err) : callback(null);
         });
       }

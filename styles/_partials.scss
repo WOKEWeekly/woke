@@ -36,6 +36,7 @@
   height: 80vh;
   text-align: center;
   .errorText {
+    @extend .responsive-container;
     padding: 1.5em;
     .message {
       font-size: 1.6em;
