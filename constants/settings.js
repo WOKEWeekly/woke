@@ -11,7 +11,7 @@ module.exports = {
   emails: {
     applications: "applications@wokeweekly.co.uk",
     enquiries: "enquiries@wokeweekly.co.uk",
-    website: "site@wokeweekly.co.uk",
+    site: "site@wokeweekly.co.uk",
 
     director: "zavidegbue@gmail.com"
   },

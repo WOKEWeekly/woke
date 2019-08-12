@@ -9,7 +9,8 @@ domain = dev ? 'http://localhost:3000' : domain;
 
 /** Pass credentials to transporter */
 const transporter = nodemailer.createTransport({
-  service: 'gmail',
+  host: 'mail.privateemail.com',
+  port: 465,
   auth: {
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PWD,
@@ -17,9 +18,9 @@ const transporter = nodemailer.createTransport({
 });
 
 /** Construct template for emails */
-sendMail = (from, to, subject, message) => {
+sendMail = (to, subject, message) => {
   transporter.sendMail({
-    from: from,
+    from: `#WOKEWeekly Website <${emails.site}>`,
     to: to,
     subject: subject,
     html: message
@@ -43,8 +44,7 @@ module.exports = {
     Thank you for joining the #WOKEWeekly website. We're very honoured to have your support!
     <br><br>
     
-    Remember, your username is
-    <span style="${textStyleBold}">${user.username}</span>.
+    Remember, your username is <strong>${user.username}</strong>.
     You can use your username, as well as this email address, to log in to the website from here on out.
     You are free to change your username at any point in time by clicking the "Change Username" option on the account pane.
     <br><br>
@@ -64,7 +64,7 @@ module.exports = {
     <br><br>
     `, true);
     
-    sendMail(emails.website, user.email, subject, message);
+    sendMail(user.email, subject, message);
   },
 
   resendVerificationEmail: (user, token) => {
@@ -82,7 +82,7 @@ module.exports = {
     </div>
     `, true);
     
-    sendMail(emails.site, user.email, subject, message);
+    sendMail(user.email, subject, message);
   },
 
   sendAccountRecoveryEmail: (user, token) => {
@@ -106,7 +106,7 @@ module.exports = {
     <br><br>
     `, true);
     
-    sendMail(emails.website, user.email, subject, message);
+    sendMail(user.email, subject, message);
   },
   
   sendTopicDeletionEmail: (topic) => {
@@ -121,7 +121,7 @@ module.exports = {
     <a href="${domain}/topics">Click here</a> to view the Topic Bank.
     `);
     
-    sendMail(emails.website, emails.director, subject, message);
+    sendMail(emails.director, subject, message);
   },
   
   sendNewSuggestionEmail: (topic) => {
@@ -136,7 +136,7 @@ module.exports = {
     <br><br>
     `);
     
-    sendMail(emails.website, emails.director, subject, message);
+    sendMail(emails.director, subject, message);
   }
 
 };
@@ -160,7 +160,7 @@ const designMessage = (content, withFooter) => {
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 
-        <link href="https://fonts.googleapis.com/css?family=Raleway:700|Patua+One" rel="stylesheet" type="text/css">
+        <link href="https://fonts.googleapis.com/css?family=Raleway:400,700" rel="stylesheet" type="text/css">
       </head>
       <div style="${emailStyle}">
         <div style="${textStyle}">
@@ -191,8 +191,6 @@ const textStyle = `
   line-height: 1.5;
   padding: 1em;
 `;
-
-const textStyleBold = `font-weight: bold;`;
 
 const buttonContainerStyle = `
   cursor: pointer;

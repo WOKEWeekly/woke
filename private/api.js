@@ -1,5 +1,4 @@
 const async = require('async');
-const request = require('superagent');
 const fs = require('fs');
 const { verifyToken, validateReq, upload } = require('./middleware.js');
 const { resToClient } = require('./response.js');

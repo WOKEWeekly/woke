@@ -2,10 +2,16 @@ const LocalStrategy = require('passport-local').Strategy;
 const validator = require("email-validator");
 const async = require('async');
 const bcrypt = require('bcrypt');
+const dev = process.env.NODE_ENV !== 'production';
+const dotenv = require('dotenv').config({path: dev ? './config.env' : '/root/config.env'});
 const jwt = require('jsonwebtoken');
+const request = require('superagent');
 const emails = require('./emails.js');
 const { validateReq} = require('./middleware.js');
 const { resToClient, renderErrPage } = require('./response.js');
+
+const Mailchimp = require('mailchimp-api-v3');
+const mailchimp = new Mailchimp(process.env.MAILCHIMP_API_KEY);
 
 module.exports = function(app, conn, passport, server){
   
@@ -337,26 +343,42 @@ module.exports = function(app, conn, passport, server){
 }
 
 /** Subscribe new user to Mailchimp mailing list */
-function subscribeUserToMailingList(user){
-  request
-  .post(`https://${process.env.MAILCHIMP_INSTANCE}.api.mailchimp.com/3.0/lists/${process.env.MAILCHIMP_LISTID}/members/`)
-  .set({
-    'Content-Type': 'application/json;charset=utf-8',
-    'Authorization': 'Basic ' + new Buffer(`any:${process.env.MAILCHIMP_API_KEY}`).toString('base64')
-  })
-  .send({
-    'email_address': user.email,
-    'status': 'subscribed',
-    'merge_fields': {
-      'FNAME': user.firstname,
-      'LNAME': user.lastname
+const subscribeUserToMailingList = (user) => {
+
+  mailchimp.post(`/lists/${process.env.MAILCHIMP_LISTID}/members`, {
+    email_address: user.email,
+    status: 'subscribed',
+    merge_fields: {
+      FNAME: user.firstname,
+      LNAME: user.lastname
     }
   })
-  .end(function(err, response) {
-    if (response.status < 300 || (response.status === 400 && response.body.title === "Member Exists")) {
-      console.log(`Signed up user ${user.firstname} ${user.lastname} to mailing list.`);
-    } else {
-      console.log(err.toString());
-    }
+  .then(results => {
+    console.log(results);
+  })
+  .catch(err => {
+    console.log(err.toString());
   });
+
+  // request
+  // .post(`https://${process.env.MAILCHIMP_INSTANCE}.api.mailchimp.com/3.0/lists/${process.env.MAILCHIMP_LISTID}/members/`)
+  // .set({
+  //   'Content-Type': 'application/json;charset=utf-8',
+  //   'Authorization': 'Basic ' + Buffer.from(`any:${process.env.MAILCHIMP_API_KEY}`).toString('base64')
+  // })
+  // .send({
+  //   'email_address': user.email,
+  //   'status': 'subscribed',
+  //   'merge_fields': {
+  //     'FNAME': user.firstname,
+  //     'LNAME': user.lastname
+  //   }
+  // })
+  // .end(function(err, response) {
+  //   if (response.status < 300 || (response.status === 400 && response.body.title === "Member Exists")) {
+  //     console.log(`Signed up user ${user.firstname} ${user.lastname} to mailing list.`);
+  //   } else {
+  //     console.log(err.toString());
+  //   }
+  // });
 }

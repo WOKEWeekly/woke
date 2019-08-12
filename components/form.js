@@ -24,7 +24,7 @@ export class Heading extends Component {
   render(){
     return (
       <Fader determinant={this.state.isLoaded} duration={750}>
-        <div className={css.heading}>{this.props.children}</div>
+        <div className={css.formHeading}>{this.props.children}</div>
       </Fader>
     )
   }

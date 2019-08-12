@@ -59,6 +59,11 @@ export class _Paragraph extends Component {
               </div>
             );
 
+            // For dividers
+            case '_': return (
+              <Divider style={{margin: '2rem 0 1rem'}}/>
+            );
+
             // For list items
             case '•': return <li className={css.listitem} key={key}>{paragraph.substring(1).trim()}</li>;
 
@@ -130,7 +135,8 @@ export class TruncatedParagraph extends Component {
 
 export class Divider extends Component {
   render(){
-    return <hr className={css.divider} />
+    const classes = classNames(css.divider, this.props.className);
+    return <hr className={classes} style={this.props.style} />
   }
 }
 
