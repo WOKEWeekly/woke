@@ -505,6 +505,10 @@
     font-size: 1.2em;
     padding: .2em 0;}
   .body { margin: 1rem 0; }
+  .listitem {
+    display: grid;
+    grid-template-columns: 1.5em 1fr;
+  }
   .image {
     margin: 1.5em 0;
     width: 100%;

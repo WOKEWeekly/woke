@@ -45,8 +45,8 @@ class Links extends Component {
         <a href={'/about'}>About #WOKEWeekly</a>
         <a href={'/privacy'}>Privacy Policy</a>
         <a href={'/cookies'}>Cookies</a>
-        <a href={'faq'}>FAQs</a>
-        <a target={'_blank' } href={'https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=BUWDQJCN66KRL&source=url'}>Donate</a>
+        <a href={'/faq'}>FAQs</a>
+        <a href={'/donate'}>Donate</a>
         <a href={`mailto: ${emails.enquiries}`}>Contact Us</a>
       </div>
     )

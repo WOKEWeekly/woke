@@ -342,6 +342,7 @@ module.exports = function(app, conn, server){
     conn.query(`SELECT * FROM resources WHERE name = 'about'`, function (err, result) {
       if (err || !result.length) return renderErrPage(req, res, err, server);
 
+      const {text} = result[0];
       return server.render(req, res, '/info/edit', {
         title: 'Edit About',
         description: text,
@@ -412,6 +413,38 @@ module.exports = function(app, conn, server){
     });
   });
 
+  /** Donate */
+  app.get('/donate', function(req, res){
+    conn.query(`SELECT * FROM resources WHERE name = 'donate'`, function (err, result) {
+      if (err || !result.length) return renderErrPage(req, res, err, server);
+
+      const {text} = result[0];
+      return server.render(req, res, '/info', {
+        title: 'Donate | #WOKEWeekly',
+        description: serveDescription(text),
+        pageText: text,
+        url: '/donate',
+        backgroundImage: 'bg-donate.jpg',
+        cardImage: `/bg/card-donate.jpg`,
+      });
+    });
+  });
+
+  /** Edit Donate Page */
+  app.get('/donate/edit', function(req, res){
+    conn.query(`SELECT * FROM resources WHERE name = 'donate'`, function (err, result) {
+      if (err || !result.length) return renderErrPage(req, res, err, server);
+
+      const {text} = result[0];
+      return server.render(req, res, '/info/edit', {
+        title: 'Edit Donate Page',
+        description: text,
+        resource: 'donate',
+        placeholder: `How will #WOKEWeekly use donations?`
+      });
+    });
+  });
+
   /** FAQs */
   app.get('/faq', function(req, res){
     conn.query(`SELECT * FROM resources WHERE name = 'faq'`, function (err, result) {
@@ -462,7 +495,7 @@ module.exports = function(app, conn, server){
 
   app.get('/sitemap.xml', (req, res) => {
     const routes = [ '/', '/home', '/sessions', '/blackexcellence', '/mentalhealth',
-    '/executives', '/signup', '/about', '/cookies', '/faq', '/privacy' ];
+    '/executives', '/signup', '/about', '/cookies', '/donate', '/faq', '/privacy' ];
 
     async.parallel([
       function(callback){

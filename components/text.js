@@ -65,7 +65,12 @@ export class _Paragraph extends Component {
             );
 
             // For list items
-            case '•': return <li className={css.listitem} key={key}>{paragraph.substring(1).trim()}</li>;
+            case '•': return (
+              <div className={css.listitem} key={key}>
+                <span>●</span>
+                <span>{paragraph.substring(1).trim()}</span>
+              </div>
+            );
 
             // Normal paragraph text
             default:

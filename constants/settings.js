@@ -4,7 +4,8 @@ module.exports = {
     twitter: "https://www.twitter.com/wokeweeklyuk",
     instagram: "https://www.instagram.com/wokeweeklyuk",
     linkedin: "https://www.linkedin.com/company/wokeweeklyuk",
-    youtube: "https://www.youtube.com/channel/UC2pxSc01dJSFSVDPSN6_hBA"
+    youtube: "https://www.youtube.com/channel/UC2pxSc01dJSFSVDPSN6_hBA",
+    paypal: 'https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=BUWDQJCN66KRL&source=url'
   },
   creationDate: new Date(2017, 2, 2),
   domain: "https://www.wokeweekly.co.uk",

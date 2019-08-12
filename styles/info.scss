@@ -1,5 +1,6 @@
 
 @import "_variables.scss";
+@import "_components.scss";
 
 .container {
   @extend .responsive-container;
@@ -9,6 +10,14 @@
     font-size: 1.2em;
     @media (max-width: $break-md) { font-size: 1em; }
   }
+}
+
+.donate {
+  @extend .submit-default;
+  @include font-scaler(1.5);
+  margin-top: 1em;
+  min-width: 50%;
+  @media (max-width: $break-md) { min-width: 100%; }
 }
 
 .form { @extend .responsive-form; }

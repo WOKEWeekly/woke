@@ -432,7 +432,7 @@ class ForumAdvertiser extends Component {
 
   render(){
     const { imageLoaded, imageSrc } = this.state;
-    const text = `Wouldn't it make sense if you could suggest more topics for us to cover at our sessions?\n\nForum coming soon...`;
+    const text = `Wouldn't it make sense if you could suggest more topics for us to cover at our sessions?\n\nFORUM COMING SOON...`;
     
     return (
       <Fader
