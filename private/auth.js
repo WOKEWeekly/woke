@@ -276,16 +276,14 @@ module.exports = function(app, conn, passport, server){
         });
       },
       function(user, callback){ /** Verify account by changing user clearance to verified */
-        if (user.clearance === 1){
-          conn.query('UPDATE user SET clearance = 2 WHERE id = ?', user.id, function(err){	
-            err ? callback(err) : callback(null);
-          });
-        } else {
-          callback(new Error(`Verification not required.`));
-        }
+        if (user.clearance !== 1) return callback(new Error(`Verification not required.`));
+
+        conn.query('UPDATE user SET clearance = 2 WHERE id = ?', user.id, function(err){	
+          err ? callback(err) : callback(null);
+        });
       }
     ], function(err){
-      err ? renderErrPage(req, res, err, server) : res.redirect('/account');
+      err ? renderErrPage(req, res, err, server) : res.redirect(`/account?verified=${token}`);
     });
   });
 

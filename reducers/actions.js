@@ -9,6 +9,11 @@ export const clearUser = () => ({
   type: 'CLEAR_USER'
 });
 
+/** Verify user */
+export const verifyUser = () => ({
+  type: 'VERIFY_USER'
+});
+
 /** Change username */
 export const changeUsername = username => ({
   type: 'CHANGE_USERNAME',

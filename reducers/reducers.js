@@ -24,8 +24,12 @@ const userReducer = (state = initialUser, action) => {
       
       return user;
     case 'CLEAR_USER':
-      console.log('clearing');
       return initialUser;
+    case 'VERIFY_USER':
+      return Object.assign({}, state, {
+        clearance: 2,
+        isVerified: true
+      });
     case 'CHANGE_USERNAME':
       return Object.assign({}, state, {
         username: action.payload

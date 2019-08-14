@@ -1,3 +1,5 @@
+const dev = process.env.NODE_ENV !== 'production';
+
 module.exports = {
   accounts: {
     facebook: "https://www.facebook.com/wokeweeklyuk",
@@ -8,7 +10,7 @@ module.exports = {
     paypal: 'https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=BUWDQJCN66KRL&source=url'
   },
   creationDate: new Date(2017, 2, 2),
-  domain: "https://www.wokeweekly.co.uk",
+  domain: dev ? 'http://localhost:3000' : "https://www.wokeweekly.co.uk",
   emails: {
     applications: "applications@wokeweekly.co.uk",
     enquiries: "enquiries@wokeweekly.co.uk",

@@ -227,12 +227,31 @@ class _User extends PureComponent {
             <span><button className={css.invisible_button} onClick={this.openDelete}><Icon name={'trash'} /></button></span>
           </Default>
           <Mobile>
-            <Title className={css.name}>{item.firstname} {item.lastname}</Title>
-            <div>{item.clearance}</div>
-            <div>{item.email}</div>
-            <div>{item.username}</div>
-            <div>{formatDate(item.create_time)}</div>
+            <div>
+              <span><Icon name={'user'}/></span>
+              <span className={css.name}>{item.firstname} {item.lastname}</span>
+            </div>
+            <div>
+              <span><Icon name={'signature'}/></span>
+              <span>{item.clearance}</span>
+            </div>
+            <div>
+              <span><Icon name={'envelope'}/></span>
+              <span>{item.email}</span>
+            </div>
+            <div>
+              <span><Icon name={'at'}/></span>
+              <span>{item.username}</span>
+            </div>
+            <div>
+              <span><Icon name={'calendar-alt'}/></span>
+              <span>{formatDate(item.create_time)}</span>
+            </div>
             <div className={css.index}>{idx+1}</div>
+            <div className={css.crud}>
+              <button className={css.invisible_button} onClick={this.openEdit}><Icon name={'edit'} /></button>
+              <button className={css.invisible_button} onClick={this.openDelete}><Icon name={'trash'} /></button>
+            </div>
           </Mobile>
         </Fader>
 

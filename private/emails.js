@@ -4,9 +4,6 @@ const nodemailer = require('nodemailer');
 
 let { domain, emails } = require('../constants/settings.js');
 
-const main = domain;
-domain = dev ? 'http://localhost:3000' : domain;
-
 /** Pass credentials to transporter */
 const transporter = nodemailer.createTransport({
   host: 'mail.privateemail.com',

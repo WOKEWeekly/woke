@@ -2,7 +2,7 @@ import React, { Component} from 'react';
 import { connect } from 'react-redux';
 import Router from 'next/router';
 
-import { alert, setAlert, displayErrorMessage } from '~/components/alert.js';
+import { setAlert } from '~/components/alert.js';
 
 import CLEARANCES from '~/constants/clearances';
 import { formatISODate } from '~/constants/date.js';
@@ -84,10 +84,11 @@ class CandidateEdit extends Component {
     const data = new FormData();
     data.append('candidates', JSON.stringify(candidates));
     data.append('changed', imageChanged);
-    imageChanged && data.append('file', image, filename);
+    if (imageChanged) data.append('file', image, filename);
 
     /** Update candidate in database */
-    request('/updateCandidate', {
+    request({
+      url: '/updateCandidate',
       method: 'PUT',
       body: data,
       headers: {

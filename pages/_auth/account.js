@@ -1,7 +1,7 @@
 import React, { Component} from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { changeUsername, clearUser } from '~/reducers/actions';
+import { changeUsername, clearUser, verifyUser } from '~/reducers/actions';
 import { Col } from 'react-bootstrap';
 
 import { alert, setAlert } from '~/components/alert.js';
@@ -17,6 +17,10 @@ import request from '~/constants/request.js';
 import css from '~/styles/auth.scss';
 
 class Account extends Component {
+  static getInitialProps({query}) {
+    return { ...query }
+  }
+
   constructor(props){
     super(props);
     this.state = {
@@ -34,7 +38,16 @@ class Account extends Component {
   }
 
   componentDidMount(){
-    this.setState({ isLoaded: true })
+    this.setState({ isLoaded: true });
+
+    const { user, justVerified, verifiedUser } = this.props;
+
+    if (justVerified && user.id === verifiedUser.id){
+      this.props.verifyUser();
+      setTimeout(() => {
+        location.href = '/account';
+      }, 1000);
+    }
   }
 
   deleteAccount = () => {
@@ -303,7 +316,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => (
   bindActionCreators({
-    changeUsername, clearUser
+    changeUsername, clearUser, verifyUser
   }, dispatch)
 );
 

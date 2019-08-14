@@ -10,7 +10,7 @@ module.exports = {
   },
   renderErrPage: (req, res, err, server) => {
     if (err) console.error(err.toString());
-    return server.render(req, res, '/error', { message: getErrMsg(err) });
+    return server.render(req, res, '/error', { message: err ? getErrMsg(err) : '' });
   }
 }
 

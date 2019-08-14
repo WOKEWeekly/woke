@@ -64,7 +64,7 @@ module.exports = function(app, conn, server){
     const id = req.params.id;
     const sql = "SELECT * FROM sessions WHERE id = ?";
     
-    conn.query(sql, [id], function (err, result) {
+    conn.query(sql, id, function (err, result) {
       if (!err && result.length){
         const session = result[0];
         return server.render(req, res, '/sessions/edit', {
@@ -99,7 +99,7 @@ module.exports = function(app, conn, server){
     const id = req.params.id;
     const sql = "SELECT * FROM topics WHERE id = ?";
     
-    conn.query(sql, [id], function (err, result) {
+    conn.query(sql, id, function (err, result) {
       if (!err && result.length){
         const topic = result[0];
         return server.render(req, res, '/topics/edit', {
@@ -136,21 +136,19 @@ module.exports = function(app, conn, server){
 
   /** Edit Candidate */
   app.get('/blackexcellence/edit/:id', function(req, res){
-    const id = req.params.id;
+    const { id } = req.params;
     const sql = "SELECT * FROM blackex WHERE id = ?";
     
-    conn.query(sql, [id], function (err, result) {
-      if (!err && result.length){
-        const candidate = result[0];
-        return server.render(req, res, '/blackexcellence/edit', {
-          title: 'Edit Candidate',
-          backgroundImage: 'bg-blackex.jpg',
-          theme: 'blackex',
-          candidate
-        });
-      } else {
-        renderErrPage(req, res, err, server);
-      }
+    conn.query(sql, id, function (err, result) {
+      if (err || !result.length) return renderErrPage(req, res, err, server);
+
+      const candidate = result[0];
+      return server.render(req, res, '/blackexcellence/edit', {
+        title: 'Edit Candidate',
+        backgroundImage: 'bg-blackex.jpg',
+        theme: 'blackex',
+        candidate
+      });
     });
   });
 
@@ -159,23 +157,21 @@ module.exports = function(app, conn, server){
     const id = req.params.id;
     const sql = "SELECT * FROM blackex WHERE id = ?";
     
-    conn.query(sql, [id], function (err, result) {
-      if (!err && result.length){
-        const candidate = result[0];
-        candidate.label = `#${candidate.id}: ${candidate.name}`;
-        return server.render(req, res, '/blackexcellence/single', {
-          title: `${candidate.label} | #WOKEWeekly`,
-          description: serveDescription(candidate.description),
-          url: `/blackexcellence/candidate/${candidate.id}`,
-          cardImage: `/blackexcellence/${candidate.image}`,
-          alt: candidate.label,
-          backgroundImage: 'bg-blackex.jpg',
-          theme: 'blackex',
-          candidate
-        });
-      } else {
-        renderErrPage(req, res, err, server);
-      }
+    conn.query(sql, id, function (err, result) {
+      if (err || !result.length) return renderErrPage(req, res, err, server);
+
+      const candidate = result[0];
+      candidate.label = `#${candidate.id}: ${candidate.name}`;
+      return server.render(req, res, '/blackexcellence/single', {
+        title: `${candidate.label} | #WOKEWeekly`,
+        description: serveDescription(candidate.description),
+        url: `/blackexcellence/candidate/${candidate.id}`,
+        cardImage: `/blackexcellence/${candidate.image}`,
+        alt: candidate.label,
+        backgroundImage: 'bg-blackex.jpg',
+        theme: 'blackex',
+        candidate
+      });
     });
   });
 
@@ -225,7 +221,7 @@ module.exports = function(app, conn, server){
     const id = req.params.id;
     const sql = "SELECT * FROM team WHERE id = ?";
     
-    conn.query(sql, [id], function (err, result) {
+    conn.query(sql, id, function (err, result) {
       if (!err && result.length){
         const member = result[0];
         return server.render(req, res, '/team/edit', { 
@@ -257,9 +253,22 @@ module.exports = function(app, conn, server){
 
   /** Account */
   app.get('/account', function(req, res){
-    server.render(req, res, '/_auth/account', {
-      title: 'Account | #WOKEWeekly',
-      url: '/account',
+    const token = req.query.verified;
+    async.waterfall([
+      function(callback){
+        if (!token) return callback(null, false);
+        jwt.verify(token, process.env.JWT_SECRET, (err, result) => {
+          if (err) return callback(null, false);
+          callback(null, true, result.user);
+        });
+      }
+    ], function(err, justVerified, user){
+      server.render(req, res, '/_auth/account', {
+        title: 'Account | #WOKEWeekly',
+        url: '/account',
+        justVerified: justVerified,
+        verifiedUser: user
+      });
     });
   });
 
@@ -421,7 +430,7 @@ module.exports = function(app, conn, server){
       const {text} = result[0];
       return server.render(req, res, '/info', {
         title: 'Donate | #WOKEWeekly',
-        description: serveDescription(text),
+        description: 'Contribute to the support of our movement.',
         pageText: text,
         url: '/donate',
         backgroundImage: 'bg-donate.jpg',
@@ -453,7 +462,7 @@ module.exports = function(app, conn, server){
       const {text} = result[0];
       return server.render(req, res, '/info', {
         title: 'FAQs | #WOKEWeekly',
-        description: serveDescription(text),
+        description: 'Our most Frequently Asked Questions.',
         pageText: text, 
         url: '/faq'
       });
