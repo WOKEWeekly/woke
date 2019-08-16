@@ -38,9 +38,11 @@ export class Voter extends Component {
 
     const pct1 = result1 > 0 ? `${Math.ceil(result1)}%` : '';
     const pct2 = result2 > 0 ? `${Math.floor(result2)}%` : '';
+
     return (
       <div className={classes}>
         <Mover
+          name={'yes'}
           determinant={hasVoted}
           duration={500}
           width={hasVoted ? result1 : 50}
@@ -48,9 +50,12 @@ export class Voter extends Component {
           <button
             name={'yes'}
             onClick={event => this.makeVote(event)}
-            className={hasVoted ? css.yesVoted : css.yes}>{hasVoted ? pct1 : option1}</button>
+            className={hasVoted ? css.yesVoted : css.yes}>
+            {hasVoted ? pct1 : option1}
+          </button>
         </Mover>
         <Mover
+          name={'no'}
           determinant={hasVoted}
           duration={500}
           width={hasVoted ? result2 : 50}
@@ -58,7 +63,9 @@ export class Voter extends Component {
           <button
             name={'no'}
             onClick={event => this.makeVote(event)}
-            className={hasVoted ? css.noVoted : css.no}>{hasVoted ? pct2: option2}</button>
+            className={hasVoted ? css.noVoted : css.no}>
+            {hasVoted ? pct2: option2}
+          </button>
         </Mover>
       </div>
     )

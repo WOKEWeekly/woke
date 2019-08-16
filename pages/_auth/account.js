@@ -44,9 +44,7 @@ class Account extends Component {
 
     if (justVerified && user.id === verifiedUser.id){
       this.props.verifyUser();
-      setTimeout(() => {
-        location.href = '/account';
-      }, 1000);
+      setTimeout(() => location.href = '/account', 1000);
     }
   }
 
@@ -109,6 +107,10 @@ class Account extends Component {
 
               {isVerified ?
               <React.Fragment>
+                <div className={css.features}>
+                  <div>We'll be adding more management features to your account as time goes on.</div>
+                  <div>Stay tuned.</div>
+                </div>
                 <button onClick={this.showUsernameModal}>Change Username</button>
                 <button onClick={this.showPasswordModal}>Change Password</button>
               </React.Fragment>

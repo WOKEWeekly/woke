@@ -16,7 +16,7 @@ import CLEARANCES from '~/constants/clearances.js';
 import { formatDate } from '~/constants/date.js';
 import request from '~/constants/request.js';
 
-import css from '~/styles/users.scss';
+import css from '~/styles/team.scss';
 
 
 class Users extends Component {
@@ -75,7 +75,7 @@ class Users extends Component {
     const UserTable = () => {
       const headerRow = (
         <div className={css.header}>
-          <span>No.</span>
+          <span>#</span>
           <span>Name</span>
           <span>Clearance</span>
           <span>Email Address</span>
@@ -109,7 +109,7 @@ class Users extends Component {
     }
 
     return (
-      <Shader className={css.container}>
+      <Shader className={css.userTabler}>
         <Title className={css.heading}>List of Registered Users</Title>
         <UserCollection/>
       </Shader>

@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 
 import { Shader, Default, Mobile } from '~/components/layout.js';
 import { Loader, Empty } from '~/components/loader.js';
+import { Icon } from '~/components/icon.js';
 import { Fader } from '~/components/transitioner.js';
 import { Title } from '~/components/text.js';
 
@@ -53,7 +54,6 @@ class Team extends Component {
 	render(){
 
     const { isLoaded, members } = this.state;
-    const { user } = this.props;
 
     if (!isLoaded){
       return <Loader/>;
@@ -70,7 +70,7 @@ class Team extends Component {
     const MemberTable = () => {
       const headerRow = (
         <div className={css.header}>
-          <span>No.</span>
+          <span>#</span>
           <span>Name</span>
           <span>Level</span>
           <span>Role</span>
@@ -101,7 +101,7 @@ class Team extends Component {
     }
 
     return (
-      <Shader className={css.container}>
+      <Shader className={css.memberTabler}>
         <Title className={css.heading}>List of #WOKEWeekly Team Members</Title>
         <MemberCollection/>
       </Shader>
@@ -141,11 +141,26 @@ class _Member extends PureComponent {
           <span>{formatDate(item.birthday)}</span>
         </Default>
         <Mobile>
-          <Title className={css.name}>{item.firstname} {item.lastname}</Title>
-          <div>{item.level}</div>
-          <div>{item.role}</div>
-          <div>{item.demonyms}</div>
-          <div>{formatDate(item.birthday)}</div>
+          <div>
+            <span><Icon name={'user'}/></span>
+            <span className={css.name}>{item.firstname} {item.lastname}</span>
+          </div>
+          <div>
+            <span><Icon name={'star'}/></span>
+            <span>{item.level}</span>
+          </div>
+          <div>
+            <span><Icon name={'signature'}/></span>
+            <span>{item.role}</span>
+          </div>
+          <div>
+            <span><Icon name={'globe-africa'}/></span>
+            <span>{item.demonyms}</span>
+          </div>
+          <div>
+            <span><Icon name={'birthday-cake'}/></span>
+            <span>{formatDate(item.birthday)}</span>
+          </div>
           <div className={css.index}>{idx+1}</div>
         </Mobile>
         

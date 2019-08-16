@@ -41,14 +41,19 @@ export default class Footer extends Component {
 class Links extends Component {
   render(){
     return (
-      <div className={css.footerLinks}>
-        <a href={'/about'}>About #WOKEWeekly</a>
-        <a href={'/privacy'}>Privacy Policy</a>
-        <a href={'/cookies'}>Cookies</a>
-        <a href={'/faq'}>FAQs</a>
-        <a href={'/donate'}>Donate</a>
-        <a href={`mailto: ${emails.enquiries}`}>Contact Us</a>
-      </div>
+      <React.Fragment>
+        <Col className={css.footerLinks} lg={9}>
+          <a href={'/about'}>About #WOKEWeekly</a>
+          <a href={'/privacy'}>Privacy Policy</a>
+          <a href={'/cookies'}>Cookies</a>
+          <a href={'/faq'}>FAQs</a>
+          <a href={'/donate'}>Donate</a>
+          <a href={`mailto: ${emails.enquiries}`}>Contact Us</a>
+        </Col>
+        <Col className={css.author} lg={3}>
+          Powered by #WOKEWeekly
+        </Col>
+      </React.Fragment>
     )
   }
 }

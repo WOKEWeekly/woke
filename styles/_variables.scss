@@ -127,3 +127,65 @@ $break-xxl: 1408px; // Extra large devices (large desktops)
   @media (max-width: $break-md) { grid-template-columns: repeat(3, calc(100% / 3)); }
   @media (max-width: $break-sm) { grid-template-columns: repeat(2, 50%); }
 }
+
+@mixin entityTabler($columns...) {
+  padding: 1em 2em;
+  @media (max-width: $break-md) { padding: 1em; }
+  .heading {
+    font-size: 2em;
+    margin-bottom: .5em;
+    @media (max-width: $break-md) { font-size: 1.5em; }}
+  .grid {
+    display: grid;
+    font-size: 1.1em;
+    position: relative;
+    .header, .row {
+      align-items: center;
+      color: white;
+      display: grid;
+      grid-template-columns: $columns;
+      padding: .7em 0;
+      span { padding: 0 .5em; word-break: break-word; } }
+    .header {
+      border-bottom: 1px solid rgba(255,255,255,.6);
+      font-family: $title-font; }
+    .row {
+      font-family: $body-font;
+      border-radius: 10px;
+      &:hover { background-color: $primary-light; }
+      button {
+        @extend .invisible_button;
+        cursor: pointer;
+      }
+    }
+  }
+  .list {
+    color: white;
+    display: grid;
+    @include font-scaler(1);
+    .row {
+      background: $primary-dark;
+      border: 1px solid white;
+      border-radius: 15px;
+      font-family: $body-font;
+      padding: 1em;
+      margin: .5em 0;
+      position: relative;
+      div:not(.index):not(.crud) { display: grid; grid-template-columns: 2em 1fr;}
+      .name {
+        @include font-scaler(1.5);
+        font-family: $title-font; }
+      .index {
+        @include font-scaler(1.5);
+        font-family: $title-font;
+        position: absolute;
+        top: 5%;
+        right: 5%; }
+      .crud {
+        position: absolute;
+        bottom: 5%;
+        right: 0;
+      }
+    }
+  }
+}

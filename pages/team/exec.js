@@ -4,7 +4,7 @@ import Link from 'next/link';
 
 import { Cover, Shader, Spacer } from '~/components/layout.js';
 import { Loader, Empty } from '~/components/loader.js';
-import { Title, Subtitle, Divider, TruncatedParagraph } from '~/components/text.js';
+import { Title, Subtitle, Divider, Paragraph, truncateText } from '~/components/text.js';
 import { Slider } from '~/components/transitioner.js';
 
 import request from '~/constants/request.js';
@@ -119,7 +119,11 @@ class Exec extends PureComponent {
                   <Title className={css.title}>{item.fullname}</Title>
                   <Subtitle className={css.subtitle}>{item.role}</Subtitle>
                   <Divider />
-                  <TruncatedParagraph className={css.paragraph} paragraphs={1}>{item.description}</TruncatedParagraph>
+                  <Paragraph
+                    className={css.paragraph}
+                    more={`More on ${item.firstname}`}>
+                    {truncateText(item.description, 60)}
+                  </Paragraph>
                 </div>
               </Col>
             </Row>

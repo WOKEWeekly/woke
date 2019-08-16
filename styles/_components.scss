@@ -534,6 +534,8 @@
   color: skyblue;
   cursor: pointer;
   display: block;
+  font-family: $body-font;
+  font-size: 1.1em;
   margin-top: .5em;
   &:hover { text-decoration: underline; }
 }
@@ -581,6 +583,7 @@
   margin: 0 auto;
   overflow: hidden;
   min-height: 6em;
+  width: 100%;
   .options {
     all: initial;
     align-items: center;

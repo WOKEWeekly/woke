@@ -90,12 +90,14 @@ export class Mover extends Component {
     const { duration, delay, width } = this.props;
 
     const defaultStyle = {
-      transition: `all ${duration}ms ease ${delay || 0}ms`,
+      transition: `all ${duration}ms ease-in-out ${delay || 0}ms`,
       width: '50%'
     }
 
     const transitionStyles = {
-      entered: { width: `${width}%` },
+      entered: {
+        padding: width === 0 ? 0 : '.5em', 
+        width: `${width}%` },
       exited: defaultStyle,
     };
 

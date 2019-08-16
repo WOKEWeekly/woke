@@ -4,7 +4,7 @@ import {Container, Col, Row} from 'react-bootstrap';
 import Link from 'next/link';
 
 import { Cover, Shader, Default, Mobile } from '~/components/layout.js';
-import { Title, Subtitle, Divider, Paragraph, TruncatedParagraph } from '~/components/text.js';
+import { Title, Subtitle, Divider, Paragraph, truncateText, TruncatedParagraph } from '~/components/text.js';
 import { Fader, Slider } from '~/components/transitioner.js';
 import { Voter } from '~/components/voter.js';
 
@@ -156,10 +156,10 @@ class UpcomingSession extends Component {
             <Title className={css.title}>{session.title}</Title>
             <Subtitle className={css.subtitle}>{formatDate(session.dateHeld, true)}</Subtitle>
             <Divider/>
-            <TruncatedParagraph
-              paragraphs={1}
+            <Paragraph
               link={link}
-              className={css.paragraph}>{session.description}</TruncatedParagraph>
+              more={true}
+              className={css.paragraph}>{truncateText(session.description)}</Paragraph>
           </div>
         </div>
       </Slider>
@@ -228,11 +228,10 @@ class _RandomCandidate extends Component {
               {candidate.age} • {candidate.occupation} • {candidate.demonyms}
             </Subtitle>
             <Divider/>
-            <TruncatedParagraph
-              paragraphs={1}
+            <Paragraph
               link={link}
-              more={`Read more on ${candidate.firstname}...`}
-              className={css.paragraph}>{candidate.description}</TruncatedParagraph>
+              more={`Read more on ${candidate.firstname}`}
+              className={css.paragraph}>{truncateText(candidate.description)}</Paragraph>
           </div>
         </div>
       </Slider>
@@ -246,8 +245,8 @@ class TopicVoter extends Component {
     this.state = {
       topic: {},
       votes: 0,
-      result1: 0,
-      result2: 0,
+      result1: 50,
+      result2: 50,
       hasVoted: false,
       isLoaded: false
     }
@@ -272,6 +271,8 @@ class TopicVoter extends Component {
         this.setState({
           topic: topic,
           votes: topic.yes + topic.no,
+          result1: 50,
+          result2: 50,
           hasVoted: false
         });
       }
@@ -401,11 +402,10 @@ class RandomExecutive extends Component{
                 <Title className={css.title}>{exec.fullname}</Title>
                 <Subtitle className={css.subtitle}>{exec.role}</Subtitle>
                 <Divider/>
-                <TruncatedParagraph
-                  paragraphs={1}
+                <Paragraph
                   link={link}
-                  more={`Read more on ${exec.firstname}...`}
-                  className={css.paragraph}>{exec.description}</TruncatedParagraph>
+                  more={`Read more on ${exec.firstname}`}
+                  className={css.paragraph}>{truncateText(exec.description)}</Paragraph>
               </div>
             </Col>
           </Row>

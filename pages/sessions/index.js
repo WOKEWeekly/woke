@@ -11,7 +11,7 @@ import { SortDropdown } from '~/components/dropdown.js';
 import { Icon } from '~/components/icon.js';
 import { Cover, Shader, Spacer } from '~/components/layout.js';
 import { Loader, Empty } from '~/components/loader.js';
-import { Title, Subtitle, Divider, TruncatedParagraph, ReadMore } from '~/components/text.js';
+import { Title, Subtitle, Divider, Paragraph, truncateText } from '~/components/text.js';
 import {BottomToolbar} from '~/components/toolbar.js';
 import { Zoomer, Slider, Fader } from '~/components/transitioner.js';
 
@@ -210,7 +210,11 @@ class Session extends PureComponent {
                   <Title className={css.title}>{item.title}</Title>
                   <Subtitle className={css.date}>{formatDate(item.dateHeld, true)}</Subtitle>
                   <Divider />
-                  <TruncatedParagraph className={css.description} paragraphs={1} ellipsis={<ReadMore/>}>{item.description}</TruncatedParagraph>
+                  <Paragraph
+                    className={css.description}
+                    more={true}>
+                    {truncateText(item.description, 60)}
+                  </Paragraph>
                 </div>
               </Col>
             </Row>
