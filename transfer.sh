@@ -13,6 +13,7 @@ next.config.js \
 package.json \
 server.js \
 build.sh \
+502.html \
 root@www.wokeweekly.co.uk:/var/www/wokeweekly.co.uk
 
 #scp -r config.env root@www.wokeweekly.co.uk:/root

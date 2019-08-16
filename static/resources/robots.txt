@@ -2,7 +2,7 @@ User-agent: Twitterbot
 Disallow:
 
 User-agent: *
-Disallow: /
+Disallow:
 
 Disallow: /sessions/*
 Disallow: /blackexcellence/*
@@ -11,7 +11,8 @@ Disallow: /team
 Disallow: /account
 Disallow: /about/*
 Disallow: /cookies/*
-Disallow: /faqs/*
+Disallow: /donate/*
+Disallow: /faq/*
 Disallow: /privacy/*
 Disallow: /mentalhealth/*
 Disallow: /constitution
