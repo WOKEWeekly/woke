@@ -82,6 +82,7 @@ class Input extends Component {
         className={classes}
         autoComplete={'off'}
         value={this.props.value || ''}
+        ref={this.props.ref}
         onChange={this.props.onChange} />
     )
   }

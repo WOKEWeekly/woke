@@ -6,7 +6,7 @@ const dev = process.env.NODE_ENV !== 'production';
 const dotenv = require('dotenv').config({path: dev ? './config.env' : '/root/config.env'});
 const jwt = require('jsonwebtoken');
 const emails = require('./emails.js');
-const { validateReq} = require('./middleware.js');
+const { verifyToken, validateReq } = require('./middleware.js');
 const { resToClient, renderErrPage } = require('./response.js');
 
 const Mailchimp = require('mailchimp-api-v3');
@@ -239,6 +239,17 @@ module.exports = function(app, conn, passport, server){
     });
   });
 
+  /** Generate Topic Bank access token */
+  app.put('/generateTopicBankToken', verifyToken, function(req, res){
+    const token = generateRandomString(8);
+    const sql = `UPDATE tokens SET value = ?, lastUpdated = ? WHERE name = ?`;
+    const values = [token, new Date(), 'topicBank'];
+        
+    conn.query(sql, values, function(err){	
+      resToClient(res, err, {token});
+    });
+  });
+
   /** Resend the verification email to user's email address */
   app.notify('/resendVerificationEmail', validateReq, function(req, res){
     const { id } = req.body;
@@ -349,10 +360,17 @@ const subscribeUserToMailingList = (user) => {
       LNAME: user.lastname
     }
   })
-  .then(results => {
-    console.log(results);
-  })
-  .catch(err => {
-    console.log(err.toString());
-  });
+  .then(results => console.log(results))
+  .catch(err => console.log(err.toString()));
+}
+
+const generateRandomString = (length) => {
+  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  const charactersLength = characters.length;
+
+  let result = '';
+  for (let i = 0; i < length; i++) {
+    result += characters.charAt(Math.floor(Math.random() * charactersLength));
+  }
+  return result;
 }

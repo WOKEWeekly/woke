@@ -26,6 +26,10 @@ import '~/styles/_categories.scss';
 
 
 class TopicBank extends Component {
+  static getInitialProps({query}) {
+    return { ...query }
+  }
+
   constructor(props){
     super(props);
     this.state = {
@@ -40,8 +44,10 @@ class TopicBank extends Component {
       topicsLoaded: false
     };
 
-    if (props.user.clearance < CLEARANCES.ACTIONS.VIEW_TOPICS){
-      return location.href = '/';
+    if (props.hasAccess === false){
+      if (props.user.clearance < CLEARANCES.ACTIONS.VIEW_TOPICS){
+        return location.href = '/';
+      }
     }
   }
 
@@ -52,11 +58,14 @@ class TopicBank extends Component {
 
   /** Retrieve all topics */
   getTopics = (callback) => {
+    const { user, hasAccess } = this.props;
+    console.log(hasAccess);
     request({
       url: '/getTopics',
       method: 'GET',
       headers: {
-        'Authorization': `Bearer ${this.props.user.token}`,
+        'Admission': hasAccess,
+        'Authorization': `Bearer ${user.token}`,
         'Clearance': CLEARANCES.ACTIONS.VIEW_TOPICS,
         'Content-Type': 'application/json',
       },

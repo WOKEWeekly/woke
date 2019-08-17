@@ -9,6 +9,7 @@ Disallow: /blackexcellence/*
 Disallow: /topics
 Disallow: /team
 Disallow: /account
+Disallow: /admin
 Disallow: /about/*
 Disallow: /cookies/*
 Disallow: /donate/*

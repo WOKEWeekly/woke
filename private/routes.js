@@ -80,9 +80,15 @@ module.exports = function(app, conn, server){
 
   /** Topic Bank */
   app.get('/topics', function(req, res){
-    server.render(req, res, '/topics', {
-      title: 'Topic Bank | #WOKEWeekly',
-      backgroundImage: 'bg-topics.jpg'
+    const token = req.query.access;
+    const sql = "SELECT * FROM tokens WHERE name = 'topicBank'";
+
+    conn.query(sql, function (err, result) {
+      server.render(req, res, '/topics', {
+        title: 'Topic Bank | #WOKEWeekly',
+        backgroundImage: 'bg-topics.jpg',
+        hasAccess: result[0].value === token
+      });
     });
   });
 
@@ -289,6 +295,13 @@ module.exports = function(app, conn, server){
         title: 'Reset Password | #WOKEWeekly',
         recoveryToken: token
       });
+    });
+  });
+
+  /** Admin */
+  app.get('/admin', function(req, res){
+    server.render(req, res, '/_auth/admin', {
+      title: 'Admin Tools | #WOKEWeekly',
     });
   });
 

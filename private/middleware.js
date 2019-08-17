@@ -9,9 +9,11 @@ module.exports = {
   verifyToken: (req, res, next) => {
     async.waterfall([
       function(callback){ // Retrieve token from request
-        const bearerHeader = req.headers.authorization;
-        if (typeof bearerHeader !== 'undefined'){
-          const token = bearerHeader.split(' ')[1];
+        const { admission, authorization } = req.headers;
+        if (admission === 'true') return next();
+
+        if (typeof authorization !== 'undefined'){
+          const token = authorization.split(' ')[1];
           callback(null, token);
         } else {
           callback(new Error('Unauthorized request.'));
