@@ -13,7 +13,7 @@ module.exports = function(app, conn, server){
   app.get(['/', '/home'], function(req, res){
     server.render(req, res, '/home', { 
       title: '#WOKEWeekly - Awakening Through Conversation',
-      description: 'Debates and discussions centered around and beyond the UK black community.',
+      description: 'Debates and discussions centered around and beyond the UK black community. Facilitating open-floor conversation to shape the minds and alter the perspectives of participants.',
       url: '/',
       backgroundImage: 'bg-app.jpg'
      });
@@ -25,6 +25,7 @@ module.exports = function(app, conn, server){
       title: 'Sessions | #WOKEWeekly',
       description: 'Where the magic happens...',
       url: '/sessions',
+      cardImage: `/bg/card-sessions.jpg`,
       backgroundImage: 'bg-sessions.jpg'
      });
   });
@@ -86,6 +87,9 @@ module.exports = function(app, conn, server){
     conn.query(sql, function (err, result) {
       server.render(req, res, '/topics', {
         title: 'Topic Bank | #WOKEWeekly',
+        description: 'The currency of the franchise.',
+        url: '/topics',
+        cardImage: `/bg/card-topics.jpg`,
         backgroundImage: 'bg-topics.jpg',
         hasAccess: result[0].value === token
       });

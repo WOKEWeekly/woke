@@ -241,7 +241,7 @@ module.exports = function(app, conn, passport, server){
 
   /** Generate Topic Bank access token */
   app.put('/generateTopicBankToken', verifyToken, function(req, res){
-    const token = generateRandomString(8);
+    const token = generateRandomString(12);
     const sql = `UPDATE tokens SET value = ?, lastUpdated = ? WHERE name = ?`;
     const values = [token, new Date(), 'topicBank'];
         

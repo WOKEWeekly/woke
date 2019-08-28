@@ -331,7 +331,7 @@ class TopicVoter extends Component {
               result2={result2}
               hasVoted={hasVoted}
               onVote={this.submitVote} />
-            <div className={css.voteCount}>{votes} {votes === 1 ? 'vote' : 'votes'}</div>
+            {/* <div className={css.voteCount}>{votes} {votes === 1 ? 'vote' : 'votes'}</div> */}
             <Fader determinant={hasVoted} duration={750} className={css.voteThanks}>
               Thank you for your vote!
             </Fader>

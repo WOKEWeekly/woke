@@ -54,6 +54,7 @@ const Meta = ({
     <meta property="og:image:type" content="image/jpeg" />
     <meta property="og:image:alt" content={title} />
     <meta property="og:site_name" content="#WOKEWeekly" />
+    <meta name="google-site-verification" content="Kv9Zk269oRFxqqh7W9amnHVXRsR8qREsGK4dk0a1SQk" />
     <meta name="twitter:card" content="summary_large_image" />
 
     {/* Favicon */}
