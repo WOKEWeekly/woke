@@ -53,13 +53,13 @@ export function getCookie(cname) {
 }
 
 export function checkCookies(message){
-  if (Boolean(getCookie('cookiesAccepted'))){
+  if (getCookie('cookiesAccepted') === 'true'){
+    return true;
+  } else {
     if (message){
       return alert.error(message);
     } else {
       return false;
     }
-  } else {
-    return true;
   }
 }
