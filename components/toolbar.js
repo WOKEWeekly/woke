@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { Container } from 'react-bootstrap';
 import css from '~/styles/_components.scss';
-import { zIndices } from './layout';
 
 class Toolbar extends Component {
   constructor(props){
@@ -15,6 +14,7 @@ class Toolbar extends Component {
 
   render(){
     if (!this.state.isLoaded) return null;
+    if (this.props.children.filter((e) => e !== null).length < 1) return null;
 
     return (
       <div className={this.props.className}>

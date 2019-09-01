@@ -250,8 +250,8 @@ module.exports = function(app, conn){
       },
       function(callback){ // Update member in database
         const { member1, member2 } = JSON.parse(req.body.members);
-        const sql = "UPDATE team SET firstname = ?, lastname = ?, image = ?, level = ?, birthday = ?, role = ?, ethnicity = ?, socials = ?, slug = ?, description = ? WHERE id = ?";
-        const values = [member2.firstname, member2.lastname, member2.image, member2.level, member2.birthday, member2.role, member2.ethnicity, member2.socials, member2.slug, member2.description, member1.id];
+        const sql = "UPDATE team SET firstname = ?, lastname = ?, image = ?, level = ?, birthday = ?, role = ?, ethnicity = ?, socials = ?, slug = ?, description = ?, verified = ? WHERE id = ?";
+        const values = [member2.firstname, member2.lastname, member2.image, member2.level, member2.birthday, member2.role, member2.ethnicity, member2.socials, member2.slug, member2.description, member2.verified, member1.id];
         
         conn.query(sql, values, function (err) {
           if (err) return callback(err);
@@ -337,8 +337,8 @@ module.exports = function(app, conn){
   });
 
   /** Get random member of the executive team */
-  app.get('/getRandomExecutive', function(req, res){
-    const sql = "SELECT * FROM team WHERE level = 'Executive' ORDER BY RAND() LIMIT 1";
+  app.get('/getRandomMember', function(req, res){
+    const sql = "SELECT * FROM team WHERE verified = 1 ORDER BY RAND() LIMIT 1";
     conn.query(sql, function (err, result) {
       resToClient(res, err, result[0]);
     });

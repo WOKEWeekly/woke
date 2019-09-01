@@ -58,7 +58,7 @@ export default class Home extends Component {
           </Row>
 
           <Row><TopicVoter/></Row>
-          <Row><RandomExecutive/></Row>
+          <Row><RandomMember/></Row>
           <Row><ForumAdvertiser/></Row>
         </Container>
       </Shader>
@@ -342,70 +342,73 @@ class TopicVoter extends Component {
   }
 }
 
-class RandomExecutive extends Component{
+class RandomMember extends Component{
   constructor(){
     super();
-    this.state = { exec: {} }
+    this.state = { member: {} }
   }
 
   componentDidMount(){
-    this.getRandomExecutive();
+    this.getRandomMember();
   }
 
-  getRandomExecutive = () => {
+  getRandomMember = () => {
     request({
-      url: '/getRandomExecutive',
+      url: '/getRandomMember',
       method: 'GET',
       headers: {
         'Authorization': process.env.AUTH_KEY,
         'Content-Type': 'application/json',
       },
-      onSuccess: (exec) => {
-        exec.loaded = true;
-        this.setState({exec})
+      onSuccess: (member) => {
+        member.loaded = true;
+        this.setState({member})
       }
     });
   }
 
   render(){
-    const { exec } = this.state;
+    const { member } = this.state;
 
-    if (exec.loaded){
-      exec.fullname = `${exec.firstname} ${exec.lastname}`;
-      exec.description = exec.description.trim().length > 0 ? exec.description : 'No description.';
+    if (member.loaded){
+      member.fullname = `${member.firstname} ${member.lastname}`;
+      member.description = member.description.trim().length > 0 ? member.description : 'No description.';
     }
 
-    const link = `/executives/${exec.slug}`;
+    const isExecutive = member.level === 'Executive';
+
+    const link = isExecutive ? `/executives/${member.slug}` : `/team/member/${member.slug}`;
+    const heading = `Have you met our ${isExecutive ? 'executive' : 'member'}?`
 
     return (
       <Fader
-        determinant={exec.loaded}
+        determinant={member.loaded}
         duration={750}
         delay={1500}
         postTransitions={'background-color .3s'}
-        className={css.randomExecutive}>
+        className={css.randomMember}>
         <div className={css.container}>
-        <Mobile><Title className={css.heading}>Have you met our executive?</Title></Mobile>
+        <Mobile><Title className={css.heading}>{heading}</Title></Mobile>
           <Row>
             <Col md={4}>
-              {exec.image ?
+              {member.image ?
               <Link href={link}>
                 <img
-                  src={`/static/images/team/${exec.image}`}
-                  alt={exec.fullname}
+                  src={`/static/images/team/${member.image}`}
+                  alt={member.fullname}
                   className={css.image} />
               </Link> : null}
             </Col>
             <Col md={8}>
-            <Default><Title className={css.heading}>Have you met our executive?</Title></Default>
+            <Default><Title className={css.heading}>{heading}</Title></Default>
               <div className={css.details}>
-                <Title className={css.title}>{exec.fullname}</Title>
-                <Subtitle className={css.subtitle}>{exec.role}</Subtitle>
+                <Title className={css.title}>{member.fullname}</Title>
+                <Subtitle className={css.subtitle}>{member.role}</Subtitle>
                 <Divider/>
                 <Paragraph
                   link={link}
-                  more={`Read more on ${exec.firstname}`}
-                  className={css.paragraph}>{truncateText(exec.description)}</Paragraph>
+                  more={`Read more on ${member.firstname}`}
+                  className={css.paragraph}>{truncateText(member.description)}</Paragraph>
               </div>
             </Col>
           </Row>
