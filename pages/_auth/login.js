@@ -19,7 +19,7 @@ class LoginModal extends Component {
     this.state = {
       username: '',
       password: '',
-      remember: getCookie('remember')
+      remember: Boolean(getCookie('remember'))
     }
   }
 

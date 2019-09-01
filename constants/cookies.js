@@ -53,7 +53,7 @@ export function getCookie(cname) {
 }
 
 export function checkCookies(message){
-  if (!getCookie('cookiesAccepted')){
+  if (Boolean(getCookie('cookiesAccepted'))){
     if (message){
       return alert.error(message);
     } else {

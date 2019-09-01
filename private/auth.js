@@ -68,13 +68,6 @@ module.exports = function(app, conn, passport, server){
       function(user, callback){ // Log user session
         req.login(user, function(err) {
           err ? callback(err) : callback(null, user);
-
-          // /** If remember checked, maintain session for 30 days */
-          // if (req.body.remember) {
-          //   req.session.cookie.maxAge = 30 * 24 * 60 * 60 * 1000;
-          // } else {
-          //   req.session.cookie.expires = false;
-          // }
         });
       },
       function(user, callback){ // Update last login time for user
@@ -89,7 +82,6 @@ module.exports = function(app, conn, passport, server){
         jwt.sign( { user: req.user }, process.env.JWT_SECRET,
           { expiresIn: req.body.remember ? '30d' : '2h' }, (err, token) => {
           if (err) return callback(err);
-
           const { id, firstname, lastname, username, clearance } = req.user;
           const user = { id, firstname, lastname, username, clearance, token };
           
