@@ -14,7 +14,9 @@ class Toolbar extends Component {
 
   render(){
     if (!this.state.isLoaded) return null;
-    if (this.props.children.filter((e) => e !== null).length < 1) return null;
+    
+    const { children } = this.props;
+    if (children.length && children.filter(e => e !== null).length < 1) return null;
 
     return (
       <div className={this.props.className}>

@@ -75,7 +75,7 @@ export default class WOKE extends App {
   }
 
   acceptCookies = () => {
-    setCookie('cookiesAccepted', true);
+    setCookie('cookiesAccepted', true, 365 * 24);
     this.setState({ cookiesAccepted: true});
   }
 

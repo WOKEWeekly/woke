@@ -238,7 +238,7 @@ module.exports = function(app, conn, server){
       return server.render(req, res, '/team/single', { 
         title: `${member.firstname} ${member.lastname} | #WOKEWeekly`,
         description: serveDescription(member.description),
-        url: `/team/member/${member.id}`,
+        url: `/team/member/${member.slug}`,
         cardImage: `/team/${member.image}`,
         alt: `${member.firstname} ${member.lastname}`,
         backgroundImage: 'bg-team.jpg',

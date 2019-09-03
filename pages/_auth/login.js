@@ -48,7 +48,7 @@ class LoginModal extends Component {
       body: JSON.stringify(this.state),
       headers: { 'Content-Type': 'application/json' },
       onSuccess: (user) => {
-        setCookie('remember', this.state.remember);
+        setCookie('remember', this.state.remember, 365 * 24);
         this.props.saveUser(user);
         this.props.close();
         setAlert({ type: 'info', message: `Welcome, ${user.firstname}!` });
