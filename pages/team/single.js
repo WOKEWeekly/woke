@@ -91,7 +91,7 @@ class MemberPage extends Component {
             title={'Back to Executives'}
             onClick={() => location.href = '/executives'} /> : null}
 
-          {user.clearance >= CLEARANCES.ACTIONS.EDIT_MEMBER ? 
+          {user.clearance >= CLEARANCES.ACTIONS.CRUD_TEAM ? 
             <EditEntityButton
               title={isExecutive ? 'Edit Executive' : 'Edit Member'}
               onClick={() => Router.push(`/team/edit/${member.id}`)}/>

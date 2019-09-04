@@ -184,6 +184,8 @@ class _User extends PureComponent {
     const { item, idx } = this.props;
     const { clearance, editVisible, deleteVisible } = this.state;
 
+    item.fullname = `${item.firstname} ${item.lastname}`;
+
     const header = (
       <h2 className={css.text}>Change Clearance</h2>
     );
@@ -217,7 +219,7 @@ class _User extends PureComponent {
           postTransitions={'background-color .1s ease'}>
           <Default>
             <span>{idx+1}</span>
-            <span>{item.firstname} {item.lastname}</span>
+            <span>{item.fullname}</span>
             <span>{item.clearance}</span>
             <span>{item.email}</span>
             <span>{item.username}</span>
@@ -229,7 +231,7 @@ class _User extends PureComponent {
           <Mobile>
             <div>
               <span><Icon name={'user'}/></span>
-              <span className={css.name}>{item.firstname} {item.lastname}</span>
+              <span className={css.name}>{item.fullname}</span>
             </div>
             <div>
               <span><Icon name={'signature'}/></span>
@@ -263,7 +265,7 @@ class _User extends PureComponent {
 
         <ConfirmModal
           visible={deleteVisible}
-          message={'Are you sure you want to delete this user?'}
+          message={`Are you sure you want to delete user: ${item.fullname}?`}
           confirmFunc={this.deleteUser}
           confirmText={'Delete'}
           close={this.closeDelete} />

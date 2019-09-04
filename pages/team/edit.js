@@ -97,7 +97,7 @@ class MemberEdit extends Component {
       body: data,
       headers: {
         'Authorization': `Bearer ${this.props.user.token}`,
-        'Clearance': CLEARANCES.ACTIONS.EDIT_MEMBER,
+        'Clearance': CLEARANCES.ACTIONS.CRUD_TEAM,
         'Path': 'team'
       },
       onSuccess: () => {

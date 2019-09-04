@@ -23,7 +23,7 @@ class MemberForm extends Component {
       socialsModalVisible: false
     }
 
-    if (props.user.clearance < CLEARANCES.ACTIONS.EDIT_MEMBER){
+    if (props.user.clearance < CLEARANCES.ACTIONS.CRUD_TEAM){
       return location.href = '/executives';
     }
   }

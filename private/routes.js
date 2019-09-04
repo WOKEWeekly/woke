@@ -247,6 +247,14 @@ module.exports = function(app, conn, server){
     });
   });
 
+  /** Add New Team Member */
+  app.get('/team/add', function(req, res){
+    server.render(req, res, '/team/add', {
+      title: 'Add New Member',
+      backgroundImage: 'bg-team.jpg'
+    });
+  });
+
   /** Edit Team Member */
   app.get('/team/edit/:id', function(req, res){
     const id = req.params.id;
