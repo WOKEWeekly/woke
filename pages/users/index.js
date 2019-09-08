@@ -77,7 +77,7 @@ class Users extends Component {
         <div className={css.header}>
           <span>#</span>
           <span>Name</span>
-          <span>Clearance</span>
+          <span><Icon name={'star'}/></span>
           <span>Email Address</span>
           <span>Username</span>
           <span>Last Active</span>
@@ -234,7 +234,7 @@ class _User extends PureComponent {
               <span className={css.name}>{item.fullname}</span>
             </div>
             <div>
-              <span><Icon name={'signature'}/></span>
+              <span><Icon name={'star'}/></span>
               <span>{item.clearance}</span>
             </div>
             <div>
