@@ -101,7 +101,7 @@
   height: $navbar-height;
   transition: height 0.3s ease-in-out;
   -webkit-transition: height 0.3s ease-in-out;
-  @media (max-width: $break-md) { height: initial; }
+  @media (max-width: $break-lg) { height: initial; }
   .brand { @include scale-on-hover(1.08); }
   a:not(.brand) {
     font-family: $body-font;
