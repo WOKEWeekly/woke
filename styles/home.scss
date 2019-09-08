@@ -7,9 +7,12 @@
   }
 }
 
-:global(.link-default){
-  color: skyblue !important;
-  &:hover { color: #2babb4 !important; }
+/** Override colour of home links **/
+.paragraph {
+  a {
+    color: skyblue !important;
+    &:hover { color: #2babb4 !important; }
+  }
 }
 
 .threepart {
