@@ -53,6 +53,23 @@ module.exports = {
     }
   },
 
+  /** Log user activity on each request */
+  logUserActivity: (conn) => {
+    return function(req, res, next){
+      const id = parseInt(req.headers['user']);
+      if (isNaN(id)){
+        next();
+      } else {
+        const sql = `UPDATE user SET last_active = ? WHERE id = ?`;
+        const values = [new Date(), id];
+        
+        conn.query(sql, values, () => {
+          next();
+        });
+      }
+    }
+  },
+
   /** Uploading files using Multer */
   upload: multer({
     storage: multer.diskStorage({

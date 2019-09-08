@@ -67,15 +67,7 @@ module.exports = function(app, conn, passport, server){
       },
       function(user, callback){ // Log user session
         req.login(user, function(err) {
-          err ? callback(err) : callback(null, user);
-        });
-      },
-      function(user, callback){ // Update last login time for user
-        const sql = `UPDATE user SET last_login = ? WHERE id = ?`;
-        const values = [new Date(), user.id];
-        
-        conn.query(sql, values, function() {
-          callback(null);
+          err ? callback(err) : callback(null);
         });
       },
       function(callback){ // Pass authenticated user information to mobile app */

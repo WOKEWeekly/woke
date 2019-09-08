@@ -13,7 +13,7 @@ import { Fader } from '~/components/transitioner.js';
 import { Title } from '~/components/text.js';
 
 import CLEARANCES from '~/constants/clearances.js';
-import { formatDate } from '~/constants/date.js';
+import { formatDate, formatDateTime } from '~/constants/date.js';
 import request from '~/constants/request.js';
 
 import css from '~/styles/team.scss';
@@ -80,7 +80,7 @@ class Users extends Component {
           <span>Clearance</span>
           <span>Email Address</span>
           <span>Username</span>
-          <span>Last Login</span>
+          <span>Last Active</span>
           <span>Date Registered</span>
           <span></span>
           <span></span>
@@ -223,7 +223,7 @@ class _User extends PureComponent {
             <span>{item.clearance}</span>
             <span>{item.email}</span>
             <span>{item.username}</span>
-            <span>{formatDate(item.last_login)}</span>
+            <span>{formatDateTime(item.last_active)}</span>
             <span>{formatDate(item.create_time)}</span>
             <span><button className={css.invisible_button} onClick={this.openEdit}><Icon name={'edit'} /></button></span>
             <span><button className={css.invisible_button} onClick={this.openDelete}><Icon name={'trash'} /></button></span>
@@ -244,6 +244,10 @@ class _User extends PureComponent {
             <div>
               <span><Icon name={'at'}/></span>
               <span>{item.username}</span>
+            </div>
+            <div>
+              <span><Icon name={'clock'}/></span>
+              <span>{formatDateTime(item.last_active)}</span>
             </div>
             <div>
               <span><Icon name={'calendar-alt'}/></span>

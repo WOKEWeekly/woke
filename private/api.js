@@ -1,9 +1,12 @@
 const async = require('async');
 const fs = require('fs');
-const { verifyToken, validateReq, upload } = require('./middleware.js');
+const { verifyToken, validateReq, logUserActivity, upload } = require('./middleware.js');
 const { resToClient } = require('./response.js');
 
 module.exports = function(app, conn){
+
+  /** Log user activity on each request */
+  app.use('/', logUserActivity(conn));
 
   /** Retrieve all sessions */
   app.get('/getSessions', validateReq, function(req, res){
@@ -321,7 +324,7 @@ module.exports = function(app, conn){
 
   /** Retrieve all users */
   app.get('/getRegisteredUsers', verifyToken, function(req, res){
-    const sql = "SELECT id, firstname, lastname, clearance, username, email, create_time, last_login FROM user";
+    const sql = "SELECT id, firstname, lastname, clearance, username, email, create_time, last_active FROM user";
     conn.query(sql, function (err, result) {
       resToClient(res, err, result);
     });
