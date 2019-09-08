@@ -542,6 +542,14 @@ module.exports = function(app, conn, server){
     });
   });
 
+  app.get('/sponsorship-proposal', function(req, res){
+    fs.readFile('./static/resources/Sponsorship Proposal.pdf', function (err, data){
+      if (err) res.sendStatus(404);
+      res.contentType("application/pdf");
+      res.send(data);
+    });
+  });
+
   app.get('/robots.txt', (req, res) => (
     res.status(200).sendFile(path.resolve('./static/resources/robots.txt'), {
       headers: { 'Content-Type': 'text/plain;charset=UTF-8', }
