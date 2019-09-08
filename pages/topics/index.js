@@ -6,7 +6,7 @@ import { bindActionCreators } from 'redux';
 import { saveTopicSort, saveTopicFilters } from '~/reducers/actions';
 import classNames from 'classnames';
 
-import { alert } from '~/components/alert.js';
+import { alert, setAlert } from '~/components/alert.js';
 import { AddEntityButton } from '~/components/button.js';
 import { SortDropdown, FilterDropdown } from '~/components/dropdown.js';
 import { Checkbox, SearchBar } from '~/components/form.js';
@@ -46,6 +46,7 @@ class TopicBank extends Component {
 
     if (props.hasAccess === false){
       if (props.user.clearance < CLEARANCES.ACTIONS.VIEW_TOPICS){
+        setAlert({type: 'error', message: 'This link is invalid or expired.'});
         return location.href = '/';
       }
     }
