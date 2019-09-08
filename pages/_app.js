@@ -51,7 +51,7 @@ export default class WOKE extends App {
     };
     
     // Get cookie consent value
-    this.setState({cookiesAccepted: getCookie('cookiesAccepted')});
+    this.setState({cookiesAccepted: getCookie('cookiesAccepted') === 'true'});
 
     // Loaded countries if not already loaded
     if (!localStorage.getItem('countriesLoaded')){
@@ -75,7 +75,7 @@ export default class WOKE extends App {
   }
 
   acceptCookies = () => {
-    setCookie('cookiesAccepted', true);
+    setCookie('cookiesAccepted', true, 365 * 24);
     this.setState({ cookiesAccepted: true});
   }
 

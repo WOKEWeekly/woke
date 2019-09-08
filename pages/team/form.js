@@ -1,9 +1,8 @@
 import React, { Component} from 'react';
 import { Col } from 'react-bootstrap';
 import { connect } from 'react-redux';
-import Router from 'next/router';
 
-import { SubmitButton, CancelButton, AddEntityButton } from '~/components/button.js';
+import { SubmitButton, CancelButton, CheckboxButton, AddEntityButton } from '~/components/button.js';
 import { BirthdayPicker } from '~/components/datepicker.js';
 import { Heading, Group, Label, Select, TextInput, ClickInput, TextArea, FileSelector } from '~/components/form.js';
 import { SocialsList } from '~/components/icon.js';
@@ -24,7 +23,7 @@ class MemberForm extends Component {
       socialsModalVisible: false
     }
 
-    if (props.user.clearance < CLEARANCES.ACTIONS.EDIT_EXEC){
+    if (props.user.clearance < CLEARANCES.ACTIONS.CRUD_TEAM){
       return location.href = '/executives';
     }
   }
@@ -36,10 +35,10 @@ class MemberForm extends Component {
 
   render(){
     const { heading, confirmText, confirmFunc, cancelFunc,
-      handleText, handleDate, handleImage, clearSelection, confirmSocials, countries } = this.props;
+      handleText, handleDate, handleImage, handleCheckbox, clearSelection, confirmSocials, countries } = this.props;
 
     const { firstname, lastname, level, role, description, birthday, image, socials,
-      ethnicity1, ethnicity2, ethnicity3, ethnicity4 } = this.props.candidate;
+      ethnicity1, ethnicity2, ethnicity3, ethnicity4, verified } = this.props.member;
 
     const { ethnicModalVisible, socialsModalVisible } = this.state;
 
@@ -103,12 +102,20 @@ class MemberForm extends Component {
               </Col>
             </Group>
             <Group>
-              <Col md={12}>
+              <Col md={7}>
                 <Label>Socials:</Label>
                 <AddEntityButton
                   title={'Add Socials'}
                   onClick={this.showSocialsModal} />
                 <SocialsList socials={socials} />
+              </Col>
+              <Col md={5}>
+                <Label>Status:</Label>
+                <CheckboxButton
+                  name={'verified'}
+                  value={verified}
+                  onChange={handleCheckbox}
+                  label={'This is a verified member.'} />
               </Col>
             </Group>
             <Group>
@@ -143,7 +150,7 @@ class MemberForm extends Component {
 
         <EthnicModal
           visible={ethnicModalVisible}
-          entity={this.props.candidate}
+          entity={this.props.member}
           handleSelect={handleText}
           clearSelection={clearSelection}
           close={this.hideEthnicModal} />

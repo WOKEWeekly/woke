@@ -1,11 +1,15 @@
 import React, { Component, PureComponent } from 'react';
 import { connect } from 'react-redux';
 
+import { alert } from '~/components/alert.js';
+import { AddEntityButton } from '~/components/button.js';
 import { Shader, Default, Mobile } from '~/components/layout.js';
 import { Loader, Empty } from '~/components/loader.js';
 import { Icon } from '~/components/icon.js';
+import { ConfirmModal } from '~/components/modal.js';
 import { Fader } from '~/components/transitioner.js';
 import { Title } from '~/components/text.js';
+import { BottomToolbar } from '~/components/toolbar.js';
 
 import { countriesToString } from '~/constants/countries.js';
 import { formatDate } from '~/constants/date.js';
@@ -64,7 +68,7 @@ class Team extends Component {
     const items = [];
 
     for (const [index, item] of members.entries()) {
-      items.push(<Member key={index} idx={index} item={item} />);
+      items.push(<Member key={index} idx={index} item={item} getTeam={this.getTeam} />);
     }
 
     const MemberTable = () => {
@@ -76,6 +80,9 @@ class Team extends Component {
           <span>Role</span>
           <span>Ethnicity</span>
           <span>Birthday</span>
+          <span/>
+          <span/>
+          <span/>
         </div>
       )
 
@@ -101,19 +108,29 @@ class Team extends Component {
     }
 
     return (
-      <Shader className={css.memberTabler}>
-        <Title className={css.heading}>List of #WOKEWeekly Team Members</Title>
-        <MemberCollection/>
-      </Shader>
+      <React.Fragment>
+        <Shader className={css.memberTabler}>
+          <Title className={css.heading}>List of #WOKEWeekly Team Members</Title>
+          <MemberCollection/>
+        </Shader>
+
+        <BottomToolbar>
+          <AddEntityButton
+            title={'Add Member'}
+            onClick={() => location.href = '/team/add'} />
+        </BottomToolbar>
+      </React.Fragment>
     );
 	}
 }
 
 class _Member extends PureComponent {
-  constructor(){
-    super();
+  constructor(props){
+    super(props);
     this.state = {
-      isLoaded: false
+      ...props.item,
+      isLoaded: false,
+      deleteVisible: false,
     }
   }
 
@@ -121,9 +138,37 @@ class _Member extends PureComponent {
     this.setState({ isLoaded: true });
   }
 
+  /** Go to edit member */
+  editMember = (member) => location.href = `/team/edit/${member.id}`;
+
+  /** Delete member */
+  deleteMember = () => {
+    const { firstname, lastname } = this.state;
+    request({
+      url: '/deleteMember',
+      method: 'DELETE',
+      body: JSON.stringify(this.state),
+      headers: {
+        'Authorization': `Bearer ${this.props.user.token}`,
+        'Clearance': CLEARANCES.ACTIONS.CRUD_TEAM,
+        'Content-Type': 'application/json',
+      },
+      onSuccess: () => {
+        alert.success(`You've deleted member ${firstname} ${lastname}.`);
+        this.closeDelete();
+        this.props.getTeam();
+      }
+    });
+  }
+
+  openDelete = () => this.setState({ deleteVisible: true});
+  closeDelete = () => this.setState({ deleteVisible: false});
+
   render(){
+    const { deleteVisible } = this.state;
     const { item, idx, countries } = this.props;
     item.demonyms = countriesToString(JSON.parse(item.ethnicity), countries);
+    item.fullname = `${item.firstname} ${item.lastname}`;
 
     return (
       <Fader
@@ -134,16 +179,19 @@ class _Member extends PureComponent {
         postTransitions={'background-color .1s ease'}>
         <Default>
           <span>{idx+1}</span>
-          <span>{item.firstname} {item.lastname}</span>
+          <span>{item.fullname}</span>
           <span>{item.level}</span>
           <span>{item.role}</span>
           <span>{item.demonyms}</span>
           <span>{formatDate(item.birthday)}</span>
+          <span><button className={css.invisible_button} onClick={() => location.href = `/team/member/${item.slug}`}><Icon name={'external-link-alt'} /></button></span>
+          <span><button className={css.invisible_button} onClick={() => this.editMember(item)}><Icon name={'edit'} /></button></span>
+          <span><button className={css.invisible_button} onClick={this.openDelete}><Icon name={'trash'} /></button></span>
         </Default>
         <Mobile>
           <div>
             <span><Icon name={'user'}/></span>
-            <span className={css.name}>{item.firstname} {item.lastname}</span>
+            <span className={css.name}>{item.fullname}</span>
           </div>
           <div>
             <span><Icon name={'star'}/></span>
@@ -162,7 +210,19 @@ class _Member extends PureComponent {
             <span>{formatDate(item.birthday)}</span>
           </div>
           <div className={css.index}>{idx+1}</div>
+          <div className={css.crud}>
+            <button className={css.invisible_button} onClick={() => location.href = `/team/member/${item.slug}`}><Icon name={'external-link-alt'} /></button>
+            <button className={css.invisible_button} onClick={this.openEdit}><Icon name={'edit'} /></button>
+            <button className={css.invisible_button} onClick={this.openDelete}><Icon name={'trash'} /></button>
+          </div>
         </Mobile>
+
+        <ConfirmModal
+          visible={deleteVisible}
+          message={`Are you sure you want to delete member: ${item.fullname}?`}
+          confirmFunc={this.deleteMember}
+          confirmText={'Delete'}
+          close={this.closeDelete} />
         
       </Fader>
     ); 

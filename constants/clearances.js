@@ -6,7 +6,7 @@ module.exports = {
     CRUD_BLACKEX: 6,        // Add, edit and delete #BlackExcellence candidates
     CRUD_SESSIONS: 6,       // Add, edit and delete sessions
     CRUD_TOPICS: 6,         // Add, edit and delete topics from the Topic Bank
-    EDIT_EXEC: 6,           // Add, edit and delete team member profiles
+    CRUD_TEAM: 6,           // Add, edit and delete team member profiles
 
     VIEW_TEAM: 7,           // View all team member details
     SEE_SUGGESTING_USER: 7, // See author of suggestions

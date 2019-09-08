@@ -240,6 +240,28 @@ module.exports = function(app, conn){
     });
   });
 
+  /** Add new team member to database */
+  app.post('/addMember', verifyToken, function(req, res){
+    async.waterfall([
+      function(callback){ // Upload file to directory
+        upload(req, res, function(err){
+          err ? callback(err) : callback(null);
+        });
+      },
+      function(callback){ // Add candidate to database
+        const member = JSON.parse(req.body.member);
+        const sql = "INSERT INTO team (firstname, lastname, image, level, birthday, role, ethnicity, socials, slug, description, verified) VALUES ?";
+        const values = [[member.firstname, member.lastname, member.image, member.level, member.birthday, member.role, member.ethnicity, member.socials, member.slug, member.description, member.verified]];
+        
+        conn.query(sql, [values], function (err) {
+          err ? callback(err) : callback(null);
+        });
+      }
+    ], function(err){
+      resToClient(res, err);
+    });
+  });
+
   /** Update details of existing team member in database */
   app.put('/updateMember', verifyToken, function(req, res){
     async.waterfall([
@@ -250,8 +272,8 @@ module.exports = function(app, conn){
       },
       function(callback){ // Update member in database
         const { member1, member2 } = JSON.parse(req.body.members);
-        const sql = "UPDATE team SET firstname = ?, lastname = ?, image = ?, level = ?, birthday = ?, role = ?, ethnicity = ?, socials = ?, slug = ?, description = ? WHERE id = ?";
-        const values = [member2.firstname, member2.lastname, member2.image, member2.level, member2.birthday, member2.role, member2.ethnicity, member2.socials, member2.slug, member2.description, member1.id];
+        const sql = "UPDATE team SET firstname = ?, lastname = ?, image = ?, level = ?, birthday = ?, role = ?, ethnicity = ?, socials = ?, slug = ?, description = ?, verified = ? WHERE id = ?";
+        const values = [member2.firstname, member2.lastname, member2.image, member2.level, member2.birthday, member2.role, member2.ethnicity, member2.socials, member2.slug, member2.description, member2.verified, member1.id];
         
         conn.query(sql, values, function (err) {
           if (err) return callback(err);
@@ -267,6 +289,28 @@ module.exports = function(app, conn){
       function(image, callback){ // Delete original image from directory
         fs.unlink(image, function(err) {
           if (err) console.warn(err.toString());
+          callback(null);
+        });
+      }
+    ], function(err){
+      resToClient(res, err);
+    });
+  });
+
+  /** Delete an existing team member from database */
+  app.delete('/deleteMember', verifyToken, function(req, res){
+    async.waterfall([
+      function(callback){ // Delete member from database
+        const member = req.body;
+        const sql = "DELETE FROM team WHERE id = ?";
+
+        conn.query(sql, member.id, function (err) {
+          err ? callback(err) : callback(null, member.image);
+        });
+      },
+      function(image, callback){ // Delete image from directory
+        fs.unlink(`./static/images/team/${image}`, function(err) {
+          if (err) console.warn(`${image} not found in /team directory.`);
           callback(null);
         });
       }
@@ -337,8 +381,8 @@ module.exports = function(app, conn){
   });
 
   /** Get random member of the executive team */
-  app.get('/getRandomExecutive', function(req, res){
-    const sql = "SELECT * FROM team WHERE level = 'Executive' ORDER BY RAND() LIMIT 1";
+  app.get('/getRandomMember', function(req, res){
+    const sql = "SELECT * FROM team WHERE verified = 1 ORDER BY RAND() LIMIT 1";
     conn.query(sql, function (err, result) {
       resToClient(res, err, result[0]);
     });
@@ -376,76 +420,6 @@ module.exports = function(app, conn){
   /****************************
    * CHECKPOINT
    ***************************/
-
-  /** Add new team member to database */
-  app.post('/addMember', verifyToken, function(req, res){
-    jwt.verify(req.token, process.env.JWT_SECRET, (err, auth) => {
-      if (err){
-        res.sendStatus(403);
-      } else {
-        if (!(auth.user && auth.user.clearance >= CLEARANCES.ACTIONS.CRUD_TEAM)){
-          res.status(401).send(`You are not authorised to perform such an action.`);
-          return;
-        }
-
-        var member = req.body;
-        var sql = "INSERT INTO team (firstname, lastname, image, level, birthday, role, ethnicity, socials, slug, text, description, delta) VALUES ?";
-        var values = [[member.firstname, member.lastname, member.image, member.level, member.birthday, member.role, member.ethnicity, member.socials, member.slug, member.text, member.description, member.delta]];
-        
-        conn.query(sql, [values], function (err, result) {
-          if (!err){
-                        res.sendStatus(200);
-          } else {
-            if (err.toString().includes("Incorrect string")){
-              res.status(422).send(`Please do not use emojis during input.`)
-            } else {
-              res.status(400).send(err.toString());
-            }
-          }
-        });
-      }
-    });
-  });
-
-  /** Delete an existing team member from database */
-  app.delete('/deleteMember', verifyToken, function(req, res){
-    jwt.verify(req.token, process.env.JWT_SECRET, (err, auth) => {
-      if (err){
-        res.sendStatus(403);
-      } else {
-        if (!(auth.user && auth.user.clearance >= CLEARANCES.ACTIONS.CRUD_TEAM)){
-          res.status(401).send(`You are not authorised to perform such an action.`);
-          return;
-        }
-
-        var member = req.body;
-        var sql = "DELETE FROM team WHERE id = ?";
-        
-        conn.query(sql, member.id, function (err, result) {
-          if (!err){
-                        
-            /** Delete image from file system if exists */
-            if (member.image){
-              fs.unlink(`.${team_dir}${member.image}`, function(err1) {
-                if (!err1) {
-                  console.log(`Deleted ${member.image} from the /team directory.` );
-                  res.sendStatus(200);
-                } else {
-                  console.warn(`${member.image} not found in /team directory.` );
-                  res.sendStatus(200);
-                }
-              });
-            } else {
-              console.log(`You've deleted team member ${member.firstname} ${member.lastname}.`);
-              res.sendStatus(200);
-            }
-          } else {
-            res.status(400).send(err.toString());
-          }
-        });
-      }
-    });
-  });
 
   /** Retrieve all suggestions */
   app.get('/getSuggestions', function(req, res){

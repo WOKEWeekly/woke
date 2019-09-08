@@ -15,11 +15,11 @@ import { countriesToString } from '~/constants/countries.js';
 import { calculateAge } from '~/constants/date.js';
 import css from '~/styles/team.scss';
 
-class ExecPage extends Component {
+class MemberPage extends Component {
 
   /** Retrieve member from server */
   static async getInitialProps({ query }) {
-    return { exec: query.exec };
+    return { member: query.member };
   }
 
   constructor(){
@@ -37,11 +37,13 @@ class ExecPage extends Component {
   render(){
     const { isLoaded, imageLoaded } = this.state;
 
-    const { exec, user, countries } = this.props;
-    exec.fullname = `${exec.firstname} ${exec.lastname}`;
-    exec.description = exec.description && exec.description.trim().length > 0 ? exec.description : 'No description.';
-    exec.age = calculateAge(exec.birthday);
-    exec.demonyms = countriesToString(JSON.parse(exec.ethnicity), countries);
+    const { member, user, countries } = this.props;
+    member.fullname = `${member.firstname} ${member.lastname}`;
+    member.description = member.description && member.description.trim().length > 0 ? member.description : 'No description.';
+    member.age = calculateAge(member.birthday);
+    member.demonyms = countriesToString(JSON.parse(member.ethnicity), countries);
+
+    const isExecutive = member.level === 'Executive';
 
     return (
       <Spacer>
@@ -52,8 +54,8 @@ class ExecPage extends Component {
               duration={800}
               direction={'left'}> 
               <img
-                src={`/static/images/team/${exec.image}`}
-                alt={exec.fullname}
+                src={`/static/images/team/${member.image}`}
+                alt={member.fullname}
                 className={css.image}
                 onLoad={() => this.setState({imageLoaded: true})} />
             </Slider>
@@ -61,37 +63,38 @@ class ExecPage extends Component {
               <Fader
                 determinant={isLoaded}
                 duration={500}>
-                <Title className={css.title}>{exec.fullname}</Title>
+                <Title className={css.title}>{member.fullname}</Title>
               </Fader>
               <Fader
                 determinant={isLoaded}
                 duration={500}
                 delay={500}>
                 <Subtitle className={css.subtitle}>
-                  {exec.role} • {exec.age} • {exec.demonyms}
+                  {member.role} • {member.age} • {member.demonyms}
                 </Subtitle>
-                <PromoIconsBar socials={exec.socials} />
+                <PromoIconsBar socials={member.socials} />
               </Fader>
               <Fader
                 determinant={isLoaded}
                 duration={500}
                 delay={1000}>
                 <Divider />
-                <Paragraph className={css.description}>{exec.description}</Paragraph>
+                <Paragraph className={css.description}>{member.description}</Paragraph>
               </Fader>
             </div>
           </Container>
         </Shader>
         
         <BottomToolbar>
+          {isExecutive ?
           <BackButton
             title={'Back to Executives'}
-            onClick={() => location.href = '/executives'} />
+            onClick={() => location.href = '/executives'} /> : null}
 
-          {user.clearance >= CLEARANCES.ACTIONS.EDIT_EXEC ? 
+          {user.clearance >= CLEARANCES.ACTIONS.CRUD_TEAM ? 
             <EditEntityButton
-              title={'Edit Executive'}
-              onClick={() => Router.push(`/team/edit/${exec.id}`)}/>
+              title={isExecutive ? 'Edit Executive' : 'Edit Member'}
+              onClick={() => Router.push(`/team/edit/${member.id}`)}/>
           : null}
         </BottomToolbar>
 
@@ -105,4 +108,4 @@ const mapStateToProps = state => ({
   countries: state.countries
 });
 
-export default connect(mapStateToProps)(ExecPage);
+export default connect(mapStateToProps)(MemberPage);

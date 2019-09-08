@@ -20,11 +20,12 @@ class MemberEdit extends Component {
   constructor(props) {
     super(props);
 
-    const { id, firstname, lastname, role, level, image, birthday, description, ethnicity, socials } = this.props.member;
+    const { id, firstname, lastname, role, level, image, birthday, description, ethnicity, socials, verified } = this.props.member;
     const ethnicities = JSON.parse(ethnicity);
 
     this.state = {
       id, firstname, lastname, level, role, description, image,
+      verified: verified === 1,
       imageChanged: false,
       birthday: new Date(birthday),
       ethnicity1: ethnicities ? ethnicities[0] : '',
@@ -35,12 +36,16 @@ class MemberEdit extends Component {
     };
   }
 
-  /** Handle text changes */
+  /** Handle changes */
   handleText = (event) => {
     const { name, value } = event.target;
     this.setState({[name]: value}); }
   handleDate = (birthday) => { this.setState({birthday}); }
   handleImage = (event) => { this.setState({image: event.target.files[0], imageChanged: true}); }
+  handleCheckbox = (value, event) => {
+    const { name, checked } = event.target;
+    this.setState({[name]: checked})
+  }
   confirmSocials = (socials) => {this.setState({socials})}
 
   clearSelection = (name) => { this.setState({[name]: ''})}
@@ -50,7 +55,7 @@ class MemberEdit extends Component {
     if (!isValidMember(this.state)) return;
     
     const { firstname, lastname, role, level, image, birthday, description, socials,
-      ethnicity1, ethnicity2, ethnicity3, ethnicity4, imageChanged } = this.state;
+      ethnicity1, ethnicity2, ethnicity3, ethnicity4, imageChanged, verified } = this.state;
 
     /** Generate slugs and filenames from name and data */
     let slug = generateSlug(`${firstname} ${lastname}`);
@@ -75,7 +80,8 @@ class MemberEdit extends Component {
         birthday: formatISODate(birthday),
         description: description,
         ethnicity: JSON.stringify(ethnicities),
-        socials: JSON.stringify(socials)
+        socials: JSON.stringify(socials),
+        verified: verified
       }
     };
 
@@ -91,12 +97,13 @@ class MemberEdit extends Component {
       body: data,
       headers: {
         'Authorization': `Bearer ${this.props.user.token}`,
-        'Clearance': CLEARANCES.ACTIONS.EDIT_EXEC,
+        'Clearance': CLEARANCES.ACTIONS.CRUD_TEAM,
         'Path': 'team'
       },
       onSuccess: () => {
+        const isExecutive = level === 'Executive';
         setAlert({ type: 'success', message: `You've successfully edited the details of ${firstname} ${lastname}.` });
-        location.href = `/executives/${slug}`;
+        location.href = isExecutive ? `/executives/${slug}` : `/team/member/${slug}`;
       }
     });
   }
@@ -105,10 +112,11 @@ class MemberEdit extends Component {
     return (
       <MemberForm
         heading={'Edit Team Member'}
-        candidate={this.state}
+        member={this.state}
         handleText={this.handleText}
         handleDate={this.handleDate}
         handleImage={this.handleImage}
+        handleCheckbox={this.handleCheckbox}
 
         confirmSocials={this.confirmSocials}
         clearSelection={this.clearSelection}

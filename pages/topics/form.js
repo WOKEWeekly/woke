@@ -79,6 +79,7 @@ class TopicForm extends Component {
                 <Label>Polarity:</Label>
                 <CheckboxButton
                   name={'polarity'}
+                  value={polarity}
                   onChange={handleCheckbox}
                   label={'This is a polar question.'} />
               </Col>

@@ -199,18 +199,18 @@ module.exports = function(app, conn, server){
   /** Executive:Individual */
   app.get('/executives/:slug', function(req, res){
     const slug = req.params.slug;
-    const sql = "SELECT * FROM team WHERE slug = ?";
+    const sql = "SELECT * FROM team WHERE slug = ? AND level = 'Executive'";
     
     conn.query(sql, [slug], function (err, result) {
       if (!err && result.length){
         const exec = result[0];
-        return server.render(req, res, '/team/exec.single', {
+        return server.render(req, res, '/team/single', {
           title: `${exec.firstname} ${exec.lastname} | #WOKEWeekly`,
           description: serveDescription(exec.description),
           url: `/executives/${exec.slug}`,
           cardImage: `/team/${exec.image}`,
           backgroundImage: 'bg-team.jpg',
-          exec
+          member: exec
         });
       } else {
         renderErrPage(req, res, err, server);
@@ -223,6 +223,35 @@ module.exports = function(app, conn, server){
     return server.render(req, res, '/team', {
       title: 'Team Members | #WOKEWeekly',
       backgroundImage: 'bg-team.jpg',
+    });
+  });
+
+  /** Team:Individual */
+  app.get('/team/member/:slug', function(req, res){
+    const slug = req.params.slug;
+    const sql = "SELECT * FROM team WHERE slug = ?";
+    
+    conn.query(sql, slug, function (err, result) {
+      if (err || !result.length) return renderErrPage(req, res, err, server);
+
+      const member = result[0];
+      return server.render(req, res, '/team/single', { 
+        title: `${member.firstname} ${member.lastname} | #WOKEWeekly`,
+        description: serveDescription(member.description),
+        url: `/team/member/${member.slug}`,
+        cardImage: `/team/${member.image}`,
+        alt: `${member.firstname} ${member.lastname}`,
+        backgroundImage: 'bg-team.jpg',
+        member
+      });
+    });
+  });
+
+  /** Add New Team Member */
+  app.get('/team/add', function(req, res){
+    server.render(req, res, '/team/add', {
+      title: 'Add New Member',
+      backgroundImage: 'bg-team.jpg'
     });
   });
 

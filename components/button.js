@@ -127,8 +127,9 @@ export class CheckboxButton extends Component {
         className={css.widgets}
         type={'checkbox'}
         name={this.props.name}
-        onChange={this.props.onChange}>
-        <ToggleButton variant="dark" value={true}>{this.props.label}</ToggleButton>
+        onChange={this.props.onChange}
+        defaultValue={this.props.value ? 1 : 0}>
+        <ToggleButton variant="dark" value={1}>{this.props.label}</ToggleButton>
       </ToggleButtonGroup>
     )
   }

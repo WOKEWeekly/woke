@@ -51,6 +51,8 @@ const Meta = ({
     <meta property="og:type" content="website" />
     <meta property="og:url" content={`${domain}${url}`} />
     <meta property="og:image" content={`${domain}/static/images${cardImage}`} />
+    <meta property="og:image:height" content="800" />
+    <meta property="og:image:width" content="800" />
     <meta property="og:image:type" content="image/jpeg" />
     <meta property="og:image:alt" content={title} />
     <meta property="og:site_name" content="#WOKEWeekly" />

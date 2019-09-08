@@ -35,7 +35,7 @@ export class CookiePrompt extends Component {
 export function setCookie(name, value, hours) {
   const date = new Date();
   date.setTime(date.getTime() + (hours * 60 * 60 * 1000));
-  const expires = `${expires}${date.toUTCString()}`;
+  const expires = `expires=${date.toUTCString()}`;
   document.cookie = `${name}=${value};${expires};path=/`;
 }
 
@@ -53,13 +53,13 @@ export function getCookie(cname) {
 }
 
 export function checkCookies(message){
-  if (!getCookie('cookiesAccepted')){
+  if (getCookie('cookiesAccepted') === 'true'){
+    return true;
+  } else {
     if (message){
       return alert.error(message);
     } else {
       return false;
     }
-  } else {
-    return true;
   }
 }
