@@ -7,11 +7,10 @@ const jwt = require('jsonwebtoken');
 const user = {
   firstname: 'Fred',
   lastname: 'Flintstone',
-  clearance: 9,
-  // token: jwt.sign({ user: this }, process.env.JWT_SECRET, { expiresIn: '1m' })
+  clearance: 9
 }
 
-describe("Run All Tests", function(){
+describe("Tests", function(){
   before(function(done){
     jwt.sign({ user: user }, process.env.JWT_SECRET, { expiresIn: '1m' }, function(err, token){
       user.token = token;
@@ -31,6 +30,20 @@ describe("Run All Tests", function(){
   describe("Sessions Page", function() {
     it("Route Accessed OK", function(done) {
       request.get(`${host}/sessions`, function(err, res){
+        assert.equal(res.statusCode, 200);
+        done();
+      });
+    });
+
+    it("Get Sessions", function(done) {
+      const options = {
+        headers: {
+          'Authorization': process.env.AUTH_KEY,
+          'Content-Type': 'application/json',
+        }
+      }
+
+      request.get(`${host}/getSessions`, options, function(err, res, body){
         assert.equal(res.statusCode, 200);
         done();
       });
@@ -55,7 +68,6 @@ describe("Run All Tests", function(){
     it("Authorised Get Topics", function(done) {
       const options = {
         headers: {
-          // 'Admission': true,
           'Authorization': `Bearer ${user.token}`,
           'Content-Type': 'application/json',
         }

@@ -6,42 +6,45 @@ const { resToClient } = require('./response.js');
 module.exports = {
 
   /** Verify access tokens */
-  verifyToken: (req, res, next) => {
-    async.waterfall([
-      function(callback){ // Retrieve token from request
-        const { admission, authorization } = req.headers;
-        if (admission === 'true') return next();
+  verifyToken: (threshold) => {
+    if (!threshold) threshold = 0;
+    
+    return function(req, res, next){
+      async.waterfall([
+        function(callback){ // Retrieve token from request
+          const { admission, authorization } = req.headers;
+          if (admission === 'true') return next();
 
-        if (typeof authorization !== 'undefined'){
-          const token = authorization.split(' ')[1];
-          callback(null, token);
-        } else {
-          callback(new Error('Unauthorized request.'));
-        }
-      },
-      function(token, callback){ // Verify token
-        jwt.verify(token, process.env.JWT_SECRET, (err, auth) => {
-          if (err){
-            req.logout();
-            err.type = 'jwt';
-            callback(err);
+          if (typeof authorization !== 'undefined'){
+            const token = authorization.split(' ')[1];
+            callback(null, token);
           } else {
-            callback(null, auth);
+            callback(new Error('Unauthorized request.'));
           }
-        });
-      },
-      function(auth, callback){ // Check authentication
-        const clearance = auth ? auth.user.clearance : 0;
-        const threshold = parseInt(req.headers.clearance);
-        if (clearance >= threshold){
-          callback(null);
-        } else {
-          callback(new Error('You are not authorised to perform such an action.'));
+        },
+        function(token, callback){ // Verify token
+          jwt.verify(token, process.env.JWT_SECRET, (err, auth) => {
+            if (err){
+              req.logout();
+              err.type = 'jwt';
+              callback(err);
+            } else {
+              callback(null, auth);
+            }
+          });
+        },
+        function(auth, callback){ // Check authentication
+          const clearance = auth ? auth.user.clearance : 0;
+          if (clearance >= threshold){
+            callback(null);
+          } else {
+            callback(new Error('You are not authorised to perform such an action.'));
+          }
         }
-      }
-    ], function(err){
-      err ? resToClient(res, err) : next();
-    });
+      ], function(err){
+        err ? resToClient(res, err) : next();
+      });
+    }
   },
 
   /** Check for 'authorized' header values to validate requests */

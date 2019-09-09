@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 
 import { setAlert } from '~/components/alert.js';
 
-import CLEARANCES from '~/constants/clearances';
 import { formatISODate } from '~/constants/date.js';
 import { generateSlug, generateSessionFilename } from '~/constants/file.js';
 import { isValidSession } from '~/constants/validations.js';
@@ -59,7 +58,6 @@ class SessionAdd extends Component {
       body: data,
       headers: {
         'Authorization': `Bearer ${this.props.user.token}`,
-        'Clearance': CLEARANCES.ACTIONS.CRUD_SESSIONS,
         'Path': 'sessions'
       },
       onSuccess: () => {

@@ -48,8 +48,7 @@ class CandidatePage extends Component {
       body: JSON.stringify(candidate),
       headers: {
         'Authorization': `Bearer ${user.token}`,
-        'Content-Type': 'application/json',
-        'Clearance': CLEARANCES.ACTIONS.CRUD_BLACKEX
+        'Content-Type': 'application/json'
       },
       onSuccess: () => {
         setAlert({ type: 'success', message: `You've successfully deleted ${candidate.name}.` });

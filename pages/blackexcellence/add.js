@@ -5,7 +5,6 @@ import Router from 'next/router';
 import { setAlert } from '~/components/alert.js';
 
 import { formatISODate } from '~/constants/date.js';
-import CLEARANCES from '~/constants/clearances.js';
 import { generateSlug, generateCandidateFilename } from '~/constants/file.js';
 import request from '~/constants/request.js';
 import { isValidCandidate } from '~/constants/validations.js';
@@ -85,7 +84,6 @@ class CandidateAdd extends Component {
       body: data,
       headers: {
         'Authorization': `Bearer ${this.props.user.token}`,
-        'Clearance': CLEARANCES.ACTIONS.CRUD_BLACKEX,
         'Path': 'blackexcellence'
       },
       onSuccess: () => {

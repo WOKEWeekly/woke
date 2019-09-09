@@ -8,6 +8,7 @@ const jwt = require('jsonwebtoken');
 const emails = require('./emails.js');
 const { verifyToken, validateReq } = require('./middleware.js');
 const { resToClient, renderErrPage } = require('./response.js');
+const CLEARANCES = require('../constants/clearances.js');
 
 const Mailchimp = require('mailchimp-api-v3');
 const mailchimp = new Mailchimp(process.env.MAILCHIMP_API_KEY);
@@ -224,7 +225,7 @@ module.exports = function(app, conn, passport, server){
   });
 
   /** Generate Topic Bank access token */
-  app.put('/generateTopicBankToken', verifyToken, function(req, res){
+  app.put('/generateTopicBankToken', verifyToken(CLEARANCES.ACTIONS.GENERATE_NEW_TOKEN), function(req, res){
     const token = generateRandomString(12);
     const sql = `UPDATE tokens SET value = ?, lastUpdated = ? WHERE name = ?`;
     const values = [token, new Date(), 'topicBank'];

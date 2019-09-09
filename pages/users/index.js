@@ -44,7 +44,6 @@ class Users extends Component {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${this.props.user.token}`,
-        'Clearance': CLEARANCES.ACTIONS.VIEW_USERS,
         'Content-Type': 'application/json',
       },
       onSuccess: (result) => {
@@ -150,7 +149,6 @@ class _User extends PureComponent {
       body: JSON.stringify({id, clearance}),
       headers: {
         'Authorization': `Bearer ${this.props.user.token}`,
-        'Clearance': CLEARANCES.ACTIONS.CRUD_USERS,
         'Content-Type': 'application/json',
       },
       onSuccess: () => {

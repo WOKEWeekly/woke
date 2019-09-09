@@ -16,7 +16,7 @@ module.exports = function(app, conn, server){
       description: 'Debates and discussions centered around and beyond the UK black community. Facilitating open-floor conversation to shape the minds and alter the perspectives of participants.',
       url: '/',
       backgroundImage: 'bg-app.jpg'
-     });
+    });
   });
 
   /** Sessions */

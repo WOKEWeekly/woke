@@ -1,7 +1,6 @@
 import React, { Component} from 'react';
 import { Col } from 'react-bootstrap';
 import { connect } from 'react-redux';
-import Router from 'next/router';
 
 import { SubmitButton, CancelButton, CheckboxButton, RadioButtonGroup } from '~/components/button.js';
 import { Heading, Group, Label, TextInput, TextArea, ShortTextArea, Select } from '~/components/form.js';

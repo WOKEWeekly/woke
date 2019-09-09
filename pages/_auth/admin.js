@@ -6,7 +6,6 @@ import { TextInput } from '~/components/form';
 import { Shader } from '~/components/layout.js';
 import { ConfirmModal } from '~/components/modal.js';
 
-import CLEARANCES from '~/constants/clearances.js';
 import { domain } from '~/constants/settings.js';
 import request from '~/constants/request.js';
 import css from '~/styles/auth.scss';
@@ -39,7 +38,6 @@ class Admin extends Component {
       method: 'PUT',
       headers: {
         'Authorization': `Bearer ${this.props.user.token}`,
-        'Clearance': CLEARANCES.ACTIONS.GENERATE_NEW_TOKEN,
         'Content-Type': 'application/json'
       },
       onSuccess: (response) => {
