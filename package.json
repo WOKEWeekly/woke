@@ -4,7 +4,8 @@
     "start": "next start",
     "export": "next export",
     "dev": "node server.js",
-    "prod": "NODE_ENV=production node server.js"
+    "prod": "NODE_ENV=production node server.js",
+    "test": "mocha"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^1.2.18",
@@ -54,6 +55,7 @@
     "redux": "^4.0.1",
     "redux-persist": "^5.10.0",
     "regenerate": "^1.4.0",
+    "request": "^2.88.0",
     "shebang-loader": "0.0.1",
     "sitemap": "^3.2.2"
   },
@@ -62,6 +64,9 @@
     "@babel/preset-env": "^7.4.5",
     "babel-loader": "^8.0.6",
     "babel-plugin-root-import": "^6.2.0",
+    "mocha": "^6.2.0",
+    "should": "^13.2.3",
+    "supertest": "^4.0.2",
     "webpack": "^4.33.0"
   }
 }
