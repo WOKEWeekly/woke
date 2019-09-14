@@ -6,9 +6,7 @@ const { resToClient } = require('./response.js');
 module.exports = {
 
   /** Verify access tokens */
-  verifyToken: (threshold) => {
-    if (!threshold) threshold = 0;
-    
+  verifyToken: (threshold) => {  
     return function(req, res, next){
       async.waterfall([
         function(callback){ // Retrieve token from request
@@ -35,6 +33,7 @@ module.exports = {
         },
         function(auth, callback){ // Check authentication
           const clearance = auth ? auth.user.clearance : 0;
+          if (!threshold) threshold = 1;
           if (clearance >= threshold){
             callback(null);
           } else {

@@ -167,7 +167,7 @@ class _User extends PureComponent {
       method: 'DELETE',
       body: JSON.stringify({id}),
       headers: {
-        'Authorization': process.env.AUTH_KEY,
+        'Authorization': `Bearer ${this.props.user.token}`,
         'Content-Type': 'application/json',
       },
       onSuccess: () => {

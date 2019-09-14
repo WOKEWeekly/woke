@@ -152,7 +152,7 @@ module.exports = function(app, conn, passport, server){
   });
 
   /** Change user's username in database */
-  app.put('/changeUsername', validateReq, function(req, res){
+  app.put('/changeUsername', verifyToken(CLEARANCES.ACTIONS.CHANGE_ACCOUNT), function(req, res){
     const { id, username } = req.body;
     const sql = "UPDATE user SET username = ? WHERE id = ?";
     const values = [username, id];
@@ -163,7 +163,7 @@ module.exports = function(app, conn, passport, server){
   });
 
   /** Change user's password in database */
-  app.put('/changePassword', validateReq, function(req, res){
+  app.put('/changePassword', verifyToken(CLEARANCES.ACTIONS.CHANGE_ACCOUNT), function(req, res){
     const { id, oldPassword, newPassword } = req.body;
 
     async.waterfall([
@@ -198,7 +198,7 @@ module.exports = function(app, conn, passport, server){
   });
 
   /** Delete user account */
-  app.delete('/deleteAccount', validateReq, function(req, res){
+  app.delete('/deleteAccount', verifyToken(CLEARANCES.ACTIONS.DELETE_ACCOUNT), function(req, res){
     const { id } = req.body;
 
     async.waterfall([

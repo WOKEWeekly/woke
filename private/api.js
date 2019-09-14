@@ -109,8 +109,8 @@ module.exports = function(app, conn){
     const values = [[topic.headline, topic.category, topic.question, topic.description, topic.type,
       topic.polarity, topic.option1, topic.option2, topic.userId]];
     
-    conn.query(sql, [values], function (err) {
-      resToClient(res, err);
+    conn.query(sql, [values], function (err, result) {
+      resToClient(res, err, result.insertId);
     });
   });
 

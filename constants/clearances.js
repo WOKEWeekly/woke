@@ -1,6 +1,10 @@
 module.exports = {
   ACTIONS: {
-    SUGGEST_TOPIC: 2,       // Suggest topics
+    DELETE_ACCOUNT: 1,      // Delete account
+
+    SUGGEST_TOPIC: 2,       // Suggest topics,
+    CHANGE_ACCOUNT: 2,      // Change username and password
+
     VIEW_TOPICS: 3,         // View Topic Bank
 
     CRUD_BLACKEX: 6,        // Add, edit and delete #BlackExcellence candidates
