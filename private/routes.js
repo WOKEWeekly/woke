@@ -165,7 +165,9 @@ module.exports = function(app, conn, server){
   /** Candidate:Individual */
   app.get('/blackexcellence/candidate/:id', function(req, res){
     const id = req.params.id;
-    const sql = "SELECT * FROM blackex WHERE id = ?";
+    const sql = `SELECT blackex.*, CONCAT(team.firstname, ' ', team.lastname) AS author,
+    team.level AS author_level, team.slug AS author_slug
+    FROM blackex LEFT JOIN team ON blackex.authorId=team.id WHERE blackex.id = ?`;
     
     conn.query(sql, id, function (err, result) {
       if (err || !result.length) return renderErrPage(req, res, err, server);

@@ -14,7 +14,7 @@ import { Fader, Slider } from '~/components/transitioner.js';
 
 import CLEARANCES from '~/constants/clearances.js';
 import { countriesToString } from '~/constants/countries.js';
-import { calculateAge } from '~/constants/date.js';
+import { formatDate, calculateAge } from '~/constants/date.js';
 import request from '~/constants/request.js';
 
 import css from '~/styles/blackex.scss';
@@ -69,6 +69,25 @@ class CandidatePage extends Component {
 
     const { isLoaded, imageLoaded } = this.state;
 
+    const getDetails = () => {
+      const { author, author_level, author_slug, date_written } = candidate;
+      if (!author) return null;
+
+      let link = '';
+      if (author_level === 'Executive')
+        link = `/executives/${author_slug}`;
+      else
+        link = `/team/member/${author_slug}`;
+
+      return (
+      <Subtitle className={css.meta}>
+        Written by 
+        <a className={css.author} href={link}> {author}</a>
+        , {formatDate(date_written)}
+      </Subtitle>
+      );
+    }
+
     return (
       <Spacer>
         <Shader>
@@ -97,6 +116,7 @@ class CandidatePage extends Component {
                   {candidate.age} • {candidate.occupation} • {candidate.demonyms}
                 </Subtitle>
                 <PromoIconsBar socials={candidate.socials} />
+                {getDetails()}
               </Fader>
               <Fader
                 determinant={isLoaded}

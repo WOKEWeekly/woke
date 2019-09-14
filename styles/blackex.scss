@@ -26,6 +26,14 @@
 
 .entity { @include entity(left, 55vh); }
 
+.meta {
+  @include font-scaler(0.8);
+  .author {
+    @extend .link-blackex;
+    text-decoration: none !important;
+  }
+}
+
 /*************
 *** form.js
 *************/
