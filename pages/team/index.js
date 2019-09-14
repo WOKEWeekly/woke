@@ -210,7 +210,7 @@ class _Member extends PureComponent {
           <div className={css.index}>{idx+1}</div>
           <div className={css.crud}>
             <button className={css.invisible_button} onClick={() => location.href = `/team/member/${item.slug}`}><Icon name={'external-link-alt'} /></button>
-            <button className={css.invisible_button} onClick={this.openEdit}><Icon name={'edit'} /></button>
+            <button className={css.invisible_button} onClick={() => this.editMember(item)}><Icon name={'edit'} /></button>
             <button className={css.invisible_button} onClick={this.openDelete}><Icon name={'trash'} /></button>
           </div>
         </Mobile>
