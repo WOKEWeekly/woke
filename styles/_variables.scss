@@ -106,7 +106,7 @@ $break-xxl: 1408px; // Extra large devices (large desktops)
   .image {
     border-radius: 8px;
     float: $float;
-    @if $float == right { margin-left: 1em; } @else { margin-right: 1em }
+    @if $float == right { margin-left: 1.5em; } @else { margin-right: 1.5em }
     margin-bottom: 1em;
     width: $width;
     @media (max-width: $break-xl) { width: 50%; }
