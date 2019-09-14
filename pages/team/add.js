@@ -60,7 +60,7 @@ class MemberAdd extends Component {
       lastname: lastname.trim(),
       level: level,
       role: role.trim(),
-      slug: slug,
+      slug: verified ? slug : null,
       image: filename,
       birthday: formatISODate(birthday),
       description: description,

@@ -168,6 +168,16 @@ class _Member extends PureComponent {
     item.demonyms = countriesToString(JSON.parse(item.ethnicity), countries);
     item.fullname = `${item.firstname} ${item.lastname}`;
 
+    const linkButton = () => {
+      if (!item.slug) return null;
+
+      return (
+        <button className={css.invisible_button} onClick={() => location.href = `/team/member/${item.slug}`}>
+          <Icon name={'external-link-alt'} />
+        </button>
+      );
+    }
+
     return (
       <Fader
         key={idx}
@@ -182,7 +192,7 @@ class _Member extends PureComponent {
           <span>{item.role}</span>
           <span>{item.demonyms}</span>
           <span>{formatDate(item.birthday)}</span>
-          <span><button className={css.invisible_button} onClick={() => location.href = `/team/member/${item.slug}`}><Icon name={'external-link-alt'} /></button></span>
+          <span>{linkButton()}</span>
           <span><button className={css.invisible_button} onClick={() => this.editMember(item)}><Icon name={'edit'} /></button></span>
           <span><button className={css.invisible_button} onClick={this.openDelete}><Icon name={'trash'} /></button></span>
         </Default>
@@ -209,7 +219,7 @@ class _Member extends PureComponent {
           </div>
           <div className={css.index}>{idx+1}</div>
           <div className={css.crud}>
-            <button className={css.invisible_button} onClick={() => location.href = `/team/member/${item.slug}`}><Icon name={'external-link-alt'} /></button>
+          {linkButton()}
             <button className={css.invisible_button} onClick={() => this.editMember(item)}><Icon name={'edit'} /></button>
             <button className={css.invisible_button} onClick={this.openDelete}><Icon name={'trash'} /></button>
           </div>
