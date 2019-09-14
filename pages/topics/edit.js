@@ -70,8 +70,7 @@ class TopicEdit extends Component {
       body: JSON.stringify(topic),
       headers: {
         'Authorization': `Bearer ${this.props.user.token}`,
-        'Content-Type': 'application/json',
-        'Clearance': CLEARANCES.ACTIONS.CRUD_TOPICS
+        'Content-Type': 'application/json'
       },
       onSuccess: () => {
         setAlert({ type: 'success', message: `You've successfully edited the details of "${headline}: ${question}".` });

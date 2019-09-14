@@ -43,7 +43,6 @@ class Team extends Component {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${this.props.user.token}`,
-        'Clearance': CLEARANCES.ACTIONS.VIEW_TEAM,
         'Content-Type': 'application/json',
       },
       onSuccess: (members) => {
@@ -150,7 +149,6 @@ class _Member extends PureComponent {
       body: JSON.stringify(this.state),
       headers: {
         'Authorization': `Bearer ${this.props.user.token}`,
-        'Clearance': CLEARANCES.ACTIONS.CRUD_TEAM,
         'Content-Type': 'application/json',
       },
       onSuccess: () => {

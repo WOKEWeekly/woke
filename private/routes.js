@@ -16,7 +16,7 @@ module.exports = function(app, conn, server){
       description: 'Debates and discussions centered around and beyond the UK black community. Facilitating open-floor conversation to shape the minds and alter the perspectives of participants.',
       url: '/',
       backgroundImage: 'bg-app.jpg'
-     });
+    });
   });
 
   /** Sessions */
@@ -536,6 +536,14 @@ module.exports = function(app, conn, server){
      
   app.get('/constitution', function(req, res){
     fs.readFile('./static/resources/Constitution.pdf', function (err, data){
+      if (err) res.sendStatus(404);
+      res.contentType("application/pdf");
+      res.send(data);
+    });
+  });
+
+  app.get('/sponsorship-proposal', function(req, res){
+    fs.readFile('./static/resources/Sponsorship Proposal.pdf', function (err, data){
       if (err) res.sendStatus(404);
       res.contentType("application/pdf");
       res.send(data);

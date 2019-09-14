@@ -5,8 +5,11 @@ import configureStore from '~/reducers/store.js';
 const { store } = configureStore();
 
 export default ({url, method = 'GET', body, headers, onSuccess}) => {
+  if (headers) headers['User'] = store.getState().user.id;
+  
   fetch(url,
-    { method,
+    {
+      method,
       body,
       headers
     })

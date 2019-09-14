@@ -46,8 +46,7 @@ class SessionPage extends Component {
       body: JSON.stringify(session),
       headers: {
         'Authorization': `Bearer ${user.token}`,
-        'Content-Type': 'application/json',
-        'Clearance': CLEARANCES.ACTIONS.CRUD_SESSIONS,
+        'Content-Type': 'application/json'
       },
       onSuccess: () => {
         setAlert({ type: 'success', message: `You've successfully deleted: ${session.title}.` });

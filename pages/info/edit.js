@@ -46,7 +46,6 @@ class EditInfo extends Component {
       body: JSON.stringify({text, resource}),
       headers: {
         'Authorization': `Bearer ${user.token}`,
-        'Clearance': CLEARANCES.ACTIONS.EDIT_INFO,
         'Content-Type': 'application/json'
       },
       onSuccess: () => {

@@ -1,9 +1,13 @@
 const async = require('async');
 const fs = require('fs');
-const { verifyToken, validateReq, upload } = require('./middleware.js');
+const { verifyToken, validateReq, logUserActivity, upload } = require('./middleware.js');
 const { resToClient } = require('./response.js');
+const CLEARANCES = require('../constants/clearances.js');
 
 module.exports = function(app, conn){
+
+  /** Log user activity on each request */
+  app.use('/', logUserActivity(conn));
 
   /** Retrieve all sessions */
   app.get('/getSessions', validateReq, function(req, res){
@@ -13,7 +17,7 @@ module.exports = function(app, conn){
   });
 
   /** Add new session to database */
-  app.post('/addSession', verifyToken, function(req, res){
+  app.post('/addSession', verifyToken(CLEARANCES.ACTIONS.CRUD_SESSIONS), function(req, res){
     async.waterfall([
       function(callback){ // Upload file to directory
         upload(req, res, function(err){
@@ -35,7 +39,7 @@ module.exports = function(app, conn){
   });
 
   /** Update details of existing session in database */
-  app.put('/updateSession', verifyToken, function(req, res){
+  app.put('/updateSession', verifyToken(CLEARANCES.ACTIONS.CRUD_SESSIONS), function(req, res){
     async.waterfall([
       function(callback){ // Upload new image to directory
         upload(req, res, function(err){
@@ -70,7 +74,7 @@ module.exports = function(app, conn){
   });
 
   /** Delete an existing session from database */
-  app.delete('/deleteSession', verifyToken, function(req, res){
+  app.delete('/deleteSession', verifyToken(CLEARANCES.ACTIONS.CRUD_SESSIONS), function(req, res){
     async.waterfall([
       function(callback){ // Delete session from database
         const session = req.body;
@@ -92,26 +96,26 @@ module.exports = function(app, conn){
   });
 
   /** Retrieve all topics */
-  app.get('/getTopics', verifyToken, function(req, res){
+  app.get('/getTopics', verifyToken(CLEARANCES.ACTIONS.VIEW_TOPICS), function(req, res){
     conn.query("SELECT * FROM topics", function (err, result) {
       resToClient(res, err, result)
     });
   });
 
   /** Add new topic to database */
-  app.post('/addTopic', verifyToken, function(req, res){
+  app.post('/addTopic', verifyToken(CLEARANCES.ACTIONS.CRUD_TOPICS), function(req, res){
     const topic = req.body;
     const sql = "INSERT INTO topics (headline, category, question, description, type, polarity, option1, option2, user_id) VALUES ?";
     const values = [[topic.headline, topic.category, topic.question, topic.description, topic.type,
       topic.polarity, topic.option1, topic.option2, topic.userId]];
     
-    conn.query(sql, [values], function (err) {
-      resToClient(res, err);
+    conn.query(sql, [values], function (err, result) {
+      resToClient(res, err, result.insertId);
     });
   });
 
   /** Update topic in database */
-  app.put('/updateTopic', verifyToken, function(req, res){
+  app.put('/updateTopic', verifyToken(CLEARANCES.ACTIONS.CRUD_TOPICS), function(req, res){
     const topic = req.body;
     const sql = `UPDATE topics SET headline = ?, category = ?, question = ?, description = ?, type = ?, polarity = ?, option1 = ?, option2 = ? WHERE id = ?`;
     const values = [topic.headline, topic.category, topic.question, topic.description, topic.type,
@@ -123,7 +127,7 @@ module.exports = function(app, conn){
   });
 
   /** Delete an existing topic from database */
-  app.delete('/deleteTopic', verifyToken, function(req, res){
+  app.delete('/deleteTopic', verifyToken(CLEARANCES.ACTIONS.CRUD_TOPICS), function(req, res){
     const topic = req.body;
     const sql = "DELETE FROM topics WHERE id = ?";
     
@@ -148,7 +152,7 @@ module.exports = function(app, conn){
   });
 
   /** Add new candidate to database */
-  app.post('/addCandidate', verifyToken, function(req, res){
+  app.post('/addCandidate', verifyToken(CLEARANCES.ACTIONS.CRUD_BLACKEX), function(req, res){
     async.waterfall([
       function(callback){ // Upload file to directory
         upload(req, res, function(err){
@@ -170,7 +174,7 @@ module.exports = function(app, conn){
   });
 
   /** Update details of existing candidate in database */
-  app.put('/updateCandidate', verifyToken, function(req, res){
+  app.put('/updateCandidate', verifyToken(CLEARANCES.ACTIONS.CRUD_BLACKEX), function(req, res){
     async.waterfall([
       function(callback){ // Upload new image to directory
         upload(req, res, function(err){
@@ -205,7 +209,7 @@ module.exports = function(app, conn){
   });
 
   /** Delete an existing candidate from database */
-  app.delete('/deleteCandidate', verifyToken, function(req, res){
+  app.delete('/deleteCandidate', verifyToken(CLEARANCES.ACTIONS.CRUD_BLACKEX), function(req, res){
     async.waterfall([
       function(callback){ // Delete candidate from database
         const candidate = req.body;
@@ -227,7 +231,7 @@ module.exports = function(app, conn){
   });
 
   /** Retrieve all team members */
-  app.get('/getTeam', verifyToken, function(req, res){
+  app.get('/getTeam', verifyToken(CLEARANCES.ACTIONS.VIEW_TEAM), function(req, res){
     conn.query("SELECT * FROM team", function (err, result) {
       resToClient(res, err, result);
     });
@@ -241,7 +245,7 @@ module.exports = function(app, conn){
   });
 
   /** Add new team member to database */
-  app.post('/addMember', verifyToken, function(req, res){
+  app.post('/addMember', verifyToken(CLEARANCES.ACTIONS.CRUD_TEAM), function(req, res){
     async.waterfall([
       function(callback){ // Upload file to directory
         upload(req, res, function(err){
@@ -263,7 +267,7 @@ module.exports = function(app, conn){
   });
 
   /** Update details of existing team member in database */
-  app.put('/updateMember', verifyToken, function(req, res){
+  app.put('/updateMember', verifyToken(CLEARANCES.ACTIONS.CRUD_TEAM), function(req, res){
     async.waterfall([
       function(callback){ // Upload new image to directory
         upload(req, res, function(err){
@@ -298,7 +302,7 @@ module.exports = function(app, conn){
   });
 
   /** Delete an existing team member from database */
-  app.delete('/deleteMember', verifyToken, function(req, res){
+  app.delete('/deleteMember', verifyToken(CLEARANCES.ACTIONS.CRUD_TEAM), function(req, res){
     async.waterfall([
       function(callback){ // Delete member from database
         const member = req.body;
@@ -320,15 +324,15 @@ module.exports = function(app, conn){
   });
 
   /** Retrieve all users */
-  app.get('/getRegisteredUsers', verifyToken, function(req, res){
-    const sql = "SELECT id, firstname, lastname, clearance, username, email, create_time, last_login FROM user";
+  app.get('/getRegisteredUsers', verifyToken(CLEARANCES.ACTIONS.VIEW_USERS), function(req, res){
+    const sql = "SELECT id, firstname, lastname, clearance, username, email, create_time, last_active FROM user";
     conn.query(sql, function (err, result) {
       resToClient(res, err, result);
     });
   });
   
   /** Change user's clearance */
-  app.put('/changeClearance', verifyToken, function(req, res){
+  app.put('/changeClearance', verifyToken(CLEARANCES.ACTIONS.CRUD_USERS), function(req, res){
     const {id, clearance} = req.body;
     console.log(req.body);
     const sql = "UPDATE user SET clearance = ? WHERE id = ?";
@@ -408,7 +412,7 @@ module.exports = function(app, conn){
   });
 
   /** Update information pages */
-  app.put(['/updateInfo', '/updateVariantPage'], verifyToken, function(req, res){
+  app.put(['/updateInfo', '/updateVariantPage'], verifyToken(CLEARANCES.ACTIONS.EDIT_INFO), function(req, res){
     const { resource, text } = req.body;
     const sql = "UPDATE resources SET text = ?, lastModified = ? WHERE name = ?";
     const values = [text, new Date(), resource];

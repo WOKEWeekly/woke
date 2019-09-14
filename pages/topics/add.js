@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import Router from 'next/router';
 
 import { setAlert } from '~/components/alert.js';
-import CLEARANCES from '~/constants/clearances.js';
 import request from '~/constants/request.js';
 import { isValidTopic } from '~/constants/validations.js';
 
@@ -67,8 +66,7 @@ class TopicAdd extends Component {
       body: JSON.stringify(topic),
       headers: {
         'Authorization': `Bearer ${this.props.user.token}`,
-        'Content-Type': 'application/json',
-        'Clearance': CLEARANCES.ACTIONS.CRUD_TOPICS
+        'Content-Type': 'application/json'
       },
       onSuccess: () => {
         setAlert({ type: 'success', message: `You've successfully added "${headline}: ${question}".` });

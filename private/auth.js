@@ -8,6 +8,7 @@ const jwt = require('jsonwebtoken');
 const emails = require('./emails.js');
 const { verifyToken, validateReq } = require('./middleware.js');
 const { resToClient, renderErrPage } = require('./response.js');
+const CLEARANCES = require('../constants/clearances.js');
 
 const Mailchimp = require('mailchimp-api-v3');
 const mailchimp = new Mailchimp(process.env.MAILCHIMP_API_KEY);
@@ -67,15 +68,7 @@ module.exports = function(app, conn, passport, server){
       },
       function(user, callback){ // Log user session
         req.login(user, function(err) {
-          err ? callback(err) : callback(null, user);
-        });
-      },
-      function(user, callback){ // Update last login time for user
-        const sql = `UPDATE user SET last_login = ? WHERE id = ?`;
-        const values = [new Date(), user.id];
-        
-        conn.query(sql, values, function() {
-          callback(null);
+          err ? callback(err) : callback(null);
         });
       },
       function(callback){ // Pass authenticated user information to mobile app */
@@ -159,7 +152,7 @@ module.exports = function(app, conn, passport, server){
   });
 
   /** Change user's username in database */
-  app.put('/changeUsername', validateReq, function(req, res){
+  app.put('/changeUsername', verifyToken(CLEARANCES.ACTIONS.CHANGE_ACCOUNT), function(req, res){
     const { id, username } = req.body;
     const sql = "UPDATE user SET username = ? WHERE id = ?";
     const values = [username, id];
@@ -170,7 +163,7 @@ module.exports = function(app, conn, passport, server){
   });
 
   /** Change user's password in database */
-  app.put('/changePassword', validateReq, function(req, res){
+  app.put('/changePassword', verifyToken(CLEARANCES.ACTIONS.CHANGE_ACCOUNT), function(req, res){
     const { id, oldPassword, newPassword } = req.body;
 
     async.waterfall([
@@ -205,7 +198,7 @@ module.exports = function(app, conn, passport, server){
   });
 
   /** Delete user account */
-  app.delete('/deleteAccount', validateReq, function(req, res){
+  app.delete('/deleteAccount', verifyToken(CLEARANCES.ACTIONS.DELETE_ACCOUNT), function(req, res){
     const { id } = req.body;
 
     async.waterfall([
@@ -232,7 +225,7 @@ module.exports = function(app, conn, passport, server){
   });
 
   /** Generate Topic Bank access token */
-  app.put('/generateTopicBankToken', verifyToken, function(req, res){
+  app.put('/generateTopicBankToken', verifyToken(CLEARANCES.ACTIONS.GENERATE_NEW_TOKEN), function(req, res){
     const token = generateRandomString(12);
     const sql = `UPDATE tokens SET value = ?, lastUpdated = ? WHERE name = ?`;
     const values = [token, new Date(), 'topicBank'];

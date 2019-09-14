@@ -46,7 +46,9 @@ class TopicBank extends Component {
 
     if (props.hasAccess === false){
       if (props.user.clearance < CLEARANCES.ACTIONS.VIEW_TOPICS){
-        setAlert({type: 'error', message: 'This link is invalid or expired.'});
+        if (location.href.indexOf('?') > -1)
+          setAlert({type: 'error', message: 'This link is invalid or expired.'});
+
         return location.href = '/';
       }
     }
@@ -60,14 +62,12 @@ class TopicBank extends Component {
   /** Retrieve all topics */
   getTopics = (callback) => {
     const { user, hasAccess } = this.props;
-    console.log(hasAccess);
     request({
       url: '/getTopics',
       method: 'GET',
       headers: {
         'Admission': hasAccess,
         'Authorization': `Bearer ${user.token}`,
-        'Clearance': CLEARANCES.ACTIONS.VIEW_TOPICS,
         'Content-Type': 'application/json',
       },
       onSuccess: (response) => {
@@ -331,7 +331,6 @@ class _Topic extends PureComponent {
       body: JSON.stringify(item),
       headers: {
         'Authorization': `Bearer ${user.token}`,
-        'Clearance': CLEARANCES.ACTIONS.CRUD_TOPICS,
         'Content-Type': 'application/json'
       },
       onSuccess: () => {

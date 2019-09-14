@@ -56,7 +56,7 @@ class Account extends Component {
       method: 'DELETE',
       body: JSON.stringify({id}),
       headers: {
-        'Authorization': process.env.AUTH_KEY,
+        'Authorization': `Bearer ${this.props.user.token}`,
         'Content-Type': 'application/json'
       },
       onSuccess: () => {
@@ -167,7 +167,7 @@ class _NewUsernameModal extends Component {
       method: 'PUT',
       body: body,
       headers: {
-        'Authorization': process.env.AUTH_KEY,
+        'Authorization': `Bearer ${this.props.user.token}`,
         'Content-Type': 'application/json'
       },
       onSuccess: () => {
@@ -242,7 +242,7 @@ class _NewPasswordModal extends Component {
       method: 'PUT',
       body: body,
       headers: {
-        'Authorization': process.env.AUTH_KEY,
+        'Authorization': `Bearer ${this.props.user.token}`,
         'Content-Type': 'application/json'
       },
       onSuccess: () => {

@@ -45,14 +45,28 @@ module.exports = {
     return result;
   },
 
+  /** Convert date to full time string */
+  formatTime: (value) => {
+    if (!value) return '-';
+  
+    let dt = new Date(value);
+    let hour = doubleDigit(dt.getHours());
+    let min = doubleDigit(dt.getMinutes());
+
+    let result = `${hour}:${min}`;
+    return result;
+  },
+
+  formatDateTime: (value) => {
+    if (!value) return '-';
+    return `${module.exports.formatTime(value)} @ ${module.exports.formatDate(value)}`;
+  },
+
   /** Get date in YYYY-MM-DD format */
   formatISODate: (value) => {
-    let dd = value.getDate();
-    let mm = value.getMonth() + 1;
+    let dd = doubleDigit(value.getDate());
+    let mm = doubleDigit(value.getMonth() + 1);
     let yyyy = value.getFullYear();
-
-    dd = (dd < 10) ? '0' + dd : dd;
-    mm = (mm < 10) ? '0' + mm : mm;
 
     return `${yyyy}-${mm}-${dd}`;
   },
@@ -89,4 +103,9 @@ const getDateSuffix = (day) => {
   }
   
   return suffix;
+}
+
+/** Ensure all values are two significant figures */
+const doubleDigit = (value) => {
+  return value = (value < 10) ? '0' + value : value;
 }

@@ -9,7 +9,7 @@
 }
 
 .userTabler {
-  @include entityTabler(4% 15% 8% auto 13% 15% 15% 4% 4%);
+  @include entityTabler(4% 15% 4% 1fr 13% 1fr 15% 4% 4%);
 }
 
 /************

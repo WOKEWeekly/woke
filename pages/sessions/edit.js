@@ -67,7 +67,6 @@ class SessionEdit extends Component {
       body: data,
       headers: {
         'Authorization': `Bearer ${this.props.user.token}`,
-        'Clearance': CLEARANCES.ACTIONS.CRUD_SESSIONS,
         'Path': 'sessions'
       },
       onSuccess: () => {
