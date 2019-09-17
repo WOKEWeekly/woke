@@ -19,22 +19,24 @@ class CandidateEdit extends Component {
   constructor(props) {
     super(props);
 
-    const { id, name, occupation, image, birthday, description, ethnicity, socials } = props.candidate;
+    const { id, name, occupation, image, birthday, description, ethnicity, socials, authorId, date_written } = props.candidate;
     const ethnicities = JSON.parse(ethnicity);
 
     this.state = {
-      id: id,
-      name: name,
+      id,
+      name,
       occupation: occupation,
       birthday: new Date(birthday),
       description: description,
-      image: image,
+      image,
       imageChanged: false,
       ethnicity1: ethnicities ? ethnicities[0] : '',
       ethnicity2: ethnicities ? ethnicities[1] : '',
       ethnicity3: ethnicities ? ethnicities[2] : '',
       ethnicity4: ethnicities ? ethnicities[3] : '',
-      socials: JSON.parse(socials)
+      socials: JSON.parse(socials),
+      authorId,
+      date_written
     };
   }
 
@@ -42,7 +44,8 @@ class CandidateEdit extends Component {
   handleText = (event) => {
     const { name, value } = event.target;
     this.setState({[name]: value}); }
-  handleDate = (birthday) => { this.setState({birthday}); }
+  handleBirthday = (birthday) => { this.setState({birthday}); }
+  handleDateWritten = (date_written) => { this.setState({date_written}); }
   handleImage = (event) => { this.setState({image: event.target.files[0], imageChanged: true}); }
   confirmSocials = (socials) => {this.setState({socials})}
 
@@ -53,7 +56,7 @@ class CandidateEdit extends Component {
     if (!isValidCandidate(this.state)) return;
     
     const { id, name, occupation, image, birthday, description, socials,
-      ethnicity1, ethnicity2, ethnicity3, ethnicity4, imageChanged } = this.state;
+      ethnicity1, ethnicity2, ethnicity3, ethnicity4, imageChanged, authorId, date_written } = this.state;
 
     /** Generate slugs and filenames from name and data */
     let slug = generateSlug(name);
@@ -76,7 +79,9 @@ class CandidateEdit extends Component {
         birthday: formatISODate(birthday),
         ethnicity: JSON.stringify(ethnicities),
         description: description,
-        socials: JSON.stringify(socials)
+        socials: JSON.stringify(socials),
+        authorId,
+        date_written: formatISODate(date_written)
       }
     };
 
@@ -107,7 +112,8 @@ class CandidateEdit extends Component {
         heading={'Edit Candidate'}
         candidate={this.state}
         handleText={this.handleText}
-        handleDate={this.handleDate}
+        handleBirthday={this.handleBirthday}
+        handleDateWritten={this.handleDateWritten}
         handleImage={this.handleImage}
 
         confirmSocials={this.confirmSocials}

@@ -1,11 +1,10 @@
 import React, { Component} from 'react';
 import { Col } from 'react-bootstrap';
 import { connect } from 'react-redux';
-import Router from 'next/router';
 
 import { SubmitButton, CancelButton, AddEntityButton } from '~/components/button.js';
-import { BirthdayPicker } from '~/components/datepicker.js';
-import { Heading, Group, Label, TextInput, ClickInput, NumberPicker, TextArea, FileSelector } from '~/components/form.js';
+import { EventDatePicker, BirthdayPicker } from '~/components/datepicker.js';
+import { Heading, Group, Label, TextInput, Select, ClickInput, NumberPicker, TextArea, FileSelector } from '~/components/form.js';
 import { SocialsList } from '~/components/icon.js';
 import { Shader, Spacer } from '~/components/layout.js';
 import { EthnicModal, SocialsModal } from '~/components/modal.js';
@@ -13,6 +12,7 @@ import { EthnicModal, SocialsModal } from '~/components/modal.js';
 import { countriesToString } from '~/constants/countries.js';
 import CLEARANCES from '~/constants/clearances.js';
 import { getFilename } from '~/constants/file.js';
+import request from '~/constants/request.js';
 
 import css from '~/styles/blackex.scss';
 
@@ -21,12 +21,36 @@ class CandidateForm extends Component {
     super(props);
     this.state = {
       ethnicModalVisible: false,
-      socialsModalVisible: false
+      socialsModalVisible: false,
+      members: []
     }
 
     if (props.user.clearance < CLEARANCES.ACTIONS.CRUD_SESSIONS){
       return location.href = '/blackexcellence';
     }
+  }
+
+  componentDidMount(){
+    request({
+      url: '/getTeam',
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${this.props.user.token}`,
+        'Content-Type': 'application/json',
+      },
+      onSuccess: (response) => {
+        const members = [];
+        response.forEach(member => {
+          members.push({value: member.id, label: `${member.firstname} ${member.lastname}` })
+        });
+        members.sort((a, b) => {
+          a = a.label;
+          b = b.label;
+          return a < b ? -1 : a > b ? 1 : 0;
+        });
+        this.setState({ members});
+      }
+    });
   }
 
   showEthnicModal = () => { this.setState({ ethnicModalVisible: true})}
@@ -36,12 +60,13 @@ class CandidateForm extends Component {
 
   render(){
     const { heading, confirmText, confirmFunc, cancelFunc,
-      handleText, handleDate, handleImage, clearSelection, confirmSocials, countries } = this.props;
+      handleText, handleBirthday, handleDateWritten, handleImage, clearSelection, confirmSocials, countries } = this.props;
 
     const { id, name, description, occupation, birthday, image, socials,
-      ethnicity1, ethnicity2, ethnicity3, ethnicity4 } = this.props.candidate;
+      ethnicity1, ethnicity2, ethnicity3, ethnicity4,
+      authorId, date_written } = this.props.candidate;
 
-    const { ethnicModalVisible, socialsModalVisible } = this.state;
+    const { members, ethnicModalVisible, socialsModalVisible } = this.state;
 
     const filename = getFilename(image);
     const ethnicities = countriesToString([ethnicity1, ethnicity2, ethnicity3, ethnicity4], countries);    
@@ -71,7 +96,7 @@ class CandidateForm extends Component {
               </Col>
               <Col md={4}>
                 <Label>Birthday:</Label>
-                <BirthdayPicker date={birthday} onConfirm={handleDate} />
+                <BirthdayPicker date={birthday} onConfirm={handleBirthday} />
               </Col>
             </Group>
             <Group>
@@ -109,6 +134,21 @@ class CandidateForm extends Component {
                   onChange={handleText}
                   placeholder={"Write out candidate tribute..."} />
               </Col>
+            </Group>
+            <Group>
+              <Col md={5}>
+                <Label>Author:</Label>
+                <Select
+                  name={'authorId'}
+                  value={authorId}
+                  placeholder={'Select the author.'}
+                  items={members}
+                  onChange={handleText} />
+                </Col>
+                <Col md={{span: 5, offset: 2}}>
+                  <Label>Date Written:</Label>
+                  <EventDatePicker date={date_written} onConfirm={handleDateWritten} />
+                </Col>
             </Group>
             <Group>
               <Col>

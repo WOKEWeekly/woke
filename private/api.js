@@ -161,8 +161,8 @@ module.exports = function(app, conn){
       },
       function(callback){ // Add candidate to databse
         const candidate = JSON.parse(req.body.candidate);
-        const sql = "INSERT INTO blackex (id, name, image, birthday, ethnicity, socials, occupation, description) VALUES ?";
-        const values = [[candidate.id, candidate.name, candidate.image, candidate.birthday, candidate.ethnicity, candidate.socials, candidate.occupation, candidate.description]];
+        const sql = "INSERT INTO blackex (id, name, image, birthday, ethnicity, socials, occupation, description, authorId, date_written) VALUES ?";
+        const values = [[candidate.id, candidate.name, candidate.image, candidate.birthday, candidate.ethnicity, candidate.socials, candidate.occupation, candidate.description, candidate.authorId, candidate.date_written]];
     
         conn.query(sql, [values], function (err) {
           err ? callback(err) : callback(null);
@@ -183,8 +183,8 @@ module.exports = function(app, conn){
       },
       function(callback){ // Update candidate in database
         const { candidate1, candidate2 } = JSON.parse(req.body.candidates);
-        const sql = "UPDATE blackex SET id = ?, name = ?, image = ?, birthday = ?, ethnicity = ?, socials = ?, occupation = ?, description = ? WHERE id = ?";
-        const values = [candidate2.id, candidate2.name, candidate2.image, candidate2.birthday, candidate2.ethnicity, candidate2.socials, candidate2.occupation, candidate2.description, candidate1.id];
+        const sql = "UPDATE blackex SET id = ?, name = ?, image = ?, birthday = ?, ethnicity = ?, socials = ?, occupation = ?, description = ?, authorId = ?, date_written = ? WHERE id = ?";
+        const values = [candidate2.id, candidate2.name, candidate2.image, candidate2.birthday, candidate2.ethnicity, candidate2.socials, candidate2.occupation, candidate2.description, candidate2.authorId, candidate2.date_written, candidate1.id];
         
         conn.query(sql, values, function (err) {
           if (err) return callback(err);

@@ -4,7 +4,6 @@ import Router from 'next/router';
 
 import { setAlert } from '~/components/alert.js';
 
-import CLEARANCES from '~/constants/clearances';
 import { formatISODate } from '~/constants/date.js';
 import { generateSlug, generateMemberFilename } from '~/constants/file.js';
 import request from '~/constants/request.js';

@@ -63,7 +63,8 @@ module.exports = {
   },
 
   /** Get date in YYYY-MM-DD format */
-  formatISODate: (value) => {
+  formatISODate: (date) => {
+    const value = new Date(date);
     let dd = doubleDigit(value.getDate());
     let mm = doubleDigit(value.getMonth() + 1);
     let yyyy = value.getFullYear();

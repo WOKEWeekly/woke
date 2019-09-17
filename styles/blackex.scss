@@ -28,6 +28,7 @@
 
 .meta {
   @include font-scaler(0.8);
+  margin-top: 0.5em;
   .author {
     @extend .link-blackex;
     text-decoration: none !important;
