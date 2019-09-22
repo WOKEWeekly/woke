@@ -4,13 +4,15 @@ import {Container, Col, Row} from 'react-bootstrap';
 import Link from 'next/link';
 
 import { Cover, Shader, Default, Mobile } from '~/components/layout.js';
-import { Title, Subtitle, Divider, Paragraph, truncateText, TruncatedParagraph } from '~/components/text.js';
+import { Title, Subtitle, Divider, Paragraph, truncateText } from '~/components/text.js';
 import { Fader, Slider } from '~/components/transitioner.js';
 import { Voter } from '~/components/voter.js';
 
 import { countriesToString } from '~/constants/countries.js';
 import { formatDate, calculateAge } from '~/constants/date.js';
 import request from '~/constants/request.js';
+
+import { Review } from '~/pages/reviews/unit.js';
 
 import css from '~/styles/home.scss';
 
@@ -51,6 +53,8 @@ export default class Home extends Component {
               description={'Encouraging unity amongst the community irrespective of social status or background.'}
               image={'three-part-3.jpg'} />
           </Row>
+
+          <Row><ReviewsPreview/></Row>
 
           <Row>
             <Col md={6} className={'p-0'}><UpcomingSession/></Col>
@@ -103,6 +107,46 @@ class Part extends Component {
 		);
 	}
 }
+
+class ReviewsPreview extends Component {
+  constructor(){
+    super();
+    this.state = {
+      reviews: []
+    }
+  }
+
+  componentDidMount(){
+    this.getReviews();
+  }
+  
+  getReviews = () => {
+    request({
+      url: '/getReviews',
+      method: 'GET',
+      headers: {
+        'Authorization': process.env.AUTH_KEY,
+        'Content-Type': 'application/json',
+      },
+      onSuccess: (reviews) => {
+        this.setState({reviews, isLoaded: true});
+      }
+    });
+  }
+
+  render(){
+    const { reviews } = this.state;
+    if (reviews.length === 0) return null;
+
+    const items = [];
+
+    for (const [index, item] of reviews.entries()) {
+      items.push(<Review key={index} idx={index} item={item} />);
+    }
+
+    return <Container className={css.list}>{items}</Container>;
+  }
+} 
 
 class UpcomingSession extends Component {
   constructor(){

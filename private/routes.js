@@ -532,6 +532,25 @@ module.exports = function(app, conn, server){
     });
   });
 
+  /** Reviews */
+  app.get('/reviews', function(req, res){
+    conn.query(`SELECT * FROM reviews`, function (err, result) {
+      if (err) return renderErrPage(req, res, err, server);
+      return server.render(req, res, '/reviews', {
+        title: 'Reviews | #WOKEWeekly',
+        description: 'Our most Frequently Asked Questions.',
+        url: '/reviews'
+      });
+    });
+  });
+
+  /** Add New Review */
+  app.get('/reviews/add', function(req, res){
+    server.render(req, res, '/reviews/add', {
+      title: 'Add New Review'
+    });
+  });
+
   /***************************************************************
    * RESOURCES
    **************************************************************/

@@ -67,6 +67,15 @@ export const isValidMember = (member) => {
   return true;
 }
 
+/** Ensure valid review is added or updated */
+export const isValidReview = (review) => {
+  if (!ifExists(review.referee.trim(), 'Enter referee of the review.')) return false;
+  if (!ifExists(review.role.trim(), 'Enter the referee role\'s.')) return false;
+  if (review.rating === 0) return alert.error('Select the member\'s level.');
+  if (!ifExists(review.description.trim(), 'Enter the description provided by the referee.')) return false;
+  return true;
+}
+
 /** Ensure a valid email address */
 export const isValidEmail = (email) => {
   const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
