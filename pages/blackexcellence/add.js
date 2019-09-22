@@ -5,7 +5,7 @@ import Router from 'next/router';
 import { setAlert } from '~/components/alert.js';
 
 import { formatISODate } from '~/constants/date.js';
-import { generateSlug, generateCandidateFilename } from '~/constants/file.js';
+import { generateSlug, generateCandidateFilename } from '~/private/file.js';
 import request from '~/constants/request.js';
 import { isValidCandidate } from '~/constants/validations.js';
 
@@ -87,10 +87,7 @@ class CandidateAdd extends Component {
       url:'/addCandidate',
       method: 'POST',
       body: data,
-      headers: {
-        'Authorization': `Bearer ${this.props.user.token}`,
-        'Path': 'blackexcellence'
-      },
+      headers: { 'Authorization': `Bearer ${this.props.user.token}` },
       onSuccess: () => {
         setAlert({ type: 'success', message: `You've successfully added candidate ${candidate.name}.` });
         location.href = '/blackexcellence';

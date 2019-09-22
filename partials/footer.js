@@ -23,11 +23,6 @@ export default class Footer extends Component {
 
     return (
       <div className={css.footer}>
-        {/* <Row>
-          <Col md={4}></Col>
-          <Col md={4}></Col>
-          <Col md={4}><Socials/></Col>
-        </Row> */}
         <Divider />
         <Row>
           <Links/>
@@ -44,6 +39,7 @@ class Links extends Component {
       <React.Fragment>
         <Col className={css.footerLinks} lg={9}>
           <a href={'/about'}>About #WOKEWeekly</a>
+          <a href={'/reviews'}>Reviews</a>
           <a href={'/privacy'}>Privacy Policy</a>
           <a href={'/cookies'}>Cookies</a>
           <a href={'/faq'}>FAQs</a>

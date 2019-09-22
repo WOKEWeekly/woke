@@ -4,9 +4,7 @@ import Router from 'next/router';
 
 import { setAlert } from '~/components/alert.js';
 
-import CLEARANCES from '~/constants/clearances';
 import { formatISODate } from '~/constants/date.js';
-import { generateSlug, generateSessionFilename } from '~/constants/file.js';
 import request from '~/constants/request.js';
 import { isValidSession } from '~/constants/validations.js';
 
@@ -39,10 +37,6 @@ class SessionEdit extends Component {
     if (!isValidSession(this.state)) return;
     
     const { title, date, description, image, imageChanged } = this.state;
-
-    /** Generate slugs and filenames from title and data */
-    let slug = generateSlug(title);
-    let filename = imageChanged ? generateSessionFilename(date, slug, image) : image;
     
     const sessions = {
       session1: this.props.session,
@@ -50,26 +44,22 @@ class SessionEdit extends Component {
         title: title.trim(),
         dateHeld: formatISODate(date),
         description: description.trim(),
-        slug: slug,
-        image: filename
+        image: image
       }
     };
 
     const data = new FormData();
     data.append('sessions', JSON.stringify(sessions));
     data.append('changed', imageChanged);
-    imageChanged && data.append('file', image, filename);
+    imageChanged && data.append('file', image);
 
     /** Update session in database */
     request({
       url: '/updateSession',
       method: 'PUT',
       body: data,
-      headers: {
-        'Authorization': `Bearer ${this.props.user.token}`,
-        'Path': 'sessions'
-      },
-      onSuccess: () => {
+      headers: { 'Authorization': `Bearer ${this.props.user.token}`, },
+      onSuccess: ({slug}) => {
         setAlert({ type: 'success', message: `You've successfully edited the details of ${title}.` });
         location.href = `/session/${slug}`;
       }

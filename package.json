@@ -64,6 +64,7 @@
     "@babel/preset-env": "^7.4.5",
     "babel-loader": "^8.0.6",
     "babel-plugin-root-import": "^6.2.0",
+    "canvas": "^2.6.0",
     "chai": "^4.2.0",
     "mocha": "^6.2.0",
     "supertest": "^4.0.2",

@@ -11,7 +11,7 @@ import { EthnicModal, SocialsModal } from '~/components/modal.js';
 
 import { countriesToString } from '~/constants/countries.js';
 import CLEARANCES from '~/constants/clearances.js';
-import { getFilename } from '~/constants/file.js';
+import { getFilename } from '~/private/file.js';
 import request from '~/constants/request.js';
 
 import css from '~/styles/blackex.scss';

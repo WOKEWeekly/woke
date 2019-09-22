@@ -5,7 +5,7 @@ import Router from 'next/router';
 import { setAlert } from '~/components/alert.js';
 
 import { formatISODate } from '~/constants/date.js';
-import { generateSlug, generateMemberFilename } from '~/constants/file.js';
+import { generateSlug, generateMemberFilename } from '~/private/file.js';
 import request from '~/constants/request.js';
 import { isValidMember } from '~/constants/validations.js';
 
@@ -94,10 +94,7 @@ class MemberEdit extends Component {
       url: '/updateMember',
       method: 'PUT',
       body: data,
-      headers: {
-        'Authorization': `Bearer ${this.props.user.token}`,
-        'Path': 'team'
-      },
+      headers: { 'Authorization': `Bearer ${this.props.user.token}`, },
       onSuccess: () => {
         const isExecutive = level === 'Executive';
         setAlert({ type: 'success', message: `You've successfully edited the details of ${firstname} ${lastname}.` });

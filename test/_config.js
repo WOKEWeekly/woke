@@ -1,5 +1,5 @@
 const assert = require('chai').assert;
-const request = require("request");
+const request = require('request');
 const host = "http://localhost:3000";
 const dotenv = require('dotenv').config({path:'./config.env'});
 const jwt = require('jsonwebtoken');
@@ -30,14 +30,15 @@ const users = {
 
 const options = {
   standard: { headers: { 'Content-Type': 'application/json' } },
-  strong: (user) => {
-    return {
-      headers: {
-        'Authorization': `Bearer ${user.token}`,
-        'Content-Type': 'application/json',
-      }
+  strong: (user) => ({
+    headers: {
+      'Authorization': `Bearer ${user.token}`,
+      'Content-Type': 'application/json',
     }
-  },
+  }),
+  strongCRUD: (user) => ({
+    headers: { 'Authorization': `Bearer ${user.token}` }
+  }),
   weak: {
     headers: {
       'Authorization': process.env.AUTH_KEY,

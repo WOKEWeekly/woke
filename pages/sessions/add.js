@@ -5,7 +5,6 @@ import { connect } from 'react-redux';
 import { setAlert } from '~/components/alert.js';
 
 import { formatISODate } from '~/constants/date.js';
-import { generateSlug, generateSessionFilename } from '~/constants/file.js';
 import { isValidSession } from '~/constants/validations.js';
 import request from '~/constants/request.js';
 
@@ -33,33 +32,25 @@ class SessionAdd extends Component {
     if (!isValidSession(this.state)) return;
     
     const { title, date, description, image } = this.state;
-
-    /** Generate slugs and filenames from title and data */
-    let slug = generateSlug(title);
-    let filename = generateSessionFilename(date, slug, image);
     
     const session = {
       title: title.trim(),
       dateHeld: formatISODate(date),
       description: description.trim(),
-      slug: slug,
-      image: filename
+      image: image
     };
 
     const data = new FormData();
     data.append('session', JSON.stringify(session));
     data.append('changed', true);
-    data.append('file', image, filename);
+    data.append('file', image);
 
     /** Add session to database */
     request({
       url: '/addSession',
       method: 'POST',
       body: data,
-      headers: {
-        'Authorization': `Bearer ${this.props.user.token}`,
-        'Path': 'sessions'
-      },
+      headers: { 'Authorization': `Bearer ${this.props.user.token}` },
       onSuccess: () => {
         setAlert({ type: 'success', message: `You've successfully added: ${session.title}.` });
         location.href = '/sessions';

@@ -20,74 +20,79 @@ module.exports = function(app, conn){
   app.post('/addSession', verifyToken(CLEARANCES.ACTIONS.CRUD_SESSIONS), function(req, res){
     async.waterfall([
       function(callback){ // Upload file to directory
+        req.headers.path = 'sessions';
         upload(req, res, function(err){
           err ? callback(err) : callback(null);
         });
       },
-      function(callback){ // Add session to databse
+      function(callback){ // Add session to database
         const session = JSON.parse(req.body.session);
         const sql = "INSERT INTO sessions (title, dateHeld, image, slug, description) VALUES ?";
-        const values = [[session.title, session.dateHeld, session.image, session.slug, session.description]];
+        const values = [[session.title, session.dateHeld, req.file.filename, req.body.slug, session.description]];
         
-        conn.query(sql, [values], function (err) {
-          err ? callback(err) : callback(null);
+        conn.query(sql, [values], function (err, result) {
+          err ? callback(err) : callback(null, result.insertId);
         });
       }
-    ], function(err){
-      resToClient(res, err);
+    ], function(err, id){
+      resToClient(res, err, {id, slug: req.body.slug, image: req.file.filename});
     });
   });
 
   /** Update details of existing session in database */
   app.put('/updateSession', verifyToken(CLEARANCES.ACTIONS.CRUD_SESSIONS), function(req, res){
+    let slug, image;
     async.waterfall([
       function(callback){ // Upload new image to directory
+        req.headers.path = 'sessions';
         upload(req, res, function(err){
           err ? callback(err) : callback(null);
         });
       },
       function(callback){ // Update session in database
         const { session1, session2 } = JSON.parse(req.body.sessions);
+
+        image = req.file ? req.file.filename : session1.image;
+        slug = req.file ? req.body.slug : session1.slug;
+
         const sql = "UPDATE sessions SET title = ?, dateHeld = ?, image = ?, slug = ?, description = ? WHERE id = ?";
-        const values = [session2.title, session2.dateHeld, session2.image, session2.slug, session2.description, session1.id];
-        
+        const values = [session2.title, session2.dateHeld, image, slug, session2.description, session1.id];
+
         conn.query(sql, values, function (err) {
           if (err) return callback(err);
-          const image = `./static/images/sessions/${session1.image}`;
+          const src = `./static/images/sessions/${session1.image}`;
           
-          if (req.body.changed){
-            if (session1.image !== session2.image){
-              callback(null, image);
+          if (req.body.changed === 'true'){
+            if (session1.image !== req.file.filename){
+              callback(null, src);
             } else { callback(true); }
           } else { callback(true); }
         });
       },
-      function(image, callback){ // Delete original image from directory
-        fs.unlink(image, function(err) {
+      function(src, callback){ // Delete original image from directory
+        fs.unlink(src, function(err) {
           if (err) console.warn(err.toString());
           callback(null);
         });
       }
     ], function(err){
-      resToClient(res, err);
+      resToClient(res, err, { slug, image });
     });
   });
 
   /** Delete an existing session from database */
   app.delete('/deleteSession', verifyToken(CLEARANCES.ACTIONS.CRUD_SESSIONS), function(req, res){
+    const session = req.body;
     async.waterfall([
-      function(callback){ // Delete session from database
-        const session = req.body;
-        const sql = "DELETE FROM sessions WHERE id = ?";
-
-        conn.query(sql, session.id, function (err) {
-          err ? callback(err) : callback(null, session.image);
+      function(callback){ // Delete image from directory
+        fs.unlink(`./static/images/sessions/${session.image}`, function(err) {
+          if (err) console.warn(`${session.image} not found in /sessions directory.`);
+          callback(null);
         });
       },
-      function(image, callback){ // Delete image from directory
-        fs.unlink(`./static/images/sessions/${image}`, function(err) {
-          if (err) console.warn(`${image} not found in /sessions directory.`);
-          callback(null);
+      function(callback){ // Delete session from database
+        conn.query("DELETE FROM sessions WHERE id = ?", session.id, function (err) {
+          err ? callback(err) : callback(null);
         });
       }
     ], function(err){
@@ -155,6 +160,7 @@ module.exports = function(app, conn){
   app.post('/addCandidate', verifyToken(CLEARANCES.ACTIONS.CRUD_BLACKEX), function(req, res){
     async.waterfall([
       function(callback){ // Upload file to directory
+        req.headers.path = 'blackexcellence';
         upload(req, res, function(err){
           err ? callback(err) : callback(null);
         });
@@ -177,6 +183,7 @@ module.exports = function(app, conn){
   app.put('/updateCandidate', verifyToken(CLEARANCES.ACTIONS.CRUD_BLACKEX), function(req, res){
     async.waterfall([
       function(callback){ // Upload new image to directory
+        req.headers.path = 'blackexcellence';
         upload(req, res, function(err){
           err ? callback(err) : callback(null);
         });
@@ -248,6 +255,7 @@ module.exports = function(app, conn){
   app.post('/addMember', verifyToken(CLEARANCES.ACTIONS.CRUD_TEAM), function(req, res){
     async.waterfall([
       function(callback){ // Upload file to directory
+        req.headers.path = 'team';
         upload(req, res, function(err){
           err ? callback(err) : callback(null);
         });
@@ -270,6 +278,7 @@ module.exports = function(app, conn){
   app.put('/updateMember', verifyToken(CLEARANCES.ACTIONS.CRUD_TEAM), function(req, res){
     async.waterfall([
       function(callback){ // Upload new image to directory
+        req.headers.path = 'team';
         upload(req, res, function(err){
           err ? callback(err) : callback(null);
         });
@@ -334,12 +343,19 @@ module.exports = function(app, conn){
   /** Change user's clearance */
   app.put('/changeClearance', verifyToken(CLEARANCES.ACTIONS.CRUD_USERS), function(req, res){
     const {id, clearance} = req.body;
-    console.log(req.body);
     const sql = "UPDATE user SET clearance = ? WHERE id = ?";
     const values = [clearance, id];
     
     conn.query(sql, values, function(err){	
       resToClient(res, err);
+    });
+  });
+  
+  /** Retrieve all reviews */
+  app.get('/getReviews', function(req, res){
+    const sql = "SELECT * FROM reviews";
+    conn.query(sql, function (err, result) {
+      resToClient(res, err, result);
     });
   });
 

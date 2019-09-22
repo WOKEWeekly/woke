@@ -2,6 +2,7 @@ const async = require('async');
 const jwt = require('jsonwebtoken');
 const multer = require('multer');
 const { resToClient } = require('./response.js');
+const filer = require('./file.js');
 
 module.exports = {
 
@@ -76,7 +77,16 @@ module.exports = {
   upload: multer({
     storage: multer.diskStorage({
       destination: function(req, file, callback) {callback(null, `./static/images/${req.headers.path}/`);},
-      filename: function (req, file, callback) {callback(null, file.originalname);}
+      filename: function (req, file, callback) {
+        let filename, slug;
+        switch (req.headers.path){
+          case 'sessions':
+            const session = req.method === 'POST' ? JSON.parse(req.body.session) : JSON.parse(req.body.sessions).session2;
+            slug = req.body.slug = filer.generateSlug(session.title);
+            filename = filer.generateSessionFilename(session.dateHeld, slug, file);
+        }
+        callback(null, filename);
+      }
     }),
     limits: {
       files: 1,
