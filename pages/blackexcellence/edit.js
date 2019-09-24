@@ -5,7 +5,6 @@ import Router from 'next/router';
 import { setAlert } from '~/components/alert.js';
 
 import { formatISODate } from '~/constants/date.js';
-import { generateSlug, generateCandidateFilename } from '~/private/file.js';
 import request from '~/constants/request.js';
 import { isValidCandidate } from '~/constants/validations.js';
 
