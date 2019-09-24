@@ -58,10 +58,6 @@ class CandidateEdit extends Component {
     const { id, name, occupation, image, birthday, description, socials,
       ethnicity1, ethnicity2, ethnicity3, ethnicity4, imageChanged, authorId, date_written } = this.state;
 
-    /** Generate slugs and filenames from name and data */
-    let slug = generateSlug(name);
-    let filename = imageChanged ? generateCandidateFilename(id, slug, image) : image
-
     /** Add ethncities to array */
     const ethnicities = [];
     if (ethnicity1) ethnicities.push(ethnicity1);
@@ -72,10 +68,10 @@ class CandidateEdit extends Component {
     const candidates = {
       candidate1: this.props.candidate,
       candidate2: {
-        id: id,
+        id,
         name: name.trim(),
         occupation: occupation.trim(),
-        image: filename,
+        image,
         birthday: formatISODate(birthday),
         ethnicity: JSON.stringify(ethnicities),
         description: description,
@@ -88,7 +84,7 @@ class CandidateEdit extends Component {
     const data = new FormData();
     data.append('candidates', JSON.stringify(candidates));
     data.append('changed', imageChanged);
-    if (imageChanged) data.append('file', image, filename);
+    if (imageChanged) data.append('file', image);
 
     /** Update candidate in database */
     request({

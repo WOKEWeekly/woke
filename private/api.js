@@ -60,11 +60,10 @@ module.exports = function(app, conn){
 
         conn.query(sql, values, function (err) {
           if (err) return callback(err);
-          const src = `./static/images/sessions/${session1.image}`;
           
           if (req.body.changed === 'true'){
-            if (session1.image !== req.file.filename){
-              callback(null, src);
+            if (session1.image !== image){
+              callback(null, `./static/images/sessions/${session1.image}`);
             } else { callback(true); }
           } else { callback(true); }
         });
@@ -83,6 +82,7 @@ module.exports = function(app, conn){
   /** Delete an existing session from database */
   app.delete('/deleteSession', verifyToken(CLEARANCES.ACTIONS.CRUD_SESSIONS), function(req, res){
     const session = req.body;
+
     async.waterfall([
       function(callback){ // Delete image from directory
         fs.unlink(`./static/images/sessions/${session.image}`, function(err) {
@@ -165,22 +165,23 @@ module.exports = function(app, conn){
           err ? callback(err) : callback(null);
         });
       },
-      function(callback){ // Add candidate to databse
+      function(callback){ // Add candidate to database
         const candidate = JSON.parse(req.body.candidate);
         const sql = "INSERT INTO blackex (id, name, image, birthday, ethnicity, socials, occupation, description, authorId, date_written) VALUES ?";
-        const values = [[candidate.id, candidate.name, candidate.image, candidate.birthday, candidate.ethnicity, candidate.socials, candidate.occupation, candidate.description, candidate.authorId, candidate.date_written]];
+        const values = [[candidate.id, candidate.name, req.file.filename, candidate.birthday, candidate.ethnicity, candidate.socials, candidate.occupation, candidate.description, candidate.authorId, candidate.date_written]];
     
         conn.query(sql, [values], function (err) {
           err ? callback(err) : callback(null);
         });
       }
     ], function(err){
-      resToClient(res, err);
+      resToClient(res, err, {image: req.file.filename});
     });
   });
 
   /** Update details of existing candidate in database */
   app.put('/updateCandidate', verifyToken(CLEARANCES.ACTIONS.CRUD_BLACKEX), function(req, res){
+    let image;
     async.waterfall([
       function(callback){ // Upload new image to directory
         req.headers.path = 'blackexcellence';
@@ -190,46 +191,47 @@ module.exports = function(app, conn){
       },
       function(callback){ // Update candidate in database
         const { candidate1, candidate2 } = JSON.parse(req.body.candidates);
+
+        image = req.file ? req.file.filename : candidate1.image;
+
         const sql = "UPDATE blackex SET id = ?, name = ?, image = ?, birthday = ?, ethnicity = ?, socials = ?, occupation = ?, description = ?, authorId = ?, date_written = ? WHERE id = ?";
-        const values = [candidate2.id, candidate2.name, candidate2.image, candidate2.birthday, candidate2.ethnicity, candidate2.socials, candidate2.occupation, candidate2.description, candidate2.authorId, candidate2.date_written, candidate1.id];
+        const values = [candidate2.id, candidate2.name, image, candidate2.birthday, candidate2.ethnicity, candidate2.socials, candidate2.occupation, candidate2.description, candidate2.authorId, candidate2.date_written, candidate1.id];
         
         conn.query(sql, values, function (err) {
           if (err) return callback(err);
-          const image = `./static/images/blackexcellence/${candidate1.image}`;
           
           if (req.body.changed){
-            if (candidate1.image !== candidate2.image){
-              callback(null, image);
+            if (candidate1.image !== image){
+              callback(null, `./static/images/blackexcellence/${candidate1.image}`);
             } else { callback(true); }
           } else { callback(true); }
         });
       },
-      function(image, callback){ // Delete original image from directory
-        fs.unlink(image, function(err) {
+      function(src, callback){ // Delete original image from directory
+        fs.unlink(src, function(err) {
           if (err) console.warn(err.toString());
           callback(null);
         });
       }
     ], function(err){
-      resToClient(res, err);
+      resToClient(res, err, { image });
     });
   });
 
   /** Delete an existing candidate from database */
   app.delete('/deleteCandidate', verifyToken(CLEARANCES.ACTIONS.CRUD_BLACKEX), function(req, res){
-    async.waterfall([
-      function(callback){ // Delete candidate from database
-        const candidate = req.body;
-        const sql = "DELETE FROM blackex WHERE id = ?";
+    const candidate = req.body;
 
-        conn.query(sql, candidate.id, function (err) {
-          err ? callback(err) : callback(null, candidate.image);
+    async.waterfall([
+      function(callback){ // Delete image from directory
+        fs.unlink(`./static/images/blackexcellence/${candidate.image}`, function(err) {
+          if (err) console.warn(`${candidate.image} not found in /blackexcellence directory.`);
+          callback(null);
         });
       },
-      function(image, callback){ // Delete image from directory
-        fs.unlink(`./static/images/blackexcellence/${image}`, function(err) {
-          if (err) console.warn(`${image} not found in /blackexcellence directory.`);
-          callback(null);
+      function(callback){ // Delete candidate from database
+        conn.query("DELETE FROM blackex WHERE id = ?", candidate.id, function (err) {
+          err ? callback(err) : callback(null);
         });
       }
     ], function(err){

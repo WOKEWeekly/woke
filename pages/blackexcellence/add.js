@@ -52,11 +52,6 @@ class CandidateAdd extends Component {
     if (!isValidCandidate(this.state)) return;
     const { id, name, occupation, image, birthday, description, socials,
     ethnicity1, ethnicity2, ethnicity3, ethnicity4, authorId, date_written } = this.state;
-
-    /** Generate slugs and filenames from name and data */
-    let slug = generateSlug(name);
-    let filename = generateCandidateFilename(id, slug, image);
-
     /** Add ethncities to array */
     const ethnicities = [];
     if (ethnicity1) ethnicities.push(ethnicity1);
@@ -68,7 +63,7 @@ class CandidateAdd extends Component {
       id: id,
       name: name.trim(),
       occupation: occupation.trim(),
-      image: filename,
+      image: image,
       birthday: formatISODate(birthday),
       ethnicity: JSON.stringify(ethnicities),
       description: description,
@@ -79,8 +74,8 @@ class CandidateAdd extends Component {
 
     const data = new FormData();
     data.append('candidate', JSON.stringify(candidate));
-    data.append('changed', true);
-    data.append('file', image, filename);
+    data.append('changed', 'true');
+    data.append('file', image);
 
     /** Add candidate to database */
     request({

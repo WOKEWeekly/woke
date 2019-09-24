@@ -84,6 +84,12 @@ module.exports = {
             const session = req.method === 'POST' ? JSON.parse(req.body.session) : JSON.parse(req.body.sessions).session2;
             slug = req.body.slug = filer.generateSlug(session.title);
             filename = filer.generateSessionFilename(session.dateHeld, slug, file);
+            break;
+          case 'blackexcellence':
+            const candidate = req.method === 'POST' ? JSON.parse(req.body.candidate) : JSON.parse(req.body.candidates).candidate2;
+            slug = filer.generateSlug(candidate.name);
+            filename = filer.generateCandidateFilename(candidate.id, slug, file);
+            break;
         }
         callback(null, filename);
       }
