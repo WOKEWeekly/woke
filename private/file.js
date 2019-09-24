@@ -14,25 +14,11 @@ module.exports = {
     return !image ? '' : typeof image === 'object' ? image.name : image;
   },
 
-  /** Generate the filename for sessions */
-  generateSessionFilename: (date, slug, image) => {
-    return `${formatISODate(date)}_${slug}.${getExtension(image)}`;
-  },
-
-  /** Generate the filename for candidates */
-  generateCandidateFilename: (id, slug, image) => {
-    return `${id}_${slug}.${getExtension(image)}`;
-  },
-
-  /** Generate the filename for members */
-  generateMemberFilename: (slug, image) => {
-    return `${slug}.${getExtension(image)}`;
-  },
-
-  /** Generate the filename for referee */
-  generateReviewFilename: (slug, image) => {
-    return `${slug}.${getExtension(image)}`;
-  }
+  /** Generate filenames from entities */
+  generateSessionFilename: (date, slug, image) => `${formatISODate(date)}_${slug}.${getExtension(image)}`,
+  generateCandidateFilename: (id, slug, image) => `${id}_${slug}.${getExtension(image)}`,
+  generateMemberFilename: (slug, image) => `${slug}.${getExtension(image)}`,
+  generateReviewFilename: (rating, slug, image) => `${rating}_${slug}.${getExtension(image)}`,
 }
 
 /** Retrieve file extension via string manipulation */

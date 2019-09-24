@@ -334,6 +334,97 @@ module.exports = function(app, conn){
     });
   });
 
+  /** Retrieve all reviews */
+  app.get('/getReviews', validateReq, function(req, res){
+    const sql = "SELECT * FROM reviews";
+    conn.query(sql, function (err, result) {
+      resToClient(res, err, result);
+    });
+  });
+
+  /** Add new review to database */
+  app.post('/addReview', verifyToken(CLEARANCES.ACTIONS.CRUD_REVIEWS), function(req, res){
+    async.waterfall([
+      function(callback){ // Upload file to directory
+        req.headers.path = 'reviews';
+        upload(req, res, function(err){
+          err ? callback(err) : callback(null);
+        });
+      },
+      function(callback){ // Add review to database
+        const review = JSON.parse(req.body.review);
+        const sql = "INSERT INTO reviews (referee, position, rating, image, description) VALUES ?";
+        const values = [[review.referee, review.position, review.rating, req.file.filename, review.description]];
+        
+        conn.query(sql, [values], function (err, result) {
+          err ? callback(err) : callback(null, result.insertId);
+        });
+      }
+    ], function(err, id){
+      resToClient(res, err, {id, image: req.file.filename});
+    });
+  });
+
+  /** Update details of existing review in database */
+  app.put('/updateReview', verifyToken(CLEARANCES.ACTIONS.CRUD_REVIEWS), function(req, res){
+    let image;
+    async.waterfall([
+      function(callback){ // Upload new image to directory
+        req.headers.path = 'reviews';
+        upload(req, res, function(err){
+          err ? callback(err) : callback(null);
+        });
+      },
+      function(callback){ // Update review in database
+        const { review1, review2 } = JSON.parse(req.body.reviews);
+
+        image = req.file ? req.file.filename : review1.image;
+
+        const sql = "UPDATE reviews SET referee = ?, position = ?, rating = ?, image = ?, description = ? WHERE id = ?";
+        const values = [review2.referee, review2.position, review2.rating, image, review2.description, review1.id];
+
+        conn.query(sql, values, function (err) {
+          if (err) return callback(err);
+          
+          if (req.body.changed === 'true'){
+            if (review1.image !== image){
+              callback(null, `./static/images/reviews/${review1.image}`);
+            } else { callback(true); }
+          } else { callback(true); }
+        });
+      },
+      function(src, callback){ // Delete original image from directory
+        fs.unlink(src, function(err) {
+          if (err) console.warn(err.toString());
+          callback(null);
+        });
+      }
+    ], function(err){
+      resToClient(res, err, { image });
+    });
+  });
+
+  /** Delete an existing review from database */
+  app.delete('/deleteReview', verifyToken(CLEARANCES.ACTIONS.CRUD_REVIEWS), function(req, res){
+    const review = req.body;
+
+    async.waterfall([
+      function(callback){ // Delete image from directory
+        fs.unlink(`./static/images/reviews/${review.image}`, function(err) {
+          if (err) console.warn(`${review.image} not found in /reviews directory.`);
+          callback(null);
+        });
+      },
+      function(callback){ // Delete review from database
+        conn.query("DELETE FROM reviews WHERE id = ?", review.id, function (err) {
+          err ? callback(err) : callback(null);
+        });
+      }
+    ], function(err){
+      resToClient(res, err);
+    });
+  });
+
   /** Retrieve all users */
   app.get('/getRegisteredUsers', verifyToken(CLEARANCES.ACTIONS.VIEW_USERS), function(req, res){
     const sql = "SELECT id, firstname, lastname, clearance, username, email, create_time, last_active FROM user";
@@ -350,14 +441,6 @@ module.exports = function(app, conn){
     
     conn.query(sql, values, function(err){	
       resToClient(res, err);
-    });
-  });
-  
-  /** Retrieve all reviews */
-  app.get('/getReviews', function(req, res){
-    const sql = "SELECT * FROM reviews";
-    conn.query(sql, function (err, result) {
-      resToClient(res, err, result);
     });
   });
 

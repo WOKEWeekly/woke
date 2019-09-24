@@ -79,7 +79,7 @@ describe("#BlackExcellence Page", function() {
     });
   });
 
-  it("Update Candidate: Change", function(done) {
+  it("Update Candidate With Image", function(done) {
     const data = {
       candidates: JSON.stringify({candidate1: candidate, candidate2}),
       changed: 'true',
@@ -98,7 +98,7 @@ describe("#BlackExcellence Page", function() {
     });
   });
 
-  it("Update Candidate: No Change", function(done) {
+  it("Update Candidate Without Image", function(done) {
     const data = {
       candidates: JSON.stringify({candidate1: candidate2, candidate2: candidate3}),
       changed: 'false'
