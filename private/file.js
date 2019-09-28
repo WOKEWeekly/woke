@@ -18,7 +18,7 @@ module.exports = {
   generateSessionFilename: (date, slug, image) => `${formatISODate(date)}_${slug}.${getExtension(image)}`,
   generateCandidateFilename: (id, slug, image) => `${id}_${slug}.${getExtension(image)}`,
   generateMemberFilename: (slug, image) => `${slug}.${getExtension(image)}`,
-  generateReviewFilename: (rating, slug, image) => `${rating}_${slug}.${getExtension(image)}`,
+  generateReviewFilename: (rating, slug, image) => `${rating}-${slug}.${getExtension(image)}`,
 }
 
 /** Retrieve file extension via string manipulation */

@@ -336,7 +336,10 @@ module.exports = function(app, conn){
 
   /** Retrieve all reviews */
   app.get('/getReviews', validateReq, function(req, res){
-    const sql = "SELECT * FROM reviews";
+    const limit = req.query.limit;
+    const query = "SELECT * FROM reviews";
+    const sql = limit ? `${query} LIMIT ${limit}` : query;
+
     conn.query(sql, function (err, result) {
       resToClient(res, err, result);
     });
@@ -344,6 +347,7 @@ module.exports = function(app, conn){
 
   /** Add new review to database */
   app.post('/addReview', verifyToken(CLEARANCES.ACTIONS.CRUD_REVIEWS), function(req, res){
+    let image;
     async.waterfall([
       function(callback){ // Upload file to directory
         req.headers.path = 'reviews';
@@ -353,15 +357,17 @@ module.exports = function(app, conn){
       },
       function(callback){ // Add review to database
         const review = JSON.parse(req.body.review);
+        image = req.file ? req.file.filename : null;
+
         const sql = "INSERT INTO reviews (referee, position, rating, image, description) VALUES ?";
-        const values = [[review.referee, review.position, review.rating, req.file.filename, review.description]];
+        const values = [[review.referee, review.position, review.rating, image, review.description]];
         
         conn.query(sql, [values], function (err, result) {
           err ? callback(err) : callback(null, result.insertId);
         });
       }
     ], function(err, id){
-      resToClient(res, err, {id, image: req.file.filename});
+      resToClient(res, err, {id, image});
     });
   });
 

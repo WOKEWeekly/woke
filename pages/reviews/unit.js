@@ -3,13 +3,14 @@ import { Col, Row } from 'react-bootstrap';
 
 import { Title, Subtitle, Divider, Paragraph, truncateText } from '~/components/text.js';
 import { Slider } from '~/components/transitioner.js';
+import Rator from '~/components/rator.js';
 
-import css from '~/styles/team.scss';
+import css from '~/styles/home.scss';
 import '~/styles/_categories.scss';
 
 export class Review extends PureComponent {
-  constructor(){
-    super();
+  constructor(props){
+    super(props);
     this.state = {
       isLoaded: false
     }
@@ -20,7 +21,7 @@ export class Review extends PureComponent {
   }
 
   render(){
-    const { item, idx } = this.props;
+    const { item, idx, fullText } = this.props;
     item.description = item.description && item.description.trim().length > 0 ? item.description : 'No description.';
 
     const isEven = (idx % 2 == 0);
@@ -29,8 +30,8 @@ export class Review extends PureComponent {
       if (!item.image) return null;
       return (
         <img
-          src={`/static/images/team/${reviews.image}`}
-          alt={reviews.fullname}
+          src={`/static/images/reviews/${item.image}`}
+          alt={item.fullname}
           className={css.image} />
       );
     }
@@ -44,17 +45,18 @@ export class Review extends PureComponent {
         direction={isEven ? 'left' : 'right'}>
         <div className={css.item}>
           <Row>
-            <Col md={{span: 4, order: isEven ? 1 : 2}}>
+            <Col md={{span: 5, order: isEven ? 1 : 2}}>
               <ReviewerImage/>
             </Col>
-            <Col md={{span: 8, order: isEven ? 2 : 1}}>
+            <Col md={{span: 7, order: isEven ? 2 : 1}}>
               <div className={css.details}>
                 <Title className={css.title}>{item.referee}</Title>
                 <Subtitle className={css.subtitle}>{item.position}</Subtitle>
+                <Rator rating={item.rating} changeable={false} />
                 <Divider />
                 <Paragraph
                   className={css.paragraph}>
-                  {truncateText(item.description, 60)}
+                  {fullText ? item.description : truncateText(item.description, 60)}
                 </Paragraph>
               </div>
             </Col>

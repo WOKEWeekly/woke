@@ -481,6 +481,16 @@
 }
 
 /****************/
+/** rator.js **/
+/****************/
+
+.starBar {
+  display: flex;
+  padding: 0.8em 0 0;
+  button { padding: 0; }
+}
+
+/****************/
 /** text.js **/
 /****************/
 .title {

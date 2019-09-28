@@ -116,4 +116,34 @@ describe("Reviews Page", function() {
       done();
     });
   });
+
+  it("Add Review Without Image", function(done) {
+    const data = {
+      review: JSON.stringify(review)
+    }
+
+    request({
+      url: `${host}/addReview`,
+      method: 'POST',
+      formData: data,
+      ...options.strongCRUD(superuser)
+    }, function(err, res, body){
+      assert.equal(res.statusCode, 200, JSON.parse(body).message);
+      Object.assign(review, JSON.parse(body));
+      review2.id = review3.id = JSON.parse(body).id;
+      done();
+    });
+  });
+
+  it("Delete Review Without Image", function(done) {
+    request({
+      url: `${host}/deleteReview`,
+      method: 'DELETE',
+      body: JSON.stringify(review),
+      ...options.strong(superuser)
+    }, function(err, res){
+      assert.equal(res.statusCode, 200, JSON.parse(res.body).message);
+      done();
+    });
+  });
 });

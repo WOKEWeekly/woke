@@ -4,7 +4,6 @@ import Router from 'next/router';
 
 import { setAlert } from '~/components/alert.js';
 
-import { generateSlug, generateReviewFilename } from '~/private/file.js';
 import request from '~/constants/request.js';
 import { isValidReview } from '~/constants/validations.js';
 
@@ -18,7 +17,7 @@ class ReviewAdd extends Component {
       position: '',
       rating: 0,
       description: '',
-      image: ''
+      image: null
     };
   }
  
@@ -27,26 +26,21 @@ class ReviewAdd extends Component {
     const { name, value } = event.target;
     this.setState({[name]: value}); }
   handleImage = (event) => { this.setState({image: event.target.files[0]}); }
+  handleRatingChange = (e) => {
+    const rating = parseInt(e.currentTarget.value)
+    this.setState({ rating });
+  }
 
   /** POST review to the server */
   submitReview = () => {
     if (!isValidReview(this.state)) return;
-    const { referee, position, rating, description, image } = this.state;
-
-    /** Generate slugs and filenames from name and data */
-    let slug = generateSlug(referee);
-    let filename = generateReviewFilename(slug, image);
-    
-    const review = {
-      referee, position, rating, description,
-      image: filename
-    };
+    const review = this.state;
 
     const data = new FormData();
     data.append('review', JSON.stringify(review));
-    if (image !== ''){
+    if (review.image !== null){
       data.append('changed', true);
-      data.append('file', image, filename);
+      data.append('file', review.image);
     }
 
     /** Add review to database */
@@ -56,7 +50,7 @@ class ReviewAdd extends Component {
       body: data,
       headers: { 'Authorization': `Bearer ${this.props.user.token}` },
       onSuccess: () => {
-        setAlert({ type: 'success', message: `You've successfully added review by ${review.referee}.` });
+        setAlert({ type: 'success', message: `You've successfully added the review by ${review.referee}.` });
         location.href = '/reviews';
       }
     });
@@ -69,6 +63,7 @@ class ReviewAdd extends Component {
         entity={this.state}
         handleText={this.handleText}
         handleImage={this.handleImage}
+        handleRatingChange={this.handleRatingChange}
 
         confirmSocials={this.confirmSocials}
         clearSelection={this.clearSelection}

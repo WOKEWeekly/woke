@@ -122,7 +122,7 @@ class ReviewsPreview extends Component {
   
   getReviews = () => {
     request({
-      url: '/getReviews',
+      url: '/getReviews?limit=3',
       method: 'GET',
       headers: {
         'Authorization': process.env.AUTH_KEY,
@@ -141,10 +141,10 @@ class ReviewsPreview extends Component {
     const items = [];
 
     for (const [index, item] of reviews.entries()) {
-      items.push(<Review key={index} idx={index} item={item} />);
+      items.push(<Review key={index} idx={index} item={item} fullText={false} />);
     }
 
-    return <Container className={css.list}>{items}</Container>;
+    return <div className={css.reviewsList}>{items}</div>;
   }
 } 
 

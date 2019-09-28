@@ -69,9 +69,9 @@ export const isValidMember = (member) => {
 
 /** Ensure valid review is added or updated */
 export const isValidReview = (review) => {
-  if (!ifExists(review.referee.trim(), 'Enter referee of the review.')) return false;
-  if (!ifExists(review.role.trim(), 'Enter the referee role\'s.')) return false;
-  if (review.rating === 0) return alert.error('Select the member\'s level.');
+  if (!ifExists(review.referee.trim(), 'Enter the referee of the review.')) return false;
+  if (!ifExists(review.position.trim(), 'Enter the referee position\'s.')) return false;
+  if (review.rating === 0) return alert.error('Provided the review rating.');
   if (!ifExists(review.description.trim(), 'Enter the description provided by the referee.')) return false;
   return true;
 }

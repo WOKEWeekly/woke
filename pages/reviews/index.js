@@ -13,7 +13,7 @@ import request from '~/constants/request.js';
 
 import { Review } from '~/pages/reviews/unit.js';
 
-import css from '~/styles/team.scss';
+import css from '~/styles/home.scss';
 import '~/styles/_categories.scss';
 
 class ReviewsList extends Component {
@@ -54,13 +54,13 @@ class ReviewsList extends Component {
       if (!isLoaded){
         return <Loader/>;
       } else if (reviews.length === 0){
-        return <Empty message={'No reviews found.'}/>;
+        return <Empty message={'There are no reviews.'}/>;
       } else {
         const items = [];
         for (const [index, item] of reviews.entries()) {
-          items.push(<Review key={index} idx={index} item={item} />);
+          items.push(<Review key={index} idx={index} item={item} fullText={true} />);
         }
-        return <Container className={css.list}>{items}</Container>;
+        return <Container className={css.reviewsList}>{items}</Container>;
       }
     };
 

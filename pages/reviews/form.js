@@ -3,7 +3,7 @@ import { Col } from 'react-bootstrap';
 import { connect } from 'react-redux';
 
 import { SubmitButton, CancelButton } from '~/components/button.js';
-import { Heading, Group, Label, Select, TextInput, ClickInput, TextArea, FileSelector } from '~/components/form.js';
+import { Heading, Group, Label, TextInput, TextArea, FileSelector } from '~/components/form.js';
 import { Shader, Spacer } from '~/components/layout.js';
 import Rator from '~/components/rator.js';
 
@@ -22,7 +22,7 @@ class ReviewForm extends Component {
   }
 
   render(){
-    const { heading, entity, confirmText, confirmFunc, cancelFunc, handleText, handleImage } = this.props;
+    const { heading, entity, confirmText, confirmFunc, cancelFunc, handleText, handleImage, handleRatingChange } = this.props;
       const { referee, position, rating, description, image } = entity;
 
     const filename = getFilename(image);
@@ -54,7 +54,10 @@ class ReviewForm extends Component {
             <Group>
               <Col>
                 <Label>Rating:</Label>
-                <Rator/>
+                <Rator
+                  rating={rating}
+                  changeable={true}
+                  onChange={handleRatingChange} />
               </Col>
             </Group>
             <Group>
