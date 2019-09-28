@@ -2,7 +2,8 @@ import React, { Component} from 'react';
 import { connect } from 'react-redux';
 
 import { alert } from '~/components/alert.js';
-import { TextInput } from '~/components/form';
+import { SubmitButton } from '~/components/button.js';
+import { Icon } from '~/components/icon';
 import { Shader } from '~/components/layout.js';
 import { ConfirmModal } from '~/components/modal.js';
 
@@ -18,8 +19,10 @@ class Admin extends Component {
       ...props.user,
       generateTokenModal: false,
       accessInput: null,
-      accessLink: '',
-      tokenGenerated: false,
+      // accessLink: '',
+      // tokenGenerated: false,
+      accessLink: 'https://www.wokeweekly.co.uk',
+      tokenGenerated: true,
     }
 
     if (props.user.clearance < 8){
@@ -75,13 +78,12 @@ class Admin extends Component {
       <React.Fragment>
         <Shader>
           <div className={css.container}>
-            <button onClick={this.showGenerateTokenModal}>Regenerate Topic Bank Token</button>
-            <div style={{ visibility: tokenGenerated ? 'visible' : 'hidden'}}>
-              <TextInput
-                value={accessLink}
-                onChange={null}
-                readOnly />
-              <button onClick={this.copyAccessLink}>Copy Link</button>
+            <SubmitButton onClick={this.showGenerateTokenModal}>Regenerate Topic Bank Token</SubmitButton>
+            <div className={css.generatedLink} style={{ visibility: tokenGenerated ? 'visible' : 'hidden'}}>
+              <a href={accessLink} className={css['link-default']}>{accessLink}</a>
+              <button className={css.invisible_button} onClick={this.copyAccessLink}>
+                <Icon name={'copy'} prefix={'far'} />
+              </button>
             </div>
             
           </div>
