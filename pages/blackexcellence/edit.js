@@ -5,6 +5,7 @@ import Router from 'next/router';
 import { setAlert } from '~/components/alert.js';
 
 import { formatISODate } from '~/constants/date.js';
+import handlers from '~/constants/handlers.js';
 import request from '~/constants/request.js';
 import { isValidCandidate } from '~/constants/validations.js';
 
@@ -39,15 +40,7 @@ class CandidateEdit extends Component {
     };
   }
 
-  /** Handle text changes */
-  handleText = (event) => {
-    const { name, value } = event.target;
-    this.setState({[name]: value}); }
-  handleBirthday = (birthday) => { this.setState({birthday}); }
-  handleDateWritten = (date_written) => { this.setState({date_written}); }
-  handleImage = (event) => { this.setState({image: event.target.files[0], imageChanged: true}); }
   confirmSocials = (socials) => {this.setState({socials})}
-
   clearSelection = (name) => { this.setState({[name]: ''})}
 
   /** Update session details */
@@ -103,10 +96,7 @@ class CandidateEdit extends Component {
       <CandidateForm
         heading={'Edit Candidate'}
         candidate={this.state}
-        handleText={this.handleText}
-        handleBirthday={this.handleBirthday}
-        handleDateWritten={this.handleDateWritten}
-        handleImage={this.handleImage}
+        handlers={handlers(this)}
 
         confirmSocials={this.confirmSocials}
         clearSelection={this.clearSelection}
