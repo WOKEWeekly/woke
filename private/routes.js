@@ -571,6 +571,14 @@ module.exports = function(app, conn, server){
     });
   });
 
+  app.get('/blackexcellence-tribute-guide', function(req, res){
+    fs.readFile('./static/resources/#BlackExcellence Tribute Guide.pdf', function (err, data){
+      if (err) res.sendStatus(404);
+      res.contentType("application/pdf");
+      res.send(data);
+    });
+  });
+
   app.get('/robots.txt', (req, res) => (
     res.status(200).sendFile(path.resolve('./static/resources/robots.txt'), {
       headers: { 'Content-Type': 'text/plain;charset=UTF-8', }
@@ -585,27 +593,28 @@ module.exports = function(app, conn, server){
       function(callback){
         conn.query('SELECT slug FROM sessions', function (err, result) {
           if (err) return callback(err);
-          result.forEach(session => {
-            routes.push(`/session/${session.slug}`)
-          });
+          result.forEach(session => routes.push(`/session/${session.slug}`));
           callback(null);
         });
       },
       function(callback){
         conn.query('SELECT id FROM blackex', function (err, result) {
           if (err) return callback(err);
-          result.forEach(candidate => {
-            routes.push(`/blackexcellence/candidate/${candidate.id}`)
-          });
+          result.forEach(candidate => routes.push(`/blackexcellence/candidate/${candidate.id}`));
           callback(null);
         });
       },
       function(callback){
         conn.query(`SELECT slug FROM team WHERE level = 'Executive'`, function (err, result) {
           if (err) return callback(err);
-          result.forEach(exec => {
-            routes.push(`/executives/${exec.slug}`)
-          });
+          result.forEach(exec => routes.push(`/executives/${exec.slug}`));
+          callback(null);
+        });
+      },
+      function(callback){
+        conn.query(`SELECT slug FROM team WHERE level != 'Executive' AND verified = 1;`, function (err, result) {
+          if (err) return callback(err);
+          result.forEach(member => routes.push(`/team/member/${member.slug}`));
           callback(null);
         });
       }
