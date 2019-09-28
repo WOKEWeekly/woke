@@ -98,7 +98,7 @@ class MemberEdit extends Component {
       onSuccess: () => {
         const isExecutive = level === 'Executive';
         setAlert({ type: 'success', message: `You've successfully edited the details of ${firstname} ${lastname}.` });
-        location.href = isExecutive ? `/executives/${slug}` : `/team/member/${slug}`;
+        location.href = !verified ? `/team` : isExecutive ? `/executives/${slug}` : `/team/member/${slug}`;
       }
     });
   }
