@@ -121,16 +121,35 @@ export class BackButton extends Component {
  ***********************/
 
 export class CheckboxButton extends Component {
+  constructor(props){
+    super(props);
+    this.state = {checked: props.checked}
+
+    this.checkbox = React.createRef();
+  }
+
+  check = () => {
+    this.setState({ checked: !this.state.checked});
+    this.props.onChange(this.checkbox.current);
+  }
+
   render(){
     return (
-      <ToggleButtonGroup
-        className={css.widgets}
-        type={'checkbox'}
-        name={this.props.name}
-        onChange={this.props.onChange}
-        defaultValue={this.props.value ? 1 : 0}>
-        <ToggleButton variant="dark" value={1}>{this.props.label}</ToggleButton>
-      </ToggleButtonGroup>
+      <React.Fragment>
+        <input
+          ref={this.checkbox}
+          name={this.props.name}
+          type={'checkbox'}
+          checked={this.state.checked}
+          onChange={this.props.onChange}
+          style={{display: 'none'}} />
+        <Button variant="dark" className={css.widgets} style={{display: 'flex'}} onClick={this.check}>
+          <div>
+            <Icon name={this.props.checked ? 'check-square' : 'square'} prefix={'far'} />
+            {this.props.label}
+          </div>
+        </Button>
+      </React.Fragment>
     )
   }
 }

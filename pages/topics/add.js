@@ -36,7 +36,7 @@ class TopicAdd extends Component {
   }
 
   /** Handle checkbox changes */
-  handleCheckbox = (value, event) => {
+  handleCheckbox = (event) => {
     const { name, checked } = event.target;
     this.setState({[name]: checked})
   }

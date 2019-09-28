@@ -41,8 +41,8 @@ class MemberEdit extends Component {
     this.setState({[name]: value}); }
   handleDate = (birthday) => { this.setState({birthday}); }
   handleImage = (event) => { this.setState({image: event.target.files[0], imageChanged: true}); }
-  handleCheckbox = (value, event) => {
-    const { name, checked } = event.target;
+  handleCheckbox = (event) => {
+    const { name, checked } = event;
     this.setState({[name]: checked})
   }
   confirmSocials = (socials) => {this.setState({socials})}

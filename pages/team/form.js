@@ -113,7 +113,7 @@ class MemberForm extends Component {
                 <Label>Status:</Label>
                 <CheckboxButton
                   name={'verified'}
-                  value={verified}
+                  checked={verified}
                   onChange={handleCheckbox}
                   label={'This is a verified member.'} />
               </Col>

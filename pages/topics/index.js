@@ -76,8 +76,8 @@ class TopicBank extends Component {
           filtered: response,
           topicsLoaded: true
         }, () => {
-           this.sortTopics(this.state.sort);
-           if (callback) callback();
+          this.sortTopics(this.state.sort);
+          if (callback) callback();
         });
       }
     });

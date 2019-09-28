@@ -41,8 +41,8 @@ class TopicEdit extends Component {
   }
 
   /** Handle checkbox changes */
-  handleCheckbox = (value, event) => {
-    const { name, checked } = event.target;
+  handleCheckbox = (event) => {
+    const { name, checked } = event;
     this.setState({[name]: checked})
   }
 
