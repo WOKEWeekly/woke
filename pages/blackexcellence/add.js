@@ -36,8 +36,8 @@ class CandidateAdd extends Component {
     request({ url: '/newCandidateID', onSuccess: (id) => this.setState({id}) })
   }
 
-  confirmSocials = (socials) => {this.setState({socials})}
-  clearSelection = (name) => { this.setState({[name]: ''})}
+  // confirmSocials = (socials) => {this.setState({socials})}
+  // clearSelection = (name) => { this.setState({[name]: ''})}
 
   /** POST candidate to the server */
   submitCandidate = () => {
@@ -89,9 +89,6 @@ class CandidateAdd extends Component {
         heading={'Add New Candidate'}
         candidate={this.state}
         handlers={handlers(this)}
-
-        confirmSocials={this.confirmSocials}
-        clearSelection={this.clearSelection}
 
         confirmText={'Submit'}
         confirmFunc={this.submitCandidate}

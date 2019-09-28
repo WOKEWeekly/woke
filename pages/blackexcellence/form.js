@@ -59,8 +59,8 @@ class CandidateForm extends Component {
   hideSocialsModal = () => { this.setState({ socialsModalVisible: false})}
 
   render(){
-    const { heading, confirmText, confirmFunc, cancelFunc, handlers, clearSelection, confirmSocials, countries } = this.props;
-    const { handleText, handleBirthday, handleDateWritten, handleImage } = handlers;
+    const { heading, confirmText, confirmFunc, cancelFunc, handlers, countries } = this.props;
+    const { handleText, handleBirthday, handleDateWritten, handleImage, clearSelection, confirmSocials, } = handlers;
 
     const { id, name, description, occupation, birthday, image, socials,
       ethnicity1, ethnicity2, ethnicity3, ethnicity4,

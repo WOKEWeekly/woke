@@ -40,9 +40,6 @@ class CandidateEdit extends Component {
     };
   }
 
-  confirmSocials = (socials) => {this.setState({socials})}
-  clearSelection = (name) => { this.setState({[name]: ''})}
-
   /** Update session details */
   updateCandidate = () => {
     if (!isValidCandidate(this.state)) return;
@@ -97,9 +94,6 @@ class CandidateEdit extends Component {
         heading={'Edit Candidate'}
         candidate={this.state}
         handlers={handlers(this)}
-
-        confirmSocials={this.confirmSocials}
-        clearSelection={this.clearSelection}
 
         confirmText={'Update'}
         confirmFunc={this.updateCandidate}
