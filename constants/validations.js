@@ -53,6 +53,7 @@ export const isValidCandidate = (candidate) => {
   if (!ifExists(candidate.name.trim(), 'Enter the candidate\'s name.')) return false;
   if (!ifExists(candidate.birthday, 'Select the candidate\'s date of birth.')) return false;
   if (!ifExists(candidate.occupation.trim(), 'Please select an image for the session.')) return false;
+  if (candidate.authorId === 0){ alert.error('Please select the author of this tribute.'); return false; }
   if (!isValidFile(candidate.image, 'candidate')) return false;
   return true;
 }
