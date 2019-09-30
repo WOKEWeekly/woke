@@ -22,8 +22,7 @@ class SessionEdit extends Component {
       title: props.session.title,
       date: new Date(props.session.dateHeld),
       description: props.session.description,
-      image: props.session.image,
-      imageChanged: false
+      image: props.session.image
     };
   }
  
@@ -32,7 +31,8 @@ class SessionEdit extends Component {
   updateSession = () => {
     if (!isValidSession(this.state)) return;
     
-    const { title, date, description, image, imageChanged } = this.state;
+    const { title, date, description, image } = this.state;
+    const imageChanged = typeof image === 'object';
     
     const sessions = {
       session1: this.props.session,
@@ -47,7 +47,7 @@ class SessionEdit extends Component {
     const data = new FormData();
     data.append('sessions', JSON.stringify(sessions));
     data.append('changed', imageChanged);
-    imageChanged && data.append('file', image);
+    if (imageChanged) data.append('file', image);
 
     /** Update session in database */
     request({

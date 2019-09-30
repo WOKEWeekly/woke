@@ -56,6 +56,8 @@ class MemberEdit extends Component {
     const { firstname, lastname, role, level, image, birthday, description, socials,
       ethnicity1, ethnicity2, ethnicity3, ethnicity4, imageChanged, verified } = this.state;
 
+
+    // TODO: Generate these on server, this should be tackled while testing Team
     /** Generate slugs and filenames from name and data */
     let slug = generateSlug(`${firstname} ${lastname}`);
     let filename = imageChanged ? generateMemberFilename(slug, image) : image

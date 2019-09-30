@@ -111,7 +111,7 @@ module.exports = {
       }
 
       /** If no image change, skip */
-      if (!req.body.changed){
+      if (req.body.changed === 'false'){
         return callback(null, false);
       }
 

@@ -39,7 +39,7 @@ class Links extends Component {
       <React.Fragment>
         <Col className={css.footerLinks} lg={9}>
           <a href={'/about'}>About #WOKEWeekly</a>
-          {/* <a href={'/reviews'}>Reviews</a> //TODO uncomment */}
+          {/* <a href={'/reviews'}>Reviews</a> //TODO Uncomment to show reviews link in footer */}
           <a href={'/privacy'}>Privacy Policy</a>
           <a href={'/cookies'}>Cookies</a>
           <a href={'/faq'}>FAQs</a>

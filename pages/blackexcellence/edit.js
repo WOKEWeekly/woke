@@ -29,7 +29,6 @@ class CandidateEdit extends Component {
       birthday: new Date(birthday),
       description: description,
       image,
-      imageChanged: false,
       ethnicity1: ethnicities ? ethnicities[0] : '',
       ethnicity2: ethnicities ? ethnicities[1] : '',
       ethnicity3: ethnicities ? ethnicities[2] : '',
@@ -45,7 +44,8 @@ class CandidateEdit extends Component {
     if (!isValidCandidate(this.state)) return;
     
     const { id, name, occupation, image, birthday, description, socials,
-      ethnicity1, ethnicity2, ethnicity3, ethnicity4, imageChanged, authorId, date_written } = this.state;
+      ethnicity1, ethnicity2, ethnicity3, ethnicity4, authorId, date_written } = this.state;
+    const imageChanged = typeof image === 'object';
 
     /** Add ethncities to array */
     const ethnicities = [];
