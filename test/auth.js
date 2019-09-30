@@ -4,7 +4,7 @@ const { assert, jwt, host, options, request, users } = require('./_config.js');
 const superuser = users.nine;
 const registrar = users.one;
 
-describe.skip("Authentication", function() {
+describe("Authentication", function() {
   before(function(done){
     jwt.sign({ user: superuser }, process.env.JWT_SECRET, { expiresIn: '1m' }, function(err, token){
       superuser.token = token;
