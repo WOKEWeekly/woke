@@ -22,7 +22,8 @@ class TopicForm extends Component {
   }
 
   render(){
-    const { heading, confirmText, confirmFunc, cancelFunc, handleText, handleRadio, handleCheckbox} = this.props;
+    const { heading, confirmText, confirmFunc, cancelFunc, handlers} = this.props;
+    const { handleText, handleRadio, handleCheckboxButton } = handlers;
     const { headline, category, question, type, polarity, option1, option2, description } = this.props.topic;
 
     const radioItems = [
@@ -79,7 +80,7 @@ class TopicForm extends Component {
                 <CheckboxButton
                   name={'polarity'}
                   checked={polarity}
-                  onChange={handleCheckbox}
+                  onChange={handleCheckboxButton}
                   label={'This is a polar question.'} />
               </Col>
             </Group>

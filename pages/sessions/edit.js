@@ -5,6 +5,7 @@ import Router from 'next/router';
 import { setAlert } from '~/components/alert.js';
 
 import { formatISODate } from '~/constants/date.js';
+import handlers from '~/constants/handlers.js';
 import request from '~/constants/request.js';
 import { isValidSession } from '~/constants/validations.js';
 
@@ -26,11 +27,6 @@ class SessionEdit extends Component {
     };
   }
  
-  /** Handle session detail changes */
-  handleTitle = (event) => { this.setState({title: event.target.value}); }
-  handleDate = (date) => { this.setState({date}); }
-  handleDescription = (event) => { this.setState({description: event.target.value}); }
-  handleImage = (event) => { this.setState({image: event.target.files[0], imageChanged: true}); }
 
   /** Update session details */
   updateSession = () => {
@@ -71,10 +67,7 @@ class SessionEdit extends Component {
       <SessionForm
         heading={'Edit Session'}
         session={this.state}
-        handleTitle={this.handleTitle}
-        handleDate={this.handleDate}
-        handleDescription={this.handleDescription}
-        handleImage={this.handleImage}
+        handlers={handlers(this)}
 
         confirmText={'Update'}
         confirmFunc={this.updateSession}

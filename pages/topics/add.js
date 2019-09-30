@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import Router from 'next/router';
 
 import { setAlert } from '~/components/alert.js';
+import handlers from '~/constants/handlers.js';
 import request from '~/constants/request.js';
 import { isValidTopic } from '~/constants/validations.js';
 
@@ -21,24 +22,6 @@ class TopicAdd extends Component {
       option1: '',
       option2: ''
     };
-  }
- 
-  /** Handle text changes */
-  handleText = (event) => {
-    const { name, value } = event.target;
-    this.setState({[name]: value});
-  }
-
-  /** Handle radio changes */
-  handleRadio = (value, event) => {
-    const { name } = event.target;
-    this.setState({[name]: value});
-  }
-
-  /** Handle checkbox changes */
-  handleCheckbox = (event) => {
-    const { name, checked } = event.target;
-    this.setState({[name]: checked})
   }
 
   /** POST session to the server */
@@ -80,9 +63,7 @@ class TopicAdd extends Component {
       <TopicForm
         heading={'Add New Topic'}
         topic={this.state}
-        handleText={this.handleText}
-        handleRadio={this.handleRadio}
-        handleCheckbox={this.handleCheckbox}
+        handlers={handlers(this)}
 
         confirmText={'Submit'}
         confirmFunc={this.submitTopic}

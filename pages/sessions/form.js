@@ -1,7 +1,6 @@
 import React, { Component} from 'react';
 import { Col } from 'react-bootstrap';
 import { connect } from 'react-redux';
-import Router from 'next/router';
 
 import { SubmitButton, CancelButton } from '~/components/button.js';
 import { EventDatePicker } from '~/components/datepicker.js';
@@ -23,8 +22,8 @@ class SessionForm extends Component {
   }
 
   render(){
-    const { heading, confirmText, confirmFunc, cancelFunc,
-      handleTitle, handleDate, handleDescription, handleImage } = this.props;
+    const { heading, confirmText, confirmFunc, cancelFunc, handlers } = this.props;
+    const { handleText, handleDate, handleImage } = handlers;
     const {title, date, description, image} = this.props.session;
 
     const filename = getFilename(image);
@@ -39,8 +38,9 @@ class SessionForm extends Component {
               <Col md={7}>
                 <Label>Title:</Label>
                 <TextInput
+                  name={'title'}
                   value={title}
-                  onChange={handleTitle}
+                  onChange={handleText}
                   placeholder={"Enter the title."} />
               </Col>
               <Col md={5}>
@@ -52,6 +52,7 @@ class SessionForm extends Component {
               <Col>
                 <Label>Description:</Label>
                 <TextArea
+                  name={'description'}
                   value={description}
                   onChange={handleDescription}
                   placeholder={"Enter the description."} />

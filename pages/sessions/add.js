@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import { setAlert } from '~/components/alert.js';
 
 import { formatISODate } from '~/constants/date.js';
+import handlers from '~/constants/handlers.js';
 import { isValidSession } from '~/constants/validations.js';
 import request from '~/constants/request.js';
 
@@ -20,12 +21,6 @@ class SessionAdd extends Component {
       image: new Image()
     };
   }
- 
-  /** Handle session detail changes */
-  handleTitle = (event) => { this.setState({title: event.target.value}); }
-  handleDate = (date) => { this.setState({date}); }
-  handleDescription = (event) => { this.setState({description: event.target.value}); }
-  handleImage = (event) => { this.setState({image: event.target.files[0]}); }
 
   /** POST session to the server */
   submitSession = () => {
@@ -63,10 +58,7 @@ class SessionAdd extends Component {
       <SessionForm
         heading={'Add New Session'}
         session={this.state}
-        handleTitle={this.handleTitle}
-        handleDate={this.handleDate}
-        handleDescription={this.handleDescription}
-        handleImage={this.handleImage}
+        handlers={handlers(this)}
 
         confirmText={'Submit'}
         confirmFunc={this.submitSession}

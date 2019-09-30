@@ -8,8 +8,27 @@ export default (component) => {
       component.setState({[name]: value});
     },
 
+    /** Handle radio changes */
+    handleRadio: (value, event) => {
+      const { name } = event.target;
+      component.setState({[name]: value});
+    },
+
+    /** Handle checkbox changes */
+    handleCheckbox: (event) => {
+      const { name, checked } = event.target;
+      component.setState({[name]: checked})
+    },
+
+    /** Handle checkbox changes */
+    handleCheckboxButton: (event) => {
+      const { name, checked } = event;
+      component.setState({[name]: checked})
+    },
+
     /** Handle date selections */
     handleBirthday: (birthday) => {component.setState({birthday}); },
+    handleDate: (date) => {component.setState({date}); },
     handleDateWritten: (date_written) => { component.setState({date_written}); },
 
     /** Handle image selections */
