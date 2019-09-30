@@ -35,7 +35,7 @@ class CandidateForm extends Component {
       url: '/getTeam',
       method: 'GET',
       headers: {
-        'Authorization': `Bearer ${this.props.user.token}`,
+        'Admission': true,
         'Content-Type': 'application/json',
       },
       onSuccess: (response) => {
