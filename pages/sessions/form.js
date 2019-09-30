@@ -23,7 +23,7 @@ class SessionForm extends Component {
 
   render(){
     const { heading, confirmText, confirmFunc, cancelFunc, handlers } = this.props;
-    const { handleText, handleDate, handleImage } = handlers;
+    const { handleText, handleDate, handleImage, handleDescription } = handlers;
     const {title, date, description, image} = this.props.session;
 
     const filename = getFilename(image);
