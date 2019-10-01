@@ -5,9 +5,11 @@ import Router from 'next/router';
 import { setAlert } from '~/components/alert.js';
 
 import { formatISODate } from '~/constants/date.js';
-import { generateSlug, generateMemberFilename } from '~/private/file.js';
+import handlers from '~/constants/handlers.js';
 import request from '~/constants/request.js';
 import { isValidMember } from '~/constants/validations.js';
+
+import { generateSlug, generateMemberFilename } from '~/private/file.js';
 
 import MemberForm from './form.js';
 
@@ -34,20 +36,6 @@ class MemberEdit extends Component {
       socials: JSON.parse(socials)
     };
   }
-
-  /** Handle changes */
-  handleText = (event) => {
-    const { name, value } = event.target;
-    this.setState({[name]: value}); }
-  handleDate = (birthday) => { this.setState({birthday}); }
-  handleImage = (event) => { this.setState({image: event.target.files[0], imageChanged: true}); }
-  handleCheckbox = (event) => {
-    const { name, checked } = event;
-    this.setState({[name]: checked})
-  }
-  confirmSocials = (socials) => {this.setState({socials})}
-
-  clearSelection = (name) => { this.setState({[name]: ''})}
 
   /** Update session details */
   updateMember = () => {
@@ -110,13 +98,7 @@ class MemberEdit extends Component {
       <MemberForm
         heading={'Edit Team Member'}
         member={this.state}
-        handleText={this.handleText}
-        handleDate={this.handleDate}
-        handleImage={this.handleImage}
-        handleCheckbox={this.handleCheckbox}
-
-        confirmSocials={this.confirmSocials}
-        clearSelection={this.clearSelection}
+        handlers={handlers(this)}
 
         confirmText={'Update'}
         confirmFunc={this.updateMember}

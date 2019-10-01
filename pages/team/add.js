@@ -5,6 +5,7 @@ import Router from 'next/router';
 import { setAlert } from '~/components/alert.js';
 
 import { formatISODate } from '~/constants/date.js';
+import handlers from '~/constants/handlers.js';
 import { generateSlug, generateMemberFilename } from '~/private/file.js';
 import request from '~/constants/request.js';
 import { isValidMember } from '~/constants/validations.js';
@@ -27,16 +28,6 @@ class MemberAdd extends Component {
       verified: false
     };
   }
- 
-  /** Handle text changes */
-  handleText = (event) => {
-    const { name, value } = event.target;
-    this.setState({[name]: value}); }
-  handleDate = (birthday) => { this.setState({birthday}); }
-  handleImage = (event) => { this.setState({image: event.target.files[0]}); }
-
-  confirmSocials = (socials) => {this.setState({socials})}
-  clearSelection = (name) => { this.setState({[name]: ''})}
 
   /** POST member to the server */
   submitMember = () => {
@@ -94,12 +85,7 @@ class MemberAdd extends Component {
       <MemberForm
         heading={'Add New Member'}
         member={this.state}
-        handleText={this.handleText}
-        handleDate={this.handleDate}
-        handleImage={this.handleImage}
-
-        confirmSocials={this.confirmSocials}
-        clearSelection={this.clearSelection}
+        handlers={handlers(this)}
 
         confirmText={'Submit'}
         confirmFunc={this.submitMember}

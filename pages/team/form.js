@@ -34,8 +34,8 @@ class MemberForm extends Component {
   hideSocialsModal = () => { this.setState({ socialsModalVisible: false})}
 
   render(){
-    const { heading, confirmText, confirmFunc, cancelFunc,
-      handleText, handleDate, handleImage, handleCheckboxButton, clearSelection, confirmSocials, countries } = this.props;
+    const { heading, confirmText, confirmFunc, cancelFunc, countries, handlers } = this.props;
+    const { handleText, handleDate, handleImage, handleCheckboxButton, clearSelection, confirmSocials } = handlers;
 
     const { firstname, lastname, level, role, description, birthday, image, socials,
       ethnicity1, ethnicity2, ethnicity3, ethnicity4, verified } = this.props.member;
