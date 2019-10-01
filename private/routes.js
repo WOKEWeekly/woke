@@ -546,9 +546,29 @@ module.exports = function(app, conn, server){
 
   /** Add New Review */
   app.get('/reviews/add', function(req, res){
-    server.render(req, res, '/reviews/add', {
-      title: 'Add New Review'
+    server.render(req, res, '/reviews/crud', {
+      title: 'Add New Review',
+      operation: 'add'
     });
+  });
+
+  /** Add New Review */
+  app.get('/reviews/edit/:id', function(req, res){
+    const { id } = req.params;
+    const sql = "SELECT * FROM reviews WHERE id = ?";
+    
+    conn.query(sql, id, function (err, result) {
+      if (err || !result.length) return renderErrPage(req, res, err, server);
+
+      const review = result[0];
+      server.render(req, res, '/reviews/crud', {
+        title: 'Edit Review',
+        operation: 'edit',
+        review
+      });
+    });
+
+    
   });
 
   /***************************************************************

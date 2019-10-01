@@ -11,7 +11,7 @@ import { BottomToolbar } from '~/components/toolbar.js';;
 import CLEARANCES from '~/constants/clearances.js';
 import request from '~/constants/request.js';
 
-import { Review } from '~/pages/reviews/unit.js';
+import Review from '~/pages/reviews/unit.js';
 
 import css from '~/styles/home.scss';
 import '~/styles/_categories.scss';

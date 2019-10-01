@@ -87,6 +87,15 @@
         @media (max-width: $break-md) { font-size: 1em; }}
     }
   }
+  .buttons {
+    border-radius: 15px;
+    width: 40%;
+    @media (max-width: $break-md) { width: 70%; }
+    button {
+      font-size: 85%;
+      width: 50%;
+    }
+  }
 }
 
 .advertiser {

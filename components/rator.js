@@ -35,14 +35,14 @@ export default class Rator extends Component {
       for (let i = 0; i < rating; i++){
         stars.push(
           <button key={i} value={i+1} className={css.invisible_button} onClick={this.changeRating}>
-            <Icon name={'star'} style={{fontSize: 30}} />
+            <Icon name={'star'} className={css.starIcon} />
           </button>
         );
       }
       for (let i = 0; i < 5 - rating; i++){
         stars.push(
           <button key={i+rating} value={i+1+rating} className={css.invisible_button} onClick={this.changeRating}>
-            <Icon prefix={'far'} name={'star'} style={{fontSize: 30}} />
+            <Icon prefix={'far'} name={'star'} className={css.starIcon} />
           </button>
         );
       }

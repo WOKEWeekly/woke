@@ -22,8 +22,9 @@ class ReviewForm extends Component {
   }
 
   render(){
-    const { heading, entity, confirmText, confirmFunc, cancelFunc, handleText, handleImage, handleRatingChange } = this.props;
-      const { referee, position, rating, description, image } = entity;
+    const { heading, entity, confirmText, confirmFunc, cancelFunc, handlers } = this.props;
+    const { handleText, handleImage, handleRatingChange } = handlers;
+    const { referee, position, rating, description, image } = entity;
 
     const filename = getFilename(image);
 
@@ -74,7 +75,7 @@ class ReviewForm extends Component {
               <Col>
                 <FileSelector
                   filename={filename}
-                  directory={`team`}
+                  directory={`reviews`}
                   onChange={handleImage} />
               </Col>
             </Group>

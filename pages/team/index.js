@@ -168,7 +168,7 @@ class _Member extends PureComponent {
     item.demonyms = countriesToString(JSON.parse(item.ethnicity), countries);
     item.fullname = `${item.firstname} ${item.lastname}`;
 
-    const linkButton = () => {
+    const LinkButton = () => {
       if (!item.slug) return null;
 
       return (
@@ -192,7 +192,7 @@ class _Member extends PureComponent {
           <span>{item.role}</span>
           <span>{item.demonyms}</span>
           <span>{formatDate(item.birthday)}</span>
-          <span>{linkButton()}</span>
+          <span><LinkButton /></span>
           <span><button className={css.invisible_button} onClick={() => this.editMember(item)}><Icon name={'edit'} /></button></span>
           <span><button className={css.invisible_button} onClick={this.openDelete}><Icon name={'trash'} /></button></span>
         </Default>
@@ -219,7 +219,7 @@ class _Member extends PureComponent {
           </div>
           <div className={css.index}>{idx+1}</div>
           <div className={css.crud}>
-          {linkButton()}
+            <LinkButton />
             <button className={css.invisible_button} onClick={() => this.editMember(item)}><Icon name={'edit'} /></button>
             <button className={css.invisible_button} onClick={this.openDelete}><Icon name={'trash'} /></button>
           </div>

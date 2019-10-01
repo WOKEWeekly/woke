@@ -3,26 +3,26 @@ export default (component) => {
   return module.exports = {
     
     /** Handle text input fields */
-    handleText: (event) => {
-      const { name, value } = event.target;
+    handleText: (e) => {
+      const { name, value } = e.target;
       component.setState({[name]: value});
     },
 
     /** Handle radio changes */
-    handleRadio: (value, event) => {
-      const { name } = event.target;
+    handleRadio: (value, e) => {
+      const { name } = e.target;
       component.setState({[name]: value});
     },
 
     /** Handle checkbox changes */
-    handleCheckbox: (event) => {
-      const { name, checked } = event.target;
+    handleCheckbox: (e) => {
+      const { name, checked } = e.target;
       component.setState({[name]: checked})
     },
 
     /** Handle checkbox changes */
-    handleCheckboxButton: (event) => {
-      const { name, checked } = event;
+    handleCheckboxButton: (e) => {
+      const { name, checked } = e;
       component.setState({[name]: !checked})
     },
 
@@ -32,7 +32,13 @@ export default (component) => {
     handleDateWritten: (date_written) => { component.setState({date_written}); },
 
     /** Handle image selections */
-    handleImage: (event) => { component.setState({image: event.target.files[0]}); },
+    handleImage: (e) => { component.setState({image: e.target.files[0]}); },
+
+    /** Handle new rating */
+    handleRatingChange: (e) => {
+      const rating = parseInt(e.currentTarget.value)
+      component.setState({ rating });
+    },
     
     /** Store social media handle entries  */
     confirmSocials: (socials) => {component.setState({socials})},

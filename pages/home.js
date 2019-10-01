@@ -12,7 +12,7 @@ import { countriesToString } from '~/constants/countries.js';
 import { formatDate, calculateAge } from '~/constants/date.js';
 import request from '~/constants/request.js';
 
-import { Review } from '~/pages/reviews/unit.js';
+import Review from '~/pages/reviews/unit.js';
 
 import css from '~/styles/home.scss';
 
