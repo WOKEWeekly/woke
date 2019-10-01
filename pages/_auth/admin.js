@@ -19,10 +19,8 @@ class Admin extends Component {
       ...props.user,
       generateTokenModal: false,
       accessInput: null,
-      // accessLink: '',
-      // tokenGenerated: false,
-      accessLink: 'https://www.wokeweekly.co.uk',
-      tokenGenerated: true,
+      accessLink: '',
+      tokenGenerated: false,
     }
 
     if (props.user.clearance < 8){
