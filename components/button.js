@@ -145,7 +145,7 @@ export class CheckboxButton extends Component {
           style={{display: 'none'}} />
         <Button variant="dark" className={css.widgets} style={{display: 'flex'}} onClick={this.check}>
           <div>
-            <Icon name={this.props.checked ? 'check-square' : 'square'} prefix={'far'} />
+            <Icon name={this.state.checked ? 'check-square' : 'square'} prefix={'far'} />
             {this.props.label}
           </div>
         </Button>

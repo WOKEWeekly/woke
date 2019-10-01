@@ -23,7 +23,7 @@ export default (component) => {
     /** Handle checkbox changes */
     handleCheckboxButton: (event) => {
       const { name, checked } = event;
-      component.setState({[name]: checked})
+      component.setState({[name]: !checked})
     },
 
     /** Handle date selections */

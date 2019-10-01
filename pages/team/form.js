@@ -35,7 +35,7 @@ class MemberForm extends Component {
 
   render(){
     const { heading, confirmText, confirmFunc, cancelFunc,
-      handleText, handleDate, handleImage, handleCheckbox, clearSelection, confirmSocials, countries } = this.props;
+      handleText, handleDate, handleImage, handleCheckboxButton, clearSelection, confirmSocials, countries } = this.props;
 
     const { firstname, lastname, level, role, description, birthday, image, socials,
       ethnicity1, ethnicity2, ethnicity3, ethnicity4, verified } = this.props.member;
@@ -114,7 +114,7 @@ class MemberForm extends Component {
                 <CheckboxButton
                   name={'verified'}
                   checked={verified}
-                  onChange={handleCheckbox}
+                  onChange={handleCheckboxButton}
                   label={'This is a verified member.'} />
               </Col>
             </Group>
