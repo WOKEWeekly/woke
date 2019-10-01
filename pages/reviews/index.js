@@ -23,6 +23,10 @@ class ReviewsList extends Component {
       reviews: [],
       isLoaded: false
     };
+
+    if (props.user.clearance < CLEARANCES.ACTIONS.CRUD_REVIEWS){
+      return location.href = '/';
+    }
   }
 
   componentDidMount(){
