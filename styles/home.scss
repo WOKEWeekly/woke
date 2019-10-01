@@ -60,7 +60,7 @@
 
 
 .reviewsList {
-  @extend .responsive-container;
+  @extend .responsive-container-80;
   .item {
     @include scale-on-hover(1.03);
     cursor: pointer;

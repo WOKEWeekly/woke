@@ -17,8 +17,8 @@ import css from '~/styles/home.scss';
 import '~/styles/_categories.scss';
 
 class ReviewsList extends Component {
-  constructor(){
-    super();
+  constructor(props){
+    super(props);
     this.state = {
       reviews: [],
       isLoaded: false

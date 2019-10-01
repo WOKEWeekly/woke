@@ -79,6 +79,10 @@ $break-xxl: 1408px; // Extra large devices (large desktops)
   width: 70%;
   @media (max-width: $break-lg) { width: 80%; }
   @media (max-width: $break-sm) { width: 100%; } }
+.responsive-container-80 {
+  margin: 0 auto;
+  width: 80%;
+  @media (max-width: $break-sm) { width: 100%; } }
 
 .responsive-form {
   @extend .responsive-container;

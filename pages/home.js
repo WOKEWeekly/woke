@@ -416,7 +416,7 @@ class RandomMember extends Component{
 
     if (member.loaded){
       member.fullname = `${member.firstname} ${member.lastname}`;
-      member.description = member.description.trim().length > 0 ? member.description : 'No description.';
+      member.description = member.description && member.description.trim().length > 0 ? member.description : 'No description.';
     }
 
     const isExecutive = member.level === 'Executive';

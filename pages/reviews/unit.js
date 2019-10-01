@@ -75,10 +75,10 @@ class Review extends PureComponent {
           direction={isEven ? 'left' : 'right'}>
           <div className={css.item}>
             <Row>
-              <Col md={{span: 5, order: isEven ? 1 : 2}}>
+              <Col md={{span: 3, order: isEven ? 1 : 2}}>
                 <ReviewerImage/>
               </Col>
-              <Col md={{span: 7, order: isEven ? 2 : 1}}>
+              <Col md={{span: 9, order: isEven ? 2 : 1}}>
                 <div className={css.details}>
                   <Title className={css.title}>{item.referee}</Title>
                   <Subtitle className={css.subtitle}>{item.position}</Subtitle>
