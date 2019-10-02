@@ -61,12 +61,11 @@
 
 .reviewsPreview {
   .heading {
+    @include font-scaler(2);
     text-transform: uppercase;
     text-align: center;
-    font-size: 2em;
     margin: .5em 0;
-    width: 100%;
-    @media (max-width: $break-md) { font-size: 1.2em; }}
+    width: 100%;}
   .reviewsList {
     @extend .responsive-container-80;
     padding: 1.2em;

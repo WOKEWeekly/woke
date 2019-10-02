@@ -108,17 +108,36 @@ class Part extends Component {
 	}
 }
 
+class ReviewsHeading extends Component {
+  constructor(){
+    super();
+    this.state = { isLoaded: false }
+  }
+
+  componentDidMount() {
+    this.setState({isLoaded: true})
+  }
+
+  render(){
+    const { isLoaded } = this.state;
+
+    return (
+      <Fader determinant={isLoaded} duration={1500} delay={1000} className={css.reviewsPreview}>
+        <Title className={css.heading}>What are people saying about us?</Title>
+      </Fader>
+    );
+  }
+}
+
 class ReviewsPreview extends Component {
   constructor(){
     super();
     this.state = {
-      reviews: [],
-      isLoaded: false
+      reviews: []
     }
   }
 
   componentDidMount(){
-    this.setState({isLoaded: true});
     this.getReviews();
   }
   
@@ -131,13 +150,13 @@ class ReviewsPreview extends Component {
         'Content-Type': 'application/json',
       },
       onSuccess: (reviews) => {
-        this.setState({reviews, isLoaded: true});
+        this.setState({reviews});
       }
     });
   }
 
   render(){
-    const { reviews, isLoaded } = this.state;
+    const { reviews } = this.state;
     if (reviews.length === 0) return null;
 
     const items = [];
@@ -155,9 +174,7 @@ class ReviewsPreview extends Component {
 
     return (
       <div className={css.reviewsPreview}>
-        <Fader determinant={isLoaded} duration={750} delay={1250}>
-          <Title className={css.heading}>What are people saying about us?</Title>
-        </Fader>
+        <ReviewsHeading />
         <div className={css.reviewsList}>{items}</div>
       </div>
     );
@@ -370,7 +387,7 @@ class TopicVoter extends Component {
   }
 
   render(){
-    const { topic, votes, result1, result2, hasVoted, isLoaded } = this.state;
+    const { topic, result1, result2, hasVoted, isLoaded } = this.state;
     return (
       <Fader
         determinant={isLoaded}
