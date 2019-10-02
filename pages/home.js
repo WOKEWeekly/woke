@@ -118,6 +118,7 @@ class ReviewsPreview extends Component {
   }
 
   componentDidMount(){
+    this.setState({isLoaded: true});
     this.getReviews();
   }
   

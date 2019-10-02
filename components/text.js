@@ -178,8 +178,10 @@ export const truncateText = (text, limit) => {
     }
   });
 
-  text = parts.filter(e => e != null).slice(0, limit).join(' ');
-  if (text.length <= limit) return text;
+  const words = parts.filter(e => e != null).slice(0, limit);
+  text = words.join(' ');
+  
+  if (words.length > limit) return text;
 
   return `${text}....`;
 }

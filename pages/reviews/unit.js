@@ -56,7 +56,7 @@ class Review extends PureComponent {
     const { showFullText } = this.state;
     item.description = item.description && item.description.trim().length > 0 ? item.description : 'No description.';
 
-    const beyondLimit = item.description.length > 60;
+    const beyondLimit = item.description.split(' ').length > 60;
 
     const isEven = (idx % 2 == 0);
 
