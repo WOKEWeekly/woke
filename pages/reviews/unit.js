@@ -3,7 +3,6 @@ import { Col, Row, Button, ButtonGroup } from 'react-bootstrap';
 import { connect } from 'react-redux';
 
 import { setAlert } from '~/components/alert.js';
-import { Default, Mobile } from '~/components/layout.js';
 import { ConfirmModal } from '~/components/modal.js';
 import { Title, Subtitle, Paragraph, QuoteWrapper, ExpandText, truncateText } from '~/components/text.js';
 import { Slider } from '~/components/transitioner.js';
@@ -84,11 +83,11 @@ class Review extends PureComponent {
               <Col md={{span: 3, order: isEven ? 1 : 2}}>
                 <ReviewerImage/>
               </Col>
-              <Col md={{span: 9, order: isEven ? 2 : 1}}>
-                <div className={css.details}>
+              <Col md={{span: 9, order: isEven ? 2 : 1}} style={{display: 'flex', flexDirection: 'column'}}>
+                <div className={css.details} style={{textAlign: isEven ? 'left' : 'right'}}>
                   <Title className={css.title}>{item.referee}</Title>
                   <Subtitle className={css.subtitle}>{item.position}</Subtitle>
-                  <Rator rating={item.rating} changeable={false} />
+                  <Rator rating={item.rating} changeable={false} style={{justifyContent: isEven ? 'flex-start' : 'flex-end'}} />
                   <QuoteWrapper>
                     <div>
                       <Paragraph className={css.paragraph}>
@@ -99,7 +98,7 @@ class Review extends PureComponent {
                   </QuoteWrapper>
                 </div>
                 {showAdminControls && user.clearance >= CLEARANCES.ACTIONS.CRUD_REVIEWS ?
-                  <ButtonGroup className={css.buttons}>
+                  <ButtonGroup className={css.buttons} style={{alignSelf: isEven ? 'flex-start' : 'flex-end'}}>
                     <Button variant={'success'} onClick={() => location.href = (`/reviews/edit/${item.id}`)}>Edit</Button>
                     <Button variant={'danger'} onClick={this.showModal}>Delete</Button>
                   </ButtonGroup> : null}

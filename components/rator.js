@@ -50,7 +50,7 @@ export default class Rator extends Component {
     }
 
     return (
-      <div className={css.starBar}><Stars/></div>
+      <div className={css.starBar} style={{...this.props.style}}><Stars/></div>
     )
   }
 }

@@ -71,7 +71,11 @@ class ReviewsList extends Component {
               showAdminControls={true} />
           );
         }
-        return <Container className={css.reviewsList}>{items}</Container>;
+        return (
+          <div className={css.reviewsPreview}>
+            <div className={css.reviewsList}>{items}</div>
+          </div>
+        );
       }
     };
 
