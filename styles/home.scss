@@ -68,7 +68,7 @@
     width: 100%;}
   .reviewsList {
     @extend .responsive-container-80;
-    padding: 1.2em;
+    padding: 0 1.2em 1.2em;
     .item {
       margin: 0.8em 0;
       overflow: hidden;

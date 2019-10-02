@@ -148,7 +148,7 @@ export class ReadMore extends Component {
 
 export class ExpandText extends Component {
   render(){
-    const { text = 'Read more....', onClick } = this.props;
+    const { text = 'Read more...', onClick } = this.props;
     return (
       <button className={css.invisible_button} onClick={onClick} style={{padding: 0}}>
         <div className={css.expandText}>{text}</div>
@@ -178,10 +178,10 @@ export const truncateText = (text, limit) => {
     }
   });
 
-  const words = parts.filter(e => e != null).slice(0, limit);
-  text = words.join(' ');
+  const words = parts.filter(e => e != null);
+  text = words.slice(0, limit).join(' ');
   
-  if (words.length > limit) return text;
+  if (words.length <= limit) return text;
 
   return `${text}....`;
 }

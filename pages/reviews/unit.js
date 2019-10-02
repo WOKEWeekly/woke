@@ -3,9 +3,9 @@ import { Col, Row, Button, ButtonGroup } from 'react-bootstrap';
 import { connect } from 'react-redux';
 
 import { setAlert } from '~/components/alert.js';
-import { Icon } from '~/components/icon.js';
+import { Default, Mobile } from '~/components/layout.js';
 import { ConfirmModal } from '~/components/modal.js';
-import { Title, Subtitle, Divider, Paragraph, QuoteWrapper, ExpandText, truncateText } from '~/components/text.js';
+import { Title, Subtitle, Paragraph, QuoteWrapper, ExpandText, truncateText } from '~/components/text.js';
 import { Slider } from '~/components/transitioner.js';
 import Rator from '~/components/rator.js';
 
@@ -56,7 +56,8 @@ class Review extends PureComponent {
     const { showFullText } = this.state;
     item.description = item.description && item.description.trim().length > 0 ? item.description : 'No description.';
 
-    const beyondLimit = item.description.split(' ').length > 60;
+    const limit = window.matchMedia('(max-width: 576px)').matches ? 40 : 60;
+    const beyondLimit = item.description.split(' ').length > limit;
 
     const isEven = (idx % 2 == 0);
 
@@ -91,7 +92,7 @@ class Review extends PureComponent {
                   <QuoteWrapper>
                     <div>
                       <Paragraph className={css.paragraph}>
-                        {showFullText ? item.description : truncateText(item.description, 60)}
+                        {showFullText ? item.description : truncateText(item.description, limit)}
                       </Paragraph>
                       {!showFullText && beyondLimit ? <ExpandText text={'Click to read more...'} onClick={() => this.setState({showFullText: true})} /> : null}
                     </div>
