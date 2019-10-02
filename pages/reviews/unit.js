@@ -93,7 +93,7 @@ class Review extends PureComponent {
                       <Paragraph className={css.paragraph}>
                         {showFullText ? item.description : truncateText(item.description, 60)}
                       </Paragraph>
-                      {!showFullText && beyondLimit ? <ExpandText onClick={() => this.setState({showFullText: true})} /> : null}
+                      {!showFullText && beyondLimit ? <ExpandText text={'Click to read more...'} onClick={() => this.setState({showFullText: true})} /> : null}
                     </div>
                   </QuoteWrapper>
                 </div>

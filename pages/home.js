@@ -218,7 +218,7 @@ class UpcomingSession extends Component {
             <Divider/>
             <Paragraph
               link={link}
-              more={true}
+              more={'Find out more'}
               className={css.paragraph}>{truncateText(session.description)}</Paragraph>
           </div>
         </div>
@@ -290,7 +290,7 @@ class _RandomCandidate extends Component {
             <Divider/>
             <Paragraph
               link={link}
-              more={`Read more on ${candidate.firstname}`}
+              more={`Discover more on ${candidate.firstname}`}
               className={css.paragraph}>{truncateText(candidate.description)}</Paragraph>
           </div>
         </div>

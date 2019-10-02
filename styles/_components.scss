@@ -563,23 +563,24 @@
   }
 }
 .readmore {
+  @include font-scaler(1.1);
   color: skyblue;
   cursor: pointer;
   display: block;
   font-family: $body-font;
-  font-size: 1.1em;
   margin-top: .5em;
   &:hover { text-decoration: underline; }
   .linkIcon {
+    @include font-scaler(1.1);
     color: skyblue;
   }
 }
 .expandText {
+  @include font-scaler(1.1);
   color: skyblue;
   cursor: pointer;
   display: block;
   font-family: $body-font;
-  font-size: 1.1em;
   &:hover { text-decoration: underline; }
 }
 
