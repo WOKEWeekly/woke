@@ -62,7 +62,14 @@ class ReviewsList extends Component {
       } else {
         const items = [];
         for (const [index, item] of reviews.entries()) {
-          items.push(<Review key={index} idx={index} item={item} fullText={true} />);
+          items.push(
+            <Review
+              key={index}
+              idx={index}
+              item={item}
+              showFullText={true}
+              showAdminControls={true} />
+          );
         }
         return <Container className={css.reviewsList}>{items}</Container>;
       }

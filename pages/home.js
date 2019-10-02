@@ -112,7 +112,8 @@ class ReviewsPreview extends Component {
   constructor(){
     super();
     this.state = {
-      reviews: []
+      reviews: [],
+      isLoaded: false
     }
   }
 
@@ -135,16 +136,30 @@ class ReviewsPreview extends Component {
   }
 
   render(){
-    const { reviews } = this.state;
+    const { reviews, isLoaded } = this.state;
     if (reviews.length === 0) return null;
 
     const items = [];
 
     for (const [index, item] of reviews.entries()) {
-      items.push(<Review key={index} idx={index} item={item} fullText={false} />);
+      items.push(
+        <Review
+          key={index}
+          idx={index}
+          item={item}
+          showFullText={false}
+          showAdminControls={false} />
+      );
     }
 
-    return <div className={css.reviewsList}>{items}</div>;
+    return (
+      <div className={css.reviewPreview}>
+        <Fader determinant={isLoaded} duration={750} delay={1250}>
+          <Title className={css.heading}>What are people saying about us?</Title>
+        </Fader>
+        <div className={css.reviewsList}>{items}</div>
+      </div>
+    );
   }
 } 
 

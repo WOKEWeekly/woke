@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 
 import { setAlert } from '~/components/alert.js';
 import { ConfirmModal } from '~/components/modal.js';
-import { Title, Subtitle, Divider, Paragraph, truncateText } from '~/components/text.js';
+import { Title, Subtitle, Divider, Paragraph, ExpandText, truncateText } from '~/components/text.js';
 import { Slider } from '~/components/transitioner.js';
 import Rator from '~/components/rator.js';
 
@@ -18,7 +18,8 @@ class Review extends PureComponent {
     super(props);
     this.state = {
       isLoaded: false,
-      modalVisible: false
+      modalVisible: false,
+      showFullText: props.showFullText
     }
   }
 
@@ -50,8 +51,11 @@ class Review extends PureComponent {
   hideModal = () => { this.setState({modalVisible: false})}
 
   render(){
-    const { item, idx, fullText, user } = this.props;
+    const { item, idx, user, showAdminControls } = this.props;
+    const { showFullText } = this.state;
     item.description = item.description && item.description.trim().length > 0 ? item.description : 'No description.';
+
+    const beyondLimit = item.description.length > 60;
 
     const isEven = (idx % 2 == 0);
 
@@ -84,12 +88,12 @@ class Review extends PureComponent {
                   <Subtitle className={css.subtitle}>{item.position}</Subtitle>
                   <Rator rating={item.rating} changeable={false} />
                   <Divider />
-                  <Paragraph
-                    className={css.paragraph}>
-                    {fullText ? item.description : truncateText(item.description, 60)}
+                  <Paragraph className={css.paragraph}>
+                    {showFullText ? item.description : truncateText(item.description, 60)}
                   </Paragraph>
+                  {!showFullText && beyondLimit ? <ExpandText onClick={() => this.setState({showFullText: true})} /> : null}
                 </div>
-                {user.clearance >= CLEARANCES.ACTIONS.CRUD_REVIEWS ?
+                {showAdminControls && user.clearance >= CLEARANCES.ACTIONS.CRUD_REVIEWS ?
                   <ButtonGroup className={css.buttons}>
                     <Button variant={'success'} onClick={() => location.href = (`/reviews/edit/${item.id}`)}>Edit</Button>
                     <Button variant={'danger'} onClick={this.showModal}>Delete</Button>

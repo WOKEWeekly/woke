@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Link from 'next/link';
 import classNames from 'classnames';
+
+import { Icon } from '~/components/icon.js';
 import css from '~/styles/_components.scss';
 
 export class Title extends Component {
@@ -120,19 +122,31 @@ export class Divider extends Component {
 
 export class ReadMore extends Component {
   render(){
-    const text = this.props.text || 'Read more...';
+    const text = this.props.text || 'Read more';
     return (
       <Link href={this.props.link}>
         <div className={css.readmore}>
-          {text}
+          <Icon name={'external-link-alt'} className={css.linkIcon} />{text}
         </div>
       </Link>
     )
   }
 }
 
+export class ExpandText extends Component {
+  render(){
+    const { text = 'Read more....', onClick } = this.props;
+    return (
+      <button className={css.invisible_button} onClick={onClick} style={{padding: 0}}>
+        <div className={css.expandText}>{text}</div>
+      </button>
+    )
+  }
+}
+
 export const truncateText = (text, limit) => {
   if (!text) text = '';
+  if (!limit) limit = 45;
 
   const parts = text.split(' ').map(paragraph => {
     if (paragraph.length === 0) return null;
@@ -151,7 +165,8 @@ export const truncateText = (text, limit) => {
     }
   });
 
-  text = parts.filter(e => e != null).slice(0, limit || 45).join(' ');
+  text = parts.filter(e => e != null).slice(0, limit).join(' ');
+  if (text.length <= limit) return text;
 
   return `${text}....`;
 }

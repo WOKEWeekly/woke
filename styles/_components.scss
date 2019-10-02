@@ -549,6 +549,17 @@
   font-size: 1.1em;
   margin-top: .5em;
   &:hover { text-decoration: underline; }
+  .linkIcon {
+    color: skyblue;
+  }
+}
+.expandText {
+  color: skyblue;
+  cursor: pointer;
+  display: block;
+  font-family: $body-font;
+  font-size: 1.1em;
+  &:hover { text-decoration: underline; }
 }
 
 /****************/
