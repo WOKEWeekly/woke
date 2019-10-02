@@ -541,6 +541,27 @@
   background-color: white;
   overflow: hidden;
 }
+.quoteWrapper {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  margin-top: 1em;
+  .quotes {
+    @include font-scaler(6);
+    color: white;
+    font-family: 'Yeseva One', cursive;
+    line-height: 0; }
+  .quoteLeft {
+    @extend .quotes;
+    align-self: flex-start;
+    padding-top: .5em;
+    padding-right: 8px; }
+  .quoteRight {
+    @extend .quotes;
+    align-self: end;
+    padding-left: 8px;
+    @media (max-width: $break-md) { padding-bottom: .35em; }
+  }
+}
 .readmore {
   color: skyblue;
   cursor: pointer;

@@ -63,6 +63,6 @@ const Meta = ({
     <link rel="icon" href="/static/images/logos/favicon.jpg" />
 
     {/* BootStrap and Google Web Fonts importation */}
-    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Raleway:400,700|Patua+One:400,700" />
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Raleway:400,700|Yeseva+One|Patua+One:400,700" />
   </React.Fragment>
 )

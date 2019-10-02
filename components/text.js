@@ -107,9 +107,22 @@ export class _Paragraph extends Component {
             }
           })}
         </pre>
-      {more ? <ReadMore link={link} text={more === true ? null : more} /> : null}
+        {more ? <ReadMore link={link} text={more === true ? null : more} /> : null}
       </React.Fragment>
     )
+  }
+}
+
+export class QuoteWrapper extends Component {
+  render(){
+    return (
+      <div className={css.quoteWrapper}>
+        {/* <div><Icon name={'quote-left'} className={css.quotes} /></div> */}
+        <div className={css.quoteLeft}>“</div>
+        {this.props.children}
+        <div className={css.quoteRight}>”</div>
+      </div>
+    );
   }
 }
 

@@ -3,8 +3,9 @@ import { Col, Row, Button, ButtonGroup } from 'react-bootstrap';
 import { connect } from 'react-redux';
 
 import { setAlert } from '~/components/alert.js';
+import { Icon } from '~/components/icon.js';
 import { ConfirmModal } from '~/components/modal.js';
-import { Title, Subtitle, Divider, Paragraph, ExpandText, truncateText } from '~/components/text.js';
+import { Title, Subtitle, Divider, Paragraph, QuoteWrapper, ExpandText, truncateText } from '~/components/text.js';
 import { Slider } from '~/components/transitioner.js';
 import Rator from '~/components/rator.js';
 
@@ -87,11 +88,14 @@ class Review extends PureComponent {
                   <Title className={css.title}>{item.referee}</Title>
                   <Subtitle className={css.subtitle}>{item.position}</Subtitle>
                   <Rator rating={item.rating} changeable={false} />
-                  <Divider />
-                  <Paragraph className={css.paragraph}>
-                    {showFullText ? item.description : truncateText(item.description, 60)}
-                  </Paragraph>
-                  {!showFullText && beyondLimit ? <ExpandText onClick={() => this.setState({showFullText: true})} /> : null}
+                  <QuoteWrapper>
+                    <div>
+                      <Paragraph className={css.paragraph}>
+                        {showFullText ? item.description : truncateText(item.description, 60)}
+                      </Paragraph>
+                      {!showFullText && beyondLimit ? <ExpandText onClick={() => this.setState({showFullText: true})} /> : null}
+                    </div>
+                  </QuoteWrapper>
                 </div>
                 {showAdminControls && user.clearance >= CLEARANCES.ACTIONS.CRUD_REVIEWS ?
                   <ButtonGroup className={css.buttons}>

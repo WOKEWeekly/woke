@@ -153,7 +153,7 @@ class ReviewsPreview extends Component {
     }
 
     return (
-      <div className={css.reviewPreview}>
+      <div className={css.reviewsPreview}>
         <Fader determinant={isLoaded} duration={750} delay={1250}>
           <Title className={css.heading}>What are people saying about us?</Title>
         </Fader>
