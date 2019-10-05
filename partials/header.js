@@ -154,6 +154,7 @@ export class MainNavbar extends Component {
         <Navbar.Toggle />
         <Navbar.Collapse>
           <Nav className="ml-auto">
+            <Nav.Link href="/about" className={classes}>About Us</Nav.Link>
             <Nav.Link href="/sessions" className={classes}>Sessions</Nav.Link>
             {user.clearance >= CLEARANCES.ACTIONS.VIEW_TOPICS ?
             <Nav.Link href="/topics" className={classes}>Topic Bank</Nav.Link> : null}
@@ -161,7 +162,6 @@ export class MainNavbar extends Component {
             <Nav.Link href="/blackexcellence" className={classes}>#BlackExcellence</Nav.Link>
             <Nav.Link href="/mentalhealth" className={classes}>Mental Health</Nav.Link>
             <Nav.Link href="/executives" className={classes}>The Executives</Nav.Link>
-            <Nav.Link href="/about" className={classes}>About Us</Nav.Link>
           </Nav>
         </Navbar.Collapse>
       </Navbar>
