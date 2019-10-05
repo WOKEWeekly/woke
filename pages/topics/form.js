@@ -24,7 +24,7 @@ class TopicForm extends Component {
   render(){
     const { heading, confirmText, confirmFunc, cancelFunc, handlers} = this.props;
     const { handleText, handleRadio, handleCheckboxButton } = handlers;
-    const { headline, category, question, type, polarity, option1, option2, description } = this.props.topic;
+    let { headline, category, question, type, polarity, validated, sensitivity, option1, option2, description } = this.props.topic;
 
     const radioItems = [
       { label: 'Debate', value: 'Debate' },
@@ -110,6 +110,24 @@ class TopicForm extends Component {
                   value={description}
                   onChange={handleText}
                   placeholder={"Provide background or context to this question. (Optional)"} />
+              </Col>
+            </Group>
+            <Group>
+              <Col md={6}>
+                <Label>Validation:</Label>
+                <CheckboxButton
+                  name={'validated'}
+                  checked={validated}
+                  onChange={handleCheckboxButton}
+                  label={'This topic has been validated.'} />
+              </Col>
+              <Col md={6}>
+                <Label>Sensitivity:</Label>
+                <CheckboxButton
+                  name={'sensitivity'}
+                  checked={sensitivity}
+                  onChange={handleCheckboxButton}
+                  label={'This topic is sensitivity.'} />
               </Col>
             </Group>
           </div>

@@ -98,8 +98,9 @@ module.exports = function(app, conn, server){
 
   /** Add New Topic */
   app.get('/topics/add', function(req, res){
-    server.render(req, res, '/topics/add', {
+    server.render(req, res, '/topics/crud', {
       title: 'Add New Topic',
+      operation: 'add',
       backgroundImage: 'bg-topics.jpg'
     });
   });
@@ -112,8 +113,9 @@ module.exports = function(app, conn, server){
     conn.query(sql, id, function (err, result) {
       if (!err && result.length){
         const topic = result[0];
-        return server.render(req, res, '/topics/edit', {
+        return server.render(req, res, '/topics/crud', {
           title: 'Edit Topic',
+          operation: 'edit',
           backgroundImage: 'bg-topics.jpg',
           topic
         });

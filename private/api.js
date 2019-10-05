@@ -110,9 +110,9 @@ module.exports = function(app, conn){
   /** Add new topic to database */
   app.post('/addTopic', verifyToken(CLEARANCES.ACTIONS.CRUD_TOPICS), function(req, res){
     const topic = req.body;
-    const sql = "INSERT INTO topics (headline, category, question, description, type, polarity, option1, option2, user_id) VALUES ?";
+    const sql = "INSERT INTO topics (headline, category, question, description, type, polarity, validated, sensitivity, option1, option2, user_id) VALUES ?";
     const values = [[topic.headline, topic.category, topic.question, topic.description, topic.type,
-      topic.polarity, topic.option1, topic.option2, topic.userId]];
+      topic.polarity, topic.validated, topic.sensitivity, topic.option1, topic.option2, topic.userId]];
     
     conn.query(sql, [values], function (err, result) {
       resToClient(res, err, result.insertId);
@@ -122,9 +122,9 @@ module.exports = function(app, conn){
   /** Update topic in database */
   app.put('/updateTopic', verifyToken(CLEARANCES.ACTIONS.CRUD_TOPICS), function(req, res){
     const topic = req.body;
-    const sql = `UPDATE topics SET headline = ?, category = ?, question = ?, description = ?, type = ?, polarity = ?, option1 = ?, option2 = ? WHERE id = ?`;
+    const sql = `UPDATE topics SET headline = ?, category = ?, question = ?, description = ?, type = ?, polarity = ?, validated = ?, sensitivity = ?, option1 = ?, option2 = ? WHERE id = ?`;
     const values = [topic.headline, topic.category, topic.question, topic.description, topic.type,
-      topic.polarity, topic.option1, topic.option2, topic.id];
+      topic.polarity, topic.validated, topic.sensitivity, topic.option1, topic.option2, topic.id];
     
     conn.query(sql, values, function (err) {
       resToClient(res, err);

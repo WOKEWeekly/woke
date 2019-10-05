@@ -64,6 +64,7 @@ const defaultTopic = {
     categories: [],
     types: [],
     polarity: [],
+    misc: []
   },
   sort: '3',
 }

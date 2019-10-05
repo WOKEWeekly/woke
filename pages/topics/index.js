@@ -10,6 +10,7 @@ import { alert, setAlert } from '~/components/alert.js';
 import { AddEntityButton } from '~/components/button.js';
 import { SortDropdown, FilterDropdown } from '~/components/dropdown.js';
 import { Checkbox, SearchBar } from '~/components/form.js';
+import { Icon } from '~/components/icon.js';
 import { Cover, Shader, Spacer } from '~/components/layout.js';
 import { Loader, Empty } from '~/components/loader.js';
 import { ConfirmModal } from '~/components/modal.js';
@@ -17,12 +18,14 @@ import { Title, Subtitle } from '~/components/text.js';
 import { TopToolbar, BottomToolbar } from '~/components/toolbar.js';
 import { Fader } from '~/components/transitioner.js';
 
-import { categories, types, polarity } from '~/constants/categories.js';
+import CATEGORIES from '~/constants/categories.js';
 import CLEARANCES from '~/constants/clearances.js';
 import request from '~/constants/request.js';
 
 import css from '~/styles/topics.scss';
 import '~/styles/_categories.scss';
+
+const { categories, types, polarity, misc } = CATEGORIES;
 
 
 class TopicBank extends Component {
@@ -124,16 +127,26 @@ class TopicBank extends Component {
     if (this.state.filters){
       const { topics, filters, searchWord } = this.state;
 
-      // Filter upon condition of presence of values in filter arrays
-      let results = topics.filter((topic, index, topics) => {
-        if (Object.keys(filters).length > 0){
-          return (filters.categories.length ? filters.categories.includes(topic.category) : true)
-            && (filters.types.length ? filters.types.includes(topic.type) : true)
-            && (filters.polarity.length ? filters.polarity.includes(topic.polarity === 1 ? 'Polar' : 'Non-Polar') : true);
-        } else {
-          return topics;
-        }      
+      let results;
+
+      try {
+        // Filter upon condition of presence of values in filter arrays
+        results = topics.filter((topic, index, topics) => {
+          if (Object.keys(filters).length > 0){
+            const filterCategory = filters.categories.length ? filters.categories.includes(topic.category) : true;
+            const filterTypes = filters.types.length ? filters.types.includes(topic.type) : true;
+            const filterPolarity = filters.polarity.length ? filters.polarity.includes(topic.polarity === 1 ? 'Polar' : 'Non-Polar') : true;
+            const filterValidated = filters.misc.length ? filters.misc.includes(topic.validated === 1 && 'Validated') : true;
+            const filterSensitive = filters.misc.length ? filters.misc.includes(topic.sensitivity === 1 && 'Sensitive') : true;
+
+            return filterCategory && filterTypes && filterPolarity && (filterValidated || filterSensitive);
+          } else {
+            return topics;
+          }      
       });
+      } catch (err){
+        results = topics;
+      }
 
       // Search topics after filtering
       this.setState({ filtered: results }, () => {
@@ -256,48 +269,7 @@ class TopicBank extends Component {
               title={'Sort'}
               onSelect={this.switchSort} />
 
-            <FilterDropdown title={'Filter'}>
-              <div className={css.menuSection}>
-                <div>
-                  <Dropdown.Item disabled>Filter by category</Dropdown.Item>
-                  <Dropdown.Divider />
-                    {categories.map((item, index) => {
-                      return <Checkbox
-                        name={`${item.label}, categories`}
-                        key={index}
-                        label={item.label}
-                        checked={filters.categories.includes(item.label)}
-                        onChange={this.handleFilter} />
-                    })}
-                </div>
-                <div>
-                  <div>
-                    <Dropdown.Item disabled>Filter by type</Dropdown.Item>
-                    <Dropdown.Divider />
-                      {types.map((item, index) => {
-                        return <Checkbox
-                          name={`${item.label}, types`}
-                          key={index}
-                          label={item.label}
-                          checked={filters.types.includes(item.label)}
-                          onChange={this.handleFilter} />
-                      })}
-                  </div>
-                  <div className={css.polarityBlock}>
-                    <Dropdown.Item disabled>Filter by polarity</Dropdown.Item>
-                    <Dropdown.Divider />
-                      {polarity.map((item, index) => {
-                        return <Checkbox
-                          name={`${item.label}, polarity`}
-                          key={index}
-                          label={item.label}
-                          checked={filters.polarity.includes(item.label)}
-                          onChange={this.handleFilter} />
-                      })}
-                  </div>
-                </div>
-              </div>
-            </FilterDropdown>
+            <TopicFilter filters={filters} handleFilter={this.handleFilter} />
           </BottomToolbar>
         </Spacer>
       </Shader>
@@ -345,6 +317,26 @@ class _Topic extends PureComponent {
     const category = categories.find(category => category.label === item.category).short;
     const classes = classNames(css.cell, category);
 
+    const AdminButtons = () => {
+      if (!hasPrivileges) return null;
+      return (
+        <ButtonGroup className={css.buttons}>
+          <Button variant={'success'} onClick={() => Router.push(`/topics/edit/${item.id}`)}>Edit</Button>
+          <Button variant={'danger'} onClick={this.showModal}>Delete</Button>
+        </ButtonGroup>
+      );
+    }
+
+    const ValSens = () => {
+      if (!(item.validated || item.sensitivity)) return null;
+      return (
+        <div className={css.valSens}>
+          {item.sensitivity ? <Icon name={'skull-crossbones'} className={css.val} /> : <div/>}
+          {item.validated ? <Icon name={'check-circle'} className={css.sens} /> : null}
+        </div>
+      );
+    }
+
     return (
       <React.Fragment>
         <Fader
@@ -354,13 +346,9 @@ class _Topic extends PureComponent {
           className={classes}>
           <Title className={css.headline}>{item.headline}</Title>
           <Subtitle className={css.question}>{item.question}</Subtitle>
+          <ValSens/>
           <Subtitle className={css.details}>{item.type} • {item.category}</Subtitle>
-
-          {hasPrivileges ?
-          <ButtonGroup className={css.buttons}>
-            <Button variant={'success'} onClick={() => Router.push(`/topics/edit/${item.id}`)}>Edit</Button>
-            <Button variant={'danger'} onClick={this.showModal}>Delete</Button>
-          </ButtonGroup> : null}
+          <AdminButtons />
         </Fader>
 
         <ConfirmModal
@@ -374,6 +362,74 @@ class _Topic extends PureComponent {
           close={this.hideModal} />
       </React.Fragment>
     ); 
+  }
+}
+
+class TopicFilter extends Component {
+  render(){
+    const { filters, handleFilter } = this.props;
+
+    /** Ensure any new categories added won't affect Redux store */
+    for (const key of Object.keys(CATEGORIES)) {
+      if (!filters[key]) filters[key] = [];
+    }
+
+    return (
+      <FilterDropdown title={'Filter'}>
+        <div className={css.menuSection}>
+          <div>
+            <Dropdown.Item disabled>Filter by category</Dropdown.Item>
+            <Dropdown.Divider />
+              {categories.map((item, index) => {
+                return <Checkbox
+                  name={`${item.label}, categories`}
+                  key={index}
+                  label={item.label}
+                  checked={filters.categories.includes(item.label)}
+                  onChange={handleFilter} />
+              })}
+          </div>
+          <div>
+            <div>
+              <Dropdown.Item disabled>Filter by type</Dropdown.Item>
+              <Dropdown.Divider />
+                {types.map((item, index) => {
+                  return <Checkbox
+                    name={`${item.label}, types`}
+                    key={index}
+                    label={item.label}
+                    checked={filters.types.includes(item.label)}
+                    onChange={handleFilter} />
+                })}
+            </div>
+            <div className={css.polarityBlock}>
+              <Dropdown.Item disabled>Filter by polarity</Dropdown.Item>
+              <Dropdown.Divider />
+                {polarity.map((item, index) => {
+                  return <Checkbox
+                    name={`${item.label}, polarity`}
+                    key={index}
+                    label={item.label}
+                    checked={filters.polarity.includes(item.label)}
+                    onChange={handleFilter} />
+                })}
+            </div>
+            <div className={css.polarityBlock}>
+              <Dropdown.Item disabled>More filters</Dropdown.Item>
+              <Dropdown.Divider />
+                {misc.map((item, index) => {
+                  return <Checkbox
+                    name={`${item.label}, misc`}
+                    key={index}
+                    label={item.label}
+                    checked={filters.misc.includes(item.label)}
+                    onChange={handleFilter} />
+                })}
+            </div>
+          </div>
+        </div>
+      </FilterDropdown>
+    )
   }
 }
 

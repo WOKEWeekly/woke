@@ -2,31 +2,38 @@
 const { assert, jwt, host, options, request, users } = require('./_config.js');
 const superuser = users.nine;
 
-const topic = {
-  headline: 'Title',
-  category: 'Philosophy & Ethics',
-  question: 'Is this the topic question?',
-  description: 'This is the topic description',
-  type: 'Debate',
-  polarity: true,
-  option1: 'Yes',
-  option2: 'No',
-  userId: superuser.id
-};
-
-const topic2 = {
-  headline: 'Changed',
-  category: 'Academia',
-  question: 'This isn\'t the topic question, is it?',
-  description: 'The topic has been changed.',
-  type: 'Discussion',
-  polarity: false,
-  option1: null,
-  option2: null
-}
+let topic1 = {};
+let topic2 = {};
 
 describe("Topic Bank Page", function() {
   before(function(done){
+    topic1 = {
+      headline: 'Title',
+      category: 'Philosophy & Ethics',
+      question: 'Is this the topic question?',
+      description: 'This is the topic description',
+      type: 'Debate',
+      polarity: true,
+      validated: false,
+      sensitivity: true,
+      option1: 'Yes',
+      option2: 'No',
+      userId: superuser.id
+    };
+
+    topic2 = {
+      headline: 'Changed',
+      category: 'Academia',
+      question: 'This isn\'t the topic question, is it?',
+      description: 'The topic has been changed.',
+      type: 'Discussion',
+      polarity: false,
+      validated: true,
+      sensitivity: true,
+      option1: null,
+      option2: null
+    };
+
     jwt.sign({ user: superuser }, process.env.JWT_SECRET, { expiresIn: '1m' }, function(err, token){
       superuser.token = token;
       done();
@@ -34,6 +41,8 @@ describe("Topic Bank Page", function() {
   });
 
   it("Route Accessed OK", function(done) {
+    // assert.isTrue(isValidTopic(topic1));
+
     request.get(`${host}/topics`, function(err, res){
       assert.equal(res.statusCode, 200);
       done();
@@ -55,14 +64,15 @@ describe("Topic Bank Page", function() {
   });
 
   it("Add Topic", function(done) {
+
     request({
       url: `${host}/addTopic`,
       method: 'POST',
-      body: JSON.stringify(topic),
+      body: JSON.stringify(topic1),
       ...options.strong(superuser)
     }, function(err, res, body){
       assert.equal(res.statusCode, 200, JSON.parse(res.body).message);
-      topic.id = topic2.id = body;
+      topic1.id = topic2.id = body;
       done();
     });
   });
@@ -83,7 +93,7 @@ describe("Topic Bank Page", function() {
     request({
       url: `${host}/deleteTopic`,
       method: 'DELETE',
-      body: JSON.stringify(topic),
+      body: JSON.stringify(topic1),
       ...options.strong(superuser)
     }, function(err, res){
       assert.equal(res.statusCode, 200, JSON.parse(res.body).message);

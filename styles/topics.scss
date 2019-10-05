@@ -21,7 +21,6 @@
   .cell {
     border-radius: 15px;
     border: $secondary-border;
-    cursor: pointer;
     display: grid;
     grid-template-rows: auto 1fr auto auto;
     margin: .1em;
@@ -36,6 +35,12 @@
       font-size: .9em;
       padding: .7em 0;
       @media (max-width: $break-md) { font-size: .8em; }}
+    .valSens {
+      display: flex;
+      justify-content: space-between;
+      padding-bottom: .4em;
+      .val { justify-self: flex-start; }
+      .sens { justify-self: flex-end; }}
     .details {
       font-size: .8em;
       border-top: 1px solid white;
