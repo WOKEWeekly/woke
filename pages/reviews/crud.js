@@ -33,13 +33,21 @@ class ReviewCrud extends Component {
   /** POST review to the server */
   submitReview = () => {
     if (!isValidReview(this.state)) return;
-    const review = this.state;
+    const {referee, position, rating, description, image } = this.state;
+
+    const review = {
+      referee: referee.trim(),
+      position: position.trim(),
+      rating,
+      description: description.trim(),
+      image
+    };
 
     const data = new FormData();
     data.append('review', JSON.stringify(review));
-    if (review.image !== null){
+    if (image !== null){
       data.append('changed', true);
-      data.append('file', review.image);
+      data.append('file', image);
     }
 
     /** Add review to database */
@@ -49,7 +57,7 @@ class ReviewCrud extends Component {
       body: data,
       headers: { 'Authorization': `Bearer ${this.props.user.token}` },
       onSuccess: () => {
-        setAlert({ type: 'success', message: `You've successfully added the review by ${review.referee}.` });
+        setAlert({ type: 'success', message: `You've successfully added the review by ${referee}.` });
         location.href = '/reviews';
       }
     });
