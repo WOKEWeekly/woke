@@ -38,7 +38,7 @@ const candidate3 = {
   authorId: superuser.id
 };
 
-describe("#BlackExcellence Page", function() {
+describe.skip("#BlackExcellence Page", function() {
   before(function(done){
     jwt.sign({ user: superuser }, process.env.JWT_SECRET, { expiresIn: '1m' }, function(err, token){
       superuser.token = token;
