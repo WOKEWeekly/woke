@@ -128,6 +128,10 @@ export class CheckboxButton extends Component {
     this.checkbox = React.createRef();
   }
 
+  static getDerivedStateFromProps(props){
+    return { checked: props.checked };
+  }
+
   check = () => {
     this.setState({ checked: !this.state.checked});
     this.props.onChange(this.checkbox.current);
