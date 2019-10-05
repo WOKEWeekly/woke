@@ -127,7 +127,7 @@ class TopicForm extends Component {
                   name={'sensitivity'}
                   checked={sensitivity}
                   onChange={handleCheckboxButton}
-                  label={'This topic is sensitivity.'} />
+                  label={'This topic is sensitive.'} />
               </Col>
             </Group>
           </div>
