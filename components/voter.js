@@ -19,7 +19,7 @@ export class Voter extends Component {
   }
 
   static getDerivedStateFromProps(props) {
-    this.setState({ hasVoted: props.hasVoted });   
+    return { hasVoted: props.hasVoted };
   }
 
   /** Submit the vote and set voter to disabled */

@@ -17,7 +17,7 @@ export default class Rator extends Component {
   };
 
   static getDerivedStateFromProps(props) {
-    this.setState({ rating: props.rating }); 
+    return { rating: props.rating }; 
   }
 
   /** Update the rating on star click */
