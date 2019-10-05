@@ -16,8 +16,8 @@ export default class Rator extends Component {
     this.setState({ isLoaded: true });
   };
 
-  componentWillReceiveProps(props) {
-    this.setState({ rating: props.rating });  
+  static getDerivedStateFromProps(props) {
+    this.setState({ rating: props.rating }); 
   }
 
   /** Update the rating on star click */

@@ -163,16 +163,14 @@ export class SocialsModal extends Component {
   }
 
   /** Receive socials from props and populate state */
-  componentWillReceiveProps(props) {
-    this.setState((state) => {
-      if (props.socials){
-        for (const idx of Object.keys(socialPlatforms)) {
-          let social = props.socials[idx];
-          state[idx] = social ? social : state[idx];
-        }
+  static getDerivedStateFromProps(props, state){
+    if (props.socials){
+      for (const idx of Object.keys(socialPlatforms)) {
+        let social = props.socials[idx];
+        state[idx] = social ? social : state[idx];
       }
-      return state;
-    });  
+    }
+    return state;
   }
 
   handleText = (event) => {

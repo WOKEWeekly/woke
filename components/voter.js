@@ -18,8 +18,8 @@ export class Voter extends Component {
     this.setState({ isLoaded: true})
   }
 
-  componentWillReceiveProps(props) {
-    this.setState({ hasVoted: props.hasVoted });  
+  static getDerivedStateFromProps(props) {
+    this.setState({ hasVoted: props.hasVoted });   
   }
 
   /** Submit the vote and set voter to disabled */
