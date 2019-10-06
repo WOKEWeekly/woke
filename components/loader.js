@@ -22,9 +22,9 @@ export class LoaderIcon extends Component {
     return (
       <div className={css.loader}>
       <Spinner
-        animation="grow"
+        animation="border"
         className={css.spinner}
-        size={'sm'} />
+        size={'lg'} />
         </div>
     )
   }
