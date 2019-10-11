@@ -1,4 +1,4 @@
-import React, { Component, PureComponent } from 'react';
+import React, { Component, PureComponent, Suspense } from 'react';
 import { Button, ButtonGroup, Dropdown } from 'react-bootstrap';
 import Router from 'next/router';
 import { connect } from 'react-redux';
@@ -338,7 +338,7 @@ class _Topic extends PureComponent {
     }
 
     return (
-      <React.Fragment>
+      <Suspense fallback={<Loader/>}>
         <Fader
           key={idx}
           determinant={this.state.isLoaded}
@@ -360,7 +360,7 @@ class _Topic extends PureComponent {
           confirmFunc={this.deleteTopic}
           confirmText={'Delete'}
           close={this.hideModal} />
-      </React.Fragment>
+      </Suspense>
     ); 
   }
 }

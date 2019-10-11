@@ -1,14 +1,12 @@
 import React, { Component, Suspense } from 'react';
 import {Container, Col, Row} from 'react-bootstrap';
+import LazyLoader from 'react-visibility-sensor';
 
 import { Cover, Shader } from '~/components/layout.js';
-import { LoaderIcon } from '~/components/loader.js';
 import { Paragraph } from '~/components/text.js';
 import { Fader } from '~/components/transitioner.js';
 
 import css from '~/styles/home.scss';
-
-// import ThreePart from './home.advertiser';
 
 const ThreePart = React.lazy(() => import('./home.advertiser'));
 const ReviewsPreview = React.lazy(() => import('./home.reviews'));
@@ -16,7 +14,6 @@ const UpcomingSession = React.lazy(() => import('./home.session'));
 const RandomCandidate = React.lazy(() => import('./home.candidate'));
 const TopicVoter = React.lazy(() => import('./home.voter'));
 const RandomMember = React.lazy(() => import('./home.member'));
-
 
 export default class Home extends Component {
   constructor(){
@@ -41,7 +38,7 @@ export default class Home extends Component {
           className={css.cover} />
 
         <Container fluid={true}>
-          <Suspense fallback={<LoaderIcon />}>
+          <Suspense fallback={null}>
             <ThreePart />
 
             <Row><ReviewsPreview/></Row>
@@ -66,7 +63,8 @@ class ForumAdvertiser extends Component {
     super();
     this.state = {
       imageLoaded: false,
-      imageSrc: ''
+      imageSrc: '',
+      inView: false
     }
   }
 
@@ -76,21 +74,25 @@ class ForumAdvertiser extends Component {
     image.onload = () => this.setState({imageLoaded: true, imageSrc: image.src});
   }
 
+  toggleVisibility = (inView) => this.setState({inView});
+
   render(){
-    const { imageLoaded, imageSrc } = this.state;
+    const { imageLoaded, imageSrc, inView } = this.state;
     const text = `Wouldn't it make sense if you could suggest more topics for us to cover at our sessions?\n\nFORUM COMING SOON...`;
     
     return (
       <Fader
-        determinant={imageLoaded}
+        determinant={imageLoaded && inView}
         duration={750}
         delay={0}
         postTransitions={'background-color .3s'}
         className={css.forumAdvertiser}
         style={{backgroundImage: `url(${imageSrc})`}}>
-        <div className={css.container}>
-          <Paragraph className={css.coverText}>{text}</Paragraph>
-        </div>
+        <LazyLoader onChange={this.toggleVisibility} partialVisibility={true}>
+          <div className={css.container}>
+            <Paragraph className={css.coverText}>{text}</Paragraph>
+          </div>
+        </LazyLoader>
       </Fader>
     )
   }

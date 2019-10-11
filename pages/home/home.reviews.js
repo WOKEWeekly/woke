@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { Title } from '~/components/text.js';
 import { Fader } from '~/components/transitioner.js';
-
 import request from '~/constants/request.js';
 
 import Review from '~/pages/reviews/unit.js';
@@ -10,9 +9,7 @@ import css from '~/styles/home.scss';
 export default class ReviewsPreview extends Component {
   constructor(){
     super();
-    this.state = {
-      reviews: []
-    }
+    this.state = { reviews: [] }
   }
 
   componentDidMount(){
@@ -34,7 +31,7 @@ export default class ReviewsPreview extends Component {
   }
 
   render(){
-    const { reviews } = this.state;
+    const { reviews, inView, detectViewChange } = this.state;
     if (reviews.length === 0) return null;
 
     const items = [];
@@ -45,6 +42,8 @@ export default class ReviewsPreview extends Component {
           key={index}
           idx={index}
           item={item}
+          inView={inView}
+          detectViewChange={detectViewChange}
           showFullText={false}
           showAdminControls={false} />
       );

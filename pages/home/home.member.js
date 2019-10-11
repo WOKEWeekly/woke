@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import {Col, Row} from 'react-bootstrap';
 import Link from 'next/link';
+import LazyLoader from 'react-visibility-sensor';
 
 import { Default, Mobile } from '~/components/layout.js';
 import { Title, Subtitle, Divider, Paragraph, truncateText } from '~/components/text.js';
@@ -13,11 +14,19 @@ import css from '~/styles/home.scss';
 export default class RandomMember extends Component{
   constructor(){
     super();
-    this.state = { member: {} }
+    this.state = {
+      member: {},
+      inView: false,
+      detectViewChange: true
+    }
   }
 
   componentDidMount(){
     this.getRandomMember();
+  }
+
+  toggleVisibility = (inView) => {
+    this.setState({ inView, detectViewChange: inView === false });
   }
 
   getRandomMember = () => {
@@ -36,7 +45,7 @@ export default class RandomMember extends Component{
   }
 
   render(){
-    const { member } = this.state;
+    const { member, inView, detectViewChange } = this.state;
 
     if (member.loaded){
       member.fullname = `${member.firstname} ${member.lastname}`;
@@ -49,39 +58,38 @@ export default class RandomMember extends Component{
     const heading = `Have you met our ${isExecutive ? 'executive' : 'member'}?`
 
     return (
-      <Fader
-        determinant={member.loaded}
-        duration={750}
-        delay={1500}
-        postTransitions={'background-color .3s'}
-        className={css.randomMember}>
-        <div className={css.container}>
-        <Mobile><Title className={css.heading}>{heading}</Title></Mobile>
-          <Row>
-            <Col md={4}>
-              {member.image ?
-              <Link href={link}>
-                <img
-                  src={`/static/images/team/${member.image}`}
-                  alt={member.fullname}
-                  className={css.image} />
-              </Link> : null}
-            </Col>
-            <Col md={8}>
-            <Default><Title className={css.heading}>{heading}</Title></Default>
-              <div className={css.details}>
-                <Title className={css.title}>{member.fullname}</Title>
-                <Subtitle className={css.subtitle}>{member.role}</Subtitle>
-                <Divider/>
-                <Paragraph
-                  link={link}
-                  more={`Read more on ${member.firstname}`}
-                  className={css.paragraph}>{truncateText(member.description)}</Paragraph>
-              </div>
-            </Col>
-          </Row>
-        </div>
-      </Fader>
+      <div className={css.randomMember}>
+        <LazyLoader onChange={this.toggleVisibility} partialVisibility={true} active={detectViewChange}>
+          <Fader determinant={inView} duration={750}>
+            <div className={css.container}>
+            <Mobile><Title className={css.heading}>{heading}</Title></Mobile>
+              <Row>
+                <Col md={4}>
+                  {member.image ?
+                  <Link href={link}>
+                    <img
+                      src={`/static/images/team/${member.image}`}
+                      alt={member.fullname}
+                      className={css.image} />
+                  </Link> : null}
+                </Col>
+                <Col md={8}>
+                <Default><Title className={css.heading}>{heading}</Title></Default>
+                  <div className={css.details}>
+                    <Title className={css.title}>{member.fullname}</Title>
+                    <Subtitle className={css.subtitle}>{member.role}</Subtitle>
+                    <Divider/>
+                    <Paragraph
+                      link={link}
+                      more={`Read more on ${member.firstname}`}
+                      className={css.paragraph}>{truncateText(member.description)}</Paragraph>
+                  </div>
+                </Col>
+              </Row>
+            </div>
+          </Fader>
+        </LazyLoader>
+      </div>
     )
   }
 }

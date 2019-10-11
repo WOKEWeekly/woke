@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import { Col, Row, Button, ButtonGroup } from 'react-bootstrap';
 import { connect } from 'react-redux';
-import VizSensor from 'react-visibility-sensor';
+import LazyLoader from 'react-visibility-sensor';
 
 import { setAlert } from '~/components/alert.js';
 import { Default, Mobile } from '~/components/layout.js';
@@ -81,7 +81,7 @@ class Review extends PureComponent {
 
     return (
       <React.Fragment>
-        <VizSensor onChange={this.toggleVisibility} partialVisibility={true} active={detectViewChange}>
+        <LazyLoader onChange={this.toggleVisibility} partialVisibility={true} active={detectViewChange}>
           <Slider
             key={idx}
             determinant={inView}
@@ -143,7 +143,7 @@ class Review extends PureComponent {
               </Row>
             </div>
           </Slider>
-        </VizSensor>
+        </LazyLoader>
 
         <ConfirmModal
           visible={this.state.modalVisible}

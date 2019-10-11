@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Link from 'next/link';
+import LazyLoader from 'react-visibility-sensor';
 
 import { Title, Subtitle, Divider, Paragraph, truncateText } from '~/components/text.js';
-import { Slider } from '~/components/transitioner.js';
+import { Fader } from '~/components/transitioner.js';
 
 import { countriesToString } from '~/constants/countries.js';
 import { calculateAge } from '~/constants/date.js';
@@ -14,11 +15,19 @@ import css from '~/styles/home.scss';
 class _RandomCandidate extends Component {
   constructor(){
     super();
-    this.state = { candidate: {} }
+    this.state = {
+      candidate: {},
+      inView: false,
+      detectViewChange: true
+    }
   }
 
   componentDidMount(){
     this.getRandomCandidate();
+  }
+
+  toggleVisibility = (inView) => {
+    this.setState({ inView, detectViewChange: inView === false });
   }
 
   getRandomCandidate = () => {
@@ -37,7 +46,7 @@ class _RandomCandidate extends Component {
   }
 
   render(){
-    const { candidate } = this.state;
+    const { candidate, inView, detectViewChange } = this.state;
     const { countries } = this.props;
 
     if (candidate.loaded){
@@ -50,35 +59,33 @@ class _RandomCandidate extends Component {
     const link = `/blackexcellence/candidate/${candidate.id}`;
 
     return (
-      <Slider
-        determinant={candidate.loaded}
-        duration={750}
-        delay={1000}
-        direction={'right'}
-        postTransitions={'background-color .3s'}
-        className={css.randomCandidate}>
-        <Title className={css.heading}>Check out our candidate:</Title>
-        <div>
-          {candidate.image ?
-          <Link href={link}>
-            <img
-              src={`/static/images/blackexcellence/${candidate.image}`}
-              alt={candidate.name}
-              className={css.image} />
-          </Link> : null}
-          <div className={css.details}>
-            <Title className={css.title}>{candidate.name}</Title>
-            <Subtitle className={css.subtitle}>
-              {candidate.age} • {candidate.occupation} • {candidate.demonyms}
-            </Subtitle>
-            <Divider/>
-            <Paragraph
-              link={link}
-              more={`Discover more on ${candidate.firstname}`}
-              className={css.paragraph}>{truncateText(candidate.description)}</Paragraph>
-          </div>
-        </div>
-      </Slider>
+      <div className={css.randomCandidate}>
+        <LazyLoader onChange={this.toggleVisibility} partialVisibility={false} active={detectViewChange}>
+          <Fader determinant={inView} duration={750}>
+            <Title className={css.heading}>Check out our candidate:</Title>
+            <div>
+              {candidate.image ?
+              <Link href={link}>
+                <img
+                  src={`/static/images/blackexcellence/${candidate.image}`}
+                  alt={candidate.name}
+                  className={css.image} />
+              </Link> : null}
+              <div className={css.details}>
+                <Title className={css.title}>{candidate.name}</Title>
+                <Subtitle className={css.subtitle}>
+                  {candidate.age} • {candidate.occupation} • {candidate.demonyms}
+                </Subtitle>
+                <Divider/>
+                <Paragraph
+                  link={link}
+                  more={`Discover more on ${candidate.firstname}`}
+                  className={css.paragraph}>{truncateText(candidate.description)}</Paragraph>
+              </div>
+            </div>
+          </Fader>
+        </LazyLoader>
+      </div>
     )
   }
 }

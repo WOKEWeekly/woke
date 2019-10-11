@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import Link from 'next/link';
+import LazyLoader from 'react-visibility-sensor';
 
 import { Title, Subtitle, Divider, Paragraph, truncateText } from '~/components/text.js';
-import { Slider } from '~/components/transitioner.js';
+import { Fader } from '~/components/transitioner.js';
 
 import { formatDate } from '~/constants/date.js';
 import request from '~/constants/request.js';
@@ -12,11 +13,19 @@ import css from '~/styles/home.scss';
 export default class UpcomingSession extends Component {
   constructor(){
     super();
-    this.state = { session: {} }
+    this.state = {
+      session: {},
+      inView: false,
+      detectViewChange: true
+    }
   }
 
   componentDidMount(){
     this.getUpcomingSession();
+  }
+
+  toggleVisibility = (inView) => {
+    this.setState({ inView, detectViewChange: inView === false });
   }
 
   getUpcomingSession = () => {
@@ -37,37 +46,35 @@ export default class UpcomingSession extends Component {
   }
 
   render(){
-    const { session } = this.state;
+    const { session, inView, detectViewChange } = this.state;
     const heading = session.upcoming ? 'Most Upcoming Session' : 'Latest Session';
     const link = `/session/${session.slug}` || '/';
     return (
-      <Slider
-        determinant={session.loaded}
-        duration={750}
-        delay={1000}
-        direction={'left'}
-        postTransitions={'background-color .3s'}
-        className={css.upcomingSession}>
-        <Title className={css.heading}>{heading}</Title>
-        <div>
-          {session.image ?
-          <Link href={link}>
-            <img
-              src={`/static/images/sessions/${session.image}`}
-              alt={session.title}
-              className={css.image} />
-          </Link> : null}
-          <div className={css.details}>
-            <Title className={css.title}>{session.title}</Title>
-            <Subtitle className={css.subtitle}>{formatDate(session.dateHeld, true)}</Subtitle>
-            <Divider/>
-            <Paragraph
-              link={link}
-              more={'Find out more'}
-              className={css.paragraph}>{truncateText(session.description)}</Paragraph>
-          </div>
-        </div>
-      </Slider>
+      <div className={css.upcomingSession}>
+        <LazyLoader onChange={this.toggleVisibility} partialVisibility={false} active={detectViewChange}>
+          <Fader determinant={inView} duration={750}>
+            <Title className={css.heading}>{heading}</Title>
+            <div>
+              {session.image ?
+              <Link href={link}>
+                <img
+                  src={`/static/images/sessions/${session.image}`}
+                  alt={session.title}
+                  className={css.image} />
+              </Link> : null}
+              <div className={css.details}>
+                <Title className={css.title}>{session.title}</Title>
+                <Subtitle className={css.subtitle}>{formatDate(session.dateHeld, true)}</Subtitle>
+                <Divider/>
+                <Paragraph
+                  link={link}
+                  more={'Find out more'}
+                  className={css.paragraph}>{truncateText(session.description)}</Paragraph>
+              </div>
+            </div>
+          </Fader>
+        </LazyLoader>
+      </div>
     )
   }
 }
