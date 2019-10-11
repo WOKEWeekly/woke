@@ -52,6 +52,7 @@
     "react-textarea-autosize": "^7.1.0",
     "react-toastify": "^5.3.1",
     "react-transition-group": "^4.1.1",
+    "react-visibility-sensor": "^5.1.1",
     "redux": "^4.0.1",
     "redux-persist": "^5.10.0",
     "regenerate": "^1.4.0",

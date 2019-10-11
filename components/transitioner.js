@@ -62,12 +62,16 @@ export class Slider extends Component {
     const defaultStyle = {
       transition: `${direction} ${duration}ms ease ${delay || 0}ms,
         opacity ${duration}ms ease ${delay || 0}ms`,
-      [direction]: '-100vw',
+      // visibility: 'hidden',
       opacity: 0,
       position: 'relative'
     }
 
     const transitionStyles = {
+      entering: {
+        [direction]: '-100vw',
+        visibility: 'visible'
+      },
       entered:  {
         [direction]: '0',
         opacity: 1,

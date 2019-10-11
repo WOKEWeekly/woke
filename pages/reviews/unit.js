@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react';
 import { Col, Row, Button, ButtonGroup } from 'react-bootstrap';
 import { connect } from 'react-redux';
+import VizSensor from 'react-visibility-sensor';
 
 import { setAlert } from '~/components/alert.js';
 import { Default, Mobile } from '~/components/layout.js';
@@ -20,12 +21,19 @@ class Review extends PureComponent {
     this.state = {
       isLoaded: false,
       modalVisible: false,
-      showFullText: props.showFullText
+      showFullText: props.showFullText,
+
+      inView: false,
+      detectViewChange: true
     }
   }
 
   componentDidMount(){
     this.setState({isLoaded: true});
+  }
+
+  toggleVisibility = (inView) => {
+    this.setState({ inView, detectViewChange: inView === false });
   }
   
   /** Delete review from database */
@@ -53,7 +61,7 @@ class Review extends PureComponent {
 
   render(){
     const { item, idx, user, showAdminControls } = this.props;
-    const { showFullText } = this.state;
+    const { showFullText, inView, detectViewChange } = this.state;
     item.description = item.description && item.description.trim().length > 0 ? item.description : 'No description.';
 
     const limit = window.matchMedia('(max-width: 576px)').matches ? 40 : 60;
@@ -73,68 +81,69 @@ class Review extends PureComponent {
 
     return (
       <React.Fragment>
-        <Slider
-          key={idx}
-          determinant={this.state.isLoaded}
-          duration={750}
-          delay={1000 + (500 * idx)}
-          direction={isEven ? 'left' : 'right'}>
-          <div className={css.item}>
-            <Row>
-              <Col md={{span: 3, order: isEven ? 1 : 2}}>
-                <ReviewerImage/>
-              </Col>
-
-              {/* TODO: Requires serious tidying */}
-              <Mobile>
-                <Col md={{span: 9, order: isEven ? 2 : 1}}>
-                  <div className={css.details}>
-                    <Title className={css.title}>{item.referee}</Title>
-                    <Subtitle className={css.subtitle}>{item.position}</Subtitle>
-                    <Rator rating={item.rating} changeable={false} />
-                    <QuoteWrapper>
-                      <div>
-                        <Paragraph className={css.paragraph}>
-                          {showFullText ? item.description : truncateText(item.description, limit)}
-                        </Paragraph>
-                        {!showFullText && beyondLimit ? <ExpandText text={'Click to read more...'} onClick={() => this.setState({showFullText: true})} /> : null}
-                      </div>
-                    </QuoteWrapper>
-                  </div>
-                  {showAdminControls && user.clearance >= CLEARANCES.ACTIONS.CRUD_REVIEWS ?
-                    <ButtonGroup className={css.buttons}>
-                      <Button variant={'success'} onClick={() => location.href = (`/reviews/edit/${item.id}`)}>Edit</Button>
-                      <Button variant={'danger'} onClick={this.showModal}>Delete</Button>
-                    </ButtonGroup> : null}
+        <VizSensor onChange={this.toggleVisibility} partialVisibility={true} active={detectViewChange}>
+          <Slider
+            key={idx}
+            determinant={inView}
+            duration={750}
+            direction={isEven ? 'left' : 'right'}>
+            <div className={css.item}>
+              <Row>
+                <Col md={{span: 3, order: isEven ? 1 : 2}}>
+                  <ReviewerImage/>
                 </Col>
-              </Mobile>
 
-              <Default>
-                <Col md={{span: 9, order: isEven ? 2 : 1}} style={{display: 'flex', flexDirection: 'column'}}>
-                  <div className={css.details} style={{textAlign: isEven ? 'left' : 'right'}}>
-                  <Divider style={{marginTop: 0}} />
-                    <Title className={css.title}>{item.referee}</Title>
-                    <Subtitle className={css.subtitle}>{item.position}</Subtitle>
-                    <Rator rating={item.rating} changeable={false} style={{justifyContent: isEven ? 'flex-start' : 'flex-end'}} />
-                    <QuoteWrapper>
-                      <div>
-                        <Paragraph className={css.paragraph}>
-                          {showFullText ? item.description : truncateText(item.description, limit)}
-                        </Paragraph>
-                        {!showFullText && beyondLimit ? <ExpandText text={'Click to read more...'} onClick={() => this.setState({showFullText: true})} /> : null}
-                      </div>
-                    </QuoteWrapper>
-                  </div>
-                  {showAdminControls && user.clearance >= CLEARANCES.ACTIONS.CRUD_REVIEWS ?
-                    <ButtonGroup className={css.buttons} style={{alignSelf: isEven ? 'flex-start' : 'flex-end'}}>
-                      <Button variant={'success'} onClick={() => location.href = (`/reviews/edit/${item.id}`)}>Edit</Button>
-                      <Button variant={'danger'} onClick={this.showModal}>Delete</Button>
-                    </ButtonGroup> : null}
-                </Col>
-              </Default>
-            </Row>
-          </div>
-        </Slider>
+                {/* TODO: Requires serious tidying */}
+                <Mobile>
+                  <Col md={{span: 9, order: isEven ? 2 : 1}}>
+                    <div className={css.details}>
+                      <Title className={css.title}>{item.referee}</Title>
+                      <Subtitle className={css.subtitle}>{item.position}</Subtitle>
+                      <Rator rating={item.rating} changeable={false} />
+                      <QuoteWrapper>
+                        <div>
+                          <Paragraph className={css.paragraph}>
+                            {showFullText ? item.description : truncateText(item.description, limit)}
+                          </Paragraph>
+                          {!showFullText && beyondLimit ? <ExpandText text={'Click to read more...'} onClick={() => this.setState({showFullText: true})} /> : null}
+                        </div>
+                      </QuoteWrapper>
+                    </div>
+                    {showAdminControls && user.clearance >= CLEARANCES.ACTIONS.CRUD_REVIEWS ?
+                      <ButtonGroup className={css.buttons}>
+                        <Button variant={'success'} onClick={() => location.href = (`/reviews/edit/${item.id}`)}>Edit</Button>
+                        <Button variant={'danger'} onClick={this.showModal}>Delete</Button>
+                      </ButtonGroup> : null}
+                  </Col>
+                </Mobile>
+
+                <Default>
+                  <Col md={{span: 9, order: isEven ? 2 : 1}} style={{display: 'flex', flexDirection: 'column'}}>
+                    <div className={css.details} style={{textAlign: isEven ? 'left' : 'right'}}>
+                    <Divider style={{marginTop: 0}} />
+                      <Title className={css.title}>{item.referee}</Title>
+                      <Subtitle className={css.subtitle}>{item.position}</Subtitle>
+                      <Rator rating={item.rating} changeable={false} style={{justifyContent: isEven ? 'flex-start' : 'flex-end'}} />
+                      <QuoteWrapper>
+                        <div>
+                          <Paragraph className={css.paragraph}>
+                            {showFullText ? item.description : truncateText(item.description, limit)}
+                          </Paragraph>
+                          {!showFullText && beyondLimit ? <ExpandText text={'Click to read more...'} onClick={() => this.setState({showFullText: true})} /> : null}
+                        </div>
+                      </QuoteWrapper>
+                    </div>
+                    {showAdminControls && user.clearance >= CLEARANCES.ACTIONS.CRUD_REVIEWS ?
+                      <ButtonGroup className={css.buttons} style={{alignSelf: isEven ? 'flex-start' : 'flex-end'}}>
+                        <Button variant={'success'} onClick={() => location.href = (`/reviews/edit/${item.id}`)}>Edit</Button>
+                        <Button variant={'danger'} onClick={this.showModal}>Delete</Button>
+                      </ButtonGroup> : null}
+                  </Col>
+                </Default>
+              </Row>
+            </div>
+          </Slider>
+        </VizSensor>
 
         <ConfirmModal
           visible={this.state.modalVisible}
