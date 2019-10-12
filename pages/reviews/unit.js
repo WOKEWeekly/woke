@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import LazyLoader from 'react-visibility-sensor';
 
 import { setAlert } from '~/components/alert.js';
-import { Default, Mobile } from '~/components/layout.js';
+import { isSmallDevice, Default } from '~/components/layout.js';
 import { ConfirmModal } from '~/components/modal.js';
 import { Title, Subtitle, Paragraph, QuoteWrapper, Divider, ExpandText, truncateText } from '~/components/text.js';
 import { Slider } from '~/components/transitioner.js';
@@ -64,20 +64,77 @@ class Review extends PureComponent {
     const { showFullText, inView, detectViewChange } = this.state;
     item.description = item.description && item.description.trim().length > 0 ? item.description : 'No description.';
 
-    const limit = window.matchMedia('(max-width: 576px)').matches ? 40 : 60;
+    const limit = isSmallDevice() ? 40 : 60;
     const beyondLimit = item.description.split(' ').length > limit;
 
     const isEven = (idx % 2 == 0);
 
+    /** Image of reviewer */
     const ReviewerImage = () => {
       if (!item.image) return null;
       return (
-        <img
-          src={`/static/images/reviews/${item.image}`}
-          alt={item.fullname}
-          className={css.image} />
+        <Col md={{span: 3, order: isEven ? 1 : 2}}>
+          <img
+            src={`/static/images/reviews/${item.image}`}
+            alt={item.fullname}
+            className={css.image} />
+        </Col>
       );
     }
+
+    /** Admin buttons for each review */
+    const AdminControls = () => {
+      if (!(showAdminControls && user.clearance >= CLEARANCES.ACTIONS.CRUD_REVIEWS)) return null;
+
+      const style = () => {
+        if (isSmallDevice()) return null;
+        return { alignSelf: isEven ? 'flex-start' : 'flex-end' };
+      };
+
+      return (
+        <ButtonGroup className={css.buttons} style={style()}>
+          <Button variant={'success'} onClick={() => location.href = (`/reviews/edit/${item.id}`)}>Edit</Button>
+          <Button variant={'danger'} onClick={this.showModal}>Delete</Button>
+        </ButtonGroup>
+      );
+    }
+
+    const ReadMore = () => {
+      if (showFullText || !beyondLimit) return null;
+
+      return (
+      <ExpandText
+        text={'Click to read more...'}
+        onClick={() => this.setState({showFullText: true})} />
+      );
+    }
+
+    /** Details of the review */
+    const ReviewDetails = () => {
+      const colStyle = !isSmallDevice() ? { display: 'flex', flexDirection: 'column' } : null;
+      const detailsStyle = { textAlign: isEven && !isSmallDevice() ? 'left' : 'right' };
+      const ratorStyle = !isSmallDevice() ? { justifyContent: isEven ? 'flex-start' : 'flex-end' } : null;
+
+      return (
+        <Col md={{span: 9, order: isEven ? 2 : 1}} style={colStyle}>
+          <div className={css.details} style={detailsStyle}>
+            <Default><Divider style={{marginTop: 0}} /></Default>
+            <Title className={css.title}>{item.referee}</Title>
+            <Subtitle className={css.subtitle}>{item.position}</Subtitle>
+            <Rator rating={item.rating} changeable={false} style={ratorStyle} />
+            <QuoteWrapper>
+              <div>
+                <Paragraph className={css.paragraph}>
+                  {showFullText ? item.description : truncateText(item.description, limit)}
+                </Paragraph>
+                <ReadMore />
+              </div>
+            </QuoteWrapper>
+          </div>
+          <AdminControls />
+        </Col>
+      );
+    };
 
     return (
       <React.Fragment>
@@ -89,57 +146,8 @@ class Review extends PureComponent {
             direction={isEven ? 'left' : 'right'}>
             <div className={css.item}>
               <Row>
-                <Col md={{span: 3, order: isEven ? 1 : 2}}>
-                  <ReviewerImage/>
-                </Col>
-
-                {/* TODO: Requires serious tidying */}
-                <Mobile>
-                  <Col md={{span: 9, order: isEven ? 2 : 1}}>
-                    <div className={css.details}>
-                      <Title className={css.title}>{item.referee}</Title>
-                      <Subtitle className={css.subtitle}>{item.position}</Subtitle>
-                      <Rator rating={item.rating} changeable={false} />
-                      <QuoteWrapper>
-                        <div>
-                          <Paragraph className={css.paragraph}>
-                            {showFullText ? item.description : truncateText(item.description, limit)}
-                          </Paragraph>
-                          {!showFullText && beyondLimit ? <ExpandText text={'Click to read more...'} onClick={() => this.setState({showFullText: true})} /> : null}
-                        </div>
-                      </QuoteWrapper>
-                    </div>
-                    {showAdminControls && user.clearance >= CLEARANCES.ACTIONS.CRUD_REVIEWS ?
-                      <ButtonGroup className={css.buttons}>
-                        <Button variant={'success'} onClick={() => location.href = (`/reviews/edit/${item.id}`)}>Edit</Button>
-                        <Button variant={'danger'} onClick={this.showModal}>Delete</Button>
-                      </ButtonGroup> : null}
-                  </Col>
-                </Mobile>
-
-                <Default>
-                  <Col md={{span: 9, order: isEven ? 2 : 1}} style={{display: 'flex', flexDirection: 'column'}}>
-                    <div className={css.details} style={{textAlign: isEven ? 'left' : 'right'}}>
-                    <Divider style={{marginTop: 0}} />
-                      <Title className={css.title}>{item.referee}</Title>
-                      <Subtitle className={css.subtitle}>{item.position}</Subtitle>
-                      <Rator rating={item.rating} changeable={false} style={{justifyContent: isEven ? 'flex-start' : 'flex-end'}} />
-                      <QuoteWrapper>
-                        <div>
-                          <Paragraph className={css.paragraph}>
-                            {showFullText ? item.description : truncateText(item.description, limit)}
-                          </Paragraph>
-                          {!showFullText && beyondLimit ? <ExpandText text={'Click to read more...'} onClick={() => this.setState({showFullText: true})} /> : null}
-                        </div>
-                      </QuoteWrapper>
-                    </div>
-                    {showAdminControls && user.clearance >= CLEARANCES.ACTIONS.CRUD_REVIEWS ?
-                      <ButtonGroup className={css.buttons} style={{alignSelf: isEven ? 'flex-start' : 'flex-end'}}>
-                        <Button variant={'success'} onClick={() => location.href = (`/reviews/edit/${item.id}`)}>Edit</Button>
-                        <Button variant={'danger'} onClick={this.showModal}>Delete</Button>
-                      </ButtonGroup> : null}
-                  </Col>
-                </Default>
+                <ReviewerImage/>
+                <ReviewDetails />
               </Row>
             </div>
           </Slider>

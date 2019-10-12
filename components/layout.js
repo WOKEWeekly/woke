@@ -6,6 +6,10 @@ import classNames from 'classnames';
 import css from '~/styles/_components.scss';
 import { Fader } from '~/components/transitioner.js';
 
+export const isSmallDevice = () => {
+  return window.matchMedia('(max-width: 576px)').matches;
+}
+
 
 class _Cover extends Component {
   constructor(){
