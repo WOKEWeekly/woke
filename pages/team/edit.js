@@ -1,6 +1,5 @@
 import React, { Component} from 'react';
 import { connect } from 'react-redux';
-import Router from 'next/router';
 
 import { setAlert } from '~/components/alert.js';
 
@@ -24,16 +23,19 @@ class MemberEdit extends Component {
     const { id, firstname, lastname, role, level, image, birthday, description, ethnicity, socials, verified } = this.props.member;
     const ethnicities = JSON.parse(ethnicity);
 
+    const isExecutive = level === 'Executive';
+    const verified = verfied === 1;
+
     this.state = {
-      id, firstname, lastname, level, role, description, image,
-      verified: verified === 1,
+      id, firstname, lastname, level, role, description, image, verified,
       imageChanged: false,
       birthday: new Date(birthday),
       ethnicity1: ethnicities ? ethnicities[0] : '',
       ethnicity2: ethnicities ? ethnicities[1] : '',
       ethnicity3: ethnicities ? ethnicities[2] : '',
       ethnicity4: ethnicities ? ethnicities[3] : '',
-      socials: JSON.parse(socials)
+      socials: JSON.parse(socials),
+      backPath: !verified ? `/team` : isExecutive ? `/executives/${slug}` : `/team/member/${slug}`
     };
   }
 
@@ -42,7 +44,7 @@ class MemberEdit extends Component {
     if (!isValidMember(this.state)) return;
     
     const { firstname, lastname, role, level, image, birthday, description, socials,
-      ethnicity1, ethnicity2, ethnicity3, ethnicity4, imageChanged, verified } = this.state;
+      ethnicity1, ethnicity2, ethnicity3, ethnicity4, imageChanged, verified, backPath } = this.state;
 
 
     // TODO: Generate these on server, this should be tackled while testing Team
@@ -86,9 +88,8 @@ class MemberEdit extends Component {
       body: data,
       headers: { 'Authorization': `Bearer ${this.props.user.token}`, },
       onSuccess: () => {
-        const isExecutive = level === 'Executive';
         setAlert({ type: 'success', message: `You've successfully edited the details of ${firstname} ${lastname}.` });
-        location.href = !verified ? `/team` : isExecutive ? `/executives/${slug}` : `/team/member/${slug}`;
+        location.href = backPath;
       }
     });
   }
@@ -102,7 +103,7 @@ class MemberEdit extends Component {
 
         confirmText={'Update'}
         confirmFunc={this.updateMember}
-        cancelFunc={Router.back}
+        cancelFunc={() => location.href = backPath}
 
         metaTitle={'Edit Team Member'}
         metaUrl={'/edit'} />

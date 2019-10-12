@@ -1,7 +1,6 @@
 import React, { Component, PureComponent } from 'react';
 import { Col, Row } from 'react-bootstrap';
 import Link from 'next/link';
-import Router from 'next/router';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { saveSessionSort, saveSessionView } from '~/reducers/actions';
@@ -138,7 +137,7 @@ class Sessions extends Component {
             {user.clearance >= CLEARANCES.ACTIONS.CRUD_TOPICS ?
             <AddEntityButton
               title={'Add Session'}
-              onClick={() => Router.push('/sessions/add')} /> : null}
+              onClick={() => location.href = '/sessions/add'} /> : null}
 
             <RadioButtonGroup
               name={'view'}

@@ -1,6 +1,5 @@
 import React, { Component} from 'react';
 import { connect } from 'react-redux';
-import Router from 'next/router';
 
 import { setAlert } from '~/components/alert.js';
 
@@ -92,7 +91,7 @@ class CandidateAdd extends Component {
 
         confirmText={'Submit'}
         confirmFunc={this.submitCandidate}
-        cancelFunc={() => Router.push('/blackexcellence')}
+        cancelFunc={() => location.href = '/blackexcellence'}
 
         metaTitle={'Add New Candidate'}
         metaUrl={'/add'} />

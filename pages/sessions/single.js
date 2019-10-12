@@ -1,7 +1,6 @@
 import React, { Component} from 'react';
 import { Container } from 'react-bootstrap';
 import { connect } from 'react-redux';
-import Router from 'next/router';
 
 import { setAlert } from '~/components/alert.js';
 import { EditEntityButton, DeleteEntityButton, BackButton } from '~/components/button.js';
@@ -111,7 +110,7 @@ class SessionPage extends Component {
             <React.Fragment>
               <EditEntityButton
                 title={'Edit Session'}
-                onClick={() => Router.push(`/sessions/edit/${session.id}`)} />
+                onClick={() => location.href = `/sessions/edit/${session.id}`} />
         
               <DeleteEntityButton
                 title={'Delete Session'}

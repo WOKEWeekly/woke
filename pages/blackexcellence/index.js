@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { saveCandidateSort } from '~/reducers/actions';
 import Link from 'next/link';
-import Router from 'next/router';
 
 import { AddEntityButton } from '~/components/button.js';
 import { SortDropdown } from '~/components/dropdown.js';
@@ -144,7 +143,7 @@ class BlackExcellence extends Component {
             {user.clearance >= CLEARANCES.ACTIONS.CRUD_BLACKEX ?
             <AddEntityButton
               title={'Add Candidate'}
-              onClick={() => Router.push('/blackexcellence/add')} /> : null}
+              onClick={() => location.href = '/blackexcellence/add'} /> : null}
       
             <SortDropdown
               items={sortItems}

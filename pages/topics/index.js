@@ -1,6 +1,5 @@
 import React, { Component, PureComponent, Suspense } from 'react';
 import { Button, ButtonGroup, Dropdown } from 'react-bootstrap';
-import Router from 'next/router';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { saveTopicSort, saveTopicFilters } from '~/reducers/actions';
@@ -262,7 +261,7 @@ class TopicBank extends Component {
             {hasPrivileges ?
             <AddEntityButton
               title={'Add Topic'}
-              onClick={() => Router.push('/topics/add')} /> : null}
+              onClick={() => location.href = '/topics/add'} /> : null}
       
             <SortDropdown
               items={sortItems}
@@ -321,7 +320,7 @@ class _Topic extends PureComponent {
       if (!hasPrivileges) return null;
       return (
         <ButtonGroup className={css.buttons}>
-          <Button variant={'success'} onClick={() => Router.push(`/topics/edit/${item.id}`)}>Edit</Button>
+          <Button variant={'success'} onClick={() => location.href = `/topics/edit/${item.id}`}>Edit</Button>
           <Button variant={'danger'} onClick={this.showModal}>Delete</Button>
         </ButtonGroup>
       );

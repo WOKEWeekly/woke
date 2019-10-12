@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Col } from 'react-bootstrap';
-import Router from 'next/router';
 
 import { setAlert } from '~/components/alert.js';
 import { SubmitButton, CancelButton } from '~/components/button.js';
@@ -21,14 +20,15 @@ class EditVariantPage extends Component {
 
   constructor(props){
     super(props);
+    const path = location.pathname;
     this.state = {
       isLoaded: false,
-      text: props.pageText
+      text: props.pageText,
+      backPath: path.substring(0, path.indexOf('/', 1)),
     }
 
     if (props.user.clearance < CLEARANCES.ACTIONS.EDIT_VARIANTS){
-      const path = location.pathname;
-      return location.href = path.substring(0, path.indexOf('/', 1));
+      return location.href = this.state.backPath;
     }
   }
 
@@ -39,7 +39,7 @@ class EditVariantPage extends Component {
   /** Update variant page */
   updateInfo = () => {
     const { user, title, resource } = this.props;
-    const { text } = this.state;
+    const { text, backPath } = this.state;
 
     request({
       url: '/updateVariantPage',
@@ -51,8 +51,7 @@ class EditVariantPage extends Component {
       },
       onSuccess: () => {
         setAlert({ type: 'success', message: `You've successfully updated the '${title.substring(5)}'.` });
-        const path = location.pathname;
-        location.href = path.substring(0, path.indexOf('/', 1));
+        location.href = backPath;
       }
     });
   }
@@ -63,7 +62,7 @@ class EditVariantPage extends Component {
     this.setState({[name]: value}); }
 
   render(){
-    const { isLoaded, text } = this.state;
+    const { isLoaded, text, backPath } = this.state;
     const { title, placeholder } = this.props;
 
     if (!isLoaded) return null;
@@ -90,7 +89,7 @@ class EditVariantPage extends Component {
             <Group>
               <Col>
                 <SubmitButton onClick={this.updateInfo} className={'mr-2'}>Update</SubmitButton>
-                <CancelButton onClick={Router.back}>Cancel</CancelButton>
+                <CancelButton onClick={() => location.href = backPath}>Cancel</CancelButton>
               </Col>
             </Group>
           </div>

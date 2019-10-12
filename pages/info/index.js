@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import Router from 'next/router';
 
 import CLEARANCES from '~/constants/clearances.js';
 
@@ -57,7 +56,7 @@ class Info extends Component {
             <BottomToolbar>
               <EditEntityButton
                 title={'Edit Text'}
-                onClick={() => Router.push(`${url}/edit/`)} />
+                onClick={() => location.href = `${url}/edit/`} />
             </BottomToolbar>
           : null}
           </Spacer>

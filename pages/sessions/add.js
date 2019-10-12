@@ -1,5 +1,4 @@
 import React, { Component} from 'react';
-import Router from 'next/router';
 import { connect } from 'react-redux';
 
 import { setAlert } from '~/components/alert.js';
@@ -62,7 +61,7 @@ class SessionAdd extends Component {
 
         confirmText={'Submit'}
         confirmFunc={this.submitSession}
-        cancelFunc={() => Router.push('/sessions')}
+        cancelFunc={() => location.href = '/sessions'}
 
         metaTitle={'Add New Session'}
         metaUrl={'/add'} />

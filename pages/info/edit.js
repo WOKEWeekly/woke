@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Col } from 'react-bootstrap';
-import Router from 'next/router';
 
-import { alert, setAlert, displayErrorMessage } from '~/components/alert.js';
+import { setAlert } from '~/components/alert.js';
 import { SubmitButton, CancelButton } from '~/components/button.js';
 import { Heading, Group, Label, TextArea } from '~/components/form.js';
 import { Shader, Spacer } from '~/components/layout.js';
@@ -20,14 +19,15 @@ class EditInfo extends Component {
 
   constructor(props){
     super(props);
+    const path = location.pathname;
     this.state = {
       isLoaded: false,
+      backPath: path.substring(0, path.indexOf('/', 1)),
       text: props.description
     }
 
     if (props.user.clearance < CLEARANCES.ACTIONS.EDIT_INFO){
-      const path = location.pathname;
-      return location.href = path.substring(0, path.indexOf('/', 1));
+      return location.href = this.state.backPath;
     }
   }
 
@@ -38,7 +38,7 @@ class EditInfo extends Component {
   /** Update information */
   updateInfo = () => {
     const { user, title, resource } = this.props;
-    const { text } = this.state;
+    const { text, backPath } = this.state;
 
     request({
       url: '/updateInfo',
@@ -50,8 +50,7 @@ class EditInfo extends Component {
       },
       onSuccess: () => {
         setAlert({ type: 'success', message: `You've successfully updated the '${title.substring(5)}'.` });
-        const path = location.pathname;
-        location.href = path.substring(0, path.indexOf('/', 1));
+        location.href = backPath;
       }
     });
   }
@@ -62,7 +61,7 @@ class EditInfo extends Component {
     this.setState({[name]: value}); }
 
   render(){
-    const { isLoaded, text } = this.state;
+    const { isLoaded, text, backPath } = this.state;
     const { title, placeholder } = this.props;
 
     if (!isLoaded) return null;
@@ -89,7 +88,7 @@ class EditInfo extends Component {
             <Group>
               <Col>
                 <SubmitButton onClick={this.updateInfo} className={'mr-2'}>Update</SubmitButton>
-                <CancelButton onClick={Router.back}>Cancel</CancelButton>
+                <CancelButton onClick={() => location.href = backPath}>Cancel</CancelButton>
               </Col>
             </Group>
           </div>

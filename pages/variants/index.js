@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import Router from 'next/router';
 
 import { Cover, Shader, Spacer } from '~/components/layout.js';
 import { EditEntityButton } from '~/components/button.js';
@@ -55,7 +54,7 @@ class Variants extends Component {
             <BottomToolbar>
               <EditEntityButton
                 title={'Edit Page'}
-                onClick={() => Router.push(`${url}/edit/`)} />
+                onClick={() => location.href = `${url}/edit/`} />
             </BottomToolbar>
           : null}
         </Spacer>

@@ -1,6 +1,5 @@
 import React, { Component} from 'react';
 import { connect } from 'react-redux';
-import Router from 'next/router';
 
 import { setAlert } from '~/components/alert.js';
 
@@ -111,7 +110,7 @@ class ReviewCrud extends Component {
 
         confirmText={operation === 'add' ? 'Submit' : 'Update'}
         confirmFunc={operation === 'add' ? this.submitReview : this.updateReview}
-        cancelFunc={() => Router.push('/reviews')}
+        cancelFunc={() => location.href = '/reviews'}
 
         metaTitle={title}
         metaUrl={`/${operation}`} />

@@ -1,6 +1,5 @@
 import React, { Component} from 'react';
 import { connect } from 'react-redux';
-import Router from 'next/router';
 
 import { setAlert } from '~/components/alert.js';
 
@@ -89,7 +88,7 @@ class MemberAdd extends Component {
 
         confirmText={'Submit'}
         confirmFunc={this.submitMember}
-        cancelFunc={() => Router.push('/team')}
+        cancelFunc={() => location.href = '/team'}
 
         metaTitle={'Add New Member'}
         metaUrl={'/add'} />

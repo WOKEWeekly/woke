@@ -1,7 +1,6 @@
 import React, { Component} from 'react';
 import { Container } from 'react-bootstrap';
 import { connect } from 'react-redux';
-import Router from 'next/router';
 
 import { EditEntityButton, BackButton } from '~/components/button.js';
 import { PromoIconsBar } from '~/components/icon.js';
@@ -94,7 +93,7 @@ class MemberPage extends Component {
           {user.clearance >= CLEARANCES.ACTIONS.CRUD_TEAM ? 
             <EditEntityButton
               title={isExecutive ? 'Edit Executive' : 'Edit Member'}
-              onClick={() => Router.push(`/team/edit/${member.id}`)}/>
+              onClick={() => location.href = `/team/edit/${member.id}`}/>
           : null}
         </BottomToolbar>
 

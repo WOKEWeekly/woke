@@ -1,6 +1,5 @@
 import React, { Component} from 'react';
 import { connect } from 'react-redux';
-import Router from 'next/router';
 
 import { setAlert } from '~/components/alert.js';
 
@@ -89,6 +88,7 @@ class CandidateEdit extends Component {
   }
 
   render(){
+    const { id } = this.props.candidate;
     return (
       <CandidateForm
         heading={'Edit Candidate'}
@@ -97,7 +97,7 @@ class CandidateEdit extends Component {
 
         confirmText={'Update'}
         confirmFunc={this.updateCandidate}
-        cancelFunc={Router.back}
+        cancelFunc={() => location.href = `/blackexcellence/candidate/${id}`}
 
         metaTitle={'Edit Candidate'}
         metaUrl={'/edit'} />

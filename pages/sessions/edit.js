@@ -1,6 +1,5 @@
 import React, { Component} from 'react';
 import { connect } from 'react-redux';
-import Router from 'next/router';
 
 import { setAlert } from '~/components/alert.js';
 
@@ -63,6 +62,7 @@ class SessionEdit extends Component {
   }
 
   render(){
+    const { slug } = this.props.session;
     return (
       <SessionForm
         heading={'Edit Session'}
@@ -71,7 +71,7 @@ class SessionEdit extends Component {
 
         confirmText={'Update'}
         confirmFunc={this.updateSession}
-        cancelFunc={Router.back}
+        cancelFunc={() => location.href = `/session/${slug}`}
 
         metaTitle={'Edit Session'}
         metaUrl={'/edit'}

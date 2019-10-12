@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { Container } from 'react-bootstrap';
 import { connect } from 'react-redux';
-import Router from 'next/router';
 
 import { AddEntityButton } from '~/components/button.js';
 import { Cover, Shader, Spacer } from '~/components/layout.js';
@@ -95,7 +94,7 @@ class ReviewsList extends Component {
             {user.clearance >= CLEARANCES.ACTIONS.CRUD_REVIEWS ?
             <AddEntityButton
               title={'Add Review'}
-              onClick={() => Router.push('/reviews/add')} /> : null}
+              onClick={() => location.href = '/reviews/add'} /> : null}
           </BottomToolbar>
         </Spacer>
       </Shader>

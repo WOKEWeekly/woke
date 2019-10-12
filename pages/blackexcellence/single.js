@@ -1,7 +1,6 @@
 import React, { Component} from 'react';
 import { Container } from 'react-bootstrap';
 import { connect } from 'react-redux';
-import Router from 'next/router';
 
 import { setAlert } from '~/components/alert.js';
 import { EditEntityButton, DeleteEntityButton, BackButton } from '~/components/button.js';
@@ -138,7 +137,7 @@ class CandidatePage extends Component {
             <React.Fragment>
               <EditEntityButton
                 title={'Edit Candidate'}
-                onClick={() => Router.push(`/blackexcellence/edit/${candidate.id}`)}/>
+                onClick={() => location.href = `/blackexcellence/edit/${candidate.id}`}/>
               <DeleteEntityButton
                 title={'Delete Candidate'}
                 onClick={this.showModal} />

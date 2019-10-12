@@ -3,7 +3,6 @@ import { Container, Col, Row, Dropdown, Nav, Navbar } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { clearUser } from '~/reducers/actions';
-import Router from 'next/router';
 
 import { setAlert, checkAlert } from '~/components/alert.js';
 import { Icon, HeaderIcon } from '~/components/icon';
@@ -66,7 +65,7 @@ class PreNavbar extends Component {
                 <Mobile>{firstname} {lastname.substring(0,1)}.</Mobile>
               </Dropdown.Toggle>
               <Dropdown.Menu className={css.dropdown_menu}>
-                <Dropdown.Item className={css.dropdown_item} onClick={() => Router.push('/account')}>Your Account</Dropdown.Item>
+                <Dropdown.Item className={css.dropdown_item} onClick={() => location.href = '/account'}>Your Account</Dropdown.Item>
                 {clearance >= CLEARANCES.ACTIONS.VIEW_TEAM ?
                 <Dropdown.Item className={css.dropdown_item} onClick={() => location.href = '/team'}>Team Members</Dropdown.Item>
                 :null}
