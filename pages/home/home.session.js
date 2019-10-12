@@ -51,7 +51,7 @@ export default class UpcomingSession extends Component {
     const link = `/session/${session.slug}` || '/';
     return (
       <div className={css.upcomingSession}>
-        <LazyLoader onChange={this.toggleVisibility} partialVisibility={false} active={detectViewChange}>
+        <LazyLoader onChange={this.toggleVisibility} partialVisibility={true} active={detectViewChange}>
           <Fader determinant={inView} duration={750}>
             <Title className={css.heading}>{heading}</Title>
             <div>

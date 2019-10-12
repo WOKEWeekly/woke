@@ -60,7 +60,7 @@ class _RandomCandidate extends Component {
 
     return (
       <div className={css.randomCandidate}>
-        <LazyLoader onChange={this.toggleVisibility} partialVisibility={false} active={detectViewChange}>
+        <LazyLoader onChange={this.toggleVisibility} partialVisibility={true} active={detectViewChange}>
           <Fader determinant={inView} duration={750}>
             <Title className={css.heading}>Check out our candidate:</Title>
             <div>
