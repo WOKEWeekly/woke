@@ -18,7 +18,7 @@ class SessionAdd extends Component {
       title: '',
       date: new Date(),
       description: '',
-      image: new Image()
+      image: null
     };
   }
 

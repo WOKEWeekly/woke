@@ -72,7 +72,7 @@ module.exports = {
   isValidReview: (review) => {
     if (!ifExists(review.referee.trim(), 'Enter the referee of the review.')) return false;
     if (!ifExists(review.position.trim(), 'Enter the referee position\'s.')) return false;
-    if (ifTrue(review.rating === 0, 'Provided the review rating.')) return false;
+    if (ifTrue(review.rating < 1, 'Specify the review rating.')) return false;
     if (!ifExists(review.description.trim(), 'Enter the description provided by the referee.')) return false;
     return true;
   },
@@ -123,13 +123,13 @@ const ifExists = (value, message) => {
   }
 }
 
-/** Check if a value is true */
+/** Check if a value is wrongly true */
 const ifTrue = (condition, message) => {
-  if (condition === false){
+  if (condition === true){
     alert.error(message)
-    return false;
-  } else {
     return true;
+  } else {
+    return false;
   }
 }
 
