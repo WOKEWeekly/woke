@@ -112,7 +112,7 @@ class Review extends PureComponent {
     /** Details of the review */
     const ReviewDetails = () => {
       const colStyle = !isSmallDevice() ? { display: 'flex', flexDirection: 'column' } : null;
-      const detailsStyle = { textAlign: isEven && !isSmallDevice() ? 'left' : 'right' };
+      const detailsStyle = !isSmallDevice() ? { textAlign: isEven ? 'left' : 'right' } : null;
       const ratorStyle = !isSmallDevice() ? { justifyContent: isEven ? 'flex-start' : 'flex-end' } : null;
 
       return (
