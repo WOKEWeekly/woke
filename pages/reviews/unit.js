@@ -116,7 +116,7 @@ class Review extends PureComponent {
       const ratorStyle = !isSmallDevice() ? { justifyContent: isEven ? 'flex-start' : 'flex-end' } : null;
 
       return (
-        <Col md={{span: 9, order: isEven ? 2 : 1}} style={colStyle}>
+        <Col md={{span: item.image ? 9 : 12, order: isEven ? 2 : 1}} style={colStyle}>
           <div className={css.details} style={detailsStyle}>
             <Default><Divider style={{marginTop: 0}} /></Default>
             <Title className={css.title}>{item.referee}</Title>

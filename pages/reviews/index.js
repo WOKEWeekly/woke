@@ -22,10 +22,6 @@ class ReviewsList extends Component {
       reviews: [],
       isLoaded: false
     };
-
-    if (props.user.clearance < CLEARANCES.ACTIONS.CRUD_REVIEWS){
-      return location.href = '/';
-    }
   }
 
   componentDidMount(){
@@ -84,8 +80,8 @@ class ReviewsList extends Component {
           <Cover
             title={heading}
             subtitle={description}
-            image={'header-team.jpg'}
-            height={200}
+            image={'header-reviews.jpg'}
+            height={250}
             backgroundPosition={'center'} />
 
           <ReviewsList/>

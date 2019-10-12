@@ -5,11 +5,15 @@ import request from '~/constants/request.js';
 
 import Review from '~/pages/reviews/unit.js';
 import css from '~/styles/home.scss';
+import { ReadMore } from '../../components/text';
 
 export default class ReviewsPreview extends Component {
   constructor(){
     super();
-    this.state = { reviews: [] }
+    this.state = {
+      reviews: [],
+      limit: 3
+    }
   }
 
   componentDidMount(){
@@ -17,8 +21,9 @@ export default class ReviewsPreview extends Component {
   }
   
   getReviews = () => {
+    const { limit } = this.state;
     request({
-      url: '/getReviews?limit=3',
+      url: `/getReviews?limit=${limit}`,
       method: 'GET',
       headers: {
         'Authorization': process.env.AUTH_KEY,
@@ -31,7 +36,7 @@ export default class ReviewsPreview extends Component {
   }
 
   render(){
-    const { reviews, inView, detectViewChange } = this.state;
+    const { reviews, limit } = this.state;
     if (reviews.length === 0) return null;
 
     const items = [];
@@ -42,17 +47,26 @@ export default class ReviewsPreview extends Component {
           key={index}
           idx={index}
           item={item}
-          inView={inView}
-          detectViewChange={detectViewChange}
           showFullText={false}
           showAdminControls={false} />
       );
+    }
+
+    const SeeMoreReviews = () => {
+      if (reviews.length < limit) return null;
+
+      return (
+        <div className={css.moreReviews}>
+          <ReadMore text={'See more reviews'} link={'/reviews'} />
+        </div>
+      )
     }
 
     return (
       <div className={css.reviewsPreview}>
         <ReviewsHeading />
         <div className={css.reviewsList}>{items}</div>
+        <SeeMoreReviews />
       </div>
     );
   }

@@ -40,10 +40,10 @@ class _Cover extends Component {
           minHeight: height,
         }}>
           <div className={css.coverText}>
-            <Fader determinant={imageLoaded} duration={500} delay={750}>
+            <Fader determinant={imageLoaded} duration={500} delay={250}>
               {imageTitle || <div className={css.coverTitle}>{title}</div>}
             </Fader>
-            <Fader determinant={imageLoaded} duration={500} delay={1250}>
+            <Fader determinant={imageLoaded} duration={500} delay={750}>
               <div className={css.coverSubtitle}>{subtitle}</div>
             </Fader>
           </div>
