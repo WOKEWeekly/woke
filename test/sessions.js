@@ -23,7 +23,7 @@ const session3 = {
   description: 'This is the session description after updating again without an image.'
 };
 
-describe.skip("Sessions Page", function() {
+describe("Sessions Page", function() {
   before(function(done){
     jwt.sign({ user: superuser }, process.env.JWT_SECRET, { expiresIn: '1m' }, function(err, token){
       superuser.token = token;

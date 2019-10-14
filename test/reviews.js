@@ -26,7 +26,7 @@ const review3 = {
   description: 'We love #WOKEWeekly',
 };
 
-describe.skip("Reviews Page", function() {
+describe("Reviews Page", function() {
   before(function(done){
     jwt.sign({ user: superuser }, process.env.JWT_SECRET, { expiresIn: '1m' }, function(err, token){
       superuser.token = token;
