@@ -16,10 +16,10 @@ module.exports = {
 
     if (!ifExists(firstname.trim(), 'Please enter your first name.')) return false;
     if (!ifExists(lastname.trim(), 'Please enter your last name.')) return false;
-    if (!isValidEmail(email)) return false;
+    if (!module.exports.isValidEmail(email)) return false;
     if (!module.exports.isValidUsername(username)) return false;
     if (!module.exports.isValidPassword(password1, password2)) return false;
-    if (!ifTrue(privacy, 'You have not read or agreed to the Privacy Policy.')) return false;
+    if (ifTrue(!privacy, 'You have not read or agreed to the Privacy Policy.')) return false;
 
     return true;
   },
@@ -81,7 +81,7 @@ module.exports = {
   isValidEmail: (email) => {
     const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     const valid = re.test(String(email).toLowerCase());
-    if (!ifTrue(valid, 'Please enter a valid email address.')) return false;
+    if (ifTrue(!valid, 'Please enter a valid email address.')) return false;
     return true;
   },
 
