@@ -338,7 +338,7 @@ module.exports = function(app, conn){
   app.get('/getReviews', validateReq, function(req, res){
     const limit = req.query.limit;
     const query = "SELECT * FROM reviews";
-    const sql = limit ? `${query} ORDER BY RAND() LIMIT ${limit}` : query;
+    const sql = limit ? `${query} WHERE rating = 5 ORDER BY RAND() LIMIT ${limit}` : query;
 
     conn.query(sql, function (err, result) {
       resToClient(res, err, result);
