@@ -41,7 +41,7 @@ class TopicCrud extends Component {
       category,
       question: question.trim(),
       type,
-      description: description.trim(),
+      description: description ? description.trim() : '',
       polarity,
       validated,
       sensitivity,
