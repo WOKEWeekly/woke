@@ -24,7 +24,7 @@ class MemberEdit extends Component {
     const ethnicities = JSON.parse(ethnicity);
 
     const isExecutive = level === 'Executive';
-    const isVerified = verfied === 1;
+    const isVerified = verified === 1;
 
     this.state = {
       id, firstname, lastname, level, role, description, image,
