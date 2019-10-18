@@ -20,6 +20,11 @@
   }
 }
 
+.imageLogo {
+  @extend .responsive-container;
+  padding: 1em 0;
+}
+
 /************
 *** single.js
 *************/

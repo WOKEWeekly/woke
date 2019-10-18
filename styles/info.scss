@@ -27,5 +27,6 @@
 ******************************************/
 
 .imageLogo {
-  @extend .responsive-container
+  @extend .responsive-container;
+  padding: 1em 0;
 }
