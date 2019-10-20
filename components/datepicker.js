@@ -22,6 +22,15 @@ export class DatePicker extends Component {
     }
   }
 
+  /** Account for changes to input */
+  static getDerivedStateFromProps(props) {
+    return {
+      dateOfMonth: moment().date(moment(props.date).date()).format("Do"),
+      month: moment(props.date).format('MMMM'),
+      year: moment(props.date).year()
+    }
+  }
+
   handleDateChange = (e) => {
     const { name, value } = e.target;
     this.setState({ [name]: value });

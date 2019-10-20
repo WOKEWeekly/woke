@@ -253,8 +253,9 @@ module.exports = function(app, conn, server){
 
   /** Add New Team Member */
   app.get('/team/add', function(req, res){
-    server.render(req, res, '/team/add', {
+    server.render(req, res, '/team/crud', {
       title: 'Add New Member',
+      operation: 'add',
       backgroundImage: 'bg-team.jpg'
     });
   });
@@ -267,8 +268,9 @@ module.exports = function(app, conn, server){
     conn.query(sql, id, function (err, result) {
       if (!err && result.length){
         const member = result[0];
-        return server.render(req, res, '/team/edit', { 
+        return server.render(req, res, '/team/crud', { 
           title: 'Edit Team Member',
+          operation: 'edit',
           backgroundImage: 'bg-team.jpg',
           member
         });

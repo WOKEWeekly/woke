@@ -24,7 +24,7 @@ class MemberForm extends Component {
     }
 
     if (props.user.clearance < CLEARANCES.ACTIONS.CRUD_TEAM){
-      return location.href = '/executives';
+      return location.href = props.backPath;
     }
   }
 
@@ -35,7 +35,7 @@ class MemberForm extends Component {
 
   render(){
     const { heading, confirmText, confirmFunc, cancelFunc, countries, handlers } = this.props;
-    const { handleText, handleDate, handleImage, handleCheckboxButton, clearSelection, confirmSocials } = handlers;
+    const { handleText, handleBirthday, handleImage, handleCheckboxButton, clearSelection, confirmSocials } = handlers;
 
     const { firstname, lastname, level, role, description, birthday, image, socials,
       ethnicity1, ethnicity2, ethnicity3, ethnicity4, verified } = this.props.member;
@@ -98,7 +98,7 @@ class MemberForm extends Component {
               </Col>
               <Col md={5}>
                 <Label>Birthday:</Label>
-                <BirthdayPicker date={birthday} onConfirm={handleDate} />
+                <BirthdayPicker date={birthday} onConfirm={handleBirthday} />
               </Col>
             </Group>
             <Group>

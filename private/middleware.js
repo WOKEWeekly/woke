@@ -90,6 +90,11 @@ module.exports = {
             slug = filer.generateSlug(candidate.name);
             filename = filer.generateCandidateFilename(candidate.id, slug, file);
             break;
+          case 'team':
+            const member = req.method === 'POST' ? JSON.parse(req.body.member) : JSON.parse(req.body.members).member2;
+            slug = filer.generateSlug(`${member.firstname} ${member.lastname}`);
+            filename = filer.generateMemberFilename(slug, file);
+            break;
           case 'reviews':
             const review = req.method === 'POST' ? JSON.parse(req.body.review) : JSON.parse(req.body.reviews).review2;
             slug = filer.generateSlug(review.referee);

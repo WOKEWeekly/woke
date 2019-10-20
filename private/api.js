@@ -294,7 +294,7 @@ module.exports = function(app, conn){
           if (err) return callback(err);
           const image = `./static/images/team/${member1.image}`;
           
-          if (req.body.changed){
+          if (req.body.changed === 'true'){
             if (member1.image !== member2.image){
               callback(null, image);
             } else { callback(true); }
