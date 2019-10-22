@@ -8,6 +8,7 @@ import { SocialIcon } from '~/components/icon.js';
 import { Paragraph } from '~/components/text.js';
 import css from '~/styles/_components.scss';
 
+import handlers from '~/constants/handlers';
 import { socialPlatforms } from '~/constants/settings';
 
 export class Modal extends Component {
@@ -164,6 +165,8 @@ export class SocialsModal extends Component {
 
   /** Receive socials from props and populate state */
   static getDerivedStateFromProps(props, state){
+    if (props.visible) return;
+    
     if (props.socials){
       for (const idx of Object.keys(socialPlatforms)) {
         let social = props.socials[idx];
@@ -172,10 +175,6 @@ export class SocialsModal extends Component {
     }
     return state;
   }
-
-  handleText = (event) => {
-    const { name, value } = event.target;
-    this.setState({[name]: value}); }
 
   confirmSocials = () => {
     this.props.confirm(this.state);
@@ -198,7 +197,7 @@ export class SocialsModal extends Component {
               <UsernameInput
                 name={idx}
                 value={this.state[idx]}
-                onChange={this.handleText}
+                onChange={handlers(this).handleText}
                 placeholder={`${social.name} ${social.domain === '' ? 'URL' : 'username'}`} />
             </div>
           </Col>
