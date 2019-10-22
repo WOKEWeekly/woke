@@ -11,23 +11,25 @@ import { Icon } from './icon';
 import moment from 'moment';
 
 export class DatePicker extends Component {
-  constructor(props){
-    super(props);
+  constructor({date}){
+    super({date});
 
     this.state = {
-      dateOfMonth: moment().date(moment(props.date).date()).format("Do"),
-      month: moment(props.date).format('MMMM'),
-      year: moment(props.date).year(),
+      dateOfMonth: moment().date(moment(date).date()).format("Do"),
+      month: moment(date).format('MMMM'),
+      year: moment(date).year(),
       visible: false
     }
   }
 
   /** Account for changes to input */
-  static getDerivedStateFromProps(props) {
+  static getDerivedStateFromProps({date}, state) {
+    if (state.visible) return;
     return {
-      dateOfMonth: moment().date(moment(props.date).date()).format("Do"),
-      month: moment(props.date).format('MMMM'),
-      year: moment(props.date).year()
+      dateOfMonth: moment().date(moment(date).date()).format("Do"),
+      month: moment(date).format('MMMM'),
+      year: moment(date).year(),
+      changed: true
     }
   }
 
