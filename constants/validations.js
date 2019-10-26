@@ -108,7 +108,7 @@ module.exports = {
   /** Ensure a valid file */
   isValidFile: (file, entity) => {
     if (!ifExists(file, `Please select an image for the ${entity}.`)) return false;
-    if (ifTrue(file.size > 5 * 1024 * 1024, 'The image you selected is too large.')) return false;
+    if (ifTrue(file.size > 1.5 * 1024 * 1024, 'The image you selected is larger than 1.5MB. Please compress this image or use a smaller one.')) return false;
     return true;
   }
 }
