@@ -278,6 +278,7 @@ module.exports = function(app, conn){
 
   /** Update details of existing team member in database */
   app.put('/updateMember', verifyToken(CLEARANCES.ACTIONS.CRUD_TEAM), function(req, res){
+    let slug, image;
     async.waterfall([
       function(callback){ // Upload new image to directory
         req.headers.path = 'team';
@@ -287,28 +288,31 @@ module.exports = function(app, conn){
       },
       function(callback){ // Update member in database
         const { member1, member2 } = JSON.parse(req.body.members);
+
+        image = req.file ? req.file.filename : member1.image;
+        slug = req.file ? req.body.slug : member1.slug;
+
         const sql = "UPDATE team SET firstname = ?, lastname = ?, image = ?, level = ?, birthday = ?, role = ?, ethnicity = ?, socials = ?, slug = ?, description = ?, verified = ? WHERE id = ?";
-        const values = [member2.firstname, member2.lastname, member2.image, member2.level, member2.birthday, member2.role, member2.ethnicity, member2.socials, member2.slug, member2.description, member2.verified, member1.id];
+        const values = [member2.firstname, member2.lastname, image, member2.level, member2.birthday, member2.role, member2.ethnicity, member2.socials, slug, member2.description, member2.verified, member1.id];
         
         conn.query(sql, values, function (err) {
           if (err) return callback(err);
-          const image = `./static/images/team/${member1.image}`;
           
           if (req.body.changed === 'true'){
-            if (member1.image !== member2.image){
-              callback(null, image);
+            if (member1.image !== image){
+              callback(null, `./static/images/team/${member1.image}`);
             } else { callback(true); }
           } else { callback(true); }
         });
       },
-      function(image, callback){ // Delete original image from directory
-        fs.unlink(image, function(err) {
+      function(src, callback){ // Delete original image from directory
+        fs.unlink(src, function(err) {
           if (err) console.warn(err.toString());
           callback(null);
         });
       }
     ], function(err){
-      resToClient(res, err);
+      resToClient(res, err,  { slug, image });
     });
   });
 

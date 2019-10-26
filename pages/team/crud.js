@@ -74,7 +74,7 @@ class MemberCrud extends Component {
   }
 
   buildRequest = () => {
-    const { firstname, lastname, role, level, slug, image, birthday, description, socials, verified } = this.state;
+    const { firstname, lastname, role, level, image, birthday, description, socials, verified } = this.state;
     const { operation } = this.props;
 
     if (!verified) this.setState({backPath: '/team'});
@@ -90,7 +90,6 @@ class MemberCrud extends Component {
       lastname: lastname.trim(),
       level,
       role: role.trim(),
-      slug: verified ? slug : null,
       image,
       birthday: formatISODate(birthday),
       description: description,
@@ -111,7 +110,7 @@ class MemberCrud extends Component {
       }));
     }
 
-    if (image !== null){
+    if (imageChanged){
       data.append('changed', imageChanged);
       data.append('file', image);
     }

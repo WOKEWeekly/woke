@@ -92,7 +92,7 @@ module.exports = {
             break;
           case 'team':
             const member = req.method === 'POST' ? JSON.parse(req.body.member) : JSON.parse(req.body.members).member2;
-            slug = filer.generateSlug(`${member.firstname} ${member.lastname}`);
+            slug = req.body.slug = filer.generateSlug(`${member.firstname} ${member.lastname}`);
             filename = filer.generateMemberFilename(slug, file);
             break;
           case 'reviews':
