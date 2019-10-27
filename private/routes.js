@@ -611,7 +611,7 @@ module.exports = function(app, conn, server){
 
   app.get('/sitemap.xml', (req, res) => {
     const routes = [ '/', '/home', '/sessions', '/blackexcellence', '/mentalhealth',
-    '/executives', '/signup', '/about', '/cookies', '/donate', '/faq', '/privacy' ];
+    '/executives', '/reviews', '/signup', '/about', '/cookies', '/donate', '/faq', '/privacy' ];
 
     async.parallel([
       function(callback){
