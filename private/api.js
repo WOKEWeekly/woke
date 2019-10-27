@@ -1,5 +1,7 @@
 const async = require('async');
 const fs = require('fs');
+
+const filer = require('./file.js');
 const { verifyToken, validateReq, logUserActivity, upload } = require('./middleware.js');
 const { resToClient } = require('./response.js');
 const CLEARANCES = require('../constants/clearances.js');
@@ -290,7 +292,7 @@ module.exports = function(app, conn){
         const { member1, member2 } = JSON.parse(req.body.members);
 
         image = req.file ? req.file.filename : member1.image;
-        slug = req.file ? req.body.slug : member1.slug;
+        slug = filer.generateSlug(`${member2.firstname} ${member2.lastname}`);
 
         const sql = "UPDATE team SET firstname = ?, lastname = ?, image = ?, level = ?, birthday = ?, role = ?, ethnicity = ?, socials = ?, slug = ?, description = ?, verified = ? WHERE id = ?";
         const values = [member2.firstname, member2.lastname, image, member2.level, member2.birthday, member2.role, member2.ethnicity, member2.socials, slug, member2.description, member2.verified, member1.id];

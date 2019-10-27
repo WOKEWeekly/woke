@@ -146,8 +146,11 @@ class MemberCrud extends Component {
       method: 'PUT',
       body: data,
       headers: { 'Authorization': `Bearer ${this.props.user.token}`, },
-      onSuccess: () => {
-        const { firstname, lastname, backPath } = this.state;
+      onSuccess: ({slug}) => {
+        const { firstname, lastname, level } = this.state;
+        const isExecutive = level === 'Executive';
+        const backPath = isExecutive ? `/executives/${slug}` : `/team/member/${slug}`;
+
         setAlert({ type: 'success', message: `You've successfully edited the details of ${firstname} ${lastname}.` });
         location.href = backPath;
       }
