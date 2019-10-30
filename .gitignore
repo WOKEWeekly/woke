@@ -1,0 +1,19 @@
+# Backup files
+wokedb.sql
+
+# Build scripts
+build.sh
+transfer.sh
+
+# Configuration files
+config.env
+node_modules
+.next
+
+# Resources
+static
+!robots.txt
+
+#Miscellaneous
+.DS_Store
+.vscode

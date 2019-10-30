@@ -7,7 +7,7 @@ const shebang_loader = require('shebang-loader');
 
 const DotEnv = require('dotenv-webpack');
 const MomentLocalesPlugin = require('moment-locales-webpack-plugin');
-const dev = process.env.NODE_ENV !== 'production';
+const server = require('./server.js')
 
 module.exports = withPlugins([
   [
@@ -40,7 +40,7 @@ module.exports = withPlugins([
         config.plugins = [
           ...config.plugins,
           new DotEnv({
-            path: dev ? './config.env' : '/root/config.env',
+            path: server.config,
             systemvars: true
           }),
           new MomentLocalesPlugin(),

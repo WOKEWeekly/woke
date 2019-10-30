@@ -4,13 +4,14 @@ const app = express();
 const next = require('next');
 const port = parseInt(process.env.PORT, 10) || 3000;
 const dev = process.env.NODE_ENV !== 'production';
+const config = dev ? '../../config.env' : '/root/config.env';
 const server = next({ dev });
 const handle = server.getRequestHandler();
 
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
-const dotenv = require('dotenv').config({path: dev ? './config.env' : '/root/config.env'});
+const dotenv = require('dotenv').config({path: config});
 const expressSession = require('express-session');
 const mysql = require('mysql');
 const passport = require('passport');
@@ -66,3 +67,5 @@ require('./private/routes.js')(app, conn, server);
 // require('./private/cron.js')(conn);
 // require('./private/mobile.js')(app, conn);
 // require('./private/notifications.js');
+
+module.exports = { config }

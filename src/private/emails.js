@@ -1,5 +1,5 @@
-const dev = process.env.NODE_ENV !== 'production';
-const dotenv = require('dotenv').config({path: dev ? './config.env' : '/root/config.env'});
+const { config } = require('../server.js')
+const dotenv = require('dotenv').config({path: config});
 const nodemailer = require('nodemailer');
 
 let { domain, emails } = require('../constants/settings.js');
