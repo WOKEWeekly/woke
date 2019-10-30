@@ -47,11 +47,4 @@ const options = {
   }
 }
 
-module.exports = {
-  assert,
-  request,
-  host,
-  jwt,
-  users,
-  options
-}
+module.exports = { assert, request, host, jwt, users, options }
