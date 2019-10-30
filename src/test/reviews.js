@@ -1,4 +1,4 @@
-const { assert, jwt, host, options, request, users } = require('./_config.js.js');
+const { assert, jwt, host, options, request, users } = require('./_config.js');
 const fs = require('fs');
 
 const superuser = users.nine;

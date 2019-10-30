@@ -1,7 +1,7 @@
 const assert = require('chai').assert;
 const request = require('request');
 const host = "http://localhost:3000";
-const dotenv = require('dotenv').config({path:'./config.env'});
+const dotenv = require('dotenv').config({path:'../../config.env'});
 const jwt = require('jsonwebtoken');
 
 const users = {
