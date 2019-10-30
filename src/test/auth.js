@@ -14,6 +14,7 @@ describe("Authentication", function() {
   
   describe("Log In", function() {
     let response = {};
+    
     const attemptLogin = (credentials, assertion, done) => {
       request({
         url: `${host}/login`,
@@ -47,6 +48,7 @@ describe("Authentication", function() {
 
   describe("Sign Up", function() {
     let response = {};
+
     const attemptSignup = (registrar, assertion, done) => {
       request({
         url: `${host}/signup`,
