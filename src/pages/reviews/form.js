@@ -3,7 +3,7 @@ import { Col } from 'react-bootstrap';
 import { connect } from 'react-redux';
 
 import { SubmitButton, CancelButton } from '~/components/button.js';
-import { Heading, Group, Label, TextInput, TextArea, FileSelector } from '~/components/form.js';
+import { Heading, Group, Label, TextInput, LongTextArea, FileSelector } from '~/components/form.js';
 import { Shader, Spacer } from '~/components/layout.js';
 import Rator from '~/components/rator.js';
 
@@ -64,7 +64,7 @@ class ReviewForm extends Component {
             <Group>
               <Col>
                 <Label>Description:</Label>
-                <TextArea
+                <LongTextArea
                   name={'description'}
                   value={description}
                   onChange={handleText}

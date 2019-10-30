@@ -4,7 +4,7 @@ import { Col } from 'react-bootstrap';
 
 import { setAlert } from '~/components/alert.js';
 import { SubmitButton, CancelButton } from '~/components/button.js';
-import { Heading, Group, Label, TextArea } from '~/components/form.js';
+import { Heading, Group, Label, LongTextArea } from '~/components/form.js';
 import { Shader, Spacer } from '~/components/layout.js';
 
 import CLEARANCES from '~/constants/clearances.js';
@@ -76,7 +76,7 @@ class EditVariantPage extends Component {
             <Group>
               <Col>
                 <Label>Description:</Label>
-                <TextArea
+                <LongTextArea
                   name={'text'}
                   value={text}
                   onChange={this.handleText}

@@ -2,8 +2,8 @@ const LocalStrategy = require('passport-local').Strategy;
 const validator = require("email-validator");
 const async = require('async');
 const bcrypt = require('bcrypt');
-const dev = process.env.NODE_ENV !== 'production';
-const dotenv = require('dotenv').config({path: dev ? './config.env' : '/root/config.env'});
+const { config } = require('../server.js')
+const dotenv = require('dotenv').config({path: config});
 const jwt = require('jsonwebtoken');
 const emails = require('./emails.js');
 const { verifyToken, validateReq } = require('./middleware.js');

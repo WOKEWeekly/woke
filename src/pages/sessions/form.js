@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 
 import { SubmitButton, CancelButton } from '~/components/button.js';
 import { EventDatePicker } from '~/components/datepicker.js';
-import { Heading, Group, Label, TextInput, TextArea, FileSelector } from '~/components/form.js';
+import { Heading, Group, Label, TextInput, LongTextArea, FileSelector } from '~/components/form.js';
 import { Shader, Spacer } from '~/components/layout.js';
 
 import CLEARANCES from '~/constants/clearances.js';
@@ -51,7 +51,7 @@ class SessionForm extends Component {
             <Group>
               <Col>
                 <Label>Description:</Label>
-                <TextArea
+                <LongTextArea
                   name={'description'}
                   value={description}
                   onChange={handleText}

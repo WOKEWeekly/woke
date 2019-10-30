@@ -1,7 +1,6 @@
 import React, { Component} from 'react';
 import { connect } from 'react-redux';
 import { Form, Row } from 'react-bootstrap';
-import Textarea from 'react-textarea-autosize';
 import classNames from 'classnames';
 
 import { Icon } from '~/components/icon.js';
@@ -59,9 +58,7 @@ export class Group extends Component {
 /** For labels */
 export class Label extends Component {
   render(){
-    return (
-      <Form.Label className={css.label}>{this.props.children}</Form.Label>
-    )
+    return <Form.Label className={css.label}>{this.props.children}</Form.Label>
   }
 }
 
@@ -91,33 +88,21 @@ class Input extends Component {
 /** For inline text inputs */
 export class TextInput extends Component {
   render(){
-    return (
-      <Input
-        {...this.props}
-        type={'text'} />
-    )
+    return <Input {...this.props} type={'text'} />
   }
 }
 
 /** For username inputs */
 export class UsernameInput extends Component {
   render(){
-    return (
-      <Input
-        {...this.props}
-        autoCapitalize={'off'} />
-    )
+    return <Input {...this.props} autoCapitalize={'off'} />
   }
 }
 
 /** For password inputs */
 export class PasswordInput extends Component {
   render(){
-    return (
-      <Input
-        {...this.props}
-        type={'password'} />
-    )
+    return <Input {...this.props} type={'password'} />
   }
 }
 
@@ -128,9 +113,7 @@ export class ClickInput extends Component {
         onClick={this.props.onClick}
         className={css.invisible_button}
         style={{width: '100%', padding: '0'}}>
-        <Input
-          {...this.props}
-          readOnly />
+        <Input {...this.props} readOnly />
       </button>
     )
   }
@@ -139,12 +122,7 @@ export class ClickInput extends Component {
 /** For number selections */
 export class NumberPicker extends Component {
   render(){
-    return (
-      <Input
-        {...this.props}
-        type={'number'}
-        min={1} />
-    )
+    return <Input {...this.props} type={'number'} min={1} />
   }
 }
 
@@ -169,22 +147,46 @@ export class SearchBar extends Component {
  * TEXTAREAS
  **************************/
 
+ class TextArea extends Component {
+  constructor(props){
+    super(props);
+    this.state = { rows: props.minRows }
+  }
+
+  handleTextChange = (event) => {
+    this.props.onChange(event);
+    const limit = this.props.minRows;
+
+    const text = event.target.value;
+    const lines = text.split(/\r*\n/).length;
+    const rows = lines > limit ? lines : limit;
+
+    this.setState({ wordCount: text.length, rows });
+  }
+
+  render(){
+    const { name, placeholder, value } = this.props;
+    return (
+      <textarea
+        name={name}
+        placeholder={placeholder}
+        className={css.textarea}
+        rows={this.state.rows}
+        value={value || ''}
+        onChange={this.handleTextChange} />
+    )
+  }
+ }
+
 /** For inline long text inputs */
 export class ShortTextArea extends Component {
   render(){
-    return (
-      <Textarea
-        name={this.props.name}
-        placeholder={this.props.placeholder}
-        className={css.textarea}
-        value={this.props.value || ''}
-        onChange={this.props.onChange} />
-    )
+    return <TextArea minRows={1} {...this.props} />
   }
 }
 
 /** For long text inputs with word counters */
-export class TextArea extends Component {
+export class LongTextArea extends Component {
   constructor(props){
     super(props);
     this.state = {
@@ -196,21 +198,10 @@ export class TextArea extends Component {
     return { wordCount: props.value ? props.value.length : 0 };
   }
 
-  handleTextChange = (event) => {
-    this.props.onChange(event);
-    this.setState({wordCount: event.target.value.length})
-  }
-
   render(){
     return (
       <div>
-        <Textarea
-          name={this.props.name}
-          placeholder={this.props.placeholder}
-          className={css.textarea}
-          minRows={3}
-          value={this.props.value || ''}
-          onChange={this.handleTextChange} />
+        <TextArea minRows={3} {...this.props} />
         <label className={css.wordcount}>{this.state.wordCount}</label>
       </div>
     )

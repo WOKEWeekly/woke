@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 
 import { SubmitButton, CancelButton, CheckboxButton, AddEntityButton } from '~/components/button.js';
 import { BirthdayPicker } from '~/components/datepicker.js';
-import { Heading, Group, Label, Select, TextInput, ClickInput, TextArea, FileSelector } from '~/components/form.js';
+import { Heading, Group, Label, Select, TextInput, ClickInput, LongTextArea, FileSelector } from '~/components/form.js';
 import { SocialsList } from '~/components/icon.js';
 import { Shader, Spacer } from '~/components/layout.js';
 import { EthnicModal, SocialsModal } from '~/components/modal.js';
@@ -121,7 +121,7 @@ class MemberForm extends Component {
             <Group>
               <Col>
                 <Label>Description:</Label>
-                <TextArea
+                <LongTextArea
                   name={'description'}
                   value={description}
                   onChange={handleText}

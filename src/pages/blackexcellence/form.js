@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 
 import { SubmitButton, CancelButton, AddEntityButton } from '~/components/button.js';
 import { EventDatePicker, BirthdayPicker } from '~/components/datepicker.js';
-import { Heading, Group, Label, TextInput, Select, ClickInput, NumberPicker, TextArea, FileSelector } from '~/components/form.js';
+import { Heading, Group, Label, TextInput, Select, ClickInput, NumberPicker, LongTextArea, FileSelector } from '~/components/form.js';
 import { SocialsList } from '~/components/icon.js';
 import { Shader, Spacer } from '~/components/layout.js';
 import { EthnicModal, SocialsModal } from '~/components/modal.js';
@@ -128,7 +128,7 @@ class CandidateForm extends Component {
             <Group>
               <Col>
                 <Label>Description:</Label>
-                <TextArea
+                <LongTextArea
                   name={'description'}
                   value={description}
                   onChange={handleText}
