@@ -8,7 +8,6 @@ pipeline {
     stages {
         stage('Build') { 
             steps {
-                sh 'rm -rf src/node_modules'
                 sh 'npm --prefix ./src install'
             }
         }
