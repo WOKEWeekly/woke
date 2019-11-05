@@ -9,6 +9,7 @@ pipeline {
         stage('Build') { 
             steps {
                 sh 'npm --prefix ./src install'
+                sh 'npm --prefix ./src run start' 
                 sh 'npm --prefix ./src run build' 
             }
         }
