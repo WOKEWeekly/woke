@@ -60,8 +60,8 @@
     "sitemap": "^3.2.2"
   },
   "devDependencies": {
-    "@babel/core": "^7.4.5",
-    "@babel/preset-env": "^7.4.5",
+    "@babel/core": "^7.7.2",
+    "@babel/preset-env": "^7.7.1",
     "babel-loader": "^8.0.6",
     "babel-plugin-root-import": "^6.2.0",
     "canvas": "^2.6.0",
