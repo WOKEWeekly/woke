@@ -1,15 +1,8 @@
 pipeline {
-    agent {
-        docker {
-            image 'node:12.13.0-alpine' 
-            args '-p 3001:3001' 
-        }
-    }
+    agent { dockerfile true }
     stages {
         stage('Build') { 
             steps {
-                sh 'apt-get update'
-                sh 'apt-get install'
                 sh 'npm --prefix ./src install'
             }
         }
