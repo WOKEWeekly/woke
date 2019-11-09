@@ -23,14 +23,6 @@ library.add(fab, far, fas);
 const { store, persistor } = configureStore();
 
 export default class WOKE extends App {
-  static async getInitialProps({ Component, ctx }) {
-    let pageProps = {};
-    if (Component.getInitialProps) {
-      pageProps = await Component.getInitialProps(ctx);
-    }
-    return { pageProps };
-  }
-
   state = { isLoaded: false }
   
   componentDidMount(){
