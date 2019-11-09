@@ -1,13 +1,14 @@
 pipeline {
     agent {
         docker {
-            image 'node:12.13.0-alpine' 
+            image 'python3.7-node:12.13.0-alpine' 
             args '-p 3001:3001' 
         }
     }
     stages {
         stage('Build') { 
             steps {
+                sh 'python --version'
                 sh 'npm --prefix ./src install'
             }
         }
