@@ -9,7 +9,7 @@ pipeline {
         stage('Build') { 
             steps {
                 sh 'npm --prefix ./src install'
-                sh 'npm --prefix ./src run build'
+                sh 'npm --prefix ./src run first-build'
             }
         }
         stage('Deploy') { 
