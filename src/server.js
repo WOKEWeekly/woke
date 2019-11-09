@@ -4,7 +4,7 @@ const app = express();
 const next = require('next');
 const port = parseInt(process.env.PORT, 10) || 3000;
 const dev = process.env.NODE_ENV !== 'production';
-const config = dev ? '../../config.env' : '/root/config.env';
+const config = dev ? '../../config.env' : '/home/config.env';
 const server = next({ dev });
 const handle = server.getRequestHandler();
 
