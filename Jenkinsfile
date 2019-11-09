@@ -13,7 +13,7 @@ pipeline {
         }
         stage('Deploy') { 
             steps {
-                sh 'npm --prefix ./src run dev'
+                sh 'npm --prefix ./src run prod'
             }
         } 
     }
