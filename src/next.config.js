@@ -3,6 +3,7 @@ require('dotenv').config()
 const withSass = require("@zeit/next-sass");
 const withCss = require("@zeit/next-css");
 const withPlugins = require("next-compose-plugins");
+const shebang_loader = require('shebang-loader');
 
 const DotEnv = require('dotenv-webpack');
 const MomentLocalesPlugin = require('moment-locales-webpack-plugin');
