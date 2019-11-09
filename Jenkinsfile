@@ -8,8 +8,8 @@ pipeline {
     stages {
         stage('Build') { 
             steps {
-                sh 'sudo apt-get update'
-                sh 'sudo apt-get install'
+                sh 'apt-get update'
+                sh 'apt-get install'
                 sh 'npm --prefix ./src install'
             }
         }
