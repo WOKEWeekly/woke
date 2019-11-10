@@ -13,10 +13,5 @@ pipeline {
                 sh 'npm --prefix ./src run first-build'
             }
         }
-        stage('Deploy') { 
-            steps {
-                sh 'npm --prefix ./src run prod'
-            }
-        } 
     }
 }
