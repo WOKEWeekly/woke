@@ -6,8 +6,6 @@ RUN apk add --no-cache --update \
   libstdc++ \
   linux-headers \
   make \
-  pixman \
-  pkgconfig \
   python
 
 WORKDIR /var/jenkins_home/workspace/woke/src/
