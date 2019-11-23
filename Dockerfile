@@ -7,7 +7,3 @@ RUN apk add --no-cache --update \
   linux-headers \
   make \
   python
-
-WORKDIR /var/jenkins_home/workspace/woke/src/
-
-CMD [ "node", "server.js" ]
