@@ -11,6 +11,7 @@ pipeline {
                 sh 'npm --prefix ./src install'
                 sh 'npm --prefix ./src rebuild node-sass'
                 sh 'npm --prefix ./src run first-build'
+                sh 'npm --prefix ./src export'
             }
         }
     }
