@@ -10,6 +10,4 @@ RUN apk add --no-cache --update \
 
 WORKDIR /var/jenkins_home/workspace/woke/src/
 
-EXPOSE 3000
-
 CMD [ "node", "server.js" ]

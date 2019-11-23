@@ -5,8 +5,6 @@ const withCss = require("@zeit/next-css");
 const withPlugins = require("next-compose-plugins");
 const shebang_loader = require('shebang-loader');
 
-// TODO: Remove
-
 const DotEnv = require('dotenv-webpack');
 const MomentLocalesPlugin = require('moment-locales-webpack-plugin');
 const server = require('./server.js')
