@@ -9,6 +9,8 @@ const config = '/home/config.env';
 const server = next({ dev });
 const handle = server.getRequestHandler();
 
+console.log(process.env.NODE_ENV);
+
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
