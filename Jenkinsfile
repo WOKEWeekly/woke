@@ -3,7 +3,7 @@ pipeline {
     stages {
         stage('Clean') { 
             steps {
-                sh 'npm --prefix ./src prune'
+                sh 'rm -rf node_modules .next out'
             }
         }
         // stage('Build') { 
