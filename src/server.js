@@ -6,10 +6,8 @@ const port = parseInt(process.env.PORT, 10) || 3000;
 const dev = process.env.NODE_ENV !== 'production';
 // const config = dev ? '../../config.env' : '/home/config.env';
 const config = '/home/config.env';
-const server = next({ dev });
+const server = next({ dev: false });
 const handle = server.getRequestHandler();
-
-console.log(process.env.NODE_ENV);
 
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
