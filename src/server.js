@@ -3,17 +3,16 @@ const app = express();
 
 const next = require('next');
 const port = parseInt(process.env.PORT, 10) || 3000;
-const dev = process.env.NODE_ENV !== 'production';
-const config = !dev ? '../../config.env' : '/home/config.env';
-const server = next({ dev });
+// const dev = process.env.NODE_ENV !== 'production';
+// const config = dev ? '../../config.env' : '/home/config.env';
+const config = '/home/config.env';
+const server = next({ dev: true });
 const handle = server.getRequestHandler();
-
-console.log(process.env.NODE_ENV);
 
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
-const dotenv = require('dotenv').config({path: '/home/config.env'});
+const dotenv = require('dotenv').config({path: config });
 const expressSession = require('express-session');
 const mysql = require('mysql');
 const passport = require('passport');
