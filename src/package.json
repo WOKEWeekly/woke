@@ -2,6 +2,7 @@
   "scripts": {
     "build": "next build",
     "first-build": "NODE_ENV=dev next build",
+    "prod-build": "NODE_ENV=dev next build",
     "start": "next start",
     "export": "next export",
     "dev": "node server.js",
