@@ -9,6 +9,7 @@ transfer.sh
 config.env
 node_modules
 .next
+out
 
 # Resources
 static

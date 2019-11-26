@@ -2,10 +2,10 @@ const express = require('express');
 const app = express();
 
 const next = require('next');
-// const dev = process.env.NODE_ENV !== 'production';
+const dev = process.env.NODE_ENV !== 'production';
 // const config = dev ? '../../config.env' : '/home/config.env';
 const config = '/home/config.env';
-const server = next({ dev: true });
+const server = next({ dev });
 const handle = server.getRequestHandler();
 
 const bodyParser = require('body-parser');
