@@ -4,9 +4,11 @@ const app = express();
 const next = require('next');
 const dev = process.env.NODE_ENV !== 'production';
 // const config = dev ? '../../config.env' : '/home/config.env';
-const config = '/home/config.env';
+const config = '../../config.env';
 const server = next({ dev });
 const handle = server.getRequestHandler();
+
+console.log(dev);
 
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
