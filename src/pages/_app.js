@@ -23,6 +23,14 @@ library.add(fab, far, fas);
 const { store, persistor } = configureStore();
 
 export default class WOKE extends App {
+  static async getInitialProps({ Component, ctx }) {
+    let pageProps = {};
+    if (Component.getInitialProps) {
+      pageProps = await Component.getInitialProps(ctx);
+    }
+    return { pageProps };
+  }
+  
   state = { isLoaded: false }
   
   componentDidMount(){
@@ -78,17 +86,15 @@ export default class WOKE extends App {
     if (!isLoaded) return null;
 
     return (
-      <Container>
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossOrigin="anonymous" />
-        <Provider store={store}>
-          <PersistGate loading={null} persistor={persistor}>
-            <PreNavBar/> <MainNavBar/>
-            <Component {...pageProps} />
-            <Footer/>
-            {!cookiesAccepted ? <CookiePrompt acceptCookies={this.acceptCookies} /> :null}
-          </PersistGate>
-        </Provider> 
-      </Container>
+      <Provider store={store}>
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossOrigin="anonymous" />
+        <PersistGate loading={null} persistor={persistor}>
+          <PreNavBar/> <MainNavBar/>
+          <Component {...pageProps} />
+          <Footer/>
+          {!cookiesAccepted ? <CookiePrompt acceptCookies={this.acceptCookies} /> :null}
+        </PersistGate>
+      </Provider> 
     );
   }
 }
