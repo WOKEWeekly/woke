@@ -2,7 +2,7 @@ import React from 'react';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 import configureStore from '~/reducers/store.js';
-import App, { Container } from 'next/app';
+import App from 'next/app';
 
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { fab } from '@fortawesome/free-brands-svg-icons';
@@ -30,7 +30,7 @@ export default class WOKE extends App {
     }
     return { pageProps };
   }
-  
+
   state = { isLoaded: false }
   
   componentDidMount(){
