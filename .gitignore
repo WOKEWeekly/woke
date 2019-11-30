@@ -12,7 +12,6 @@ node_modules
 out
 
 # Resources
-static
 !robots.txt
 
 #Miscellaneous
