@@ -42,41 +42,26 @@ module.exports = function(app, conn){
 
   /** Update details of existing session in database */
   app.put('/updateSession', verifyToken(CLEARANCES.ACTIONS.CRUD_SESSIONS), function(req, res){
-    let slug, image;
+    let { session1, session2, changed } = req.body;
     async.waterfall([
       function(callback){ // Upload new image to directory
-        req.headers.path = 'sessions';
-        upload(req, res, function(err){
-          err ? callback(err) : callback(null);
-        });
+        filer.uploadImage(session2, 'sessions', callback);
       },
-      function(callback){ // Update session in database
-        const { session1, session2 } = JSON.parse(req.body.sessions);
-
-        image = req.file ? req.file.filename : session1.image;
-        slug = req.file ? req.body.slug : session1.slug;
-
+      function(entity, callback){ // Update session in database
+        session2 = entity;
         const sql = "UPDATE sessions SET title = ?, dateHeld = ?, image = ?, slug = ?, description = ? WHERE id = ?";
-        const values = [session2.title, session2.dateHeld, image, slug, session2.description, session1.id];
+        const values = [session2.title, session2.dateHeld, session2.image, session2.slug, session2.description, session1.id];
 
         conn.query(sql, values, function (err) {
           if (err) return callback(err);
-          
-          if (req.body.changed === 'true'){
-            if (session1.image !== image){
-              callback(null, `./static/images/sessions/${session1.image}`);
-            } else { callback(true); }
-          } else { callback(true); }
+          changed === 'true' ? callback(null) : callback(true);
         });
       },
-      function(src, callback){ // Delete original image from directory
-        fs.unlink(src, function(err) {
-          if (err) console.warn(err.toString());
-          callback(null);
-        });
+      function(callback){ // Delete original image from directory
+        filer.destroyImage(session1.image, callback);
       }
     ], function(err){
-      resToClient(res, err, { slug, image });
+      resToClient(res, err, { id: session1.id, ...session2 });
     });
   });
 

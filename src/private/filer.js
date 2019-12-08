@@ -32,13 +32,16 @@ module.exports = {
 
     cloudinary.uploader.upload(entity.image, {
       public_id: filename,
-      eager: [{ width: 800, height: 800, crop: 'scale' }],
+      width: 1000,
+      height: 1000,
+      crop: 'limit',
       folder: directory,
       unique_filename: false
     }, (err, result) => {
+      if (err) return callback(err);
       const { public_id, version, format } = result;
       entity.image = `v${version}/${public_id}.${format}`;
-      err ? callback(err) : callback(null, entity);
+      callback(null, entity);
     });
   },
 
@@ -57,22 +60,9 @@ module.exports = {
     .replace(/\s+/g, '-');            // Replace spaces with dashes
   },
 
-  /** Retrieve filename from field or selection.
-   ** If object, use name value. If string, use value. Empty if null */
-  getFilename: (image) => {
-    return !image ? '' : typeof image === 'object' ? image.name : image;
-  },
-
   /** Generate filenames from entities */
   generateSessionFilename: (date, slug) => `${formatISODate(date)}_${slug}`,
   generateCandidateFilename: (id, slug) => `${id}_${slug}`,
   generateMemberFilename: (slug) => slug,
   generateReviewFilename: (rating, slug) => `${rating}-${slug}`,
-  
-}
-
-/** Retrieve file extension via string manipulation */
-const getExtension = (file) => {
-  const name = file.originalname || file.name;
-  return name ? name.split('.').pop().toLowerCase() : '';
 }

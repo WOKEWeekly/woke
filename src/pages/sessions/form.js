@@ -59,7 +59,7 @@ class SessionForm extends Component {
             <Group>
               <Col>
                 <FileSelector
-                  filename={image}
+                  image={image}
                   directory={`sessions`}
                   onChange={handleImage} />
               </Col>

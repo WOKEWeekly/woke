@@ -6,6 +6,8 @@ import classNames from 'classnames';
 import { Icon } from '~/components/icon.js';
 import { Fader, Zoomer } from '~/components/transitioner.js';
 
+import { cdn } from '~/constants/settings.js';
+
 import css from '~/styles/_components.scss';
 
 /** For the form heading */
@@ -253,9 +255,12 @@ export class Checkbox extends Component {
 export class _FileSelector extends Component {
   constructor(props){
     super(props);
+
+    const { image } = props;
+
     this.state = {
-      image: '',
-      filename: props.filename
+      image: image ? `${cdn}${image}` : null,
+      filename: image.substring(image.lastIndexOf('/') + 1)
     }
 
     this.image = React.createRef();

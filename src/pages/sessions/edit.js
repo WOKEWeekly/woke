@@ -24,29 +24,24 @@ class SessionEdit extends Component {
       image: props.session.image
     };
   }
- 
 
   /** Update session details */
   updateSession = () => {
     if (!isValidSession(this.state)) return;
     
     const { title, date, description, image } = this.state;
-    const imageChanged = typeof image === 'object';
-    
-    const sessions = {
+    const changed = !image.startsWith("v");
+
+    const data = JSON.stringify({
       session1: this.props.session,
       session2: {
         title: title.trim(),
         dateHeld: formatISODate(date),
         description: description.trim(),
         image: image
-      }
-    };
-
-    const data = new FormData();
-    data.append('sessions', JSON.stringify(sessions));
-    data.append('changed', imageChanged);
-    if (imageChanged) data.append('file', image);
+      },
+      changed
+    });
 
     /** Update session in database */
     request({
@@ -74,8 +69,7 @@ class SessionEdit extends Component {
         cancelFunc={() => location.href = `/session/${slug}`}
 
         metaTitle={'Edit Session'}
-        metaUrl={'/edit'}
-         />
+        metaUrl={'/edit'} />
     );
   }
 }
