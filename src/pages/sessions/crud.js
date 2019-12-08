@@ -98,6 +98,8 @@ class SessionCrud extends Component {
         confirmFunc={operation === 'add' ? this.submitSession : this.updateSession}
         cancelFunc={() => location.href = '/sessions'}
 
+        operation={operation}
+
         metaTitle={title}
         metaUrl={`/${operation}`} />
     );

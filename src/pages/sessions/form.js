@@ -22,7 +22,7 @@ class SessionForm extends Component {
   }
 
   render(){
-    const { heading, confirmText, confirmFunc, cancelFunc, handlers } = this.props;
+    const { heading, confirmText, confirmFunc, cancelFunc, handlers, operation } = this.props;
     const { handleText, handleDate, handleImage } = handlers;
     const { title, date, description, image } = this.props.session;
 
@@ -61,6 +61,7 @@ class SessionForm extends Component {
                 <FileSelector
                   image={image}
                   directory={`sessions`}
+                  operation={operation}
                   onChange={handleImage} />
               </Col>
             </Group>

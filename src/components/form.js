@@ -253,10 +253,10 @@ export class Checkbox extends Component {
 
 /** File selector */
 export class _FileSelector extends Component {
-  constructor(){
-    super();
+  constructor(props){
+    super(props);
 
-    this.state = { bs: false }
+    this.state = { bs: props.operation === 'add' }
 
     this.image = React.createRef();
     this.file = React.createRef();
