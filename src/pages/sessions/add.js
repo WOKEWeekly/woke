@@ -17,7 +17,7 @@ class SessionAdd extends Component {
       title: '',
       date: new Date(),
       description: '',
-      image: null
+      image: ''
     };
   }
 
@@ -34,16 +34,11 @@ class SessionAdd extends Component {
       image: image
     };
 
-    const data = new FormData();
-    data.append('session', JSON.stringify(session));
-    data.append('changed', true);
-    data.append('file', image);
-
     /** Add session to database */
     request({
       url: '/addSession',
       method: 'POST',
-      body: data,
+      body: JSON.stringify(session),
       headers: { 'Authorization': `Bearer ${this.props.user.token}` },
       onSuccess: () => {
         setAlert({ type: 'success', message: `You've successfully added: ${session.title}.` });

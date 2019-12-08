@@ -3,8 +3,7 @@ const app = express();
 
 const next = require('next');
 const dev = process.env.NODE_ENV !== 'production';
-// const config = dev ? '../../config.env' : '/home/config.env';
-const config = '/home/config.env';
+const config = process.env.LOCAL_ENV ? '../../config.env' : '/home/config.env';
 const server = next({ dev });
 const handle = server.getRequestHandler();
 
@@ -18,8 +17,7 @@ const passport = require('passport');
 const port = parseInt(process.env.PORT, 10) || 3000;
 const url = require('url');
 
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json({ limit: '2MB' }));
 app.use(cookieParser());
 app.use(cors());
 

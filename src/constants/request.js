@@ -6,6 +6,7 @@ const { store } = configureStore();
 
 export default ({url, method = 'GET', body, headers, onSuccess}) => {
   if (headers) headers['User'] = store.getState().user.id;
+  headers['Content-Type'] = 'application/json'
   
   fetch(url,
     {

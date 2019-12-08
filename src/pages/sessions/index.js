@@ -17,6 +17,7 @@ import { Zoomer, Slider, Fader } from '~/components/transitioner.js';
 import { formatDate } from '~/constants/date.js';
 import CLEARANCES from '~/constants/clearances.js';
 import request from '~/constants/request.js';
+import { cdn } from '~/constants/settings.js';
 
 import css from '~/styles/sessions.scss';
 
@@ -176,7 +177,7 @@ class Session extends PureComponent {
           <Link href={`/session/${item.slug}`}>
             <div className={css.cell}>
               <img
-                src={`/static/images/sessions/${item.image}`}
+                src={`${cdn}${item.image}`}
                 alt={item.title}
                 className={css.image}
                 onLoad={() => this.setState({isLoaded: true})} />
@@ -199,7 +200,7 @@ class Session extends PureComponent {
             <Row className={css.item}>
               <Col md={4} className={'p-0'}>
                 <img
-                  src={`/static/images/sessions/${item.image}`}
+                  src={`${cdn}${item.image}`}
                   alt={item.title}
                   className={css.image}
                   onLoad={() => this.setState({isLoaded: true})} />

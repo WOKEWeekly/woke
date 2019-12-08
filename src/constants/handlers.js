@@ -32,7 +32,7 @@ export default (component) => {
     handleDateWritten: (date_written) => { component.setState({date_written}); },
 
     /** Handle image selections */
-    handleImage: (e) => { component.setState({image: e.target.files[0]}); },
+    handleImage: (image) => { component.setState({image}); },
 
     /** Handle new rating */
     handleRatingChange: (e) => {

@@ -20,24 +20,23 @@ module.exports = function(app, conn){
 
   /** Add new session to database */
   app.post('/addSession', verifyToken(CLEARANCES.ACTIONS.CRUD_SESSIONS), function(req, res){
+    let session = req.body;
+
     async.waterfall([
-      function(callback){ // Upload file to directory
-        req.headers.path = 'sessions';
-        upload(req, res, function(err){
-          err ? callback(err) : callback(null);
-        });
+      function(callback){
+        filer.uploadImage(session, 'sessions', callback);
       },
-      function(callback){ // Add session to database
-        const session = JSON.parse(req.body.session);
+      function(entity, callback){ // Add session to database
+        session = entity;
         const sql = "INSERT INTO sessions (title, dateHeld, image, slug, description) VALUES ?";
-        const values = [[session.title, session.dateHeld, req.file.filename, req.body.slug, session.description]];
+        const values = [[session.title, session.dateHeld, session.image, session.slug, session.description]];
         
         conn.query(sql, [values], function (err, result) {
           err ? callback(err) : callback(null, result.insertId);
         });
       }
     ], function(err, id){
-      resToClient(res, err, {id, slug: req.body.slug, image: req.file.filename});
+      resToClient(res, err, {id, ...session});
     });
   });
 
@@ -87,10 +86,7 @@ module.exports = function(app, conn){
 
     async.waterfall([
       function(callback){ // Delete image from directory
-        fs.unlink(`./static/images/sessions/${session.image}`, function(err) {
-          if (err) console.warn(`${session.image} not found in /sessions directory.`);
-          callback(null);
-        });
+        filer.destroyImage(session.image, callback);
       },
       function(callback){ // Delete session from database
         conn.query("DELETE FROM sessions WHERE id = ?", session.id, function (err) {
