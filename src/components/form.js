@@ -253,18 +253,27 @@ export class Checkbox extends Component {
 
 /** File selector */
 export class _FileSelector extends Component {
-  constructor(props){
-    super(props);
+  constructor(){
+    super();
 
-    const { image } = props;
-
-    this.state = {
-      image: image ? `${cdn}${image}` : null,
-      filename: image.substring(image.lastIndexOf('/') + 1)
-    }
+    this.state = { bs: false }
 
     this.image = React.createRef();
     this.file = React.createRef();
+  }
+
+  static getDerivedStateFromProps(props, state){
+    if (state.bs) return;
+
+    let image, filename, bs;
+
+    if (props.image){
+      image = `${cdn}${props.image}`;
+      filename = image.substring(image.lastIndexOf('/') + 1);
+      bs = true;
+    }
+
+    return { image, filename, bs };
   }
 
   handleImageChange = () => {

@@ -54,8 +54,9 @@ module.exports = function(app, conn, server){
 
   /** Add New Session */
   app.get('/sessions/add', function(req, res){
-    server.render(req, res, '/sessions/add', {
+    server.render(req, res, '/sessions/crud', {
       title: 'Add New Session',
+      operation: 'add',
       backgroundImage: 'bg-sessions.jpg'
     });
   });
@@ -68,9 +69,10 @@ module.exports = function(app, conn, server){
     conn.query(sql, id, function (err, result) {
       if (!err && result.length){
         const session = result[0];
-        return server.render(req, res, '/sessions/edit', {
+        return server.render(req, res, '/sessions/crud', {
           title: 'Edit Session',
           backgroundImage: 'bg-sessions.jpg',
+          operation: 'edit',
           session
         });
       } else {
