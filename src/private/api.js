@@ -1,7 +1,7 @@
 const async = require('async');
 const fs = require('fs');
 
-const filer = require('./file.js');
+const filer = require('./filer.js');
 const { verifyToken, validateReq, logUserActivity, upload } = require('./middleware.js');
 const { resToClient } = require('./response.js');
 const CLEARANCES = require('../constants/clearances.js');

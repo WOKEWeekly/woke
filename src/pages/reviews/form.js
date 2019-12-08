@@ -8,7 +8,7 @@ import { Shader, Spacer } from '~/components/layout.js';
 import Rator from '~/components/rator.js';
 
 import CLEARANCES from '~/constants/clearances.js';
-import { getFilename } from '~/private/file.js';
+import { getFilename } from '~/private/filer.js';
 
 import css from '~/styles/team.scss';
 

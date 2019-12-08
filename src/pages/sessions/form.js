@@ -8,7 +8,7 @@ import { Heading, Group, Label, TextInput, LongTextArea, FileSelector } from '~/
 import { Shader, Spacer } from '~/components/layout.js';
 
 import CLEARANCES from '~/constants/clearances.js';
-// import { getFilename } from '../../private/file.js';
+// import { getFilename } from '../../private/filer.js';
 
 import css from '~/styles/sessions.scss';
 
