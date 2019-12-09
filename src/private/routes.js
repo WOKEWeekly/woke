@@ -141,9 +141,10 @@ module.exports = function(app, conn, server){
 
   /** Add New Candidate */
   app.get('/blackexcellence/add', function(req, res){
-    server.render(req, res, '/blackexcellence/add', {
+    server.render(req, res, '/blackexcellence/crud', {
       title: 'Add New Candidate',
       backgroundImage: 'bg-blackex.jpg',
+      operation: 'add',
       theme: 'blackex'
     });
   });
@@ -157,10 +158,11 @@ module.exports = function(app, conn, server){
       if (err || !result.length) return renderErrPage(req, res, err, server);
 
       const candidate = result[0];
-      return server.render(req, res, '/blackexcellence/edit', {
+      return server.render(req, res, '/blackexcellence/crud', {
         title: 'Edit Candidate',
         backgroundImage: 'bg-blackex.jpg',
         theme: 'blackex',
+        operation: 'edit',
         candidate
       });
     });

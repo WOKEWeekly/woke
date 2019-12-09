@@ -141,63 +141,47 @@ module.exports = function(app, conn){
 
   /** Add new candidate to database */
   app.post('/addCandidate', verifyToken(CLEARANCES.ACTIONS.CRUD_BLACKEX), function(req, res){
+    let candidate = req.body;
     async.waterfall([
       function(callback){ // Upload file to directory
-        req.headers.path = 'blackexcellence';
-        upload(req, res, function(err){
-          err ? callback(err) : callback(null);
-        });
+        filer.uploadImage(candidate, 'blackexcellence', callback);
       },
-      function(callback){ // Add candidate to database
-        const candidate = JSON.parse(req.body.candidate);
+      function(entity, callback){ // Add candidate to database
+        candidate = entity;
         const sql = "INSERT INTO blackex (id, name, image, birthday, ethnicity, socials, occupation, description, authorId, date_written) VALUES ?";
-        const values = [[candidate.id, candidate.name, req.file.filename, candidate.birthday, candidate.ethnicity, candidate.socials, candidate.occupation, candidate.description, candidate.authorId, candidate.date_written]];
+        const values = [[candidate.id, candidate.name, candidate.image, candidate.birthday, candidate.ethnicity, candidate.socials, candidate.occupation, candidate.description, candidate.authorId, candidate.date_written]];
     
         conn.query(sql, [values], function (err) {
           err ? callback(err) : callback(null);
         });
       }
     ], function(err){
-      resToClient(res, err, {image: req.file.filename});
+      resToClient(res, err, { ...candidate });
     });
   });
 
   /** Update details of existing candidate in database */
   app.put('/updateCandidate', verifyToken(CLEARANCES.ACTIONS.CRUD_BLACKEX), function(req, res){
-    let image;
+    let { candidate1, candidate2, changed } = req.body;
     async.waterfall([
       function(callback){ // Upload new image to directory
-        req.headers.path = 'blackexcellence';
-        upload(req, res, function(err){
-          err ? callback(err) : callback(null);
-        });
+        filer.uploadImage(candidate2, 'blackexcellence', callback);
       },
-      function(callback){ // Update candidate in database
-        const { candidate1, candidate2 } = JSON.parse(req.body.candidates);
-
-        image = req.file ? req.file.filename : candidate1.image;
-
+      function(entity, callback){ // Update candidate in database
+        candidate2 = entity;
         const sql = "UPDATE blackex SET id = ?, name = ?, image = ?, birthday = ?, ethnicity = ?, socials = ?, occupation = ?, description = ?, authorId = ?, date_written = ? WHERE id = ?";
-        const values = [candidate2.id, candidate2.name, image, candidate2.birthday, candidate2.ethnicity, candidate2.socials, candidate2.occupation, candidate2.description, candidate2.authorId, candidate2.date_written, candidate1.id];
+        const values = [candidate2.id, candidate2.name, candidate2.image, candidate2.birthday, candidate2.ethnicity, candidate2.socials, candidate2.occupation, candidate2.description, candidate2.authorId, candidate2.date_written, candidate1.id];
         
         conn.query(sql, values, function (err) {
           if (err) return callback(err);
-          
-          if (req.body.changed){
-            if (candidate1.image !== image){
-              callback(null, `./static/images/blackexcellence/${candidate1.image}`);
-            } else { callback(true); }
-          } else { callback(true); }
+          changed === 'true' ? callback(null) : callback(true);
         });
       },
-      function(src, callback){ // Delete original image from directory
-        fs.unlink(src, function(err) {
-          if (err) console.warn(err.toString());
-          callback(null);
-        });
+      function(callback){ // Delete original image from directory
+        filer.destroyImage(candidate2.image, callback);
       }
     ], function(err){
-      resToClient(res, err, { image });
+      resToClient(res, err, { id: candidate1.id, ...candidate2 });
     });
   });
 
@@ -207,10 +191,7 @@ module.exports = function(app, conn){
 
     async.waterfall([
       function(callback){ // Delete image from directory
-        fs.unlink(`./static/images/blackexcellence/${candidate.image}`, function(err) {
-          if (err) console.warn(`${candidate.image} not found in /blackexcellence directory.`);
-          callback(null);
-        });
+        filer.destroyImage(candidate.image, callback);
       },
       function(callback){ // Delete candidate from database
         conn.query("DELETE FROM blackex WHERE id = ?", candidate.id, function (err) {

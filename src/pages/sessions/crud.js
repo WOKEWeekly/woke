@@ -60,7 +60,6 @@ class SessionCrud extends Component {
     if (!isValidSession(this.state)) return;
     
     const { title, date, description, image } = this.state;
-    const changed = !image.startsWith("v");
 
     const data = JSON.stringify({
       session1: this.props.session,
@@ -70,7 +69,7 @@ class SessionCrud extends Component {
         description: description.trim(),
         image: image
       },
-      changed
+      changed: !image.startsWith("v")
     });
 
     /** Update session in database */

@@ -57,7 +57,7 @@ class MemberCrud extends Component {
         backPath = '/team';
       }
 
-      /** Populate ethncity array */
+      /** Populate ethnicity array */
       const ethnicities = {};
       for (let i = 0; i < 4; i++){
         ethnicities[`ethnicity${i+1}`] = ethnicityArr ? ethnicityArr[i] : '';
