@@ -219,82 +219,61 @@ module.exports = function(app, conn){
 
   /** Add new team member to database */
   app.post('/addMember', verifyToken(CLEARANCES.ACTIONS.CRUD_TEAM), function(req, res){
+    let member = req.body;
     async.waterfall([
       function(callback){ // Upload file to directory
-        req.headers.path = 'team';
-        upload(req, res, function(err){
-          err ? callback(err) : callback(null);
-        });
+        filer.uploadImage(member, 'team', callback);
       },
-      function(callback){ // Add candidate to database
-        const member = JSON.parse(req.body.member);
+      function(entity, callback){ // Add candidate to database
+        member = entity;
         const sql = "INSERT INTO team (firstname, lastname, image, level, birthday, role, ethnicity, socials, slug, description, verified) VALUES ?";
         const values = [[member.firstname, member.lastname, member.image, member.level, member.birthday, member.role, member.ethnicity, member.socials, member.slug, member.description, member.verified]];
         
-        conn.query(sql, [values], function (err) {
-          err ? callback(err) : callback(null);
+        conn.query(sql, [values], function (err, result) {
+          err ? callback(err) : callback(null, result.insertId);
         });
       }
-    ], function(err){
-      resToClient(res, err);
+    ], function(err, id){
+      resToClient(res, err, { id, ...member } );
     });
   });
 
   /** Update details of existing team member in database */
   app.put('/updateMember', verifyToken(CLEARANCES.ACTIONS.CRUD_TEAM), function(req, res){
-    let slug, image;
+    let { member1, member2, changed } = req.body;
     async.waterfall([
       function(callback){ // Upload new image to directory
-        req.headers.path = 'team';
-        upload(req, res, function(err){
-          err ? callback(err) : callback(null);
-        });
+        filer.uploadImage(member2, 'team', callback);
       },
-      function(callback){ // Update member in database
-        const { member1, member2 } = JSON.parse(req.body.members);
-
-        image = req.file ? req.file.filename : member1.image;
-        slug = filer.generateSlug(`${member2.firstname} ${member2.lastname}`);
-
+      function(entity, callback){ // Update member in database
+        member2 = entity;
         const sql = "UPDATE team SET firstname = ?, lastname = ?, image = ?, level = ?, birthday = ?, role = ?, ethnicity = ?, socials = ?, slug = ?, description = ?, verified = ? WHERE id = ?";
-        const values = [member2.firstname, member2.lastname, image, member2.level, member2.birthday, member2.role, member2.ethnicity, member2.socials, slug, member2.description, member2.verified, member1.id];
+        const values = [member2.firstname, member2.lastname, member2.image, member2.level, member2.birthday, member2.role, member2.ethnicity, member2.socials, member2.slug, member2.description, member2.verified, member1.id];
         
         conn.query(sql, values, function (err) {
           if (err) return callback(err);
-          
-          if (req.body.changed === 'true'){
-            if (member1.image !== image){
-              callback(null, `./static/images/team/${member1.image}`);
-            } else { callback(true); }
-          } else { callback(true); }
+          changed === 'true' ? callback(null) : callback(true);
         });
       },
-      function(src, callback){ // Delete original image from directory
-        fs.unlink(src, function(err) {
-          if (err) console.warn(err.toString());
-          callback(null);
-        });
+      function(callback){ // Delete original image from directory
+        filer.destroyImage(member1.image, callback);
       }
     ], function(err){
-      resToClient(res, err,  { slug, image });
+      resToClient(res, err,  { id: member1.id, ...member2 });
     });
   });
 
   /** Delete an existing team member from database */
   app.delete('/deleteMember', verifyToken(CLEARANCES.ACTIONS.CRUD_TEAM), function(req, res){
+    const member = req.body;
     async.waterfall([
-      function(callback){ // Delete member from database
-        const member = req.body;
-        const sql = "DELETE FROM team WHERE id = ?";
-
-        conn.query(sql, member.id, function (err) {
-          err ? callback(err) : callback(null, member.image);
-        });
+      function(callback){ // Delete image from directory
+        filer.destroyImage(member.image, callback);
       },
-      function(image, callback){ // Delete image from directory
-        fs.unlink(`./static/images/team/${image}`, function(err) {
-          if (err) console.warn(`${image} not found in /team directory.`);
-          callback(null);
+      function(callback){ // Delete member from database
+        const sql = "DELETE FROM team WHERE id = ?";
+        conn.query(sql, member.id, function (err) {
+          err ? callback(err) : callback(null);
         });
       }
     ], function(err){
