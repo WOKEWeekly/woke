@@ -294,66 +294,47 @@ module.exports = function(app, conn){
 
   /** Add new review to database */
   app.post('/addReview', verifyToken(CLEARANCES.ACTIONS.CRUD_REVIEWS), function(req, res){
-    let image;
+    let review = req.body;
     async.waterfall([
       function(callback){ // Upload file to directory
-        req.headers.path = 'reviews';
-        upload(req, res, function(err){
-          err ? callback(err) : callback(null);
-        });
+        filer.uploadImage(review, 'reviews', callback);
       },
-      function(callback){ // Add review to database
-        const review = JSON.parse(req.body.review);
-        image = req.file ? req.file.filename : null;
-
+      function(entity, callback){ // Add review to database
+        review = entity;
         const sql = "INSERT INTO reviews (referee, position, rating, image, description) VALUES ?";
-        const values = [[review.referee, review.position, review.rating, image, review.description]];
+        const values = [[review.referee, review.position, review.rating, review.image, review.description]];
         
         conn.query(sql, [values], function (err, result) {
           err ? callback(err) : callback(null, result.insertId);
         });
       }
     ], function(err, id){
-      resToClient(res, err, {id, image});
+      resToClient(res, err, {id, ...review});
     });
   });
 
   /** Update details of existing review in database */
   app.put('/updateReview', verifyToken(CLEARANCES.ACTIONS.CRUD_REVIEWS), function(req, res){
-    let image;
+    let { review1, review2, changed } = req.body;
     async.waterfall([
       function(callback){ // Upload new image to directory
-        req.headers.path = 'reviews';
-        upload(req, res, function(err){
-          err ? callback(err) : callback(null);
-        });
+        filer.uploadImage(review2, 'reviews', callback);
       },
-      function(callback){ // Update review in database
-        const { review1, review2 } = JSON.parse(req.body.reviews);
-
-        image = req.file ? req.file.filename : review1.image;
-
+      function(entity, callback){ // Update review in database
+        review2 = entity;
         const sql = "UPDATE reviews SET referee = ?, position = ?, rating = ?, image = ?, description = ? WHERE id = ?";
-        const values = [review2.referee, review2.position, review2.rating, image, review2.description, review1.id];
+        const values = [review2.referee, review2.position, review2.rating, review2.image, review2.description, review1.id];
 
         conn.query(sql, values, function (err) {
           if (err) return callback(err);
-          
-          if (req.body.changed === 'true'){
-            if (review1.image !== image){
-              callback(null, `./static/images/reviews/${review1.image}`);
-            } else { callback(true); }
-          } else { callback(true); }
+          changed === 'true' ? callback(null) : callback(true);
         });
       },
-      function(src, callback){ // Delete original image from directory
-        fs.unlink(src, function(err) {
-          if (err) console.warn(err.toString());
-          callback(null);
-        });
+      function(callback){ // Delete original image from directory
+        filer.destroyImage(review1.image, callback);
       }
     ], function(err){
-      resToClient(res, err, { image });
+      resToClient(res, err, { id: review1.id, ...review2 });
     });
   });
 
@@ -363,10 +344,7 @@ module.exports = function(app, conn){
 
     async.waterfall([
       function(callback){ // Delete image from directory
-        fs.unlink(`./static/images/reviews/${review.image}`, function(err) {
-          if (err) console.warn(`${review.image} not found in /reviews directory.`);
-          callback(null);
-        });
+        filer.destroyImage(review.image, callback);
       },
       function(callback){ // Delete review from database
         conn.query("DELETE FROM reviews WHERE id = ?", review.id, function (err) {
