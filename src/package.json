@@ -1,7 +1,7 @@
 {
   "scripts": {
     "build": "NODE_ENV=development next build",
-    "start": "next start",
+    "start": "NODE_ENV=production next start",
     "export": "NODE_ENV=production next export",
     "dev": "LOCAL_ENV=true node server.js",
     "prod": "NODE_ENV=production node server.js",
