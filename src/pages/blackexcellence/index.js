@@ -13,6 +13,7 @@ import { Fader } from '~/components/transitioner.js';
 
 import CLEARANCES from '~/constants/clearances.js';
 import request from '~/constants/request.js';
+import { cdn } from '~/constants/settings.js';
 
 import css from '~/styles/blackex.scss';
 import '~/styles/_categories.scss';
@@ -167,7 +168,9 @@ class Candidate extends PureComponent {
 
   render(){
     const { item, idx } = this.props;
-    const label = `#${item.id}: ${item.name}`;    
+    const label = `#${item.id}: ${item.name}`;
+    
+    const params = '/w_800,h_800,c_fill/';
 
     return (
       <Fader
@@ -178,7 +181,7 @@ class Candidate extends PureComponent {
         <Link href={`/blackexcellence/candidate/${item.id}`}>
           <div className={css.cell}>
             <img
-              src={`/static/images/blackexcellence/${item.image}`}
+              src={`${cdn}${params}${item.image}`}
               alt={label}
               className={css.image}
               onLoad={this.showImage}

@@ -11,7 +11,6 @@ import { EthnicModal, SocialsModal } from '~/components/modal.js';
 
 import { countriesToString } from '~/constants/countries.js';
 import CLEARANCES from '~/constants/clearances.js';
-import { getFilename } from '~/private/file.js';
 
 import css from '~/styles/team.scss';
 
@@ -34,7 +33,7 @@ class MemberForm extends Component {
   hideSocialsModal = () => { this.setState({ socialsModalVisible: false})}
 
   render(){
-    const { heading, confirmText, confirmFunc, cancelFunc, countries, handlers } = this.props;
+    const { heading, confirmText, confirmFunc, cancelFunc, countries, handlers, operation } = this.props;
     const { handleText, handleBirthday, handleImage, handleCheckboxButton, clearSelection, confirmSocials } = handlers;
 
     const { firstname, lastname, level, role, description, birthday, image, socials,
@@ -42,7 +41,6 @@ class MemberForm extends Component {
 
     const { ethnicModalVisible, socialsModalVisible } = this.state;
 
-    const filename = getFilename(image);
     const ethnicities = countriesToString([ethnicity1, ethnicity2, ethnicity3, ethnicity4], countries);
 
     return (
@@ -131,7 +129,8 @@ class MemberForm extends Component {
             <Group>
               <Col>
                 <FileSelector
-                  filename={filename}
+                  image={image}
+                  operation={operation}
                   directory={`team`}
                   onChange={handleImage} />
               </Col>

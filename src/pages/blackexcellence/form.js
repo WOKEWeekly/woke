@@ -11,7 +11,6 @@ import { EthnicModal, SocialsModal } from '~/components/modal.js';
 
 import { countriesToString } from '~/constants/countries.js';
 import CLEARANCES from '~/constants/clearances.js';
-import { getFilename } from '~/private/file.js';
 import request from '~/constants/request.js';
 
 import css from '~/styles/blackex.scss';
@@ -59,7 +58,7 @@ class CandidateForm extends Component {
   hideSocialsModal = () => { this.setState({ socialsModalVisible: false})}
 
   render(){
-    const { heading, confirmText, confirmFunc, cancelFunc, handlers, countries } = this.props;
+    const { heading, confirmText, confirmFunc, cancelFunc, handlers, countries, operation } = this.props;
     const { handleText, handleBirthday, handleDateWritten, handleImage, clearSelection, confirmSocials, } = handlers;
 
     const { id, name, description, occupation, birthday, image, socials,
@@ -68,7 +67,6 @@ class CandidateForm extends Component {
 
     const { members, ethnicModalVisible, socialsModalVisible } = this.state;
 
-    const filename = getFilename(image);
     const ethnicities = countriesToString([ethnicity1, ethnicity2, ethnicity3, ethnicity4], countries);    
 
     return (
@@ -153,8 +151,9 @@ class CandidateForm extends Component {
             <Group>
               <Col>
                 <FileSelector
-                  filename={filename}
+                  image={image}
                   directory={`blackexcellence`}
+                  operation={operation}
                   onChange={handleImage} />
               </Col>
             </Group>

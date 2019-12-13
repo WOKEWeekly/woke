@@ -29,11 +29,10 @@ class ReviewCrud extends Component {
     this.setState({...this.props.review})
   }
 
-  /** POST review to the server */
-  submitReview = () => {
-    if (!isValidReview(this.state)) return;
-    const {referee, position, rating, description, image } = this.state;
-
+  buildRequest = () => {
+    const { referee, position, rating, description, image } = this.state;
+    const { operation } = this.props;
+    
     const review = {
       referee: referee.trim(),
       position: position.trim(),
@@ -42,12 +41,25 @@ class ReviewCrud extends Component {
       image
     };
 
-    const data = new FormData();
-    data.append('review', JSON.stringify(review));
-    if (image !== null){
-      data.append('changed', true);
-      data.append('file', image);
+    let data;
+
+    if (operation === 'add'){
+      data = JSON.stringify(review);
+    } else {
+      data = JSON.stringify({
+        review1: this.props.review,
+        review2: review,
+        changed: !image.startsWith("v")
+      });
     }
+
+    return data;
+  }
+
+  /** POST review to the server */
+  submitReview = () => {
+    if (!isValidReview(this.state)) return;
+    const data = this.buildRequest();
 
     /** Add review to database */
     request({
@@ -56,7 +68,7 @@ class ReviewCrud extends Component {
       body: data,
       headers: { 'Authorization': `Bearer ${this.props.user.token}` },
       onSuccess: () => {
-        setAlert({ type: 'success', message: `You've successfully added the review by ${referee}.` });
+        setAlert({ type: 'success', message: `You've successfully added the review by ${this.state.referee}.` });
         location.href = '/reviews';
       }
     });
@@ -65,25 +77,7 @@ class ReviewCrud extends Component {
   /** Update review on server */
   updateReview = () => {
     if (!isValidReview(this.state)) return;
-
-    const {referee, position, rating, description, image } = this.state;
-    const imageChanged = typeof image === 'object';
-
-    const reviews = {
-      review1: this.props.review,
-      review2: {
-        referee: referee.trim(),
-        position: position.trim(),
-        rating,
-        description: description.trim(),
-        image
-      }
-    };
-
-    const data = new FormData();
-    data.append('reviews', JSON.stringify(reviews));
-    data.append('changed', imageChanged);
-    if (imageChanged) data.append('file', image);
+    const data = this.buildRequest();
 
     /** Update review in database */
     request({
@@ -92,7 +86,7 @@ class ReviewCrud extends Component {
       body: data,
       headers: { 'Authorization': `Bearer ${this.props.user.token}`, },
       onSuccess: () => {
-        setAlert({ type: 'success', message: `You've successfully edited ${referee}'s review.` });
+        setAlert({ type: 'success', message: `You've successfully edited ${this.state.referee}'s review.` });
         location.href = `/reviews`;
       }
     });
@@ -111,6 +105,8 @@ class ReviewCrud extends Component {
         confirmText={operation === 'add' ? 'Submit' : 'Update'}
         confirmFunc={operation === 'add' ? this.submitReview : this.updateReview}
         cancelFunc={() => location.href = '/reviews'}
+
+        operation={operation}
 
         metaTitle={title}
         metaUrl={`/${operation}`} />

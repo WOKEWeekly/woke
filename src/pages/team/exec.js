@@ -8,6 +8,7 @@ import { Title, Subtitle, Divider, Paragraph, truncateText } from '~/components/
 import { Slider } from '~/components/transitioner.js';
 
 import request from '~/constants/request.js';
+import { cdn } from '~/constants/settings.js';
 
 import css from '~/styles/team.scss';
 import '~/styles/_categories.scss';
@@ -110,7 +111,7 @@ class Exec extends PureComponent {
             <Row>
               <Col md={{span: 4, order: isEven ? 1 : 2}}>
                 <img
-                  src={`/static/images/team/${item.image}`}
+                  src={`${cdn}${item.image}`}
                   alt={item.fullname}
                   className={css.image} />
               </Col>

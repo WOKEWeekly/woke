@@ -57,7 +57,7 @@ class MemberCrud extends Component {
         backPath = '/team';
       }
 
-      /** Populate ethncity array */
+      /** Populate ethnicity array */
       const ethnicities = {};
       for (let i = 0; i < 4; i++){
         ethnicities[`ethnicity${i+1}`] = ethnicityArr ? ethnicityArr[i] : '';
@@ -98,21 +98,16 @@ class MemberCrud extends Component {
       verified
     };
 
-    const data = new FormData();
-    const imageChanged = typeof image === 'object';
+    let data;
 
     if (operation === 'add'){
-      data.append('member', JSON.stringify(member));
+      data = JSON.stringify(member);
     } else {
-      data.append('members', JSON.stringify({
+      data = JSON.stringify({
         member1: this.props.member,
-        member2: member
-      }));
-    }
-
-    if (imageChanged){
-      data.append('changed', imageChanged);
-      data.append('file', image);
+        member2: member,
+        changed: !image.startsWith("v")
+      });
     }
 
     return data;
@@ -170,6 +165,8 @@ class MemberCrud extends Component {
         confirmText={operation === 'add' ? 'Submit' : 'Update'}
         confirmFunc={operation === 'add' ? this.submitMember : this.updateMember}
         cancelFunc={() => location.href = backPath}
+
+        operation={operation}
 
         metaTitle={title}
         metaUrl={`/${operation}`} />

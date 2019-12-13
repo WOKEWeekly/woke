@@ -15,6 +15,7 @@ import CLEARANCES from '~/constants/clearances.js';
 import { countriesToString } from '~/constants/countries.js';
 import { formatDate, calculateAge } from '~/constants/date.js';
 import request from '~/constants/request.js';
+import { cdn } from '~/constants/settings.js';
 
 import css from '~/styles/blackex.scss';
 
@@ -96,7 +97,7 @@ class CandidatePage extends Component {
               duration={800}
               direction={'left'}> 
               <img
-                src={`/static/images/blackexcellence/${candidate.image}`}
+                src={`${cdn}${candidate.image}`}
                 alt={candidate.name}
                 className={css.image}
                 onLoad={() => this.setState({imageLoaded: true})} />

@@ -8,7 +8,6 @@ import { Shader, Spacer } from '~/components/layout.js';
 import Rator from '~/components/rator.js';
 
 import CLEARANCES from '~/constants/clearances.js';
-import { getFilename } from '~/private/file.js';
 
 import css from '~/styles/team.scss';
 
@@ -22,11 +21,9 @@ class ReviewForm extends Component {
   }
 
   render(){
-    const { heading, entity, confirmText, confirmFunc, cancelFunc, handlers } = this.props;
+    const { heading, entity, confirmText, confirmFunc, cancelFunc, handlers, operation } = this.props;
     const { handleText, handleImage, handleRatingChange } = handlers;
     const { referee, position, rating, description, image } = entity;
-
-    const filename = getFilename(image);
 
     return (
       <Shader>
@@ -74,8 +71,9 @@ class ReviewForm extends Component {
             <Group>
               <Col>
                 <FileSelector
-                  filename={filename}
+                  image={image}
                   directory={`reviews`}
+                  operation={operation}
                   onChange={handleImage} />
               </Col>
             </Group>

@@ -5,7 +5,8 @@ import classNames from 'classnames';
 
 import { Icon } from '~/components/icon.js';
 import { Fader, Zoomer } from '~/components/transitioner.js';
-import { domain } from '~/constants/settings.js';
+
+import { cdn } from '~/constants/settings.js';
 
 import css from '~/styles/_components.scss';
 
@@ -255,18 +256,27 @@ export class _FileSelector extends Component {
   constructor(props){
     super(props);
 
-    const { filename, directory } = this.props;
-
-    this.state = {
-      image: filename ? `${domain}/static/images/${directory}/${filename}` : null
-    }
+    this.state = { bs: props.operation === 'add' }
 
     this.image = React.createRef();
     this.file = React.createRef();
   }
 
-  handleImageChange = (event) => {
-    this.props.onChange(event);
+  static getDerivedStateFromProps(props, state){
+    if (state.bs) return;
+
+    let image, filename, bs;
+
+    if (props.image){
+      image = `${cdn}${props.image}`;
+      filename = image.substring(image.lastIndexOf('/') + 1);
+      bs = true;
+    }
+
+    return { image, filename, bs };
+  }
+
+  handleImageChange = () => {
     this.previewImage();
   }
 
@@ -278,7 +288,8 @@ export class _FileSelector extends Component {
     reader.addEventListener("load", () => {
       const source = reader.result;
       preview.src = source;
-      this.setState({ image: source});
+      this.setState({ image: source, filename: file.name});
+      this.props.onChange(source)
     }, false);
 
     if (file) reader.readAsDataURL(file);
@@ -302,7 +313,7 @@ export class _FileSelector extends Component {
           <input
             type={'text'}
             disabled
-            value={this.props.filename}
+            value={this.state.filename}
             placeholder={'Choose a file'}
             className={css.file_input} />
         </div>

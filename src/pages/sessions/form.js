@@ -8,7 +8,7 @@ import { Heading, Group, Label, TextInput, LongTextArea, FileSelector } from '~/
 import { Shader, Spacer } from '~/components/layout.js';
 
 import CLEARANCES from '~/constants/clearances.js';
-import { getFilename } from '~/private/file.js';
+// import { getFilename } from '../../private/filer.js';
 
 import css from '~/styles/sessions.scss';
 
@@ -22,11 +22,9 @@ class SessionForm extends Component {
   }
 
   render(){
-    const { heading, confirmText, confirmFunc, cancelFunc, handlers } = this.props;
+    const { heading, confirmText, confirmFunc, cancelFunc, handlers, operation } = this.props;
     const { handleText, handleDate, handleImage } = handlers;
-    const {title, date, description, image} = this.props.session;
-
-    const filename = getFilename(image);
+    const { title, date, description, image } = this.props.session;
 
     return (
       <Shader>
@@ -61,8 +59,9 @@ class SessionForm extends Component {
             <Group>
               <Col>
                 <FileSelector
-                  filename={filename}
+                  image={image}
                   directory={`sessions`}
+                  operation={operation}
                   onChange={handleImage} />
               </Col>
             </Group>

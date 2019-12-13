@@ -13,6 +13,7 @@ import { Fader, Slider } from '~/components/transitioner.js';
 import CLEARANCES from '~/constants/clearances.js';
 import { formatDate } from '~/constants/date.js';
 import request from '~/constants/request.js';
+import { cdn } from '~/constants/settings.js';
 
 import css from '~/styles/sessions.scss';
 
@@ -72,7 +73,7 @@ class SessionPage extends Component {
               duration={800}
               direction={'right'}> 
               <img
-                src={`/static/images/sessions/${session.image}`}
+                src={`${cdn}${session.image}`}
                 alt={session.title}
                 className={css.image}
                 onLoad={() => this.setState({imageLoaded: true})} />

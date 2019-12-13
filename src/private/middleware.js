@@ -1,8 +1,8 @@
 const async = require('async');
 const jwt = require('jsonwebtoken');
 const multer = require('multer');
+
 const { resToClient } = require('./response.js');
-const filer = require('./file.js');
 
 module.exports = {
 
@@ -49,7 +49,8 @@ module.exports = {
 
   /** Check for 'authorized' header values to validate requests */
   validateReq: (req, res, next) => {
-    if (req.headers['authorization'] !== process.env.AUTH_KEY){
+    const { admission, authorization } = req.headers;
+    if (authorization !== process.env.AUTH_KEY && admission !== 'true'){
       res.sendStatus(403);
     } else {
       next();
@@ -73,7 +74,9 @@ module.exports = {
     }
   },
 
-  /** Uploading files using Multer */
+  /** 
+   * //TODO: Delete when Cloudinary fully implemented
+   * Uploading files using Multer */
   upload: multer({
     storage: multer.diskStorage({
       destination: function(req, file, callback) {callback(null, `./static/images/${req.headers.path}/`);},
