@@ -30,12 +30,13 @@ module.exports = {
         break;
     }
 
+    const env = process.env.LOCAL_ENV === 'true' ? 'dev' : 'prod';
+
     cloudinary.uploader.upload(entity.image, {
-      public_id: filename,
+      public_id: `${env}/${directory}/${filename}`,
       width: 1000,
       height: 1000,
       crop: 'limit',
-      folder: directory,
       unique_filename: false
     }, (err, result) => {
       if (err) return callback(err);
