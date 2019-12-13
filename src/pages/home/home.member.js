@@ -8,6 +8,7 @@ import { Title, Subtitle, Divider, Paragraph, truncateText } from '~/components/
 import { Fader } from '~/components/transitioner.js';
 
 import request from '~/constants/request.js';
+import { cdn } from '~/constants/settings.js';
 
 import css from '~/styles/home.scss';
 
@@ -68,7 +69,7 @@ export default class RandomMember extends Component{
                   {member.image ?
                   <Link href={link}>
                     <img
-                      src={`/static/images/team/${member.image}`}
+                      src={`${cdn}${member.image}`}
                       alt={member.fullname}
                       className={css.image} />
                   </Link> : null}

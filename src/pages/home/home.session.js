@@ -7,6 +7,7 @@ import { Fader } from '~/components/transitioner.js';
 
 import { formatDate } from '~/constants/date.js';
 import request from '~/constants/request.js';
+import { cdn } from '~/constants/settings.js';
 
 import css from '~/styles/home.scss';
 
@@ -58,7 +59,7 @@ export default class UpcomingSession extends Component {
               {session.image ?
               <Link href={link}>
                 <img
-                  src={`/static/images/sessions/${session.image}`}
+                  src={`${cdn}${session.image}`}
                   alt={session.title}
                   className={css.image} />
               </Link> : null}
