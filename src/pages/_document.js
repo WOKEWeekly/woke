@@ -50,6 +50,8 @@ const Meta = ({
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
     <meta property="og:url" content={`${domain}${url}`} />
+
+    {/* TODO: Check if this actually works */}
     <meta property="og:image" content={`${domain}/static/images${cardImage}`} />
     <meta property="og:image:height" content="800" />
     <meta property="og:image:width" content="800" />
