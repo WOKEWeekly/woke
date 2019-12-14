@@ -8,7 +8,7 @@ cloudinary.config({
 })
 
 module.exports = {
-  uploadImage: (entity, directory, callback) => {
+  uploadImage: (entity, directory, changed, callback) => {
     let filename;
 
     switch (directory){
@@ -29,6 +29,8 @@ module.exports = {
         filename = module.exports.generateReviewFilename(entity.rating, entity.slug, entity.file);
         break;
     }
+
+    if (!changed) return callback(null, entity);
 
     const env = process.env.LOCAL_ENV === 'true' ? 'dev' : 'prod';
 

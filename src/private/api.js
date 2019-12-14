@@ -24,7 +24,7 @@ module.exports = function(app, conn){
 
     async.waterfall([
       function(callback){
-        filer.uploadImage(session, 'sessions', callback);
+        filer.uploadImage(session, 'sessions', true, callback);
       },
       function(entity, callback){ // Add session to database
         session = entity;
@@ -45,7 +45,7 @@ module.exports = function(app, conn){
     let { session1, session2, changed } = req.body;
     async.waterfall([
       function(callback){ // Upload new image to directory
-        changed ? filer.uploadImage(session2, 'sessions', callback) : callback(null, session2);
+        filer.uploadImage(session2, 'sessions', changed, callback);
       },
       function(entity, callback){ // Update session in database
         session2 = entity;
@@ -144,7 +144,7 @@ module.exports = function(app, conn){
     let candidate = req.body;
     async.waterfall([
       function(callback){ // Upload file to directory
-        filer.uploadImage(candidate, 'blackexcellence', callback);
+        filer.uploadImage(candidate, 'blackexcellence', true, callback);
       },
       function(entity, callback){ // Add candidate to database
         candidate = entity;
@@ -165,8 +165,7 @@ module.exports = function(app, conn){
     let { candidate1, candidate2, changed } = req.body;
     async.waterfall([
       function(callback){ // Upload new image to directory
-        filer.uploadImage(candidate2, 'blackexcellence', callback);
-        changed ? filer.uploadImage(candidate2, 'blackexcellence', callback) : callback(null, candidate2);
+        filer.uploadImage(candidate2, 'blackexcellence', changed, callback);
       },
       function(entity, callback){ // Update candidate in database
         candidate2 = entity;
@@ -223,7 +222,7 @@ module.exports = function(app, conn){
     let member = req.body;
     async.waterfall([
       function(callback){ // Upload file to directory
-        filer.uploadImage(member, 'team', callback);
+        filer.uploadImage(member, 'team', true, callback);
       },
       function(entity, callback){ // Add candidate to database
         member = entity;
@@ -244,7 +243,7 @@ module.exports = function(app, conn){
     let { member1, member2, changed } = req.body;
     async.waterfall([
       function(callback){ // Upload new image to directory
-        changed ? filer.uploadImage(member2, 'team', callback) : callback(null, member2); 
+        filer.uploadImage(member2, 'team', changed, callback); 
       },
       function(entity, callback){ // Update member in database
         member2 = entity;
@@ -298,7 +297,7 @@ module.exports = function(app, conn){
     let review = req.body;
     async.waterfall([
       function(callback){ // Upload file to directory
-        filer.uploadImage(review, 'reviews', callback);
+        filer.uploadImage(review, 'reviews', true, callback);
       },
       function(entity, callback){ // Add review to database
         review = entity;
@@ -319,7 +318,7 @@ module.exports = function(app, conn){
     let { review1, review2, changed } = req.body;
     async.waterfall([
       function(callback){ // Upload new image to directory
-        changed ? filer.uploadImage(review2, 'reviews', callback) : callback(null, review2);
+        filer.uploadImage(review2, 'reviews', changed, callback);
       },
       function(entity, callback){ // Update review in database
         review2 = entity;
