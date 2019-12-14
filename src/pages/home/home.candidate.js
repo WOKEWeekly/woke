@@ -50,7 +50,7 @@ class _RandomCandidate extends Component {
     const { candidate, inView, detectViewChange } = this.state;
     const { countries } = this.props;
 
-    if (candidate.loaded){
+    if (candidate.name && candidate.loaded){
       candidate.firstname = candidate.name.split(' ')[0];
       candidate.age = calculateAge(candidate.birthday);
       candidate.description = candidate.description.trim().length > 0 ? candidate.description : 'No description.';
