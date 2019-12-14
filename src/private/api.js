@@ -45,7 +45,7 @@ module.exports = function(app, conn){
     let { session1, session2, changed } = req.body;
     async.waterfall([
       function(callback){ // Upload new image to directory
-        filer.uploadImage(session2, 'sessions', callback);
+        changed ? filer.uploadImage(session2, 'sessions', callback) : callback(null, session2);
       },
       function(entity, callback){ // Update session in database
         session2 = entity;
@@ -54,7 +54,7 @@ module.exports = function(app, conn){
 
         conn.query(sql, values, function (err) {
           if (err) return callback(err);
-          changed === 'true' ? callback(null) : callback(true);
+          changed ? callback(null) : callback(true);
         });
       },
       function(callback){ // Delete original image from directory
@@ -166,6 +166,7 @@ module.exports = function(app, conn){
     async.waterfall([
       function(callback){ // Upload new image to directory
         filer.uploadImage(candidate2, 'blackexcellence', callback);
+        changed ? filer.uploadImage(candidate2, 'blackexcellence', callback) : callback(null, candidate2);
       },
       function(entity, callback){ // Update candidate in database
         candidate2 = entity;
@@ -174,7 +175,7 @@ module.exports = function(app, conn){
         
         conn.query(sql, values, function (err) {
           if (err) return callback(err);
-          changed === 'true' ? callback(null) : callback(true);
+          changed ? callback(null) : callback(true);
         });
       },
       function(callback){ // Delete original image from directory
@@ -243,7 +244,7 @@ module.exports = function(app, conn){
     let { member1, member2, changed } = req.body;
     async.waterfall([
       function(callback){ // Upload new image to directory
-        filer.uploadImage(member2, 'team', callback);
+        changed ? filer.uploadImage(member2, 'team', callback) : callback(null, member2); 
       },
       function(entity, callback){ // Update member in database
         member2 = entity;
@@ -252,7 +253,7 @@ module.exports = function(app, conn){
         
         conn.query(sql, values, function (err) {
           if (err) return callback(err);
-          changed === 'true' ? callback(null) : callback(true);
+          changed ? callback(null) : callback(true);
         });
       },
       function(callback){ // Delete original image from directory
@@ -318,7 +319,7 @@ module.exports = function(app, conn){
     let { review1, review2, changed } = req.body;
     async.waterfall([
       function(callback){ // Upload new image to directory
-        filer.uploadImage(review2, 'reviews', callback);
+        changed ? filer.uploadImage(review2, 'reviews', callback) : callback(null, review2);
       },
       function(entity, callback){ // Update review in database
         review2 = entity;
@@ -327,7 +328,7 @@ module.exports = function(app, conn){
 
         conn.query(sql, values, function (err) {
           if (err) return callback(err);
-          changed === 'true' ? callback(null) : callback(true);
+          changed ? callback(null) : callback(true);
         });
       },
       function(callback){ // Delete original image from directory
