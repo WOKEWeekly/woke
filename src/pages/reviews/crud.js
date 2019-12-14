@@ -21,7 +21,7 @@ class ReviewCrud extends Component {
       position: '',
       rating: 0,
       description: '',
-      image: null
+      image: ''
     };
   }
 
