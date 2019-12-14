@@ -50,7 +50,7 @@ export default class Home extends Component {
 
             <Row><TopicVoter/></Row>
             <Row><RandomMember/></Row>
-            <Row><ForumAdvertiser/></Row>
+            {/* <Row><ForumAdvertiser/></Row> */}
           </Suspense>
         </Container>
       </Shader>
