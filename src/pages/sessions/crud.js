@@ -35,18 +35,21 @@ class SessionCrud extends Component {
     
     const { title, date, description, image } = this.state;
     
-    const session = {
-      title: title.trim(),
-      dateHeld: formatISODate(date),
-      description: description.trim(),
-      image: image
+    const data = {
+      session: {
+        title: title.trim(),
+        dateHeld: formatISODate(date),
+        description: description.trim(),
+        image: image
+      },
+      changed: image !== ''
     };
 
     /** Add session to database */
     request({
       url: '/addSession',
       method: 'POST',
-      body: JSON.stringify(session),
+      body: JSON.stringify(data),
       headers: { 'Authorization': `Bearer ${this.props.user.token}` },
       onSuccess: () => {
         setAlert({ type: 'success', message: `You've successfully added: ${session.title}.` });
@@ -69,7 +72,7 @@ class SessionCrud extends Component {
         description: description.trim(),
         image: image
       },
-      changed: !image.startsWith("v")
+      changed: image !== null && image !== '' && !image.startsWith("v")
     });
 
     /** Update session in database */

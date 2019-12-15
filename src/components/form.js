@@ -256,7 +256,9 @@ export class _FileSelector extends Component {
   constructor(props){
     super(props);
 
-    this.state = { bs: props.operation === 'add' }
+    const regex = new RegExp(/(v[0-9]+|dev|prod)\//); // Checks if image is on cdn
+    const bs = props.operation === 'add' || regex.test(props.image);
+    this.state = { bs }
 
     this.image = React.createRef();
     this.file = React.createRef();

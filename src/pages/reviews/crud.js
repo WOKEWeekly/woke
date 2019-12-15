@@ -44,12 +44,15 @@ class ReviewCrud extends Component {
     let data;
 
     if (operation === 'add'){
-      data = JSON.stringify(review);
+      data = JSON.stringify({
+        review,
+        changed: image !== ''
+      });
     } else {
       data = JSON.stringify({
         review1: this.props.review,
         review2: review,
-        changed: !image.startsWith("v")
+        changed: image !== null && image !== '' && !image.startsWith("v")
       });
     }
 

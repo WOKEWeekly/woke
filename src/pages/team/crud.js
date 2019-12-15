@@ -101,12 +101,15 @@ class MemberCrud extends Component {
     let data;
 
     if (operation === 'add'){
-      data = JSON.stringify(member);
+      data = JSON.stringify({
+        member,
+        changed: image !== ''
+      });
     } else {
       data = JSON.stringify({
         member1: this.props.member,
         member2: member,
-        changed: !image.startsWith("v")
+        changed: image !== null && image !== '' && !image.startsWith("v")
       });
     }
 

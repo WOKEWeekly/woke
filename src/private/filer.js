@@ -48,7 +48,9 @@ module.exports = {
     });
   },
 
-  destroyImage: (image, callback) => {
+  destroyImage: (image, changed, callback) => {
+    if (!image || image === null || !changed) return callback(null);
+    
     const public_id = image.substring(image.indexOf('/') + 1, image.indexOf('.'));
     cloudinary.uploader.destroy(public_id, (err) => {
       if (err) console.warn(err);
