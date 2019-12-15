@@ -32,7 +32,7 @@ export default class Home extends Component {
       <Shader>
         <Cover
           title={'Awakening Through Conversation.'}
-          subtitle={'Debates and discussions centered around and beyond the UK black community'}
+          subtitle={'Debates and discussions centered around and beyond the UK black community.'}
           image={'header-home.jpg'}
           height={575}
           className={css.cover} />
