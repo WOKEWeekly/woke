@@ -219,10 +219,10 @@ module.exports = function(app, conn){
 
   /** Add new team member to database */
   app.post('/addMember', verifyToken(CLEARANCES.ACTIONS.CRUD_TEAM), function(req, res){
-    let member = req.body;
+    let { member, changed } = req.body;
     async.waterfall([
       function(callback){ // Upload file to directory
-        filer.uploadImage(member, 'team', true, callback);
+        filer.uploadImage(member, 'team', changed, callback);
       },
       function(entity, callback){ // Add candidate to database
         member = entity;
@@ -242,6 +242,9 @@ module.exports = function(app, conn){
   app.put('/updateMember', verifyToken(CLEARANCES.ACTIONS.CRUD_TEAM), function(req, res){
     let { member1, member2, changed } = req.body;
     async.waterfall([
+      function(callback){ // Delete original image from directory
+        filer.destroyImage(member1.image, changed, callback);
+      },
       function(callback){ // Upload new image to directory
         filer.uploadImage(member2, 'team', changed, callback); 
       },
@@ -251,12 +254,8 @@ module.exports = function(app, conn){
         const values = [member2.firstname, member2.lastname, member2.image, member2.level, member2.birthday, member2.role, member2.ethnicity, member2.socials, member2.slug, member2.description, member2.verified, member1.id];
         
         conn.query(sql, values, function (err) {
-          if (err) return callback(err);
-          changed ? callback(null) : callback(true);
+          err ? callback(err) : callback(null);
         });
-      },
-      function(callback){ // Delete original image from directory
-        filer.destroyImage(member1.image, callback);
       }
     ], function(err){
       resToClient(res, err,  { id: member1.id, ...member2 });
@@ -268,7 +267,7 @@ module.exports = function(app, conn){
     const member = req.body;
     async.waterfall([
       function(callback){ // Delete image from directory
-        filer.destroyImage(member.image, callback);
+        filer.destroyImage(member.image, true, callback);
       },
       function(callback){ // Delete member from database
         const sql = "DELETE FROM team WHERE id = ?";
