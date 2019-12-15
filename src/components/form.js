@@ -256,26 +256,37 @@ export class _FileSelector extends Component {
   constructor(props){
     super(props);
 
-    const regex = new RegExp(/(v[0-9]+|dev|prod)\//); // Checks if image is on cdn
-    const bs = props.operation === 'add' || regex.test(props.image);
-    this.state = { bs }
+    this.state = {
+      image: '',
+      filename: ''
+    }
 
     this.image = React.createRef();
     this.file = React.createRef();
   }
 
+  /** Attaches CDN base url to preview cloudinary images */
   static getDerivedStateFromProps(props, state){
-    if (state.bs) return;
+    const newState = {
+      image: state.image,
+      filename: state.filename
+    };
 
-    let image, filename, bs;
-
-    if (props.image){
-      image = `${cdn}${props.image}`;
-      filename = image.substring(image.lastIndexOf('/') + 1);
-      bs = true;
+    if (props.operation === 'add'){
+      return newState;
+    } else {
+      if (state.image) return newState;
     }
 
-    return { image, filename, bs };
+    const regex = new RegExp(/(v[0-9]+|dev|prod)\//); // Checks if image is on cdn
+
+    if (regex.test(props.image)){
+      const cloudPath = `${cdn}${props.image}`;
+      newState.image = cloudPath;
+      newState.filename = cloudPath.substring(cloudPath.lastIndexOf('/') + 1);
+    }
+
+    return newState;
   }
 
   handleImageChange = () => {
