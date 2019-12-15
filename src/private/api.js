@@ -20,11 +20,11 @@ module.exports = function(app, conn){
 
   /** Add new session to database */
   app.post('/addSession', verifyToken(CLEARANCES.ACTIONS.CRUD_SESSIONS), function(req, res){
-    let session = req.body;
+    let {session, changed} = req.body;
 
     async.waterfall([
       function(callback){
-        filer.uploadImage(session, 'sessions', true, callback);
+        filer.uploadImage(session, 'sessions', changed, callback);
       },
       function(entity, callback){ // Add session to database
         session = entity;
@@ -44,6 +44,9 @@ module.exports = function(app, conn){
   app.put('/updateSession', verifyToken(CLEARANCES.ACTIONS.CRUD_SESSIONS), function(req, res){
     let { session1, session2, changed } = req.body;
     async.waterfall([
+      function(callback){ // Delete original image from directory
+        filer.destroyImage(session1.image, changed, callback);
+      },
       function(callback){ // Upload new image to directory
         filer.uploadImage(session2, 'sessions', changed, callback);
       },
@@ -53,12 +56,8 @@ module.exports = function(app, conn){
         const values = [session2.title, session2.dateHeld, session2.image, session2.slug, session2.description, session1.id];
 
         conn.query(sql, values, function (err) {
-          if (err) return callback(err);
-          changed ? callback(null) : callback(true);
+          err ? callback(err) : callback(null);
         });
-      },
-      function(callback){ // Delete original image from directory
-        filer.destroyImage(session1.image, callback);
       }
     ], function(err){
       resToClient(res, err, { id: session1.id, ...session2 });
@@ -71,7 +70,7 @@ module.exports = function(app, conn){
 
     async.waterfall([
       function(callback){ // Delete image from directory
-        filer.destroyImage(session.image, callback);
+        filer.destroyImage(session.image, true, callback);
       },
       function(callback){ // Delete session from database
         conn.query("DELETE FROM sessions WHERE id = ?", session.id, function (err) {
@@ -141,10 +140,10 @@ module.exports = function(app, conn){
 
   /** Add new candidate to database */
   app.post('/addCandidate', verifyToken(CLEARANCES.ACTIONS.CRUD_BLACKEX), function(req, res){
-    let candidate = req.body;
+    let {candidate, changed} = req.body;
     async.waterfall([
       function(callback){ // Upload file to directory
-        filer.uploadImage(candidate, 'blackexcellence', true, callback);
+        filer.uploadImage(candidate, 'blackexcellence', changed, callback);
       },
       function(entity, callback){ // Add candidate to database
         candidate = entity;
@@ -164,6 +163,9 @@ module.exports = function(app, conn){
   app.put('/updateCandidate', verifyToken(CLEARANCES.ACTIONS.CRUD_BLACKEX), function(req, res){
     let { candidate1, candidate2, changed } = req.body;
     async.waterfall([
+      function(callback){ // Delete original image from directory
+        filer.destroyImage(candidate2.image, changed, callback);
+      },
       function(callback){ // Upload new image to directory
         filer.uploadImage(candidate2, 'blackexcellence', changed, callback);
       },
@@ -173,12 +175,8 @@ module.exports = function(app, conn){
         const values = [candidate2.id, candidate2.name, candidate2.image, candidate2.birthday, candidate2.ethnicity, candidate2.socials, candidate2.occupation, candidate2.description, candidate2.authorId, candidate2.date_written, candidate1.id];
         
         conn.query(sql, values, function (err) {
-          if (err) return callback(err);
-          changed ? callback(null) : callback(true);
+          err ? callback(err) : callback(null);
         });
-      },
-      function(callback){ // Delete original image from directory
-        filer.destroyImage(candidate2.image, callback);
       }
     ], function(err){
       resToClient(res, err, { id: candidate1.id, ...candidate2 });
@@ -191,7 +189,7 @@ module.exports = function(app, conn){
 
     async.waterfall([
       function(callback){ // Delete image from directory
-        filer.destroyImage(candidate.image, callback);
+        filer.destroyImage(candidate.image, true, callback);
       },
       function(callback){ // Delete candidate from database
         conn.query("DELETE FROM blackex WHERE id = ?", candidate.id, function (err) {
@@ -293,10 +291,10 @@ module.exports = function(app, conn){
 
   /** Add new review to database */
   app.post('/addReview', verifyToken(CLEARANCES.ACTIONS.CRUD_REVIEWS), function(req, res){
-    let review = req.body;
+    let {review, changed} = req.body;
     async.waterfall([
       function(callback){ // Upload file to directory
-        filer.uploadImage(review, 'reviews', true, callback);
+        filer.uploadImage(review, 'reviews', changed, callback);
       },
       function(entity, callback){ // Add review to database
         review = entity;
@@ -316,6 +314,9 @@ module.exports = function(app, conn){
   app.put('/updateReview', verifyToken(CLEARANCES.ACTIONS.CRUD_REVIEWS), function(req, res){
     let { review1, review2, changed } = req.body;
     async.waterfall([
+      function(callback){ // Delete original image from directory
+        filer.destroyImage(review1.image, changed, callback);
+      },
       function(callback){ // Upload new image to directory
         filer.uploadImage(review2, 'reviews', changed, callback);
       },
@@ -325,12 +326,8 @@ module.exports = function(app, conn){
         const values = [review2.referee, review2.position, review2.rating, review2.image, review2.description, review1.id];
 
         conn.query(sql, values, function (err) {
-          if (err) return callback(err);
-          changed ? callback(null) : callback(true);
+          err ? callback(err) : callback(null);
         });
-      },
-      function(callback){ // Delete original image from directory
-        filer.destroyImage(review1.image, callback);
       }
     ], function(err){
       resToClient(res, err, { id: review1.id, ...review2 });
@@ -343,7 +340,7 @@ module.exports = function(app, conn){
 
     async.waterfall([
       function(callback){ // Delete image from directory
-        filer.destroyImage(review.image, callback);
+        filer.destroyImage(review.image, true callback);
       },
       function(callback){ // Delete review from database
         conn.query("DELETE FROM reviews WHERE id = ?", review.id, function (err) {

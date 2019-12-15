@@ -93,12 +93,15 @@ class CandidateAdd extends Component {
     let data;
 
     if (operation === 'add'){
-      data = JSON.stringify(candidate);
+      data = JSON.stringify({
+        candidate,
+        changed: image !== ''
+      });
     } else {
       data = JSON.stringify({
         candidate1: this.props.candidate,
         candidate2: candidate,
-        changed: !image.startsWith("v")
+        changed: image !== null && image !== '' && !image.startsWith("v")
       });
     }
 
