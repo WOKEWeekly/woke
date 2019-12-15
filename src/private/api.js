@@ -340,7 +340,7 @@ module.exports = function(app, conn){
 
     async.waterfall([
       function(callback){ // Delete image from directory
-        filer.destroyImage(review.image, true callback);
+        filer.destroyImage(review.image, true, callback);
       },
       function(callback){ // Delete review from database
         conn.query("DELETE FROM reviews WHERE id = ?", review.id, function (err) {
