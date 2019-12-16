@@ -131,7 +131,7 @@ class BlackExcellence extends Component {
             backgroundPosition={'center'}
             imageTitle={
               <img
-                src={`/static/images/logos/blackex-logo.png`}
+                src={`${cdn}/public/logos/blackex-logo.png`}
                 alt={'#BlackExcellence logo'}
                 className={css.imageLogo}
                 onLoad={this.showImage}

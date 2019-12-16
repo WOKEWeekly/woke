@@ -72,58 +72,5 @@ module.exports = {
         });
       }
     }
-  },
-
-  /** 
-   * //TODO: Delete when Cloudinary fully implemented
-   * Uploading files using Multer */
-  upload: multer({
-    storage: multer.diskStorage({
-      destination: function(req, file, callback) {callback(null, `./static/images/${req.headers.path}/`);},
-      filename: function (req, file, callback) {
-        let filename, slug;
-        switch (req.headers.path){
-          case 'sessions':
-            const session = req.method === 'POST' ? JSON.parse(req.body.session) : JSON.parse(req.body.sessions).session2;
-            slug = req.body.slug = filer.generateSlug(session.title);
-            filename = filer.generateSessionFilename(session.dateHeld, slug, file);
-            break;
-          case 'blackexcellence':
-            const candidate = req.method === 'POST' ? JSON.parse(req.body.candidate) : JSON.parse(req.body.candidates).candidate2;
-            slug = filer.generateSlug(candidate.name);
-            filename = filer.generateCandidateFilename(candidate.id, slug, file);
-            break;
-          case 'team':
-            const member = req.method === 'POST' ? JSON.parse(req.body.member) : JSON.parse(req.body.members).member2;
-            slug = filer.generateSlug(`${member.firstname} ${member.lastname}`);
-            filename = filer.generateMemberFilename(slug, file);
-            break;
-          case 'reviews':
-            const review = req.method === 'POST' ? JSON.parse(req.body.review) : JSON.parse(req.body.reviews).review2;
-            slug = filer.generateSlug(review.referee);
-            filename = filer.generateReviewFilename(review.rating, slug, file);
-            break;
-        }
-        callback(null, filename);
-      }
-    }),
-    limits: {
-      files: 1,
-      fileSize: 1.5 * 1024 * 1024
-    },
-    fileFilter: function(req, file, callback) {
-      /** Limit to certain image types */
-      let allowedMimes = ['image/jpeg', 'image/pjpeg', 'image/png', 'image/gif'];
-      if (!allowedMimes.includes(file.mimetype)){
-        return callback(new Error('Invalid file type. Only jpg, png and gif image files are allowed.'));
-      }
-
-      /** If no image change, skip */
-      if (req.body.changed === 'false'){
-        return callback(null, false);
-      }
-
-      callback(null, true);
-    }
-  }).single('file')
+  }
 }

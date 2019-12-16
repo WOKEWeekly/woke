@@ -5,6 +5,7 @@ import {Container} from 'react-bootstrap';
 import classNames from 'classnames';
 import css from '~/styles/_components.scss';
 import { Fader } from '~/components/transitioner.js';
+import { cdn } from '~/constants/settings.js';
 
 export const isSmallDevice = () => {
   return window.matchMedia('(max-width: 576px)').matches;
@@ -22,7 +23,7 @@ class _Cover extends Component {
 
   componentDidMount(){
     const image = new Image();
-    image.src = `/static/images/bg/${this.props.image}`;
+    image.src = `${cdn}/public/bg/${this.props.image}`;
     image.onload = () => this.setState({imageLoaded: true, imageSrc: image.src});
   }
 

@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Col, Row } from 'react-bootstrap';
 import { Slider } from '~/components/transitioner.js';
 import LazyLoader from 'react-visibility-sensor';
+import { cdn } from '~/constants/settings.js';
 
 import css from '~/styles/home.scss';
 
@@ -55,7 +56,7 @@ class Part extends Component {
 
   componentDidMount(){
     const image = new Image();
-    image.src = `/static/images/fillers/${this.props.image}`;
+    image.src = `${cdn}/public/fillers/${this.props.image}`;
     image.onload = () => this.setState({imageLoaded: true, imageSrc: image.src});
   }
 

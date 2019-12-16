@@ -2,8 +2,9 @@ const async = require('async');
 const fs = require('fs');
 const jwt = require('jsonwebtoken');
 const path = require('path');
+const request = require('request');
 const sm = require('sitemap');
-const { domain } = require('../constants/settings.js');
+const { cdn, domain } = require('../constants/settings.js');
 
 const { renderErrPage } = require('./response.js');
 
@@ -584,31 +585,19 @@ module.exports = function(app, conn, server){
    **************************************************************/
      
   app.get('/constitution', function(req, res){
-    fs.readFile('./static/resources/Constitution.pdf', function (err, data){
-      if (err) res.sendStatus(404);
-      res.contentType("application/pdf");
-      res.send(data);
-    });
+    request(`${cdn}/resources/Constitution.pdf`).pipe(res);
   });
 
   app.get('/sponsorship-proposal', function(req, res){
-    fs.readFile('./static/resources/Sponsorship Proposal.pdf', function (err, data){
-      if (err) res.sendStatus(404);
-      res.contentType("application/pdf");
-      res.send(data);
-    });
+    request(`${cdn}/resources/Sponsorship_Proposal.pdf`).pipe(res);
   });
 
   app.get('/blackexcellence-tribute-guide', function(req, res){
-    fs.readFile('./static/resources/#BlackExcellence Tribute Guide.pdf', function (err, data){
-      if (err) res.sendStatus(404);
-      res.contentType("application/pdf");
-      res.send(data);
-    });
+    request(`${cdn}/resources/BlackExcellence_Tribute_Guide.pdf`).pipe(res);
   });
 
   app.get('/robots.txt', (req, res) => (
-    res.status(200).sendFile(path.resolve('./static/resources/robots.txt'), {
+    res.status(200).sendFile(path.resolve('./robots.txt'), {
       headers: { 'Content-Type': 'text/plain;charset=UTF-8', }
     })
   ));

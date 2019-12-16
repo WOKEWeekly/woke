@@ -25,7 +25,7 @@
   @extend .text;
   background: {  
     attachment: fixed;
-    image: url('/static/images/bg/bg-404.jpg');
+    image: url('https://res.cloudinary.com/wokeweekly/image/upload/public/bg/bg-404.jpg');
     position: top;
     repeat: no-repeat;
     size: cover;
