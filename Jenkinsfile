@@ -4,7 +4,7 @@ pipeline {
         stage('Clean') { 
             steps {
               dir('src'){
-                sh 'rm -rf *'
+                sh 'rm -rf node_modules .next out'
               }
             }
         }
