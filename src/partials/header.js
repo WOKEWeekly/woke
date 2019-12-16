@@ -10,7 +10,7 @@ import { Default, Mobile, zIndices } from '~/components/layout';
 
 import CLEARANCES from '~/constants/clearances.js';
 import request from '~/constants/request.js';
-import { accounts } from '~/constants/settings.js';
+import { accounts, cdn } from '~/constants/settings.js';
 
 import Login from '~/pages/_auth/login';
 import css from '~/styles/_partials.scss';
@@ -129,7 +129,7 @@ export class MainNavbar extends Component {
 
   componentDidMount(){
     const image = new Image();
-    image.src = `/static/images/bg/nav-bg-${this.props.theme}.jpg`;
+    image.src = `${cdn}/public/bg/nav-bg-${this.props.theme}.jpg`;
     image.onload = () => this.setState({imageLoaded: true, imageSrc: image.src});
   }
 
@@ -146,7 +146,7 @@ export class MainNavbar extends Component {
         style={{ backgroundImage: `url(${imageSrc})` }}>
         <Navbar.Brand className={css.brand} href="/">
           <img
-            src="/static/images/logos/wokeweekly-logo.png"
+            src={`${cdn}/public/logos/wokeweekly-logo.png`}
             height="40"
             alt="#WOKEWeekly Logo" />
         </Navbar.Brand>

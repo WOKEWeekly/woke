@@ -11,6 +11,7 @@ import { fas } from '@fortawesome/free-solid-svg-icons';
 
 import { CookiePrompt, setCookie, getCookie } from '~/constants/cookies';
 import { loadCountries } from '~/constants/countries';
+import { cdn } from '~/constants/settings.js';
 import { saveCountries, setTheme } from '~/reducers/actions';
 
 import { PreNavBar, MainNavBar } from "~/partials/header.js";
@@ -44,7 +45,7 @@ export default class WOKE extends App {
 
     // Fade background image into view
     const image = new Image();
-    image.src = `/static/images/bg/${backgroundImage}`;
+    image.src = `${cdn}/public/bg/${backgroundImage}`;
     image.onload = () => {
       document.body.style.backgroundImage = `url(${image.src})`;
       document.body.style.opacity = 1;

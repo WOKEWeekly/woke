@@ -6,6 +6,7 @@ import { EditEntityButton } from '~/components/button.js';
 import { Paragraph } from '~/components/text.js';
 import { BottomToolbar } from '~/components/toolbar.js';
 import { Fader } from '~/components/transitioner.js';
+import { cdn } from '~/constants/settings.js';
 
 import CLEARANCES from '~/constants/clearances.js';
 import css from '~/styles/info.scss';
@@ -30,7 +31,7 @@ class Variants extends Component {
     coverImage, imageLogo, imageAlt, } = this.props;
     
     const image = <img
-      src={`/static/images/logos/${imageLogo}`}
+      src={`${cdn}/public/logos/${imageLogo}`}
       alt={imageAlt}
       className={css.imageLogo} />
 
