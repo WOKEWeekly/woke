@@ -179,7 +179,7 @@ class Session extends PureComponent {
           <Link href={`/session/${item.slug}`}>
             <div className={css.cell}>
               <img
-                src={`${cdn}${params}${item.image}`}
+                src={`${cdn}/${params}${item.image}`}
                 alt={item.title}
                 className={css.image}
                 onLoad={() => this.setState({isLoaded: true})} />

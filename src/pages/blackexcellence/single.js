@@ -97,7 +97,7 @@ class CandidatePage extends Component {
               duration={800}
               direction={'left'}> 
               <img
-                src={`${cdn}${candidate.image}`}
+                src={`${cdn}/${candidate.image}`}
                 alt={candidate.name}
                 className={css.image}
                 onLoad={() => this.setState({imageLoaded: true})} />

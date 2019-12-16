@@ -111,7 +111,7 @@ class Exec extends PureComponent {
             <Row>
               <Col md={{span: 4, order: isEven ? 1 : 2}}>
                 <img
-                  src={`${cdn}${item.image}`}
+                  src={`${cdn}/${item.image}`}
                   alt={item.fullname}
                   className={css.image} />
               </Col>

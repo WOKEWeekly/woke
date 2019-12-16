@@ -1,5 +1,5 @@
 import Document, { Html, Head, Main, NextScript } from 'next/document';
-import { domain } from '~/constants/settings.js';
+import { cdn, domain } from '~/constants/settings.js';
 import css from '~/styles/_partials.scss';
 
 export default class MyDocument extends Document {
@@ -52,7 +52,7 @@ const Meta = ({
     <meta property="og:url" content={`${domain}${url}`} />
 
     {/* TODO: Check if this actually works */}
-    <meta property="og:image" content={`${domain}/static/images${cardImage}`} />
+    <meta property="og:image" content={`${cdn}/public/${cardImage}`} />
     <meta property="og:image:height" content="800" />
     <meta property="og:image:width" content="800" />
     <meta property="og:image:type" content="image/jpeg" />

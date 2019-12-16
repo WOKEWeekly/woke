@@ -9,7 +9,7 @@ module.exports = {
     youtube: "https://www.youtube.com/channel/UC2pxSc01dJSFSVDPSN6_hBA",
     paypal: 'https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=BUWDQJCN66KRL&source=url'
   },
-  cdn: 'https://res.cloudinary.com/wokeweekly/image/upload/',
+  cdn: 'https://res.cloudinary.com/wokeweekly/image/upload',
   creationDate: new Date(2017, 2, 2),
   domain: dev ? 'http://localhost:3000' : "https://www.wokeweekly.co.uk",
   emails: {

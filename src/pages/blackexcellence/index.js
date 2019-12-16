@@ -181,7 +181,7 @@ class Candidate extends PureComponent {
         <Link href={`/blackexcellence/candidate/${item.id}`}>
           <div className={css.cell}>
             <img
-              src={`${cdn}${params}${item.image}`}
+              src={`${cdn}/${params}${item.image}`}
               alt={label}
               className={css.image}
               onLoad={this.showImage}

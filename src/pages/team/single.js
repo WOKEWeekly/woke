@@ -54,7 +54,7 @@ class MemberPage extends Component {
               duration={800}
               direction={'left'}> 
               <img
-                src={`${cdn}${member.image}`}
+                src={`${cdn}/${member.image}`}
                 alt={member.fullname}
                 className={css.image}
                 onLoad={() => this.setState({imageLoaded: true})} />

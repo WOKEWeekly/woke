@@ -76,7 +76,7 @@ class Review extends PureComponent {
       return (
         <Col md={{span: 3, order: isEven ? 1 : 2}}>
           <img
-            src={`${cdn}${item.image}`}
+            src={`${cdn}/${item.image}`}
             alt={item.fullname}
             className={css.image} />
         </Col>
