@@ -26,7 +26,7 @@ module.exports = function(app, conn, server){
       title: 'Sessions | #WOKEWeekly',
       description: 'Where the magic happens...',
       url: '/sessions',
-      cardImage: `/bg/card-sessions.jpg`,
+      cardImage: `public/bg/card-sessions.jpg`,
       backgroundImage: 'bg-sessions.jpg'
      });
   });
@@ -43,7 +43,7 @@ module.exports = function(app, conn, server){
           title: `${session.title} | #WOKEWeekly`,
           description: serveDescription(session.description),
           url: `/sessions/${session.slug}`,
-          cardImage: `/sessions/${session.image}`,
+          cardImage: session.image,
           backgroundImage: 'bg-sessions.jpg',
           session
         });
@@ -92,7 +92,7 @@ module.exports = function(app, conn, server){
         title: 'Topic Bank | #WOKEWeekly',
         description: 'The currency of the franchise.',
         url: '/topics',
-        cardImage: `/bg/card-topics.jpg`,
+        cardImage: `public/bg/card-topics.jpg`,
         backgroundImage: 'bg-topics.jpg',
         hasAccess: result[0].value === token
       });
@@ -135,7 +135,7 @@ module.exports = function(app, conn, server){
       description: 'Recognising the intrinsic potential in young black rising stars who are excelling in their respective fields and walks of life.',
       url: '/blackexcellence',
       backgroundImage: 'bg-blackex.jpg',
-      cardImage: `/bg/card-blackex.jpg`,
+      cardImage: `public/bg/card-blackex.jpg`,
       theme: 'blackex'
     });
   });
@@ -185,7 +185,7 @@ module.exports = function(app, conn, server){
         title: `${candidate.label} | #WOKEWeekly`,
         description: serveDescription(candidate.description),
         url: `/blackexcellence/candidate/${candidate.id}`,
-        cardImage: `/blackexcellence/${candidate.image}`,
+        cardImage: candidate.image,
         alt: candidate.label,
         backgroundImage: 'bg-blackex.jpg',
         theme: 'blackex',
@@ -200,7 +200,7 @@ module.exports = function(app, conn, server){
       title: 'Meet The Executives | #WOKEWeekly',
       description: 'The masterminds behind the cause.',
       url: '/executives',
-      cardImage: '/bg/card-team.jpg',
+      cardImage: 'public/bg/card-team.jpg',
       backgroundImage: 'bg-team.jpg',
     });
   });
@@ -217,7 +217,7 @@ module.exports = function(app, conn, server){
           title: `${exec.firstname} ${exec.lastname} | #WOKEWeekly`,
           description: serveDescription(exec.description),
           url: `/executives/${exec.slug}`,
-          cardImage: `/team/${exec.image}`,
+          cardImage: exec.image,
           backgroundImage: 'bg-team.jpg',
           member: exec
         });
@@ -248,7 +248,7 @@ module.exports = function(app, conn, server){
         title: `${member.firstname} ${member.lastname} | #WOKEWeekly`,
         description: serveDescription(member.description),
         url: `/team/member/${member.slug}`,
-        cardImage: `/team/${member.image}`,
+        cardImage: member.image,
         alt: `${member.firstname} ${member.lastname}`,
         backgroundImage: 'bg-team.jpg',
         member
@@ -359,7 +359,7 @@ module.exports = function(app, conn, server){
         title: '#WOKEWeekly Mental Health',
         description: 'Shattering the stigmata of discussion over our wellbeing through healthy conversation and education.',
         url: '/mentalhealth',
-        cardImage: '/bg/card-mental.jpg',
+        cardImage: 'public/bg/card-mental.jpg',
         backgroundImage: 'bg-mental.jpg',
         pageText: text,
         coverImage: 'header-mental.jpg',
@@ -397,7 +397,7 @@ module.exports = function(app, conn, server){
         title: 'About #WOKEWeekly',
         description: serveDescription(text),
         pageText: text,
-        cardImage: '/bg/card-about.jpg',
+        cardImage: 'public/bg/card-about.jpg',
         url: '/about'
       });
     });
@@ -491,7 +491,7 @@ module.exports = function(app, conn, server){
         pageText: text,
         url: '/donate',
         backgroundImage: 'bg-donate.jpg',
-        cardImage: `/bg/card-donate.jpg`,
+        cardImage: `public/bg/card-donate.jpg`,
       });
     });
   });

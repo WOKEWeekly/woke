@@ -52,7 +52,7 @@ const Meta = ({
     <meta property="og:url" content={`${domain}${url}`} />
 
     {/* TODO: Check if this actually works */}
-    <meta property="og:image" content={`${cdn}/public/${cardImage}`} />
+    <meta property="og:image" content={`${cdn}/${cardImage}`} />
     <meta property="og:image:height" content="800" />
     <meta property="og:image:width" content="800" />
     <meta property="og:image:type" content="image/jpeg" />
