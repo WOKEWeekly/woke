@@ -165,7 +165,7 @@ export class RadioButtonGroup extends Component {
         className={css.widgets}
         type={'radio'}
         name={this.props.name}
-        defaultValue={this.props.defaultValue}
+        value={this.props.value}
         onChange={this.props.onChange}>
           {this.props.items.map((item, index) => {
             return <ToggleButton variant="dark" key={index} value={item.value}>{item.label}</ToggleButton>;

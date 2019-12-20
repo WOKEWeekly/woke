@@ -71,7 +71,7 @@ class TopicForm extends Component {
                 <Label>Type:</Label>
                 <RadioButtonGroup
                   name={'type'}
-                  defaultValue={type}
+                  value={type}
                   onChange={handleRadio}
                   items={radioItems} />
               </Col>
