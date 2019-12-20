@@ -26,11 +26,6 @@ class TopicForm extends Component {
     const { handleText, handleRadio, handleCheckboxButton } = handlers;
     let { headline, category, question, type, polarity, validated, sensitivity, option1, option2, description } = this.props.topic;
 
-    const radioItems = [
-      { label: 'Debate', value: 'Debate' },
-      { label: 'Discussion', value: 'Discussion' }
-    ];
-
     return (
       <Shader>
         <Spacer className={css.form}>
@@ -73,7 +68,10 @@ class TopicForm extends Component {
                   name={'type'}
                   value={type}
                   onChange={handleRadio}
-                  items={radioItems} />
+                  items={[
+                    { label: 'Debate', value: 'Debate' },
+                    { label: 'Discussion', value: 'Discussion' }
+                  ]} />
               </Col>
               <Col md={7}>
                 <Label>Polarity:</Label>
