@@ -1,6 +1,8 @@
 const dev = process.env.NODE_ENV !== 'production';
 
 module.exports = {
+
+  /** The full URLs for each #WOKEWeekly account */
   accounts: {
     facebook: "https://www.facebook.com/wokeweeklyuk",
     twitter: "https://www.twitter.com/wokeweeklyuk",
@@ -9,11 +11,32 @@ module.exports = {
     youtube: "https://www.youtube.com/channel/UC2pxSc01dJSFSVDPSN6_hBA",
     paypal: 'https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=BUWDQJCN66KRL&source=url'
   },
+
+  /** Cloudinary fields */
   cdn: {
+    /**
+     * Checks whether the image is from Cloudinary by testing
+     * against a regular expression.
+     * @param {string} image - The image in question.
+     * @returns {Boolean} Value indicating whether it's from Cloudinary
+     */
+    check: (image) => {
+      const regex = new RegExp(/(v[0-9]+|dev|prod)\//);
+      const match = image.match(regex);
+      if (match === null) return false;
+
+      return image.startsWith(match[0]); 
+    },
     url: 'https://res.cloudinary.com/wokeweekly/image/upload',
   },
+
+  /** The date in which #WOKEWeekly was established */
   creationDate: new Date(2017, 2, 2),
+
+  /** Domain to use dependent on environment */
   domain: dev ? 'http://localhost:3000' : "https://www.wokeweekly.co.uk",
+
+  /** Relevant email accounts */
   emails: {
     applications: "applications@wokeweekly.co.uk",
     enquiries: "enquiries@wokeweekly.co.uk",
@@ -21,6 +44,8 @@ module.exports = {
 
     director: "zavidegbue@gmail.com"
   },
+
+  /** List of social media domains and icons for forms */
   socialPlatforms: {
     facebook: { name: 'Facebook', icon: 'facebook-f', domain: 'https://www.facebook.com/' },
     twitter: { name: 'Twitter', icon: 'twitter', domain: 'https://www.twitter.com/' },

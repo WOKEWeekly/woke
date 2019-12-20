@@ -5,8 +5,9 @@ import { setAlert } from '~/components/alert.js';
 
 import { formatISODate } from '~/constants/date.js';
 import handlers from '~/constants/handlers.js';
-import { isValidSession } from '~/constants/validations.js';
 import request from '~/constants/request.js';
+import { cdn } from '~/constants/settings.js';
+import { isValidSession } from '~/constants/validations.js';
 
 import SessionForm from './form.js';
 
@@ -72,7 +73,7 @@ class SessionCrud extends Component {
         description: description.trim(),
         image: image
       },
-      changed: image !== null && image !== '' && !image.startsWith("v")
+      changed: !cdn.check(image)
     });
 
     /** Update session in database */

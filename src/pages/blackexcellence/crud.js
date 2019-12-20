@@ -6,6 +6,7 @@ import { setAlert } from '~/components/alert.js';
 import { formatISODate } from '~/constants/date.js';
 import handlers from '~/constants/handlers.js';
 import request from '~/constants/request.js';
+import { cdn } from '~/constants/settings.js';
 
 import { creationDate } from '~/constants/settings.js';
 import { isValidCandidate } from '~/constants/validations.js';
@@ -101,7 +102,7 @@ class CandidateAdd extends Component {
       data = JSON.stringify({
         candidate1: this.props.candidate,
         candidate2: candidate,
-        changed: image !== null && image !== '' && !image.startsWith("v")
+        changed: !cdn.check(image)
       });
     }
 

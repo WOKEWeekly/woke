@@ -5,6 +5,7 @@ import { setAlert } from '~/components/alert.js';
 
 import handlers from '~/constants/handlers.js';
 import request from '~/constants/request.js';
+import { cdn } from '~/constants/settings.js';
 import { isValidReview } from '~/constants/validations.js';
 
 import ReviewForm from './form.js';
@@ -52,7 +53,7 @@ class ReviewCrud extends Component {
       data = JSON.stringify({
         review1: this.props.review,
         review2: review,
-        changed: image !== null && image !== '' && !image.startsWith("v")
+        changed: !cdn.check(image)
       });
     }
 
