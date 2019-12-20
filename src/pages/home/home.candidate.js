@@ -68,7 +68,7 @@ class _RandomCandidate extends Component {
               {candidate.image ?
               <Link href={link}>
                 <img
-                  src={`${cdn}/${candidate.image}`}
+                  src={`${cdn.url}/${candidate.image}`}
                   alt={candidate.name}
                   className={css.image} />
               </Link> : null}

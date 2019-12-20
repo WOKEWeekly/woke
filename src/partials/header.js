@@ -129,7 +129,7 @@ export class MainNavbar extends Component {
 
   componentDidMount(){
     const image = new Image();
-    image.src = `${cdn}/public/bg/nav-bg-${this.props.theme}.jpg`;
+    image.src = `${cdn.url}/public/bg/nav-bg-${this.props.theme}.jpg`;
     image.onload = () => this.setState({imageLoaded: true, imageSrc: image.src});
   }
 
@@ -146,7 +146,7 @@ export class MainNavbar extends Component {
         style={{ backgroundImage: `url(${imageSrc})` }}>
         <Navbar.Brand className={css.brand} href="/">
           <img
-            src={`${cdn}/public/logos/wokeweekly-logo.png`}
+            src={`${cdn.url}/public/logos/wokeweekly-logo.png`}
             height="40"
             alt="#WOKEWeekly Logo" />
         </Navbar.Brand>

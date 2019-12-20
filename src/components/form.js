@@ -281,7 +281,7 @@ export class _FileSelector extends Component {
     const regex = new RegExp(/(v[0-9]+|dev|prod)\//); // Checks if image is on cdn
 
     if (regex.test(props.image)){
-      const cloudPath = `${cdn}/${props.image}`;
+      const cloudPath = `${cdn.url}/${props.image}`;
       newState.image = cloudPath;
       newState.filename = cloudPath.substring(cloudPath.lastIndexOf('/') + 1);
     }

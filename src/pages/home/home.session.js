@@ -59,7 +59,7 @@ export default class UpcomingSession extends Component {
               {session.image ?
               <Link href={link}>
                 <img
-                  src={`${cdn}/${session.image}`}
+                  src={`${cdn.url}/${session.image}`}
                   alt={session.title}
                   className={css.image} />
               </Link> : null}

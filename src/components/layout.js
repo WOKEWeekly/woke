@@ -23,7 +23,7 @@ class _Cover extends Component {
 
   componentDidMount(){
     const image = new Image();
-    image.src = `${cdn}/public/bg/${this.props.image}`;
+    image.src = `${cdn.url}/public/bg/${this.props.image}`;
     image.onload = () => this.setState({imageLoaded: true, imageSrc: image.src});
   }
 

@@ -45,7 +45,7 @@ export default class WOKE extends App {
 
     // Fade background image into view
     const image = new Image();
-    image.src = `${cdn}/public/bg/${backgroundImage}`;
+    image.src = `${cdn.url}/public/bg/${backgroundImage}`;
     image.onload = () => {
       document.body.style.backgroundImage = `url(${image.src})`;
       document.body.style.opacity = 1;

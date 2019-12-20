@@ -52,7 +52,7 @@ const Meta = ({
     <meta property="og:url" content={`${domain}${url}`} />
 
     {/* TODO: Check if this actually works */}
-    <meta property="og:image" content={`${cdn}/${cardImage}`} />
+    <meta property="og:image" content={`${cdn.url}/${cardImage}`} />
     <meta property="og:image:height" content="800" />
     <meta property="og:image:width" content="800" />
     <meta property="og:image:type" content="image/jpeg" />
@@ -62,7 +62,7 @@ const Meta = ({
     <meta name="twitter:card" content="summary_large_image" />
 
     {/* Favicon */}
-    <link rel="icon" href={`${cdn}/public/logos/favicon.jpg`} />
+    <link rel="icon" href={`${cdn.url}/public/logos/favicon.jpg`} />
 
     {/* BootStrap and Google Web Fonts importation */}
     <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Raleway:400,700|Yeseva+One|Patua+One:400,700" />

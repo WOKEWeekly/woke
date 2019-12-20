@@ -69,7 +69,7 @@ export default class RandomMember extends Component{
                   {member.image ?
                   <Link href={link}>
                     <img
-                      src={`${cdn}/${member.image}`}
+                      src={`${cdn.url}/${member.image}`}
                       alt={member.fullname}
                       className={css.image} />
                   </Link> : null}

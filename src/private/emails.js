@@ -148,7 +148,7 @@ const designMessage = (content, withFooter) => {
     The #WOKEWeekly Team.
 
     <hr style="margin-top: .8em">
-    <img src="${cdn}/public/logos/email-signature.png" style="width:175px" alt="#WOKEWeekly">
+    <img src="${cdn.url}/public/logos/email-signature.png" style="width:175px" alt="#WOKEWeekly">
   `
   return (
     `

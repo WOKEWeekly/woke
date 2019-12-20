@@ -56,7 +56,7 @@ class Part extends Component {
 
   componentDidMount(){
     const image = new Image();
-    image.src = `${cdn}/public/fillers/${this.props.image}`;
+    image.src = `${cdn.url}/public/fillers/${this.props.image}`;
     image.onload = () => this.setState({imageLoaded: true, imageSrc: image.src});
   }
 

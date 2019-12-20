@@ -71,7 +71,7 @@ class ForumAdvertiser extends Component {
 
   componentDidMount(){
     const image = new Image();
-    image.src = `${cdn}/public/bg/bg-home-forum.jpg`;
+    image.src = `${cdn.url}/public/bg/bg-home-forum.jpg`;
     image.onload = () => this.setState({imageLoaded: true, imageSrc: image.src});
   }
 

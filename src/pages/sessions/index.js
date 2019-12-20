@@ -179,7 +179,7 @@ class Session extends PureComponent {
           <Link href={`/session/${item.slug}`}>
             <div className={css.cell}>
               <img
-                src={`${cdn}/${params}${item.image}`}
+                src={`${cdn.url}/${params}${item.image}`}
                 alt={item.title}
                 className={css.image}
                 onLoad={() => this.setState({isLoaded: true})} />
@@ -202,7 +202,7 @@ class Session extends PureComponent {
             <Row className={css.item}>
               <Col md={4} className={'p-0'}>
                 <img
-                  src={`${cdn}/${params}/${item.image}`}
+                  src={`${cdn.url}/${params}/${item.image}`}
                   alt={item.title}
                   className={css.image}
                   onLoad={() => this.setState({isLoaded: true})} />

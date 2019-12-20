@@ -31,7 +31,7 @@ class Variants extends Component {
     coverImage, imageLogo, imageAlt, } = this.props;
     
     const image = <img
-      src={`${cdn}/public/logos/${imageLogo}`}
+      src={`${cdn.url}/public/logos/${imageLogo}`}
       alt={imageAlt}
       className={css.imageLogo} />
 

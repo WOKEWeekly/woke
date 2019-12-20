@@ -59,7 +59,7 @@ export class _Paragraph extends Component {
               // For images
               case ';': return (
                 <div className={css.image}>
-                  <img src={`${cdn}/public/fillers/${paragraph.substring(1)}`} key={key} />
+                  <img src={`${cdn.url}/public/fillers/${paragraph.substring(1)}`} key={key} />
                 </div>
               );
 

@@ -131,7 +131,7 @@ class BlackExcellence extends Component {
             backgroundPosition={'center'}
             imageTitle={
               <img
-                src={`${cdn}/public/logos/blackex-logo.png`}
+                src={`${cdn.url}/public/logos/blackex-logo.png`}
                 alt={'#BlackExcellence logo'}
                 className={css.imageLogo}
                 onLoad={this.showImage}
@@ -181,7 +181,7 @@ class Candidate extends PureComponent {
         <Link href={`/blackexcellence/candidate/${item.id}`}>
           <div className={css.cell}>
             <img
-              src={`${cdn}/${params}${item.image}`}
+              src={`${cdn.url}/${params}${item.image}`}
               alt={label}
               className={css.image}
               onLoad={this.showImage}

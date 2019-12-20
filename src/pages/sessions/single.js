@@ -73,7 +73,7 @@ class SessionPage extends Component {
               duration={800}
               direction={'right'}> 
               <img
-                src={`${cdn}/${session.image}`}
+                src={`${cdn.url}/${session.image}`}
                 alt={session.title}
                 className={css.image}
                 onLoad={() => this.setState({imageLoaded: true})} />
