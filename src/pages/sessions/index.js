@@ -143,7 +143,7 @@ class Sessions extends Component {
             <RadioButtonGroup
               name={'view'}
               items={radioItems}
-              defaultValue={view}
+              value={view}
               onChange={this.switchView} />
       
             <SortDropdown

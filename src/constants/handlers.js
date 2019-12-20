@@ -11,6 +11,7 @@ export default (component) => {
     /** Handle radio changes */
     handleRadio: (value, e) => {
       const { name } = e.target;
+      console.log(name, value);
       component.setState({[name]: value});
     },
 
