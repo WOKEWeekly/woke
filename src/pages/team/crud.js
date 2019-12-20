@@ -100,7 +100,7 @@ class MemberCrud extends Component {
       ethnicity: JSON.stringify(ethnicities),
       socials: JSON.stringify(socials),
       verified,
-      slackID: slackID.trim()
+      slackID: slackID !== null ? slackID.trim() : null
     };
 
     let data;
