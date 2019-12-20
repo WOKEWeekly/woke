@@ -210,7 +210,7 @@ module.exports = function(app, conn){
 
   /** Retrieve only executive team members */
   app.get('/getExec', validateReq, function(req, res){
-    conn.query("SELECT * FROM team WHERE level = 'Executive'", function (err, result) {
+    conn.query("SELECT * FROM team WHERE level = 'Executive' AND verified = 1", function (err, result) {
       resToClient(res, err, result);
     });
   });
