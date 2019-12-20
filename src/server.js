@@ -64,7 +64,5 @@ require('./private/api.js')(app, conn);
 require('./private/auth.js')(app, conn, passport, server);
 require('./private/routes.js')(app, conn, server);
 require('./private/cron.js')(conn);
-// require('./private/mobile.js')(app, conn);
-// require('./private/notifications.js');
 
 module.exports = { config }
