@@ -6,7 +6,7 @@ import classNames from 'classnames';
 import { Icon } from '~/components/icon.js';
 import { Fader, Zoomer } from '~/components/transitioner.js';
 
-import { cdn } from '~/constants/settings.js';
+import { cloudinary } from '~/constants/settings.js';
 
 import css from '~/styles/_components.scss';
 
@@ -278,8 +278,8 @@ export class _FileSelector extends Component {
       if (state.image) return newState;
     }
 
-    if (cdn.check(props.image)){
-      const cloudPath = `${cdn.url}/${props.image}`;
+    if (cloudinary.verify(props.image)){
+      const cloudPath = `${cloudinary.url}/${props.image}`;
       newState.image = cloudPath;
       newState.filename = cloudPath.substring(cloudPath.lastIndexOf('/') + 1);
     }

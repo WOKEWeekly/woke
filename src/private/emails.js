@@ -2,7 +2,7 @@ const { config } = require('../server.js')
 const dotenv = require('dotenv').config({path: config});
 const nodemailer = require('nodemailer');
 
-let { cdn, domain, emails } = require('../constants/settings.js');
+let { cloudinary, domain, emails } = require('../constants/settings.js');
 
 /** Pass credentials to transporter */
 const transporter = nodemailer.createTransport({
@@ -148,7 +148,7 @@ const designMessage = (content, withFooter) => {
     The #WOKEWeekly Team.
 
     <hr style="margin-top: .8em">
-    <img src="${cdn.url}/public/logos/email-signature.png" style="width:175px" alt="#WOKEWeekly">
+    <img src="${cloudinary.url}/public/logos/email-signature.png" style="width:175px" alt="#WOKEWeekly">
   `
   return (
     `

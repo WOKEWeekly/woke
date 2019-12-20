@@ -17,7 +17,7 @@ import { Zoomer, Slider, Fader } from '~/components/transitioner.js';
 import { formatDate } from '~/constants/date.js';
 import CLEARANCES from '~/constants/clearances.js';
 import request from '~/constants/request.js';
-import { cdn } from '~/constants/settings.js';
+import { cloudinary } from '~/constants/settings.js';
 
 import css from '~/styles/sessions.scss';
 
@@ -166,8 +166,6 @@ class Session extends PureComponent {
   render(){
     const { item, idx, view } = this.props;
     item.description = item.description && item.description.trim().length > 0 ? item.description : 'No description.';
-
-    const params = '/w_800,h_800,c_fill/';
     
     if (view === 'grid'){
       return (
@@ -179,7 +177,7 @@ class Session extends PureComponent {
           <Link href={`/session/${item.slug}`}>
             <div className={css.cell}>
               <img
-                src={`${cdn.url}/${params}${item.image}`}
+                src={`${cloudinary.url}/${cloudinary.lazy}/${item.image}`}
                 alt={item.title}
                 className={css.image}
                 onLoad={() => this.setState({isLoaded: true})} />
@@ -202,7 +200,7 @@ class Session extends PureComponent {
             <Row className={css.item}>
               <Col md={4} className={'p-0'}>
                 <img
-                  src={`${cdn.url}/${params}/${item.image}`}
+                  src={`${cloudinary.url}/${cloudinary.lazy}/${item.image}`}
                   alt={item.title}
                   className={css.image}
                   onLoad={() => this.setState({isLoaded: true})} />

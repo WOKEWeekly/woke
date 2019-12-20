@@ -4,7 +4,7 @@ import Link from 'next/link';
 import classNames from 'classnames';
 
 import { Icon } from '~/components/icon.js';
-import { cdn } from '~/constants/settings.js';
+import { cloudinary } from '~/constants/settings.js';
 import css from '~/styles/_components.scss';
 
 export class Title extends Component {
@@ -59,7 +59,7 @@ export class _Paragraph extends Component {
               // For images
               case ';': return (
                 <div className={css.image}>
-                  <img src={`${cdn.url}/public/fillers/${paragraph.substring(1)}`} key={key} />
+                  <img src={`${cloudinary.url}/public/fillers/${paragraph.substring(1)}`} key={key} />
                 </div>
               );
 

@@ -12,7 +12,7 @@ import Rator from '~/components/rator.js';
 
 import CLEARANCES from '~/constants/clearances.js';
 import request from '~/constants/request.js';
-import { cdn } from '~/constants/settings.js';
+import { cloudinary } from '~/constants/settings.js';
 
 import css from '~/styles/home.scss';
 
@@ -76,7 +76,7 @@ class Review extends PureComponent {
       return (
         <Col md={{span: 3, order: isEven ? 1 : 2}}>
           <img
-            src={`${cdn.url}/${item.image}`}
+            src={`${cloudinary.url}/${item.image}`}
             alt={item.fullname}
             className={css.image} />
         </Col>

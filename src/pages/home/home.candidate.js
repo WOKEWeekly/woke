@@ -9,7 +9,7 @@ import { Fader } from '~/components/transitioner.js';
 import { countriesToString } from '~/constants/countries.js';
 import { calculateAge } from '~/constants/date.js';
 import request from '~/constants/request.js';
-import { cdn } from '~/constants/settings.js';
+import { cloudinary } from '~/constants/settings.js';
 
 import css from '~/styles/home.scss';
 
@@ -68,7 +68,7 @@ class _RandomCandidate extends Component {
               {candidate.image ?
               <Link href={link}>
                 <img
-                  src={`${cdn.url}/${candidate.image}`}
+                  src={`${cloudinary.url}/${candidate.image}`}
                   alt={candidate.name}
                   className={css.image} />
               </Link> : null}

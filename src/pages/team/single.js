@@ -12,7 +12,7 @@ import { Fader, Slider } from '~/components/transitioner.js';
 import CLEARANCES from '~/constants/clearances.js';
 import { countriesToString } from '~/constants/countries.js';
 import { calculateAge } from '~/constants/date.js';
-import { cdn } from '~/constants/settings.js';
+import { cloudinary } from '~/constants/settings.js';
 import css from '~/styles/team.scss';
 
 class MemberPage extends Component {
@@ -54,7 +54,7 @@ class MemberPage extends Component {
               duration={800}
               direction={'left'}> 
               <img
-                src={`${cdn.url}/${member.image}`}
+                src={`${cloudinary.url}/${member.image}`}
                 alt={member.fullname}
                 className={css.image}
                 onLoad={() => this.setState({imageLoaded: true})} />

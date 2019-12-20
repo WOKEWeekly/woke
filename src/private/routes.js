@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken');
 const path = require('path');
 const request = require('request');
 const sm = require('sitemap');
-const { cdn, domain } = require('../constants/settings.js');
+const { cloudinary, domain } = require('../constants/settings.js');
 
 const { renderErrPage } = require('./response.js');
 
@@ -585,15 +585,15 @@ module.exports = function(app, conn, server){
    **************************************************************/
      
   app.get('/constitution', function(req, res){
-    request(`${cdn.url}/resources/Constitution.pdf`).pipe(res);
+    request(`${cloudinary.url}/resources/Constitution.pdf`).pipe(res);
   });
 
   app.get('/sponsorship-proposal', function(req, res){
-    request(`${cdn.url}/resources/Sponsorship_Proposal.pdf`).pipe(res);
+    request(`${cloudinary.url}/resources/Sponsorship_Proposal.pdf`).pipe(res);
   });
 
   app.get('/blackexcellence-tribute-guide', function(req, res){
-    request(`${cdn.url}/resources/BlackExcellence_Tribute_Guide.pdf`).pipe(res);
+    request(`${cloudinary.url}/resources/BlackExcellence_Tribute_Guide.pdf`).pipe(res);
   });
 
   app.get('/robots.txt', (req, res) => (

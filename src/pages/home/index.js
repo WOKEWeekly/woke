@@ -5,7 +5,7 @@ import LazyLoader from 'react-visibility-sensor';
 import { Cover, Shader } from '~/components/layout.js';
 import { Paragraph } from '~/components/text.js';
 import { Fader } from '~/components/transitioner.js';
-import { cdn } from '~/constants/settings.js';
+import { cloudinary } from '~/constants/settings.js';
 
 import css from '~/styles/home.scss';
 
@@ -71,7 +71,7 @@ class ForumAdvertiser extends Component {
 
   componentDidMount(){
     const image = new Image();
-    image.src = `${cdn.url}/public/bg/bg-home-forum.jpg`;
+    image.src = `${cloudinary.url}/public/bg/bg-home-forum.jpg`;
     image.onload = () => this.setState({imageLoaded: true, imageSrc: image.src});
   }
 

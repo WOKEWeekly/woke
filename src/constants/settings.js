@@ -13,7 +13,7 @@ module.exports = {
   },
 
   /** Cloudinary fields */
-  cdn: {
+  cloudinary: {
     /**
      * Checks whether the image is from Cloudinary by testing
      * against a regular expression.
@@ -27,10 +27,15 @@ module.exports = {
 
       return image.startsWith(match[0]); 
     },
+
+    /** Lazy transformations for square images */
+    lazy: '/w_800,h_800,c_fill',
+
+    /** Base url for Cloudinary images */
     url: 'https://res.cloudinary.com/wokeweekly/image/upload',
   },
 
-  /** The date in which #WOKEWeekly was established */
+  /** The date #WOKEWeekly was established */
   creationDate: new Date(2017, 2, 2),
 
   /** Domain to use dependent on environment */

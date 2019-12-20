@@ -6,7 +6,7 @@ import { setAlert } from '~/components/alert.js';
 import { formatISODate } from '~/constants/date.js';
 import handlers from '~/constants/handlers.js';
 import request from '~/constants/request.js';
-import { cdn } from '~/constants/settings.js';
+import { cloudinary } from '~/constants/settings.js';
 import { isValidMember } from '~/constants/validations.js';
 
 import MemberForm from './form.js';
@@ -115,7 +115,7 @@ class MemberCrud extends Component {
       data = JSON.stringify({
         member1: this.props.member,
         member2: member,
-        changed: !cdn.check(image)
+        changed: !cloudinary.verify(image)
       });
     }
 
