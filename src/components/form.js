@@ -278,7 +278,7 @@ export class _FileSelector extends Component {
       if (state.image) return newState;
     }
 
-    if (cloudinary.verify(props.image)){
+    if (cloudinary.check(props.image)){
       const cloudPath = `${cloudinary.url}/${props.image}`;
       newState.image = cloudPath;
       newState.filename = cloudPath.substring(cloudPath.lastIndexOf('/') + 1);

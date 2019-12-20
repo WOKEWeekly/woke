@@ -53,7 +53,7 @@ class ReviewCrud extends Component {
       data = JSON.stringify({
         review1: this.props.review,
         review2: review,
-        changed: !cloudinary.verify(image)
+        changed: !cloudinary.check(image)
       });
     }
 
