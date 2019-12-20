@@ -23,6 +23,7 @@ module.exports = {
       case 'team':
         entity.slug = module.exports.generateSlug(`${entity.firstname} ${entity.lastname}`);
         filename = module.exports.generateMemberFilename(entity.slug);
+        if (!entity.verified) entity.slug = null;
         break;
       case 'reviews':
         entity.slug = module.exports.generateSlug(entity.referee);

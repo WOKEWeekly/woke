@@ -147,7 +147,7 @@ class MemberCrud extends Component {
       onSuccess: ({slug}) => {
         const { firstname, lastname, level } = this.state;
         const isExecutive = level === 'Executive';
-        const backPath = isExecutive ? `/executives/${slug}` : `/team/member/${slug}`;
+        const backPath = slug === null ? '/team' : isExecutive ? `/executives/${slug}` : `/team/member/${slug}`;
 
         setAlert({ type: 'success', message: `You've successfully edited the details of ${firstname} ${lastname}.` });
         location.href = backPath;
