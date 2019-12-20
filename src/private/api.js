@@ -224,8 +224,8 @@ module.exports = function(app, conn){
       },
       function(entity, callback){ // Add candidate to database
         member = entity;
-        const sql = "INSERT INTO team (firstname, lastname, image, level, birthday, role, ethnicity, socials, slug, description, verified) VALUES ?";
-        const values = [[member.firstname, member.lastname, member.image, member.level, member.birthday, member.role, member.ethnicity, member.socials, member.slug, member.description, member.verified]];
+        const sql = "INSERT INTO team (firstname, lastname, image, level, birthday, sex, role, ethnicity, socials, slug, description, verified, slackID) VALUES ?";
+        const values = [[member.firstname, member.lastname, member.image, member.level, member.birthday, member.sex, member.role, member.ethnicity, member.socials, member.slug, member.description, member.verified, member.slackID]];
         
         conn.query(sql, [values], function (err, result) {
           err ? callback(err) : callback(null, result.insertId);
@@ -248,8 +248,8 @@ module.exports = function(app, conn){
       },
       function(entity, callback){ // Update member in database
         member2 = entity;
-        const sql = "UPDATE team SET firstname = ?, lastname = ?, image = ?, level = ?, birthday = ?, role = ?, ethnicity = ?, socials = ?, slug = ?, description = ?, verified = ? WHERE id = ?";
-        const values = [member2.firstname, member2.lastname, member2.image, member2.level, member2.birthday, member2.role, member2.ethnicity, member2.socials, member2.slug, member2.description, member2.verified, member1.id];
+        const sql = "UPDATE team SET firstname = ?, lastname = ?, image = ?, level = ?, birthday = ?, sex = ?, role = ?, ethnicity = ?, socials = ?, slug = ?, description = ?, verified = ?, slackID = ? WHERE id = ?";
+        const values = [member2.firstname, member2.lastname, member2.image, member2.level, member2.birthday, member2.sex, member2.role, member2.ethnicity, member2.socials, member2.slug, member2.description, member2.verified, member2.slackID, member1.id];
         
         conn.query(sql, values, function (err) {
           err ? callback(err) : callback(null);

@@ -2,7 +2,7 @@ import React, { Component} from 'react';
 import { Col } from 'react-bootstrap';
 import { connect } from 'react-redux';
 
-import { SubmitButton, CancelButton, CheckboxButton, AddEntityButton } from '~/components/button.js';
+import { SubmitButton, CancelButton, CheckboxButton, AddEntityButton, RadioButtonGroup } from '~/components/button.js';
 import { BirthdayPicker } from '~/components/datepicker.js';
 import { Heading, Group, Label, Select, TextInput, ClickInput, LongTextArea, FileSelector } from '~/components/form.js';
 import { SocialsList } from '~/components/icon.js';
@@ -34,10 +34,10 @@ class MemberForm extends Component {
 
   render(){
     const { heading, confirmText, confirmFunc, cancelFunc, countries, handlers, operation } = this.props;
-    const { handleText, handleBirthday, handleImage, handleCheckboxButton, clearSelection, confirmSocials } = handlers;
+    const { handleText, handleBirthday, handleImage, handleRadio, handleCheckboxButton, clearSelection, confirmSocials } = handlers;
 
-    const { firstname, lastname, level, role, description, birthday, image, socials,
-      ethnicity1, ethnicity2, ethnicity3, ethnicity4, verified } = this.props.member;
+    const { firstname, lastname, level, sex, role, description, birthday, image, socials,
+      ethnicity1, ethnicity2, ethnicity3, ethnicity4, verified, slackID } = this.props.member;
 
     const { ethnicModalVisible, socialsModalVisible } = this.state;
 
@@ -68,7 +68,27 @@ class MemberForm extends Component {
               </Col>
             </Group>
             <Group>
-              <Col md={4}>
+              <Col md={3}>
+                <Label>Sex:</Label>
+                <RadioButtonGroup
+                  name={'sex'}
+                  value={sex}
+                  onChange={handleRadio}
+                  items={[
+                    { label: 'Male', value: 'M' },
+                    { label: 'Female', value: 'F' }
+                  ]} />
+              </Col>
+              <Col md={9}>
+                <Label>Ethnic Origin:</Label>
+                <ClickInput
+                  onClick={this.showEthnicModal}
+                  value={ethnicities}
+                  placeholder={'Click to select countries of origin...'} />
+              </Col>
+            </Group>
+            <Group>
+              <Col md={5}>
                 <Label>Level:</Label>
                 <Select
                   name={'level'}
@@ -77,12 +97,13 @@ class MemberForm extends Component {
                   items={CLEARANCES.LEVELS.MEMBERS}
                   onChange={handleText} />
               </Col>
-              <Col md={8}>
-                <Label>Ethnic Origin:</Label>
-                <ClickInput
-                  onClick={this.showEthnicModal}
-                  value={ethnicities}
-                  placeholder={'Click to select countries of origin...'} />
+              <Col md={7}>
+                <Label>Slack ID:</Label>
+                <TextInput
+                  name={'slackID'}
+                  value={slackID}
+                  onChange={handleText}
+                  placeholder={"e.g. UDL5UM6KG"} />
               </Col>
             </Group>
             <Group>

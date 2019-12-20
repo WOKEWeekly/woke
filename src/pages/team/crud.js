@@ -26,12 +26,14 @@ class MemberCrud extends Component {
       lastname: '',
       level: '',
       role: '',
+      sex: 'M',
       image: '',
       birthday: new Date(2000, 0, 1),
       description: '',
       ...ethnicities,
       socials: {},
       verified: false,
+      slackID: null
     };
   }
 
@@ -45,7 +47,7 @@ class MemberCrud extends Component {
         backPath: '/team'
       });
     } else {
-      const { level, birthday, ethnicity, socials, slug, verified } = this.props.member;
+      const { level, sex, birthday, ethnicity, socials, slug, verified } = this.props.member;
     
       const ethnicityArr = JSON.parse(ethnicity);
       const isExecutive = level === 'Executive';
@@ -74,7 +76,8 @@ class MemberCrud extends Component {
   }
 
   buildRequest = () => {
-    const { firstname, lastname, role, level, image, birthday, description, socials, verified } = this.state;
+    const { firstname, lastname, role, level, sex, image,
+      birthday, description, socials, verified, slackID } = this.state;
     const { operation } = this.props;
 
     if (!verified) this.setState({backPath: '/team'});
@@ -90,12 +93,14 @@ class MemberCrud extends Component {
       lastname: lastname.trim(),
       level,
       role: role.trim(),
+      sex,
       image,
       birthday: formatISODate(birthday),
       description: description,
       ethnicity: JSON.stringify(ethnicities),
       socials: JSON.stringify(socials),
-      verified
+      verified,
+      slackID: slackID.trim()
     };
 
     let data;
