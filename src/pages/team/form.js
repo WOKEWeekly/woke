@@ -88,6 +88,10 @@ class MemberForm extends Component {
               </Col>
             </Group>
             <Group>
+              <Col md={7}>
+                <Label>Birthday:</Label>
+                <BirthdayPicker date={birthday} onConfirm={handleBirthday} />
+              </Col>
               <Col md={5}>
                 <Label>Level:</Label>
                 <Select
@@ -97,17 +101,9 @@ class MemberForm extends Component {
                   items={CLEARANCES.LEVELS.MEMBERS}
                   onChange={handleText} />
               </Col>
-              <Col md={7}>
-                <Label>Slack ID:</Label>
-                <TextInput
-                  name={'slackID'}
-                  value={slackID}
-                  onChange={handleText}
-                  placeholder={"e.g. UDL5UM6KG"} />
-              </Col>
             </Group>
             <Group>
-              <Col md={7}>
+              <Col md={8}>
                 <Label>Role:</Label>
                 <TextInput
                   name={'role'}
@@ -115,9 +111,13 @@ class MemberForm extends Component {
                   onChange={handleText}
                   placeholder={"Enter member's role."} />
               </Col>
-              <Col md={5}>
-                <Label>Birthday:</Label>
-                <BirthdayPicker date={birthday} onConfirm={handleBirthday} />
+              <Col md={4}>
+                <Label>Slack ID:</Label>
+                <TextInput
+                  name={'slackID'}
+                  value={slackID}
+                  onChange={handleText}
+                  placeholder={"e.g. UDL5UM6KG"} />
               </Col>
             </Group>
             <Group>
