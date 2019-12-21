@@ -73,7 +73,7 @@ class SessionCrud extends Component {
         description: description.trim(),
         image: image
       },
-      changed: !cloudinary.check(image)
+      changed: image !== '' && !cloudinary.check(image)
     });
 
     /** Update session in database */

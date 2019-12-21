@@ -115,7 +115,7 @@ class MemberCrud extends Component {
       data = JSON.stringify({
         member1: this.props.member,
         member2: member,
-        changed: !cloudinary.check(image)
+        changed: image !== '' && !cloudinary.check(image)
       });
     }
 
