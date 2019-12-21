@@ -2,7 +2,6 @@ import { alert } from '~/components/alert.js';
 import { checkCookies } from './cookies';
 
 module.exports = {
-  
   /**
    * Login validation.
    * @param {string} user - User credentials to be validated.
@@ -90,6 +89,7 @@ module.exports = {
     if (!ifExists(member.level, 'Select the member\'s level.')) return false;
     if (!ifExists(member.role.trim(), 'Enter the candidate\'s role.')) return false;
     if (!ifExists(member.birthday, 'Select the candidate\'s date of birth.')) return false;
+    if (!isUnderFileSizeLimit(member.image)) return false;
     return true;
   },
 
@@ -150,13 +150,13 @@ module.exports = {
 
   /**
    * Ensure submitted file meets requirements.
-   * @param {string} file - File to be uploaded.
+   * @param {string} file - Base64 string of file to be uploaded.
    * @param {string} entity - The entity this file represents.
    * @returns {Boolean} True if meets requirements. If not: false.
    */
   isValidFile: (file, entity) => {
     if (!ifExists(file, `Please select an image for the ${entity}.`)) return false;
-    if (ifTrue(file.size > 1.5 * 1024 * 1024, 'The image you selected is larger than 1.5MB. Please compress this image or use a smaller one.')) return false;
+    if (!isUnderFileSizeLimit(file)) return false;
     return true;
   }
 }
@@ -177,10 +177,10 @@ const ifExists = (value, message) => {
 }
 
 /**
- * Check if value is wrongly true.
- * @param {string} value - Value to be checked.
+ * Check if condition is wrongly true.
+ * @param {Boolean} condition - Condition to be evaluated.
  * @param {string} message - Error message to be returned if value is true.
- * @returns {Boolean} True if value is true. False if value is not.
+ * @returns {Boolean} True if condition resolves to true. False if not.
  */
 const ifTrue = (condition, message) => {
   if (condition === true){
@@ -189,4 +189,16 @@ const ifTrue = (condition, message) => {
   } else {
     return false;
   }
+}
+
+/**
+ * Ensure file size is within limit.
+ * @param {string} file - Base64 string of file to be uploaded.
+ * @returns {Boolean} True if within limit. False if not.
+ */
+const isUnderFileSizeLimit = (file) => {
+  if (!file && !file.length) return true;
+  const size = Buffer.from(file.substring(file.indexOf(',') + 1)).length;
+  if (ifTrue(size > 2 * 1024 * 1024, 'The image you selected is larger than 2MB. Please compress this image or use a smaller one.')) return false;
+  return true;
 }

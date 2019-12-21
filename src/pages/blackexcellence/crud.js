@@ -67,12 +67,16 @@ class CandidateAdd extends Component {
     }
   }
 
+  /**
+   * Build candidate(s) object from state and props.
+   * @returns {Object} Payload to be submitted to server.
+   */
   buildRequest = () => {
     const { id, name, occupation, image, birthday, description, socials,
       authorId, date_written } = this.state;
     const { operation } = this.props;
 
-    /** Add ethncities to array */
+    // Add ethncities to array
     const ethnicities = [];
     for (let i = 1; i <= 4; i++){
       if (this.state[`ethnicity${i}`]) ethnicities.push(this.state[`ethnicity${i}`]);
@@ -109,12 +113,11 @@ class CandidateAdd extends Component {
     return data;
   }
 
-  /** POST candidate to the server */
+  /** Submit the candidate to the server */
   submitCandidate = () => {
     if (!isValidCandidate(this.state)) return;
     const data = this.buildRequest();
 
-    /** Add candidate to database */
     request({
       url:'/addCandidate',
       method: 'POST',
@@ -127,12 +130,11 @@ class CandidateAdd extends Component {
     });
   }
 
-  /** Update session details */
+  /** Update candidate on server */
   updateCandidate = () => {
     if (!isValidCandidate(this.state)) return;
     const data = this.buildRequest();
 
-    /** Update candidate in database */
     request({
       url: '/updateCandidate',
       method: 'PUT',
