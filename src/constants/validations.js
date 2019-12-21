@@ -2,7 +2,12 @@ import { alert } from '~/components/alert.js';
 import { checkCookies } from './cookies';
 
 module.exports = {
-  /** Ensure valid login credentials */
+  
+  /**
+   * Login validation.
+   * @param {string} user - User credentials to be validated.
+   * @returns {Boolean} True if valid. False with error message if invalid.
+   */
   isValidLogin: (user) => {
     if (!checkCookies('We cannot allow you to log in without accepting our Cookie Policy.')) return false;
     if (!ifExists(user.username.trim(), 'Enter your username or email address.')) return false;
@@ -10,7 +15,11 @@ module.exports = {
     return true;
   },
 
-  /** Ensure valid registration credentials */
+  /**
+   * Registration validation.
+   * @param {string} user - User information to be validated.
+   * @returns {Boolean} True if valid. False with error message if invalid.
+   */
   isValidSignup: (user) => {
     const { firstname, lastname, email, username, password1, password2, privacy } = user;
 
@@ -24,7 +33,11 @@ module.exports = {
     return true;
   },
 
-  /** Ensure valid session is added or updated */
+  /**
+   * Validation of session submission or update.
+   * @param {string} user - Session information to be validated.
+   * @returns {Boolean} True if valid. False with error message if invalid.
+   */
   isValidSession: (session) => {
     if (!ifExists(session.title.trim(), 'Enter the session title.')) return false;
     if (!ifExists(session.date, 'Select the date when the session will be held.')) return false;
@@ -32,7 +45,11 @@ module.exports = {
     return true;
   },
 
-  /** Ensure valid topic is added or updated */
+  /**
+   * Validation of topic submission or update.
+   * @param {string} topic - Topic information to be validated.
+   * @returns {Boolean} True if valid. False with error message if invalid.
+   */
   isValidTopic: (topic) => {
     if (!ifExists(topic.headline.trim(), 'Enter the topic headline.')) return false;
     if (!ifExists(topic.category, 'Select the topic category.')) return false;
@@ -45,7 +62,11 @@ module.exports = {
     return true;
   },
 
-  /** Ensure valid candidate is added or updated */
+  /**
+   * Validation of candidate submission or update.
+   * @param {string} candidate - Candidate information to be validated.
+   * @returns {Boolean} True if valid. False with error message if invalid.
+   */
   isValidCandidate: (candidate) => {
     if (!ifExists(candidate.id, 'Please enter the ID number of the candidate.')) return false;
     if (ifTrue(candidate.id < 1, `ID number needs to be a positive non-zero number.`)) return false;
@@ -58,7 +79,11 @@ module.exports = {
     return true;
   },
 
-  /** Ensure valid team member is added or updated */
+  /**
+   * Validation of team member submission or update.
+   * @param {string} member - Team member information to be validated.
+   * @returns {Boolean} True if valid. False with error message if invalid.
+   */
   isValidMember: (member) => {
     if (!ifExists(member.firstname.trim(), 'Enter the member\'s firstname.')) return false;
     if (!ifExists(member.lastname.trim(), 'Enter the member\'s lastname.')) return false;
@@ -68,7 +93,11 @@ module.exports = {
     return true;
   },
 
-  /** Ensure valid review is added or updated */
+  /**
+   * Validation of review submission or update.
+   * @param {string} review - Review information to be validated.
+   * @returns {Boolean} True if valid. False with error message if invalid.
+   */
   isValidReview: (review) => {
     if (!ifExists(review.referee.trim(), 'Enter the referee of the review.')) return false;
     if (!ifExists(review.position.trim(), 'Enter the referee position\'s.')) return false;
@@ -77,7 +106,11 @@ module.exports = {
     return true;
   },
 
-  /** Ensure a valid email address */
+  /**
+   * Ensure submitted email address is valid.
+   * @param {string} email - Email address to be validated.
+   * @returns {Boolean} True if valid. False with error message if invalid.
+   */
   isValidEmail: (email) => {
     const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     const valid = re.test(String(email).toLowerCase());
@@ -85,14 +118,24 @@ module.exports = {
     return true;
   },
 
-  /** Ensure a valid username */
+  /**
+   * Ensure submitted username is valid.
+   * @param {string} username - Username to be validated.
+   * @returns {Boolean} True if valid. False with error message if invalid.
+   */
   isValidUsername: (username) => {
     if (!ifExists(username.trim(), 'Please enter a username.')) return false;
     if (ifTrue(username.trim().length < 3, 'Your username must be at least 3 characters long.')) return false;
     return true;
   },
 
-  /** Check passwords */
+  /**
+   * Check passwords match, are novel and meet requirements.
+   * @param {string} password1 - The initial password input.
+   * @param {string} password2 - The confirmation password input.
+   * @param {string} oldPassword - The previous password.
+   * @returns {Boolean} True if meets requirements. If not: false.
+   */
   isValidPassword: (password1, password2, oldPassword) => {
     if (!ifExists(password1.trim(), 'Please enter a password.')) return false;
     if (!ifExists(password2.trim(), 'Please confirm your password.')) return false;
@@ -105,7 +148,12 @@ module.exports = {
     return true;
   },
 
-  /** Ensure a valid file */
+  /**
+   * Ensure submitted file meets requirements.
+   * @param {string} file - File to be uploaded.
+   * @param {string} entity - The entity this file represents.
+   * @returns {Boolean} True if meets requirements. If not: false.
+   */
   isValidFile: (file, entity) => {
     if (!ifExists(file, `Please select an image for the ${entity}.`)) return false;
     if (ifTrue(file.size > 1.5 * 1024 * 1024, 'The image you selected is larger than 1.5MB. Please compress this image or use a smaller one.')) return false;
@@ -113,7 +161,12 @@ module.exports = {
   }
 }
 
-/** Check for the presence of a value */
+/**
+ * Check for presence of a value.
+ * @param {string} value - Value to be checked.
+ * @param {string} message - Error message to be returned if value is absent.
+ * @returns {Boolean} True if value exists. False if not.
+ */
 const ifExists = (value, message) => {
   if (!value || value.length == 0){
     alert.error(message);
@@ -123,7 +176,12 @@ const ifExists = (value, message) => {
   }
 }
 
-/** Check if a value is wrongly true */
+/**
+ * Check if value is wrongly true.
+ * @param {string} value - Value to be checked.
+ * @param {string} message - Error message to be returned if value is true.
+ * @returns {Boolean} True if value is true. False if value is not.
+ */
 const ifTrue = (condition, message) => {
   if (condition === true){
     alert.error(message)
@@ -132,8 +190,3 @@ const ifTrue = (condition, message) => {
     return false;
   }
 }
-
-// /** Check if running on browser */
-// const isBrowser = () => {
-//   return typeof window !== 'undefined';
-// } 
