@@ -1,11 +1,10 @@
 const async = require('async');
-const fs = require('fs');
 const jwt = require('jsonwebtoken');
 const path = require('path');
 const request = require('request');
 const sm = require('sitemap');
-const { cloudinary, domain } = require('../constants/settings.js');
 
+const { cloudinary, domain } = require('../constants/settings.js');
 const { renderErrPage } = require('./response.js');
 
 module.exports = function(app, conn, server){
