@@ -10,7 +10,10 @@ const { renderErrPage } = require('./response.js');
 
 module.exports = function(app, conn, server){
 
-  /** Home */
+  /**
+   * Home page
+   * @route {GET} /home
+   */
   app.get(['/', '/home'], function(req, res){
     server.render(req, res, '/home', { 
       title: '#WOKEWeekly - Awakening Through Conversation',
@@ -20,7 +23,10 @@ module.exports = function(app, conn, server){
     });
   });
 
-  /** Sessions */
+  /**
+   * Sessions page
+   * @route {GET} /sessions
+   */
   app.get('/sessions', function(req, res){
     server.render(req, res, '/sessions', { 
       title: 'Sessions | #WOKEWeekly',
@@ -31,7 +37,10 @@ module.exports = function(app, conn, server){
      });
   });
 
-  /** Session:Individual */
+  /**
+   * Individual session page
+   * @route {GET} /session/:slug
+   */
   app.get('/session/:slug', function(req, res){
     const slug = req.params.slug;
     const sql = "SELECT * FROM sessions WHERE slug = ?";
@@ -41,7 +50,7 @@ module.exports = function(app, conn, server){
         const session = result[0];
         return server.render(req, res, '/sessions/single', {
           title: `${session.title} | #WOKEWeekly`,
-          description: serveDescription(session.description),
+          description: createExcerpt(session.description),
           url: `/sessions/${session.slug}`,
           cardImage: session.image,
           backgroundImage: 'bg-sessions.jpg',
@@ -53,7 +62,10 @@ module.exports = function(app, conn, server){
     });
   });
 
-  /** Add New Session */
+  /**
+   * Add Session page
+   * @route {GET} /sessions/add
+   */
   app.get('/sessions/add', function(req, res){
     server.render(req, res, '/sessions/crud', {
       title: 'Add New Session',
@@ -62,7 +74,10 @@ module.exports = function(app, conn, server){
     });
   });
 
-  /** Edit Session */
+  /**
+   * Edit Session page
+   * @route {GET} /sessions/edit/:id
+   */
   app.get('/sessions/edit/:id', function(req, res){
     const id = req.params.id;
     const sql = "SELECT * FROM sessions WHERE id = ?";
@@ -82,7 +97,10 @@ module.exports = function(app, conn, server){
     });
   });
 
-  /** Topic Bank */
+  /**
+   * Topic Bank page
+   * @route {GET} /topics
+   */
   app.get('/topics', function(req, res){
     const token = req.query.access;
     const sql = "SELECT * FROM tokens WHERE name = 'topicBank'";
@@ -99,7 +117,10 @@ module.exports = function(app, conn, server){
     });
   });
 
-  /** Add New Topic */
+  /**
+   * Add Topic page
+   * @route {GET} /topics/add
+   */
   app.get('/topics/add', function(req, res){
     server.render(req, res, '/topics/crud', {
       title: 'Add New Topic',
@@ -108,7 +129,10 @@ module.exports = function(app, conn, server){
     });
   });
 
-  /** Edit Topic */
+  /**
+   * Edit Topic page
+   * @route {GET} /topics/edit/:id
+   */
   app.get('/topics/edit/:id', function(req, res){
     const id = req.params.id;
     const sql = "SELECT * FROM topics WHERE id = ?";
@@ -128,7 +152,10 @@ module.exports = function(app, conn, server){
     });
   });
 
-  /** #BlackExcellence */
+  /**
+   * #BlackExcellence page
+   * @route {GET} /blackexcellence
+   */
   app.get('/blackexcellence', function(req, res){
     server.render(req, res, '/blackexcellence', {
       title: '#BlackExcellence | #WOKEWeekly',
@@ -140,7 +167,10 @@ module.exports = function(app, conn, server){
     });
   });
 
-  /** Add New Candidate */
+  /**
+   * Add #BlackExcellence Candidate page
+   * @route {GET} /blackexcellence/add
+   */
   app.get('/blackexcellence/add', function(req, res){
     server.render(req, res, '/blackexcellence/crud', {
       title: 'Add New Candidate',
@@ -150,7 +180,10 @@ module.exports = function(app, conn, server){
     });
   });
 
-  /** Edit Candidate */
+  /**
+   * Edit #BlackExcellence Candidate page
+   * @route {GET} /blackexcellence/edit/:id
+   */
   app.get('/blackexcellence/edit/:id', function(req, res){
     const { id } = req.params;
     const sql = "SELECT * FROM blackex WHERE id = ?";
@@ -169,7 +202,10 @@ module.exports = function(app, conn, server){
     });
   });
 
-  /** Candidate:Individual */
+  /**
+   * Individual #BlackExcellence Candidate page
+   * @route {GET} /blackexcellence/add
+   */
   app.get('/blackexcellence/candidate/:id', function(req, res){
     const id = req.params.id;
     const sql = `SELECT blackex.*, CONCAT(team.firstname, ' ', team.lastname) AS author,
@@ -183,7 +219,7 @@ module.exports = function(app, conn, server){
       candidate.label = `#${candidate.id}: ${candidate.name}`;
       return server.render(req, res, '/blackexcellence/single', {
         title: `${candidate.label} | #WOKEWeekly`,
-        description: serveDescription(candidate.description),
+        description: createExcerpt(candidate.description),
         url: `/blackexcellence/candidate/${candidate.id}`,
         cardImage: candidate.image,
         alt: candidate.label,
@@ -194,7 +230,10 @@ module.exports = function(app, conn, server){
     });
   });
 
-  /** Executives */
+  /**
+   * Executives page
+   * @route {GET} /executives
+   */
   app.get('/executives', function(req, res){
     return server.render(req, res, '/team/exec', {
       title: 'Meet The Executives | #WOKEWeekly',
@@ -205,7 +244,10 @@ module.exports = function(app, conn, server){
     });
   });
 
-  /** Executive:Individual */
+  /**
+   * Individual executive page
+   * @route {GET} /executives/:slug
+   */
   app.get('/executives/:slug', function(req, res){
     const slug = req.params.slug;
     const sql = "SELECT * FROM team WHERE slug = ? AND level = 'Executive'";
@@ -215,7 +257,7 @@ module.exports = function(app, conn, server){
         const exec = result[0];
         return server.render(req, res, '/team/single', {
           title: `${exec.firstname} ${exec.lastname} | #WOKEWeekly`,
-          description: serveDescription(exec.description),
+          description: createExcerpt(exec.description),
           url: `/executives/${exec.slug}`,
           cardImage: exec.image,
           backgroundImage: 'bg-team.jpg',
@@ -227,7 +269,10 @@ module.exports = function(app, conn, server){
     });
   });
 
-  /** Team Members */
+  /**
+   * Team Members page
+   * @route {GET} /team
+   */
   app.get('/team', function(req, res){
     return server.render(req, res, '/team', {
       title: 'Team Members | #WOKEWeekly',
@@ -235,7 +280,10 @@ module.exports = function(app, conn, server){
     });
   });
 
-  /** Team:Individual */
+  /**
+   * Individual team member page
+   * @route {GET} /team/member/:slug
+   */
   app.get('/team/member/:slug', function(req, res){
     const slug = req.params.slug;
     const sql = "SELECT * FROM team WHERE slug = ?";
@@ -246,7 +294,7 @@ module.exports = function(app, conn, server){
       const member = result[0];
       return server.render(req, res, '/team/single', { 
         title: `${member.firstname} ${member.lastname} | #WOKEWeekly`,
-        description: serveDescription(member.description),
+        description: createExcerpt(member.description),
         url: `/team/member/${member.slug}`,
         cardImage: member.image,
         alt: `${member.firstname} ${member.lastname}`,
@@ -256,7 +304,10 @@ module.exports = function(app, conn, server){
     });
   });
 
-  /** Add New Team Member */
+  /**
+   * Add Team Member page
+   * @route {GET} /team/:add
+   */
   app.get('/team/add', function(req, res){
     server.render(req, res, '/team/crud', {
       title: 'Add New Member',
@@ -265,7 +316,10 @@ module.exports = function(app, conn, server){
     });
   });
 
-  /** Edit Team Member */
+  /**
+   * Edit Team Member page
+   * @route {GET} /team/edit/:id
+   */
   app.get('/team/edit/:id', function(req, res){
     const id = req.params.id;
     const sql = "SELECT * FROM team WHERE id = ?";
@@ -285,14 +339,20 @@ module.exports = function(app, conn, server){
     });
   });
 
-  /** Registered Users */
+  /**
+   * Registered Users page
+   * @route {GET} /users
+   */
   app.get('/users', function(req, res){
     return server.render(req, res, '/users', {
       title: 'Registered Users | #WOKEWeekly'
     });
   });
 
-  /** Registration */
+  /**
+   * Registration page
+   * @route {GET} /signup
+   */
   app.get('/signup', function(req, res){
     server.render(req, res, '/_auth/signup', {
       title: 'Sign Up | #WOKEWeekly',
@@ -301,7 +361,10 @@ module.exports = function(app, conn, server){
     });
   });
 
-  /** Account */
+  /**
+   * User account page
+   * @route {GET} /account
+   */
   app.get('/account', function(req, res){
     const token = req.query.verified;
     async.waterfall([
@@ -322,7 +385,10 @@ module.exports = function(app, conn, server){
     });
   });
 
-  /** Forgot Password */
+  /**
+   * 'Forgot Password' page
+   * @route {GET} /account/recovery
+   */
   app.get('/account/recovery', function(req, res){
     server.render(req, res, '/_auth/recovery', {
       title: 'Forgot Password | #WOKEWeekly',
@@ -330,7 +396,10 @@ module.exports = function(app, conn, server){
     });
   });
 
-  /** Reset Password */
+  /**
+   * Reset Password page
+   * @route {GET} /account/reset/:token
+   */
   app.get('/account/reset/:token', function(req, res){
     const { token } = req.params;
     jwt.verify(token, process.env.JWT_SECRET, (err) => {
@@ -342,14 +411,20 @@ module.exports = function(app, conn, server){
     });
   });
 
-  /** Admin */
+  /**
+   * Admin page
+   * @route {GET} /admin
+   */
   app.get('/admin', function(req, res){
     server.render(req, res, '/_auth/admin', {
       title: 'Admin Tools | #WOKEWeekly',
     });
   });
 
-   /** Mental Health */
+   /**
+   * Mental Health page
+   * @route {GET} /mentalhealth
+   */
    app.get('/mentalhealth', function(req, res){
     conn.query(`SELECT * FROM resources WHERE name = 'mentalhealth'`, function (err, result) {
       if (err || !result.length) return renderErrPage(req, res, err, server);
@@ -370,7 +445,10 @@ module.exports = function(app, conn, server){
     });
   });
 
-  /** Edit Mental Health Page */
+  /**
+   * Edit Mental Health page
+   * @route {GET} /mentalhealth/edit
+   */
   app.get('/mentalhealth/edit', function(req, res){
     conn.query(`SELECT * FROM resources WHERE name = 'mentalhealth'`, function (err, result) {
       if (err || !result.length) return renderErrPage(req, res, err, server);
@@ -387,7 +465,10 @@ module.exports = function(app, conn, server){
     });
   });
 
-  /** About Us */
+  /**
+   * About page
+   * @route {GET} /executives/:slug
+   */
   app.get('/about', function(req, res){
     conn.query(`SELECT * FROM resources WHERE name = 'about'`, function (err, result) {
       if (err || !result.length) return renderErrPage(req, res, err, server);
@@ -395,7 +476,7 @@ module.exports = function(app, conn, server){
       const {text} = result[0];
       return server.render(req, res, '/info', {
         title: 'About #WOKEWeekly',
-        description: serveDescription(text),
+        description: createExcerpt(text),
         pageText: text,
         cardImage: 'public/bg/card-about.jpg',
         url: '/about'
@@ -403,7 +484,10 @@ module.exports = function(app, conn, server){
     });
   });
 
-  /** Edit About */
+  /**
+   * Edit About page
+   * @route {GET} /about/edit
+   */
   app.get('/about/edit', function(req, res){
     conn.query(`SELECT * FROM resources WHERE name = 'about'`, function (err, result) {
       if (err || !result.length) return renderErrPage(req, res, err, server);
@@ -418,7 +502,10 @@ module.exports = function(app, conn, server){
     });
   });
 
-  /** Privacy Policy */
+  /**
+   * Privacy Policy page
+   * @route {GET} /privacy
+   */
   app.get('/privacy', function(req, res){
     conn.query(`SELECT * FROM resources WHERE name = 'privacy'`, function (err, result) {
       if (err || !result.length) return renderErrPage(req, res, err, server);
@@ -426,7 +513,7 @@ module.exports = function(app, conn, server){
       const {text, lastModified} = result[0];
       return server.render(req, res, '/info', {
         title: 'Privacy Policy | #WOKEWeekly',
-        description: serveDescription(text),
+        description: createExcerpt(text),
         pageText: text,
         url: '/privacy',
         lastModified: lastModified
@@ -434,7 +521,10 @@ module.exports = function(app, conn, server){
     });
   });
 
-  /** Edit Privacy Policy */
+  /**
+   * Edit Privacy Policy page
+   * @route {GET} /privacy/edit
+   */
   app.get('/privacy/edit', function(req, res){
     conn.query(`SELECT * FROM resources WHERE name = 'privacy'`, function (err, result) {
       if (err || !result.length) return renderErrPage(req, res, err, server);
@@ -449,7 +539,10 @@ module.exports = function(app, conn, server){
     });
   });
 
-  /** Cookies Policy */
+  /**
+   * Cookies Policy page
+   * @route {GET} /cookies
+   */
   app.get('/cookies', function(req, res){
     conn.query(`SELECT * FROM resources WHERE name = 'cookies'`, function (err, result) {
       if (err || !result.length) return renderErrPage(req, res, err, server);
@@ -457,14 +550,17 @@ module.exports = function(app, conn, server){
       const {text} = result[0];
       return server.render(req, res, '/info', {
         title: 'Cookies Policy | #WOKEWeekly',
-        description: serveDescription(text),
+        description: createExcerpt(text),
         pageText: text,
         url: '/cookies',
       });
     });
   });
 
-  /** Edit Cookies Policy */
+  /**
+   * Edit Cookies Policy page
+   * @route {GET} /cookies/edit
+   */
   app.get('/cookies/edit', function(req, res){
     conn.query(`SELECT * FROM resources WHERE name = 'cookies'`, function (err, result) {
       if (err || !result.length) return renderErrPage(req, res, err, server);
@@ -479,7 +575,10 @@ module.exports = function(app, conn, server){
     });
   });
 
-  /** Donate */
+  /**
+   * Donate page
+   * @route {GET} /donate
+   */
   app.get('/donate', function(req, res){
     conn.query(`SELECT * FROM resources WHERE name = 'donate'`, function (err, result) {
       if (err || !result.length) return renderErrPage(req, res, err, server);
@@ -496,7 +595,10 @@ module.exports = function(app, conn, server){
     });
   });
 
-  /** Edit Donate Page */
+  /**
+   * Edit Donate page
+   * @route {GET} /donate/edit
+   */
   app.get('/donate/edit', function(req, res){
     conn.query(`SELECT * FROM resources WHERE name = 'donate'`, function (err, result) {
       if (err || !result.length) return renderErrPage(req, res, err, server);
@@ -511,7 +613,10 @@ module.exports = function(app, conn, server){
     });
   });
 
-  /** FAQs */
+  /**
+   * 'Frequently Asked Questions' page
+   * @route {GET} /faq
+   */
   app.get('/faq', function(req, res){
     conn.query(`SELECT * FROM resources WHERE name = 'faq'`, function (err, result) {
       if (err || !result.length) return renderErrPage(req, res, err, server);
@@ -526,7 +631,10 @@ module.exports = function(app, conn, server){
     });
   });
 
-  /** Edit FAQs */
+  /**
+   * Edit FAQs page
+   * @route {GET} /faq/edit
+   */
   app.get('/faq/edit', function(req, res){
     conn.query(`SELECT * FROM resources WHERE name = 'faq'`, function (err, result) {
       if (err || !result.length) return renderErrPage(req, res, err, server);
@@ -541,19 +649,25 @@ module.exports = function(app, conn, server){
     });
   });
 
-  /** Reviews */
+  /**
+   * Reviews Page
+   * @route {GET} /reviews
+   */
   app.get('/reviews', function(req, res){
     conn.query(`SELECT * FROM reviews`, function (err, result) {
       if (err) return renderErrPage(req, res, err, server);
       return server.render(req, res, '/reviews', {
         title: 'Reviews | #WOKEWeekly',
-        description: 'Our most Frequently Asked Questions.',
+        description: 'Read what the people have to say about us.',
         url: '/reviews'
       });
     });
   });
 
-  /** Add New Review */
+  /**
+   * Add Review page
+   * @route {GET} /reviews/add
+   */
   app.get('/reviews/add', function(req, res){
     server.render(req, res, '/reviews/crud', {
       title: 'Add New Review',
@@ -561,7 +675,10 @@ module.exports = function(app, conn, server){
     });
   });
 
-  /** Add New Review */
+  /**
+   * Edit Review page
+   * @route {GET} /reviews/edit/:id
+   */
   app.get('/reviews/edit/:id', function(req, res){
     const { id } = req.params;
     const sql = "SELECT * FROM reviews WHERE id = ?";
@@ -584,24 +701,44 @@ module.exports = function(app, conn, server){
    * RESOURCES
    **************************************************************/
      
+  /**
+   * Constitution PDF
+   * @route {GET} /constitution
+   */
   app.get('/constitution', function(req, res){
     request(`${cloudinary.url}/resources/Constitution.pdf`).pipe(res);
   });
 
+  /**
+   * Sponsorship Proposal PDF
+   * @route {GET} /sponsorship-proposal
+   */
   app.get('/sponsorship-proposal', function(req, res){
     request(`${cloudinary.url}/resources/Sponsorship_Proposal.pdf`).pipe(res);
   });
 
+  /**
+   * #Blackexcellence Tribute Guide PDF
+   * @route {GET} /blackexcellence-tribute-guide
+   */
   app.get('/blackexcellence-tribute-guide', function(req, res){
     request(`${cloudinary.url}/resources/BlackExcellence_Tribute_Guide.pdf`).pipe(res);
   });
 
+  /**
+   * Robots.txt page
+   * @route {GET} /robots.txt
+   */
   app.get('/robots.txt', (req, res) => (
     res.status(200).sendFile(path.resolve('./robots.txt'), {
       headers: { 'Content-Type': 'text/plain;charset=UTF-8', }
     })
   ));
 
+  /**
+   * Sitemap generated page
+   * @route {GET} /sitemap.xml
+   */
   app.get('/sitemap.xml', (req, res) => {
     const routes = [ '/', '/home', '/sessions', '/blackexcellence', '/mentalhealth',
     '/executives', '/reviews', '/signup', '/about', '/cookies', '/donate', '/faq', '/privacy' ];
@@ -654,8 +791,12 @@ module.exports = function(app, conn, server){
   });
 }
 
-
-const serveDescription = (text) => {
+/**
+ * Create an excerpt from the description of a web page.
+ * @param {string} text - Piece of text to be served.
+ * @returns {Boolean} The excerpt shown in previews.
+ */
+const createExcerpt = (text) => {
   if (!text) text = '';
 
   const parts = text.split('\n').map(paragraph => {
@@ -676,6 +817,5 @@ const serveDescription = (text) => {
   });
 
   text = parts.filter(e => e != null);
-
   return text[0];
 }
