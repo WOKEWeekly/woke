@@ -168,7 +168,7 @@ module.exports = {
  * @returns {Boolean} True if within limit. False if not.
  */
 const isUnderFileSizeLimit = (file) => {
-  if (!file && !file.length) return true;
+  if (!file || !file.length) return true;
   const size = Buffer.from(file.substring(file.indexOf(',') + 1)).length;
   if (ifTrue(size > 2 * 1024 * 1024, 'The image you selected is larger than 2MB. Please compress this image or use a smaller one.')) return false;
   return true;
