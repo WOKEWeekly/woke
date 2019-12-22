@@ -50,6 +50,6 @@ export const displayErrorMessage = (err) => {
     alert.error(err.toString());
   } else {
     alert.error('Something went wrong. Please try again later.');
-    console.log(err.toString());
+    console.error(err.toString());
   }
 }
