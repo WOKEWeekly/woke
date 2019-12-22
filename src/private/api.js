@@ -238,6 +238,7 @@ module.exports = function(app, conn){
   /** Update details of existing team member in database */
   app.put('/updateMember', verifyToken(CLEARANCES.ACTIONS.CRUD_TEAM), function(req, res){
     let { member1, member2, changed } = req.body;
+    console.log(changed);
     async.waterfall([
       function(callback){ // Delete original image from directory
         filer.destroyImage(member1.image, changed, callback);
