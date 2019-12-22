@@ -4,7 +4,7 @@ const slack = require('./slack.js');
 module.exports = function(conn){
 
   /** Notify executives of team member birthdays */
-  schedule.scheduleJob({ hour: 10 }, function(){
+  schedule.scheduleJob({ hour: 10, minute: 10 }, function(){
     conn.query("SELECT * FROM team WHERE DATE_FORMAT(birthday,'%m-%d') = DATE_FORMAT(CURDATE(),'%m-%d')", function (err, result) {
       if (err) return console.log(err.toString());
       if (!result.length) return console.log("Birthdays: It's no one's birthday today.");
