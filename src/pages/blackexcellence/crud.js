@@ -106,7 +106,7 @@ class CandidateAdd extends Component {
       data = JSON.stringify({
         candidate1: this.props.candidate,
         candidate2: candidate,
-        changed: image !== '' && !cloudinary.check(image)
+        changed: image !== '' && image !== null && !cloudinary.check(image)
       });
     }
 

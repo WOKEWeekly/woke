@@ -34,7 +34,7 @@ class MemberCrud extends Component {
       ...ethnicities,
       socials: {},
       verified: false,
-      slackID: null
+      slackID: ''
     };
   }
 
@@ -48,7 +48,7 @@ class MemberCrud extends Component {
         backPath: '/team'
       });
     } else {
-      const { level, sex, birthday, ethnicity, socials, slug, verified } = this.props.member;
+      const { level, birthday, ethnicity, socials, slug, verified } = this.props.member;
     
       const ethnicityArr = JSON.parse(ethnicity);
       const isExecutive = level === 'Executive';
@@ -101,7 +101,7 @@ class MemberCrud extends Component {
       ethnicity: JSON.stringify(ethnicities),
       socials: JSON.stringify(socials),
       verified,
-      slackID: !slackID ? slackID.trim() : null
+      slackID: slackID !== null ? slackID.trim() : null
     };
 
     let data;
@@ -115,7 +115,7 @@ class MemberCrud extends Component {
       data = JSON.stringify({
         member1: this.props.member,
         member2: member,
-        changed: !image || !cloudinary.check(image)
+        changed: image !== '' && image !== null && !cloudinary.check(image)
       });
     }
 
