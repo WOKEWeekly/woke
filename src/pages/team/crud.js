@@ -101,7 +101,7 @@ class MemberCrud extends Component {
       ethnicity: JSON.stringify(ethnicities),
       socials: JSON.stringify(socials),
       verified,
-      slackID: slackID !== null ? slackID.trim() : null
+      slackID: !slackID ? slackID.trim() : null
     };
 
     let data;
@@ -115,7 +115,7 @@ class MemberCrud extends Component {
       data = JSON.stringify({
         member1: this.props.member,
         member2: member,
-        changed: !image && !cloudinary.check(image)
+        changed: !image || !cloudinary.check(image)
       });
     }
 
