@@ -32,11 +32,11 @@ const Meta = ({
 }) => (
   <React.Fragment>
     {/* Global site tag (gtag.js) - Google Analytics */}
-    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-145389782-1" />
+    {/* <script async src="https://www.googletagmanager.com/gtag/js?id=UA-145389782-1" />
     <script dangerouslySetInnerHTML={{__html: `window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
-      gtag('config', 'UA-145389782-1');`}} />
+      gtag('config', 'UA-145389782-1');`}} /> */}
 
     {/* Page information */}
     <meta charSet="UTF-8" name="author" content="Zavid Egbue" />
