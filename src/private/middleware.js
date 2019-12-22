@@ -1,6 +1,5 @@
 const async = require('async');
 const jwt = require('jsonwebtoken');
-const multer = require('multer');
 
 const { resToClient } = require('./response.js');
 
