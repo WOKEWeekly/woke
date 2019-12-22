@@ -99,11 +99,7 @@ const blackexReducer = (state = defaultBlackEx, action) => {
   }
 };
 
-const defaultCountries = {
-  countries: []
-}
-
-const countryReducer = (state = defaultCountries, action) => {
+const countryReducer = (state = [], action) => {
   switch (action.type) {
     case 'SAVE_COUNTRIES':
       return action.payload;

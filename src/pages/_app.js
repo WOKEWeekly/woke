@@ -55,7 +55,8 @@ export default class WOKE extends App {
     this.setState({cookiesAccepted: getCookie('cookiesAccepted') === 'true'});
 
     // Loaded countries if not already loaded
-    if (!localStorage.getItem('countriesLoaded')){
+    const countries = store.getState().countries;
+    if (!countries.length){
       this.preloadCountries();
     } else {
       this.setState({isLoaded: true});
@@ -70,7 +71,6 @@ export default class WOKE extends App {
         countries.push({ label: country.name, demonym: country.demonym });
       });
       store.dispatch(saveCountries(countries));
-      localStorage.setItem('countriesLoaded', true);
       this.setState({isLoaded: true});
     });
   }
