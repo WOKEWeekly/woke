@@ -658,7 +658,8 @@ module.exports = function(app, conn, server){
       return server.render(req, res, '/reviews', {
         title: 'Reviews | #WOKEWeekly',
         description: 'Read what the people have to say about us.',
-        url: '/reviews'
+        url: '/reviews',
+        cardImage: `public/bg/card-reviews.jpg`,
       });
     });
   });
