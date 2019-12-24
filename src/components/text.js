@@ -158,9 +158,14 @@ export class ExpandText extends Component {
   }
 }
 
-export const truncateText = (text, limit) => {
+/**
+ * Truncate a piece of text to a certain number of words.
+ * @param {string} text - The text to be truncated.
+ * @param {int} limit - The number of words to be truncated to. Default value is 45.
+ * @returns {string} The truncated text.
+ */
+export const truncateText = (text, limit = 45) => {
   if (!text) text = '';
-  if (!limit) limit = 45;
 
   const parts = text.split(' ').map(paragraph => {
     if (paragraph.length === 0) return null;

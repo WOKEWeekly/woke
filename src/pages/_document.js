@@ -1,5 +1,6 @@
 import Document, { Html, Head, Main, NextScript } from 'next/document';
 import { cloudinary, domain } from '~/constants/settings.js';
+import { truncateText } from '~/components/text.js';
 import css from '~/styles/_partials.scss';
 
 export default class MyDocument extends Document {
@@ -28,7 +29,7 @@ const Meta = ({
   title = 'Page Not Found',
   url = null,
   description = '',
-  cardImage = '/bg/card-home.jpg'
+  cardImage = 'public/bg/card-home.jpg'
 }) => (
   <React.Fragment>
     {/* Global site tag (gtag.js) - Google Analytics */}
@@ -47,7 +48,7 @@ const Meta = ({
 
     {/* OpenGraph meta tags for search engine optimisation */}
     <meta property="og:title" content={title} />
-    <meta property="og:description" content={description} />
+    <meta property="og:description" content={truncateText(description, 30)} />
     <meta property="og:type" content="website" />
     <meta property="og:url" content={`${domain}${url}`} />
 
