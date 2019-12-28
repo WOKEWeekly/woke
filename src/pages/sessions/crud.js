@@ -46,14 +46,13 @@ class SessionCrud extends Component {
       changed: image !== ''
     };
 
-    /** Add session to database */
     request({
       url: '/addSession',
       method: 'POST',
       body: JSON.stringify(data),
       headers: { 'Authorization': `Bearer ${this.props.user.token}` },
-      onSuccess: () => {
-        setAlert({ type: 'success', message: `You've successfully added: ${session.title}.` });
+      onSuccess: ({title}) => {
+        setAlert({ type: 'success', message: `You've successfully added: ${title}.` });
         location.href = '/sessions';
       }
     });
@@ -76,7 +75,6 @@ class SessionCrud extends Component {
       changed: image !== '' && image !== null && !cloudinary.check(image)
     });
 
-    /** Update session in database */
     request({
       url: '/updateSession',
       method: 'PUT',
