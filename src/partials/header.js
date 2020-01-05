@@ -155,11 +155,11 @@ export class MainNavbar extends Component {
           <Nav className="ml-auto">
             <Nav.Link href="/about" className={classes}>About Us</Nav.Link>
             <Nav.Link href="/sessions" className={classes}>Sessions</Nav.Link>
+            <Nav.Link href="/reviews" className={classes}>Reviews</Nav.Link>
             {user.clearance >= CLEARANCES.ACTIONS.VIEW_TOPICS ?
             <Nav.Link href="/topics" className={classes}>Topic Bank</Nav.Link> : null}
-            {/* <Nav.Link href="#link" className={classes}>Forum</Nav.Link> */}
             <Nav.Link href="/blackexcellence" className={classes}>#BlackExcellence</Nav.Link>
-            <Nav.Link href="/mentalhealth" className={classes}>Mental Health</Nav.Link>
+            {/* <Nav.Link href="/mentalhealth" className={classes}>Mental Health</Nav.Link> */}
             <Nav.Link href="/executives" className={classes}>The Executives</Nav.Link>
           </Nav>
         </Navbar.Collapse>
