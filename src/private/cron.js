@@ -1,7 +1,7 @@
 const schedule = require('node-schedule');
 const slack = require('./slack.js');
 
-const time = { hour: 9, minute: 0 };
+const time = { hour: 7, minute: 0 };
 const sql = "SELECT * FROM team WHERE DATE_FORMAT(birthday,'%m-%d') = DATE_FORMAT(CURDATE(),'%m-%d')";
 
 // const time = { second: 0 };
@@ -10,7 +10,7 @@ const sql = "SELECT * FROM team WHERE DATE_FORMAT(birthday,'%m-%d') = DATE_FORMA
 module.exports = function(conn){
 
   /** Notify executives of team member birthdays */
-  schedule.scheduleJob({ time }, function(){
+  schedule.scheduleJob(time, function(){
     conn.query(sql, function (err, result) {
       if (err) return console.log(err.toString());
       if (!result.length) return console.log("Birthdays: It's no one's birthday today.");
