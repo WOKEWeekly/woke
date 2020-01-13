@@ -3,7 +3,7 @@
     "build": "NODE_ENV=development next build",
     "start": "NODE_ENV=production next start",
     "export": "NODE_ENV=production next export",
-    "dev": "LOCAL_ENV=true node server.js",
+    "dev": "cross-env LOCAL_ENV=true node server.js",
     "prod": "NODE_ENV=production node server.js",
     "test": "mocha"
   },
@@ -18,7 +18,7 @@
     "@zeit/next-sass": "^1.0.1",
     "animate.css": "^3.7.0",
     "async": "^3.0.1",
-    "bcrypt": "^3.0.6",
+    "bcryptjs": "^2.4.3",
     "body-parser": "^1.18.3",
     "bootstrap": "^4.3.1",
     "classnames": "^2.2.6",
@@ -66,6 +66,7 @@
     "babel-loader": "^8.0.6",
     "babel-plugin-root-import": "^6.2.0",
     "chai": "^4.2.0",
+    "cross-env": "^6.0.3",
     "mocha": "^6.2.0",
     "supertest": "^4.0.2",
     "webpack": "^4.33.0"

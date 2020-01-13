@@ -1,7 +1,7 @@
 const LocalStrategy = require('passport-local').Strategy;
 const validator = require("email-validator");
 const async = require('async');
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 const { config } = require('../server.js')
 const dotenv = require('dotenv').config({path: config});
 const jwt = require('jsonwebtoken');
