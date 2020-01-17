@@ -714,7 +714,7 @@ module.exports = function(app, conn, server){
    * @route {GET} /sponsorship-proposal
    */
   app.get('/sponsorship-proposal', function(req, res){
-    request(`${cloudinary.url}/resources/Sponsorship_Proposal.pdf`).pipe(res);
+    request(`${cloudinary.url}/v1579300643/resources/Sponsorship_Proposal.pdf`).pipe(res);
   });
 
   /**
