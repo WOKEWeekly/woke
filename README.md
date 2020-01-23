@@ -1,6 +1,4 @@
-This is the GitHub repository for the #WOKEWeekly website, which is live at https://www.wokeweekly.co.uk.
-
-## Development Installation
+## Development Environment Setup
 
 1. Request the `config.env` file from this repository's administrator and place it in the file as follows:
 
