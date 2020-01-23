@@ -8,5 +8,13 @@ pipeline {
               }
             }
         }
+        stage('Build') { 
+            steps {
+              dir('src'){
+                sh 'npm ci'
+                sh 'npm run build'
+              }
+            }
+        }
     }
 }
