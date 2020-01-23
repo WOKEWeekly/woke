@@ -1,5 +1,3 @@
-# #WOKEWeekly
-
 This is the GitHub repository for the #WOKEWeekly website, which is live at https://www.wokeweekly.co.uk.
 
 ## Development Installation
@@ -7,9 +5,9 @@ This is the GitHub repository for the #WOKEWeekly website, which is live at http
 1. Request the `config.env` file from this repository's administrator and place it in the file as follows:
 
     ```
-    /workspace
-    ├── /woke
-    │   ├── /src
+    workspace
+    ├── woke
+    │   ├── src
     │   ├── .gitignore
     │   ├── Dockerfile
     │   ├── Jenkinsfile
