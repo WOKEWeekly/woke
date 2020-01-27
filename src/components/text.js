@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import ReactDOM from 'react-dom';
 import { connect } from 'react-redux';
 import Link from 'next/link';
 import classNames from 'classnames';
@@ -41,72 +42,14 @@ export class _Paragraph extends Component {
 
     if (!children) children = '';
 
+    children = applyFormatting(children);
+
     return (
       <React.Fragment>
         <pre
           {...this.props}
           className={classes}>
-          {children.split('\n').map((paragraph, key) => {
-            if (paragraph.length === 0) return null;
-
-            switch (paragraph.charAt(0)){
-              // For headings
-              case '*': return <div className={css.heading} key={key}>{paragraph.substring(1)}</div>;
-
-              // For subheadings
-              case '>': return <div className={css.subheading} key={key}>{paragraph.substring(1)}</div>;
-
-              // For images
-              case ';': return (
-                <div className={css.image}>
-                  <img src={`${cloudinary.url}/public/fillers/${paragraph.substring(1)}`} key={key} />
-                </div>
-              );
-
-              // For dividers
-              case '_': return (
-                <Divider style={{margin: '2rem 0 1rem'}}/>
-              );
-
-              // For list items
-              case '•': return (
-                <div className={css.listitem} key={key}>
-                  <span>●</span>
-                  <span>{paragraph.substring(1).trim()}</span>
-                </div>
-              );
-
-              // Normal paragraph text
-              default:
-                const linkRegex = new RegExp(/\<\[(.*?)\]\s(.*?)\>/g); // Regular expression for links
-                const subRegex = new RegExp(/\<\$(.*?)\$\>/g); // Regular expression for substitutions
-
-                /** Substitute variables */
-                paragraph = paragraph.replace(subRegex, (match, p1) => substitutions[p1]);
-
-                const parts = paragraph.split(linkRegex);
-                paragraph = parts.map((text, count, array) => {
-                  if (parts.length < 2) return text;
-
-                  // Hyperlinking text
-                  if (text.startsWith('/') || text.startsWith('mailto:') || text.startsWith('http')){
-                    array.splice(count, 1);
-                    return (
-                    <a
-                      target={'_blank'}
-                      rel={'noreferrer'}
-                      href={text}
-                      key={count}
-                      className={css[`link-${theme.toLowerCase()}`]}>{array[count]}</a>
-                    )
-                  } else {
-                    return text;
-                  }
-                });
-
-                return <p className={css.body} key={key}>{paragraph}</p>;
-            }
-          })}
+          {children}
         </pre>
         {more ? <ReadMore link={link} text={more === true ? null : more} /> : null}
       </React.Fragment>
@@ -156,6 +99,115 @@ export class ExpandText extends Component {
       </button>
     )
   }
+}
+
+const applyMarkdownFormatting = (text) => {
+  const regex = new RegExp(/\*\*(.*)\*\*/gi); // Regular expression for bolded text
+  let string;
+
+  text.replace(regex, (match, p1) => {
+    const parts = text.split(regex).map((segment, key) => {
+      if (p1 !== segment) return segment;
+      return <strong>{segment}</strong>;
+    });
+
+    string = parts;
+  });
+
+  // text = text.replace(regex, (match, p1) => {
+  //   return <span style={{fontWeight: 'bold'}}>{p1}</span>;
+  // });
+  return string;
+}
+
+const applyFormatting = (children) => {
+  return children.split('\n').map((paragraph, key) => {
+    if (paragraph.length === 0) return null;
+
+    // paragraph = applyMarkdownFormatting(paragraph);
+
+    switch (paragraph.charAt(0)){
+      // For headings
+      case '*': return <div className={css.heading} key={key}>{paragraph.substring(1)}</div>;
+
+      // For subheadings
+      case '>': return <div className={css.subheading} key={key}>{paragraph.substring(1)}</div>;
+
+      // For images
+      case ';': return (
+        <div className={css.image}>
+          <img src={`${cloudinary.url}/public/fillers/${paragraph.substring(1)}`} key={key} />
+        </div>
+      );
+
+      // For dividers
+      case '_': return (
+        <Divider style={{margin: '2rem 0 1rem'}}/>
+      );
+
+      // For list items
+      case '•': return (
+        <div className={css.listitem} key={key}>
+          <span>●</span>
+          <span>{paragraph.substring(1).trim()}</span>
+        </div>
+      );
+
+      // Normal paragraph text
+      default:
+        const linkRegex = new RegExp(/\<\[(.*?)\]\s(.*?)\>/); // Regex for links
+        const subRegex = new RegExp(/\<\$(.*?)\$\>/g); // Regex for substitutions
+        const boldRegex = new RegExp(/\*\*(.*?)\*\*/); // Regex for bold text
+
+        const regexArray = [linkRegex.source, boldRegex.source];
+        const combined = new RegExp(regexArray.join('|'), 'g');
+
+        /** Substitute variables */
+        paragraph = paragraph.replace(subRegex, (match, p1) => substitutions[p1]);
+
+        const match = text.replace(boldRegex, (match, p1) => p1);
+
+        const parts = paragraph.split(combined);
+        paragraph = parts.map((text, count, array) => {
+          if (parts.length < 2) return text;
+          if (text === undefined) return '';
+
+          if (boldRegex.test(text)){
+            let string;
+
+            text.replace(boldRegex, (match, boldText) => {
+              const parts = text.split(boldRegex).map((segment, key) => {
+                if (boldText !== segment) return segment;
+                return <strong>{segment}</strong>;
+              });
+          
+              string = parts;
+            });
+
+            return string;
+          }
+
+          // Hyperlinking text
+          if (text.startsWith('/') || text.startsWith('mailto:') || text.startsWith('http')){
+            array.splice(count, 1);
+            return (
+            <a
+              target={'_blank'}
+              rel={'noreferrer'}
+              href={text}
+              key={count}
+              className={css[`link-${theme.toLowerCase()}`]}>{array[count]}</a>
+            )
+          } else {
+            return text;
+          }
+        });
+
+        paragraph = paragraph
+
+        return <p className={css.body} key={key}>{paragraph}</p>;
+    }
+  });
 }
 
 /**
