@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import ReactDOM from 'react-dom';
 import { connect } from 'react-redux';
 import Link from 'next/link';
 import classNames from 'classnames';
@@ -161,15 +160,17 @@ const applyFormatting = (text, hyperlinkClass) => {
   const parts = text.split(combined).filter(e => e != null);
 
   const finalText = parts.map((partText, count, array) => {
-    // if (parts.length < 2) return partText;
-
     // Bold text
     if (boldRegex.test(partText)){
       return <strong key={count}>{partText.substring(2, partText.length - 2)}</strong>;
     }
 
-    // Hyperlinking text
-    if (partText.startsWith('/') || partText.startsWith('mailto:') || partText.startsWith('http')){
+    // Hyperlink text
+    if (
+		partText.startsWith('/') ||
+		partText.startsWith('mailto:') ||
+		partText.startsWith('http')
+	){
       array.splice(count, 1);
       return (
       <a
