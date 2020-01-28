@@ -36,13 +36,11 @@ export class Subtitle extends Component {
 
 export class _Paragraph extends Component {
   render(){
-
-    let { children, substitutions, theme, link, more } = this.props;
+    let { children = '', substitutions, theme, link, more } = this.props;
     const classes = classNames(css.paragraph, this.props.className);
 
-    if (!children) children = '';
-
-    children = applyFormatting(children);
+	children = applySubstitutions(children, substitutions);
+    children = prefixFormatting(children, css[`link-${theme.toLowerCase()}`]);
 
     return (
       <React.Fragment>
@@ -101,30 +99,16 @@ export class ExpandText extends Component {
   }
 }
 
-const applyMarkdownFormatting = (text) => {
-  const regex = new RegExp(/\*\*(.*)\*\*/gi); // Regular expression for bolded text
-  let string;
-
-  text.replace(regex, (match, p1) => {
-    const parts = text.split(regex).map((segment, key) => {
-      if (p1 !== segment) return segment;
-      return <strong>{segment}</strong>;
-    });
-
-    string = parts;
-  });
-
-  // text = text.replace(regex, (match, p1) => {
-  //   return <span style={{fontWeight: 'bold'}}>{p1}</span>;
-  // });
-  return string;
-}
-
-const applyFormatting = (children) => {
-  return children.split('\n').map((paragraph, key) => {
+/**
+ * Apply the prefix formatting for hierarchical or listed text.
+ * Text needs this formatting first before markdown formatting is applied.
+ * @param {string} text - The text to which hierarchical formatting will be applied.
+ * @param {Object} hyperlinkClass - The CSS class to be passed into the next function.
+ * @returns The text with formatting applied. 
+ */
+const prefixFormatting = (text, hyperlinkClass) => {
+  return text.split('\n').map((paragraph, key) => {
     if (paragraph.length === 0) return null;
-
-    // paragraph = applyMarkdownFormatting(paragraph);
 
     switch (paragraph.charAt(0)){
       // For headings
@@ -135,86 +119,92 @@ const applyFormatting = (children) => {
 
       // For images
       case ';': return (
-        <div className={css.image}>
-          <img src={`${cloudinary.url}/public/fillers/${paragraph.substring(1)}`} key={key} />
+        <div className={css.image} key={key}>
+          <img src={`${cloudinary.url}/public/fillers/${paragraph.substring(1)}`} />
         </div>
       );
 
       // For dividers
       case '_': return (
-        <Divider style={{margin: '2rem 0 1rem'}}/>
+        <Divider key={key} style={{margin: '2rem 0 1rem'}}/>
       );
 
       // For list items
       case '•': return (
         <div className={css.listitem} key={key}>
           <span>●</span>
-          <span>{paragraph.substring(1).trim()}</span>
+          <span>{applyFormatting(paragraph.substring(1).trim())}</span>
         </div>
       );
 
-      // Normal paragraph text
+      // For normal paragraph text
       default:
-        const linkRegex = new RegExp(/\<\[(.*?)\]\s(.*?)\>/); // Regex for links
-        const subRegex = new RegExp(/\<\$(.*?)\$\>/g); // Regex for substitutions
-        const boldRegex = new RegExp(/\*\*(.*?)\*\*/); // Regex for bold text
-
-        const regexArray = [linkRegex.source, boldRegex.source];
-        const combined = new RegExp(regexArray.join('|'), 'g');
-
-        /** Substitute variables */
-        paragraph = paragraph.replace(subRegex, (match, p1) => substitutions[p1]);
-
-        const match = text.replace(boldRegex, (match, p1) => p1);
-
-        const parts = paragraph.split(combined);
-        paragraph = parts.map((text, count, array) => {
-          if (parts.length < 2) return text;
-          if (text === undefined) return '';
-
-          if (boldRegex.test(text)){
-            let string;
-
-            text.replace(boldRegex, (match, boldText) => {
-              const parts = text.split(boldRegex).map((segment, key) => {
-                if (boldText !== segment) return segment;
-                return <strong>{segment}</strong>;
-              });
-          
-              string = parts;
-            });
-
-            return string;
-          }
-
-          // Hyperlinking text
-          if (text.startsWith('/') || text.startsWith('mailto:') || text.startsWith('http')){
-            array.splice(count, 1);
-            return (
-            <a
-              target={'_blank'}
-              rel={'noreferrer'}
-              href={text}
-              key={count}
-              className={css[`link-${theme.toLowerCase()}`]}>{array[count]}</a>
-            )
-          } else {
-            return text;
-          }
-        });
-
-        paragraph = paragraph
-
-        return <p className={css.body} key={key}>{paragraph}</p>;
+        const finalText = applyFormatting(paragraph, hyperlinkClass);
+        return <p className={css.body} key={key}>{finalText}</p>;
     }
   });
 }
 
 /**
+ * Apply markdown-like formatting to text.
+ * @param {string} text - The text to which formatting needs to be applied.
+ * @param {Object} hyperlinkClass - The CSS class for hyperlinks.
+ * @returns The formatted text.
+ */
+const applyFormatting = (text, hyperlinkClass) => {
+  const linkRegex = new RegExp(/\<\[(.*?)\]\s(.*?)\>/); // Regex for links
+  const boldRegex = new RegExp(/(\*\*.*?\*\*)/); // Regex for bold text
+
+  const regexArray = [linkRegex.source, boldRegex.source];
+  const combined = new RegExp(regexArray.join('|'), 'g');
+
+  const parts = text.split(combined).filter(e => e != null);
+
+  const finalText = parts.map((partText, count, array) => {
+    // if (parts.length < 2) return partText;
+
+    // Bold text
+    if (boldRegex.test(partText)){
+      return <strong key={count}>{partText.substring(2, partText.length - 2)}</strong>;
+    }
+
+    // Hyperlinking text
+    if (partText.startsWith('/') || partText.startsWith('mailto:') || partText.startsWith('http')){
+      array.splice(count, 1);
+      return (
+      <a
+        target={'_blank'}
+        rel={'noreferrer'}
+        href={partText}
+        key={count}
+        className={hyperlinkClass}>{array[count]}</a>
+      )
+    } else {
+      return partText;
+    }
+  });
+
+  return finalText
+}
+
+/**
+ * Apply the variable substitutions to the text, swapping our placeholders for
+ * dynamic values. 
+ * @param {string} text - The original text containing the variables to be substituted.
+ * @param {Object} substitutions - The mapping specifying the values to substitute the placeholder variables.
+ * @returns The full text with variables substitutions applied.
+ */
+const applySubstitutions = (text, substitutions) => {
+	const subRegex = new RegExp(/\<\$(.*?)\$\>/g); // Regex for substitutions
+	text = text.replace(subRegex, (match, p1) => substitutions[p1]);
+	return text;
+}
+
+/**
  * Truncate a piece of text to a certain number of words.
  * @param {string} text - The text to be truncated.
- * @param {int} limit - The number of words to be truncated to. Default value is 45.
- * @returns {string} The truncated text.
+ * @param {int} [limit=45] - The number of words to be truncated to. Default value is 45.
+ * @returns The truncated text.
  */
 export const truncateText = (text, limit = 45) => {
   if (!text) text = '';
