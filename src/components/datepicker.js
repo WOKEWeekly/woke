@@ -10,6 +10,8 @@ import css from '~/styles/_components.scss';
 import { Icon } from './icon';
 import moment from 'moment';
 
+import { zDate } from 'zavid-modules';
+
 export class DatePicker extends Component {
   constructor({date}){
     super({date});
@@ -54,11 +56,14 @@ export class DatePicker extends Component {
     const { date, placeholderText, minDate, maxDate, withDayOfWeek } = this.props;
     const { dateOfMonth, month, year, visible } = this.state;
 
-    const daysInMonth = moment(`${year}-${moment().month(month).format("M")}`, 'YYYY-MM').daysInMonth();
+    const momentMonth = moment().month(month).format("M");
+    const daysInMonth = moment(`${year}-${momentMonth}`, 'YYYY-MM').daysInMonth();
 
     const getDates = () => {
       const array = [];
-      for (let i = 1; i <= daysInMonth; i++) array.push(moment().date(i).format("Do"));
+      for (let i = 1; i <= daysInMonth; i++){
+        array.push(`${i}${zDate.getDateSuffix(i)}`);
+      }
       return array;
     };
 
