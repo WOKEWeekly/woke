@@ -242,13 +242,13 @@
   .textarea {
     @extend .input;
     min-height: 42px;
-    + .wordcount {
-      color: $faded-white;
-      font-family: $title-font;
-      margin: 0;
-      text-align: right;
-      width: 100%;
-    }
+  }
+  .wordcount {
+    color: $faded-white;
+    font-family: $title-font;
+    margin: 0;
+    text-align: right;
+    width: 100%;
   }
   .select {
     @extend .input;

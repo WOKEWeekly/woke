@@ -28,12 +28,6 @@ module.exports = withPlugins([
               name: "[name].[ext]",
             },
           }
-        },
-        {
-          test: /\.(js)$/,
-          use: {
-            loader: 'shebang-loader'
-          }
         });
 
         config.plugins = config.plugins || []

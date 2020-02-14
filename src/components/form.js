@@ -5,10 +5,10 @@ import classNames from 'classnames';
 
 import { Icon } from '~/components/icon.js';
 import { Fader, Zoomer } from '~/components/transitioner.js';
-
 import { cloudinary } from '~/constants/settings.js';
 
 import css from '~/styles/_components.scss';
+import { zForm } from 'zavid-modules';
 
 /** For the form heading */
 export class Heading extends Component {
@@ -186,25 +186,13 @@ export class ShortTextArea extends Component {
   }
 }
 
-/** For long text inputs with word counters */
 export class LongTextArea extends Component {
-  constructor(props){
-    super(props);
-    this.state = {
-      wordCount: props.value ? props.value.length : 0
-    }
-  }
-
-  static getDerivedStateFromProps(props){
-    return { wordCount: props.value ? props.value.length : 0 };
-  }
-
   render(){
     return (
-      <div>
-        <TextArea minRows={3} {...this.props} />
-        <label className={css.wordcount}>{this.state.wordCount}</label>
-      </div>
+      <zForm.LongTextArea
+        {...this.props}
+        className={css.textarea}
+        wordCountClassName={css.wordcount} />
     )
   }
 }
