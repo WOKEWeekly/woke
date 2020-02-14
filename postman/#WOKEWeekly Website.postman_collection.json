@@ -1,0 +1,806 @@
+{
+	"info": {
+		"_postman_id": "d7888e4a-1f16-4a82-8b7f-8028ce7772d4",
+		"name": "#WOKEWeekly Website",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Sessions",
+			"item": [
+				{
+					"name": "Get Sessions",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "ccf00a33-bb9d-46fe-b356-541166dd19db",
+								"exec": [
+									"pm.test(\"Test\", () => {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "admission",
+								"value": "true",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{hostname}}/getSessions",
+							"host": [
+								"{{hostname}}"
+							],
+							"path": [
+								"getSessions"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add Session",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "6b99fd75-abf4-4f39-b0c1-b2143a6630f8",
+								"exec": [
+									"var json = pm.response.json();",
+									"pm.globals.set(\"currentSession\", JSON.stringify(json));",
+									"",
+									"pm.test(\"Test\", () => {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "admission",
+								"value": "true",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"session\": {\n\t\t\"title\": \"Strength From Within x #WOKEWeekly\",\n\t    \"dateHeld\": \"2019-08-30\",\n\t    \"description\": \"#WOKEWeekly are collaborating with the London-based organisation, <[https://www.sfwlondon.co.uk] Strength From Within (SFW)>, to deliver hour-long sessions embedded into SFW’s 3-day programme for young and aspiring KS5 students from Saturday 31st August til Monday 2nd September.\\n\\nThe breakdown of the three days is as follows:\\n\\n>Day One: Our Society - Saturday 31st August\\n• Social Media: What kinds of pressures has it introduced to our lives?\\n• Hustle Culture: Are we glorifying an unhealthy lifestyle?\\n• Leaders: Are they born or made?\\n\\n>Day Two: Our Politics - Sunday 1st September\\n• Brexit: How will it impact young people now and in the future?\\n• #KnifeFree: How can we ensure the effectiveness of this campaign?\\n• Youth Vote: Why don’t young people vote?\\n\\n>Day Three: Our Futures - Monday 2nd September\\n• Academia: Does academic success reflect one’s potential to succeed?\\n• Parent Power: What role should parents play in shaping our futures?\\n• Mistakes of Youth: How can we ensure we’re making better decisions for our futures?\",\n\t    \"image\": {{image1}}\n\t},\n\t\"changed\": true\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{hostname}}/addSession",
+							"host": [
+								"{{hostname}}"
+							],
+							"path": [
+								"addSession"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Session",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "6b99fd75-abf4-4f39-b0c1-b2143a6630f8",
+								"exec": [
+									"var json = pm.response.json();",
+									"pm.globals.set(\"currentSession\", JSON.stringify(json));",
+									"",
+									"pm.test(\"Test\", () => {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "admission",
+								"type": "text",
+								"value": "true"
+							},
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"changed\": true,\n\t\"session1\": {{currentSession}},\n\t\"session2\": {\n\t    \"title\": \"Strength From Within x #WOKEWeekly\",\n\t    \"dateHeld\": \"2019-08-30\",\n\t    \"description\": \"#WOKEWeekly are collaborating with the London-based organisation, <[https://www.sfwlondon.co.uk] Strength From Within (SFW)>, to deliver hour-long sessions embedded into SFW’s 3-day programme for young and aspiring KS5 students from Saturday 31st August til Monday 2nd September.\\n\\nThe breakdown of the three days is as follows:\\n\\n>Day One: Our Society - Saturday 31st August\\n• Social Media: What kinds of pressures has it introduced to our lives?\\n• Hustle Culture: Are we glorifying an unhealthy lifestyle?\\n• Leaders: Are they born or made?\\n\\n>Day Two: Our Politics - Sunday 1st September\\n• Brexit: How will it impact young people now and in the future?\\n• #KnifeFree: How can we ensure the effectiveness of this campaign?\\n• Youth Vote: Why don’t young people vote?\\n\\n>Day Three: Our Futures - Monday 2nd September\\n• Academia: Does academic success reflect one’s potential to succeed?\\n• Parent Power: What role should parents play in shaping our futures?\\n• Mistakes of Youth: How can we ensure we’re making better decisions for our futures?\",\n\t    \"image\": {{image2}}\n\t}\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{hostname}}/updateSession",
+							"host": [
+								"{{hostname}}"
+							],
+							"path": [
+								"updateSession"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Session",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "d4b7749b-622e-4440-83f9-5dea0571aea0",
+								"exec": [
+									"pm.test(\"Test\", () => {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "admission",
+								"value": "true",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{{currentSession}}"
+						},
+						"url": {
+							"raw": "{{hostname}}/deleteSession",
+							"host": [
+								"{{hostname}}"
+							],
+							"path": [
+								"deleteSession"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Candidates",
+			"item": [
+				{
+					"name": "Get Candidates",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "ccf00a33-bb9d-46fe-b356-541166dd19db",
+								"exec": [
+									"pm.test(\"Test\", () => {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "admission",
+								"type": "text",
+								"value": "true"
+							}
+						],
+						"url": {
+							"raw": "{{hostname}}/getCandidates",
+							"host": [
+								"{{hostname}}"
+							],
+							"path": [
+								"getCandidates"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add Candidate",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "6b99fd75-abf4-4f39-b0c1-b2143a6630f8",
+								"exec": [
+									"var json = pm.response.json();",
+									"pm.globals.set(\"currentCandidate\", JSON.stringify(json));",
+									"",
+									"pm.test(\"Test\", () => {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "admission",
+								"value": "true",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"candidate\": {\n\t\t\"id\": 0,\n\t    \"name\": \"Candidate 1\",\n\t    \"birthday\": \"2011-07-06\",\n\t    \"ethnicity\": \"[\\\"Anguilla\\\"]\",\n\t    \"socials\": \"{\\\"facebook\\\":\\\"\\\",\\\"twitter\\\":\\\"\\\",\\\"instagram\\\":\\\"mpopsticks\\\",\\\"linkedin\\\":\\\"\\\",\\\"snapchat\\\":\\\"\\\",\\\"youtube\\\":\\\"\\\",\\\"soundcloud\\\":\\\"\\\"}\",\n\t    \"occupation\": \"Tester\",\n\t    \"description\": \"Test description.\",\n\t    \"authorId\": 1,\n\t    \"date_written\": \"2019-03-01\",\n\t    \"image\": {{image1}}\n\t},\n\t\"changed\": true\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{hostname}}/addCandidate",
+							"host": [
+								"{{hostname}}"
+							],
+							"path": [
+								"addCandidate"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Candidate",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "6b99fd75-abf4-4f39-b0c1-b2143a6630f8",
+								"exec": [
+									"var json = pm.response.json();",
+									"pm.globals.set(\"currentCandidate\", JSON.stringify(json));",
+									"",
+									"pm.test(\"Test\", () => {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "admission",
+								"type": "text",
+								"value": "true"
+							},
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"candidate1\": {{currentCandidate}},\n\t\"candidate2\": {\n\t    \"id\": 0,\n\t    \"name\": \"Candidate 2\",\n\t    \"birthday\": \"2000-12-06\",\n\t    \"ethnicity\": \"[\\\"Anguilla\\\"]\",\n\t    \"socials\": \"{\\\"facebook\\\":\\\"\\\",\\\"twitter\\\":\\\"\\\",\\\"instagram\\\":\\\"mpopsticks\\\",\\\"linkedin\\\":\\\"\\\",\\\"snapchat\\\":\\\"\\\",\\\"youtube\\\":\\\"\\\",\\\"soundcloud\\\":\\\"\\\"}\",\n\t    \"occupation\": \"Tester\",\n\t    \"description\": \"Test description.\",\n\t    \"authorId\": 1,\n\t    \"date_written\": \"2019-11-01\",\n\t    \"image\": {{image2}}\n\t},\n\t\"changed\": true\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{hostname}}/updateCandidate",
+							"host": [
+								"{{hostname}}"
+							],
+							"path": [
+								"updateCandidate"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Candidate",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "d4b7749b-622e-4440-83f9-5dea0571aea0",
+								"exec": [
+									"pm.test(\"Test\", () => {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "admission",
+								"value": "true",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{{currentCandidate}}"
+						},
+						"url": {
+							"raw": "{{hostname}}/deleteCandidate",
+							"host": [
+								"{{hostname}}"
+							],
+							"path": [
+								"deleteCandidate"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Members",
+			"item": [
+				{
+					"name": "Get Members",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "ccf00a33-bb9d-46fe-b356-541166dd19db",
+								"exec": [
+									"pm.test(\"Test\", () => {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "admission",
+								"type": "text",
+								"value": "true"
+							}
+						],
+						"url": {
+							"raw": "{{hostname}}/getTeam",
+							"host": [
+								"{{hostname}}"
+							],
+							"path": [
+								"getTeam"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add Member",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "6b99fd75-abf4-4f39-b0c1-b2143a6630f8",
+								"exec": [
+									"var json = pm.response.json();",
+									"pm.globals.set(\"currentMember\", JSON.stringify(json));",
+									"",
+									"pm.test(\"Test\", () => {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "admission",
+								"type": "text",
+								"value": "true"
+							},
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"member\": {\n\t\t\"firstname\": \"Zavid\",\n\t    \"lastname\": \"Egbue\",\n\t    \"birthday\": \"1996-12-02\",\n\t    \"sex\": \"M\",\n\t    \"ethnicity\": \"[\\\"Nigeria\\\",\\\"Jamaica\\\"]\",\n\t    \"level\": \"Executive\",\n\t    \"role\": \"Director\",\n\t    \"socials\": \"{\\\"facebook\\\":\\\"zzavidd\\\",\\\"twitter\\\":\\\"zzavidd\\\",\\\"instagram\\\":\\\"zavidd\\\",\\\"linkedin\\\":\\\"https://www.linkedin.com/in/david-egbue/\\\",\\\"snapchat\\\":\\\"zzavidd\\\",\\\"youtube\\\":\\\"\\\",\\\"soundcloud\\\":\\\"\\\"}\",\n\t    \"description\": \"The pioneer of the franchise, Zavid holds no bars in diligence and labour. As one of the founders of #WOKEWeekly, as well as being the Director, he seeks only to push the #WOKE agenda forward, inspiring the need for conversation in all environments and related to all aspects of life.\\n\\nHis passion for debate and frustration towards the lack of enlightening conversation amongst his local community brought #WOKE to life. Sick of the subjects which fell on the lips of those around him, he sought to redeem the black community in Surrey and make a change in the dimension of discussion. The franchise has since taken flight under Zavid's direction, touching down at multiple universities since its debut with a good number of sessions being orchestrated under him as chair.\\n\\nOutside of #WOKE, Zavid is a Software Developer at IBM in Cambridge, having graduated from the University of Surrey with a BSc in Computer Science. He is also a self-taught graphic designer and an esteemed writer.\\n\\nWhen not outside and on the job, Zavid savours a quiet and serene life in solitude. He spends his spare time coding, developing websites and apps primarily for his own advancement and usage. He also occasionally dabbles in composing prose and page poetry as well as singing and songwriting. He showcases his passion for his Christian faith with an avid love for worship and fellowship.\",\n\t    \"verified\": 1,\n\t    \"image\": {{image1}}\n\t},\n\t\"changed\": true\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{hostname}}/addMember",
+							"host": [
+								"{{hostname}}"
+							],
+							"path": [
+								"addMember"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Member",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "6b99fd75-abf4-4f39-b0c1-b2143a6630f8",
+								"exec": [
+									"var json = pm.response.json();",
+									"pm.globals.set(\"currentMember\", JSON.stringify(json));",
+									"",
+									"pm.test(\"Test\", () => {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "admission",
+								"type": "text",
+								"value": "true"
+							},
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"changed\": true,\n\t\"member1\": {{currentMember}},\n\t\"member2\": {\n\t    \"firstname\": \"Divinia\",\n\t    \"lastname\": \"Egbue\",\n\t    \"birthday\": \"1994-06-29\",\n\t    \"sex\": \"F\",\n\t    \"ethnicity\": \"[\\\"Nigeria\\\"]\",\n\t    \"level\": \"Manager\",\n\t    \"role\": \"Journalist\",\n\t    \"socials\": \"{\\\"facebook\\\":\\\"\\\",\\\"twitter\\\":\\\"\\\",\\\"instagram\\\":\\\"casperdot\\\",\\\"linkedin\\\":\\\"\\\",\\\"snapchat\\\":\\\"\\\",\\\"youtube\\\":\\\"\\\",\\\"soundcloud\\\":\\\"\\\"}\",\n\t    \"description\": \"New test description.\",\n\t    \"verified\": 1,\n\t    \"image\": {{image2}}\n\t}\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{hostname}}/updateMember",
+							"host": [
+								"{{hostname}}"
+							],
+							"path": [
+								"updateMember"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Member",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "d4b7749b-622e-4440-83f9-5dea0571aea0",
+								"exec": [
+									"pm.test(\"Test\", () => {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "admission",
+								"type": "text",
+								"value": "true"
+							},
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{{currentMember}}"
+						},
+						"url": {
+							"raw": "{{hostname}}/deleteMember",
+							"host": [
+								"{{hostname}}"
+							],
+							"path": [
+								"deleteMember"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Reviews",
+			"item": [
+				{
+					"name": "Get Reviews",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "ccf00a33-bb9d-46fe-b356-541166dd19db",
+								"exec": [
+									"pm.test(\"Test\", () => {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "admission",
+								"type": "text",
+								"value": "true"
+							}
+						],
+						"url": {
+							"raw": "{{hostname}}/getReviews",
+							"host": [
+								"{{hostname}}"
+							],
+							"path": [
+								"getReviews"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add Review",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "6b99fd75-abf4-4f39-b0c1-b2143a6630f8",
+								"exec": [
+									"var json = pm.response.json();",
+									"pm.globals.set(\"currentReview\", JSON.stringify(json));",
+									"",
+									"pm.test(\"Test\", () => {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "admission",
+								"type": "text",
+								"value": "true"
+							},
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"review\": {\n\t\t\"referee\": \"Maddness\",\n    \t\"position\": \"Okay\",\n\t    \"rating\": 4,\n\t    \"description\": \"Very structured and organised, professional and engaging. The questions asked are brought together in a unique format that encourages participation. Would recommend WOKE to colleges as well as universities. There was a clear sense of interest and/or passion in the topics that each speaker discussed that we all found very engaging. Between ourselves and our mentees we noticed a clear difference in hosting styles across the three days - day 1 encouraging the expression and developments of different opinions, day 2 challenging the opinions presented by the mentees and day 3 relating to the young people on a personal level based on their experiences to encourage a more emotive discussion. We not only would recommend you but would absolutely love to work with you again in the future. You guys as an organisation have a gift, one that should not be limited to universities alone.\",\n\t    \"image\": {{image1}}\n\t},\n\t\"changed\": true\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{hostname}}/addReview",
+							"host": [
+								"{{hostname}}"
+							],
+							"path": [
+								"addReview"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Review",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "6b99fd75-abf4-4f39-b0c1-b2143a6630f8",
+								"exec": [
+									"var json = pm.response.json();",
+									"pm.globals.set(\"currentReview\", JSON.stringify(json));",
+									"",
+									"pm.test(\"Test\", () => {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "admission",
+								"type": "text",
+								"value": "true"
+							},
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"changed\": true,\n\t\"review1\": {{currentReview}},\n\t\"review2\": {\n\t    \"referee\": \"Woii\",\n        \"position\": \"Ayyy\",\n        \"rating\": 5,\n        \"description\": \"Very structured and organised, professional and engaging. The questions asked are brought together in a unique format that encourages participation. Would recommend WOKE to colleges as well as.\",\n        \"image\": {{image2}}\n\t}\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{hostname}}/updateReview",
+							"host": [
+								"{{hostname}}"
+							],
+							"path": [
+								"updateReview"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Review",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "d4b7749b-622e-4440-83f9-5dea0571aea0",
+								"exec": [
+									"pm.test(\"Test\", () => {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "admission",
+								"type": "text",
+								"value": "true"
+							},
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{{currentReview}}"
+						},
+						"url": {
+							"raw": "{{hostname}}/deleteReview",
+							"host": [
+								"{{hostname}}"
+							],
+							"path": [
+								"deleteReview"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		}
+	],
+	"protocolProfileBehavior": {}
+}
