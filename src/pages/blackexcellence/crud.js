@@ -39,14 +39,18 @@ class CandidateAdd extends Component {
 
   /** Get latest candidate ID */
   componentDidMount(){
+    const { operation, candidate } = this.props;
+    const isEditOperation = operation === 'edit';
+
     request({
-      url: '/newCandidateID',
-      onSuccess: (id) => this.setState({id})
+      url: '/latestCandidateId',
+      onSuccess: (id) => {
+        id = isEditOperation ? id : id + 1;
+        this.setState({id});
+      }
     });
 
-    const { operation, candidate } = this.props;
-
-    if (operation === 'edit'){
+    if (isEditOperation){
 
       const { birthday, date_written, ethnicity, socials } = candidate;
       const ethnicityArr = JSON.parse(ethnicity);

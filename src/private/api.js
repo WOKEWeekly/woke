@@ -131,9 +131,10 @@ module.exports = function(app, conn){
   });
 
    /** Find last candidate ID */
-  app.get('/newCandidateID', function(req, res){
+  app.get('/latestCandidateId', function(req, res){
     conn.query("SELECT MAX(ID) FROM blackex", function (err, result) {
-      resToClient(res, err, result[0]['MAX(ID)'] + 1)
+      const latestCandidateId = result[0]['MAX(ID)'];
+      resToClient(res, err, latestCandidateId);
     });
   });
 
