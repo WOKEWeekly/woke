@@ -242,6 +242,7 @@
   .textarea {
     @extend .input;
     min-height: 42px;
+    border-bottom: $underline !important;
   }
   .wordcount {
     color: $faded-white;
