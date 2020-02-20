@@ -21,6 +21,10 @@ app.use(cors());
 app.use(passport.initialize());
 app.use(passport.session());
 
+if (dotenv.error) {
+  throw new Error("Environment file either doesn't exist or cannot be found.");
+}
+
 server.prepare().then(() => {
 	app.get('*', (req, res) => handle(req, res));
 	app.listen(port, (err) => {
