@@ -3,7 +3,7 @@ const app = express();
 
 const next = require('next');
 const dev = process.env.NODE_ENV !== 'production';
-const config = process.env.LOCAL_ENV ? '../../config.env' : '/home/config/config.env';
+const config = process.env.LOCAL_ENV ? '../../config.env' : '/home/config.env';
 const server = next({ dev });
 const handle = server.getRequestHandler();
 
