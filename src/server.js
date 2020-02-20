@@ -22,7 +22,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 if (dotenv.error) {
-  throw new Error("Environment file either doesn't exist or cannot be found.");
+  throw new Error(`Environment file doesn't exist at ${config}.`);
 }
 
 server.prepare().then(() => {
