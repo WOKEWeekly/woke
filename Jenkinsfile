@@ -18,7 +18,7 @@ pipeline {
         }
         stage('Deploy') {
           steps {
-            sh '/home/rebuild-woke.sh'
+            sh '/home/rebuild-woke.sh Dockerfile-woke-from-jenkins'
           }
         }
     }
