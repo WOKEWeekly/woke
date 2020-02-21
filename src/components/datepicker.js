@@ -82,9 +82,8 @@ export class DatePicker extends Component {
           <Select
             name={'dateOfMonth'}
             items={getDates()}
-            name={'dateOfMonth'}
             value={dateOfMonth}
-            placeholder={'Select date'}
+            placeholder={'DD'}
             onChange={this.handleDateChange} />
         </Col>
         <Col xs={6}>
@@ -92,7 +91,7 @@ export class DatePicker extends Component {
             items={moment.months()}
             name={'month'}
             value={month}
-            placeholder={'Select month'}
+            placeholder={'MMMM'}
             onChange={this.handleDateChange} />
         </Col>
         <Col xs={3}>
@@ -100,7 +99,7 @@ export class DatePicker extends Component {
             items={getYears()}
             name={'year'}
             value={year}
-            placeholder={'Select year'}
+            placeholder={'YYYY'}
             onChange={this.handleDateChange} />
         </Col>
       </Group>
@@ -161,6 +160,22 @@ export class BirthdayPicker extends Component {
         onConfirm={this.props.onConfirm}
         placeholderText={'Select date of birth.'}
         maxDate={new Date()} />
+    );
+  }
+}
+
+export class AuthoredDatePicker extends Component {
+  render(){
+    let date = new Date(2018, 11, 9);
+    date = date.toString();
+    return (
+      <DatePicker
+        date={this.props.date || date}
+        onConfirm={this.props.onConfirm}
+        placeholderText={'Select the date written.'}
+        minDate={creationDate}
+        maxDate={new Date()}
+        withDayOfWeek />
     );
   }
 }

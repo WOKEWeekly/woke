@@ -3,7 +3,7 @@ import { Col } from 'react-bootstrap';
 import { connect } from 'react-redux';
 
 import { SubmitButton, CancelButton, AddEntityButton } from '~/components/button.js';
-import { EventDatePicker, BirthdayPicker } from '~/components/datepicker.js';
+import { AuthoredDatePicker, BirthdayPicker } from '~/components/datepicker.js';
 import { Heading, Group, Label, TextInput, Select, ClickInput, NumberPicker, LongTextArea, FileSelector } from '~/components/form.js';
 import { SocialsList } from '~/components/icon.js';
 import { Shader, Spacer } from '~/components/layout.js';
@@ -145,7 +145,7 @@ class CandidateForm extends Component {
                 </Col>
                 <Col md={{span: 5, offset: 2}}>
                   <Label>Date Written:</Label>
-                  <EventDatePicker date={date_written} onConfirm={handleDateWritten} />
+                  <AuthoredDatePicker date={date_written} onConfirm={handleDateWritten} />
                 </Col>
             </Group>
             <Group>

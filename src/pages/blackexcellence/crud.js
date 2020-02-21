@@ -8,7 +8,6 @@ import handlers from '~/constants/handlers.js';
 import request from '~/constants/request.js';
 import { cloudinary } from '~/constants/settings.js';
 
-import { creationDate } from '~/constants/settings.js';
 import { isValidCandidate } from '~/constants/validations.js';
 
 import CandidateForm from './form.js';
@@ -24,7 +23,7 @@ class CandidateAdd extends Component {
       id: 0,
       name: '',
       occupation: '',
-      birthday: new Date(2000, 0, 1),
+      birthday: new Date(1990, 0, 1),
       description: '',
       image: '',
       ethnicity1: '',
@@ -33,7 +32,7 @@ class CandidateAdd extends Component {
       ethnicity4: '',
       socials: {},
       authorId: 0,
-      date_written: creationDate
+      date_written: new Date()
     };
   }
 
