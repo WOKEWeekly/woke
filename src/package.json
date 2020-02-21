@@ -2,7 +2,7 @@
   "scripts": {
     "build": "cross-env NODE_ENV=development next build",
     "dev": "cross-env LOCAL_ENV=true node server.js",
-    "prod": "cross-env NODE_ENV=production node server.js",
+    "prod": "NODE_ENV=production node server.js",
     "test": "mocha"
   },
   "dependencies": {
@@ -23,7 +23,6 @@
     "cloudinary": "^1.17.0",
     "cookie-parser": "^1.4.3",
     "cors": "^2.8.5",
-    "cross-env": "^6.0.3",
     "dotenv": "^6.0.0",
     "dotenv-webpack": "^1.7.0",
     "email-validator": "^2.0.4",
@@ -65,6 +64,7 @@
     "babel-loader": "^8.0.6",
     "babel-plugin-root-import": "^6.2.0",
     "chai": "^4.2.0",
+    "cross-env": "^6.0.3",
     "mocha": "^6.2.0",
     "supertest": "^4.0.2",
     "webpack": "^4.33.0"
