@@ -1,6 +1,6 @@
 pipeline {
     agent { 
-      label 'docker'
+      dockerfile true
     }
     stages {
         stage('Clean') { 
@@ -18,10 +18,10 @@ pipeline {
               }
             }
         }
-        stage('Deploy') {
-          steps {
-            sh '/home/rebuild-woke.sh Dockerfile-woke-from-jenkins'
-          }
-        }
+        // stage('Deploy') {
+        //   steps {
+        //     sh '/home/rebuild-woke.sh Dockerfile-woke-from-jenkins'
+        //   }
+        // }
     }
 }
