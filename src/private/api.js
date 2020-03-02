@@ -380,7 +380,7 @@ module.exports = function(app, conn){
   app.get('/getUpcomingSession', validateReq, function(req, res){
     async.waterfall([
       function(callback){ // Get most upcoming session
-        const sql = "SELECT * FROM sessions WHERE dateHeld > NOW() ORDER BY dateHeld LIMIT 1;";
+        const sql = "SELECT * FROM sessions WHERE dateheld > NOW() ORDER BY RAND() LIMIT 1;";
         conn.query(sql, function (err, result) {
           if (err) return callback(err);
           if (result.length === 0) return callback(null);
