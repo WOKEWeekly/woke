@@ -698,6 +698,37 @@ module.exports = function(app, conn, server){
   });
 
   /***************************************************************
+   * FORMS
+   **************************************************************/
+
+  /**
+   * Recruitment Form
+   * @route {GET} /recruitment
+   */
+  app.get('/recruitment', function(req, res){
+    res.writeHead(301, { Location: 'https://forms.gle/xAf5bMPZvXNob7FC7' });
+    res.end();
+  });
+
+  /**
+   * Audience Review Form
+   * @route {GET} /feedback
+   */
+  app.get('/feedback', function(req, res){
+    res.writeHead(301, { Location: 'https://forms.gle/GErPZT2h2uHoFajn9' });
+    res.end();
+  });
+
+  /**
+   * Client Review Form
+   * @route {GET} /feedback/client
+   */
+  app.get('/feedback/client', function(req, res){
+    res.writeHead(301, { Location: 'https://forms.gle/iAEusQ8JBTmBoUCF8' });
+    res.end();
+  });
+
+  /***************************************************************
    * RESOURCES
    **************************************************************/
      
@@ -741,7 +772,8 @@ module.exports = function(app, conn, server){
    */
   app.get('/sitemap.xml', (req, res) => {
     const routes = [ '/', '/home', '/sessions', '/blackexcellence', '/mentalhealth',
-    '/executives', '/reviews', '/signup', '/about', '/cookies', '/donate', '/faq', '/privacy' ];
+    '/executives', '/reviews', '/signup', '/about', '/cookies', '/donate', '/faq',
+    '/privacy', '/recruitment', '/feedback' ];
 
     async.parallel([
       function(callback){
