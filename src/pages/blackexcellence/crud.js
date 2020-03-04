@@ -44,8 +44,10 @@ class CandidateAdd extends Component {
     request({
       url: '/latestCandidateId',
       onSuccess: (id) => {
-        id = isEditOperation ? id : id + 1;
-        this.setState({id});
+        if (!isEditOperation){
+          id = id + 1;
+          this.setState({id});
+        }
       }
     });
 
