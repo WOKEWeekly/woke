@@ -2,7 +2,11 @@ const { WebClient } = require('@slack/web-api');
 const token = process.env.SLACK_TOKEN;
 
 const slack = new WebClient(token);
-const channel = process.env.LOCAL_ENV ? 'UDEMRRR8T' : 'general';
+
+const mySlackID = 'UDEMRRR8T';
+const channel = process.env.LOCAL_ENV ? mySlackID : 'general';
+
+const { zDate } = require('zavid-modules');
 
 module.exports = {
   sendBirthdayMessage: async(member) => {
@@ -83,11 +87,19 @@ const constructBirthdayMessage = (member) => {
  * @param {string} session.title - The title of the session.
  * @returns The constructed message.
  */
-const constructSessionReminderMessage = ({title}) => {
+const constructSessionReminderMessage = ({title, timeHeld}) => {
+
+  // If there is no time set for the session, default to blank
+  if (timeHeld !== null){
+    timeHeld = ` at *${zDate.formatTime(timeHeld)}*`
+  } else {
+    timeHeld = '';
+  }
+
   const firstSentences = [
-    `We have the *${title}* session taking place today!`,
-    `We got *${title}* on today!`,
-    `Another day, another sesh: *${title}*.`
+    `We have the *${title}* session taking place today${timeHeld}!`,
+    `We got *${title}* on today${timeHeld}!`,
+    `Another day, another sesh: *${title}*${timeHeld} today.`
   ];
 
   const secondSentences = [
