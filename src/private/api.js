@@ -27,8 +27,8 @@ module.exports = function(app, conn){
       },
       function(entity, callback){ // Add session to database
         session = entity;
-        const sql = "INSERT INTO sessions (title, dateHeld, image, slug, description) VALUES ?";
-        const values = [[session.title, session.dateHeld, session.image, session.slug, session.description]];
+        const sql = "INSERT INTO sessions (title, dateHeld, timeHeld, image, slug, description) VALUES ?";
+        const values = [[session.title, session.dateHeld, session.timeHeld, session.image, session.slug, session.description]];
         
         conn.query(sql, [values], function (err, result) {
           err ? callback(err) : callback(null, result.insertId);
@@ -51,8 +51,8 @@ module.exports = function(app, conn){
       },
       function(entity, callback){ // Update session in database
         session2 = entity;
-        const sql = "UPDATE sessions SET title = ?, dateHeld = ?, image = ?, slug = ?, description = ? WHERE id = ?";
-        const values = [session2.title, session2.dateHeld, session2.image, session2.slug, session2.description, session1.id];
+        const sql = "UPDATE sessions SET title = ?, dateHeld = ?, timeHeld = ?, image = ?, slug = ?, description = ? WHERE id = ?";
+        const values = [session2.title, session2.dateHeld, session2.timeHeld, session2.image, session2.slug, session2.description, session1.id];
 
         conn.query(sql, values, function (err) {
           err ? callback(err) : callback(null);

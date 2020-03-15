@@ -39,7 +39,7 @@ module.exports = {
    */
   isValidSession: (session) => {
     if (!ifExists(session.title.trim(), 'Enter the session title.')) return false;
-    if (!ifExists(session.date, 'Select the date when the session will be held.')) return false;
+    if (!ifExists(session.dateHeld, 'Select the date when the session will be held.')) return false;
     if (!module.exports.isValidFile(session.image, 'session')) return false;
     return true;
   },

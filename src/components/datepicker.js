@@ -2,7 +2,6 @@ import React, { Component} from 'react';
 import {Col} from 'react-bootstrap';
 
 import { SubmitButton, CancelButton } from '~/components/button.js';
-import { formatDate } from '~/constants/date.js';
 import { Group, Select, TextInput } from '~/components/form.js';
 import { Modal } from '~/components/modal.js';
 import { creationDate } from '~/constants/settings.js';
@@ -13,9 +12,10 @@ import moment from 'moment';
 import { zDate } from 'zavid-modules';
 
 export class DatePicker extends Component {
-  constructor({date}){
-    super({date});
+  constructor(props){
+    super(props);
 
+    const { date } = props;
     this.state = {
       dateOfMonth: moment().date(moment(date).date()).format("Do"),
       month: moment(date).format('MMMM'),
@@ -26,12 +26,11 @@ export class DatePicker extends Component {
 
   /** Account for changes to input */
   static getDerivedStateFromProps({date}, state) {
-    if (state.visible) return;
+    if (state.visible) return state;
     return {
       dateOfMonth: moment().date(moment(date).date()).format("Do"),
       month: moment(date).format('MMMM'),
-      year: moment(date).year(),
-      changed: true
+      year: moment(date).year()
     }
   }
 
@@ -46,7 +45,7 @@ export class DatePicker extends Component {
     dateOfMonth = parseInt(dateOfMonth.replace(/([0-9]+)(.*)/g, '$1'));
     
     const date = new Date(year, month, dateOfMonth);
-    this.props.onConfirm(date);
+    this.props.onConfirm(date, this.props.name);
     this.close();
   }
 
@@ -122,7 +121,7 @@ export class DatePicker extends Component {
             name={'calendar-alt'}
             className={css.calendarIcon} />
           <TextInput
-            value={formatDate(date, withDayOfWeek) || ''}
+            value={zDate.formatDate(date, withDayOfWeek) || ''}
             placeholder={placeholderText}
             style={{textAlign: 'left'}}
             className={css.dateinput}
@@ -143,6 +142,7 @@ export class EventDatePicker extends Component {
   render(){
     return (
       <DatePicker
+        name={this.props.name}
         date={this.props.date || ''}
         onConfirm={this.props.onConfirm}
         placeholderText={'Select a date.'}
@@ -156,6 +156,7 @@ export class BirthdayPicker extends Component {
   render(){
     return (
       <DatePicker
+        name={this.props.name}
         date={this.props.date || ''}
         onConfirm={this.props.onConfirm}
         placeholderText={'Select date of birth.'}
@@ -170,6 +171,7 @@ export class AuthoredDatePicker extends Component {
     date = date.toString();
     return (
       <DatePicker
+        name={this.props.name}
         date={this.props.date || date}
         onConfirm={this.props.onConfirm}
         placeholderText={'Select the date written.'}
