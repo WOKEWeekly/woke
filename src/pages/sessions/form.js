@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 
 import { SubmitButton, CancelButton } from '~/components/button.js';
 import { EventDatePicker } from '~/components/datepicker.js';
+import { TimePicker } from '~/components/timepicker.js';
 import { Heading, Group, Label, TextInput, LongTextArea, FileSelector } from '~/components/form.js';
 import { Shader, Spacer } from '~/components/layout.js';
 
@@ -23,8 +24,8 @@ class SessionForm extends Component {
 
   render(){
     const { heading, confirmText, confirmFunc, cancelFunc, handlers, operation } = this.props;
-    const { handleText, handleDate, handleImage } = handlers;
-    const { title, date, description, image } = this.props.session;
+    const { handleText, handleDate, handleTime, handleImage } = handlers;
+    const { title, dateHeld, timeHeld, description, image } = this.props.session;
 
     return (
       <Shader>
@@ -33,7 +34,7 @@ class SessionForm extends Component {
             <Heading>{heading}</Heading>
 
             <Group>
-              <Col md={7}>
+              <Col md={6}>
                 <Label>Title:</Label>
                 <TextInput
                   name={'title'}
@@ -41,9 +42,13 @@ class SessionForm extends Component {
                   onChange={handleText}
                   placeholder={"Enter the title."} />
               </Col>
-              <Col md={5}>
+              <Col md={4}>
                 <Label>Date Held:</Label>
-                <EventDatePicker date={date} onConfirm={handleDate} />
+                <EventDatePicker name={'dateHeld'} date={dateHeld} onConfirm={handleDate} />
+              </Col>
+              <Col md={2}>
+                <Label>Time Held:</Label>
+                <TimePicker name={'timeHeld'} time={timeHeld} onConfirm={handleTime} />
               </Col>
             </Group>
             <Group>

@@ -204,17 +204,24 @@ export class LongTextArea extends Component {
 /** For dropdown menus */
 export class Select extends Component {
   render(){
-    const { name, placeholder, items, value, onChange } = this.props;
+    const { name, placeholder, items, onChange } = this.props;
+
+    // Select widgets don't account for values of 0
+    let { value: currentValue = '' } = this.props;
+    if (currentValue === 0) currentValue = '00';
+
     return (
       <select
         className={css.select}
         name={name}
-        value={value || ''}
+        value={currentValue || ''}
         onChange={onChange}
-        style={{ color: value === '' && '#8E8E8E' }}>
+        style={{ color: currentValue === '' && '#8E8E8E' }}>
         <option value={''} disabled>{placeholder}</option>
         {items.map((item, index) => {
-          return <option key={index} value={item.value || item.label || item}>{item.label || item}</option>
+          const value = item.value || item.label || item;
+          const label = item.label || item;
+          return <option key={index} value={value}>{label}</option>
         })}
       </select>
     )

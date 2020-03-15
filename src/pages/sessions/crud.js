@@ -3,8 +3,7 @@ import { connect } from 'react-redux';
 
 import { setAlert } from '~/components/alert.js';
 
-import { formatISODate } from '~/constants/date.js';
-import handlers from '~/constants/handlers.js';
+import { zDate, zHandlers } from 'zavid-modules';
 import request from '~/constants/request.js';
 import { cloudinary } from '~/constants/settings.js';
 import { isValidSession } from '~/constants/validations.js';
@@ -20,26 +19,28 @@ class SessionCrud extends Component {
     super();
     this.state = {
       title: '',
-      date: new Date(),
+      dateHeld: new Date(),
+      timeHeld: null,
       description: '',
       image: ''
     };
   }
 
   componentDidMount() {
-    this.setState({...this.props.session})
+    this.setState({ ...this.props.session });
   }
 
   /** POST session to the server */
   submitSession = () => {
     if (!isValidSession(this.state)) return;
     
-    const { title, date, description, image } = this.state;
+    const { title, dateHeld, timeHeld, description, image } = this.state;
     
     const data = {
       session: {
         title: title.trim(),
-        dateHeld: formatISODate(date),
+        dateHeld: zDate.formatISODate(dateHeld),
+        timeHeld: zDate.formatISOTime(timeHeld, false),
         description: description.trim(),
         image: image
       },
@@ -62,13 +63,14 @@ class SessionCrud extends Component {
   updateSession = () => {
     if (!isValidSession(this.state)) return;
     
-    const { title, date, description, image } = this.state;
+    const { title, dateHeld, timeHeld, description, image } = this.state;
 
     const data = JSON.stringify({
       session1: this.props.session,
       session2: {
         title: title.trim(),
-        dateHeld: formatISODate(date),
+        dateHeld: zDate.formatISODate(dateHeld),
+        timeHeld: zDate.formatISOTime(timeHeld, false),
         description: description.trim(),
         image: image
       },
@@ -93,7 +95,7 @@ class SessionCrud extends Component {
       <SessionForm
         heading={title}
         session={this.state}
-        handlers={handlers(this)}
+        handlers={zHandlers(this)}
 
         confirmText={operation === 'add' ? 'Submit' : 'Update'}
         confirmFunc={operation === 'add' ? this.submitSession : this.updateSession}
