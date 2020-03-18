@@ -106,6 +106,8 @@ export class ExpandText extends Component {
  * @returns The text with formatting applied. 
  */
 const prefixFormatting = (text, hyperlinkClass) => {
+  if (text === null) return '';
+
   return text.split('\n').map((paragraph, key) => {
     if (paragraph.length === 0) return null;
 
@@ -117,11 +119,16 @@ const prefixFormatting = (text, hyperlinkClass) => {
       case '>': return <div className={css.subheading} key={key}>{paragraph.substring(1)}</div>;
 
       // For images
-      case ';': return (
-        <div className={css.image} key={key}>
-          <img src={`${cloudinary.url}/public/fillers/${paragraph.substring(1)}`} />
-        </div>
-      );
+      case ';':
+        const isFullImage = paragraph.charAt(1) === ';';
+        const imageType = isFullImage ? 'fullImage' : 'floatImage';
+        const offset = isFullImage ? 2 : 1;
+        
+        return (
+          <div className={css[imageType]} key={key}>
+            <img src={`${cloudinary.url}/public/fillers/${paragraph.substring(offset)}`} />
+          </div>
+        );
 
       // For dividers
       case '_': return (
@@ -151,6 +158,8 @@ const prefixFormatting = (text, hyperlinkClass) => {
  * @returns The formatted text.
  */
 const applyFormatting = (text, hyperlinkClass) => {
+  if (text === null) return '';
+
   const linkRegex = new RegExp(/\<\[(.*?)\]\s(.*?)\>/); // Regex for links
   const boldRegex = new RegExp(/(\*\*.*?\*\*)/); // Regex for bold text
 
@@ -196,8 +205,10 @@ const applyFormatting = (text, hyperlinkClass) => {
  * @returns The full text with variables substitutions applied.
  */
 const applySubstitutions = (text, substitutions) => {
-	const subRegex = new RegExp(/\<\$(.*?)\$\>/g); // Regex for substitutions
-	text = text.replace(subRegex, (match, p1) => substitutions[p1]);
+  if (text !== null){
+    const subRegex = new RegExp(/\<\$(.*?)\$\>/g); // Regex for substitutions
+    text = text.replace(subRegex, (match, p1) => substitutions[p1]);
+  }
 	return text;
 }
 
