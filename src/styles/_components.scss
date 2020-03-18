@@ -526,7 +526,7 @@
     display: grid;
     grid-template-columns: 1.5em 1fr;
   }
-  .image {
+  .floatImage {
     margin: 1.5em 0;
     width: 100%;
     img {
@@ -540,6 +540,13 @@
         all: initial;
         border-radius: 30px;
         width: 100%; }
+    }
+  }
+  .fullImage {
+    margin: 1.5em 0;
+    width: 100%;
+    img {
+      width: 100%;
     }
   }
 }

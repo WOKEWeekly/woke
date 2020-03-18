@@ -52,6 +52,13 @@ module.exports = {
     director: "zavidegbue@gmail.com"
   },
 
+  /** External Google Forms */
+  forms: {
+    recruitment: 'https://forms.gle/xAf5bMPZvXNob7FC7',
+    clientFeedback: 'https://forms.gle/iAEusQ8JBTmBoUCF8',
+    audienceFeedback: 'https://forms.gle/GErPZT2h2uHoFajn9'
+  },
+
   /** List of social media domains and icons for forms */
   socialPlatforms: {
     facebook: { name: 'Facebook', icon: 'facebook-f', domain: 'https://www.facebook.com/' },

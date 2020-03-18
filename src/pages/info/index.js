@@ -11,7 +11,7 @@ import { BottomToolbar } from '~/components/toolbar.js';
 import { Fader } from '~/components/transitioner.js';
 
 import { formatDate } from '~/constants/date.js';
-import { accounts } from '~/constants/settings.js';
+import { accounts, forms } from '~/constants/settings.js';
 
 import css from '~/styles/info.scss';
 
@@ -44,9 +44,16 @@ class Info extends Component {
                 substitutions={{lastModified: formatDate(lastModified)}}>{pageText}</Paragraph>
 
               {url === '/donate' ?
-                <button className={css.donate} onClick={() => window.open(accounts.paypal, '_blank')}>
+                <button className={css.infoButton} onClick={() => window.open(accounts.paypal, '_blank')}>
                   <Icon name={'paypal'} prefix={'fab'} />
                   Donate with PayPal
+                </button>
+              : null}
+
+              {url === '/recruitment' ?
+                <button className={css.infoButton} onClick={() => window.open(forms.recruitment, '_blank')}>
+                  <Icon name={'user-plus'} prefix={'fas'} />
+                  Join the Team
                 </button>
               : null}
             </div>

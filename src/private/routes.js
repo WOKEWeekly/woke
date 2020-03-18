@@ -7,6 +7,8 @@ const sm = require('sitemap');
 const { cloudinary, domain } = require('../constants/settings.js');
 const { renderErrPage } = require('./response.js');
 
+const { forms } = require('../constants/settings.js');
+
 module.exports = function(app, conn, server){
 
   /**
@@ -649,6 +651,44 @@ module.exports = function(app, conn, server){
   });
 
   /**
+   * Recruitment page
+   * @route {GET} /recruitment
+   */
+  app.get('/recruitment', function(req, res){
+    conn.query(`SELECT * FROM resources WHERE name = 'recruitment'`, function (err, result) {
+      if (err || !result.length) return renderErrPage(req, res, err, server);
+
+      const {text} = result[0];
+      return server.render(req, res, '/info', {
+        title: 'Recruitment | #WOKEWeekly',
+        description: 'Join the family! Learn, grow and exercise your skills under us.',
+        pageText: text,
+        backgroundImage: 'bg-recruitment.jpg',
+        cardImage: 'public/bg/card-recruitment.jpg',
+        url: '/recruitment'
+      });
+    });
+  });
+
+  /**
+   * Edit Recruitment page
+   * @route {GET} /recruitment/edit
+   */
+  app.get('/recruitment/edit', function(req, res){
+    conn.query(`SELECT * FROM resources WHERE name = 'recruitment'`, function (err, result) {
+      if (err || !result.length) return renderErrPage(req, res, err, server);
+
+      const {text} = result[0];
+      return server.render(req, res, '/info/edit', {
+        title: 'Edit Recruitment Page',
+        description: text,
+        resource: 'recruitment',
+        placeholder: `What are we recruiting for...?`
+      });
+    });
+  });
+
+  /**
    * Reviews Page
    * @route {GET} /reviews
    */
@@ -693,8 +733,6 @@ module.exports = function(app, conn, server){
         review
       });
     });
-
-    
   });
 
   /***************************************************************
@@ -705,8 +743,8 @@ module.exports = function(app, conn, server){
    * Recruitment Form
    * @route {GET} /recruitment
    */
-  app.get('/recruitment', function(req, res){
-    res.writeHead(301, { Location: 'https://forms.gle/xAf5bMPZvXNob7FC7' });
+  app.get('/recruitment-form', function(req, res){
+    res.writeHead(301, { Location: forms.recruitment });
     res.end();
   });
 
@@ -715,7 +753,7 @@ module.exports = function(app, conn, server){
    * @route {GET} /feedback
    */
   app.get('/feedback', function(req, res){
-    res.writeHead(301, { Location: 'https://forms.gle/GErPZT2h2uHoFajn9' });
+    res.writeHead(301, { Location: forms.audienceFeedback });
     res.end();
   });
 
@@ -724,7 +762,7 @@ module.exports = function(app, conn, server){
    * @route {GET} /feedback/client
    */
   app.get('/feedback/client', function(req, res){
-    res.writeHead(301, { Location: 'https://forms.gle/iAEusQ8JBTmBoUCF8' });
+    res.writeHead(301, { Location: forms.clientFeedback });
     res.end();
   });
 
