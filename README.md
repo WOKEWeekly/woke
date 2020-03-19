@@ -13,11 +13,13 @@
     └─── config.env
     ```
 
-2. Navigate to `/src` and run `npm install` to install `node_modules`.
+2. Download Node.js via link: [https://nodejs.org/en/download/]
 
-3. Run `npm run dev` to start the project in development mode.
+3. Navigate to `/src` and run `npm install` to install `node_modules`.
 
-4. Browse `http://localhost:3000`.
+4. Run `npm run dev` to start the project in development mode.
+
+5. Browse `http://localhost:3000`.
 
 
 
