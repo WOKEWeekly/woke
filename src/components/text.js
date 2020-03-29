@@ -33,12 +33,12 @@ export class Subtitle extends Component {
   }
 }
 
-export class _Paragraph extends Component {
+export class IParagraph extends Component {
   render(){
     let { children = '', substitutions, theme, link, more } = this.props;
     const classes = classNames(css.paragraph, this.props.className);
 
-	children = applySubstitutions(children, substitutions);
+	  children = applySubstitutions(children, substitutions);
     children = prefixFormatting(children, css[`link-${theme.toLowerCase()}`]);
 
     return (
@@ -250,4 +250,4 @@ const mapStateToProps = state => ({
   theme: state.theme
 });
 
-export const Paragraph = connect(mapStateToProps)(_Paragraph);
+export const Paragraph = connect(mapStateToProps)(IParagraph);
