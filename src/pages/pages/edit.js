@@ -64,8 +64,6 @@ class EditPage extends Component {
     const { isLoaded, pageText, backPath } = this.state;
     const { title, placeholderText } = this.props;
 
-    console.log(this.props);
-
     if (!isLoaded) return null;
 
     return (
