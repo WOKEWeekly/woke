@@ -441,10 +441,10 @@ module.exports = function(app, conn){
   });
 
   /** Update information pages */
-  app.put(['/updateInfo', '/updateVariantPage'], verifyToken(CLEARANCES.ACTIONS.EDIT_INFO), function(req, res){
-    const { resource, text } = req.body;
-    const sql = "UPDATE resources SET text = ?, lastModified = ? WHERE name = ?";
-    const values = [text, new Date(), resource];
+  app.put('/updatePage', verifyToken(CLEARANCES.ACTIONS.EDIT_INFO), function(req, res){
+    const { page, text } = req.body;
+    const sql = "UPDATE pages SET text = ?, last_modified = ? WHERE name = ?";
+    const values = [text, new Date(), page];
     conn.query(sql, values, function (err) {
       resToClient(res, err);
     });

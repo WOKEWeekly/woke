@@ -11,7 +11,7 @@ import CLEARANCES from '~/constants/clearances.js';
 import request from '~/constants/request.js';
 import css from '~/styles/info.scss';
 
-class EditInfo extends Component {
+class EditPage extends Component {
   /** Retrieve informaiton from server */
   static async getInitialProps({ query }) {
     return { ...query };
@@ -23,7 +23,7 @@ class EditInfo extends Component {
     this.state = {
       isLoaded: false,
       backPath: path.substring(0, path.indexOf('/', 1)),
-      text: props.description
+      pageText: props.pageText
     }
 
     if (props.user.clearance < CLEARANCES.ACTIONS.EDIT_INFO){
@@ -37,13 +37,13 @@ class EditInfo extends Component {
 
   /** Update information */
   updateInfo = () => {
-    const { user, title, resource } = this.props;
-    const { text, backPath } = this.state;
+    const { user, title, pageName } = this.props;
+    const { pageText, backPath } = this.state;
 
     request({
-      url: '/updateInfo',
+      url: '/updatePage',
       method: 'PUT',
-      body: JSON.stringify({text, resource}),
+      body: JSON.stringify({page: pageName, text: pageText}),
       headers: {
         'Authorization': `Bearer ${user.token}`,
         'Content-Type': 'application/json'
@@ -61,8 +61,10 @@ class EditInfo extends Component {
     this.setState({[name]: value}); }
 
   render(){
-    const { isLoaded, text, backPath } = this.state;
-    const { title, placeholder } = this.props;
+    const { isLoaded, pageText, backPath } = this.state;
+    const { title, placeholderText } = this.props;
+
+    console.log(this.props);
 
     if (!isLoaded) return null;
 
@@ -76,10 +78,10 @@ class EditInfo extends Component {
               <Col>
                 <Label>Description:</Label>
                 <LongTextArea
-                  name={'text'}
-                  value={text}
+                  name={'pageText'}
+                  value={pageText}
                   onChange={this.handleText}
-                  placeholder={placeholder} />
+                  placeholder={placeholderText} />
               </Col>
             </Group>
           </div>
@@ -102,4 +104,4 @@ const mapStateToProps = state => ({
   user: state.user
 });
 
-export default connect(mapStateToProps)(EditInfo);
+export default connect(mapStateToProps)(EditPage);

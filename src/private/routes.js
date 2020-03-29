@@ -8,8 +8,13 @@ const { cloudinary, domain } = require('../constants/settings.js');
 const { renderErrPage } = require('./response.js');
 
 const { forms } = require('../constants/settings.js');
+const { PAGE } = require('../constants/strings.js');
+
+let exigencies = {};
 
 module.exports = function(app, conn, server){
+
+  exigencies = { conn, server }
 
   /**
    * Home page
@@ -341,6 +346,53 @@ module.exports = function(app, conn, server){
   });
 
   /**
+   * Reviews Page
+   * @route {GET} /reviews
+   */
+  app.get('/reviews', function(req, res){
+    conn.query(`SELECT * FROM reviews`, function (err, result) {
+      if (err) return renderErrPage(req, res, err, server);
+      return server.render(req, res, '/reviews', {
+        title: 'Reviews | #WOKEWeekly',
+        description: 'Read what the people have to say about us.',
+        url: '/reviews',
+        cardImage: `public/bg/card-reviews.jpg`,
+      });
+    });
+  });
+
+  /**
+   * Add Review page
+   * @route {GET} /reviews/add
+   */
+  app.get('/reviews/add', function(req, res){
+    server.render(req, res, '/reviews/crud', {
+      title: 'Add New Review',
+      operation: 'add'
+    });
+  });
+
+  /**
+   * Edit Review page
+   * @route {GET} /reviews/edit/:id
+   */
+  app.get('/reviews/edit/:id', function(req, res){
+    const { id } = req.params;
+    const sql = "SELECT * FROM reviews WHERE id = ?";
+    
+    conn.query(sql, id, function (err, result) {
+      if (err || !result.length) return renderErrPage(req, res, err, server);
+
+      const review = result[0];
+      server.render(req, res, '/reviews/crud', {
+        title: 'Edit Review',
+        operation: 'edit',
+        review
+      });
+    });
+  });
+
+  /**
    * Registered Users page
    * @route {GET} /users
    */
@@ -422,326 +474,13 @@ module.exports = function(app, conn, server){
     });
   });
 
-   /**
-   * Mental Health page
-   * @route {GET} /mentalhealth
-   */
-   app.get('/mentalhealth', function(req, res){
-    conn.query(`SELECT * FROM resources WHERE name = 'mentalhealth'`, function (err, result) {
-      if (err || !result.length) return renderErrPage(req, res, err, server);
-
-      const {text} = result[0];
-      return server.render(req, res, '/variants', {
-        title: '#WOKEWeekly Mental Health',
-        description: 'Shattering the stigmata of discussion over our wellbeing through healthy conversation and education.',
-        url: '/mentalhealth',
-        cardImage: 'public/bg/card-mental.jpg',
-        backgroundImage: 'bg-mental.jpg',
-        pageText: text,
-        coverImage: 'header-mental.jpg',
-        imageLogo: 'mentalhealth-logo.png',
-        imageAlt: 'Mental Health logo',
-        theme: 'mental'
-      });
-    });
-  });
-
-  /**
-   * Edit Mental Health page
-   * @route {GET} /mentalhealth/edit
-   */
-  app.get('/mentalhealth/edit', function(req, res){
-    conn.query(`SELECT * FROM resources WHERE name = 'mentalhealth'`, function (err, result) {
-      if (err || !result.length) return renderErrPage(req, res, err, server);
-
-      const {text} = result[0];
-      return server.render(req, res, '/variants/edit', {
-        title: 'Edit Mental Health Page',
-        backgroundImage: 'bg-mental.jpg',
-        pageText: text,
-        resource: 'mentalhealth',
-        placeholder: `What do we do at #WOKEWeekly Mental Health?`,
-        theme: 'mental'
-      });
-    });
-  });
-
-  /**
-   * About page
-   * @route {GET} /executives/:slug
-   */
-  app.get('/about', function(req, res){
-    conn.query(`SELECT * FROM resources WHERE name = 'about'`, function (err, result) {
-      if (err || !result.length) return renderErrPage(req, res, err, server);
-
-      const {text} = result[0];
-      return server.render(req, res, '/info', {
-        title: 'About #WOKEWeekly',
-        description: createExcerpt(text),
-        pageText: text,
-        cardImage: 'public/bg/card-about.jpg',
-        url: '/about'
-      });
-    });
-  });
-
-  /**
-   * Edit About page
-   * @route {GET} /about/edit
-   */
-  app.get('/about/edit', function(req, res){
-    conn.query(`SELECT * FROM resources WHERE name = 'about'`, function (err, result) {
-      if (err || !result.length) return renderErrPage(req, res, err, server);
-
-      const {text} = result[0];
-      return server.render(req, res, '/info/edit', {
-        title: 'Edit About',
-        description: text,
-        resource: 'about',
-        placeholder: `Write about #WOKEWeekly...`
-      });
-    });
-  });
-
-  /**
-   * Privacy Policy page
-   * @route {GET} /privacy
-   */
-  app.get('/privacy', function(req, res){
-    conn.query(`SELECT * FROM resources WHERE name = 'privacy'`, function (err, result) {
-      if (err || !result.length) return renderErrPage(req, res, err, server);
-
-      const {text, lastModified} = result[0];
-      return server.render(req, res, '/info', {
-        title: 'Privacy Policy | #WOKEWeekly',
-        description: createExcerpt(text),
-        pageText: text,
-        url: '/privacy',
-        lastModified: lastModified
-      });
-    });
-  });
-
-  /**
-   * Edit Privacy Policy page
-   * @route {GET} /privacy/edit
-   */
-  app.get('/privacy/edit', function(req, res){
-    conn.query(`SELECT * FROM resources WHERE name = 'privacy'`, function (err, result) {
-      if (err || !result.length) return renderErrPage(req, res, err, server);
-
-      const {text} = result[0];
-      return server.render(req, res, '/info/edit', {
-        title: 'Edit Privacy Policy',
-        description: text,
-        resource: 'privacy',
-        placeholder: `Detail this website's Privacy Policy...`
-      });
-    });
-  });
-
-  /**
-   * Cookies Policy page
-   * @route {GET} /cookies
-   */
-  app.get('/cookies', function(req, res){
-    conn.query(`SELECT * FROM resources WHERE name = 'cookies'`, function (err, result) {
-      if (err || !result.length) return renderErrPage(req, res, err, server);
-
-      const {text} = result[0];
-      return server.render(req, res, '/info', {
-        title: 'Cookies Policy | #WOKEWeekly',
-        description: createExcerpt(text),
-        pageText: text,
-        url: '/cookies',
-      });
-    });
-  });
-
-  /**
-   * Edit Cookies Policy page
-   * @route {GET} /cookies/edit
-   */
-  app.get('/cookies/edit', function(req, res){
-    conn.query(`SELECT * FROM resources WHERE name = 'cookies'`, function (err, result) {
-      if (err || !result.length) return renderErrPage(req, res, err, server);
-
-      const {text} = result[0];
-      return server.render(req, res, '/info/edit', {
-        title: 'Edit Cookies Policy',
-        description: text,
-        resource: 'cookies',
-        placeholder: `Detail this website's Cookie Policy...`
-      });
-    });
-  });
-
-  /**
-   * Donate page
-   * @route {GET} /donate
-   */
-  app.get('/donate', function(req, res){
-    conn.query(`SELECT * FROM resources WHERE name = 'donate'`, function (err, result) {
-      if (err || !result.length) return renderErrPage(req, res, err, server);
-
-      const {text} = result[0];
-      return server.render(req, res, '/info', {
-        title: 'Donate | #WOKEWeekly',
-        description: 'Contribute to the support of our movement.',
-        pageText: text,
-        url: '/donate',
-        backgroundImage: 'bg-donate.jpg',
-        cardImage: `public/bg/card-donate.jpg`,
-      });
-    });
-  });
-
-  /**
-   * Edit Donate page
-   * @route {GET} /donate/edit
-   */
-  app.get('/donate/edit', function(req, res){
-    conn.query(`SELECT * FROM resources WHERE name = 'donate'`, function (err, result) {
-      if (err || !result.length) return renderErrPage(req, res, err, server);
-
-      const {text} = result[0];
-      return server.render(req, res, '/info/edit', {
-        title: 'Edit Donate Page',
-        description: text,
-        resource: 'donate',
-        placeholder: `How will #WOKEWeekly use donations?`
-      });
-    });
-  });
-
-  /**
-   * 'Frequently Asked Questions' page
-   * @route {GET} /faq
-   */
-  app.get('/faq', function(req, res){
-    conn.query(`SELECT * FROM resources WHERE name = 'faq'`, function (err, result) {
-      if (err || !result.length) return renderErrPage(req, res, err, server);
-
-      const {text} = result[0];
-      return server.render(req, res, '/info', {
-        title: 'FAQs | #WOKEWeekly',
-        description: 'Our most Frequently Asked Questions.',
-        pageText: text, 
-        url: '/faq'
-      });
-    });
-  });
-
-  /**
-   * Edit FAQs page
-   * @route {GET} /faq/edit
-   */
-  app.get('/faq/edit', function(req, res){
-    conn.query(`SELECT * FROM resources WHERE name = 'faq'`, function (err, result) {
-      if (err || !result.length) return renderErrPage(req, res, err, server);
-
-      const {text} = result[0];
-      return server.render(req, res, '/info/edit', {
-        title: 'Edit FAQs',
-        description: text,
-        resource: 'faq',
-        placeholder: `Ask and answer some frequently asked questions...`
-      });
-    });
-  });
-
-  /**
-   * Recruitment page
-   * @route {GET} /recruitment
-   */
-  app.get('/recruitment', function(req, res){
-    conn.query(`SELECT * FROM resources WHERE name = 'recruitment'`, function (err, result) {
-      if (err || !result.length) return renderErrPage(req, res, err, server);
-
-      const {text} = result[0];
-      return server.render(req, res, '/info', {
-        title: 'Recruitment | #WOKEWeekly',
-        description: 'Join the family! Learn, grow and exercise your skills under us.',
-        pageText: text,
-        backgroundImage: 'bg-recruitment.jpg',
-        cardImage: 'public/bg/card-recruitment.jpg',
-        url: '/recruitment'
-      });
-    });
-  });
-
-  /**
-   * Edit Recruitment page
-   * @route {GET} /recruitment/edit
-   */
-  app.get('/recruitment/edit', function(req, res){
-    conn.query(`SELECT * FROM resources WHERE name = 'recruitment'`, function (err, result) {
-      if (err || !result.length) return renderErrPage(req, res, err, server);
-
-      const {text} = result[0];
-      return server.render(req, res, '/info/edit', {
-        title: 'Edit Recruitment Page',
-        description: text,
-        resource: 'recruitment',
-        placeholder: `What are we recruiting for...?`
-      });
-    });
-  });
-
-  /**
-   * Reviews Page
-   * @route {GET} /reviews
-   */
-  app.get('/reviews', function(req, res){
-    conn.query(`SELECT * FROM reviews`, function (err, result) {
-      if (err) return renderErrPage(req, res, err, server);
-      return server.render(req, res, '/reviews', {
-        title: 'Reviews | #WOKEWeekly',
-        description: 'Read what the people have to say about us.',
-        url: '/reviews',
-        cardImage: `public/bg/card-reviews.jpg`,
-      });
-    });
-  });
-
-  /**
-   * Add Review page
-   * @route {GET} /reviews/add
-   */
-  app.get('/reviews/add', function(req, res){
-    server.render(req, res, '/reviews/crud', {
-      title: 'Add New Review',
-      operation: 'add'
-    });
-  });
-
-  /**
-   * Edit Review page
-   * @route {GET} /reviews/edit/:id
-   */
-  app.get('/reviews/edit/:id', function(req, res){
-    const { id } = req.params;
-    const sql = "SELECT * FROM reviews WHERE id = ?";
-    
-    conn.query(sql, id, function (err, result) {
-      if (err || !result.length) return renderErrPage(req, res, err, server);
-
-      const review = result[0];
-      server.render(req, res, '/reviews/crud', {
-        title: 'Edit Review',
-        operation: 'edit',
-        review
-      });
-    });
-  });
-
   /***************************************************************
    * FORMS
    **************************************************************/
 
   /**
    * Recruitment Form
-   * @route {GET} /recruitment
+   * @route {GET} /recruitment-form
    */
   app.get('/recruitment-form', function(req, res){
     res.writeHead(301, { Location: forms.recruitment });
@@ -775,7 +514,7 @@ module.exports = function(app, conn, server){
    * @route {GET} /constitution
    */
   app.get('/constitution', function(req, res){
-    request(`${cloudinary.url}/resources/Constitution.pdf`).pipe(res);
+    request(`${cloudinary.url}/pages/Constitution.pdf`).pipe(res);
   });
 
   /**
@@ -783,7 +522,7 @@ module.exports = function(app, conn, server){
    * @route {GET} /sponsorship-proposal
    */
   app.get('/sponsorship-proposal', function(req, res){
-    request(`${cloudinary.url}/v1579300643/resources/Sponsorship_Proposal.pdf`).pipe(res);
+    request(`${cloudinary.url}/v1579300643/pages/Sponsorship_Proposal.pdf`).pipe(res);
   });
 
   /**
@@ -791,7 +530,7 @@ module.exports = function(app, conn, server){
    * @route {GET} /blackexcellence-tribute-guide
    */
   app.get('/blackexcellence-tribute-guide', function(req, res){
-    request(`${cloudinary.url}/resources/BlackExcellence_Tribute_Guide.pdf`).pipe(res);
+    request(`${cloudinary.url}/pages/BlackExcellence_Tribute_Guide.pdf`).pipe(res);
   });
 
   /**
@@ -809,9 +548,8 @@ module.exports = function(app, conn, server){
    * @route {GET} /sitemap.xml
    */
   app.get('/sitemap.xml', (req, res) => {
-    const routes = [ '/', '/home', '/sessions', '/blackexcellence', '/mentalhealth',
-    '/executives', '/reviews', '/signup', '/about', '/cookies', '/donate', '/faq',
-    '/privacy', '/recruitment', '/feedback' ];
+    const routes = [ '/', '/home', '/sessions', '/blackexcellence', '/executives',
+      '/reviews', '/signup' ];
 
     async.parallel([
       function(callback){
@@ -841,6 +579,13 @@ module.exports = function(app, conn, server){
           result.forEach(member => routes.push(`/team/member/${member.slug}`));
           callback(null);
         });
+      },
+      function(callback){
+        conn.query(`SELECT page_name FROM pages;`, function (err, result) {
+          if (err) return callback(err);
+          result.forEach(page => routes.push(`/${page.page_name}`));
+          callback(null);
+        });
       }
     ], function(){
       const sitemap = sm.createSitemap ({
@@ -859,12 +604,89 @@ module.exports = function(app, conn, server){
       });
     });
   });
+
+  app.get('/about', renderPage('about', PAGE.KINDS.INFO));
+  app.get('/about/edit', renderPage('about', PAGE.KINDS.INFO, PAGE.OPERATIONS.UPDATE));
+
+  app.get('/cookies', renderPage('cookies', PAGE.KINDS.INFO));
+  app.get('/cookies/edit', renderPage('cookies', PAGE.KINDS.INFO, PAGE.OPERATIONS.UPDATE));
+
+  app.get('/donate', renderPage('donate', PAGE.KINDS.INFO));
+  app.get('/donate/edit', renderPage('donate', PAGE.KINDS.INFO, PAGE.OPERATIONS.UPDATE));
+
+  app.get('/faq', renderPage('faq', PAGE.KINDS.INFO));
+  app.get('/faq/edit', renderPage('faq', PAGE.KINDS.INFO, PAGE.OPERATIONS.UPDATE));
+
+  app.get('/mentalhealth', renderPage('mentalhealth', PAGE.KINDS.VARIANTS));
+  app.get('/mentalhealth/edit', renderPage('mentalhealth', PAGE.KINDS.VARIANTS, PAGE.OPERATIONS.UPDATE));
+
+  app.get('/privacy', renderPage('privacy', PAGE.KINDS.INFO));
+  app.get('/privacy/edit', renderPage('privacy', PAGE.KINDS.INFO, PAGE.OPERATIONS.UPDATE));
+
+  app.get('/recruitment', renderPage('recruitment', PAGE.KINDS.INFO));
+  app.get('/recruitment/edit', renderPage('recruitment', PAGE.KINDS.INFO, PAGE.OPERATIONS.UPDATE));
+
+}
+
+/**
+ * Dynamically render a page from the database.
+ * @param {string} pageName - The name of the page.
+ * @param {string} kind - Either PAGE.KINDS.VARIANTS or 'information'.
+ * @param {string} [operation] - Either 'READ' or 'UPDATE'. Defaults to 'READ'.
+ */
+const renderPage = (
+    pageName,
+    kind,
+    operation = PAGE.OPERATIONS.READ
+  ) => {
+  const { conn, server } = exigencies;
+  return function(req, res){
+    conn.query(`SELECT * FROM pages WHERE name = '${pageName}'`, function (err, result) {
+      if (err || !result.length) return renderErrPage(req, res, err, server);
+  
+      const { name, title, include_domain, text, excerpt, card_image, bg_image,
+        cover_image, cover_image_logo, cover_image_alt, theme,
+        edit_title, edit_placeholder_text } = result[0];
+
+      let uri = '';
+      let information = {};
+  
+      if (operation === PAGE.OPERATIONS.READ){
+        uri = `/pages/${kind}`;
+        information = {
+          pageName: name,
+          pageText: text,
+          title: include_domain ? `${title} | #WOKEWeekly` : title,
+          description: excerpt || createExcerpt(text),
+          url: `/${name}`,
+          cardImage: card_image || 'public/bg/card-home.jpg',
+          backgroundImage: bg_image || 'bg-app.jpg',
+          coverImage: cover_image,
+          imageLogo: cover_image_logo,
+          imageAlt: cover_image_alt,
+          theme: theme || PAGE.THEMES.DEFAULT
+        };
+      } else {
+        uri = `/pages/edit`;
+        information = {
+          pageName: name,
+          pageText: text,
+          title: edit_title,
+          backgroundImage: bg_image || 'bg-app.jpg',
+          placeholderText: edit_placeholder_text,
+          theme: theme || PAGE.THEMES.DEFAULT
+        }
+      }
+
+      return server.render(req, res, uri, information);
+    });
+  }
 }
 
 /**
  * Create an excerpt from the description of a web page.
  * @param {string} text - Piece of text to be served.
- * @returns {Boolean} The excerpt shown in previews.
+ * @returns {string} The excerpt shown in previews.
  */
 const createExcerpt = (text) => {
   if (!text) text = '';
