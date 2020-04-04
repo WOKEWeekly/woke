@@ -18,9 +18,9 @@ module.exports = {
    * @param {string} [request.method] - The method of the request. Defaults to GET.
    * @param {Object} [request.body] - The payload for the request.
    * @param {Object} [request.headers] - The headers to accompany the request.
-   * @param {onSuccessCallback} request.onSuccess - Function triggered on successful request.
-   * @param {onErrorCallback} request.onError - Function triggered on successful request.
-   * @param {doneCallback} [request.done] - The callback to finish the test.
+   * @param {Function} request.onSuccess - Function triggered on successful request.
+   * @param {Function} request.onError - Function triggered on successful request.
+   * @param {Function} [request.done] - The callback to finish the test.
    */
   request: ({
     url,
@@ -42,9 +42,12 @@ module.exports = {
       done();
     })
     .catch(error => {
-      onError(error.response);
-      done();
-      // done(error);
+      if (typeof onError === "function"){
+        onError(error.response);
+        done();
+      } else {
+        done(error)
+      }
     });
   },
 
@@ -60,13 +63,3 @@ module.exports = {
     }
   }
 }
-
-/**
- * Function triggered on successful request.
- * @callback onSuccessCallback
- */
-
-/**
- * The callback to finish the test.
- * @callback doneCallback
- */

@@ -18,14 +18,10 @@ describe("Sessions Tests", function() {
   /** Test creating a new session */
   describe("Create", function() {
     it("Add session", function(done) {
-      const payload = JSON.stringify({
-        session: TEST_SESSIONS.CREATED
-      });
-
       request({
         url: `/api/v1/sessions`,
         method: 'POST',
-        body: payload,
+        body: JSON.stringify(TEST_SESSIONS.CREATED),
         headers: HEADERS.TOKEN(superuser),
         done,
         onSuccess: ({status, data}) => {
@@ -69,38 +65,36 @@ describe("Sessions Tests", function() {
 
   /** Test updating the session */
   describe("Update", function() {
-    it("Update session with image change", function(done) {
-      const payload = JSON.stringify({
-        session: TEST_SESSIONS.UPDATED,
-        changed: true
-      });
-
+    it("Update session without image change", function(done) {
       request({
         url: `/api/v1/sessions/${SESSION_ID}`,
         method: 'PUT',
-        body: payload,
+        body: JSON.stringify({
+          session: TEST_SESSIONS.UPDATED,
+          changed: false
+        }),
         headers: HEADERS.TOKEN(superuser),
         done,
-        onSuccess: ({status}) => {
+        onSuccess: ({status, data}) => {
           assert.equal(status, 200);
+          assert.hasAllKeys(data, ['slug']);
         }
       });
     });
 
-    it("Update session without image change", function(done) {
-      const payload = JSON.stringify({
-        session: TEST_SESSIONS.UPDATED,
-        changed: false
-      });
-
+    it("Update session with image change", function(done) {
       request({
         url: `/api/v1/sessions/${SESSION_ID}`,
         method: 'PUT',
-        body: payload,
+        body: JSON.stringify({
+          session: TEST_SESSIONS.UPDATED,
+          changed: true
+        }),
         headers: HEADERS.TOKEN(superuser),
         done,
-        onSuccess: ({status}) => {
+        onSuccess: ({status, data}) => {
           assert.equal(status, 200);
+          assert.hasAllKeys(data, ['slug']);
         }
       });
     });
@@ -132,5 +126,4 @@ describe("Sessions Tests", function() {
       });
     });
   });
-  
 });

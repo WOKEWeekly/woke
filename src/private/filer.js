@@ -9,13 +9,24 @@ cloudinary.config({
 });
 
 module.exports = {
-  uploadImage: (entity, directory, next) => {
+
+  /**
+   * Construct slug and upload image cloudinary
+   * @param {object} entity - The entity object.
+   * @param {string} directory - The Cloudinary directory the image should be uploaded to.
+   * @param {Boolean} imageHasChanged - Indicates whether the image has changed. If it has not,
+   * this method will only construct the slug.
+   * @param {Function} next - The next callback function in the series.
+   */
+  uploadImage: (entity, directory, imageHasChanged, next) => {
     let filename;
 
+    // Construct the slug and image filename
     switch (directory){
       case DIRECTORY.SESSIONS:
-        entity.slug = constructCleanSlug(entity.title, entity.id);
-        filename = generateSessionFilename(entity.id, entity.dateHeld, entity.slug);
+        const title = constructCleanSlug(entity.title);
+        entity.slug = `${title}-${entity.dateHeld}`;
+        filename = generateSessionFilename(entity.dateHeld, title);
         break;
       case DIRECTORY.BLACKEXCELLENCE:
         entity.slug = constructCleanSlug(entity.name, entity.id);
@@ -27,12 +38,16 @@ module.exports = {
         if (!entity.verified) entity.slug = null;
         break;
       case DIRECTORY.REVIEWS:
-        filename = generateReviewFilename(entity.rating, constructCleanSlug(entity.referee));
+        const referee = constructCleanSlug(entity.referee);
+        filename = generateReviewFilename(entity.rating, referee);
         break;
     }
 
-    const env = process.env.LOCAL_ENV === 'true' ? 'dev' : 'prod';
+    // Discontinue if image has not changed
+    if (!imageHasChanged) return next(null, entity);
 
+    // Upload to cloudinary
+    const env = process.env.LOCAL_ENV === 'true' ? 'dev' : 'prod';
     cloudinary.uploader.upload(entity.image, {
       public_id: `${env}/${directory}/${filename}`,
       width: 1000,
@@ -55,7 +70,9 @@ module.exports = {
   destroyImage: (image, next) => {
     if (!image) return next(null);
     
+    // e.g. public_id = "dev/sessions/2020-08-03_manchester"
     const public_id = image.substring(image.indexOf('/') + 1, image.indexOf('.'));
+
     cloudinary.uploader.destroy(public_id, (err) => {
       if (err) console.warn(err);
       next(null);
@@ -66,19 +83,16 @@ module.exports = {
 /**
  * Created formatted slugs for URLs.
  * @param {string} value - The value which the slug is based off.
- * @param {number} [id] - The unique identifier of the entity.
  * @returns {string} A clean slug.
  */
-const constructCleanSlug = (value, id) => {
-  const value = value.toLowerCase()      // Turn to lowercase
+const constructCleanSlug = (value) => {
+  return value.toLowerCase()      // Turn to lowercase
   .replace(/[^a-zA-Z 0-9]+/g, '')   // Remove all non-alphanumeric characters
   .replace(/\s+/g, '-');            // Replace spaces with dashes
-
-  return id ? `${id}-${value}` : value;
 };
 
 /** Generate filenames from entities */
-const generateSessionFilename = (id, date, slug) => `${formatISODate(date)}_${id}_${slug}`;
+const generateSessionFilename = (date, title) => `${formatISODate(date)}_${title}`;
 const generateCandidateFilename = (id, slug) => `${id}_${slug}`;
 const generateMemberFilename = (slug) => slug;
 const generateReviewFilename = (rating, slug) => `${rating}-${slug}`;

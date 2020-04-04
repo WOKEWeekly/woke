@@ -4,25 +4,29 @@ module.exports = {
   /**
    * Send a response to the client.
    * @param {object} res - The response context of the service.
-   * @param {object} err - The object containing information about the error.
+   * @param {Error} err - The object containing information about the error.
    * @param {object} [json] - The response body to be sent back to the client.
-   * @param {number} [expectedStatus] - The expected status code of the
+   * @param {number} expectedStatus - The expected status code of the
    * response. Defaults to 200.
    */
-  respondToClient: (res, err, json = {}, expectedStatus = 200) => {
+  respondToClient: (res, err, json = {}, expectedStatus) => {
     if (err && err !== true){
       console.error(err.toString());
-      res.status(400).json({message: retrieveErrorMessage(err)});
-    } else {
-      res.status(expectedStatus).json(json);
+      return res.status(400).json({message: retrieveErrorMessage(err)});
     }
+
+    if (expectedStatus === 204){
+      return res.sendStatus(204);
+    }
+
+    return res.status(expectedStatus).json(json);
   },
 
   /**
    * Display an error page on the web client with a description of the error.
    * @param {object} req - The request information from the client.
    * @param {object} res - The response context of the service
-   * @param {object} err - The object containing information about the error.
+   * @param {Error} err - The object containing information about the error.
    * @param {object} server - The server object.
    */
   renderErrorPage: (req, res, err, server) => {
@@ -34,7 +38,7 @@ module.exports = {
 
 /**
  * Extract and/or simplify the error message using given information. 
- * @param {object} err - The object containing information about the error
+ * @param {Error} err - The object containing information about the error
  */
 retrieveErrorMessage = (err) => {
   if (err.errno === 1062){

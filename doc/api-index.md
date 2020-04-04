@@ -69,13 +69,11 @@ Adds a new session.
 **Request:**
 ```json
 {
-    "session": {
-        "title": "Manchester 2020",
-        "dateHeld": "2020-01-01",
-        "timeHeld": "18:00",
-        "description": "An added session.",
-        "image": "data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw=="
-    }
+    "title": "Manchester 2020",
+    "dateHeld": "2020-01-01",
+    "timeHeld": "18:00",
+    "description": "An added session.",
+    "image": "data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw=="
 }
 ```
 
@@ -113,7 +111,15 @@ Updates the session corresponding to the specified ID.
 > The `session.image` field is optional if `changed` is `false`.
 
 **Response:**
-204 OK
+200 OK
+
+Returns the `slug` which can be used immediately to access the session's page on a web client.
+
+```json
+{
+    "slug": "new-manchester-2021"
+}
+```
 
 ---
 

@@ -3,9 +3,9 @@ const async = require('async');
 const filer = require('./filer.js');
 const { verifyToken, validateReq, logUserActivity } = require('./middleware.js');
 const { respondToClient } = require('./response.js');
+const SQL = require('./sql.js');
 
 const CLEARANCES = require('../constants/clearances.js');
-
 const { SERVER } = require('../constants/errors.js');
 const { DIRECTORY } = require('../constants/strings.js');
 
@@ -16,7 +16,7 @@ module.exports = function(app, conn){
 
   /** Retrieve all sessions */
   app.get('/api/v1/sessions', validateReq, function(req, res){
-    conn.query("SELECT * FROM sessions", function (err, result) {
+    conn.query(SQL.GET_ALL_SESSIONS, function (err, result) {
       respondToClient(res, err, result, 200);
     });
   });
@@ -24,7 +24,7 @@ module.exports = function(app, conn){
   /** Retrieve individual session */
   app.get('/api/v1/sessions/:id', validateReq, function(req, res){
     const id = req.params.id;
-    conn.query("SELECT * FROM sessions WHERE ID = ?", id, function (err, result) {
+    conn.query(SQL.GET_SINGLE_SESSION('*'), id, function (err, result) {
       if (!result.length) err = SERVER.INVALID_SESSION_ID(id);
       respondToClient(res, err, result[0], 200);
     });
@@ -32,17 +32,14 @@ module.exports = function(app, conn){
 
   /** Add new session to database */
   app.post('/api/v1/sessions', verifyToken(CLEARANCES.ACTIONS.CRUD_SESSIONS), function(req, res){
-    let { session } = req.body;
+    const session = req.body;
 
     async.waterfall([
-      function(callback){
-        filer.uploadImage(session, DIRECTORY.SESSIONS, callback);
+      function(callback){ // Upload image to cloud
+        filer.uploadImage(session, DIRECTORY.SESSIONS, true, callback);
       },
-      function(entity, callback){ // Add session to database
-        session = entity;
-        const sql = "INSERT INTO sessions (title, dateHeld, timeHeld, image, slug, description) VALUES ?";
-        const values = [[session.title, session.dateHeld, session.timeHeld, session.image, session.slug, session.description]];
-        
+      function(session, callback){ // Add session to database
+        const { sql, values } = SQL.ADD_SESSION(session);
         conn.query(sql, [values], function (err, result) {
           err ? callback(err) : callback(null, result.insertId);
         });
@@ -55,33 +52,29 @@ module.exports = function(app, conn){
   /** Update details of existing session in database */
   app.put('/api/v1/sessions/:id', verifyToken(CLEARANCES.ACTIONS.CRUD_SESSIONS), function(req, res){
     const id = req.params.id;
-    let { session, changed } = req.body;
+    const { session, changed } = req.body;
 
     async.waterfall([
-      function(callback){ // Replace image if changed.
-        if (!changed) return callback(null, session);
-        
-        conn.query("SELECT image FROM sessions WHERE id = ?", id, function (err, result) {
+      function(callback){ // Delete old image if changed.
+        conn.query(SQL.GET_SINGLE_SESSION('image'), id, function (err, result) {
           if (err) return callback(err);
           if (!result.length) return callback(SERVER.INVALID_SESSION_ID(id));
 
-          filer.destroyImage(result[0].image, () => {
-            session.id = id;
-            filer.uploadImage(session, DIRECTORY.SESSIONS, callback);
-          });
+          if (!changed) return callback(null);
+          filer.destroyImage(result[0].image, callback);
         });
       },
-      function(entity, callback){ // Update session in database
-        session = entity;
-        const sql = "UPDATE sessions SET title = ?, dateHeld = ?, timeHeld = ?, image = ?, slug = ?, description = ? WHERE id = ?";
-        const values = [session.title, session.dateHeld, session.timeHeld, session.image, session.slug, session.description, id];
-
+      function(callback){ // Equally, upload new image if changed
+        filer.uploadImage(session, DIRECTORY.SESSIONS, changed, callback);
+      },
+      function(session, callback){ // Update session in database
+        const { sql, values } = SQL.UPDATE_SESSION(id, session, changed);
         conn.query(sql, values, function (err) {
-          err ? callback(err) : callback(null);
+          err ? callback(err) : callback(null, session.slug);
         });
       }
-    ], function(err){
-      respondToClient(res, err, null, 200);
+    ], function(err, slug){
+      respondToClient(res, err, { slug }, 200);
     });
   });
 
@@ -91,7 +84,7 @@ module.exports = function(app, conn){
 
     async.waterfall([
       function(callback){ // Delete image from directory
-        conn.query("SELECT image FROM sessions WHERE id = ?", id, function (err, result) {
+        conn.query(SQL.GET_SINGLE_SESSION('image'), id, function (err, result) {
           if (err) return callback(err);
           if (!result.length) return callback(SERVER.INVALID_SESSION_ID(id));
           
@@ -99,7 +92,7 @@ module.exports = function(app, conn){
         });
       },
       function(callback){ // Delete session from database
-        conn.query("DELETE FROM sessions WHERE id = ?", id, function (err) {
+        conn.query(SQL.DELETE_SESSION, id, function (err) {
           err ? callback(err) : callback(null);
         });
       }
