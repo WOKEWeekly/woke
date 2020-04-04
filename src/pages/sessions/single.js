@@ -41,9 +41,8 @@ class SessionPage extends Component {
   deleteSession = () => {
     const { session, user } = this.props;
     request({
-      url: '/deleteSession',
+      url: `/api/v1/sessions/${session.id}`,
       method: 'DELETE',
-      body: JSON.stringify(session),
       headers: {
         'Authorization': `Bearer ${user.token}`,
         'Content-Type': 'application/json'
