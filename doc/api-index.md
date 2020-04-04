@@ -20,6 +20,24 @@ Returns all sessions.
 **Response:**
 200 OK
 
+```json
+[
+    {
+        "id": 315,
+        "title": "Manchester 2020",
+        "dateHeld": "2020-08-29T23:00:00.000Z",
+        "timeHeld": "18:00:00",
+        "image": "v1585776475/dev/sessions/2020-08-30_manchester-2020.jpg",
+        "slug": "manchester-2020",
+        "description": "An added description from Postman.",
+        "create_time": "2020-04-01T20:27:55.000Z"
+    },
+    {
+      ...
+    }
+]
+```
+
 ---
 
 **`GET /api/v1/sessions/{id}`**
@@ -28,6 +46,19 @@ Returns the session corresponding to specified ID.
 
 **Response:**
 200 OK
+
+```json
+{
+    "id": 315,
+    "title": "Manchester 2020",
+    "dateHeld": "2020-08-29T23:00:00.000Z",
+    "timeHeld": "18:00:00",
+    "image": "v1585776475/dev/sessions/2020-08-30_manchester-2020.jpg",
+    "slug": "manchester-2020",
+    "description": "An added description from Postman.",
+    "create_time": "2020-04-01T20:27:55.000Z"
+}
+```
 
 ---
 
@@ -44,15 +75,18 @@ Adds a new session.
         "timeHeld": "18:00",
         "description": "An added session.",
         "image": "data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw=="
-    },
-    "changed": true
+    }
 }
 ```
 
->If the `changed` field is `true`, the server will attempt to upload the `session.image` to the image cloud service. Otherwise, the server will skip upload.
-
 **Response:**
 201 Created
+
+```json
+{
+    "id": 101
+}
+```
 
 ---
 
@@ -74,10 +108,12 @@ Updates the session corresponding to the specified ID.
 }
 ```
 
+> If the `changed` field is `true`, the server will attempt to upload the `session.image` to the image cloud service. Otherwise, the server will skip upload.
+>
 > The `session.image` field is optional if `changed` is `false`.
 
 **Response:**
-200 OK
+204 OK
 
 ---
 
