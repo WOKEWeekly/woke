@@ -16,17 +16,17 @@ module.exports = function(app, conn){
 
   /** Retrieve all sessions */
   app.get('/api/v1/sessions', validateReq, function(req, res){
-    conn.query(SQL.GET_ALL_SESSIONS, function (err, result) {
-      respondToClient(res, err, result, 200);
+    conn.query(SQL.GET_ALL_SESSIONS, function (err, sessions) {
+      respondToClient(res, err, sessions, 200);
     });
   });
 
   /** Retrieve individual session */
   app.get('/api/v1/sessions/:id', validateReq, function(req, res){
     const id = req.params.id;
-    conn.query(SQL.GET_SINGLE_SESSION('*'), id, function (err, result) {
-      if (!result.length) err = SERVER.INVALID_SESSION_ID(id);
-      respondToClient(res, err, result[0], 200);
+    conn.query(SQL.GET_SINGLE_SESSION('*'), id, function (err, [session]) {
+      if (!session) err = SERVER.INVALID_SESSION_ID(id);
+      respondToClient(res, err, session, 200);
     });
   });
 
@@ -56,12 +56,12 @@ module.exports = function(app, conn){
 
     async.waterfall([
       function(callback){ // Delete old image if changed.
-        conn.query(SQL.GET_SINGLE_SESSION('image'), id, function (err, result) {
+        conn.query(SQL.GET_SINGLE_SESSION('image'), id, function (err, [session]) {
           if (err) return callback(err);
-          if (!result.length) return callback(SERVER.INVALID_SESSION_ID(id));
+          if (!session) return callback(SERVER.INVALID_SESSION_ID(id));
 
           if (!changed) return callback(null);
-          filer.destroyImage(result[0].image, callback);
+          filer.destroyImage(session.image, callback);
         });
       },
       function(callback){ // Equally, upload new image if changed
@@ -84,11 +84,11 @@ module.exports = function(app, conn){
 
     async.waterfall([
       function(callback){ // Delete image from directory
-        conn.query(SQL.GET_SINGLE_SESSION('image'), id, function (err, result) {
+        conn.query(SQL.GET_SINGLE_SESSION('image'), id, function (err, [session]) {
           if (err) return callback(err);
-          if (!result.length) return callback(SERVER.INVALID_SESSION_ID(id));
+          if (!session) return callback(SERVER.INVALID_SESSION_ID(id));
           
-          filer.destroyImage(result[0].image, callback);
+          filer.destroyImage(session.image, callback);
         });
       },
       function(callback){ // Delete session from database
