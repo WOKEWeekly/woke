@@ -34,7 +34,8 @@ module.exports = withPlugins([
           ...config.plugins,
           new DotEnv({
             path: server.config,
-            systemvars: true
+            systemvars: true,
+            silent: true
           }),
           new MomentLocalesPlugin(),
         ];
