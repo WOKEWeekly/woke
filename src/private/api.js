@@ -2,28 +2,41 @@ const async = require('async');
 
 const filer = require('./filer.js');
 const { verifyToken, validateReq, logUserActivity } = require('./middleware.js');
-const { resToClient } = require('./response.js');
+const { respondToClient } = require('./response.js');
+
 const CLEARANCES = require('../constants/clearances.js');
+
+const { SERVER } = require('../constants/errors.js');
+const { DIRECTORY } = require('../constants/strings.js');
 
 module.exports = function(app, conn){
 
   /** Log user activity on each request */
-  app.use('/', logUserActivity(conn));
+  app.use('/api', logUserActivity(conn));
 
   /** Retrieve all sessions */
-  app.get('/getSessions', validateReq, function(req, res){
+  app.get('/api/v1/sessions', validateReq, function(req, res){
     conn.query("SELECT * FROM sessions", function (err, result) {
-      resToClient(res, err, result);
+      respondToClient(res, err, result, 200);
+    });
+  });
+
+  /** Retrieve individual session */
+  app.get('/api/v1/sessions/:id', validateReq, function(req, res){
+    const id = req.params.id;
+    conn.query("SELECT * FROM sessions WHERE ID = ?", id, function (err, result) {
+      if (!result.length) err = SERVER.INVALID_SESSION_ID(id);
+      respondToClient(res, err, result[0], 200);
     });
   });
 
   /** Add new session to database */
-  app.post('/addSession', verifyToken(CLEARANCES.ACTIONS.CRUD_SESSIONS), function(req, res){
-    let {session, changed} = req.body;
+  app.post('/api/v1/sessions', verifyToken(CLEARANCES.ACTIONS.CRUD_SESSIONS), function(req, res){
+    let { session } = req.body;
 
     async.waterfall([
       function(callback){
-        filer.uploadImage(session, 'sessions', changed, callback);
+        filer.uploadImage(session, DIRECTORY.SESSIONS, callback);
       },
       function(entity, callback){ // Add session to database
         session = entity;
@@ -35,56 +48,76 @@ module.exports = function(app, conn){
         });
       }
     ], function(err, id){
-      resToClient(res, err, {id, ...session});
+      respondToClient(res, err, { id }, 201);
     });
   });
 
   /** Update details of existing session in database */
-  app.put('/updateSession', verifyToken(CLEARANCES.ACTIONS.CRUD_SESSIONS), function(req, res){
-    let { session1, session2, changed } = req.body;
+  app.put('/api/v1/sessions/:id', verifyToken(CLEARANCES.ACTIONS.CRUD_SESSIONS), function(req, res){
+    const id = req.params.id;
+    let { session, changed } = req.body;
+
     async.waterfall([
-      function(callback){ // Delete original image from directory
-        filer.destroyImage(session1.image, changed, callback);
-      },
-      function(callback){ // Upload new image to directory
-        filer.uploadImage(session2, 'sessions', changed, callback);
+      function(callback){ // Replace image if changed.
+        if (!changed) return callback(null, session);
+        
+        conn.query("SELECT image FROM sessions WHERE id = ?", id, function (err, result) {
+          if (err) return callback(err);
+          if (!result.length) return callback(SERVER.INVALID_SESSION_ID(id));
+
+          filer.destroyImage(result[0].image, () => {
+            session.id = id;
+            filer.uploadImage(session, DIRECTORY.SESSIONS, callback);
+          });
+        });
       },
       function(entity, callback){ // Update session in database
-        session2 = entity;
+        session = entity;
         const sql = "UPDATE sessions SET title = ?, dateHeld = ?, timeHeld = ?, image = ?, slug = ?, description = ? WHERE id = ?";
-        const values = [session2.title, session2.dateHeld, session2.timeHeld, session2.image, session2.slug, session2.description, session1.id];
+        const values = [session.title, session.dateHeld, session.timeHeld, session.image, session.slug, session.description, id];
 
         conn.query(sql, values, function (err) {
           err ? callback(err) : callback(null);
         });
       }
     ], function(err){
-      resToClient(res, err, { id: session1.id, ...session2 });
+      respondToClient(res, err, null, 200);
     });
   });
 
   /** Delete an existing session from database */
-  app.delete('/deleteSession', verifyToken(CLEARANCES.ACTIONS.CRUD_SESSIONS), function(req, res){
-    const session = req.body;
+  app.delete('/api/v1/sessions/:id', verifyToken(CLEARANCES.ACTIONS.CRUD_SESSIONS), function(req, res){
+    const id = req.params.id;
 
     async.waterfall([
       function(callback){ // Delete image from directory
-        filer.destroyImage(session.image, true, callback);
+        conn.query("SELECT image FROM sessions WHERE id = ?", id, function (err, result) {
+          if (err) return callback(err);
+          if (!result.length) return callback(SERVER.INVALID_SESSION_ID(id));
+          
+          filer.destroyImage(result[0].image, callback);
+        });
       },
       function(callback){ // Delete session from database
-        conn.query("DELETE FROM sessions WHERE id = ?", session.id, function (err) {
+        conn.query("DELETE FROM sessions WHERE id = ?", id, function (err) {
           err ? callback(err) : callback(null);
         });
       }
     ], function(err){
-      resToClient(res, err);
+      respondToClient(res, err, null, 204);
     });
   });
+
+  /*******************************************************
+   * 
+   * api redesign checkpoint
+   * 
+   *******************************************************/
 
   /** Retrieve all topics */
   app.get('/getTopics', verifyToken(CLEARANCES.ACTIONS.VIEW_TOPICS), function(req, res){
     conn.query("SELECT * FROM topics", function (err, result) {
-      resToClient(res, err, result)
+      respondToClient(res, err, result)
     });
   });
 
@@ -96,7 +129,7 @@ module.exports = function(app, conn){
       topic.polarity, topic.validated, topic.sensitivity, topic.option1, topic.option2, topic.userId]];
     
     conn.query(sql, [values], function (err, result) {
-      resToClient(res, err, result.insertId);
+      respondToClient(res, err, result.insertId);
     });
   });
 
@@ -108,7 +141,7 @@ module.exports = function(app, conn){
       topic.polarity, topic.validated, topic.sensitivity, topic.option1, topic.option2, topic.id];
     
     conn.query(sql, values, function (err) {
-      resToClient(res, err);
+      respondToClient(res, err);
     });
   });
 
@@ -119,14 +152,14 @@ module.exports = function(app, conn){
     
     conn.query(sql, topic.id, function (err) {
       // emails.sendTopicDeletionEmail(topic);
-      resToClient(res, err);
+      respondToClient(res, err);
     });
   });
 
   /** Retrieve all candidates */
   app.get('/getCandidates', validateReq, function(req, res){
     conn.query("SELECT * FROM blackex", function (err, result) {
-      resToClient(res, err, result);
+      respondToClient(res, err, result);
     });
   });
 
@@ -134,7 +167,7 @@ module.exports = function(app, conn){
   app.get('/latestCandidateId', function(req, res){
     conn.query("SELECT MAX(ID) FROM blackex", function (err, result) {
       const latestCandidateId = result[0]['MAX(ID)'];
-      resToClient(res, err, latestCandidateId);
+      respondToClient(res, err, latestCandidateId);
     });
   });
 
@@ -155,7 +188,7 @@ module.exports = function(app, conn){
         });
       }
     ], function(err){
-      resToClient(res, err, { ...candidate });
+      respondToClient(res, err, { ...candidate });
     });
   });
 
@@ -179,7 +212,7 @@ module.exports = function(app, conn){
         });
       }
     ], function(err){
-      resToClient(res, err, { id: candidate1.id, ...candidate2 });
+      respondToClient(res, err, { id: candidate1.id, ...candidate2 });
     });
   });
 
@@ -197,21 +230,21 @@ module.exports = function(app, conn){
         });
       }
     ], function(err){
-      resToClient(res, err);
+      respondToClient(res, err);
     });
   });
 
   /** Retrieve all team members */
   app.get('/getTeam', verifyToken(CLEARANCES.ACTIONS.VIEW_TEAM), function(req, res){
     conn.query("SELECT * FROM team", function (err, result) {
-      resToClient(res, err, result);
+      respondToClient(res, err, result);
     });
   });
 
   /** Retrieve only executive team members */
   app.get('/getExec', validateReq, function(req, res){
     conn.query("SELECT * FROM team WHERE level = 'Executive' AND verified = 1", function (err, result) {
-      resToClient(res, err, result);
+      respondToClient(res, err, result);
     });
   });
 
@@ -232,14 +265,13 @@ module.exports = function(app, conn){
         });
       }
     ], function(err, id){
-      resToClient(res, err, { id, ...member } );
+      respondToClient(res, err, { id, ...member } );
     });
   });
 
   /** Update details of existing team member in database */
   app.put('/updateMember', verifyToken(CLEARANCES.ACTIONS.CRUD_TEAM), function(req, res){
     let { member1, member2, changed } = req.body;
-    console.log(changed);
     async.waterfall([
       function(callback){ // Delete original image from directory
         filer.destroyImage(member1.image, changed, callback);
@@ -257,7 +289,7 @@ module.exports = function(app, conn){
         });
       }
     ], function(err){
-      resToClient(res, err,  { id: member1.id, ...member2 });
+      respondToClient(res, err,  { id: member1.id, ...member2 });
     });
   });
 
@@ -275,7 +307,7 @@ module.exports = function(app, conn){
         });
       }
     ], function(err){
-      resToClient(res, err);
+      respondToClient(res, err);
     });
   });
 
@@ -286,7 +318,7 @@ module.exports = function(app, conn){
     const sql = limit ? `${query} WHERE rating = 5 ORDER BY RAND() LIMIT ${limit}` : query;
 
     conn.query(sql, function (err, result) {
-      resToClient(res, err, result);
+      respondToClient(res, err, result);
     });
   });
 
@@ -307,7 +339,7 @@ module.exports = function(app, conn){
         });
       }
     ], function(err, id){
-      resToClient(res, err, {id, ...review});
+      respondToClient(res, err, {id, ...review});
     });
   });
 
@@ -331,7 +363,7 @@ module.exports = function(app, conn){
         });
       }
     ], function(err){
-      resToClient(res, err, { id: review1.id, ...review2 });
+      respondToClient(res, err, { id: review1.id, ...review2 });
     });
   });
 
@@ -349,7 +381,7 @@ module.exports = function(app, conn){
         });
       }
     ], function(err){
-      resToClient(res, err);
+      respondToClient(res, err);
     });
   });
 
@@ -357,7 +389,7 @@ module.exports = function(app, conn){
   app.get('/getRegisteredUsers', verifyToken(CLEARANCES.ACTIONS.VIEW_USERS), function(req, res){
     const sql = "SELECT id, firstname, lastname, clearance, username, email, create_time, last_active FROM user";
     conn.query(sql, function (err, result) {
-      resToClient(res, err, result);
+      respondToClient(res, err, result);
     });
   });
   
@@ -368,7 +400,7 @@ module.exports = function(app, conn){
     const values = [clearance, id];
     
     conn.query(sql, values, function(err){	
-      resToClient(res, err);
+      respondToClient(res, err);
     });
   });
 
@@ -401,7 +433,7 @@ module.exports = function(app, conn){
         });
       }
     ], function(err, result){
-      resToClient(res, err, result);
+      respondToClient(res, err, result);
     });
   });
 
@@ -409,7 +441,7 @@ module.exports = function(app, conn){
   app.get('/getRandomCandidate', validateReq, function(req, res){
     const sql = "SELECT * FROM blackex ORDER BY RAND() LIMIT 1";
     conn.query(sql, function (err, result) {
-      resToClient(res, err, result[0]);
+      respondToClient(res, err, result[0]);
     });
   });
 
@@ -417,7 +449,7 @@ module.exports = function(app, conn){
   app.get('/getRandomMember', function(req, res){
     const sql = "SELECT * FROM team WHERE verified = 1 ORDER BY RAND() LIMIT 1";
     conn.query(sql, function (err, result) {
-      resToClient(res, err, result[0]);
+      respondToClient(res, err, result[0]);
     });
   });
 
@@ -427,7 +459,7 @@ module.exports = function(app, conn){
       WHERE polarity = 1 AND category != 'Christian' AND category != 'Mental Health'
       ORDER BY RAND() LIMIT 1;`;
     conn.query(sql, function (err, result) {
-      resToClient(res, err, result[0]);
+      respondToClient(res, err, result[0]);
     });
   });
 
@@ -436,7 +468,7 @@ module.exports = function(app, conn){
     const topic = req.body;
     const sql = `UPDATE topics SET ${topic.vote}=${topic.vote}+1 WHERE id = ${topic.id};`;
     conn.query(sql, function (err) {
-      resToClient(res, err);
+      respondToClient(res, err);
     });
   });
 
@@ -446,7 +478,7 @@ module.exports = function(app, conn){
     const sql = "UPDATE pages SET text = ?, last_modified = ? WHERE name = ?";
     const values = [text, new Date(), page];
     conn.query(sql, values, function (err) {
-      resToClient(res, err);
+      respondToClient(res, err);
     });
   });
 }

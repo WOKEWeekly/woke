@@ -1,4 +1,10 @@
 module.exports = {
+  DIRECTORY: {
+    BLACKEXCELLENCE: 'blackexcellence',
+    REVIEWS: 'reviews',
+    SESSIONS: 'sessions',
+    TEAM: 'team'
+  },
   PAGE: {
     KINDS: {
       INFO: 'information',

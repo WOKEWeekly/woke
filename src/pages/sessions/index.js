@@ -41,7 +41,7 @@ class Sessions extends Component {
   /** Get all sessions */
   getSessions = () => {
     request({
-      url: '/getSessions',
+      url: '/api/v1/sessions',
       method: 'GET',
       headers: {
         'Authorization': process.env.AUTH_KEY,

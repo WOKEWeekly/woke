@@ -5,7 +5,7 @@ const request = require('request');
 const sm = require('sitemap');
 
 const { cloudinary, domain } = require('../constants/settings.js');
-const { renderErrPage } = require('./response.js');
+const { renderErrorPage } = require('./response.js');
 
 const { forms } = require('../constants/settings.js');
 const { PAGE } = require('../constants/strings.js');
@@ -63,7 +63,7 @@ module.exports = function(app, conn, server){
           session
         });
       } else {
-        renderErrPage(req, res, err, server);
+        renderErrorPage(req, res, err, server);
       }
     });
   });
@@ -98,7 +98,7 @@ module.exports = function(app, conn, server){
           session
         });
       } else {
-        renderErrPage(req, res, err, server);
+        renderErrorPage(req, res, err, server);
       }
     });
   });
@@ -153,7 +153,7 @@ module.exports = function(app, conn, server){
           topic
         });
       } else {
-        renderErrPage(req, res, err, server);
+        renderErrorPage(req, res, err, server);
       }
     });
   });
@@ -195,7 +195,7 @@ module.exports = function(app, conn, server){
     const sql = "SELECT * FROM blackex WHERE id = ?";
     
     conn.query(sql, id, function (err, result) {
-      if (err || !result.length) return renderErrPage(req, res, err, server);
+      if (err || !result.length) return renderErrorPage(req, res, err, server);
 
       const candidate = result[0];
       return server.render(req, res, '/blackexcellence/crud', {
@@ -219,7 +219,7 @@ module.exports = function(app, conn, server){
     FROM blackex LEFT JOIN team ON blackex.authorId=team.id WHERE blackex.id = ?`;
     
     conn.query(sql, id, function (err, result) {
-      if (err || !result.length) return renderErrPage(req, res, err, server);
+      if (err || !result.length) return renderErrorPage(req, res, err, server);
 
       const candidate = result[0];
       candidate.label = `#${candidate.id}: ${candidate.name}`;
@@ -270,7 +270,7 @@ module.exports = function(app, conn, server){
           member: exec
         });
       } else {
-        renderErrPage(req, res, err, server);
+        renderErrorPage(req, res, err, server);
       }
     });
   });
@@ -295,7 +295,7 @@ module.exports = function(app, conn, server){
     const sql = "SELECT * FROM team WHERE slug = ?";
     
     conn.query(sql, slug, function (err, result) {
-      if (err || !result.length) return renderErrPage(req, res, err, server);
+      if (err || !result.length) return renderErrorPage(req, res, err, server);
 
       const member = result[0];
       return server.render(req, res, '/team/single', { 
@@ -340,7 +340,7 @@ module.exports = function(app, conn, server){
           member
         });
       } else {
-        renderErrPage(req, res, err, server);
+        renderErrorPage(req, res, err, server);
       }
     });
   });
@@ -351,7 +351,7 @@ module.exports = function(app, conn, server){
    */
   app.get('/reviews', function(req, res){
     conn.query(`SELECT * FROM reviews`, function (err, result) {
-      if (err) return renderErrPage(req, res, err, server);
+      if (err) return renderErrorPage(req, res, err, server);
       return server.render(req, res, '/reviews', {
         title: 'Reviews | #WOKEWeekly',
         description: 'Read what the people have to say about us.',
@@ -381,7 +381,7 @@ module.exports = function(app, conn, server){
     const sql = "SELECT * FROM reviews WHERE id = ?";
     
     conn.query(sql, id, function (err, result) {
-      if (err || !result.length) return renderErrPage(req, res, err, server);
+      if (err || !result.length) return renderErrorPage(req, res, err, server);
 
       const review = result[0];
       server.render(req, res, '/reviews/crud', {
@@ -456,7 +456,7 @@ module.exports = function(app, conn, server){
   app.get('/account/reset/:token', function(req, res){
     const { token } = req.params;
     jwt.verify(token, process.env.JWT_SECRET, (err) => {
-      if (err) return renderErrPage(req, res, err, server);
+      if (err) return renderErrorPage(req, res, err, server);
       server.render(req, res, '/_auth/reset', {
         title: 'Reset Password | #WOKEWeekly',
         recoveryToken: token
@@ -642,7 +642,7 @@ const renderPage = (
   const { conn, server } = exigencies;
   return function(req, res){
     conn.query(`SELECT * FROM pages WHERE name = '${pageName}'`, function (err, result) {
-      if (err || !result.length) return renderErrPage(req, res, err, server);
+      if (err || !result.length) return renderErrorPage(req, res, err, server);
   
       const { name, title, include_domain, text, excerpt, card_image, bg_image,
         cover_image, cover_image_logo, cover_image_alt, theme,

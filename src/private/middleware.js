@@ -1,7 +1,7 @@
 const async = require('async');
 const jwt = require('jsonwebtoken');
 
-const { resToClient } = require('./response.js');
+const { respondToClient } = require('./response.js');
 
 module.exports = {
 
@@ -41,7 +41,7 @@ module.exports = {
           }
         }
       ], function(err){
-        err ? resToClient(res, err) : next();
+        err ? respondToClient(res, err) : next();
       });
     }
   },

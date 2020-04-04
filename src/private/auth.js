@@ -7,7 +7,7 @@ const dotenv = require('dotenv').config({path: config});
 const jwt = require('jsonwebtoken');
 const emails = require('./emails.js');
 const { verifyToken, validateReq } = require('./middleware.js');
-const { resToClient, renderErrPage } = require('./response.js');
+const { respondToClient, renderErrorPage } = require('./response.js');
 const CLEARANCES = require('../constants/clearances.js');
 
 const Mailchimp = require('mailchimp-api-v3');
@@ -82,22 +82,22 @@ module.exports = function(app, conn, passport, server){
         });
       }
     ], function(err, user){
-      resToClient(res, err, user);
+      respondToClient(res, err, user);
     });
   });
   
   /** Log user out */
   app.post('/logout', function(req, res){
     req.logout();
-    resToClient(res, null);
+    respondToClient(res, null);
   });
   
   /** Sign up a new user */
   app.post('/signup', validateReq, function(req, res){
     const { firstname, lastname, email, username, password1, password2, subscribe} = req.body;
     
-    if (!validator.validate(email)) return resToClient(res, new Error("Your email address is invalid."));
-    if (password1 !== password2) return resToClient(res, new Error("Your passwords do not match."));
+    if (!validator.validate(email)) return respondToClient(res, new Error("Your email address is invalid."));
+    if (password1 !== password2) return respondToClient(res, new Error("Your passwords do not match."));
     
     async.waterfall([
       function(callback){  /** Hash entered password */
@@ -147,7 +147,7 @@ module.exports = function(app, conn, passport, server){
         });
       }
     ], function(err, user){
-      resToClient(res, err, user);
+      respondToClient(res, err, user);
     });
   });
 
@@ -158,7 +158,7 @@ module.exports = function(app, conn, passport, server){
     const values = [username, id];
     
     conn.query(sql, values, function(err){
-      resToClient(res, err);
+      respondToClient(res, err);
     });
   });
 
@@ -193,7 +193,7 @@ module.exports = function(app, conn, passport, server){
         });
       }
     ], function(err){
-      resToClient(res, err);
+      respondToClient(res, err);
     });
   });
 
@@ -220,7 +220,7 @@ module.exports = function(app, conn, passport, server){
         });
       }
     ], function(err){
-      resToClient(res, err);
+      respondToClient(res, err);
     });
   });
 
@@ -231,7 +231,7 @@ module.exports = function(app, conn, passport, server){
     const values = [token, new Date(), 'topicBank'];
         
     conn.query(sql, values, function(err){	
-      resToClient(res, err, {token});
+      respondToClient(res, err, {token});
     });
   });
 
@@ -257,7 +257,7 @@ module.exports = function(app, conn, passport, server){
         callback(null);
       }
     ], function(err){
-      resToClient(res, err);
+      respondToClient(res, err);
     });
   });
 
@@ -279,7 +279,7 @@ module.exports = function(app, conn, passport, server){
         });
       }
     ], function(err){
-      err ? renderErrPage(req, res, err, server) : res.redirect(`/account?verified=${token}`);
+      err ? renderErrorPage(req, res, err, server) : res.redirect(`/account?verified=${token}`);
     });
   });
 
@@ -303,7 +303,7 @@ module.exports = function(app, conn, passport, server){
         callback(null);
       },
     ], function(err){
-      resToClient(res, err);
+      respondToClient(res, err);
     });
   });
 
@@ -330,7 +330,7 @@ module.exports = function(app, conn, passport, server){
         });
       }
     ], function(err){
-      resToClient(res, err);
+      respondToClient(res, err);
     });
   });
 }
