@@ -31,7 +31,7 @@ export default class UpcomingSession extends Component {
 
   getUpcomingSession = () => {
     request({
-      url: '/getUpcomingSession',
+      url: '/api/v1/sessions/featured',
       method: 'GET',
       headers: {
         'Authorization': process.env.AUTH_KEY,

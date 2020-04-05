@@ -5,18 +5,14 @@ module.exports = {
    * Send a response to the client.
    * @param {object} res - The response context of the service.
    * @param {Error} err - The object containing information about the error.
+   * @param {number} [expectedStatus] - The expected status code of the
    * @param {object} [json] - The response body to be sent back to the client.
-   * @param {number} expectedStatus - The expected status code of the
-   * response. Defaults to 200.
+   * response. Defaults to 400.
    */
-  respondToClient: (res, err, json = {}, expectedStatus) => {
-    if (err && err !== true){
+  respondToClient: (res, err, expectedStatus, json) => {
+    if (err && typeof err === 'object'){ // If there is an error...
       console.error(err.toString());
-      return res.status(400).json({message: retrieveErrorMessage(err)});
-    }
-
-    if (expectedStatus === 204){
-      return res.sendStatus(204);
+      return res.status(err.status || 500).json({message: retrieveErrorMessage(err)});
     }
 
     return res.status(expectedStatus).json(json);
@@ -48,9 +44,6 @@ retrieveErrorMessage = (err) => {
       return "The username you have chosen already exists.";
     }
   }
-
-  if (err.type === 'jwt') return 'jwt';
-  if (err.message === 'jwt expired') return `Awkward. The link you followed has expired. Don't say we didn't warn ya!`;
 
   return err.message; 
 }

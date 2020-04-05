@@ -1,12 +1,12 @@
 const async = require('async');
 
+const ERROR = require('./errors.js');
 const filer = require('./filer.js');
 const { verifyToken, validateReq, logUserActivity } = require('./middleware.js');
 const { respondToClient } = require('./response.js');
 const SQL = require('./sql.js');
 
 const CLEARANCES = require('../constants/clearances.js');
-const { SERVER } = require('../constants/errors.js');
 const { DIRECTORY } = require('../constants/strings.js');
 
 module.exports = function(app, conn){
@@ -16,17 +16,39 @@ module.exports = function(app, conn){
 
   /** Retrieve all sessions */
   app.get('/api/v1/sessions', validateReq, function(req, res){
-    conn.query(SQL.GET_ALL_SESSIONS, function (err, sessions) {
-      respondToClient(res, err, sessions, 200);
+    conn.query(SQL.SESSIONS.READ.ALL, function (err, sessions) {
+      respondToClient(res, err, 200, sessions);
     });
   });
 
   /** Retrieve individual session */
-  app.get('/api/v1/sessions/:id', validateReq, function(req, res){
+  app.get('/api/v1/sessions/:id([0-9]+)', validateReq, function(req, res){
     const id = req.params.id;
-    conn.query(SQL.GET_SINGLE_SESSION('*'), id, function (err, [session]) {
-      if (!session) err = SERVER.INVALID_SESSION_ID(id);
-      respondToClient(res, err, session, 200);
+    conn.query(SQL.SESSIONS.READ.SINGLE(), id, function (err, [session]) {
+      if (!session) err = ERROR.INVALID_SESSION_ID(id);
+      respondToClient(res, err, 200, session);
+    });
+  });
+
+  /** Get upcoming session */
+  app.get('/api/v1/sessions/featured', validateReq, function(req, res){
+    async.waterfall([
+      function(callback){ // Get a random upcoming session
+        conn.query(SQL.SESSIONS.READ.UPCOMING, function (err, [session]) {
+          if (err) return callback(err);
+          if (!session) return callback(null);
+          callback(true, { session, upcoming: true });
+        });
+      },
+      function(callback){ // If not, get latest session
+        conn.query(SQL.SESSIONS.READ.LATEST, function (err, [session]) {
+          if (err) return callback(err);
+          if (!session) return callback(null);
+          callback(null, { session, upcoming: false });
+        });
+      }
+    ], function(err, session){
+      respondToClient(res, err, 200, session);
     });
   });
 
@@ -39,13 +61,13 @@ module.exports = function(app, conn){
         filer.uploadImage(session, DIRECTORY.SESSIONS, true, callback);
       },
       function(session, callback){ // Add session to database
-        const { sql, values } = SQL.ADD_SESSION(session);
+        const { sql, values } = SQL.SESSIONS.CREATE(session);
         conn.query(sql, [values], function (err, result) {
           err ? callback(err) : callback(null, result.insertId);
         });
       }
     ], function(err, id){
-      respondToClient(res, err, { id }, 201);
+      respondToClient(res, err, 201, { id });
     });
   });
 
@@ -56,9 +78,9 @@ module.exports = function(app, conn){
 
     async.waterfall([
       function(callback){ // Delete old image if changed.
-        conn.query(SQL.GET_SINGLE_SESSION('image'), id, function (err, [session]) {
+        conn.query(SQL.SESSIONS.READ.SINGLE('image'), id, function (err, [session]) {
           if (err) return callback(err);
-          if (!session) return callback(SERVER.INVALID_SESSION_ID(id));
+          if (!session) return callback(ERROR.INVALID_SESSION_ID(id));
 
           if (!changed) return callback(null);
           filer.destroyImage(session.image, callback);
@@ -68,13 +90,13 @@ module.exports = function(app, conn){
         filer.uploadImage(session, DIRECTORY.SESSIONS, changed, callback);
       },
       function(session, callback){ // Update session in database
-        const { sql, values } = SQL.UPDATE_SESSION(id, session, changed);
+        const { sql, values } = SQL.SESSIONS.UPDATE(id, session, changed);
         conn.query(sql, values, function (err) {
           err ? callback(err) : callback(null, session.slug);
         });
       }
     ], function(err, slug){
-      respondToClient(res, err, { slug }, 200);
+      respondToClient(res, err, 200, { slug });
     });
   });
 
@@ -84,20 +106,20 @@ module.exports = function(app, conn){
 
     async.waterfall([
       function(callback){ // Delete image from directory
-        conn.query(SQL.GET_SINGLE_SESSION('image'), id, function (err, [session]) {
+        conn.query(SQL.SESSIONS.READ.SINGLE('image'), id, function (err, [session]) {
           if (err) return callback(err);
-          if (!session) return callback(SERVER.INVALID_SESSION_ID(id));
+          if (!session) return callback(ERROR.INVALID_SESSION_ID(id));
           
           filer.destroyImage(session.image, callback);
         });
       },
       function(callback){ // Delete session from database
-        conn.query(SQL.DELETE_SESSION, id, function (err) {
+        conn.query(SQL.SESSIONS.DELETE, id, function (err) {
           err ? callback(err) : callback(null);
         });
       }
     ], function(err){
-      respondToClient(res, err, null, 204);
+      respondToClient(res, err, 204);
     });
   });
 
@@ -400,35 +422,6 @@ module.exports = function(app, conn){
   /****************************
    * HOMEPAGE
    ***************************/
-
-  /** Get upcoming session */
-  app.get('/getUpcomingSession', validateReq, function(req, res){
-    async.waterfall([
-      function(callback){ // Get most upcoming session
-        const sql = "SELECT * FROM sessions WHERE dateheld > NOW() ORDER BY RAND() LIMIT 1;";
-        conn.query(sql, function (err, result) {
-          if (err) return callback(err);
-          if (result.length === 0) return callback(null);
-          callback(true, {
-            session: result[0],
-            upcoming: true
-          });
-        });
-      },
-      function(callback){ // If not, get latest session
-        const sql = "SELECT * FROM sessions ORDER BY dateHeld DESC LIMIT 1;";
-        conn.query(sql, function (err, result) {
-          if (err) return callback(err);
-          callback(null, {
-            session: result[0],
-            upcoming: false
-          });
-        });
-      }
-    ], function(err, result){
-      respondToClient(res, err, result);
-    });
-  });
 
   /** Get random candidate */
   app.get('/getRandomCandidate', validateReq, function(req, res){

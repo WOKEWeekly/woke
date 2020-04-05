@@ -60,6 +60,31 @@ describe("Sessions Tests", function() {
         }
       });
     });
+
+    it("Get featured session", function(done) {
+      request({
+        url: `/api/v1/sessions/featured`,
+        method: 'GET',
+        headers: { 'Authorization': process.env.AUTH_KEY },
+        done,
+        onSuccess: ({status, data}) => {
+          assert.equal(status, 200);
+          assert.hasAllKeys(data, ['session', 'upcoming']);
+        }
+      });
+    });
+
+    it("Attempt get single session with invalid ID", function(done) {
+      request({
+        url: `/api/v1/sessions/0`,
+        method: 'GET',
+        headers: { 'Authorization': process.env.AUTH_KEY },
+        done,
+        onError: ({status}) => {
+          assert.equal(status, 404);
+        }
+      });
+    });
   });
 
 
@@ -98,6 +123,22 @@ describe("Sessions Tests", function() {
         }
       });
     });
+
+    it("Attempt update session with invalid ID", function(done) {
+      request({
+        url: `/api/v1/sessions/0`,
+        method: 'PUT',
+        body: JSON.stringify({
+          session: TEST_SESSIONS.UPDATED,
+          changed: true
+        }),
+        headers: HEADERS.TOKEN(superuser),
+        done,
+        onError: ({status}) => {
+          assert.equal(status, 404);
+        }
+      });
+    });
   });
 
   /** Test deleting the session */
@@ -114,14 +155,14 @@ describe("Sessions Tests", function() {
       });
     });
 
-    it("Delete session with invalid ID", function(done) {
+    it("Attempt delete session with invalid ID", function(done) {
       request({
         url: `/api/v1/sessions/0`,
         method: 'DELETE',
         headers: HEADERS.TOKEN(superuser),
         done,
         onError: ({status}) => {
-          assert.equal(status, 400);
+          assert.equal(status, 404);
         }
       });
     });

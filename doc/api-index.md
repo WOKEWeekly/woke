@@ -2,6 +2,8 @@
 
 This page documents the application programming interface (API), defining the URL endpoints and resources of #WOKEWeekly services.
 
+Note that the requests and responses are only examples. Their purpose is to show the structure (fields and data types) of the data to be sent and returned.
+
 - [Sessions API](#sessions-api)
 - [Candidates API](#candidates-api)
 - [Topics API](#topics-api)
@@ -132,12 +134,28 @@ Deletes the session corresponding to the specified ID.
 
 ---
 
-**`GET /api/v1/session/featured`**
+**`GET /api/v1/sessions/featured`**
 
 Returns the featured session, which would be a random upcoming session. If there are not any, returns the latest session to have taken place.
 
 **Response:**
 200 OK
+
+```json
+{
+    "session": {
+        "id": 38,
+        "title": "Manchester 2020",
+        "dateHeld": "2020-08-29T23:00:00.000Z",
+        "timeHeld": "18:00:00",
+        "image": "v1586044151/dev/sessions/2020-08-30_manchester-2020.jpg",
+        "slug": "manchester-2020-2020-08-30",
+        "description": "An added description from Postman.",
+        "create_time": "2020-04-04T22:49:12.000Z"
+    },
+    "upcoming": true
+}
+```
 
 ---
 

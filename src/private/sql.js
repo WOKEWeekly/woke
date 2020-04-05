@@ -1,26 +1,32 @@
 module.exports = {
-  GET_ALL_SESSIONS: "SELECT * FROM sessions",
-  GET_SINGLE_SESSION: (fields = '*') => {
-    const sql = `SELECT ${fields} FROM sessions WHERE ID = ?`;
-    return sql;
+  SESSIONS: {
+    READ: {
+      ALL: "SELECT * FROM sessions",
+      SINGLE: (fields = '*') => {
+        const sql = `SELECT ${fields} FROM sessions WHERE ID = ?`;
+        return sql;
+      },
+      UPCOMING: "SELECT * FROM sessions WHERE dateheld > NOW() ORDER BY RAND() LIMIT 1",
+      LATEST: "SELECT * FROM sessions ORDER BY dateHeld DESC LIMIT 1",
+    },
+    CREATE: (session) => {
+      const sql = "INSERT INTO sessions (title, dateHeld, timeHeld, image, slug, description) VALUES ?";
+      const values = [[session.title, session.dateHeld, session.timeHeld, session.image, session.slug, session.description]];
+      return { sql, values };
+    },
+    UPDATE: (id, session, imageHasChanged) => {
+      let sql = "UPDATE sessions SET title = ?, dateHeld = ?, timeHeld = ?, slug = ?, description = ? WHERE id = ?";
+      let values = [session.title, session.dateHeld, session.timeHeld, session.slug, session.description, id];
+  
+      if (imageHasChanged){
+        sql = appendFieldToUpdateQuery('image', sql);
+        values = insertFieldInValues(session.image, values);
+      }
+  
+      return { sql, values };
+    },
+    DELETE: "DELETE FROM sessions WHERE id = ?"
   },
-  ADD_SESSION: (session) => {
-    const sql = "INSERT INTO sessions (title, dateHeld, timeHeld, image, slug, description) VALUES ?";
-    const values = [[session.title, session.dateHeld, session.timeHeld, session.image, session.slug, session.description]];
-    return { sql, values };
-  },
-  UPDATE_SESSION: (id, session, imageHasChanged) => {
-    let sql = "UPDATE sessions SET title = ?, dateHeld = ?, timeHeld = ?, slug = ?, description = ? WHERE id = ?";
-    let values = [session.title, session.dateHeld, session.timeHeld, session.slug, session.description, id];
-
-    if (imageHasChanged){
-      sql = appendFieldToUpdateQuery('image', sql);
-      values = insertFieldInValues(session.image, values);
-    }
-
-    return { sql, values };
-  },
-  DELETE_SESSION: "DELETE FROM sessions WHERE id = ?"
 }
 
 /**

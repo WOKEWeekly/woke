@@ -2,6 +2,7 @@ const async = require('async');
 const jwt = require('jsonwebtoken');
 
 const { respondToClient } = require('./response.js');
+const ERROR = require('./errors.js');
 
 module.exports = {
 
@@ -17,15 +18,14 @@ module.exports = {
             const token = authorization.split(' ')[1];
             callback(null, token);
           } else {
-            callback(new Error('Unauthorized request.'));
+            callback(ERROR.NOT_AUTHENTICATED());
           }
         },
         function(token, callback){ // Verify token
           jwt.verify(token, process.env.JWT_SECRET, (err, auth) => {
             if (err){
               req.logout();
-              err.type = 'jwt';
-              callback(err);
+              callback(ERROR.JWT_FAILURE(err.message));
             } else {
               callback(null, auth);
             }
@@ -37,7 +37,7 @@ module.exports = {
           if (clearance >= threshold){
             callback(null);
           } else {
-            callback(new Error('You are not authorised to perform such an action.'));
+            callback(ERROR.UNAUTHORIZED_REQUEST());
           }
         }
       ], function(err){
@@ -50,7 +50,7 @@ module.exports = {
   validateReq: (req, res, next) => {
     const { admission, authorization } = req.headers;
     if (authorization !== process.env.AUTH_KEY && admission !== 'true'){
-      res.sendStatus(403);
+      respondToClient(res, ERROR.UNAUTHORIZED_REQUEST())
     } else {
       next();
     }
