@@ -14,7 +14,7 @@ describe("Candidate Tests", function() {
       request({
         url: `/api/v1/candidates/latest`,
         method: 'GET',
-        headers: { 'Authorization': process.env.AUTH_KEY },
+        headers: HEADERS.KEY,
         done,
         onSuccess: ({data}) => {
           const id = data ? data.id + 1 : 1;
@@ -61,7 +61,7 @@ describe("Candidate Tests", function() {
       request({
         url: `/api/v1/candidates`,
         method: 'GET',
-        headers: { 'Authorization': process.env.AUTH_KEY },
+        headers: HEADERS.KEY,
         done,
         onSuccess: ({status, data}) => {
           assert.equal(status, 200);
@@ -74,7 +74,7 @@ describe("Candidate Tests", function() {
       request({
         url: `/api/v1/candidates/${CANDIDATE_ID}`,
         method: 'GET',
-        headers: { 'Authorization': process.env.AUTH_KEY },
+        headers: HEADERS.KEY,
         done,
         onSuccess: ({status, data}) => {
           assert.equal(status, 200);
@@ -87,7 +87,7 @@ describe("Candidate Tests", function() {
       request({
         url: `/api/v1/candidates/random`,
         method: 'GET',
-        headers: { 'Authorization': process.env.AUTH_KEY },
+        headers: HEADERS.KEY,
         done,
         onSuccess: ({status, data}) => {
           assert.equal(status, 200);
@@ -100,7 +100,7 @@ describe("Candidate Tests", function() {
       request({
         url: `/api/v1/candidates/0`,
         method: 'GET',
-        headers: { 'Authorization': process.env.AUTH_KEY },
+        headers: HEADERS.KEY,
         done,
         onError: ({status}) => {
           assert.equal(status, 404);

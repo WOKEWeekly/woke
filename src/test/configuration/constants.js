@@ -31,6 +31,8 @@ module.exports = {
     onError,
     done
   }) => {
+    headers['Content-Type'] = 'application/json';
+
     axios({
       url,
       method,
@@ -55,11 +57,9 @@ module.exports = {
   HEADERS: {
     TOKEN: (user) => ({
       'Authorization': `Bearer ${user.token}`,
-      'Content-Type': 'application/json',
     }),
-    SIMPLE: {
+    KEY: {
       'Authorization': process.env.AUTH_KEY,
-      'Content-Type': 'application/json',
     }
   }
 }

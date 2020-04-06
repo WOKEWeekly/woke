@@ -52,7 +52,7 @@ describe("Members Tests", function() {
       request({
         url: `/api/v1/members/random`,
         method: 'GET',
-        headers: { 'Authorization': process.env.AUTH_KEY },
+        headers: HEADERS.KEY,
         done,
         onSuccess: ({status, data}) => {
           assert.equal(status, 200);
@@ -65,7 +65,7 @@ describe("Members Tests", function() {
       request({
         url: `/api/v1/members/names`,
         method: 'GET',
-        headers: { 'Authorization': process.env.AUTH_KEY },
+        headers: HEADERS.KEY,
         done,
         onSuccess: ({status, data}) => {
           assert.equal(status, 200);
@@ -80,7 +80,7 @@ describe("Members Tests", function() {
       request({
         url: `/api/v1/members/executives`,
         method: 'GET',
-        headers: { 'Authorization': process.env.AUTH_KEY },
+        headers: HEADERS.KEY,
         done,
         onSuccess: ({status, data}) => {
           assert.equal(status, 200);
@@ -96,7 +96,7 @@ describe("Members Tests", function() {
       request({
         url: `/api/v1/members/${MEMBER_ID}`,
         method: 'GET',
-        headers: { 'Authorization': process.env.AUTH_KEY },
+        headers: HEADERS.KEY,
         done,
         onSuccess: ({status, data}) => {
           assert.equal(status, 200);
@@ -109,7 +109,7 @@ describe("Members Tests", function() {
       request({
         url: `/api/v1/members/0`,
         method: 'GET',
-        headers: { 'Authorization': process.env.AUTH_KEY },
+        headers: HEADERS.KEY,
         done,
         onError: ({status}) => {
           assert.equal(status, 404);

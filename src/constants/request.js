@@ -18,7 +18,7 @@ const axios = require('axios');
  */
 export default ({url, method = 'GET', body, headers = {}, onSuccess}) => {
   headers['User'] = store.getState().user.id;
-  headers['Content-Type'] = 'application/json'
+  headers['Content-Type'] = 'application/json';
 
   axios({
     url,

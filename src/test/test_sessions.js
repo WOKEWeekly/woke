@@ -39,7 +39,7 @@ describe("Sessions Tests", function() {
       request({
         url: `/api/v1/sessions`,
         method: 'GET',
-        headers: { 'Authorization': process.env.AUTH_KEY },
+        headers: HEADERS.KEY,
         done,
         onSuccess: ({status, data}) => {
           assert.equal(status, 200);
@@ -52,7 +52,7 @@ describe("Sessions Tests", function() {
       request({
         url: `/api/v1/sessions/${SESSION_ID}`,
         method: 'GET',
-        headers: { 'Authorization': process.env.AUTH_KEY },
+        headers: HEADERS.KEY,
         done,
         onSuccess: ({status, data}) => {
           assert.equal(status, 200);
@@ -65,7 +65,7 @@ describe("Sessions Tests", function() {
       request({
         url: `/api/v1/sessions/featured`,
         method: 'GET',
-        headers: { 'Authorization': process.env.AUTH_KEY },
+        headers: HEADERS.KEY,
         done,
         onSuccess: ({status, data}) => {
           assert.equal(status, 200);
@@ -78,7 +78,7 @@ describe("Sessions Tests", function() {
       request({
         url: `/api/v1/sessions/0`,
         method: 'GET',
-        headers: { 'Authorization': process.env.AUTH_KEY },
+        headers: HEADERS.KEY,
         done,
         onError: ({status}) => {
           assert.equal(status, 404);
