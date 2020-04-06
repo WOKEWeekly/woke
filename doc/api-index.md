@@ -6,8 +6,8 @@ Note that the requests and responses are only examples. Their purpose is to show
 
 - [Sessions API](#sessions-api)
 - [Candidates API](#candidates-api)
-- [Topics API](#topics-api)
 - [Members API](#members-api)
+- [Topics API](#topics-api)
 - [Reviews API](#reviews-api)
 - [Users API](#users-api)
 - [Pages API](#pages-api)
@@ -59,6 +59,31 @@ Returns the session corresponding to specified ID.
     "slug": "manchester-2020",
     "description": "An added description from Postman.",
     "create_time": "2020-04-01T20:27:55.000Z"
+}
+```
+
+---
+
+**`GET /api/v1/sessions/featured`**
+
+Returns the featured session, which would be a random upcoming session. If there are not any, returns the latest session to have taken place.
+
+**Response:**
+200 OK
+
+```json
+{
+    "session": {
+        "id": 38,
+        "title": "Manchester 2020",
+        "dateHeld": "2020-08-29T23:00:00.000Z",
+        "timeHeld": "18:00:00",
+        "image": "v1586044151/dev/sessions/2020-08-30_manchester-2020.jpg",
+        "slug": "manchester-2020-2020-08-30",
+        "description": "An added description from Postman.",
+        "create_time": "2020-04-04T22:49:12.000Z"
+    },
+    "upcoming": true
 }
 ```
 
@@ -134,31 +159,6 @@ Deletes the session corresponding to the specified ID.
 
 ---
 
-**`GET /api/v1/sessions/featured`**
-
-Returns the featured session, which would be a random upcoming session. If there are not any, returns the latest session to have taken place.
-
-**Response:**
-200 OK
-
-```json
-{
-    "session": {
-        "id": 38,
-        "title": "Manchester 2020",
-        "dateHeld": "2020-08-29T23:00:00.000Z",
-        "timeHeld": "18:00:00",
-        "image": "v1586044151/dev/sessions/2020-08-30_manchester-2020.jpg",
-        "slug": "manchester-2020-2020-08-30",
-        "description": "An added description from Postman.",
-        "create_time": "2020-04-04T22:49:12.000Z"
-    },
-    "upcoming": true
-}
-```
-
----
-
 # Candidates API
 
 **`GET /api/v1/candidates`**
@@ -167,6 +167,50 @@ Returns all candidates.
 
 **Response:**
 200 OK
+
+```json
+[
+    {
+        "id": 5,
+        "name": "Post Man",
+        "image": "v1586173765/dev/blackexcellence/5_post-man.jpg",
+        "birthday": "2011-07-04T23:00:00.000Z",
+        "ethnicity": "[\"Anguilla\", \"Jamaica\"]",
+        "socials": "{\"instagram\": \"postman\"}",
+        "occupation": "Tester",
+        "description": "An added candidate through Postman.",
+        "author_id": 1,
+        "date_written": "2019-03-01T00:00:00.000Z"
+    },
+    {
+      ...
+    }
+]
+```
+
+---
+
+**`GET /api/v1/candidates/{id}`**
+
+Returns the candidate corresponding to specified ID.
+
+**Response:**
+200 OK
+
+```json
+{
+    "id": 5,
+    "name": "Post Man",
+    "image": "v1586173765/dev/blackexcellence/5_post-man.jpg",
+    "birthday": "2011-07-04T23:00:00.000Z",
+    "ethnicity": "[\"Anguilla\", \"Jamaica\"]",
+    "socials": "{\"instagram\": \"postman\"}",
+    "occupation": "Tester",
+    "description": "An added candidate through Postman.",
+    "author_id": 1,
+    "date_written": "2019-03-01T00:00:00.000Z"
+}
+```
 
 ---
 
@@ -177,6 +221,8 @@ Returns the latest candidate.
 **Response:**
 200 OK
 
+Similar as above.
+
 ---
 
 **`GET /api/v1/candidates/random`**
@@ -186,14 +232,7 @@ Returns a random candidate.
 **Response:**
 200 OK
 
----
-
-**`GET /api/v1/candidates/{id}`**
-
-Returns the candidate corresponding to specified ID.
-
-**Response:**
-200 OK
+Similar as above.
 
 ---
 
@@ -218,6 +257,71 @@ Updates the candidate corresponding to the specified ID.
 **`DELETE /api/v1/candidates/{id}`**
 
 Deletes the candidate corresponding to the specified ID.
+
+**Response:**
+204 No Content
+
+---
+
+# Members API
+
+**`GET /api/v1/members`**
+
+Returns all members.
+
+**Response:**
+200 OK
+
+---
+
+**`GET /api/v1/members/soft`**
+
+Returns only the identifiers, first names and surnames of members.
+
+**Response:**
+200 OK
+
+---
+
+**`GET /api/v1/members/executives`**
+
+Returns only executives.
+
+**Response:**
+200 OK
+
+---
+
+**`GET /api/v1/members/{id}`**
+
+Returns the member corresponding to specified ID.
+
+**Response:**
+200 OK
+
+---
+
+**`POST /api/v1/members`**
+
+Adds a new member.
+
+**Response:**
+201 Created
+
+---
+
+**`PUT /api/v1/members/{id}`**
+
+Updates the member corresponding to the specified ID.
+
+**Response:**
+200 OK
+
+---
+
+**`DELETE /api/v1/members/{id}`**
+
+Deletes the member corresponding to the specified ID.
 
 **Response:**
 204 No Content
@@ -287,62 +391,6 @@ Increment the topic vote corresponding to the specified ID.
 **`DELETE /api/v1/topics/{id}`**
 
 Deletes the topic corresponding to the specified ID.
-
-**Response:**
-204 No Content
-
----
-
-# Members API
-
-**`GET /api/v1/members`**
-
-Returns all members.
-
-**Response:**
-200 OK
-
----
-
-**`GET /api/v1/members/executives`**
-
-Returns only executives.
-
-**Response:**
-200 OK
-
----
-
-**`GET /api/v1/members/{id}`**
-
-Returns the member corresponding to specified ID.
-
-**Response:**
-200 OK
-
----
-
-**`POST /api/v1/members`**
-
-Adds a new member.
-
-**Response:**
-201 Created
-
----
-
-**`PUT /api/v1/members/{id}`**
-
-Updates the member corresponding to the specified ID.
-
-**Response:**
-200 OK
-
----
-
-**`DELETE /api/v1/members/{id}`**
-
-Deletes the member corresponding to the specified ID.
 
 **Response:**
 204 No Content
