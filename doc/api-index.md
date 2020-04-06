@@ -274,6 +274,15 @@ Returns all members.
 
 ---
 
+**`GET /api/v1/members/random`**
+
+Returns a random member.
+
+**Response:**
+200 OK
+
+---
+
 **`GET /api/v1/members/names`**
 
 Returns only the identifiers, first names and surnames of members.
