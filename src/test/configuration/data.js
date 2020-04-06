@@ -29,6 +29,42 @@ module.exports = {
     }
   },
 
+  TEST_MEMBERS: {
+    CREATED: {
+      firstname: "Sally",
+      lastname: "Wenderson",
+      birthday: "1996-12-20",
+      ethnicity: JSON.stringify(['South Africa', 'Poland']),
+      sex: "F",
+      level: "Coordinator",
+      role: "Researcher",
+      image: TEST_IMAGE,
+      socials: JSON.stringify({
+        instagram: 'sallyw'
+      }),
+      description: "An added member through service tests.",
+      verified: 1,
+      slackID: null
+    },
+    UPDATED: {
+      firstname: "Lolly",
+      lastname: "Bepop",
+      birthday: "1996-12-20",
+      ethnicity: JSON.stringify(['Tanzania', 'Poland']),
+      sex: "F",
+      level: "Manager",
+      role: "Social Media Manager",
+      image: TEST_IMAGE,
+      socials: JSON.stringify({
+        twitter: 'sallyw',
+        instagram: 'sallyw'
+      }),
+      description: "An updated member through service tests.",
+      verified: 1,
+      slackID: null
+    }
+  },
+
   TEST_SESSIONS: {
     CREATED: {
       title: 'Manchester 2020',

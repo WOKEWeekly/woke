@@ -111,6 +111,16 @@ const CANDIDATES = {
 };
 
 const MEMBERS = {
+  /**
+   * Constructs the SQL statement to create a member.
+   * @param {object} member - The object containing the member details.
+   * @returns {string} The constructed statement.
+   */
+  CREATE: (member) => {
+    const sql = "INSERT INTO members (firstname, lastname, image, level, birthday, sex, role, ethnicity, socials, slug, description, verified, slackID) VALUES ?";
+    const values = [[member.firstname, member.lastname, member.image, member.level, member.birthday, member.sex, member.role, member.ethnicity, member.socials, member.slug, member.description, member.verified, member.slackID]];
+    return { sql, values };
+  },
   READ: {
     /**
      * Constructs the SQL statement to return information for all members.
@@ -119,8 +129,44 @@ const MEMBERS = {
      */
     ALL: (fields = '*') => {
       return `SELECT ${fields} FROM members`;
+    },
+
+    /**
+     * Constructs the SQL statement to return information for a single candidate.
+     * @param {string} [fields] - The fields to be queried.
+     * @returns {string} The constructed statement.
+     */
+    SINGLE: (fields = '*') => {
+      const sql = `SELECT ${fields} FROM members WHERE ID = ?`;
+      return sql;
+    },
+
+    /** The SQL statement to return a random verified member. */
+    RANDOM: "SELECT * FROM members WHERE verified = 1 ORDER BY RAND() LIMIT 1",
+
+    /** The SQL statement to retrieve all executive members. */
+    EXECUTIVES: "SELECT * FROM members WHERE level = 'Executive' AND verified = 1"
+  },
+  /**
+   * Constructs the SQL statement to update a member.
+   * @param {number} id - The identifier of the member.
+   * @param {object} member - The object containing the member details.
+   * @param {boolean} imageHasChanged - Indicates whether the image has changed in this request.
+   * @returns {string} The constructed statement.
+   */
+  UPDATE: (id, member, imageHasChanged) => {
+    let sql = "UPDATE members SET firstname = ?, lastname = ?, image = ?, level = ?, birthday = ?, sex = ?, role = ?, ethnicity = ?, socials = ?, slug = ?, description = ?, verified = ?, slackID = ? WHERE id = ?";
+    let values = [member.firstname, member.lastname, member.image, member.level, member.birthday, member.sex, member.role, member.ethnicity, member.socials, member.slug, member.description, member.verified, member.slackID, id];
+
+    if (imageHasChanged){
+      sql = appendFieldToUpdateQuery('image', sql);
+      values = insertFieldInValues(member.image, values);
     }
-  }
+
+    return { sql, values };
+  },
+  /** The SQL statement to delete a member. */
+  DELETE: "DELETE FROM members WHERE id = ?"
 }
 
 module.exports = {

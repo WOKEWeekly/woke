@@ -39,7 +39,7 @@ class Team extends Component {
   /** Retrieve all team members */
   getTeam = () => {
     request({
-      url: '/getTeam',
+      url: '/api/v1/members',
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${this.props.user.token}`,
@@ -144,7 +144,7 @@ class _Member extends PureComponent {
   deleteMember = () => {
     const { firstname, lastname } = this.state;
     request({
-      url: '/deleteMember',
+      url: `/api/v1/members/${this.state.id}`,
       method: 'DELETE',
       body: JSON.stringify(this.state),
       headers: {

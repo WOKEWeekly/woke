@@ -274,7 +274,7 @@ Returns all members.
 
 ---
 
-**`GET /api/v1/members/soft`**
+**`GET /api/v1/members/names`**
 
 Returns only the identifiers, first names and surnames of members.
 

@@ -107,14 +107,10 @@ class MemberCrud extends Component {
     let data;
 
     if (operation === 'add'){
-      data = JSON.stringify({
-        member,
-        changed: image !== ''
-      });
+      data = JSON.stringify(member);
     } else {
       data = JSON.stringify({
-        member1: this.props.member,
-        member2: member,
+        member: member,
         changed: image !== '' && image !== null && !cloudinary.check(image)
       });
     }
@@ -128,7 +124,7 @@ class MemberCrud extends Component {
     const data = this.buildRequest();
 
     request({
-      url:'/addMember',
+      url: `/api/v1/members`,
       method: 'POST',
       body: data,
       headers: { 'Authorization': `Bearer ${this.props.user.token}` },
@@ -146,7 +142,7 @@ class MemberCrud extends Component {
     const data = this.buildRequest();
 
     request({
-      url: '/updateMember',
+      url: `/api/v1/members/${this.props.member.id}`,
       method: 'PUT',
       body: data,
       headers: { 'Authorization': `Bearer ${this.props.user.token}`, },

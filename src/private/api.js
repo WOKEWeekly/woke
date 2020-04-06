@@ -230,10 +230,111 @@ module.exports = function(app, conn){
   });
 
   /** Retrieve all team members */
-  app.get('/api/v1/members/soft', validateReq, function(req, res){
+  app.get('/api/v1/members', verifyToken(CLEARANCES.ACTIONS.VIEW_TEAM), function(req, res){
+    conn.query(SQL.MEMBERS.READ.ALL(), function (err, members) {
+      respondToClient(res, err, 200, members);
+    });
+  });
+
+  /** Retrieve individual member */
+  app.get('/api/v1/members/:id([0-9]+)', validateReq, function(req, res){
+    const id = req.params.id;
+    conn.query(SQL.MEMBERS.READ.SINGLE(), id, function (err, [member]) {
+      if (!member) err = ERROR.INVALID_MEMBER_ID(id);
+      respondToClient(res, err, 200, member);
+    });
+  });
+
+  /** Retrieve a random verified member */
+  app.get('/api/v1/members/random', validateReq, function(req, res){
+    conn.query(SQL.MEMBERS.READ.RANDOM, function (err, [member]) {
+      respondToClient(res, err, 200, member);
+    });
+  });
+
+  /** Retrieve the IDs, first names and surnames of team members */
+  app.get('/api/v1/members/names', validateReq, function(req, res){
     const sql = SQL.MEMBERS.READ.ALL('id, firstname, lastname');
-    conn.query(sql, function (err, result) {
-      respondToClient(res, err, 200, result);
+    conn.query(sql, function (err, members) {
+      respondToClient(res, err, 200, members);
+    });
+  });
+
+  /** Retrieve only executive team members */
+  app.get('/api/v1/members/executives', validateReq, function(req, res){
+    conn.query(SQL.MEMBERS.READ.EXECUTIVES, function (err, executives) {
+      respondToClient(res, err, 200, executives);
+    });
+  });
+
+  /** Add new team member to database */
+  app.post('/api/v1/members', verifyToken(CLEARANCES.ACTIONS.CRUD_TEAM), function(req, res){
+    const member = req.body;
+
+    async.waterfall([
+      function(callback){ // Upload image to cloud
+        filer.uploadImage(member, DIRECTORY.TEAM, true, callback);
+      },
+      function(member, callback){ // Add member to database
+        const { sql, values } = SQL.MEMBERS.CREATE(member);
+        conn.query(sql, [values], function (err, result) {
+          err ? callback(err) : callback(null, result.insertId);
+        });
+      }
+    ], function(err, id){
+      respondToClient(res, err, 201, { id });
+    });
+  });
+
+  /** Update details of existing team member in database */
+  app.put('/api/v1/members/:id', verifyToken(CLEARANCES.ACTIONS.CRUD_TEAM), function(req, res){
+    const id = req.params.id;
+    const { member, changed } = req.body;
+
+    async.waterfall([
+      function(callback){ // Delete old image if changed.
+        conn.query(SQL.MEMBERS.READ.SINGLE('image'), id, function (err, [member]) {
+          if (err) return callback(err);
+          if (!member) return callback(ERROR.INVALID_MEMBER_ID(id));
+
+          if (!changed) return callback(null);
+          filer.destroyImage(member.image, callback);
+        });
+      },
+      function(callback){ // Equally, upload new image if changed
+        filer.uploadImage(member, DIRECTORY.TEAM, changed, callback);
+      },
+      function(member, callback){ // Update member in database
+        const { sql, values } = SQL.MEMBERS.UPDATE(id, member, changed);
+        conn.query(sql, values, function (err) {
+          err ? callback(err) : callback(null, member.slug);
+        });
+      }
+    ], function(err, slug){
+      respondToClient(res, err, 200, { slug });
+    });
+  });
+
+  /** Delete an existing team member from database */
+  app.delete('/api/v1/members/:id', verifyToken(CLEARANCES.ACTIONS.CRUD_TEAM), function(req, res){
+    const id = req.params.id;
+
+    async.waterfall([
+      function(callback){ // Delete image from cloud
+        conn.query(SQL.MEMBERS.READ.SINGLE('image'), id, function (err, [member]) {
+          if (err) return callback(err);
+          if (!member) return callback(ERROR.INVALID_MEMBER_ID(id));
+          
+          filer.destroyImage(member.image, callback);
+        });
+      },
+      function(callback){ // Delete member from database
+        conn.query(SQL.MEMBERS.DELETE, id, function (err) {
+          err ? callback(err) : callback(null);
+        });
+      }
+    ], function(err){
+      respondToClient(res, err, 204);
     });
   });
 
@@ -281,83 +382,6 @@ module.exports = function(app, conn){
     
     conn.query(sql, topic.id, function (err) {
       // emails.sendTopicDeletionEmail(topic);
-      respondToClient(res, err);
-    });
-  });
-
-  /** Retrieve all team members */
-  app.get('/getTeam', verifyToken(CLEARANCES.ACTIONS.VIEW_TEAM), function(req, res){
-    conn.query("SELECT * FROM members", function (err, result) {
-      respondToClient(res, err, 200, result);
-    });
-  });
-
-  /** Retrieve only executive team members */
-  app.get('/getExec', validateReq, function(req, res){
-    conn.query("SELECT * FROM members WHERE level = 'Executive' AND verified = 1", function (err, result) {
-      respondToClient(res, err, result);
-    });
-  });
-
-  /** Add new team member to database */
-  app.post('/addMember', verifyToken(CLEARANCES.ACTIONS.CRUD_TEAM), function(req, res){
-    let { member, changed } = req.body;
-    async.waterfall([
-      function(callback){ // Upload file to directory
-        filer.uploadImage(member, 'team', changed, callback);
-      },
-      function(entity, callback){ // Add candidate to database
-        member = entity;
-        const sql = "INSERT INTO members (firstname, lastname, image, level, birthday, sex, role, ethnicity, socials, slug, description, verified, slackID) VALUES ?";
-        const values = [[member.firstname, member.lastname, member.image, member.level, member.birthday, member.sex, member.role, member.ethnicity, member.socials, member.slug, member.description, member.verified, member.slackID]];
-        
-        conn.query(sql, [values], function (err, result) {
-          err ? callback(err) : callback(null, result.insertId);
-        });
-      }
-    ], function(err, id){
-      respondToClient(res, err, { id, ...member } );
-    });
-  });
-
-  /** Update details of existing team member in database */
-  app.put('/updateMember', verifyToken(CLEARANCES.ACTIONS.CRUD_TEAM), function(req, res){
-    let { member1, member2, changed } = req.body;
-    async.waterfall([
-      function(callback){ // Delete original image from directory
-        filer.destroyImage(member1.image, changed, callback);
-      },
-      function(callback){ // Upload new image to directory
-        filer.uploadImage(member2, 'team', changed, callback); 
-      },
-      function(entity, callback){ // Update member in database
-        member2 = entity;
-        const sql = "UPDATE members SET firstname = ?, lastname = ?, image = ?, level = ?, birthday = ?, sex = ?, role = ?, ethnicity = ?, socials = ?, slug = ?, description = ?, verified = ?, slackID = ? WHERE id = ?";
-        const values = [member2.firstname, member2.lastname, member2.image, member2.level, member2.birthday, member2.sex, member2.role, member2.ethnicity, member2.socials, member2.slug, member2.description, member2.verified, member2.slackID, member1.id];
-        
-        conn.query(sql, values, function (err) {
-          err ? callback(err) : callback(null);
-        });
-      }
-    ], function(err){
-      respondToClient(res, err,  { id: member1.id, ...member2 });
-    });
-  });
-
-  /** Delete an existing team member from database */
-  app.delete('/deleteMember', verifyToken(CLEARANCES.ACTIONS.CRUD_TEAM), function(req, res){
-    const member = req.body;
-    async.waterfall([
-      function(callback){ // Delete image from directory
-        filer.destroyImage(member.image, true, callback);
-      },
-      function(callback){ // Delete member from database
-        const sql = "DELETE FROM members WHERE id = ?";
-        conn.query(sql, member.id, function (err) {
-          err ? callback(err) : callback(null);
-        });
-      }
-    ], function(err){
       respondToClient(res, err);
     });
   });
@@ -458,14 +482,6 @@ module.exports = function(app, conn){
   /****************************
    * HOMEPAGE
    ***************************/
-
-  /** Get random member of the executive team */
-  app.get('/getRandomMember', function(req, res){
-    const sql = "SELECT * FROM members WHERE verified = 1 ORDER BY RAND() LIMIT 1";
-    conn.query(sql, function (err, result) {
-      respondToClient(res, err, result[0]);
-    });
-  });
 
   /** Get random Topic */
   app.get('/getRandomTopic', validateReq, function(req, res){
