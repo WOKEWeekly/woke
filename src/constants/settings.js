@@ -18,7 +18,7 @@ module.exports = {
      * Checks whether the image is from Cloudinary by testing
      * if the image name string starts with a regular expression.
      * @param {string} image - The image in question.
-     * @returns {Boolean} Value indicating whether it's from Cloudinary
+     * @returns {boolean} Value indicating whether it's from Cloudinary
      */
     check: (image) => {
       if (!image) return false;

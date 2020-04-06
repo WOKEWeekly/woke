@@ -14,7 +14,7 @@ module.exports = {
    * Construct slug and upload image cloudinary
    * @param {object} entity - The entity object.
    * @param {string} directory - The Cloudinary directory the image should be uploaded to.
-   * @param {Boolean} imageHasChanged - Indicates whether the image has changed. If it has not,
+   * @param {boolean} imageHasChanged - Indicates whether the image has changed. If it has not,
    * this method will only construct the slug.
    * @param {Function} next - The next callback function in the series.
    */
