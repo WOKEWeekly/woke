@@ -192,7 +192,7 @@ module.exports = function(app, conn, server){
    */
   app.get('/blackexcellence/edit/:id', function(req, res){
     const { id } = req.params;
-    const sql = "SELECT * FROM blackex WHERE id = ?";
+    const sql = "SELECT * FROM candidates WHERE id = ?";
     
     conn.query(sql, id, function (err, result) {
       if (err || !result.length) return renderErrorPage(req, res, err, server);
@@ -214,9 +214,9 @@ module.exports = function(app, conn, server){
    */
   app.get('/blackexcellence/candidate/:id', function(req, res){
     const id = req.params.id;
-    const sql = `SELECT blackex.*, CONCAT(team.firstname, ' ', team.lastname) AS author,
-    team.level AS author_level, team.slug AS author_slug
-    FROM blackex LEFT JOIN team ON blackex.authorId=team.id WHERE blackex.id = ?`;
+    const sql = `SELECT candidates.*, CONCAT(members.firstname, ' ', members.lastname) AS author,
+    members.level AS author_level, members.slug AS author_slug
+    FROM candidates LEFT JOIN members ON candidates.author_id=members.id WHERE candidates.id = ?`;
     
     conn.query(sql, id, function (err, result) {
       if (err || !result.length) return renderErrorPage(req, res, err, server);
@@ -256,7 +256,7 @@ module.exports = function(app, conn, server){
    */
   app.get('/executives/:slug', function(req, res){
     const slug = req.params.slug;
-    const sql = "SELECT * FROM team WHERE slug = ? AND level = 'Executive'";
+    const sql = "SELECT * FROM members WHERE slug = ? AND level = 'Executive'";
     
     conn.query(sql, [slug], function (err, result) {
       if (!err && result.length){
@@ -292,7 +292,7 @@ module.exports = function(app, conn, server){
    */
   app.get('/team/member/:slug', function(req, res){
     const slug = req.params.slug;
-    const sql = "SELECT * FROM team WHERE slug = ?";
+    const sql = "SELECT * FROM members WHERE slug = ?";
     
     conn.query(sql, slug, function (err, result) {
       if (err || !result.length) return renderErrorPage(req, res, err, server);
@@ -328,7 +328,7 @@ module.exports = function(app, conn, server){
    */
   app.get('/team/edit/:id', function(req, res){
     const id = req.params.id;
-    const sql = "SELECT * FROM team WHERE id = ?";
+    const sql = "SELECT * FROM members WHERE id = ?";
     
     conn.query(sql, id, function (err, result) {
       if (!err && result.length){
@@ -560,21 +560,21 @@ module.exports = function(app, conn, server){
         });
       },
       function(callback){
-        conn.query('SELECT id FROM blackex', function (err, result) {
+        conn.query('SELECT id FROM candidates', function (err, result) {
           if (err) return callback(err);
           result.forEach(candidate => routes.push(`/blackexcellence/candidate/${candidate.id}`));
           callback(null);
         });
       },
       function(callback){
-        conn.query(`SELECT slug FROM team WHERE level = 'Executive'`, function (err, result) {
+        conn.query(`SELECT slug FROM members WHERE level = 'Executive'`, function (err, result) {
           if (err) return callback(err);
           result.forEach(exec => routes.push(`/executives/${exec.slug}`));
           callback(null);
         });
       },
       function(callback){
-        conn.query(`SELECT slug FROM team WHERE level != 'Executive' AND verified = 1;`, function (err, result) {
+        conn.query(`SELECT slug FROM members WHERE level != 'Executive' AND verified = 1;`, function (err, result) {
           if (err) return callback(err);
           result.forEach(member => routes.push(`/team/member/${member.slug}`));
           callback(null);

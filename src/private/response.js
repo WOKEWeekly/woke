@@ -5,7 +5,7 @@ module.exports = {
    * Send a response to the client.
    * @param {object} res - The response context of the service.
    * @param {Error} err - The object containing information about the error.
-   * @param {number} [expectedStatus] - The expected status code of the
+   * @param {number} expectedStatus - The expected status code of the
    * @param {object} [json] - The response body to be sent back to the client.
    * response. Defaults to 400.
    */

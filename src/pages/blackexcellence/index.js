@@ -42,7 +42,7 @@ class BlackExcellence extends Component {
   /** Retrieve all candidates */
   getCandidates = () => {
     request({
-      url: '/getCandidates',
+      url: '/api/v1/candidates',
       method: 'GET',
       headers: {
         'Authorization': process.env.AUTH_KEY,

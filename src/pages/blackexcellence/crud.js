@@ -32,7 +32,7 @@ class CandidateAdd extends Component {
       ethnicity4: '',
       socials: {},
       authorId: 0,
-      date_written: new Date()
+      dateWritten: new Date()
     };
   }
 
@@ -42,8 +42,10 @@ class CandidateAdd extends Component {
     const isEditOperation = operation === 'edit';
 
     request({
-      url: '/latestCandidateId',
-      onSuccess: (id) => {
+      url: '/api/v1/candidates/latest',
+      method: 'GET',
+      headers: { 'Authorization': process.env.AUTH_KEY },
+      onSuccess: ({id}) => {
         if (!isEditOperation){
           id = id + 1;
           this.setState({id});
@@ -53,7 +55,7 @@ class CandidateAdd extends Component {
 
     if (isEditOperation){
 
-      const { birthday, date_written, ethnicity, socials } = candidate;
+      const { birthday, date_written, ethnicity, socials, author_id } = candidate;
       const ethnicityArr = JSON.parse(ethnicity);
 
       /** Populate ethnicity array */
@@ -66,7 +68,8 @@ class CandidateAdd extends Component {
         ...candidate,
         socials: JSON.parse(socials),
         birthday: new Date(birthday),
-        date_written: new Date(date_written),
+        authorId: author_id,
+        dateWritten: new Date(date_written),
         ...ethnicities
       });
     }
@@ -78,7 +81,7 @@ class CandidateAdd extends Component {
    */
   buildRequest = () => {
     const { id, name, occupation, image, birthday, description, socials,
-      authorId, date_written } = this.state;
+      authorId, dateWritten } = this.state;
     const { operation } = this.props;
 
     // Add ethncities to array
@@ -97,20 +100,16 @@ class CandidateAdd extends Component {
       description: description,
       socials: JSON.stringify(socials),
       authorId,
-      date_written: formatISODate(date_written)
+      dateWritten: formatISODate(dateWritten)
     };
 
     let data;
 
     if (operation === 'add'){
-      data = JSON.stringify({
-        candidate,
-        changed: image !== ''
-      });
+      data = JSON.stringify(candidate);
     } else {
       data = JSON.stringify({
-        candidate1: this.props.candidate,
-        candidate2: candidate,
+        candidate: candidate,
         changed: image !== '' && image !== null && !cloudinary.check(image)
       });
     }
@@ -124,7 +123,7 @@ class CandidateAdd extends Component {
     const data = this.buildRequest();
 
     request({
-      url:'/addCandidate',
+      url: '/api/v1/candidates',
       method: 'POST',
       body: data,
       headers: { 'Authorization': `Bearer ${this.props.user.token}` },
@@ -141,7 +140,7 @@ class CandidateAdd extends Component {
     const data = this.buildRequest();
 
     request({
-      url: '/updateCandidate',
+      url: `/api/v1/candidates/${this.props.candidate.id}`,
       method: 'PUT',
       body: data,
       headers: { 'Authorization': `Bearer ${this.props.user.token}` },
@@ -155,6 +154,7 @@ class CandidateAdd extends Component {
 
   render(){
     const { title, operation } = this.props;
+    const backPath = operation === 'add' ? '/blackexcellence' : `/blackexcellence/candidate/${this.state.id}`;
     return (
       <CandidateForm
         heading={title}
@@ -163,7 +163,7 @@ class CandidateAdd extends Component {
 
         confirmText={operation === 'add' ? 'Submit' : 'Update'}
         confirmFunc={operation === 'add' ? this.submitCandidate : this.updateCandidate}
-        cancelFunc={() => location.href = '/blackexcellence'}
+        cancelFunc={() => location.href = backPath}
 
         operation={operation}
 

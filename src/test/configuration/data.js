@@ -2,6 +2,33 @@ const TEST_IMAGE = 'data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALA
 
 module.exports = {
 
+  TEST_CANDIDATES: {
+    CREATED: {
+      id: 0,
+      name: 'Jon Snow',
+      occupation: 'Mentor',
+      birthday: '1990-02-02',
+      ethnicity: JSON.stringify(['Nigeria', 'Togo']),
+      socials: JSON.stringify({ instagram: 'madting' }),
+      description: 'An added candidate through service tests.',
+      authorId: 1,
+      dateWritten: '1990-02-02',
+      image: TEST_IMAGE,
+    },
+    UPDATED: {
+      id: 0,
+      name: 'Jon Snow',
+      occupation: 'Teacher',
+      birthday: '1990-02-02',
+      ethnicity: JSON.stringify(['Ghana', 'France']),
+      socials: JSON.stringify({ twitter: 'madting', instagram: 'madting' }),
+      description: 'An updated candidate through service tests.',
+      authorId: 1,
+      dateWritten: '2020-02-02',
+      image: TEST_IMAGE,
+    }
+  },
+
   TEST_SESSIONS: {
     CREATED: {
       title: 'Manchester 2020',

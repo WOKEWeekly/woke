@@ -43,9 +43,8 @@ class CandidatePage extends Component {
     const { candidate, user } = this.props;
 
     request({
-      url: '/deleteCandidate',
+      url: `/api/v1/candidates/${candidate.id}`,
       method: 'DELETE',
-      body: JSON.stringify(candidate),
       headers: {
         'Authorization': `Bearer ${user.token}`,
         'Content-Type': 'application/json'
@@ -70,7 +69,7 @@ class CandidatePage extends Component {
     const { isLoaded, imageLoaded } = this.state;
 
     const getDetails = () => {
-      const { author, author_level, author_slug, date_written } = candidate;
+      const { author, author_level, author_slug, date_written: dateWritten } = candidate;
       if (!author) return null;
 
       let link = '';
@@ -83,7 +82,7 @@ class CandidatePage extends Component {
       <Subtitle className={css.meta}>
         Written by 
         <a className={css.author} href={link}> {author}</a>
-        , {formatDate(date_written)}
+        , {formatDate(dateWritten)}
       </Subtitle>
       );
     }

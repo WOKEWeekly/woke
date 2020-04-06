@@ -1,5 +1,10 @@
 module.exports = {
   SESSIONS: {
+    CREATE: (session) => {
+      const sql = "INSERT INTO sessions (title, dateHeld, timeHeld, image, slug, description) VALUES ?";
+      const values = [[session.title, session.dateHeld, session.timeHeld, session.image, session.slug, session.description]];
+      return { sql, values };
+    },
     READ: {
       ALL: "SELECT * FROM sessions",
       SINGLE: (fields = '*') => {
@@ -8,11 +13,6 @@ module.exports = {
       },
       UPCOMING: "SELECT * FROM sessions WHERE dateheld > NOW() ORDER BY RAND() LIMIT 1",
       LATEST: "SELECT * FROM sessions ORDER BY dateHeld DESC LIMIT 1",
-    },
-    CREATE: (session) => {
-      const sql = "INSERT INTO sessions (title, dateHeld, timeHeld, image, slug, description) VALUES ?";
-      const values = [[session.title, session.dateHeld, session.timeHeld, session.image, session.slug, session.description]];
-      return { sql, values };
     },
     UPDATE: (id, session, imageHasChanged) => {
       let sql = "UPDATE sessions SET title = ?, dateHeld = ?, timeHeld = ?, slug = ?, description = ? WHERE id = ?";
@@ -27,7 +27,44 @@ module.exports = {
     },
     DELETE: "DELETE FROM sessions WHERE id = ?"
   },
+  CANDIDATES: {
+    CREATE: (candidate) => {
+      const sql = "INSERT INTO candidates (id, name, image, birthday, ethnicity, socials, occupation, description,author_id, date_written) VALUES ?";
+      const values = [[candidate.id, candidate.name, candidate.image, candidate.birthday, candidate.ethnicity, candidate.socials, candidate.occupation, candidate.description, candidate.authorId, candidate.dateWritten]];
+      return { sql, values };
+    },
+    READ: {
+      ALL: "SELECT * FROM candidates",
+      RANDOM: "SELECT * FROM candidates ORDER BY RAND() LIMIT 1",
+      SINGLE: (fields = '*') => {
+        const sql = `SELECT ${fields} FROM candidates WHERE ID = ?`;
+        return sql;
+      },
+      LATEST: "SELECT * FROM candidates ORDER BY id DESC LIMIT 1",
+    },
+    UPDATE: (id, candidate, imageHasChanged) => {
+      let sql = "UPDATE candidates SET id = ?, name = ?, birthday = ?, ethnicity = ?, socials = ?, occupation = ?, description = ?,author_id = ?, date_written = ? WHERE id = ?";
+      let values = [candidate.id, candidate.name, candidate.birthday, candidate.ethnicity, candidate.socials, candidate.occupation, candidate.description, candidate.authorId, candidate.dateWritten, id];
+  
+      if (imageHasChanged){
+        sql = appendFieldToUpdateQuery('image', sql);
+        values = insertFieldInValues(candidate.image, values);
+      }
+  
+      return { sql, values };
+    },
+    DELETE: "DELETE FROM candidates WHERE id = ?"
+  },
+  MEMBERS: {
+    READ: {
+      ALL: (fields = '*') => {
+        return `SELECT ${fields} FROM members`;
+      }
+    }
+  }
 }
+
+
 
 /**
  * Appends a new field to an existing UPDATE query.

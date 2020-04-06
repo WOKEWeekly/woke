@@ -105,7 +105,7 @@ module.exports = function(app, conn){
     const id = req.params.id;
 
     async.waterfall([
-      function(callback){ // Delete image from directory
+      function(callback){ // Delete image from cloud
         conn.query(SQL.SESSIONS.READ.SINGLE('image'), id, function (err, [session]) {
           if (err) return callback(err);
           if (!session) return callback(ERROR.INVALID_SESSION_ID(id));
@@ -120,6 +120,120 @@ module.exports = function(app, conn){
       }
     ], function(err){
       respondToClient(res, err, 204);
+    });
+  });
+
+  /** Retrieve all candidates */
+  app.get('/api/v1/candidates', validateReq, function(req, res){
+    conn.query(SQL.CANDIDATES.READ.ALL, function (err, candidates) {
+      respondToClient(res, err, 200, candidates);
+    });
+  });
+
+  /** Retrieve individual candidate */
+  app.get('/api/v1/candidates/:id([0-9]+)', validateReq, function(req, res){
+    const id = req.params.id;
+    conn.query(SQL.CANDIDATES.READ.SINGLE(), id, function (err, [candidate]) {
+      if (!candidate) err = ERROR.INVALID_CANDIDATE_ID(id);
+      respondToClient(res, err, 200, candidate);
+    });
+  });
+
+  /** Retrieve the details of the latest candidate  */
+  app.get('/api/v1/candidates/latest', validateReq, function(req, res){
+    conn.query(SQL.CANDIDATES.READ.LATEST, function (err, [candidate]) {
+      respondToClient(res, err, 200, candidate);
+    });
+  });
+
+  /** Get random candidate */
+  app.get('/api/v1/candidates/random', validateReq, function(req, res){
+    conn.query(SQL.CANDIDATES.READ.RANDOM, function (err, [candidate]) {
+      respondToClient(res, err, 200, candidate);
+    });
+  });
+
+  /** Add new candidate to database */
+  app.post('/api/v1/candidates', verifyToken(CLEARANCES.ACTIONS.CRUD_BLACKEX), function(req, res){
+    const candidate = req.body;
+
+    async.waterfall([
+      function(callback){ // Upload image to cloud
+        filer.uploadImage(candidate, DIRECTORY.BLACKEXCELLENCE, true, callback);
+      },
+      function(candidate, callback){ // Add candidate to database
+        const { sql, values } = SQL.CANDIDATES.CREATE(candidate);
+        conn.query(sql, [values], function (err) {
+          if (err){
+            if (err.errno === 1062) err = ERROR.DUPLICATE_CANDIDATE_ID(candidate.id);
+            callback(err);
+          } else {
+            callback(null);
+          }
+        });
+      }
+    ], function(err){
+      respondToClient(res, err, 201);
+    });
+  });
+
+  /** Update details of existing candidate in database */
+  app.put('/api/v1/candidates/:id', verifyToken(CLEARANCES.ACTIONS.CRUD_BLACKEX), function(req, res){
+    const id = req.params.id;
+    const { candidate, changed } = req.body;
+
+    async.waterfall([
+      function(callback){ // Delete original image from cloud
+        conn.query(SQL.CANDIDATES.READ.SINGLE('image'), id, function (err, [candidate]) {
+          if (err) return callback(err);
+          if (!candidate) return callback(ERROR.INVALID_CANDIDATE_ID(id));
+
+          if (!changed) return callback(null);
+          filer.destroyImage(candidate.image, callback);
+        });
+      },
+      function(callback){ // Equally, upload new image if changed
+        filer.uploadImage(candidate, DIRECTORY.BLACKEXCELLENCE, changed, callback);
+      },
+      function(candidate, callback){ // Update candidate in database
+        const { sql, values } = SQL.CANDIDATES.UPDATE(id, candidate, changed);
+        conn.query(sql, values, function (err) {
+          err ? callback(err) : callback(null);
+        });
+      }
+    ], function(err){
+      respondToClient(res, err, 200);
+    });
+  });
+
+  /** Delete an existing candidate from database */
+  app.delete('/api/v1/candidates/:id', verifyToken(CLEARANCES.ACTIONS.CRUD_BLACKEX), function(req, res){
+    const id = req.params.id;
+
+    async.waterfall([
+      function(callback){ // Delete image from cloud
+        conn.query(SQL.CANDIDATES.READ.SINGLE('image'), id, function (err, [candidate]) {
+          if (err) return callback(err);
+          if (!candidate) return callback(ERROR.INVALID_CANDIDATE_ID(id));
+          
+          filer.destroyImage(candidate.image, callback);
+        });
+      },
+      function(callback){ // Delete candidate from database
+        conn.query(SQL.CANDIDATES.DELETE, id, function (err) {
+          err ? callback(err) : callback(null);
+        });
+      }
+    ], function(err){
+      respondToClient(res, err, 204);
+    });
+  });
+
+  /** Retrieve all team members */
+  app.get('/api/v1/members/soft', validateReq, function(req, res){
+    const sql = SQL.MEMBERS.READ.ALL('id, firstname, lastname');
+    conn.query(sql, function (err, result) {
+      respondToClient(res, err, 200, result);
     });
   });
 
@@ -171,94 +285,16 @@ module.exports = function(app, conn){
     });
   });
 
-  /** Retrieve all candidates */
-  app.get('/getCandidates', validateReq, function(req, res){
-    conn.query("SELECT * FROM blackex", function (err, result) {
-      respondToClient(res, err, result);
-    });
-  });
-
-   /** Find last candidate ID */
-  app.get('/latestCandidateId', function(req, res){
-    conn.query("SELECT MAX(ID) FROM blackex", function (err, result) {
-      const latestCandidateId = result[0]['MAX(ID)'];
-      respondToClient(res, err, latestCandidateId);
-    });
-  });
-
-  /** Add new candidate to database */
-  app.post('/addCandidate', verifyToken(CLEARANCES.ACTIONS.CRUD_BLACKEX), function(req, res){
-    let {candidate, changed} = req.body;
-    async.waterfall([
-      function(callback){ // Upload file to directory
-        filer.uploadImage(candidate, 'blackexcellence', changed, callback);
-      },
-      function(entity, callback){ // Add candidate to database
-        candidate = entity;
-        const sql = "INSERT INTO blackex (id, name, image, birthday, ethnicity, socials, occupation, description, authorId, date_written) VALUES ?";
-        const values = [[candidate.id, candidate.name, candidate.image, candidate.birthday, candidate.ethnicity, candidate.socials, candidate.occupation, candidate.description, candidate.authorId, candidate.date_written]];
-    
-        conn.query(sql, [values], function (err) {
-          err ? callback(err) : callback(null);
-        });
-      }
-    ], function(err){
-      respondToClient(res, err, { ...candidate });
-    });
-  });
-
-  /** Update details of existing candidate in database */
-  app.put('/updateCandidate', verifyToken(CLEARANCES.ACTIONS.CRUD_BLACKEX), function(req, res){
-    let { candidate1, candidate2, changed } = req.body;
-    async.waterfall([
-      function(callback){ // Delete original image from directory
-        filer.destroyImage(candidate2.image, changed, callback);
-      },
-      function(callback){ // Upload new image to directory
-        filer.uploadImage(candidate2, 'blackexcellence', changed, callback);
-      },
-      function(entity, callback){ // Update candidate in database
-        candidate2 = entity;
-        const sql = "UPDATE blackex SET id = ?, name = ?, image = ?, birthday = ?, ethnicity = ?, socials = ?, occupation = ?, description = ?, authorId = ?, date_written = ? WHERE id = ?";
-        const values = [candidate2.id, candidate2.name, candidate2.image, candidate2.birthday, candidate2.ethnicity, candidate2.socials, candidate2.occupation, candidate2.description, candidate2.authorId, candidate2.date_written, candidate1.id];
-        
-        conn.query(sql, values, function (err) {
-          err ? callback(err) : callback(null);
-        });
-      }
-    ], function(err){
-      respondToClient(res, err, { id: candidate1.id, ...candidate2 });
-    });
-  });
-
-  /** Delete an existing candidate from database */
-  app.delete('/deleteCandidate', verifyToken(CLEARANCES.ACTIONS.CRUD_BLACKEX), function(req, res){
-    const candidate = req.body;
-
-    async.waterfall([
-      function(callback){ // Delete image from directory
-        filer.destroyImage(candidate.image, true, callback);
-      },
-      function(callback){ // Delete candidate from database
-        conn.query("DELETE FROM blackex WHERE id = ?", candidate.id, function (err) {
-          err ? callback(err) : callback(null);
-        });
-      }
-    ], function(err){
-      respondToClient(res, err);
-    });
-  });
-
   /** Retrieve all team members */
   app.get('/getTeam', verifyToken(CLEARANCES.ACTIONS.VIEW_TEAM), function(req, res){
-    conn.query("SELECT * FROM team", function (err, result) {
-      respondToClient(res, err, result);
+    conn.query("SELECT * FROM members", function (err, result) {
+      respondToClient(res, err, 200, result);
     });
   });
 
   /** Retrieve only executive team members */
   app.get('/getExec', validateReq, function(req, res){
-    conn.query("SELECT * FROM team WHERE level = 'Executive' AND verified = 1", function (err, result) {
+    conn.query("SELECT * FROM members WHERE level = 'Executive' AND verified = 1", function (err, result) {
       respondToClient(res, err, result);
     });
   });
@@ -272,7 +308,7 @@ module.exports = function(app, conn){
       },
       function(entity, callback){ // Add candidate to database
         member = entity;
-        const sql = "INSERT INTO team (firstname, lastname, image, level, birthday, sex, role, ethnicity, socials, slug, description, verified, slackID) VALUES ?";
+        const sql = "INSERT INTO members (firstname, lastname, image, level, birthday, sex, role, ethnicity, socials, slug, description, verified, slackID) VALUES ?";
         const values = [[member.firstname, member.lastname, member.image, member.level, member.birthday, member.sex, member.role, member.ethnicity, member.socials, member.slug, member.description, member.verified, member.slackID]];
         
         conn.query(sql, [values], function (err, result) {
@@ -296,7 +332,7 @@ module.exports = function(app, conn){
       },
       function(entity, callback){ // Update member in database
         member2 = entity;
-        const sql = "UPDATE team SET firstname = ?, lastname = ?, image = ?, level = ?, birthday = ?, sex = ?, role = ?, ethnicity = ?, socials = ?, slug = ?, description = ?, verified = ?, slackID = ? WHERE id = ?";
+        const sql = "UPDATE members SET firstname = ?, lastname = ?, image = ?, level = ?, birthday = ?, sex = ?, role = ?, ethnicity = ?, socials = ?, slug = ?, description = ?, verified = ?, slackID = ? WHERE id = ?";
         const values = [member2.firstname, member2.lastname, member2.image, member2.level, member2.birthday, member2.sex, member2.role, member2.ethnicity, member2.socials, member2.slug, member2.description, member2.verified, member2.slackID, member1.id];
         
         conn.query(sql, values, function (err) {
@@ -316,7 +352,7 @@ module.exports = function(app, conn){
         filer.destroyImage(member.image, true, callback);
       },
       function(callback){ // Delete member from database
-        const sql = "DELETE FROM team WHERE id = ?";
+        const sql = "DELETE FROM members WHERE id = ?";
         conn.query(sql, member.id, function (err) {
           err ? callback(err) : callback(null);
         });
@@ -423,17 +459,9 @@ module.exports = function(app, conn){
    * HOMEPAGE
    ***************************/
 
-  /** Get random candidate */
-  app.get('/getRandomCandidate', validateReq, function(req, res){
-    const sql = "SELECT * FROM blackex ORDER BY RAND() LIMIT 1";
-    conn.query(sql, function (err, result) {
-      respondToClient(res, err, result[0]);
-    });
-  });
-
   /** Get random member of the executive team */
   app.get('/getRandomMember', function(req, res){
-    const sql = "SELECT * FROM team WHERE verified = 1 ORDER BY RAND() LIMIT 1";
+    const sql = "SELECT * FROM members WHERE verified = 1 ORDER BY RAND() LIMIT 1";
     conn.query(sql, function (err, result) {
       respondToClient(res, err, result[0]);
     });
