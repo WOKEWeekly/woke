@@ -43,10 +43,7 @@ class ResetPassword extends Component {
       url: '/resetPassword',
       method: 'PUT',
       body: JSON.stringify(this.state),
-      headers: {
-        'Authorization': process.env.AUTH_KEY,
-        'Content-Type': 'application/json'
-      },
+      headers: {  'Authorization': process.env.AUTH_KEY },
       onSuccess: () => {
         setAlert({ type: 'success', message: `You've successfully set your new password. Log in with your new credentials and enjoy the website!` });
         location.href = '/';

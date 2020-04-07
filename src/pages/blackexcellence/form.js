@@ -33,10 +33,7 @@ class CandidateForm extends Component {
     request({
       url: '/api/v1/members/soft',
       method: 'GET',
-      headers: {
-        'Authorization': process.env.AUTH_KEY,
-        'Content-Type': 'application/json',
-      },
+      headers: { 'Authorization': process.env.AUTH_KEY },
       onSuccess: (response) => {
         const members = [];
         response.forEach(member => {

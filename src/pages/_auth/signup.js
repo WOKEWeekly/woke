@@ -68,10 +68,7 @@ class Signup extends Component {
       url: '/signup',
       method: 'POST',
       body: JSON.stringify(this.state),
-      headers: {
-        'Authorization': process.env.AUTH_KEY,
-        'Content-Type': 'application/json'
-      },
+      headers: {  'Authorization': process.env.AUTH_KEY },
       onSuccess: (user) => {
         this.props.saveUser(user);
         setAlert({ type: 'info', message: `Welcome, ${user.firstname}! Thank you for registering to the #WOKEWeekly website.` });

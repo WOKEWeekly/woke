@@ -46,7 +46,6 @@ class LoginModal extends Component {
       url: '/login',
       method: 'POST',
       body: JSON.stringify(this.state),
-      headers: { 'Content-Type': 'application/json' },
       onSuccess: (user) => {
         setCookie('remember', this.state.remember, 365 * 24);
         this.props.saveUser(user);

@@ -24,10 +24,7 @@ export default class ReviewsPreview extends Component {
     request({
       url: `/api/v1/reviews/featured`,
       method: 'GET',
-      headers: {
-        'Authorization': process.env.AUTH_KEY,
-        'Content-Type': 'application/json',
-      },
+      headers: { 'Authorization': process.env.AUTH_KEY },
       onSuccess: (reviews) => {
         this.setState({reviews});
       }

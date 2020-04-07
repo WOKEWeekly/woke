@@ -44,10 +44,7 @@ class EditPage extends Component {
       url: '/updatePage',
       method: 'PUT',
       body: JSON.stringify({page: pageName, text: pageText}),
-      headers: {
-        'Authorization': `Bearer ${user.token}`,
-        'Content-Type': 'application/json'
-      },
+      headers: { 'Authorization': `Bearer ${user.token}` },
       onSuccess: () => {
         setAlert({ type: 'success', message: `You've successfully updated the '${title.substring(5)}'.` });
         location.href = backPath;

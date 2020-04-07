@@ -63,10 +63,7 @@ class TopicCrud extends Component {
       url: '/api/v1/topics',
       method: 'POST',
       body: JSON.stringify(topic),
-      headers: {
-        'Authorization': `Bearer ${this.props.user.token}`,
-        'Content-Type': 'application/json'
-      },
+      headers: {  'Authorization': `Bearer ${this.props.user.token}` },
       onSuccess: () => {
         setAlert({ type: 'success', message: `You've successfully added "${topic.headline}: ${topic.question}".` });
         location.href = '/topics';
@@ -84,10 +81,7 @@ class TopicCrud extends Component {
       url: `/api/v1/topics/${this.props.topic.id}`,
       method: 'PUT',
       body: JSON.stringify(topic),
-      headers: {
-        'Authorization': `Bearer ${this.props.user.token}`,
-        'Content-Type': 'application/json'
-      },
+      headers: {  'Authorization': `Bearer ${this.props.user.token}` },
       onSuccess: () => {
         setAlert({ type: 'success', message: `You've successfully edited the details of "${topic.headline}: ${topic.question}".` });
         location.href = '/topics';

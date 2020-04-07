@@ -43,10 +43,7 @@ class Review extends PureComponent {
     request({
       url: `/api/v1/reviews/${review.id}`,
       method: 'DELETE',
-      headers: {
-        'Authorization': `Bearer ${user.token}`,
-        'Content-Type': 'application/json'
-      },
+      headers: { 'Authorization': `Bearer ${user.token}` },
       onSuccess: () => {
         setAlert({ type: 'success', message: `You've successfully deleted ${review.referee}'s review.` });
         location.href = '/reviews';

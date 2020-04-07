@@ -31,10 +31,7 @@ class ReviewsList extends Component {
     request({
       url: '/api/v1/reviews',
       method: 'GET',
-      headers: {
-        'Authorization': process.env.AUTH_KEY,
-        'Content-Type': 'application/json',
-      },
+      headers: { 'Authorization': process.env.AUTH_KEY },
       onSuccess: (reviews) => {
         this.setState({reviews, isLoaded: true});
       }

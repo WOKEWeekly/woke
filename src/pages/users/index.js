@@ -40,12 +40,9 @@ class Users extends Component {
   /** Retrieve all registered users */
   getRegisteredUsers = () => {
     request({
-      url: '/getRegisteredUsers',
+      url: '/api/v1/users',
       method: 'GET',
-      headers: {
-        'Authorization': `Bearer ${this.props.user.token}`,
-        'Content-Type': 'application/json',
-      },
+      headers: { 'Authorization': `Bearer ${this.props.user.token}` },
       onSuccess: (result) => {
         this.setState({
           users: result,
@@ -147,10 +144,7 @@ class _User extends PureComponent {
       url: '/changeClearance',
       method: 'PUT',
       body: JSON.stringify({id, clearance}),
-      headers: {
-        'Authorization': `Bearer ${this.props.user.token}`,
-        'Content-Type': 'application/json',
-      },
+      headers: { 'Authorization': `Bearer ${this.props.user.token}` },
       onSuccess: () => {
         alert.success(`You've successfully changed ${firstname} ${lastname}'s clearance.`);
         this.closeEdit();
@@ -166,10 +160,7 @@ class _User extends PureComponent {
       url: '/deleteAccount',
       method: 'DELETE',
       body: JSON.stringify({id}),
-      headers: {
-        'Authorization': `Bearer ${this.props.user.token}`,
-        'Content-Type': 'application/json',
-      },
+      headers: { 'Authorization': `Bearer ${this.props.user.token}` },
       onSuccess: () => {
         alert.success(`You've deleted user: ${firstname} ${lastname}.`);
         this.closeDelete();

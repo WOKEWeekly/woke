@@ -37,10 +37,7 @@ export default class TopicVoter extends Component {
     request({
       url: '/api/v1/topics/random',
       method: 'GET',
-      headers: {
-        'Authorization': process.env.AUTH_KEY,
-        'Content-Type': 'application/json',
-      },
+      headers: { 'Authorization': process.env.AUTH_KEY },
       onSuccess: (topic) => {
         topic.loaded = true;
         this.setState({
@@ -62,10 +59,7 @@ export default class TopicVoter extends Component {
     request({
       url: `/api/v1/topics/${topic.id}/vote/${option}`,
       method: 'PUT',
-      headers: {
-        'Authorization': process.env.AUTH_KEY,
-        'Content-Type': 'application/json',
-      },
+      headers: { 'Authorization': process.env.AUTH_KEY },
       onSuccess: ({yes, no}) => {
         votes = yes + no;
         this.setState({

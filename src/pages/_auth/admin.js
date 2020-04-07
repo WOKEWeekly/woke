@@ -37,10 +37,7 @@ class Admin extends Component {
     request({
       url: '/generateTopicBankToken',
       method: 'PUT',
-      headers: {
-        'Authorization': `Bearer ${this.props.user.token}`,
-        'Content-Type': 'application/json'
-      },
+      headers: {  'Authorization': `Bearer ${this.props.user.token}` },
       onSuccess: (response) => {
         alert.success('Topic Bank token successfully regenerated.');
         this.setState({

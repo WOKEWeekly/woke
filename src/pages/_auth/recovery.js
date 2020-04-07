@@ -37,10 +37,7 @@ class Recovery extends Component {
       url: '/sendAccountRecoveryEmail',
       method: 'NOTIFY',
       body: JSON.stringify(this.state),
-      headers: {
-        'Authorization': process.env.AUTH_KEY,
-        'Content-Type': 'application/json'
-      },
+      headers: {  'Authorization': process.env.AUTH_KEY },
       onSuccess: () => this.setState({ submitted: true })
     });
   }

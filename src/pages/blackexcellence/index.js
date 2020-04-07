@@ -44,10 +44,7 @@ class BlackExcellence extends Component {
     request({
       url: '/api/v1/candidates',
       method: 'GET',
-      headers: {
-        'Authorization': process.env.AUTH_KEY,
-        'Content-Type': 'application/json',
-      },
+      headers: { 'Authorization': process.env.AUTH_KEY },
       onSuccess: (response) => {
         this.setState({
           candidates: response

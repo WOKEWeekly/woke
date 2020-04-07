@@ -55,10 +55,7 @@ class Account extends Component {
       url: '/deleteAccount',
       method: 'DELETE',
       body: JSON.stringify({id}),
-      headers: {
-        'Authorization': `Bearer ${this.props.user.token}`,
-        'Content-Type': 'application/json'
-      },
+      headers: { 'Authorization': `Bearer ${this.props.user.token}` },
       onSuccess: () => {
         setAlert({ type: 'success', message: `Your account has successfully been deleted.` });
         this.props.clearUser();
@@ -74,10 +71,7 @@ class Account extends Component {
       url: '/resendVerificationEmail',
       method: 'NOTIFY',
       body: JSON.stringify({id}),
-      headers: {
-        'Authorization': process.env.AUTH_KEY,
-        'Content-Type': 'application/json'
-      },
+      headers: { 'Authorization': process.env.AUTH_KEY },
       onSuccess: () => alert.success('Resend successful. Check your email for the verification link.')
     });
   }
@@ -166,10 +160,7 @@ class _NewUsernameModal extends Component {
       url: '/changeUsername',
       method: 'PUT',
       body: body,
-      headers: {
-        'Authorization': `Bearer ${this.props.user.token}`,
-        'Content-Type': 'application/json'
-      },
+      headers: {  'Authorization': `Bearer ${this.props.user.token}` },
       onSuccess: () => {
         this.props.changeUsername(username);
         setAlert({ type: 'success', message: `You've successfully changed your username.` });
@@ -241,10 +232,7 @@ class _NewPasswordModal extends Component {
       url:'/changePassword',
       method: 'PUT',
       body: body,
-      headers: {
-        'Authorization': `Bearer ${this.props.user.token}`,
-        'Content-Type': 'application/json'
-      },
+      headers: {  'Authorization': `Bearer ${this.props.user.token}` },
       onSuccess: () => {
         setAlert({ type: 'success', message: `You've successfully changed your password.` });
         location.reload();

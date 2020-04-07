@@ -69,8 +69,7 @@ class TopicBank extends Component {
       method: 'GET',
       headers: {
         'Admission': hasAccess,
-        'Authorization': `Bearer ${user.token}`,
-        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${user.token}`
       },
       onSuccess: (response) => {
         this.setState({
@@ -300,10 +299,7 @@ class _Topic extends PureComponent {
       url: `/api/v1/topics/${topic.id}`,
       method: 'DELETE',
       body: JSON.stringify(topic),
-      headers: {
-        'Authorization': `Bearer ${user.token}`,
-        'Content-Type': 'application/json'
-      },
+      headers: { 'Authorization': `Bearer ${user.token}` },
       onSuccess: () => {
         alert.success(`You've successfully deleted "${topic.headline}: ${topic.question}".`);
         this.props.getTopics(() => this.hideModal());

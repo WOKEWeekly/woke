@@ -45,10 +45,7 @@ class CandidatePage extends Component {
     request({
       url: `/api/v1/candidates/${candidate.id}`,
       method: 'DELETE',
-      headers: {
-        'Authorization': `Bearer ${user.token}`,
-        'Content-Type': 'application/json'
-      },
+      headers: { 'Authorization': `Bearer ${user.token}` },
       onSuccess: () => {
         setAlert({ type: 'success', message: `You've successfully deleted ${candidate.name}.` });
         location.href = '/blackexcellence';
