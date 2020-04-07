@@ -32,7 +32,7 @@ export default class RandomMember extends Component{
 
   getRandomMember = () => {
     request({
-      url: '/getRandomMember',
+      url: '/api/v1/members/random',
       method: 'GET',
       headers: {
         'Authorization': process.env.AUTH_KEY,

@@ -82,6 +82,35 @@ module.exports = {
     }
   },
 
+  TEST_TOPICS: {
+    CREATED: {
+      headline: "Coding",
+      question: "Is this a development environment?",
+      category: "Society & Stereotypes",
+      description: "This is an added topic via service tests.",
+      type: "Discussion",
+      polarity: true,
+      validated: false,
+      sensitivity: false,
+      option1: "Yes",
+      option2: "No",
+      user_id: 1
+    },
+    UPDATED: {
+      headline: "NHS",
+      question: "Does the government support them well?",
+      category: "Philosophy & Ethics",
+      description: "This is an updated topic via service tests.",
+      type: "Debate",
+      polarity: true,
+      validated: false,
+      sensitivity: true,
+      option1: "Yes",
+      option2: "No",
+      user_id: 1
+    }
+  },
+
   TEST_USERS: {
     NINE: {
       id: 1,

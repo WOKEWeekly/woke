@@ -165,14 +165,74 @@ const MEMBERS = {
 
     return { sql, values };
   },
+  
   /** The SQL statement to delete a member. */
   DELETE: "DELETE FROM members WHERE id = ?"
+};
+
+const TOPICS = {
+  /**
+   * Constructs the SQL statement to create a topic.
+   * @param {object} topic - The object containing the topic details.
+   * @returns {string} The constructed statement.
+   */
+  CREATE: (topic) => {
+    const sql = "INSERT INTO topics (headline, category, question, description, type, polarity, validated, sensitivity, option1, option2, user_id) VALUES ?";
+    const values = [[topic.headline, topic.category, topic.question, topic.description, topic.type, topic.polarity, topic.validated, topic.sensitivity, topic.option1, topic.option2, topic.userId]];
+    return { sql, values };
+  },
+  READ: {
+    /**
+     * Constructs the SQL statement to return information for all topics.
+     * @param {string} [fields] - The fields to be queried.
+     * @returns {string} The constructed statement.
+     */
+    ALL: (fields = '*') => {
+      return `SELECT ${fields} FROM topics`;
+    },
+
+    /**
+     * Constructs the SQL statement to return information for a single topic.
+     * @param {string} [fields] - The fields to be queried.
+     * @returns {string} The constructed statement.
+     */
+    SINGLE: (fields = '*') => {
+      const sql = `SELECT ${fields} FROM topics WHERE ID = ?`;
+      return sql;
+    },
+
+    /** The SQL statement to return a random topic. */
+    RANDOM: "SELECT id, headline, category, question, option1, option2, yes, no FROM topics WHERE polarity = 1 AND category != 'Christian' AND category != 'Mental Health' ORDER BY RAND() LIMIT 1;",
+  },
+
+  /**
+   * Constructs the SQL statement to update a topic.
+   * @param {number} id - The identifier of the topic.
+   * @param {object} topic - The object containing the topic details.
+   * @param {boolean} imageHasChanged - Indicates whether the image has changed in this request.
+   * @returns {string} The constructed statement.
+   */
+  UPDATE: {
+    DETAILS: (id, topic) => {
+      const sql = `UPDATE topics SET headline = ?, category = ?, question = ?, description = ?, type = ?, polarity = ?, validated = ?, sensitivity = ?, option1 = ?, option2 = ? WHERE id = ?`;
+      const values = [topic.headline, topic.category, topic.question, topic.description, topic.type, topic.polarity, topic.validated, topic.sensitivity, topic.option1, topic.option2, id];
+      return { sql, values };
+    },
+    VOTE: (id, option) => {
+      const sql = `UPDATE topics SET ${option}=${option}+1 WHERE id = ${id}`;
+      return sql;
+    }
+  },
+
+  /** The SQL statement to delete a member. */
+  DELETE: "DELETE FROM topics WHERE id = ?"
 }
 
 module.exports = {
   SESSIONS,
   CANDIDATES,
-  MEMBERS
+  MEMBERS,
+  TOPICS
 }
 
 /**

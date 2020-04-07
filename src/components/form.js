@@ -182,7 +182,11 @@ export class SearchBar extends Component {
 /** For inline long text inputs */
 export class ShortTextArea extends Component {
   render(){
-    return <TextArea minRows={1} {...this.props} />
+    return (
+    <zForm.ShortTextArea
+      {...this.props}
+      className={css.textarea} />
+    );
   }
 }
 

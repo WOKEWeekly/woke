@@ -60,7 +60,7 @@ class TopicCrud extends Component {
     topic.userId = this.props.user.id;
 
     request({
-      url: '/addTopic',
+      url: '/api/v1/topics',
       method: 'POST',
       body: JSON.stringify(topic),
       headers: {
@@ -79,10 +79,9 @@ class TopicCrud extends Component {
     if (!isValidTopic(this.state)) return;
 
     const topic = this.buildRequest();
-    topic.id = this.props.topic.id;
 
     request({
-      url: '/updateTopic',
+      url: `/api/v1/topics/${this.props.topic.id}`,
       method: 'PUT',
       body: JSON.stringify(topic),
       headers: {

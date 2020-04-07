@@ -33,7 +33,7 @@ class _RandomCandidate extends Component {
 
   getRandomCandidate = () => {
     request({
-      url: '/getRandomCandidate',
+      url: '/api/v1/candidates/random',
       method: 'GET',
       headers: {
         'Authorization': process.env.AUTH_KEY,

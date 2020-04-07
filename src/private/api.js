@@ -338,53 +338,85 @@ module.exports = function(app, conn){
     });
   });
 
+  /** Retrieve all topics */
+  app.get('/api/v1/topics', verifyToken(CLEARANCES.ACTIONS.VIEW_TOPICS), function(req, res){
+    conn.query(SQL.TOPICS.READ.ALL(), function (err, topics) {
+      respondToClient(res, err, 200, topics)
+    });
+  });
+
+  /** Retrieve individual topic */
+  app.get('/api/v1/topics/:id([0-9]+)', validateReq, function(req, res){
+    const id = req.params.id;
+    conn.query(SQL.TOPICS.READ.SINGLE(), id, function (err, [topic]) {
+      if (!topic) err = ERROR.INVALID_TOPIC_ID(id);
+      respondToClient(res, err, 200, topic);
+    });
+  });
+
+  /** Retrieve a random topic */
+  app.get('/api/v1/topics/random', validateReq, function(req, res){
+    conn.query(SQL.TOPICS.READ.RANDOM, function (err, [topic]) {
+      respondToClient(res, err, 200, topic);
+    });
+  });
+
+  /** Add new topic to database */
+  app.post('/api/v1/topics', verifyToken(CLEARANCES.ACTIONS.CRUD_TOPICS), function(req, res){
+    const topic = req.body;
+    const { sql, values } = SQL.TOPICS.CREATE(topic);
+    conn.query(sql, [values], function (err, result) {
+      respondToClient(res, err, 201, { id: result.insertId});
+    });
+  });
+
+  /** Update topic in database */
+  app.put('/api/v1/topics/:id', verifyToken(CLEARANCES.ACTIONS.CRUD_TOPICS), function(req, res){
+    const id = req.params.id;
+    const topic = req.body;
+
+    const { sql, values } = SQL.TOPICS.UPDATE.DETAILS(id, topic);
+    conn.query(sql, values, function (err, result) {
+      if (result.affectedRows === 0) err = ERROR.INVALID_TOPIC_ID(id);
+      respondToClient(res, err, 200);
+    });
+  });
+
+  /** Increment the vote of a topic */
+  app.put('/api/v1/topics/:id/vote/:option(yes|no)', validateReq, function(req, res){
+    const { id, option } = req.params;
+    async.waterfall([
+      function(callback){ // Increment vote
+        conn.query(SQL.TOPICS.UPDATE.VOTE(id, option), function (err, result) {
+          if (result.affectedRows === 0) err = ERROR.INVALID_TOPIC_ID(id);
+          err ? callback(err) : callback(null);
+        });
+      },
+      function(callback){ // Retrieve new topic vote counts
+        conn.query(SQL.TOPICS.READ.SINGLE('yes, no'), id, function (err, [topic]) {
+          err ? callback(err) : callback(null, topic);
+        });
+      },
+    ], function(err, votes){
+      respondToClient(res, err, 200, { ...votes });
+    });
+  });
+
+  /** Delete an existing topic from database */
+  app.delete('/api/v1/topics/:id', verifyToken(CLEARANCES.ACTIONS.CRUD_TOPICS), function(req, res){
+    const id = req.params.id;
+    conn.query(SQL.TOPICS.DELETE, id, function (err, result) {
+      // emails.sendTopicDeletionEmail(topic);
+      if (result.affectedRows === 0) err = ERROR.INVALID_TOPIC_ID(id);
+      respondToClient(res, err, 204);
+    });
+  });
+
   /*******************************************************
    * 
    * api redesign checkpoint
    * 
    *******************************************************/
-
-  /** Retrieve all topics */
-  app.get('/getTopics', verifyToken(CLEARANCES.ACTIONS.VIEW_TOPICS), function(req, res){
-    conn.query("SELECT * FROM topics", function (err, result) {
-      respondToClient(res, err, result)
-    });
-  });
-
-  /** Add new topic to database */
-  app.post('/addTopic', verifyToken(CLEARANCES.ACTIONS.CRUD_TOPICS), function(req, res){
-    const topic = req.body;
-    const sql = "INSERT INTO topics (headline, category, question, description, type, polarity, validated, sensitivity, option1, option2, user_id) VALUES ?";
-    const values = [[topic.headline, topic.category, topic.question, topic.description, topic.type,
-      topic.polarity, topic.validated, topic.sensitivity, topic.option1, topic.option2, topic.userId]];
-    
-    conn.query(sql, [values], function (err, result) {
-      respondToClient(res, err, result.insertId);
-    });
-  });
-
-  /** Update topic in database */
-  app.put('/updateTopic', verifyToken(CLEARANCES.ACTIONS.CRUD_TOPICS), function(req, res){
-    const topic = req.body;
-    const sql = `UPDATE topics SET headline = ?, category = ?, question = ?, description = ?, type = ?, polarity = ?, validated = ?, sensitivity = ?, option1 = ?, option2 = ? WHERE id = ?`;
-    const values = [topic.headline, topic.category, topic.question, topic.description, topic.type,
-      topic.polarity, topic.validated, topic.sensitivity, topic.option1, topic.option2, topic.id];
-    
-    conn.query(sql, values, function (err) {
-      respondToClient(res, err);
-    });
-  });
-
-  /** Delete an existing topic from database */
-  app.delete('/deleteTopic', verifyToken(CLEARANCES.ACTIONS.CRUD_TOPICS), function(req, res){
-    const topic = req.body;
-    const sql = "DELETE FROM topics WHERE id = ?";
-    
-    conn.query(sql, topic.id, function (err) {
-      // emails.sendTopicDeletionEmail(topic);
-      respondToClient(res, err);
-    });
-  });
 
   /** Retrieve all reviews */
   app.get('/getReviews', validateReq, function(req, res){
@@ -482,25 +514,6 @@ module.exports = function(app, conn){
   /****************************
    * HOMEPAGE
    ***************************/
-
-  /** Get random Topic */
-  app.get('/getRandomTopic', validateReq, function(req, res){
-    const sql = `SELECT id, headline, category, question, option1, option2, yes, no FROM topics
-      WHERE polarity = 1 AND category != 'Christian' AND category != 'Mental Health'
-      ORDER BY RAND() LIMIT 1;`;
-    conn.query(sql, function (err, result) {
-      respondToClient(res, err, result[0]);
-    });
-  });
-
-  /** Increment the vote */
-  app.put('/incrementVote', validateReq, function(req, res){
-    const topic = req.body;
-    const sql = `UPDATE topics SET ${topic.vote}=${topic.vote}+1 WHERE id = ${topic.id};`;
-    conn.query(sql, function (err) {
-      respondToClient(res, err);
-    });
-  });
 
   /** Update information pages */
   app.put('/updatePage', verifyToken(CLEARANCES.ACTIONS.EDIT_INFO), function(req, res){
