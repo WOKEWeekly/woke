@@ -665,6 +665,769 @@
 				}
 			],
 			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Members",
+			"item": [
+				{
+					"name": "Get Members",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "ccf00a33-bb9d-46fe-b356-541166dd19db",
+								"exec": [
+									"pm.test(\"Response is OK.\", () => {",
+									"    pm.expect(pm.response.code).to.equal(200);",
+									"});",
+									"",
+									"pm.test(\"Response is an array.\", () => {",
+									"    pm.expect(pm.response.json()).to.be.an('array');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "admission",
+								"value": "true",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/api/v1/members",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"members"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Member Names Only",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "ccf00a33-bb9d-46fe-b356-541166dd19db",
+								"exec": [
+									"pm.test(\"Response is OK.\", () => {",
+									"    pm.expect(pm.response.code).to.equal(200);",
+									"});",
+									"",
+									"pm.test(\"Response is an array.\", () => {",
+									"    pm.expect(pm.response.json()).to.be.an('array');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "admission",
+								"value": "true",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/api/v1/members/names",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"members",
+								"names"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Executives Only",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "ccf00a33-bb9d-46fe-b356-541166dd19db",
+								"exec": [
+									"pm.test(\"Response is OK.\", () => {",
+									"    pm.expect(pm.response.code).to.equal(200);",
+									"});",
+									"",
+									"pm.test(\"Response is an array.\", () => {",
+									"    pm.expect(pm.response.json()).to.be.an('array');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "admission",
+								"type": "text",
+								"value": "true"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/api/v1/members/executives",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"members",
+								"executives"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Single Member",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "ccf00a33-bb9d-46fe-b356-541166dd19db",
+								"exec": [
+									"pm.test(\"Response is OK.\", () => {",
+									"    pm.expect(pm.response.code).to.equal(200);",
+									"});",
+									"",
+									"pm.test(\"Response is an object.\", () => {",
+									"    pm.expect(pm.response.json()).to.be.an('object');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "admission",
+								"type": "text",
+								"value": "true"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/api/v1/members/{{MEMBER_ID}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"members",
+								"{{MEMBER_ID}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Random Member",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "ccf00a33-bb9d-46fe-b356-541166dd19db",
+								"exec": [
+									"pm.test(\"Response is OK.\", () => {",
+									"    pm.expect(pm.response.code).to.equal(200);",
+									"});",
+									"",
+									"pm.test(\"Response is contains expected keys.\", () => {",
+									"    pm.expect(pm.response.json()).to.be.an('object');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "admission",
+								"type": "text",
+								"value": "true"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/api/v1/members/random",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"members",
+								"random"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add Member",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "6b99fd75-abf4-4f39-b0c1-b2143a6630f8",
+								"exec": [
+									"var response = pm.response.json();",
+									"pm.globals.set(\"MEMBER_ID\", response.id);",
+									"",
+									"pm.test(\"Member is created.\", () => {",
+									"    pm.expect(pm.response.code).to.equal(201);",
+									"});",
+									"",
+									"pm.test(\"Response contains ID.\", () => {",
+									"    pm.expect(pm.response.json()).to.have.property('id');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "admission",
+								"value": "true",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"firstname\": \"Siobhan\",\n    \"lastname\": \"Trunchnut\",\n    \"birthday\": \"1996-12-20\",\n    \"ethnicity\": \"[\\\"Tanzania\\\",\\\"Poland\\\"]\",\n    \"sex\": \"F\",\n    \"level\": \"Manager\",\n    \"role\": \"Social Media Manager\",\n    \"image\": {{image1}},\n    \"socials\": \"{\\\"twitter\\\":\\\"sallyw\\\",\\\"instagram\\\":\\\"sallyw\\\"}\",\n    \"description\": \"An added member through Postman.\",\n    \"verified\": 1,\n    \"slackID\": null\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/v1/members",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"members"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Member",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "6b99fd75-abf4-4f39-b0c1-b2143a6630f8",
+								"exec": [
+									"pm.test(\"Member is updated.\", () => {",
+									"    pm.expect(pm.response.code).to.equal(200);",
+									"});",
+									"",
+									"pm.test(\"Response contains slug.\", () => {",
+									"    pm.expect(pm.response.json()).to.have.property('slug');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "admission",
+								"type": "text",
+								"value": "true"
+							},
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"member\": {\n\t\t\"firstname\": \"Buffy\",\n\t    \"lastname\": \"Scampernickle\",\n\t    \"birthday\": \"1996-12-20\",\n\t    \"ethnicity\": \"[\\\"Zambia\\\",\\\"Italy\\\"]\",\n\t    \"sex\": \"F\",\n\t    \"level\": \"Coordinator\",\n\t    \"role\": \"Researcher\",\n\t    \"image\": {{image2}},\n\t    \"socials\": \"{\\\"twitter\\\":\\\"sallyw\\\"}\",\n\t    \"description\": \"An updated member through Postman.\",\n\t    \"verified\": 1,\n\t    \"slackID\": null\n\t},\n\t\"changed\": true\n    \n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/v1/members/{{MEMBER_ID}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"members",
+								"{{MEMBER_ID}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Member",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "d4b7749b-622e-4440-83f9-5dea0571aea0",
+								"exec": [
+									"pm.test(\"Member is deleted.\", () => {",
+									"    pm.response.to.have.status(204);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "admission",
+								"type": "text",
+								"value": "true"
+							},
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/api/v1/members/{{MEMBER_ID}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"members",
+								"{{MEMBER_ID}}"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Topics",
+			"item": [
+				{
+					"name": "Get Topics",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "ccf00a33-bb9d-46fe-b356-541166dd19db",
+								"exec": [
+									"pm.test(\"Response is OK.\", () => {",
+									"    pm.expect(pm.response.code).to.equal(200);",
+									"});",
+									"",
+									"pm.test(\"Response is an array.\", () => {",
+									"    pm.expect(pm.response.json()).to.be.an('array');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "admission",
+								"type": "text",
+								"value": "true"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/api/v1/topics",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"topics"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Single Topic",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "ccf00a33-bb9d-46fe-b356-541166dd19db",
+								"exec": [
+									"pm.test(\"Response is OK.\", () => {",
+									"    pm.expect(pm.response.code).to.equal(200);",
+									"});",
+									"",
+									"pm.test(\"Response is an object.\", () => {",
+									"    pm.expect(pm.response.json()).to.be.an('object');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "admission",
+								"type": "text",
+								"value": "true"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/api/v1/topics/{{TOPIC_ID}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"topics",
+								"{{TOPIC_ID}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Random Topic",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "ccf00a33-bb9d-46fe-b356-541166dd19db",
+								"exec": [
+									"pm.test(\"Response is OK.\", () => {",
+									"    pm.expect(pm.response.code).to.equal(200);",
+									"});",
+									"",
+									"pm.test(\"Response is contains expected keys.\", () => {",
+									"    pm.expect(pm.response.json()).to.be.an('object');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "admission",
+								"type": "text",
+								"value": "true"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/api/v1/topics/random",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"topics",
+								"random"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add Topic",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "6b99fd75-abf4-4f39-b0c1-b2143a6630f8",
+								"exec": [
+									"var response = pm.response.json();",
+									"pm.globals.set(\"TOPIC_ID\", response.id);",
+									"",
+									"pm.test(\"Topic is created.\", () => {",
+									"    pm.expect(pm.response.code).to.equal(201);",
+									"});",
+									"",
+									"pm.test(\"Response contains ID.\", () => {",
+									"    pm.expect(pm.response.json()).to.have.property('id');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "admission",
+								"value": "true",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"headline\": \"Nihilism\",\n    \"question\": \"Is life meaningless?\",\n    \"category\": \"Philosophy & Ethics\",\n    \"description\": \"This is an added topic through Postman.\",\n    \"type\": \"Debate\",\n    \"polarity\": true,\n    \"validated\": false,\n    \"sensitivity\": true,\n    \"option1\": \"Yes, it is.\",\n    \"option2\": \"No, it isn't.\",\n    \"user_id\": 1\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/v1/topics",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"topics"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Topic",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "6b99fd75-abf4-4f39-b0c1-b2143a6630f8",
+								"exec": [
+									"pm.test(\"Topic is updated.\", () => {",
+									"    pm.expect(pm.response.code).to.equal(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "admission",
+								"type": "text",
+								"value": "true"
+							},
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"headline\": \"The Earth\",\n    \"question\": \"Are we finished?\",\n    \"category\": \"Family & Relationships\",\n    \"description\": \"This is an updated topic through Postman.\",\n    \"type\": \"Discussion\",\n    \"polarity\": false,\n    \"validated\": true,\n    \"sensitivity\": false,\n    \"option1\": \"We might be.\",\n    \"option2\": \"We're most definitely not.\",\n    \"user_id\": 1\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/v1/topics/{{TOPIC_ID}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"topics",
+								"{{TOPIC_ID}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Vote Topic",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "6b99fd75-abf4-4f39-b0c1-b2143a6630f8",
+								"exec": [
+									"pm.test(\"Topic vote incremented.\", () => {",
+									"    pm.expect(pm.response.code).to.equal(200);",
+									"});",
+									"",
+									"pm.test(\"Response contains votes.\", () => {",
+									"    pm.expect(pm.response.json()).to.have.property('yes');",
+									"    pm.expect(pm.response.json()).to.have.property('no');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "admission",
+								"type": "text",
+								"value": "true"
+							},
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/api/v1/topics/{{TOPIC_ID}}/vote/no",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"topics",
+								"{{TOPIC_ID}}",
+								"vote",
+								"no"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Topic",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "d4b7749b-622e-4440-83f9-5dea0571aea0",
+								"exec": [
+									"pm.test(\"Topic is deleted.\", () => {",
+									"    pm.response.to.have.status(204);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "admission",
+								"value": "true",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/api/v1/topics/{{TOPIC_ID}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"topics",
+								"{{TOPIC_ID}}"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "a98fd316-944f-4b7d-a178-62dacb728319",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "0cc2a17d-0256-47ea-9af7-a271cbf88d77",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			],
+			"protocolProfileBehavior": {}
 		}
 	],
 	"protocolProfileBehavior": {}
