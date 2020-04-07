@@ -44,7 +44,8 @@ module.exports = {
     }
 
     // Discontinue if image has not changed
-    if (!imageHasChanged) return next(null, entity);
+    const noImageUpload = !imageHasChanged || !entity.image.length;
+    if (noImageUpload) return next(null, entity);
 
     // Upload to cloudinary
     const env = process.env.LOCAL_ENV === 'true' ? 'dev' : 'prod';

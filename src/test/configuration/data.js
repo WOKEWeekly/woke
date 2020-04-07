@@ -65,6 +65,23 @@ module.exports = {
     }
   },
 
+  TEST_REVIEWS: {
+    CREATED: {
+      referee: "Tom McDowell",
+      position: "Founder of McDowell Ministries",
+      rating: 2,
+      description: "This is an added review via service tests.",
+      image: TEST_IMAGE,
+    },
+    UPDATED: {
+      referee: "Nonso Chukwuemeka",
+      position: "Director of Emeka Tanks",
+      rating: 5,
+      description: "This is an updated review via service tests.",
+      image: TEST_IMAGE,
+    }
+  },
+
   TEST_SESSIONS: {
     CREATED: {
       title: 'Manchester 2020',

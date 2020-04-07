@@ -11,7 +11,8 @@ module.exports = {
    */
   respondToClient: (res, err, expectedStatus, json) => {
     if (err && typeof err === 'object'){ // If there is an error...
-      console.error(err.toString());
+      const log = process.argv.includes('verbose') ? err : err.toString();
+      console.error(log);
       return res.status(err.status || 500).json({message: retrieveErrorMessage(err)});
     }
 

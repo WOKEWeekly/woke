@@ -21,9 +21,8 @@ export default class ReviewsPreview extends Component {
   }
   
   getReviews = () => {
-    const { limit } = this.state;
     request({
-      url: `/getReviews?limit=${limit}`,
+      url: `/api/v1/reviews/featured`,
       method: 'GET',
       headers: {
         'Authorization': process.env.AUTH_KEY,

@@ -19,6 +19,11 @@ module.exports = {
     err.status = 404;
     return err;
   },
+  INVALID_REVIEW_ID: (id) => {
+    const err = new Error(`There exists no review with ID '${id}'.`);
+    err.status = 404;
+    return err;
+  },
   DUPLICATE_CANDIDATE_ID: (id) => {
     const err = new Error(`A candidate with ID '${id}' already exists in the database.`);
     err.status = 409;

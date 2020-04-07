@@ -412,85 +412,106 @@ module.exports = function(app, conn){
     });
   });
 
-  /*******************************************************
-   * 
-   * api redesign checkpoint
-   * 
-   *******************************************************/
-
   /** Retrieve all reviews */
-  app.get('/getReviews', validateReq, function(req, res){
-    const limit = req.query.limit;
-    const query = "SELECT * FROM reviews";
-    const sql = limit ? `${query} WHERE rating = 5 ORDER BY RAND() LIMIT ${limit}` : query;
+  app.get('/api/v1/reviews', validateReq, function(req, res){
+    const sql = SQL.REVIEWS.READ.ALL();
+    conn.query(sql, function (err, reviews) {
+      respondToClient(res, err, 200, reviews);
+    });
+  });
 
-    conn.query(sql, function (err, result) {
-      respondToClient(res, err, result);
+  /** Retrieve individual review */
+  app.get('/api/v1/reviews/:id([0-9]+)', validateReq, function(req, res){
+    const id = req.params.id;
+    conn.query(SQL.REVIEWS.READ.SINGLE(), id, function (err, [review]) {
+      if (!review) err = ERROR.INVALID_REVIEW_ID(id);
+      respondToClient(res, err, 200, review);
+    });
+  });
+
+  /** Retrieve 3 5-star reviews with images */
+  app.get('/api/v1/reviews/featured', validateReq, function(req, res){
+    conn.query(SQL.REVIEWS.READ.FEATURED, function (err, reviews) {
+      respondToClient(res, err, 200, reviews);
     });
   });
 
   /** Add new review to database */
-  app.post('/addReview', verifyToken(CLEARANCES.ACTIONS.CRUD_REVIEWS), function(req, res){
-    let {review, changed} = req.body;
+  app.post('/api/v1/reviews', verifyToken(CLEARANCES.ACTIONS.CRUD_REVIEWS), function(req, res){
+    const review = req.body;
+
     async.waterfall([
-      function(callback){ // Upload file to directory
-        filer.uploadImage(review, 'reviews', changed, callback);
+      function(callback){ // Upload image to cloud
+        filer.uploadImage(review, DIRECTORY.REVIEWS, true, callback);
       },
-      function(entity, callback){ // Add review to database
-        review = entity;
-        const sql = "INSERT INTO reviews (referee, position, rating, image, description) VALUES ?";
-        const values = [[review.referee, review.position, review.rating, review.image, review.description]];
-        
+      function(review, callback){ // Add review to database
+        const { sql, values } = SQL.REVIEWS.CREATE(review);
         conn.query(sql, [values], function (err, result) {
           err ? callback(err) : callback(null, result.insertId);
         });
       }
     ], function(err, id){
-      respondToClient(res, err, {id, ...review});
+      respondToClient(res, err, 201, { id });
     });
   });
 
   /** Update details of existing review in database */
-  app.put('/updateReview', verifyToken(CLEARANCES.ACTIONS.CRUD_REVIEWS), function(req, res){
-    let { review1, review2, changed } = req.body;
-    async.waterfall([
-      function(callback){ // Delete original image from directory
-        filer.destroyImage(review1.image, changed, callback);
-      },
-      function(callback){ // Upload new image to directory
-        filer.uploadImage(review2, 'reviews', changed, callback);
-      },
-      function(entity, callback){ // Update review in database
-        review2 = entity;
-        const sql = "UPDATE reviews SET referee = ?, position = ?, rating = ?, image = ?, description = ? WHERE id = ?";
-        const values = [review2.referee, review2.position, review2.rating, review2.image, review2.description, review1.id];
+  app.put('/api/v1/reviews/:id', verifyToken(CLEARANCES.ACTIONS.CRUD_REVIEWS), function(req, res){
+    const id = req.params.id;
+    const { review, changed } = req.body;
 
+    async.waterfall([
+      function(callback){ // Delete old image if changed.
+        conn.query(SQL.REVIEWS.READ.SINGLE('image'), id, function (err, [review]) {
+          if (err) return callback(err);
+          if (!review) return callback(ERROR.INVALID_REVIEW_ID(id));
+
+          if (!changed) return callback(null);
+          filer.destroyImage(review.image, callback);
+        });
+      },
+      function(callback){ // Equally, upload new image if changed
+        filer.uploadImage(review, DIRECTORY.REVIEWS, changed, callback);
+      },
+      function(review, callback){ // Update review in database
+        const { sql, values } = SQL.REVIEWS.UPDATE(id, review, changed);
         conn.query(sql, values, function (err) {
           err ? callback(err) : callback(null);
         });
       }
     ], function(err){
-      respondToClient(res, err, { id: review1.id, ...review2 });
+      respondToClient(res, err, 200);
     });
   });
 
   /** Delete an existing review from database */
-  app.delete('/deleteReview', verifyToken(CLEARANCES.ACTIONS.CRUD_REVIEWS), function(req, res){
-    const review = req.body;
+  app.delete('/api/v1/reviews/:id', verifyToken(CLEARANCES.ACTIONS.CRUD_REVIEWS), function(req, res){
+    const id = req.params.id;
 
     async.waterfall([
-      function(callback){ // Delete image from directory
-        filer.destroyImage(review.image, true, callback);
+      function(callback){ // Delete image from cloud
+        conn.query(SQL.REVIEWS.READ.SINGLE('image'), id, function (err, [review]) {
+          if (err) return callback(err);
+          if (!review) return callback(ERROR.INVALID_REVIEW_ID(id));
+          
+          filer.destroyImage(review.image, callback);
+        });
       },
       function(callback){ // Delete review from database
-        conn.query("DELETE FROM reviews WHERE id = ?", review.id, function (err) {
+        conn.query(SQL.REVIEWS.DELETE, id, function (err) {
           err ? callback(err) : callback(null);
         });
       }
     ], function(err){
-      respondToClient(res, err);
+      respondToClient(res, err, 204);
     });
   });
+
+  /*******************************************************
+   * 
+   * api redesign checkpoint
+   * 
+   *******************************************************/
 
   /** Retrieve all users */
   app.get('/getRegisteredUsers', verifyToken(CLEARANCES.ACTIONS.VIEW_USERS), function(req, res){
@@ -510,10 +531,6 @@ module.exports = function(app, conn){
       respondToClient(res, err);
     });
   });
-
-  /****************************
-   * HOMEPAGE
-   ***************************/
 
   /** Update information pages */
   app.put('/updatePage', verifyToken(CLEARANCES.ACTIONS.EDIT_INFO), function(req, res){

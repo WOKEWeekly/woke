@@ -29,7 +29,7 @@ class ReviewsList extends Component {
   
   getReviews = () => {
     request({
-      url: '/getReviews',
+      url: '/api/v1/reviews',
       method: 'GET',
       headers: {
         'Authorization': process.env.AUTH_KEY,

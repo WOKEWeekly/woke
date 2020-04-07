@@ -226,13 +226,72 @@ const TOPICS = {
 
   /** The SQL statement to delete a member. */
   DELETE: "DELETE FROM topics WHERE id = ?"
+};
+
+const REVIEWS = {
+  /**
+   * Constructs the SQL statement to create a review.
+   * @param {object} review - The object containing the review details.
+   * @returns {string} The constructed statement.
+   */
+  CREATE: (review) => {
+    const sql = "INSERT INTO reviews (referee, position, rating, image, description) VALUES ?";
+    const values = [[review.referee, review.position, review.rating, review.image, review.description]];
+    return { sql, values };
+  },
+  READ: {
+    /**
+     * Constructs the SQL statement to return information for all reviews.
+     * @param {string} [fields] - The fields to be queried.
+     * @returns {string} The constructed statement.
+     */
+    ALL: (fields = '*') => {
+      return `SELECT ${fields} FROM reviews`;
+    },
+
+    /** The SQL statement to return three 5-star reviews with images. */
+    FEATURED: "SELECT * FROM reviews WHERE (rating = 5 AND CHAR_LENGTH(image) > 0) ORDER BY RAND() LIMIT 3",
+
+    /**
+     * Constructs the SQL statement to return information for a single review.
+     * @param {string} [fields] - The fields to be queried.
+     * @returns {string} The constructed statement.
+     */
+    SINGLE: (fields = '*') => {
+      const sql = `SELECT ${fields} FROM reviews WHERE ID = ?`;
+      return sql;
+    },
+  },
+
+  /**
+   * Constructs the SQL statement to update a review.
+   * @param {number} id - The identifier of the review.
+   * @param {object} review - The object containing the review details.
+   * @param {boolean} imageHasChanged - Indicates whether the image has changed in this request.
+   * @returns {string} The constructed statement.
+   */
+  UPDATE: (id, review, imageHasChanged) => {
+    let sql = "UPDATE reviews SET referee = ?, position = ?, rating = ?, image = ?, description = ? WHERE id = ?";
+    let values = [review.referee, review.position, review.rating, review.image, review.description, id];
+
+    if (imageHasChanged){
+      sql = appendFieldToUpdateQuery('image', sql);
+      values = insertFieldInValues(review.image, values);
+    }
+
+    return { sql, values };
+  },
+
+  /** The SQL statement to delete a member. */
+  DELETE: "DELETE FROM reviews WHERE id = ?"
 }
 
 module.exports = {
   SESSIONS,
   CANDIDATES,
   MEMBERS,
-  TOPICS
+  TOPICS,
+  REVIEWS
 }
 
 /**
