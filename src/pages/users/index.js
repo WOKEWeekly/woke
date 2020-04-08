@@ -141,9 +141,8 @@ class _User extends PureComponent {
   changeClearance = () => {
     const { id, firstname, lastname, clearance} = this.state;
     request({
-      url: '/changeClearance',
+      url: `/api/v1/users/${id}/clearance/${clearance}`,
       method: 'PUT',
-      body: JSON.stringify({id, clearance}),
       headers: { 'Authorization': `Bearer ${this.props.user.token}` },
       onSuccess: () => {
         alert.success(`You've successfully changed ${firstname} ${lastname}'s clearance.`);

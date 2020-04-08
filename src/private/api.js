@@ -507,30 +507,39 @@ module.exports = function(app, conn){
     });
   });
 
+  /** Retrieve all users */
+  app.get('/api/v1/users', verifyToken(CLEARANCES.ACTIONS.VIEW_USERS), function(req, res){
+    const sql = SQL.USERS.READ.ALL("id, firstname, lastname, clearance, username, email, create_time, last_active");
+    conn.query(sql, function (err, users) {
+      respondToClient(res, err, 200, users);
+    });
+  });
+
+  /** Retrieve individual user */
+  app.get('/api/v1/users/:id([0-9]+)', validateReq, function(req, res){
+    const id = req.params.id;
+    const sql = SQL.USERS.READ.SINGLE("id, firstname, lastname, clearance, username, email, create_time, last_active");
+
+    conn.query(sql, id, function (err, [user]) {
+      if (!user) err = ERROR.INVALID_USER_ID(id);
+      respondToClient(res, err, 200, user);
+    });
+  });
+
+  /** Change user's clearance */
+  app.put('/api/v1/users/:id/clearance/:value', verifyToken(CLEARANCES.ACTIONS.CRUD_USERS), function(req, res){
+    const { id, value } = req.params.id;
+    const { sql, values } = SQL.USERS.UPDATE.CLEARANCE(id, value)
+    conn.query(sql, values, function(err){	
+      respondToClient(res, err, 200);
+    });
+  });
+
   /*******************************************************
    * 
    * api redesign checkpoint
    * 
    *******************************************************/
-
-  /** Retrieve all users */
-  app.get('/getRegisteredUsers', verifyToken(CLEARANCES.ACTIONS.VIEW_USERS), function(req, res){
-    const sql = "SELECT id, firstname, lastname, clearance, username, email, create_time, last_active FROM user";
-    conn.query(sql, function (err, result) {
-      respondToClient(res, err, result);
-    });
-  });
-  
-  /** Change user's clearance */
-  app.put('/changeClearance', verifyToken(CLEARANCES.ACTIONS.CRUD_USERS), function(req, res){
-    const {id, clearance} = req.body;
-    const sql = "UPDATE user SET clearance = ? WHERE id = ?";
-    const values = [clearance, id];
-    
-    conn.query(sql, values, function(err){	
-      respondToClient(res, err);
-    });
-  });
 
   /** Update information pages */
   app.put('/updatePage', verifyToken(CLEARANCES.ACTIONS.EDIT_INFO), function(req, res){

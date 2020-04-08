@@ -284,6 +284,42 @@ const REVIEWS = {
 
   /** The SQL statement to delete a member. */
   DELETE: "DELETE FROM reviews WHERE id = ?"
+};
+
+const USERS = {
+  READ: {
+    /**
+     * Constructs the SQL statement to return information for all users.
+     * @param {string} [fields] - The fields to be queried.
+     * @returns {string} The constructed statement.
+     */
+    ALL: (fields = '*') => {
+      return `SELECT ${fields} FROM users`;
+    },
+
+    /**
+     * Constructs the SQL statement to return information for a single review.
+     * @param {string} [fields] - The fields to be queried.
+     * @returns {string} The constructed statement.
+     */
+    SINGLE: (fields = '*') => {
+      const sql = `SELECT ${fields} FROM users WHERE ID = ?`;
+      return sql;
+    },
+  },
+  UPDATE: {
+    /**
+     * Constructs the SQL statement to update a user.
+     * @param {number} id - The identifier of the user.
+     * @param {number} clearance - The object containing the user details.
+     * @returns {string} The constructed statement.
+     */
+    CLEARANCE: (id, clearance) => {
+      const sql = "UPDATE users SET clearance = ? WHERE id = ?";
+      const values = [clearance, id];
+      return { sql, values };
+    }
+  }
 }
 
 module.exports = {
@@ -291,7 +327,8 @@ module.exports = {
   CANDIDATES,
   MEMBERS,
   TOPICS,
-  REVIEWS
+  REVIEWS,
+  USERS
 }
 
 /**
