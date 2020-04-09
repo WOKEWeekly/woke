@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "f68d0091-7cc2-4087-891c-57de027e249c",
+		"_postman_id": "d0794391-b80a-4f9d-8a29-b464e8c0056d",
 		"name": "#WOKEWeekly Website",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -140,7 +140,7 @@
 					"response": []
 				},
 				{
-					"name": "Add Session",
+					"name": "Add New Session",
 					"event": [
 						{
 							"listen": "test",
@@ -507,7 +507,7 @@
 					"response": []
 				},
 				{
-					"name": "Add Candidate",
+					"name": "Add New Candidate",
 					"event": [
 						{
 							"listen": "test",
@@ -889,7 +889,7 @@
 					"response": []
 				},
 				{
-					"name": "Add Member",
+					"name": "Add New Member",
 					"event": [
 						{
 							"listen": "test",
@@ -1191,7 +1191,51 @@
 					"response": []
 				},
 				{
-					"name": "Add Topic",
+					"name": "Regenerate Topic Bank Token",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "ccf00a33-bb9d-46fe-b356-541166dd19db",
+								"exec": [
+									"pm.test(\"Response is OK.\", () => {",
+									"    pm.expect(pm.response.code).to.equal(200);",
+									"});",
+									"",
+									"pm.test(\"Response is contains expected keys.\", () => {",
+									"    pm.expect(pm.response.json()).to.have.property('token');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "admission",
+								"type": "text",
+								"value": "true"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/api/v1/topics/token",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"topics",
+								"token"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add New Topic",
 					"event": [
 						{
 							"listen": "test",
@@ -1425,6 +1469,989 @@
 							""
 						]
 					}
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Reviews",
+			"item": [
+				{
+					"name": "Get Reviews",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "ccf00a33-bb9d-46fe-b356-541166dd19db",
+								"exec": [
+									"pm.test(\"Response is OK.\", () => {",
+									"    pm.expect(pm.response.code).to.equal(200);",
+									"});",
+									"",
+									"pm.test(\"Response is an array.\", () => {",
+									"    pm.expect(pm.response.json()).to.be.an('array');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "admission",
+								"value": "true",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/api/v1/reviews",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"reviews"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Single Review",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "ccf00a33-bb9d-46fe-b356-541166dd19db",
+								"exec": [
+									"pm.test(\"Response is OK.\", () => {",
+									"    pm.expect(pm.response.code).to.equal(200);",
+									"});",
+									"",
+									"pm.test(\"Response is an object.\", () => {",
+									"    pm.expect(pm.response.json()).to.be.an('object');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "admission",
+								"type": "text",
+								"value": "true"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/api/v1/reviews/{{REVIEW_ID}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"reviews",
+								"{{REVIEW_ID}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Featured Reviews",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "ccf00a33-bb9d-46fe-b356-541166dd19db",
+								"exec": [
+									"pm.test(\"Response is OK.\", () => {",
+									"    pm.expect(pm.response.code).to.equal(200);",
+									"});",
+									"",
+									"pm.test(\"Response is an array.\", () => {",
+									"    pm.expect(pm.response.json()).to.be.an('array');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "admission",
+								"type": "text",
+								"value": "true"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/api/v1/reviews/featured",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"reviews",
+								"featured"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add New Review",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "6b99fd75-abf4-4f39-b0c1-b2143a6630f8",
+								"exec": [
+									"var response = pm.response.json();",
+									"pm.globals.set(\"REVIEW_ID\", response.id);",
+									"",
+									"pm.test(\"Review is created.\", () => {",
+									"    pm.expect(pm.response.code).to.equal(201);",
+									"});",
+									"",
+									"pm.test(\"Response contains ID.\", () => {",
+									"    pm.expect(pm.response.json()).to.have.property('id');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "admission",
+								"value": "true",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"referee\": \"Nanny McFee\",\n\t\"position\": \"Maid of Honour\",\n\t\"rating\": 5,\n\t\"description\": \"This is an added review via Postman.\",\n\t\"image\": {{image1}}\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/v1/reviews",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"reviews"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Review",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "6b99fd75-abf4-4f39-b0c1-b2143a6630f8",
+								"exec": [
+									"pm.test(\"Session is updated.\", () => {",
+									"    pm.expect(pm.response.code).to.equal(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "admission",
+								"type": "text",
+								"value": "true"
+							},
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"review\": {\n\t    \"referee\": \"Halle Berry\",\n\t\t\"position\": \"Queen of Hollywood\",\n\t\t\"rating\": 3,\n\t\t\"description\": \"This is an updated review via Postman.\",\n\t\t\"image\": {{image2}}\n\t},\n\t\"changed\": true\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/v1/reviews/{{REVIEW_ID}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"reviews",
+								"{{REVIEW_ID}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Review",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "d4b7749b-622e-4440-83f9-5dea0571aea0",
+								"exec": [
+									"pm.test(\"Review is deleted.\", () => {",
+									"    pm.response.to.have.status(204);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "admission",
+								"value": "true",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/api/v1/reviews/{{REVIEW_ID}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"reviews",
+								"{{REVIEW_ID}}"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Users",
+			"item": [
+				{
+					"name": "Get Users",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "ae3df113-3a0b-48f2-b1c6-8f03908d8793",
+								"exec": [
+									"pm.test(\"Response is OK.\", () => {",
+									"    pm.expect(pm.response.code).to.equal(200);",
+									"});",
+									"",
+									"pm.test(\"Response is an array.\", () => {",
+									"    pm.expect(pm.response.json()).to.be.an('array');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "admission",
+								"value": "true",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/api/v1/users",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Single User",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "ccf00a33-bb9d-46fe-b356-541166dd19db",
+								"exec": [
+									"pm.test(\"Response is OK.\", () => {",
+									"    pm.expect(pm.response.code).to.equal(200);",
+									"});",
+									"",
+									"pm.test(\"Response is an object.\", () => {",
+									"    pm.expect(pm.response.json()).to.be.an('object');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "admission",
+								"type": "text",
+								"value": "true"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/api/v1/users/{{USER_ID}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"users",
+								"{{USER_ID}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add New User / Register",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "6b99fd75-abf4-4f39-b0c1-b2143a6630f8",
+								"exec": [
+									"var response = pm.response.json();",
+									"if (response.hasOwnProperty('id')){",
+									"    pm.globals.set(\"USER_ID\", response.id);",
+									"    pm.globals.set(\"USER_EMAIL\", JSON.stringify(response.email));",
+									"}",
+									"",
+									"pm.test(\"User is created.\", () => {",
+									"    pm.expect(pm.response.code).to.equal(201);",
+									"});",
+									"",
+									"pm.test(\"Response contains ID.\", () => {",
+									"    pm.expect(pm.response.json()).to.have.property('id');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "admission",
+								"type": "text",
+								"value": "true"
+							},
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"firstname\": \"Practice\",\n\t\"lastname\": \"User\",\n\t\"email\": \"wokeweeklyuk@gmail.com\",\n\t\"username\": \"wokew\",\n\t\"password1\": \"Marchsurrey20\",\n\t\"password2\": \"Marchsurrey20\",\n\t\"subscribe\": false\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/v1/users",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Log In User / Authenticate",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "6b99fd75-abf4-4f39-b0c1-b2143a6630f8",
+								"exec": [
+									"pm.test(\"User is authenticated.\", () => {",
+									"    pm.expect(pm.response.code).to.equal(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "admission",
+								"type": "text",
+								"value": "true"
+							},
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"username\": \"wokew\",\n\t\"password\": \"Marchsurrey20\",\n\t\"remember\": false\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/v1/users/login",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"users",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Change Username",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "6b99fd75-abf4-4f39-b0c1-b2143a6630f8",
+								"exec": [
+									"pm.test(\"User's username is changed.\", () => {",
+									"    pm.expect(pm.response.code).to.equal(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "admission",
+								"type": "text",
+								"value": "true"
+							},
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"username\": \"puser\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/v1/users/{{USER_ID}}/username",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"users",
+								"{{USER_ID}}",
+								"username"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Change Password",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "6b99fd75-abf4-4f39-b0c1-b2143a6630f8",
+								"exec": [
+									"pm.test(\"User's username is changed.\", () => {",
+									"    pm.expect(pm.response.code).to.equal(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "admission",
+								"type": "text",
+								"value": "true"
+							},
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"oldPassword\": \"Marchsurrey20\",\n\t\"newPassword\": \"Aprilkent21\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/v1/users/{{USER_ID}}/password",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"users",
+								"{{USER_ID}}",
+								"password"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Change Clearance",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "6b99fd75-abf4-4f39-b0c1-b2143a6630f8",
+								"exec": [
+									"pm.test(\"User's clearance is changed.\", () => {",
+									"    pm.expect(pm.response.code).to.equal(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "admission",
+								"type": "text",
+								"value": "true"
+							},
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/api/v1/users/{{USER_ID}}/clearance/5",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"users",
+								"{{USER_ID}}",
+								"clearance",
+								"5"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete User",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "d4b7749b-622e-4440-83f9-5dea0571aea0",
+								"exec": [
+									"pm.test(\"User is deleted.\", () => {",
+									"    pm.response.to.have.status(204);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "admission",
+								"type": "text",
+								"value": "true"
+							},
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/api/v1/users/{{USER_ID}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"users",
+								"{{USER_ID}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Purge Users",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "d4b7749b-622e-4440-83f9-5dea0571aea0",
+								"exec": [
+									"pm.test(\"Users are purged.\", () => {",
+									"    pm.response.to.have.status(204);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PURGE",
+						"header": [
+							{
+								"key": "admission",
+								"type": "text",
+								"value": "true"
+							},
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/api/v1/users",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Resend Verification Email",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "6b99fd75-abf4-4f39-b0c1-b2143a6630f8",
+								"exec": [
+									"var response = pm.response.json();",
+									"if (response.hasOwnProperty('token')){",
+									"    pm.globals.set(\"EMAIL_VERIFICATION_TOKEN\",  response.token);",
+									"}",
+									"",
+									"pm.test(\"Verification email sent.\", () => {",
+									"    pm.expect(pm.response.code).to.equal(200);",
+									"});",
+									"",
+									"pm.test(\"Response contains token.\", () => {",
+									"    pm.expect(pm.response.json()).to.have.property('token');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "NOTIFY",
+						"header": [
+							{
+								"key": "admission",
+								"type": "text",
+								"value": "true"
+							},
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/api/v1/users/{{USER_ID}}/email/verify",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"users",
+								"{{USER_ID}}",
+								"email",
+								"verify"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Verify User Account",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "6b99fd75-abf4-4f39-b0c1-b2143a6630f8",
+								"exec": [
+									"pm.test(\"Verification email sent.\", () => {",
+									"    pm.expect(pm.response.code).to.equal(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "admission",
+								"type": "text",
+								"value": "true"
+							},
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/api/v1/users/{{EMAIL_VERIFICATION_TOKEN}}/verify",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"users",
+								"{{EMAIL_VERIFICATION_TOKEN}}",
+								"verify"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Send Account Recovery Email",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "6b99fd75-abf4-4f39-b0c1-b2143a6630f8",
+								"exec": [
+									"var response = pm.response.json();",
+									"if (response.hasOwnProperty('token')){",
+									"    pm.globals.set(\"ACCOUNT_RECOVERY_TOKEN\", JSON.stringify(response.token));",
+									"}",
+									"",
+									"pm.test(\"Account recovery email sent.\", () => {",
+									"    pm.expect(pm.response.code).to.equal(200);",
+									"});",
+									"",
+									"pm.test(\"Response contains token.\", () => {",
+									"    pm.expect(pm.response.json()).to.have.property('token');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "NOTIFY",
+						"header": [
+							{
+								"key": "admission",
+								"type": "text",
+								"value": "true"
+							},
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"email\": {{USER_EMAIL}}\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/v1/users/recovery",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"users",
+								"recovery"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Reset Password",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "6b99fd75-abf4-4f39-b0c1-b2143a6630f8",
+								"exec": [
+									"pm.test(\"Verification email sent.\", () => {",
+									"    pm.expect(pm.response.code).to.equal(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "admission",
+								"type": "text",
+								"value": "true"
+							},
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"password\": \"Marchsurrey20\",\n\t\"token\": {{ACCOUNT_RECOVERY_TOKEN}}\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/v1/users/password/reset",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"users",
+								"password",
+								"reset"
+							]
+						}
+					},
+					"response": []
 				}
 			],
 			"protocolProfileBehavior": {}
