@@ -26,7 +26,7 @@ class EditPage extends Component {
       pageText: props.pageText
     }
 
-    if (props.user.clearance < CLEARANCES.ACTIONS.EDIT_INFO){
+    if (props.user.clearance < CLEARANCES.ACTIONS.EDIT_PAGE){
       return location.href = this.state.backPath;
     }
   }

@@ -4,10 +4,11 @@ const path = require('path');
 const request = require('request');
 const sm = require('sitemap');
 
-const { cloudinary, domain } = require('../constants/settings.js');
+const ERROR = require('./errors.js');
 const { renderErrorPage } = require('./response.js');
+const SQL = require('./sql.js');
 
-const { forms } = require('../constants/settings.js');
+const { cloudinary, domain, forms, siteDescription } = require('../constants/settings.js');
 const { PAGE } = require('../constants/strings.js');
 
 let exigencies = {};
@@ -16,25 +17,19 @@ module.exports = function(app, conn, server){
 
   exigencies = { conn, server }
 
-  /**
-   * Home page
-   * @route {GET} /home
-   */
+  /** Home page */
   app.get(['/', '/home'], function(req, res){
-    server.render(req, res, '/home', { 
+    return server.render(req, res, '/home', { 
       title: '#WOKEWeekly - Awakening Through Conversation',
-      description: 'Debates and discussions centered around and beyond the UK black community. Facilitating open-floor conversation to shape the minds and alter the perspectives of participants.',
+      description: siteDescription,
       url: '/',
       backgroundImage: 'bg-app.jpg'
     });
   });
 
-  /**
-   * Sessions page
-   * @route {GET} /sessions
-   */
+  /** Sessions page */
   app.get('/sessions', function(req, res){
-    server.render(req, res, '/sessions', { 
+    return server.render(req, res, '/sessions', { 
       title: 'Sessions | #WOKEWeekly',
       description: 'Where the magic happens...',
       url: '/sessions',
@@ -43,127 +38,103 @@ module.exports = function(app, conn, server){
      });
   });
 
-  /**
-   * Individual session page
-   * @route {GET} /session/:slug
-   */
+  /** Individual session page */
   app.get('/session/:slug', function(req, res){
     const slug = req.params.slug;
-    const sql = "SELECT * FROM sessions WHERE slug = ?";
+    const sql = SQL.SESSIONS.READ.SINGLE('slug');
     
-    conn.query(sql, [slug], function (err, result) {
-      if (!err && result.length){
-        const session = result[0];
-        return server.render(req, res, '/sessions/single', {
-          title: `${session.title} | #WOKEWeekly`,
-          description: createExcerpt(session.description),
-          url: `/sessions/${session.slug}`,
-          cardImage: session.image,
-          backgroundImage: 'bg-sessions.jpg',
-          session
-        });
-      } else {
-        renderErrorPage(req, res, err, server);
-      }
+    conn.query(sql, [slug], function (err, [session] = []) {
+      if (err) return renderErrorPage(req, res, err, server);
+      if (!session) return renderErrorPage(req, res, ERROR.NONEXISTENT_SESSION(), server);
+      
+      return server.render(req, res, '/sessions/single', {
+        title: `${session.title} | #WOKEWeekly`,
+        description: createExcerpt(session.description),
+        url: `/sessions/${session.slug}`,
+        cardImage: session.image,
+        backgroundImage: 'bg-sessions.jpg',
+        session
+      });
     });
   });
 
-  /**
-   * Add Session page
-   * @route {GET} /sessions/add
-   */
+  /** Add Session page */
   app.get('/sessions/add', function(req, res){
-    server.render(req, res, '/sessions/crud', {
+    return server.render(req, res, '/sessions/crud', {
       title: 'Add New Session',
       operation: 'add',
       backgroundImage: 'bg-sessions.jpg'
     });
   });
 
-  /**
-   * Edit Session page
-   * @route {GET} /sessions/edit/:id
-   */
+  /** Edit Session page */
   app.get('/sessions/edit/:id', function(req, res){
     const id = req.params.id;
-    const sql = "SELECT * FROM sessions WHERE id = ?";
+    const sql = SQL.SESSIONS.READ.SINGLE('id');
     
-    conn.query(sql, id, function (err, result) {
-      if (!err && result.length){
-        const session = result[0];
-        return server.render(req, res, '/sessions/crud', {
-          title: 'Edit Session',
-          backgroundImage: 'bg-sessions.jpg',
-          operation: 'edit',
-          session
-        });
-      } else {
-        renderErrorPage(req, res, err, server);
-      }
+    conn.query(sql, id, function (err, [session] = []) {
+      if (err) return renderErrorPage(req, res, err, server);
+      if (!session) return renderErrorPage(req, res, ERROR.NONEXISTENT_SESSION(), server);
+
+      return server.render(req, res, '/sessions/crud', {
+        title: 'Edit Session',
+        backgroundImage: 'bg-sessions.jpg',
+        operation: 'edit',
+        session
+      });
     });
   });
 
-  /**
-   * Topic Bank page
-   * @route {GET} /topics
-   */
+  /** Topic Bank page */
   app.get('/topics', function(req, res){
-    const token = req.query.access;
-    const sql = "SELECT * FROM tokens WHERE name = 'topicBank'";
+    const accessToken = req.query.access;
+    const sql = SQL.TOKENS.READ('topicBank');
 
-    conn.query(sql, function (err, result) {
-      server.render(req, res, '/topics', {
+    conn.query(sql, function (err, [token] = []) {
+      if (err) return renderErrorPage(req, res, err, server);
+      const hasAccess = token && token.value === accessToken;
+
+      return server.render(req, res, '/topics', {
         title: 'Topic Bank | #WOKEWeekly',
         description: 'The currency of the franchise.',
         url: '/topics',
         cardImage: `public/bg/card-topics.jpg`,
         backgroundImage: 'bg-topics.jpg',
-        hasAccess: result[0].value === token
+        hasAccess
       });
     });
   });
 
-  /**
-   * Add Topic page
-   * @route {GET} /topics/add
-   */
+  /** Add Topic page */
   app.get('/topics/add', function(req, res){
-    server.render(req, res, '/topics/crud', {
+    return server.render(req, res, '/topics/crud', {
       title: 'Add New Topic',
       operation: 'add',
       backgroundImage: 'bg-topics.jpg'
     });
   });
 
-  /**
-   * Edit Topic page
-   * @route {GET} /topics/edit/:id
-   */
+  /** Edit Topic page */
   app.get('/topics/edit/:id', function(req, res){
     const id = req.params.id;
-    const sql = "SELECT * FROM topics WHERE id = ?";
+    const sql = SQL.TOPICS.READ.SINGLE();
     
-    conn.query(sql, id, function (err, result) {
-      if (!err && result.length){
-        const topic = result[0];
-        return server.render(req, res, '/topics/crud', {
-          title: 'Edit Topic',
-          operation: 'edit',
-          backgroundImage: 'bg-topics.jpg',
-          topic
-        });
-      } else {
-        renderErrorPage(req, res, err, server);
-      }
+    conn.query(sql, id, function (err, [topic]) {
+      if (err) return renderErrorPage(req, res, err, server);
+      if (!topic) return renderErrorPage(req, res, ERROR.NONEXISTENT_TOPIC(), server);
+
+      return server.render(req, res, '/topics/crud', {
+        title: 'Edit Topic',
+        operation: 'edit',
+        backgroundImage: 'bg-topics.jpg',
+        topic
+      });
     });
   });
 
-  /**
-   * #BlackExcellence page
-   * @route {GET} /blackexcellence
-   */
+  /** #BlackExcellence page */
   app.get('/blackexcellence', function(req, res){
-    server.render(req, res, '/blackexcellence', {
+    return server.render(req, res, '/blackexcellence', {
       title: '#BlackExcellence | #WOKEWeekly',
       description: 'Recognising the intrinsic potential in young black rising stars who are excelling in their respective fields and walks of life.',
       url: '/blackexcellence',
@@ -173,12 +144,9 @@ module.exports = function(app, conn, server){
     });
   });
 
-  /**
-   * Add #BlackExcellence Candidate page
-   * @route {GET} /blackexcellence/add
-   */
+  /** Add #BlackExcellence Candidate page */
   app.get('/blackexcellence/add', function(req, res){
-    server.render(req, res, '/blackexcellence/crud', {
+    return server.render(req, res, '/blackexcellence/crud', {
       title: 'Add New Candidate',
       backgroundImage: 'bg-blackex.jpg',
       operation: 'add',
@@ -186,18 +154,15 @@ module.exports = function(app, conn, server){
     });
   });
 
-  /**
-   * Edit #BlackExcellence Candidate page
-   * @route {GET} /blackexcellence/edit/:id
-   */
+  /** Edit #BlackExcellence Candidate page */
   app.get('/blackexcellence/edit/:id', function(req, res){
-    const { id } = req.params;
-    const sql = "SELECT * FROM candidates WHERE id = ?";
+    const id = req.params.id;
+    const sql = SQL.CANDIDATES.READ.SINGLE();
     
-    conn.query(sql, id, function (err, result) {
-      if (err || !result.length) return renderErrorPage(req, res, err, server);
+    conn.query(sql, id, function (err, [candidate] = []) {
+      if (err) return renderErrorPage(req, res, err, server);
+      if (!candidate) return renderErrorPage(req, res, ERROR.NONEXISTENT_CANDIDATE(), server);
 
-      const candidate = result[0];
       return server.render(req, res, '/blackexcellence/crud', {
         title: 'Edit Candidate',
         backgroundImage: 'bg-blackex.jpg',
@@ -208,20 +173,15 @@ module.exports = function(app, conn, server){
     });
   });
 
-  /**
-   * Individual #BlackExcellence Candidate page
-   * @route {GET} /blackexcellence/add
-   */
+  /** Individual #BlackExcellence Candidate page */
   app.get('/blackexcellence/candidate/:id', function(req, res){
     const id = req.params.id;
-    const sql = `SELECT candidates.*, CONCAT(members.firstname, ' ', members.lastname) AS author,
-    members.level AS author_level, members.slug AS author_slug
-    FROM candidates LEFT JOIN members ON candidates.author_id=members.id WHERE candidates.id = ?`;
+    const sql = SQL.CANDIDATES.READ.JOIN_MEMBERS;
     
-    conn.query(sql, id, function (err, result) {
-      if (err || !result.length) return renderErrorPage(req, res, err, server);
-
-      const candidate = result[0];
+    conn.query(sql, id, function (err, [candidate] = []) {
+      if (err) return renderErrorPage(req, res, err, server);
+      if (!candidate) return renderErrorPage(req, res, ERROR.NONEXISTENT_CANDIDATE(), server);
+      
       candidate.label = `#${candidate.id}: ${candidate.name}`;
       return server.render(req, res, '/blackexcellence/single', {
         title: `${candidate.label} | #WOKEWeekly`,
@@ -236,10 +196,7 @@ module.exports = function(app, conn, server){
     });
   });
 
-  /**
-   * Executives page
-   * @route {GET} /executives
-   */
+  /** Executives page */
   app.get('/executives', function(req, res){
     return server.render(req, res, '/team/exec', {
       title: 'Meet The Executives | #WOKEWeekly',
@@ -250,35 +207,27 @@ module.exports = function(app, conn, server){
     });
   });
 
-  /**
-   * Individual executive page
-   * @route {GET} /executives/:slug
-   */
+  /** Individual executive page */
   app.get('/executives/:slug', function(req, res){
     const slug = req.params.slug;
-    const sql = "SELECT * FROM members WHERE slug = ? AND level = 'Executive'";
+    const sql = SQL.MEMBERS.READ.EXECUTIVES_SLUG;
     
-    conn.query(sql, [slug], function (err, result) {
-      if (!err && result.length){
-        const exec = result[0];
-        return server.render(req, res, '/team/single', {
-          title: `${exec.firstname} ${exec.lastname} | #WOKEWeekly`,
-          description: createExcerpt(exec.description),
-          url: `/executives/${exec.slug}`,
-          cardImage: exec.image,
-          backgroundImage: 'bg-team.jpg',
-          member: exec
-        });
-      } else {
-        renderErrorPage(req, res, err, server);
-      }
+    conn.query(sql, [slug], function (err, [exec] = []) {
+      if (err) return renderErrorPage(req, res, err, server);
+      if (!exec) return renderErrorPage(req, res, ERROR.NONEXISTENT_MEMBER(true), server);
+      
+      return server.render(req, res, '/team/single', {
+        title: `${exec.firstname} ${exec.lastname} | #WOKEWeekly`,
+        description: createExcerpt(exec.description),
+        url: `/executives/${exec.slug}`,
+        cardImage: exec.image,
+        backgroundImage: 'bg-team.jpg',
+        member: exec
+      });
     });
   });
 
-  /**
-   * Team Members page
-   * @route {GET} /team
-   */
+  /** Team Members page */
   app.get('/team', function(req, res){
     return server.render(req, res, '/team', {
       title: 'Team Members | #WOKEWeekly',
@@ -286,18 +235,15 @@ module.exports = function(app, conn, server){
     });
   });
 
-  /**
-   * Individual team member page
-   * @route {GET} /team/member/:slug
-   */
+  /** Individual team member page */
   app.get('/team/member/:slug', function(req, res){
     const slug = req.params.slug;
-    const sql = "SELECT * FROM members WHERE slug = ?";
+    const sql = SQL.MEMBERS.READ.SLUG;
     
-    conn.query(sql, slug, function (err, result) {
-      if (err || !result.length) return renderErrorPage(req, res, err, server);
+    conn.query(sql, slug, function (err, [member] = []) {
+      if (err) return renderErrorPage(req, res, err, server);
+      if (!member) return renderErrorPage(req, res, ERROR.NONEXISTENT_MEMBER(false), server);
 
-      const member = result[0];
       return server.render(req, res, '/team/single', { 
         title: `${member.firstname} ${member.lastname} | #WOKEWeekly`,
         description: createExcerpt(member.description),
@@ -310,80 +256,60 @@ module.exports = function(app, conn, server){
     });
   });
 
-  /**
-   * Add Team Member page
-   * @route {GET} /team/:add
-   */
+  /** Add Team Member page */
   app.get('/team/add', function(req, res){
-    server.render(req, res, '/team/crud', {
+    return server.render(req, res, '/team/crud', {
       title: 'Add New Member',
       operation: 'add',
       backgroundImage: 'bg-team.jpg'
     });
   });
 
-  /**
-   * Edit Team Member page
-   * @route {GET} /team/edit/:id
-   */
+  /** Edit Team Member page */
   app.get('/team/edit/:id', function(req, res){
     const id = req.params.id;
-    const sql = "SELECT * FROM members WHERE id = ?";
+    const sql = SQL.MEMBERS.READ.SINGLE();
     
-    conn.query(sql, id, function (err, result) {
-      if (!err && result.length){
-        const member = result[0];
-        return server.render(req, res, '/team/crud', { 
-          title: 'Edit Team Member',
-          operation: 'edit',
-          backgroundImage: 'bg-team.jpg',
-          member
-        });
-      } else {
-        renderErrorPage(req, res, err, server);
-      }
-    });
-  });
-
-  /**
-   * Reviews Page
-   * @route {GET} /reviews
-   */
-  app.get('/reviews', function(req, res){
-    conn.query(`SELECT * FROM reviews`, function (err, result) {
+    conn.query(sql, id, function (err, [member] = []) {
       if (err) return renderErrorPage(req, res, err, server);
-      return server.render(req, res, '/reviews', {
-        title: 'Reviews | #WOKEWeekly',
-        description: 'Read what the people have to say about us.',
-        url: '/reviews',
-        cardImage: `public/bg/card-reviews.jpg`,
+      if (!member) return renderErrorPage(req, res, ERROR.NONEXISTENT_MEMBER(false), server);
+
+      return server.render(req, res, '/team/crud', { 
+        title: 'Edit Team Member',
+        operation: 'edit',
+        backgroundImage: 'bg-team.jpg',
+        member
       });
     });
   });
 
-  /**
-   * Add Review page
-   * @route {GET} /reviews/add
-   */
+  /** Reviews Page */
+  app.get('/reviews', function(req, res){
+    return server.render(req, res, '/reviews', {
+      title: 'Reviews | #WOKEWeekly',
+      description: 'Read what the people have to say about us.',
+      url: '/reviews',
+      cardImage: `public/bg/card-reviews.jpg`,
+    });
+  });
+
+  /** Add Review page */
   app.get('/reviews/add', function(req, res){
-    server.render(req, res, '/reviews/crud', {
+    return server.render(req, res, '/reviews/crud', {
       title: 'Add New Review',
       operation: 'add'
     });
   });
 
-  /**
-   * Edit Review page
-   * @route {GET} /reviews/edit/:id
-   */
+  /** Edit Review page */
   app.get('/reviews/edit/:id', function(req, res){
-    const { id } = req.params;
+    const id = req.params.id;
     const sql = "SELECT * FROM reviews WHERE id = ?";
     
-    conn.query(sql, id, function (err, result) {
-      if (err || !result.length) return renderErrorPage(req, res, err, server);
+    conn.query(sql, id, function (err, [review] = []) {
+      if (err) return renderErrorPage(req, res, err, server);
+      if (!review) return renderErrorPage(req, res, ERROR.NONEXISTENT_REVIEW(), server);
 
-      const review = result[0];
       server.render(req, res, '/reviews/crud', {
         title: 'Edit Review',
         operation: 'edit',
@@ -392,43 +318,36 @@ module.exports = function(app, conn, server){
     });
   });
 
-  /**
-   * Registered Users page
-   * @route {GET} /users
-   */
+  /** Registered users page */
   app.get('/users', function(req, res){
     return server.render(req, res, '/users', {
       title: 'Registered Users | #WOKEWeekly'
     });
   });
 
-  /**
-   * Registration page
-   * @route {GET} /signup
-   */
+  /** Registration page */
   app.get('/signup', function(req, res){
-    server.render(req, res, '/_auth/signup', {
+    return server.render(req, res, '/_auth/signup', {
       title: 'Sign Up | #WOKEWeekly',
       backgroundImage: 'bg-signup.jpg',
       url: '/signup',
     });
   });
 
-  /**
-   * User account page
-   * @route {GET} /account
-   */
+  /** User account page */
   app.get('/account', function(req, res){
     const token = req.query.verified;
+
     async.waterfall([
       function(callback){
         if (!token) return callback(null, false);
+        // TODO: Sort this out
         jwt.verify(token, process.env.JWT_SECRET, (err, result) => {
           if (err) return callback(null, false);
           callback(null, true, result.user);
         });
       }
-    ], function(err, justVerified, user){
+    ], function(err, justVerified, user = {}){
       server.render(req, res, '/_auth/account', {
         title: 'Account | #WOKEWeekly',
         url: '/account',
@@ -438,36 +357,27 @@ module.exports = function(app, conn, server){
     });
   });
 
-  /**
-   * 'Forgot Password' page
-   * @route {GET} /account/recovery
-   */
+  /** 'Forgot Password' page */
   app.get('/account/recovery', function(req, res){
-    server.render(req, res, '/_auth/recovery', {
+    return server.render(req, res, '/_auth/recovery', {
       title: 'Forgot Password | #WOKEWeekly',
       url: '/account/recovery',
     });
   });
 
-  /**
-   * Reset Password page
-   * @route {GET} /account/reset/:token
-   */
+  /** Reset Password page */
   app.get('/account/reset/:token', function(req, res){
     const { token } = req.params;
+
     jwt.verify(token, process.env.JWT_SECRET, (err) => {
       if (err) return renderErrorPage(req, res, err, server);
-      server.render(req, res, '/_auth/reset', {
-        title: 'Reset Password | #WOKEWeekly',
-        recoveryToken: token
+      return server.render(req, res, '/_auth/reset', {
+        title: 'Reset Password | #WOKEWeekly'
       });
     });
   });
 
-  /**
-   * Admin page
-   * @route {GET} /admin
-   */
+  /** Admin page */
   app.get('/admin', function(req, res){
     server.render(req, res, '/_auth/admin', {
       title: 'Admin Tools | #WOKEWeekly',
@@ -478,28 +388,19 @@ module.exports = function(app, conn, server){
    * FORMS
    **************************************************************/
 
-  /**
-   * Recruitment Form
-   * @route {GET} /recruitment-form
-   */
+  /** Recruitment Form */
   app.get('/recruitment-form', function(req, res){
     res.writeHead(301, { Location: forms.recruitment });
     res.end();
   });
 
-  /**
-   * Audience Review Form
-   * @route {GET} /feedback
-   */
+  /** Audience Review Form */
   app.get('/feedback', function(req, res){
     res.writeHead(301, { Location: forms.audienceFeedback });
     res.end();
   });
 
-  /**
-   * Client Review Form
-   * @route {GET} /feedback/client
-   */
+  /** Client Review Form */
   app.get('/feedback/client', function(req, res){
     res.writeHead(301, { Location: forms.clientFeedback });
     res.end();
@@ -509,44 +410,29 @@ module.exports = function(app, conn, server){
    * RESOURCES
    **************************************************************/
      
-  /**
-   * Constitution PDF
-   * @route {GET} /constitution
-   */
+  /** Constitution PDF */
   app.get('/constitution', function(req, res){
     request(`${cloudinary.url}/pages/Constitution.pdf`).pipe(res);
   });
 
-  /**
-   * Sponsorship Proposal PDF
-   * @route {GET} /sponsorship-proposal
-   */
+  /** Sponsorship Proposal PDF */
   app.get('/sponsorship-proposal', function(req, res){
     request(`${cloudinary.url}/v1579300643/pages/Sponsorship_Proposal.pdf`).pipe(res);
   });
 
-  /**
-   * #Blackexcellence Tribute Guide PDF
-   * @route {GET} /blackexcellence-tribute-guide
-   */
+  /** #Blackexcellence Tribute Guide PDF */
   app.get('/blackexcellence-tribute-guide', function(req, res){
     request(`${cloudinary.url}/pages/BlackExcellence_Tribute_Guide.pdf`).pipe(res);
   });
 
-  /**
-   * Robots.txt page
-   * @route {GET} /robots.txt
-   */
+  /** Robots.txt page */
   app.get('/robots.txt', (req, res) => (
     res.status(200).sendFile(path.resolve('./robots.txt'), {
       headers: { 'Content-Type': 'text/plain;charset=UTF-8', }
     })
   ));
 
-  /**
-   * Sitemap generated page
-   * @route {GET} /sitemap.xml
-   */
+  /** Sitemap generated page */
   app.get('/sitemap.xml', (req, res) => {
     const routes = [ '/', '/home', '/sessions', '/blackexcellence', '/executives',
       '/reviews', '/signup' ];
@@ -641,12 +527,13 @@ const renderPage = (
   ) => {
   const { conn, server } = exigencies;
   return function(req, res){
-    conn.query(`SELECT * FROM pages WHERE name = '${pageName}'`, function (err, result) {
-      if (err || !result.length) return renderErrorPage(req, res, err, server);
+    conn.query(`SELECT * FROM pages WHERE name = '${pageName}'`, function (err, [page] = []) {
+      if (err) return renderErrorPage(req, res, err, server);
+      if (!page) return renderErrorPage(req, res, ERROR.NONEXISTENT_PAGE(), server);
   
       const { name, title, include_domain, text, excerpt, card_image, bg_image,
         cover_image, cover_image_logo, cover_image_alt, theme,
-        edit_title, edit_placeholder_text } = result[0];
+        edit_title, edit_placeholder_text } = page;
 
       let uri = '';
       let information = {};

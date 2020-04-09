@@ -59,7 +59,7 @@ class Info extends Component {
             </div>
           </Shader>
 
-          {user.clearance >= CLEARANCES.ACTIONS.EDIT_INFO ? 
+          {user.clearance >= CLEARANCES.ACTIONS.EDIT_PAGE ? 
             <BottomToolbar>
               <EditEntityButton
                 title={'Edit Text'}

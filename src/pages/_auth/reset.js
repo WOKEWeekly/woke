@@ -21,8 +21,7 @@ class ResetPassword extends Component {
     super(props);
     this.state = {
       password: '',
-      password2: '',
-      token: props.recoveryToken
+      password2: ''
     }
 
     if (props.user.isAuthenticated){

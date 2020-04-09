@@ -3,7 +3,7 @@ const { TEST_USERS } = require('./configuration/data.js');
 
 const superuser = TEST_USERS.NINE;
 
-let PAGE_NAME = 'about';
+const PAGE_NAME = 'about';
 
 describe("Page Tests", function() {
   this.slow(10000);
@@ -17,11 +17,14 @@ describe("Page Tests", function() {
 
   /** Test updating the user */
   describe("Update", function() {
-    xit("Update page", function(done) {
+    it("Update page", function(done) {
       request({
         url: `/api/v1/pages`,
         method: 'PUT',
-        body: JSON.stringify(TEST_TOPICS.UPDATED),
+        body: JSON.stringify({
+          page: PAGE_NAME,
+          text: 'This is an updated page through service tests.'
+        }),
         headers: HEADERS.TOKEN(superuser),
         done,
         onSuccess: ({status}) => {

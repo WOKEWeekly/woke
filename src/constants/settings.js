@@ -59,6 +59,9 @@ module.exports = {
     audienceFeedback: 'https://forms.gle/GErPZT2h2uHoFajn9'
   },
 
+  /** The site description */
+  siteDescription: 'Debates and discussions centered around and beyond the UK black community. Facilitating open-floor conversation to shape the minds and alter the perspectives of participants.',
+
   /** List of social media domains and icons for forms */
   socialPlatforms: {
     facebook: { name: 'Facebook', icon: 'facebook-f', domain: 'https://www.facebook.com/' },

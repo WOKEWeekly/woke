@@ -34,7 +34,7 @@ module.exports = function(app, conn){
   /** Retrieve individual session */
   app.get('/api/v1/sessions/:id([0-9]+)', validateReq, function(req, res){
     const id = req.params.id;
-    conn.query(SQL.SESSIONS.READ.SINGLE(), id, function (err, [session] = []) {
+    conn.query(SQL.SESSIONS.READ.SINGLE('id'), id, function (err, [session] = []) {
       if (err) return respondToClient(res, err);
       if (!session) err = ERROR.INVALID_SESSION_ID(id);
       respondToClient(res, err, 200, session);
@@ -89,7 +89,7 @@ module.exports = function(app, conn){
 
     async.waterfall([
       function(callback){ // Delete old image if changed.
-        conn.query(SQL.SESSIONS.READ.SINGLE('image'), id, function (err, [session] = []) {
+        conn.query(SQL.SESSIONS.READ.SINGLE('id', 'image'), id, function (err, [session] = []) {
           if (err) return callback(err);
           if (!session) return callback(ERROR.INVALID_SESSION_ID(id));
           if (!changed) return callback(null);
@@ -116,7 +116,7 @@ module.exports = function(app, conn){
 
     async.waterfall([
       function(callback){ // Delete image from cloud
-        conn.query(SQL.SESSIONS.READ.SINGLE('image'), id, function (err, [session] = []) {
+        conn.query(SQL.SESSIONS.READ.SINGLE('id', 'image'), id, function (err, [session] = []) {
           if (err) return callback(err);
           if (!session) return callback(ERROR.INVALID_SESSION_ID(id));
           filer.destroyImage(session.image, callback);
@@ -393,6 +393,7 @@ module.exports = function(app, conn){
 
     const { sql, values } = SQL.TOPICS.UPDATE.DETAILS(id, topic);
     conn.query(sql, values, function (err, result) {
+      if (err) return respondToClient(res, err);
       if (result.affectedRows === 0) err = ERROR.INVALID_TOPIC_ID(id);
       respondToClient(res, err, 200);
     });
@@ -404,6 +405,7 @@ module.exports = function(app, conn){
     async.waterfall([
       function(callback){ // Increment vote
         conn.query(SQL.TOPICS.UPDATE.VOTE(id, option), function (err, result) {
+          if (err) return respondToClient(res, err);
           if (result.affectedRows === 0) err = ERROR.INVALID_TOPIC_ID(id);
           err ? callback(err) : callback(null);
         });
@@ -423,6 +425,7 @@ module.exports = function(app, conn){
     const id = req.params.id;
     conn.query(SQL.TOPICS.DELETE, id, function (err, result) {
       // TODO: Slack notifications for deleted topics
+      if (err) return respondToClient(res, err);
       if (result.affectedRows === 0) err = ERROR.INVALID_TOPIC_ID(id);
       respondToClient(res, err, 204);
     });
@@ -641,10 +644,10 @@ module.exports = function(app, conn){
 
     const { sql, values } = SQL.USERS.UPDATE('username', id, username);
     conn.query(sql, values, function(err, result){
-      if (err && err.code === ERROR.SQL_DUP_CODE){
-        if (err.sqlMessage.includes("username")){
-          respondToClient(res, ERROR.DUPLICATE_USERNAME());
-        }
+      if (err){
+        const duplicateUsername = err.code === ERROR.SQL_DUP_CODE && err.sqlMessage.includes("username");
+        if (duplicateUsername) return respondToClient(res, ERROR.DUPLICATE_USERNAME());
+        return respondToClient(res, err);
       }
       if (result.affectedRows === 0) return respondToClient(res, ERROR.INVALID_USER_ID(id));
 
@@ -702,6 +705,7 @@ module.exports = function(app, conn){
     // TODO: Differentiate between self-deletion and admin-deletion.
     const id = req.params.id;
     conn.query(SQL.USERS.DELETE, id, function(err, result){	
+      if (err) return respondToClient(res, err);
       if (result.affectedRows === 0) err = ERROR.INVALID_USER_ID(id);
       respondToClient(res, err, 204);
     });
@@ -810,6 +814,7 @@ module.exports = function(app, conn){
       function(id, hash, callback){ // Update user's password in database
         const { sql, values } = SQL.USERS.UPDATE('password', id, hash)
         conn.query(sql, values, function(err, result){
+          if (err) return callback(err);
           if (result.affectedRows === 0) err = ERROR.INVALID_USER_ID(id);
           err ? callback(err) : callback(null);
         });
@@ -820,11 +825,13 @@ module.exports = function(app, conn){
   });
 
   /** Update information pages */
-  app.put('/api/v1/pages', verifyToken(CLEARANCES.ACTIONS.EDIT_INFO), function(req, res){
+  app.put('/api/v1/pages', verifyToken(CLEARANCES.ACTIONS.EDIT_PAGE), function(req, res){
     const { page, text } = req.body;
     const { sql, values } = SQL.PAGES.UPDATE(page, text);
-    conn.query(sql, values, function (err) {
-      // TODO: INVALID_PAGES_ID check
+
+    conn.query(sql, values, function (err, result) {
+      if (err) return respondToClient(res, err);
+      if (result.affectedRows === 0) err = ERROR.INVALID_PAGE_NAME(page);
       respondToClient(res, err, 200);
     });
   });

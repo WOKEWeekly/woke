@@ -31,6 +31,43 @@ module.exports = {
     err.status = 404;
     return err;
   },
+  INVALID_PAGE_NAME: (name) => {
+    const err = new Error(`A page with name '${name}' does not exist.`);
+    err.status = 404;
+    return err;
+  },
+
+  NONEXISTENT_CANDIDATE: () => {
+    const err = new Error("This candidate does not exist.");
+    err.status = 404;
+    return err;
+  },
+  NONEXISTENT_SESSION: () => {
+    const err = new Error("This session does not exist.");
+    err.status = 404;
+    return err;
+  },
+  NONEXISTENT_MEMBER: (isExecutive = false) => {
+    const title = isExecutive ? 'executive' : 'member';
+    const err = new Error(`This ${title} does not exist.`);
+    err.status = 404;
+    return err;
+  },
+  NONEXISTENT_REVIEW: () => {
+    const err = new Error("This topic does not exist.");
+    err.status = 404;
+    return err;
+  },
+  NONEXISTENT_TOPIC: () => {
+    const err = new Error("This topic does not exist.");
+    err.status = 404;
+    return err;
+  },
+  NONEXISTENT_PAGE: () => {
+    const err = new Error("This page does not exist.");
+    err.status = 404;
+    return err;
+  },
 
   DUPLICATE_CANDIDATE_ID: (id) => {
     const err = new Error(`A candidate with ID '${id}' already exists in the database.`);

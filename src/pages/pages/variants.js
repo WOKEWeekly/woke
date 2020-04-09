@@ -51,7 +51,7 @@ class Variants extends Component {
             </div>
           </Fader>
 
-          {user.clearance >= CLEARANCES.ACTIONS.EDIT_VARIANTS ? 
+          {user.clearance >= CLEARANCES.ACTIONS.EDIT_PAGE ? 
             <BottomToolbar>
               <EditEntityButton
                 title={'Edit Page'}

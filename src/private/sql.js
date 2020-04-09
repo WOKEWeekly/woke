@@ -17,11 +17,12 @@ const SESSIONS = {
     /**
      * Constructs the SQL statement to return information for a single
      * session.
+     * @param {string} condition - The condition field for the WHERE clause.
      * @param {string} [fields] - The fields to be queried.
      * @returns {string} The constructed statement.
      */
-    SINGLE: (fields = '*') => {
-      const sql = `SELECT ${fields} FROM sessions WHERE ID = ?`;
+    SINGLE: (condition, fields = '*') => {
+      const sql = `SELECT ${fields} FROM sessions WHERE ${condition} = ?`;
       return sql;
     },
 
@@ -87,6 +88,11 @@ const CANDIDATES = {
 
     /** The SQL statement to return the latest candidate. */
     LATEST: "SELECT * FROM candidates ORDER BY id DESC LIMIT 1",
+
+    /** Join candidate table with member table by author */
+    JOIN_MEMBERS: `SELECT candidates.*, CONCAT(members.firstname, ' ', members.lastname) AS author,
+    members.level AS author_level, members.slug AS author_slug
+    FROM candidates LEFT JOIN members ON candidates.author_id=members.id WHERE candidates.id = ?`
   },
 
   /**
@@ -147,7 +153,10 @@ const MEMBERS = {
     RANDOM: "SELECT * FROM members WHERE verified = 1 ORDER BY RAND() LIMIT 1",
 
     /** The SQL statement to retrieve all executive members. */
-    EXECUTIVES: "SELECT * FROM members WHERE level = 'Executive' AND verified = 1"
+    EXECUTIVES: "SELECT * FROM members WHERE level = 'Executive' AND verified = 1",
+
+    SLUG: "SELECT * FROM members WHERE slug = ?",
+    EXECUTIVES_SLUG: "SELECT * FROM members WHERE slug = ? AND level = 'Executive' AND verified = 1"
   },
   /**
    * Constructs the SQL statement to update a member.
@@ -392,6 +401,12 @@ const PAGES = {
     const values = [text, new Date(), page];
     return { sql, values };
   }
+};
+
+const TOKENS = {
+  READ: (name) => {
+    return `SELECT * FROM tokens WHERE name = '${name}'`;
+  }
 }
 
 module.exports = {
@@ -401,7 +416,8 @@ module.exports = {
   TOPICS,
   REVIEWS,
   USERS,
-  PAGES
+  PAGES,
+  TOKENS
 }
 
 /**
