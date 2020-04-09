@@ -34,7 +34,7 @@ class Recovery extends Component {
     if (!isValidEmail(email)) return false;
 
     request({
-      url: '/sendAccountRecoveryEmail',
+      url: 'api/v1/users/recovery',
       method: 'NOTIFY',
       body: JSON.stringify(this.state),
       headers: {  'Authorization': process.env.AUTH_KEY },

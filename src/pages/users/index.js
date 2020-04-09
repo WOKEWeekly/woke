@@ -156,9 +156,8 @@ class _User extends PureComponent {
   deleteUser = () => {
     const { id, firstname, lastname } = this.state;
     request({
-      url: '/deleteAccount',
+      url: `/api/v1/users/${id}`,
       method: 'DELETE',
-      body: JSON.stringify({id}),
       headers: { 'Authorization': `Bearer ${this.props.user.token}` },
       onSuccess: () => {
         alert.success(`You've deleted user: ${firstname} ${lastname}.`);
