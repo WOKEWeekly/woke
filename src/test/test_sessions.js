@@ -5,7 +5,7 @@ const superuser = TEST_USERS.NINE;
 
 let SESSION_ID = 0;
 
-describe("Sessions Tests", function() {
+describe("Session Tests", function() {
   this.slow(10000);
   
   before(function(done){

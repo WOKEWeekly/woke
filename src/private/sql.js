@@ -342,6 +342,16 @@ const USERS = {
     },
 
     /**
+     * Constructs the SQL statement to return some user information
+     * via email address.
+     * @param {string} [fields] - The fields to be queried.
+     * @returns {string} The constructed statement.
+     */
+    RECOVERY: (fields = '*') => {
+      return `SELECT ${fields} FROM users WHERE email = ?`;
+    },
+
+    /**
      * Constructs the SQL statement to return information for a single user.
      * @param {string} [fields] - The fields to be queried.
      * @returns {string} The constructed statement.

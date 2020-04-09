@@ -5,7 +5,7 @@ const superuser = TEST_USERS.NINE;
 
 let PAGE_NAME = 'about';
 
-describe("Pages Tests", function() {
+describe("Page Tests", function() {
   this.slow(10000);
   
   before(function(done){

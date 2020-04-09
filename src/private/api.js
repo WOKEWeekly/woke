@@ -16,6 +16,9 @@ const SQL = require('./sql.js');
 const CLEARANCES = require('../constants/clearances.js');
 const { DIRECTORY } = require('../constants/strings.js');
 
+const noEmails = true;
+if (noEmails) console.warn("Emails are turned off.");
+
 module.exports = function(app, conn){
 
   /** Log user activity on each request */
@@ -31,7 +34,8 @@ module.exports = function(app, conn){
   /** Retrieve individual session */
   app.get('/api/v1/sessions/:id([0-9]+)', validateReq, function(req, res){
     const id = req.params.id;
-    conn.query(SQL.SESSIONS.READ.SINGLE(), id, function (err, [session]) {
+    conn.query(SQL.SESSIONS.READ.SINGLE(), id, function (err, [session] = []) {
+      if (err) return respondToClient(res, err);
       if (!session) err = ERROR.INVALID_SESSION_ID(id);
       respondToClient(res, err, 200, session);
     });
@@ -41,14 +45,14 @@ module.exports = function(app, conn){
   app.get('/api/v1/sessions/featured', validateReq, function(req, res){
     async.waterfall([
       function(callback){ // Get a random upcoming session
-        conn.query(SQL.SESSIONS.READ.UPCOMING, function (err, [session]) {
+        conn.query(SQL.SESSIONS.READ.UPCOMING, function (err, [session] = []) {
           if (err) return callback(err);
           if (!session) return callback(null);
           callback(true, { session, upcoming: true });
         });
       },
       function(callback){ // If not, get latest session
-        conn.query(SQL.SESSIONS.READ.LATEST, function (err, [session]) {
+        conn.query(SQL.SESSIONS.READ.LATEST, function (err, [session] = []) {
           if (err) return callback(err);
           if (!session) return callback(null);
           callback(null, { session, upcoming: false });
@@ -85,10 +89,9 @@ module.exports = function(app, conn){
 
     async.waterfall([
       function(callback){ // Delete old image if changed.
-        conn.query(SQL.SESSIONS.READ.SINGLE('image'), id, function (err, [session]) {
+        conn.query(SQL.SESSIONS.READ.SINGLE('image'), id, function (err, [session] = []) {
           if (err) return callback(err);
           if (!session) return callback(ERROR.INVALID_SESSION_ID(id));
-
           if (!changed) return callback(null);
           filer.destroyImage(session.image, callback);
         });
@@ -113,10 +116,9 @@ module.exports = function(app, conn){
 
     async.waterfall([
       function(callback){ // Delete image from cloud
-        conn.query(SQL.SESSIONS.READ.SINGLE('image'), id, function (err, [session]) {
+        conn.query(SQL.SESSIONS.READ.SINGLE('image'), id, function (err, [session] = []) {
           if (err) return callback(err);
           if (!session) return callback(ERROR.INVALID_SESSION_ID(id));
-          
           filer.destroyImage(session.image, callback);
         });
       },
@@ -140,7 +142,8 @@ module.exports = function(app, conn){
   /** Retrieve individual candidate */
   app.get('/api/v1/candidates/:id([0-9]+)', validateReq, function(req, res){
     const id = req.params.id;
-    conn.query(SQL.CANDIDATES.READ.SINGLE(), id, function (err, [candidate]) {
+    conn.query(SQL.CANDIDATES.READ.SINGLE(), id, function (err, [candidate] = []) {
+      if (err) return respondToClient(res, err);
       if (!candidate) err = ERROR.INVALID_CANDIDATE_ID(id);
       respondToClient(res, err, 200, candidate);
     });
@@ -148,14 +151,14 @@ module.exports = function(app, conn){
 
   /** Retrieve the details of the latest candidate  */
   app.get('/api/v1/candidates/latest', validateReq, function(req, res){
-    conn.query(SQL.CANDIDATES.READ.LATEST, function (err, [candidate]) {
+    conn.query(SQL.CANDIDATES.READ.LATEST, function (err, [candidate] = []) {
       respondToClient(res, err, 200, candidate);
     });
   });
 
   /** Get random candidate */
   app.get('/api/v1/candidates/random', validateReq, function(req, res){
-    conn.query(SQL.CANDIDATES.READ.RANDOM, function (err, [candidate]) {
+    conn.query(SQL.CANDIDATES.READ.RANDOM, function (err, [candidate] = []) {
       respondToClient(res, err, 200, candidate);
     });
   });
@@ -191,10 +194,9 @@ module.exports = function(app, conn){
 
     async.waterfall([
       function(callback){ // Delete original image from cloud
-        conn.query(SQL.CANDIDATES.READ.SINGLE('image'), id, function (err, [candidate]) {
+        conn.query(SQL.CANDIDATES.READ.SINGLE('image'), id, function (err, [candidate] = []) {
           if (err) return callback(err);
           if (!candidate) return callback(ERROR.INVALID_CANDIDATE_ID(id));
-
           if (!changed) return callback(null);
           filer.destroyImage(candidate.image, callback);
         });
@@ -219,10 +221,9 @@ module.exports = function(app, conn){
 
     async.waterfall([
       function(callback){ // Delete image from cloud
-        conn.query(SQL.CANDIDATES.READ.SINGLE('image'), id, function (err, [candidate]) {
+        conn.query(SQL.CANDIDATES.READ.SINGLE('image'), id, function (err, [candidate] = []) {
           if (err) return callback(err);
           if (!candidate) return callback(ERROR.INVALID_CANDIDATE_ID(id));
-          
           filer.destroyImage(candidate.image, callback);
         });
       },
@@ -246,7 +247,8 @@ module.exports = function(app, conn){
   /** Retrieve individual member */
   app.get('/api/v1/members/:id([0-9]+)', validateReq, function(req, res){
     const id = req.params.id;
-    conn.query(SQL.MEMBERS.READ.SINGLE(), id, function (err, [member]) {
+    conn.query(SQL.MEMBERS.READ.SINGLE(), id, function (err, [member] = []) {
+      if (err) return respondToClient(res, err);
       if (!member) err = ERROR.INVALID_MEMBER_ID(id);
       respondToClient(res, err, 200, member);
     });
@@ -254,7 +256,7 @@ module.exports = function(app, conn){
 
   /** Retrieve a random verified member */
   app.get('/api/v1/members/random', validateReq, function(req, res){
-    conn.query(SQL.MEMBERS.READ.RANDOM, function (err, [member]) {
+    conn.query(SQL.MEMBERS.READ.RANDOM, function (err, [member] = []) {
       respondToClient(res, err, 200, member);
     });
   });
@@ -300,10 +302,9 @@ module.exports = function(app, conn){
 
     async.waterfall([
       function(callback){ // Delete old image if changed.
-        conn.query(SQL.MEMBERS.READ.SINGLE('image'), id, function (err, [member]) {
+        conn.query(SQL.MEMBERS.READ.SINGLE('image'), id, function (err, [member] = []) {
           if (err) return callback(err);
           if (!member) return callback(ERROR.INVALID_MEMBER_ID(id));
-
           if (!changed) return callback(null);
           filer.destroyImage(member.image, callback);
         });
@@ -328,10 +329,9 @@ module.exports = function(app, conn){
 
     async.waterfall([
       function(callback){ // Delete image from cloud
-        conn.query(SQL.MEMBERS.READ.SINGLE('image'), id, function (err, [member]) {
+        conn.query(SQL.MEMBERS.READ.SINGLE('image'), id, function (err, [member] = []) {
           if (err) return callback(err);
           if (!member) return callback(ERROR.INVALID_MEMBER_ID(id));
-          
           filer.destroyImage(member.image, callback);
         });
       },
@@ -355,7 +355,8 @@ module.exports = function(app, conn){
   /** Retrieve individual topic */
   app.get('/api/v1/topics/:id([0-9]+)', validateReq, function(req, res){
     const id = req.params.id;
-    conn.query(SQL.TOPICS.READ.SINGLE(), id, function (err, [topic]) {
+    conn.query(SQL.TOPICS.READ.SINGLE(), id, function (err, [topic] = []) {
+      if (err) return respondToClient(res, err);
       if (!topic) err = ERROR.INVALID_TOPIC_ID(id);
       respondToClient(res, err, 200, topic);
     });
@@ -363,7 +364,7 @@ module.exports = function(app, conn){
 
   /** Retrieve a random topic */
   app.get('/api/v1/topics/random', validateReq, function(req, res){
-    conn.query(SQL.TOPICS.READ.RANDOM, function (err, [topic]) {
+    conn.query(SQL.TOPICS.READ.RANDOM, function (err, [topic] = []) {
       respondToClient(res, err, 200, topic);
     });
   });
@@ -408,8 +409,8 @@ module.exports = function(app, conn){
         });
       },
       function(callback){ // Retrieve new topic vote counts
-        conn.query(SQL.TOPICS.READ.SINGLE('yes, no'), id, function (err, [topic]) {
-          err ? callback(err) : callback(null, topic);
+        conn.query(SQL.TOPICS.READ.SINGLE('yes, no'), id, function (err, [votes] = []) {
+          err ? callback(err) : callback(null, votes);
         });
       },
     ], function(err, votes){
@@ -421,7 +422,7 @@ module.exports = function(app, conn){
   app.delete('/api/v1/topics/:id', verifyToken(CLEARANCES.ACTIONS.CRUD_TOPICS), function(req, res){
     const id = req.params.id;
     conn.query(SQL.TOPICS.DELETE, id, function (err, result) {
-      // emails.sendTopicDeletionEmail(topic);
+      // TODO: Slack notifications for deleted topics
       if (result.affectedRows === 0) err = ERROR.INVALID_TOPIC_ID(id);
       respondToClient(res, err, 204);
     });
@@ -438,7 +439,8 @@ module.exports = function(app, conn){
   /** Retrieve individual review */
   app.get('/api/v1/reviews/:id([0-9]+)', validateReq, function(req, res){
     const id = req.params.id;
-    conn.query(SQL.REVIEWS.READ.SINGLE(), id, function (err, [review]) {
+    conn.query(SQL.REVIEWS.READ.SINGLE(), id, function (err, [review] = []) {
+      if (err) return respondToClient(res, err);
       if (!review) err = ERROR.INVALID_REVIEW_ID(id);
       respondToClient(res, err, 200, review);
     });
@@ -477,10 +479,9 @@ module.exports = function(app, conn){
 
     async.waterfall([
       function(callback){ // Delete old image if changed.
-        conn.query(SQL.REVIEWS.READ.SINGLE('image'), id, function (err, [review]) {
+        conn.query(SQL.REVIEWS.READ.SINGLE('image'), id, function (err, [review] = []) {
           if (err) return callback(err);
           if (!review) return callback(ERROR.INVALID_REVIEW_ID(id));
-
           if (!changed) return callback(null);
           filer.destroyImage(review.image, callback);
         });
@@ -505,10 +506,9 @@ module.exports = function(app, conn){
 
     async.waterfall([
       function(callback){ // Delete image from cloud
-        conn.query(SQL.REVIEWS.READ.SINGLE('image'), id, function (err, [review]) {
+        conn.query(SQL.REVIEWS.READ.SINGLE('image'), id, function (err, [review] = []) {
           if (err) return callback(err);
           if (!review) return callback(ERROR.INVALID_REVIEW_ID(id));
-          
           filer.destroyImage(review.image, callback);
         });
       },
@@ -536,7 +536,8 @@ module.exports = function(app, conn){
     const id = req.params.id;
     const sql = SQL.USERS.READ.SINGLE("id, firstname, lastname, clearance, username, email, create_time, last_active");
 
-    conn.query(sql, id, function (err, [user]) {
+    conn.query(sql, id, function (err, [user] = []) {
+      if (err) return respondToClient(res, err);
       if (!user) err = ERROR.INVALID_USER_ID(id);
       respondToClient(res, err, 200, user);
     });
@@ -574,8 +575,8 @@ module.exports = function(app, conn){
       function(user, callback){ // Generate verification token to be sent via email
         jwt.sign({ user }, process.env.JWT_SECRET, { expiresIn: '24h' }, (err, token) => {
           if (err) return callback(err);
-          // emails.sendWelcomeEmail(user, token);
-          callback(null, user);
+          if (!noEmails) emails().sendWelcomeEmail(user, token);
+          callback(null, user)
         });
       },
       function(user, callback){ // Pass authenticated user information to client with access token
@@ -587,6 +588,7 @@ module.exports = function(app, conn){
             lastname: user.lastname,
             clearance: user.clearance,
             username: user.username,
+            email: user.email,
             token
           });
         });
@@ -610,12 +612,12 @@ module.exports = function(app, conn){
     async.waterfall([
       function(callback){ // Attempt to retrieve user
         const { sql, values } = SQL.USERS.READ.LOGIN(username);
-        conn.query(sql, values, function(err, [user]){
+        conn.query(sql, values, function(err, [user] = []){
           if (err) return callback(err);
-          if (!user) return callback(ERROR.INEXISTENT_CREDENTIALS());
+          if (!user) return callback(ERROR.NONEXISTENT_CREDENTIALS());
 
           const passwordIsIncorrect = !bcrypt.compareSync(password, user.password) && !(user.password == password);
-          if(passwordIsIncorrect) return callback(ERROR.INEXISTENT_CREDENTIALS());
+          if(passwordIsIncorrect) return callback(ERROR.NONEXISTENT_CREDENTIALS());
           
           callback(null, user);
         });
@@ -657,9 +659,10 @@ module.exports = function(app, conn){
 
     async.waterfall([
       function(callback){ // Get current password of user
-        conn.query(SQL.USERS.READ.SINGLE(), id, function(err, [user]){
+        conn.query(SQL.USERS.READ.SINGLE(), id, function(err, [user] = []){
+          if (err) return callback(err);
           if (!user) return callback(ERROR.INVALID_USER_ID(id));
-          err ? callback(err) : callback(null, user.password);
+          callback(null, user.password);
         });
       },
       function(password, callback){ // Verify that current password is valid
@@ -704,22 +707,115 @@ module.exports = function(app, conn){
     });
   });
 
-  /** Delete a user */
-  app.delete('/api/v1/users/:id([0-9]+)', verifyToken(CLEARANCES.ACTIONS.DELETE_ACCOUNT), function(req, res){
-    // TODO: Differentiate between self-deletion and admin-deletion.
-    const id = req.params.id;
-    conn.query(SQL.USERS.DELETE, id, function(err, result){	
-      if (result.affectedRows === 0) err = ERROR.INVALID_USER_ID(id);
+  /** Clear added users */
+  app.purge('/api/v1/users', verifyToken(9), function(req, res){
+    if (process.env.NODE_ENV === 'production') return respondToClient(res, ERROR.UNAUTHORIZED_REQUEST());
+    conn.query(SQL.USERS.CLEAR, function(err){
       respondToClient(res, err, 204);
     });
   });
 
-  /** Clear added users */
-  app.purge('/api/v1/users', verifyToken(9), function(req, res){
-    if (process.env.NODE_ENV === 'production') return respondToClient(res, ERROR.UNAUTHORIZED_REQUEST());
+  /** Resend the verification email to user's email address */
+  app.notify('/api/v1/users/:id/email/verify', validateReq, function(req, res){
+    const { id } = req.params;
     
-    conn.query(SQL.USERS.CLEAR, function(err){
-      respondToClient(res, err, 204);
+    async.waterfall([
+      function(callback){ // Retrieve user from database
+        const sql = SQL.USERS.READ.SINGLE('id, firstname, lastname, clearance, username, email');
+        conn.query(sql, id, function(err, [user] = []){
+          if (err) return callback(err);
+          if (!user) return callback(ERROR.INVALID_USER_ID());
+          callback(null, user);
+        });
+      },
+      function(user, callback){ // Generate verification token to send via email
+        jwt.sign({user}, process.env.JWT_SECRET, { expiresIn: '30m' }, (err, token) => {
+          if (err) return callback(err);
+          if (noEmails) return callback(null, {token});
+          emails(callback, [{token}]).resendVerificationEmail(user, token);
+        });
+      },
+    ], function(err, token){
+      respondToClient(res, err, 200, token);
+    });
+  });
+
+  /** Verify a user's account */
+  app.patch('/api/v1/users/:token/verify', function(req, res){
+    const { token } = req.params;
+    
+    async.waterfall([
+      function(callback){ // Verify the given token
+        jwt.verify(token, process.env.JWT_SECRET, (err, {user} = {}) => {
+          err ? callback(err) : callback(null, user);
+        });
+      },
+      function(user, callback){ // Change user's clearance to indicate verification
+        if (user.clearance > 1) return callback(ERROR.VERIFICATION_NOT_REQUIRED());
+        const { sql, values } = SQL.USERS.UPDATE('clearance', user.id, 2)
+        conn.query(sql, values, function(err){
+          if (err) return callback(err);
+          user.clearance = 2;
+          callback(null, user);
+        });
+      }
+    ], function(err, user){
+      respondToClient(res, err, 200, user);
+
+      // TODO: Review when doing routes
+      // err ? renderErrorPage(req, res, err, server) : res.redirect(`/account?verified=${token}`);
+    });
+  });
+
+  /** Send account recovery email */
+  app.notify('/api/v1/users/recovery', validateReq, function(req, res){
+    const { email } = req.body;
+    
+    async.waterfall([
+      function(callback){ // Retrieve user using email address
+        const sql = SQL.USERS.READ.RECOVERY('id, firstname, lastname, clearance, email, username');
+        conn.query(sql, email, function(err, [user] = []){
+          if (err) return callback(err);
+          if (!user) return callback(ERROR.NONEXISTENT_EMAIL_ADDRESS());
+          callback(null, user);
+        });
+      },
+      function(user, callback){ // Generate recovery token to be sent via email
+        jwt.sign({user}, process.env.JWT_SECRET, { expiresIn: '30m'}, (err, token) => {
+          if (err) return callback(err);
+          if (noEmails) return callback(null, {token});
+          emails(callback, [{token}]).sendAccountRecoveryEmail(user, token);
+        });
+      },
+    ], function(err, token){
+      respondToClient(res, err, 200, token);
+    });
+  });
+
+  /** Change a user's password from reset */
+  app.patch('/api/v1/users/password/reset', function(req, res){
+    const { token, password } = req.body;
+    
+    async.waterfall([
+      function(callback){ // Verify the given token
+        jwt.verify(token, process.env.JWT_SECRET, (err, {user}) => {
+          err ? callback(err) : callback(null, user);
+        });
+      },
+      function(user, callback){ // Hash new password
+        bcrypt.hash(password, 8, function(err, hash) {
+          err ? callback(err) : callback(null, user.id, hash);
+        });
+      },
+      function(id, hash, callback){ // Update user's password in database
+        const { sql, values } = SQL.USERS.UPDATE('password', id, hash)
+        conn.query(sql, values, function(err, result){
+          if (result.affectedRows === 0) err = ERROR.INVALID_USER_ID(id);
+          err ? callback(err) : callback(null);
+        });
+      }
+    ], function(err){
+      respondToClient(res, err, 200);
     });
   });
 
@@ -732,120 +828,6 @@ module.exports = function(app, conn){
       respondToClient(res, err, 200);
     });
   });
-
-  //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-
-/** Resend the verification email to user's email address */
-app.notify('/resendVerificationEmail', validateReq, function(req, res){
-  const { id } = req.body;
-  
-  async.waterfall([
-    function(callback){ // Retrieve user and token string from database
-      const sql = `SELECT id, firstname, lastname, clearance, username, email FROM user WHERE id = ?`;
-      
-      conn.query(sql, id, function(err, result){	
-        err ? callback(err) : callback(null, result[0]);
-      });
-    },
-    function(user, callback){ // Generate verification token to send via email
-      jwt.sign({user}, process.env.JWT_SECRET, { expiresIn: '30m'}, (err, token) => {
-        err ? callback(err) : callback(null, user, token);
-      });
-    },
-    function(user, token, callback){ // Resend verification email to user
-      emails.resendVerificationEmail(user, token);
-      callback(null);
-    }
-  ], function(err){
-    respondToClient(res, err);
-  });
-});
-
-/** Change user's username in database */
-app.get('/verifyAccount/:token', function(req, res){
-  const { token } = req.params;
-  
-  async.waterfall([
-    function(callback){ // Verify the given token
-      jwt.verify(token, process.env.JWT_SECRET, (err, auth) => {
-        err ? callback(err) : callback(null, auth.user);
-      });
-    },
-    function(user, callback){ /** Verify account by changing user clearance to verified */
-      if (user.clearance !== 1) return callback(new Error(`Verification not required.`));
-
-      conn.query('UPDATE user SET clearance = 2 WHERE id = ?', user.id, function(err){	
-        err ? callback(err) : callback(null);
-      });
-    }
-  ], function(err){
-    err ? renderErrorPage(req, res, err, server) : res.redirect(`/account?verified=${token}`);
-  });
-});
-
-/** Send reset password email */
-app.notify('/sendAccountRecoveryEmail', validateReq, function(req, res){
-  const { email } = req.body;
-  
-  async.waterfall([
-    function(callback){ /** Retrieve user from email */
-      conn.query(`SELECT id, firstname, lastname, clearance, email, username FROM user WHERE email = ?`, email, function(err, result){
-        err ? callback(err) : callback(null, result[0]);
-      });
-    },
-    function(user, callback){ /** Generate recovery token to be sent via email */
-      jwt.sign({user}, process.env.JWT_SECRET, { expiresIn: '30m'}, (err, token) => {
-        err ? callback(err) : callback(null, user, token);
-      });
-    },
-    function(user, token, callback){ // Send account recovery email with link to reset password
-      emails.sendAccountRecoveryEmail(user, token);
-      callback(null);
-    },
-  ], function(err){
-    respondToClient(res, err);
-  });
-});
-
-/** Reset user password */
-app.put('/resetPassword', function(req, res){
-  const { token, password } = req.body;
-  
-  async.waterfall([
-    function(callback){ // Verify the given token
-      jwt.verify(token, process.env.JWT_SECRET, (err, result) => {
-        err ? callback(err) : callback(null, result.user);
-      });
-    },
-    function(user, callback){ // Hash new password
-      bcrypt.hash(password, 8, function(err, hash) {
-        err ? callback(err) : callback(null, user.id, hash);
-      });
-    },
-    function(id, hash, callback){
-      const sql = "UPDATE user SET password = ? WHERE id = ?";
-      const values = [hash, id];
-      conn.query(sql, values, function(err){
-        err ? callback(err) : callback(null);
-      });
-    }
-  ], function(err){
-    respondToClient(res, err);
-  });
-});
 }
 
 /** Subscribe new user to Mailchimp mailing list */

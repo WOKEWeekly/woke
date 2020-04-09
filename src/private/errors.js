@@ -48,8 +48,13 @@ module.exports = {
     return err;
   },
 
-  INEXISTENT_CREDENTIALS: () => {
+  NONEXISTENT_CREDENTIALS: () => {
     const err = new Error("Your username or password is incorrect.");
+    err.status = 404;
+    return err;
+  },
+  NONEXISTENT_EMAIL_ADDRESS: () => {
+    const err = new Error("The submitted email address does not exist.");
     err.status = 404;
     return err;
   },
@@ -89,6 +94,11 @@ module.exports = {
     } else {
       err.message = message;
     }
+    return err;
+  },
+  VERIFICATION_NOT_REQUIRED: () => {
+    const err = new Error(`Verification not required.`);
+    err.status = 403;
     return err;
   }
 }

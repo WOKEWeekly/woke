@@ -67,9 +67,8 @@ class Account extends Component {
     const { id } = this.state;
 
     request({
-      url: '/resendVerificationEmail',
+      url: `/api/v1/users/${id}/email/verify`,
       method: 'NOTIFY',
-      body: JSON.stringify({id}),
       headers: { 'Authorization': process.env.AUTH_KEY },
       onSuccess: () => alert.success('Resend successful. Check your email for the verification link.')
     });

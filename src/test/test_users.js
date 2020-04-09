@@ -4,8 +4,11 @@ const { TEST_USERS } = require('./configuration/data.js');
 const superuser = TEST_USERS.NINE;
 
 let USER_ID = 0;
+let USER_EMAIL = '';
+let EMAIL_VERIFICATION_TOKEN = '';
+let ACCOUNT_VERIFICATION_TOKEN = '';
 
-describe("Users Tests", function() {
+describe("User Tests", function() {
   this.slow(10000);
   
   before(function(done){
@@ -36,6 +39,7 @@ describe("Users Tests", function() {
           assert.equal(status, 201);
           assert.isObject(data);
           USER_ID = data.id;
+          USER_EMAIL = data.email;
         }
       });
     });
@@ -101,6 +105,65 @@ describe("Users Tests", function() {
     });
   });
 
+  /** Test other methods against users */
+  describe("Miscellaneous", function() {
+    it("Resend user verification email", function(done) {
+      request({
+        url: `/api/v1/users/${USER_ID}/email/verify`,
+        method: 'NOTIFY',
+        headers: HEADERS.KEY,
+        done,
+        onSuccess: ({status, data}) => {
+          assert.equal(status, 200);
+          assert.hasAllKeys(data, ['token']);
+          EMAIL_VERIFICATION_TOKEN = data.token;
+        }
+      });
+    });
+
+    it("Verify user's account", function(done) {
+      request({
+        url: `/api/v1/users/${EMAIL_VERIFICATION_TOKEN}/verify`,
+        method: 'PATCH',
+        done,
+        onSuccess: ({status, data}) => {
+          assert.equal(status, 200);
+          assert.include(data, { clearance: 2});
+        }
+      });
+    });
+
+    it("Send account recovery email", function(done) {
+      request({
+        url: `/api/v1/users/recovery`,
+        method: 'NOTIFY',
+        body: JSON.stringify({ email: USER_EMAIL }),
+        headers: HEADERS.KEY,
+        done,
+        onSuccess: ({status, data}) => {
+          assert.equal(status, 200);
+          assert.hasAllKeys(data, ['token']);
+          ACCOUNT_VERIFICATION_TOKEN = data.token;
+        }
+      });
+    });
+
+    it("Reset password", function(done) {
+      request({
+        url: `/api/v1/users/password/reset`,
+        method: 'PATCH',
+        body: JSON.stringify({
+          password: TEST_USERS.CREATED.password1,
+          token: ACCOUNT_VERIFICATION_TOKEN
+        }),
+        headers: HEADERS.KEY,
+        done,
+        onSuccess: ({status}) => {
+          assert.equal(status, 200);
+        }
+      });
+    });
+  });
 
   /** Test PUT methods against users */
   describe("Update", function() {

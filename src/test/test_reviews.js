@@ -6,7 +6,7 @@ const superuser = TEST_USERS.NINE;
 let REVIEW_ID = 0;
 let REVIEWS_LENGTH = 0;
 
-describe("Reviews Tests", function() {
+describe("Review Tests", function() {
   this.slow(10000);
   
   before(function(done){

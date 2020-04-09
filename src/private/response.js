@@ -13,7 +13,7 @@ module.exports = {
     if (err && typeof err === 'object'){ // If there is an error...
       const log = process.argv.includes('verbose') ? err : err.toString();
       console.error(log);
-      return res.status(err.status || 500).json({message: retrieveErrorMessage(err)});
+      return res.status(err.status || 500).json({message: err.message});
     }
 
     return res.status(expectedStatus).json(json);
@@ -28,23 +28,7 @@ module.exports = {
    */
   renderErrorPage: (req, res, err, server) => {
     if (err) console.error(err.toString());
-    const message = err ? retrieveErrorMessage(err) : '';
+    const message = err ? err.message : '';
     return server.render(req, res, '/error', { message });
   }
-}
-
-/**
- * Extract and/or simplify the error message using given information. 
- * @param {Error} err - The object containing information about the error
- */
-retrieveErrorMessage = (err) => {
-  if (err.errno === 1062){
-    if (err.toString().includes("email")){ // If duplicate entry in MySQL
-      return "This email address already exists.";
-    } else if (err.toString().includes("username")){
-      return "The username you have chosen already exists.";
-    }
-  }
-
-  return err.message; 
 }

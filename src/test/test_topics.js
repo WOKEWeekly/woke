@@ -5,7 +5,7 @@ const superuser = TEST_USERS.NINE;
 
 let TOPIC_ID = 0;
 
-describe("Topics Tests", function() {
+describe("Topic Tests", function() {
   this.slow(10000);
   
   before(function(done){
