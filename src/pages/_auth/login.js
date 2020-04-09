@@ -43,9 +43,10 @@ class LoginModal extends Component {
     if (!isValidLogin(this.state)) return;
 
     request({
-      url: '/login',
+      url: '/api/v1/users/login',
       method: 'POST',
       body: JSON.stringify(this.state),
+      headers: { 'Authorization': process.env.AUTH_KEY },
       onSuccess: (user) => {
         setCookie('remember', this.state.remember, 365 * 24);
         this.props.saveUser(user);

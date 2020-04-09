@@ -65,7 +65,7 @@ class Signup extends Component {
     if (!isValidSignup(this.state)) return;
 
     request({
-      url: '/signup',
+      url: '/api/v1/users',
       method: 'POST',
       body: JSON.stringify(this.state),
       headers: {  'Authorization': process.env.AUTH_KEY },

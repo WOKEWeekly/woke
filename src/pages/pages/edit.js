@@ -41,7 +41,7 @@ class EditPage extends Component {
     const { pageText, backPath } = this.state;
 
     request({
-      url: '/updatePage',
+      url: '/api/v1/pages',
       method: 'PUT',
       body: JSON.stringify({page: pageName, text: pageText}),
       headers: { 'Authorization': `Bearer ${user.token}` },

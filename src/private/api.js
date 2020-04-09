@@ -1,5 +1,12 @@
 const async = require('async');
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+const validator = require("email-validator");
 
+const Mailchimp = require('mailchimp-api-v3');
+const mailchimp = new Mailchimp(process.env.MAILCHIMP_API_KEY);
+
+const emails = require('./emails.js');
 const ERROR = require('./errors.js');
 const filer = require('./filer.js');
 const { verifyToken, validateReq, logUserActivity } = require('./middleware.js');
@@ -516,7 +523,8 @@ module.exports = function(app, conn){
   });
 
   /** Retrieve individual user */
-  app.get('/api/v1/users/:id([0-9]+)', validateReq, function(req, res){
+  app.get('/api/v1/users/:id', validateReq, function(req, res){
+    // TODO: Differentiate between self-reading and admin-reading.
     const id = req.params.id;
     const sql = SQL.USERS.READ.SINGLE("id, firstname, lastname, clearance, username, email, create_time, last_active");
 
@@ -526,28 +534,344 @@ module.exports = function(app, conn){
     });
   });
 
+  /** Add or register a new user */
+  app.post('/api/v1/users', validateReq, function(req, res){
+    const { firstname, lastname, email, username, password1, password2, subscribe} = req.body;
+    
+    if (!validator.validate(email)) return respondToClient(res, ERROR.INVALID_EMAIL_ADDRESS());
+    if (password1 !== password2) return respondToClient(res, ERROR.PASSWORD_MISMATCH());
+    
+    async.waterfall([
+      function(callback){  /** Hash entered password */
+        bcrypt.hash(password1, 8, function(err, hash) {
+          err ? callback(err) : callback(null, hash);
+        });
+      },
+      function(hash, callback){ /** Insert new user into database */
+        const { sql, values } = SQL.USERS.CREATE(req.body, hash);
+        conn.query(sql, [values], function(err, result){	
+          if (err) return callback(err);
+          
+          const user = {
+            id: result.insertId,
+            firstname, lastname, username, email,
+            clearance: 1
+          };
+          
+          // Subscribe user to mailing list if allowed
+          if (subscribe) subscribeUserToMailingList(user);
+          callback(null, user);
+        });
+      },
+      function(user, callback){ // Generate verification token to be sent via email
+        jwt.sign({ user }, process.env.JWT_SECRET, { expiresIn: '24h' }, (err, token) => {
+          if (err) return callback(err);
+          // emails.sendWelcomeEmail(user, token);
+          callback(null, user);
+        });
+      },
+      function(user, callback){ // Pass authenticated user information to client with access token
+        jwt.sign({ user }, process.env.JWT_SECRET, { expiresIn: '2h' }, (err, token) => {
+          if (err) return callback(err);
+          callback(null, {
+            id: user.id,
+            firstname: user.firstname,
+            lastname: user.lastname,
+            clearance: user.clearance,
+            username: user.username,
+            token
+          });
+        });
+      }
+    ], function(err, user){
+      if (err && err.code === ERROR.SQL_DUP_CODE){
+        if (err.sqlMessage.includes("email")){
+          err = ERROR.DUPLICATE_EMAIL_ADDRESS();
+        } else if (err.sqlMessage.includes("username")){
+          err = ERROR.DUPLICATE_USERNAME();
+        }
+      }
+      respondToClient(res, err, 201, user);
+    });
+  });
+
+  /* Log in / authenticate user */
+  app.post('/api/v1/users/login', validateReq, function(req, res){
+    const { username, password, remember } = req.body;
+
+    async.waterfall([
+      function(callback){ // Attempt to retrieve user
+        const { sql, values } = SQL.USERS.READ.LOGIN(username);
+        conn.query(sql, values, function(err, [user]){
+          if (err) return callback(err);
+          if (!user) return callback(ERROR.INEXISTENT_CREDENTIALS());
+
+          const passwordIsIncorrect = !bcrypt.compareSync(password, user.password) && !(user.password == password);
+          if(passwordIsIncorrect) return callback(ERROR.INEXISTENT_CREDENTIALS());
+          
+          callback(null, user);
+        });
+      },
+      function(user, callback){ // Assign access token to user
+        jwt.sign({ user }, process.env.JWT_SECRET, { expiresIn: remember ? '30d' : '2h' }, (err, token) => {
+          if (err) return callback(err);
+          user.token = token;
+          callback(null, user);
+        });
+      }
+    ], function(err, user){
+      respondToClient(res, err, 200, user);
+    });
+  });
+
+  /** Change user's username in database */
+  app.put('/api/v1/users/:id/username', verifyToken(CLEARANCES.ACTIONS.CHANGE_ACCOUNT), function(req, res){
+    const { id } = req.params;
+    const { username } = req.body;
+
+    const { sql, values } = SQL.USERS.UPDATE('username', id, username);
+    conn.query(sql, values, function(err, result){
+      if (err && err.code === ERROR.SQL_DUP_CODE){
+        if (err.sqlMessage.includes("username")){
+          respondToClient(res, ERROR.DUPLICATE_USERNAME());
+        }
+      }
+      if (result.affectedRows === 0) return respondToClient(res, ERROR.INVALID_USER_ID(id));
+
+      respondToClient(res, err, 200);
+    });
+  });
+
+  /** Change user's password in database */
+  app.put('/api/v1/users/:id/password', verifyToken(CLEARANCES.ACTIONS.CHANGE_ACCOUNT), function(req, res){
+    const { id } = req.params;
+    const { oldPassword, newPassword } = req.body;
+
+    async.waterfall([
+      function(callback){ // Get current password of user
+        conn.query(SQL.USERS.READ.SINGLE(), id, function(err, [user]){
+          if (!user) return callback(ERROR.INVALID_USER_ID(id));
+          err ? callback(err) : callback(null, user.password);
+        });
+      },
+      function(password, callback){ // Verify that current password is valid
+        if (!(bcrypt.compareSync(oldPassword, password) || oldPassword === password)) {
+          callback(ERROR.INCORRECT_PASSWORD());
+        } else {
+          callback(null);
+        } 
+      },
+      function(callback){ // Hash new password
+        bcrypt.hash(newPassword, 8, function(err, hash) {
+          err ? callback(err) : callback(null, hash);
+        });
+      },
+      function(hash, callback){ // Store new hashed password
+        const { sql, values } = SQL.USERS.UPDATE('password', id, hash);
+        conn.query(sql, values, function(err){
+          err ? callback(err) : callback(null);
+        });
+      }
+    ], function(err){
+      respondToClient(res, err, 200);
+    });
+  });
+
   /** Change user's clearance */
   app.put('/api/v1/users/:id/clearance/:value', verifyToken(CLEARANCES.ACTIONS.CRUD_USERS), function(req, res){
-    const { id, value } = req.params.id;
-    const { sql, values } = SQL.USERS.UPDATE.CLEARANCE(id, value)
+    const { id, value } = req.params;
+    const { sql, values } = SQL.USERS.UPDATE('clearance', id, value);
     conn.query(sql, values, function(err){	
       respondToClient(res, err, 200);
     });
   });
 
-  /*******************************************************
-   * 
-   * api redesign checkpoint
-   * 
-   *******************************************************/
-
-  /** Update information pages */
-  app.put('/updatePage', verifyToken(CLEARANCES.ACTIONS.EDIT_INFO), function(req, res){
-    const { page, text } = req.body;
-    const sql = "UPDATE pages SET text = ?, last_modified = ? WHERE name = ?";
-    const values = [text, new Date(), page];
-    conn.query(sql, values, function (err) {
-      respondToClient(res, err);
+  /** Delete a user */
+  app.delete('/api/v1/users/:id', verifyToken(CLEARANCES.ACTIONS.DELETE_ACCOUNT), function(req, res){
+    // TODO: Differentiate between self-deletion and admin-deletion.
+    const id = req.params.id;
+    conn.query(SQL.USERS.DELETE, id, function(err, result){	
+      if (result.affectedRows === 0) err = ERROR.INVALID_USER_ID(id);
+      respondToClient(res, err, 204);
     });
   });
+
+  /** Delete a user */
+  app.delete('/api/v1/users/:id([0-9]+)', verifyToken(CLEARANCES.ACTIONS.DELETE_ACCOUNT), function(req, res){
+    // TODO: Differentiate between self-deletion and admin-deletion.
+    const id = req.params.id;
+    conn.query(SQL.USERS.DELETE, id, function(err, result){	
+      if (result.affectedRows === 0) err = ERROR.INVALID_USER_ID(id);
+      respondToClient(res, err, 204);
+    });
+  });
+
+  /** Clear added users */
+  app.purge('/api/v1/users', verifyToken(9), function(req, res){
+    if (process.env.NODE_ENV === 'production') return respondToClient(res, ERROR.UNAUTHORIZED_REQUEST());
+    
+    conn.query(SQL.USERS.CLEAR, function(err){
+      respondToClient(res, err, 204);
+    });
+  });
+
+  /** Update information pages */
+  app.put('/api/v1/pages', verifyToken(CLEARANCES.ACTIONS.EDIT_INFO), function(req, res){
+    const { page, text } = req.body;
+    const { sql, values } = SQL.PAGES.UPDATE(page, text);
+    conn.query(sql, values, function (err) {
+      // TODO: INVALID_PAGES_ID check
+      respondToClient(res, err, 200);
+    });
+  });
+}
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/** Generate Topic Bank access token */
+app.put('/generateTopicBankToken', verifyToken(CLEARANCES.ACTIONS.GENERATE_NEW_TOKEN), function(req, res){
+  const token = generateRandomString(12);
+  const sql = `UPDATE tokens SET value = ?, lastUpdated = ? WHERE name = ?`;
+  const values = [token, new Date(), 'topicBank'];
+      
+  conn.query(sql, values, function(err){	
+    respondToClient(res, err, {token});
+  });
+});
+
+/** Resend the verification email to user's email address */
+app.notify('/resendVerificationEmail', validateReq, function(req, res){
+  const { id } = req.body;
+  
+  async.waterfall([
+    function(callback){ // Retrieve user and token string from database
+      const sql = `SELECT id, firstname, lastname, clearance, username, email FROM user WHERE id = ?`;
+      
+      conn.query(sql, id, function(err, result){	
+        err ? callback(err) : callback(null, result[0]);
+      });
+    },
+    function(user, callback){ // Generate verification token to send via email
+      jwt.sign({user}, process.env.JWT_SECRET, { expiresIn: '30m'}, (err, token) => {
+        err ? callback(err) : callback(null, user, token);
+      });
+    },
+    function(user, token, callback){ // Resend verification email to user
+      emails.resendVerificationEmail(user, token);
+      callback(null);
+    }
+  ], function(err){
+    respondToClient(res, err);
+  });
+});
+
+/** Change user's username in database */
+app.get('/verifyAccount/:token', function(req, res){
+  const { token } = req.params;
+  
+  async.waterfall([
+    function(callback){ // Verify the given token
+      jwt.verify(token, process.env.JWT_SECRET, (err, auth) => {
+        err ? callback(err) : callback(null, auth.user);
+      });
+    },
+    function(user, callback){ /** Verify account by changing user clearance to verified */
+      if (user.clearance !== 1) return callback(new Error(`Verification not required.`));
+
+      conn.query('UPDATE user SET clearance = 2 WHERE id = ?', user.id, function(err){	
+        err ? callback(err) : callback(null);
+      });
+    }
+  ], function(err){
+    err ? renderErrorPage(req, res, err, server) : res.redirect(`/account?verified=${token}`);
+  });
+});
+
+/** Send reset password email */
+app.notify('/sendAccountRecoveryEmail', validateReq, function(req, res){
+  const { email } = req.body;
+  
+  async.waterfall([
+    function(callback){ /** Retrieve user from email */
+      conn.query(`SELECT id, firstname, lastname, clearance, email, username FROM user WHERE email = ?`, email, function(err, result){
+        err ? callback(err) : callback(null, result[0]);
+      });
+    },
+    function(user, callback){ /** Generate recovery token to be sent via email */
+      jwt.sign({user}, process.env.JWT_SECRET, { expiresIn: '30m'}, (err, token) => {
+        err ? callback(err) : callback(null, user, token);
+      });
+    },
+    function(user, token, callback){ // Send account recovery email with link to reset password
+      emails.sendAccountRecoveryEmail(user, token);
+      callback(null);
+    },
+  ], function(err){
+    respondToClient(res, err);
+  });
+});
+
+/** Reset user password */
+app.put('/resetPassword', function(req, res){
+  const { token, password } = req.body;
+  
+  async.waterfall([
+    function(callback){ // Verify the given token
+      jwt.verify(token, process.env.JWT_SECRET, (err, result) => {
+        err ? callback(err) : callback(null, result.user);
+      });
+    },
+    function(user, callback){ // Hash new password
+      bcrypt.hash(password, 8, function(err, hash) {
+        err ? callback(err) : callback(null, user.id, hash);
+      });
+    },
+    function(id, hash, callback){
+      const sql = "UPDATE user SET password = ? WHERE id = ?";
+      const values = [hash, id];
+      conn.query(sql, values, function(err){
+        err ? callback(err) : callback(null);
+      });
+    }
+  ], function(err){
+    respondToClient(res, err);
+  });
+});
+
+const generateRandomString = (length) => {
+  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  const charactersLength = characters.length;
+
+  let result = '';
+  for (let i = 0; i < length; i++) {
+    result += characters.charAt(Math.floor(Math.random() * charactersLength));
+  }
+  return result;
+}
+
+/** Subscribe new user to Mailchimp mailing list */
+const subscribeUserToMailingList = (user) => {
+  mailchimp.post(`/lists/${process.env.MAILCHIMP_LISTID}/members`, {
+    email_address: user.email,
+    status: 'subscribed',
+    merge_fields: {
+      FNAME: user.firstname,
+      LNAME: user.lastname
+    }
+  })
+  .then(results => console.log(results))
+  .catch(err => console.log(err.toString()));
 }

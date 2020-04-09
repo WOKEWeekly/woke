@@ -12,14 +12,11 @@ const cookieParser = require('cookie-parser');
 const cors = require('cors');
 const dotenv = require('dotenv').config({path: config });
 const mysql = require('mysql');
-const passport = require('passport');
 const port = parseInt(process.env.PORT, 10) || 3000;
 
 app.use(bodyParser.json({ limit: '2MB' }));
 app.use(cookieParser());
 app.use(cors());
-app.use(passport.initialize());
-app.use(passport.session());
 
 if (dotenv.error) {
   throw new Error(`Environment file doesn't exist at ${config}.`);
@@ -55,7 +52,6 @@ conn.connect(function(err) {
 *******************************************/
 
 require('./private/api.js')(app, conn);
-require('./private/auth.js')(app, conn, passport, server);
 require('./private/routes.js')(app, conn, server);
 require('./private/cron.js')(conn);
 

@@ -31,7 +31,7 @@ class CandidateForm extends Component {
 
   componentDidMount(){
     request({
-      url: '/api/v1/members/soft',
+      url: '/api/v1/members/names',
       method: 'GET',
       headers: { 'Authorization': process.env.AUTH_KEY },
       onSuccess: (response) => {

@@ -2,7 +2,7 @@ const SESSIONS = {
   /**
    * Constructs the SQL statement to create a session.
    * @param {object} session - The object containing the session details.
-   * @returns {string} The constructed statement.
+   * @returns {object} The SQL statement and the values.
    */
   CREATE: (session) => {
     const sql = "INSERT INTO sessions (title, dateHeld, timeHeld, image, slug, description) VALUES ?";
@@ -15,7 +15,8 @@ const SESSIONS = {
     ALL: "SELECT * FROM sessions",
 
     /**
-     * Constructs the SQL statement to return information for a single session.
+     * Constructs the SQL statement to return information for a single
+     * session.
      * @param {string} [fields] - The fields to be queried.
      * @returns {string} The constructed statement.
      */
@@ -35,8 +36,9 @@ const SESSIONS = {
    * Constructs the SQL statement to update a session.
    * @param {number} id - The identifier of the session.
    * @param {object} session - The object containing the session details.
-   * @param {boolean} imageHasChanged - Indicates whether the image has changed in this request.
-   * @returns {string} The constructed statement.
+   * @param {boolean} imageHasChanged - Indicates whether the image has
+   * changed in this request.
+   * @returns {object} The SQL statement and the values.
    */
   UPDATE: (id, session, imageHasChanged) => {
     let sql = "UPDATE sessions SET title = ?, dateHeld = ?, timeHeld = ?, slug = ?, description = ? WHERE id = ?";
@@ -58,7 +60,7 @@ const CANDIDATES = {
   /**
    * Constructs the SQL statement to create a candidate.
    * @param {object} candidate - The object containing the candidate details.
-   * @returns {string} The constructed statement.
+   * @returns {object} The SQL statement and the values.
    */
   CREATE: (candidate) => {
     const sql = "INSERT INTO candidates (id, name, image, birthday, ethnicity, socials, occupation, description,author_id, date_written) VALUES ?";
@@ -92,7 +94,7 @@ const CANDIDATES = {
    * @param {number} id - The identifier of the candidate.
    * @param {object} candidate - The object containing the candidate details.
    * @param {boolean} imageHasChanged - Indicates whether the image has changed in this request.
-   * @returns {string} The constructed statement.
+   * @returns {object} The SQL statement and the values.
    */
   UPDATE: (id, candidate, imageHasChanged) => {
     let sql = "UPDATE candidates SET id = ?, name = ?, birthday = ?, ethnicity = ?, socials = ?, occupation = ?, description = ?,author_id = ?, date_written = ? WHERE id = ?";
@@ -114,7 +116,7 @@ const MEMBERS = {
   /**
    * Constructs the SQL statement to create a member.
    * @param {object} member - The object containing the member details.
-   * @returns {string} The constructed statement.
+   * @returns {object} The SQL statement and the values.
    */
   CREATE: (member) => {
     const sql = "INSERT INTO members (firstname, lastname, image, level, birthday, sex, role, ethnicity, socials, slug, description, verified, slackID) VALUES ?";
@@ -151,8 +153,9 @@ const MEMBERS = {
    * Constructs the SQL statement to update a member.
    * @param {number} id - The identifier of the member.
    * @param {object} member - The object containing the member details.
-   * @param {boolean} imageHasChanged - Indicates whether the image has changed in this request.
-   * @returns {string} The constructed statement.
+   * @param {boolean} imageHasChanged - Indicates whether the image has
+   * changed in this request.
+   * @returns {object} The SQL statement and the values.
    */
   UPDATE: (id, member, imageHasChanged) => {
     let sql = "UPDATE members SET firstname = ?, lastname = ?, image = ?, level = ?, birthday = ?, sex = ?, role = ?, ethnicity = ?, socials = ?, slug = ?, description = ?, verified = ?, slackID = ? WHERE id = ?";
@@ -174,7 +177,7 @@ const TOPICS = {
   /**
    * Constructs the SQL statement to create a topic.
    * @param {object} topic - The object containing the topic details.
-   * @returns {string} The constructed statement.
+   * @returns {object} The SQL statement and the values.
    */
   CREATE: (topic) => {
     const sql = "INSERT INTO topics (headline, category, question, description, type, polarity, validated, sensitivity, option1, option2, user_id) VALUES ?";
@@ -209,8 +212,9 @@ const TOPICS = {
    * Constructs the SQL statement to update a topic.
    * @param {number} id - The identifier of the topic.
    * @param {object} topic - The object containing the topic details.
-   * @param {boolean} imageHasChanged - Indicates whether the image has changed in this request.
-   * @returns {string} The constructed statement.
+   * @param {boolean} imageHasChanged - Indicates whether the image has
+   * changed in this request.
+   * @returns {object} The SQL statement and the values.
    */
   UPDATE: {
     DETAILS: (id, topic) => {
@@ -232,7 +236,7 @@ const REVIEWS = {
   /**
    * Constructs the SQL statement to create a review.
    * @param {object} review - The object containing the review details.
-   * @returns {string} The constructed statement.
+   * @returns {object} The SQL statement and the values.
    */
   CREATE: (review) => {
     const sql = "INSERT INTO reviews (referee, position, rating, image, description) VALUES ?";
@@ -268,7 +272,7 @@ const REVIEWS = {
    * @param {number} id - The identifier of the review.
    * @param {object} review - The object containing the review details.
    * @param {boolean} imageHasChanged - Indicates whether the image has changed in this request.
-   * @returns {string} The constructed statement.
+   * @returns {object} The SQL statement and the values.
    */
   UPDATE: (id, review, imageHasChanged) => {
     let sql = "UPDATE reviews SET referee = ?, position = ?, rating = ?, image = ?, description = ? WHERE id = ?";
@@ -282,11 +286,22 @@ const REVIEWS = {
     return { sql, values };
   },
 
-  /** The SQL statement to delete a member. */
+  /** The SQL statement to delete a review. */
   DELETE: "DELETE FROM reviews WHERE id = ?"
 };
 
 const USERS = {
+  /**
+   * Constructs the SQL statement to create a user.
+   * @param {object} user - The object containing the user details.
+   * @returns {object} The SQL statement and the values.
+   */
+  CREATE: (user, hash) => {
+    const sql = "INSERT INTO users (firstname, lastname, clearance, email, username, password) VALUES ?";
+    const values = [[user.firstname, user.lastname, 1, user.email, user.username, hash]];
+    return { sql, values };
+  },
+
   READ: {
     /**
      * Constructs the SQL statement to return information for all users.
@@ -298,7 +313,19 @@ const USERS = {
     },
 
     /**
-     * Constructs the SQL statement to return information for a single review.
+     * Constructs the SQL statement to return a user using a username or
+     * email address.
+     * @param {string} username - The submitted username.
+     * @returns {object} The SQL statement and the values.
+     */
+    LOGIN: (username) => {
+      const sql = `SELECT * FROM users WHERE Username = ? OR Email = ?`;
+      const values = [username, username];
+      return { sql, values };
+    },
+
+    /**
+     * Constructs the SQL statement to return information for a single user.
      * @param {string} [fields] - The fields to be queried.
      * @returns {string} The constructed statement.
      */
@@ -307,18 +334,36 @@ const USERS = {
       return sql;
     },
   },
-  UPDATE: {
-    /**
-     * Constructs the SQL statement to update a user.
-     * @param {number} id - The identifier of the user.
-     * @param {number} clearance - The object containing the user details.
-     * @returns {string} The constructed statement.
-     */
-    CLEARANCE: (id, clearance) => {
-      const sql = "UPDATE users SET clearance = ? WHERE id = ?";
-      const values = [clearance, id];
-      return { sql, values };
-    }
+
+  /**
+   * Constructs the SQL statement to change a user's clearance.
+   * @param {number} id - The identifier of the user.
+   * @param {number} clearance - The clearance value to be changed to.
+   * @returns {object} The SQL statement and the values.
+   */
+  UPDATE: (field, id, val) => {
+    const sql = `UPDATE users SET ${field} = ? WHERE id = ?`;
+    const values = [val, id];
+    return { sql, values };
+  },
+
+  /** The SQL statement to delete a user. */
+  DELETE: "DELETE FROM users WHERE id = ?",
+
+  CLEAR: "DELETE FROM users WHERE id > 2"
+};
+
+const PAGES = {
+  /**
+   * Constructs the SQL statement to update a page.
+   * @param {string} page - The name of the page.
+   * @param {string} text - The content text of the page.
+   * @returns {object} The SQL statement and the values.
+   */
+  UPDATE: (page, text) => {
+    const sql = "UPDATE pages SET text = ?, last_modified = ? WHERE name = ?";
+    const values = [text, new Date(), page];
+    return { sql, values };
   }
 }
 
@@ -328,7 +373,8 @@ module.exports = {
   MEMBERS,
   TOPICS,
   REVIEWS,
-  USERS
+  USERS,
+  PAGES
 }
 
 /**

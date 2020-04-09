@@ -37,15 +37,9 @@ class PreNavbar extends Component {
 
   /** Log out, de-authenticating the user */
   logOut = () => {
-    request({
-      url: '/logout',
-      method: 'POST',
-      onSuccess: () => {
-        this.props.clearUser();
-        setAlert({ type: 'info', message: 'You have successfully logged out.' });
-        location.reload();
-      }
-    });
+    this.props.clearUser();
+    setAlert({ type: 'info', message: 'You have successfully logged out.' });
+    location.reload();
   }
 
   render(){

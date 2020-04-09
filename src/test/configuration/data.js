@@ -141,13 +141,13 @@ module.exports = {
       lastname: 'Subject',
       clearance: 5
     },
-    ONE: {
-      firstname: 'David',
-      lastname: 'Egbue',
-      email: 'd.master700@gmail.com',
-      username: 'david',
-      password1: 'davido607',
-      password2: 'davido607',
+    CREATED: {
+      firstname: "Practice",
+      lastname: "User",
+      email: "wokeweeklyuk@gmail.com",
+      username: "wokew",
+      password1: "Marchsurrey20",
+      password2: "Marchsurrey20",
       subscribe: false
     }
   }

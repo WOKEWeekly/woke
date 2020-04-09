@@ -151,16 +151,13 @@ class _NewUsernameModal extends Component {
     const { username } = this.state;
     if (!isValidUsername(username)) return;
 
-    const body = JSON.stringify({
-      id: this.props.user.id,
-      username
-    });
+    const { id, token } = this.props.user;
 
     request({
-      url: '/changeUsername',
+      url: `/api/v1/users/${id}/username`,
       method: 'PUT',
-      body: body,
-      headers: {  'Authorization': `Bearer ${this.props.user.token}` },
+      body: JSON.stringify(username),
+      headers: {  'Authorization': `Bearer ${token}` },
       onSuccess: () => {
         this.props.changeUsername(username);
         setAlert({ type: 'success', message: `You've successfully changed your username.` });
@@ -222,17 +219,16 @@ class _NewPasswordModal extends Component {
     const { oldPassword, newPassword, newPassword2 } = this.state;
     if (!isValidPassword(newPassword, newPassword2, oldPassword)) return;
 
-    const body = JSON.stringify({
-      id: this.props.user.id,
-      oldPassword,
-      newPassword
-    });
+    const { id, token } = this.props.user;
 
     request({
-      url:'/changePassword',
+      url: `/api/v1/${id}/password`,
       method: 'PUT',
-      body: body,
-      headers: {  'Authorization': `Bearer ${this.props.user.token}` },
+      body: JSON.stringify({
+        oldPassword,
+        newPassword
+      }),
+      headers: {  'Authorization': `Bearer ${token}` },
       onSuccess: () => {
         setAlert({ type: 'success', message: `You've successfully changed your password.` });
         location.reload();
