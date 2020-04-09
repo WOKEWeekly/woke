@@ -13,6 +13,7 @@ module.exports = withPlugins([
     withCss,
     {
       webpack: function(config) {
+        config.devtool = 'cheap-module-source-map';
         config.node = {
           fs: 'empty',
           child_process: 'empty',

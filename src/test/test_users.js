@@ -11,6 +11,8 @@ describe("Users Tests", function() {
   before(function(done){
     jwt.sign({ user: superuser }, process.env.JWT_SECRET, { expiresIn: '1m' }, function(err, token){
       superuser.token = token;
+
+      // Clear data in table
       request({
         url: `/api/v1/users`,
         method: 'PURGE',
@@ -19,9 +21,6 @@ describe("Users Tests", function() {
         onSuccess: () => {}
       });
     });
-
-    // TODO: Clear data in table
-    
   });
 
   /** Test POST methods against users */

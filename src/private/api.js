@@ -368,6 +368,14 @@ module.exports = function(app, conn){
     });
   });
 
+  /** Generate Topic Bank access token */
+  app.get('/api/v1/topics/token', verifyToken(CLEARANCES.ACTIONS.GENERATE_NEW_TOKEN), function(req, res){
+    const { sql, values, token } = SQL.TOPICS.READ.REGENERATE_TOKEN();
+    conn.query(sql, values, function(err){	
+      respondToClient(res, err, 200, { token });
+    });
+  });
+
   /** Add new topic to database */
   app.post('/api/v1/topics', verifyToken(CLEARANCES.ACTIONS.CRUD_TOPICS), function(req, res){
     const topic = req.body;
@@ -724,8 +732,8 @@ module.exports = function(app, conn){
       respondToClient(res, err, 200);
     });
   });
-}
 
+  //
 //
 //
 //
@@ -739,18 +747,6 @@ module.exports = function(app, conn){
 //
 //
 //
-//
-
-/** Generate Topic Bank access token */
-app.put('/generateTopicBankToken', verifyToken(CLEARANCES.ACTIONS.GENERATE_NEW_TOKEN), function(req, res){
-  const token = generateRandomString(12);
-  const sql = `UPDATE tokens SET value = ?, lastUpdated = ? WHERE name = ?`;
-  const values = [token, new Date(), 'topicBank'];
-      
-  conn.query(sql, values, function(err){	
-    respondToClient(res, err, {token});
-  });
-});
 
 /** Resend the verification email to user's email address */
 app.notify('/resendVerificationEmail', validateReq, function(req, res){
@@ -850,16 +846,6 @@ app.put('/resetPassword', function(req, res){
     respondToClient(res, err);
   });
 });
-
-const generateRandomString = (length) => {
-  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-  const charactersLength = characters.length;
-
-  let result = '';
-  for (let i = 0; i < length; i++) {
-    result += characters.charAt(Math.floor(Math.random() * charactersLength));
-  }
-  return result;
 }
 
 /** Subscribe new user to Mailchimp mailing list */

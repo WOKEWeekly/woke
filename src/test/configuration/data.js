@@ -148,6 +148,7 @@ module.exports = {
       username: "wokew",
       password1: "Marchsurrey20",
       password2: "Marchsurrey20",
+      privacy: true,
       subscribe: false
     }
   }

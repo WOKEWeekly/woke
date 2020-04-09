@@ -18,8 +18,8 @@ module.exports = {
    * @param {string} [request.method] - The method of the request. Defaults to GET.
    * @param {Object} [request.body] - The payload for the request.
    * @param {Object} [request.headers] - The headers to accompany the request.
-   * @param {Function} request.onSuccess - Function triggered on successful request.
-   * @param {Function} request.onError - Function triggered on successful request.
+   * @param {Function} [request.onSuccess] - Function triggered on successful request.
+   * @param {Function} [request.onError] - Function triggered on successful request.
    * @param {Function} [request.done] - The callback to finish the test.
    */
   request: ({
@@ -40,7 +40,7 @@ module.exports = {
       headers,
     })
     .then(response => {
-      onSuccess(response);
+      if (onSuccess) onSuccess(response);
       done();
     })
     .catch(error => {

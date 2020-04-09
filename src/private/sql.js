@@ -206,22 +206,39 @@ const TOPICS = {
 
     /** The SQL statement to return a random topic. */
     RANDOM: "SELECT id, headline, category, question, option1, option2, yes, no FROM topics WHERE polarity = 1 AND category != 'Christian' AND category != 'Mental Health' ORDER BY RAND() LIMIT 1;",
+
+    /**
+     * Constructs the SQL statement and values required to
+     * regenerate a Topic Bank token.
+     * @returns {object} The SQL statement, its values, and the generated token.
+     */
+    REGENERATE_TOKEN: () => {
+      const token = generateRandomString(12);
+      const sql = `UPDATE tokens SET value = ?, lastUpdated = ? WHERE name = ?`;
+      const values = [token, new Date(), 'topicBank'];
+      return { sql, values, token };
+    }
   },
 
-  /**
-   * Constructs the SQL statement to update a topic.
-   * @param {number} id - The identifier of the topic.
-   * @param {object} topic - The object containing the topic details.
-   * @param {boolean} imageHasChanged - Indicates whether the image has
-   * changed in this request.
-   * @returns {object} The SQL statement and the values.
-   */
   UPDATE: {
+    /**
+     * Constructs the SQL statement to update a topic.
+     * @param {number} id - The identifier of the topic.
+     * @param {object} topic - The object containing the topic details.
+     * @returns {object} The SQL statement and the values.
+     */
     DETAILS: (id, topic) => {
       const sql = `UPDATE topics SET headline = ?, category = ?, question = ?, description = ?, type = ?, polarity = ?, validated = ?, sensitivity = ?, option1 = ?, option2 = ? WHERE id = ?`;
       const values = [topic.headline, topic.category, topic.question, topic.description, topic.type, topic.polarity, topic.validated, topic.sensitivity, topic.option1, topic.option2, id];
       return { sql, values };
     },
+
+    /**
+     * Constructs the SQL statement to vote on a topic.
+     * @param {number} id - The identifier of the topic.
+     * @param {string} option - The selected option. Either 'yes' or 'no'.
+     * @returns {string} The constructed statement.
+     */
     VOTE: (id, option) => {
       const sql = `UPDATE topics SET ${option}=${option}+1 WHERE id = ${id}`;
       return sql;
@@ -405,4 +422,20 @@ const appendFieldToUpdateQuery = (field, statement) => {
 const insertFieldInValues = (value, array) => {
   array.splice(array.length - 1, 0, value);
   return array;
+}
+
+/**
+ * Generate a random string of alphanumeric characters.
+ * @param {number} length The number of characters for the token.
+ * @returns {string} The generated string.
+ */
+const generateRandomString = (length) => {
+  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  const charactersLength = characters.length;
+
+  let result = '';
+  for (let i = 0; i < length; i++) {
+    result += characters.charAt(Math.floor(Math.random() * charactersLength));
+  }
+  return result;
 }

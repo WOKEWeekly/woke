@@ -52,14 +52,13 @@ class Account extends Component {
     const { id } = this.state;
 
     request({
-      url: '/deleteAccount',
+      url: `/api/v1/users/${id}`,
       method: 'DELETE',
-      body: JSON.stringify({id}),
       headers: { 'Authorization': `Bearer ${this.props.user.token}` },
       onSuccess: () => {
-        setAlert({ type: 'success', message: `Your account has successfully been deleted.` });
         this.props.clearUser();
-        location.href = '/';
+        setAlert({ type: 'success', message: `Your account has successfully been deleted.` });
+        setTimeout(() => location.href = '/', 500);
       }
     });
   }

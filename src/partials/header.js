@@ -9,7 +9,6 @@ import { Icon, HeaderIcon } from '~/components/icon';
 import { Default, Mobile, zIndices } from '~/components/layout';
 
 import CLEARANCES from '~/constants/clearances.js';
-import request from '~/constants/request.js';
 import { accounts, cloudinary } from '~/constants/settings.js';
 
 import Login from '~/pages/_auth/login';
@@ -39,7 +38,7 @@ class PreNavbar extends Component {
   logOut = () => {
     this.props.clearUser();
     setAlert({ type: 'info', message: 'You have successfully logged out.' });
-    location.reload();
+    setTimeout(() => location.reload(), 500);
   }
 
   render(){

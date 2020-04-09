@@ -85,6 +85,19 @@ describe("Topics Tests", function() {
         }
       });
     });
+
+    it("Regenerate Topic Bank access token", function(done) {
+      request({
+        url: `/api/v1/topics/token`,
+        method: 'GET',
+        headers: HEADERS.TOKEN(superuser),
+        done,
+        onSuccess: ({status, data}) => {
+          assert.equal(status, 200);
+          assert.hasAllKeys(data, ['token']);
+        }
+      });
+    });
   });
 
 
