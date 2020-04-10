@@ -339,11 +339,12 @@ const ARTICLES = {
 
     /**
      * Constructs the SQL statement to return information for a single article.
+     * @param {string} condition - The condition field for the WHERE clause.
      * @param {string} [fields] - The fields to be queried.
      * @returns {string} The constructed statement.
      */
-    SINGLE: (fields = '*') => {
-      const sql = `SELECT ${fields} FROM articles WHERE ID = ?`;
+    SINGLE: (condition, fields = '*') => {
+      const sql = `SELECT ${fields} FROM articles WHERE ${condition} = ?`;
       return sql;
     },
   },

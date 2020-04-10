@@ -536,7 +536,7 @@ module.exports = function(app, conn){
   /** Retrieve individual article */
   app.get('/api/v1/articles/:id([0-9]+)', validateReq, function(req, res){
     const id = req.params.id;
-    conn.query(SQL.ARTICLES.READ.SINGLE(), id, function (err, [article] = []) {
+    conn.query(SQL.ARTICLES.READ.SINGLE('id'), id, function (err, [article] = []) {
       if (err) return respondToClient(res, err);
       if (!article) err = ERROR.INVALID_ARTICLE_ID(id);
       respondToClient(res, err, 200, article);
@@ -569,7 +569,7 @@ module.exports = function(app, conn){
 
     async.waterfall([
       function(callback){ // Delete old image if changed.
-        conn.query(SQL.ARTICLES.READ.SINGLE('image'), id, function (err, [article] = []) {
+        conn.query(SQL.ARTICLES.READ.SINGLE('id', 'image'), id, function (err, [article] = []) {
           if (err) return callback(err);
           if (!article) return callback(ERROR.INVALID_ARTICLE_ID(id));
           if (!changed) return callback(null);
