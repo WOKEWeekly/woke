@@ -21,7 +21,7 @@ pipeline {
         stage('Test') { 
             steps {
               dir('src'){
-                sh 'npm run prod-test'
+                sh 'npm test'
               }
             }
         }
