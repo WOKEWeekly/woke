@@ -412,17 +412,17 @@ module.exports = function(app, conn, server){
      
   /** Constitution PDF */
   app.get('/constitution', function(req, res){
-    request(`${cloudinary.url}/pages/Constitution.pdf`).pipe(res);
+    request(`${cloudinary.url}/resources/Constitution.pdf`).pipe(res);
   });
 
   /** Sponsorship Proposal PDF */
   app.get('/sponsorship-proposal', function(req, res){
-    request(`${cloudinary.url}/v1579300643/pages/Sponsorship_Proposal.pdf`).pipe(res);
+    request(`${cloudinary.url}/v1579300643/resources/Sponsorship_Proposal.pdf`).pipe(res);
   });
 
   /** #Blackexcellence Tribute Guide PDF */
   app.get('/blackexcellence-tribute-guide', function(req, res){
-    request(`${cloudinary.url}/pages/BlackExcellence_Tribute_Guide.pdf`).pipe(res);
+    request(`${cloudinary.url}/resources/BlackExcellence_Tribute_Guide.pdf`).pipe(res);
   });
 
   /** Robots.txt page */
