@@ -16,7 +16,7 @@ const SQL = require('./sql.js');
 const CLEARANCES = require('../constants/clearances.js');
 const { DIRECTORY } = require('../constants/strings.js');
 
-const noEmails = true;
+const noEmails = false;
 if (noEmails) console.warn("Emails are turned off.");
 
 module.exports = function(app, conn){
