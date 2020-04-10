@@ -64,7 +64,7 @@ const CANDIDATES = {
    * @returns {object} The SQL statement and the values.
    */
   CREATE: (candidate) => {
-    const sql = "INSERT INTO candidates (id, name, image, birthday, ethnicity, socials, occupation, description,author_id, date_written) VALUES ?";
+    const sql = "INSERT INTO candidates (id, name, image, birthday, ethnicity, socials, occupation, description, author_id, date_written) VALUES ?";
     const values = [[candidate.id, candidate.name, candidate.image, candidate.birthday, candidate.ethnicity, candidate.socials, candidate.occupation, candidate.description, candidate.authorId, candidate.dateWritten]];
     return { sql, values };
   },
