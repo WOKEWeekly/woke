@@ -39,16 +39,11 @@ class Review extends PureComponent {
   
   /** Delete review from database */
   deleteReview = () => {
-    const { item, user } = this.props;
-    const review = item;
+    const { item: review, user } = this.props;
     request({
-      url: '/deleteReview',
+      url: `/api/v1/reviews/${review.id}`,
       method: 'DELETE',
-      body: JSON.stringify(item),
-      headers: {
-        'Authorization': `Bearer ${user.token}`,
-        'Content-Type': 'application/json'
-      },
+      headers: { 'Authorization': `Bearer ${user.token}` },
       onSuccess: () => {
         setAlert({ type: 'success', message: `You've successfully deleted ${review.referee}'s review.` });
         location.href = '/reviews';

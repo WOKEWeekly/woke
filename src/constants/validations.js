@@ -5,7 +5,7 @@ module.exports = {
   /**
    * Login validation.
    * @param {string} user - User credentials to be validated.
-   * @returns {Boolean} True if valid. False with error message if invalid.
+   * @returns {boolean} True if valid. False with error message if invalid.
    */
   isValidLogin: (user) => {
     if (!checkCookies('We cannot allow you to log in without accepting our Cookie Policy.')) return false;
@@ -17,7 +17,7 @@ module.exports = {
   /**
    * Registration validation.
    * @param {string} user - User information to be validated.
-   * @returns {Boolean} True if valid. False with error message if invalid.
+   * @returns {boolean} True if valid. False with error message if invalid.
    */
   isValidSignup: (user) => {
     const { firstname, lastname, email, username, password1, password2, privacy } = user;
@@ -35,7 +35,7 @@ module.exports = {
   /**
    * Validation of session submission or update.
    * @param {string} user - Session information to be validated.
-   * @returns {Boolean} True if valid. False with error message if invalid.
+   * @returns {boolean} True if valid. False with error message if invalid.
    */
   isValidSession: (session) => {
     if (!ifExists(session.title.trim(), 'Enter the session title.')) return false;
@@ -47,7 +47,7 @@ module.exports = {
   /**
    * Validation of topic submission or update.
    * @param {string} topic - Topic information to be validated.
-   * @returns {Boolean} True if valid. False with error message if invalid.
+   * @returns {boolean} True if valid. False with error message if invalid.
    */
   isValidTopic: (topic) => {
     if (!ifExists(topic.headline.trim(), 'Enter the topic headline.')) return false;
@@ -64,7 +64,7 @@ module.exports = {
   /**
    * Validation of candidate submission or update.
    * @param {string} candidate - Candidate information to be validated.
-   * @returns {Boolean} True if valid. False with error message if invalid.
+   * @returns {boolean} True if valid. False with error message if invalid.
    */
   isValidCandidate: (candidate) => {
     if (!ifExists(candidate.id, 'Please enter the ID number of the candidate.')) return false;
@@ -81,7 +81,7 @@ module.exports = {
   /**
    * Validation of team member submission or update.
    * @param {string} member - Team member information to be validated.
-   * @returns {Boolean} True if valid. False with error message if invalid.
+   * @returns {boolean} True if valid. False with error message if invalid.
    */
   isValidMember: (member) => {
     if (!ifExists(member.firstname.trim(), 'Enter the member\'s firstname.')) return false;
@@ -96,7 +96,7 @@ module.exports = {
   /**
    * Validation of review submission or update.
    * @param {string} review - Review information to be validated.
-   * @returns {Boolean} True if valid. False with error message if invalid.
+   * @returns {boolean} True if valid. False with error message if invalid.
    */
   isValidReview: (review) => {
     if (!ifExists(review.referee.trim(), 'Enter the referee of the review.')) return false;
@@ -109,7 +109,7 @@ module.exports = {
   /**
    * Ensure submitted email address is valid.
    * @param {string} email - Email address to be validated.
-   * @returns {Boolean} True if valid. False with error message if invalid.
+   * @returns {boolean} True if valid. False with error message if invalid.
    */
   isValidEmail: (email) => {
     const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -121,7 +121,7 @@ module.exports = {
   /**
    * Ensure submitted username is valid.
    * @param {string} username - Username to be validated.
-   * @returns {Boolean} True if valid. False with error message if invalid.
+   * @returns {boolean} True if valid. False with error message if invalid.
    */
   isValidUsername: (username) => {
     if (!ifExists(username.trim(), 'Please enter a username.')) return false;
@@ -134,7 +134,7 @@ module.exports = {
    * @param {string} password1 - The initial password input.
    * @param {string} password2 - The confirmation password input.
    * @param {string} oldPassword - The previous password.
-   * @returns {Boolean} True if meets requirements. If not: false.
+   * @returns {boolean} True if meets requirements. If not: false.
    */
   isValidPassword: (password1, password2, oldPassword) => {
     if (!ifExists(password1.trim(), 'Please enter a password.')) return false;
@@ -152,7 +152,7 @@ module.exports = {
    * Ensure submitted file meets requirements.
    * @param {string} file - Base64 string of file to be uploaded.
    * @param {string} entity - The entity this file represents.
-   * @returns {Boolean} True if meets requirements. If not: false.
+   * @returns {boolean} True if meets requirements. If not: false.
    */
   isValidFile: (file, entity) => {
     if (!ifExists(file, `Please select an image for the ${entity}.`)) return false;
@@ -165,7 +165,7 @@ module.exports = {
 /**
  * Ensure file size is within limit.
  * @param {string} file - Base64 string of file to be uploaded.
- * @returns {Boolean} True if within limit. False if not.
+ * @returns {boolean} True if within limit. False if not.
  */
 const isUnderFileSizeLimit = (file) => {
   if (!file) return true;
@@ -178,7 +178,7 @@ const isUnderFileSizeLimit = (file) => {
  * Check for presence of a value.
  * @param {string} value - Value to be checked.
  * @param {string} message - Error message to be returned if value is absent.
- * @returns {Boolean} True if value exists. False if not.
+ * @returns {boolean} True if value exists. False if not.
  */
 const ifExists = (value, message) => {
   if (!value || value.length == 0){
@@ -191,9 +191,9 @@ const ifExists = (value, message) => {
 
 /**
  * Check if condition is wrongly true.
- * @param {Boolean} condition - Condition to be evaluated.
+ * @param {boolean} condition - Condition to be evaluated.
  * @param {string} message - Error message to be returned if value is true.
- * @returns {Boolean} True if condition resolves to true. False if not.
+ * @returns {boolean} True if condition resolves to true. False if not.
  */
 const ifTrue = (condition, message) => {
   if (condition === true){

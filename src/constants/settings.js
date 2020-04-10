@@ -18,7 +18,7 @@ module.exports = {
      * Checks whether the image is from Cloudinary by testing
      * if the image name string starts with a regular expression.
      * @param {string} image - The image in question.
-     * @returns {Boolean} Value indicating whether it's from Cloudinary
+     * @returns {boolean} Value indicating whether it's from Cloudinary
      */
     check: (image) => {
       if (!image) return false;
@@ -58,6 +58,9 @@ module.exports = {
     clientFeedback: 'https://forms.gle/iAEusQ8JBTmBoUCF8',
     audienceFeedback: 'https://forms.gle/GErPZT2h2uHoFajn9'
   },
+
+  /** The site description */
+  siteDescription: 'Debates and discussions centered around and beyond the UK black community. Facilitating open-floor conversation to shape the minds and alter the perspectives of participants.',
 
   /** List of social media domains and icons for forms */
   socialPlatforms: {

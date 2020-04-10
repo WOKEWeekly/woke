@@ -21,8 +21,7 @@ class ResetPassword extends Component {
     super(props);
     this.state = {
       password: '',
-      password2: '',
-      token: props.recoveryToken
+      password2: ''
     }
 
     if (props.user.isAuthenticated){
@@ -35,18 +34,15 @@ class ResetPassword extends Component {
     const { name, value } = event.target;
     this.setState({[name]: value}); }
 
-  changePassword = () => {
+  changePasswordFromReset = () => {
     const { password, password2 } = this.state;
     if (!isValidPassword(password, password2)) return false;
 
     request({
-      url: '/resetPassword',
-      method: 'PUT',
+      url: '/api/v1/users/password/reset',
+      method: 'PATCH',
       body: JSON.stringify(this.state),
-      headers: {
-        'Authorization': process.env.AUTH_KEY,
-        'Content-Type': 'application/json'
-      },
+      headers: {  'Authorization': process.env.AUTH_KEY },
       onSuccess: () => {
         setAlert({ type: 'success', message: `You've successfully set your new password. Log in with your new credentials and enjoy the website!` });
         location.href = '/';
@@ -84,7 +80,7 @@ class ResetPassword extends Component {
           </Group>
           <Group>
             <Col>
-              <SubmitButton onClick={this.changePassword}>Submit</SubmitButton>
+              <SubmitButton onClick={this.changePasswordFromReset}>Submit</SubmitButton>
             </Col>
           </Group>
         </div>

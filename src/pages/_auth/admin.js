@@ -35,17 +35,14 @@ class Admin extends Component {
   /** Regenerate a new Topic Bank access token */
   generateTopicBankToken = () => {
     request({
-      url: '/generateTopicBankToken',
-      method: 'PUT',
-      headers: {
-        'Authorization': `Bearer ${this.props.user.token}`,
-        'Content-Type': 'application/json'
-      },
-      onSuccess: (response) => {
+      url: '/api/v1/topics/token',
+      method: 'GET',
+      headers: {  'Authorization': `Bearer ${this.props.user.token}` },
+      onSuccess: ({token}) => {
         alert.success('Topic Bank token successfully regenerated.');
         this.setState({
           tokenGenerated: true,
-          accessLink: `${domain}/topics?access=${response.token}`
+          accessLink: `${domain}/topics?access=${token}`
         });
         this.hideGenerateTokenModal(); 
       }

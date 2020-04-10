@@ -18,6 +18,7 @@ class SessionCrud extends Component {
   constructor() {
     super();
     this.state = {
+      id: 0,
       title: '',
       dateHeld: new Date(),
       timeHeld: null,
@@ -36,24 +37,21 @@ class SessionCrud extends Component {
     
     const { title, dateHeld, timeHeld, description, image } = this.state;
     
-    const data = {
-      session: {
-        title: title.trim(),
-        dateHeld: zDate.formatISODate(dateHeld),
-        timeHeld: zDate.formatISOTime(timeHeld, false),
-        description: description.trim(),
-        image: image
-      },
-      changed: image !== ''
+    const session = {
+      title: title.trim(),
+      dateHeld: zDate.formatISODate(dateHeld),
+      timeHeld: zDate.formatISOTime(timeHeld, false),
+      description: description.trim(),
+      image: image
     };
 
     request({
-      url: '/addSession',
+      url: '/api/v1/sessions',
       method: 'POST',
-      body: JSON.stringify(data),
+      body: JSON.stringify(session),
       headers: { 'Authorization': `Bearer ${this.props.user.token}` },
-      onSuccess: ({title}) => {
-        setAlert({ type: 'success', message: `You've successfully added: ${title}.` });
+      onSuccess: () => {
+        setAlert({ type: 'success', message: `You've successfully added: ${session.title}.` });
         location.href = '/sessions';
       }
     });
@@ -63,11 +61,10 @@ class SessionCrud extends Component {
   updateSession = () => {
     if (!isValidSession(this.state)) return;
     
-    const { title, dateHeld, timeHeld, description, image } = this.state;
+    const { id, title, dateHeld, timeHeld, description, image } = this.state;
 
     const data = JSON.stringify({
-      session1: this.props.session,
-      session2: {
+      session: {
         title: title.trim(),
         dateHeld: zDate.formatISODate(dateHeld),
         timeHeld: zDate.formatISOTime(timeHeld, false),
@@ -78,7 +75,7 @@ class SessionCrud extends Component {
     });
 
     request({
-      url: '/updateSession',
+      url: `/api/v1/sessions/${id}`,
       method: 'PUT',
       body: data,
       headers: { 'Authorization': `Bearer ${this.props.user.token}`, },

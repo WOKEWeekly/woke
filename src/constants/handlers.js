@@ -29,7 +29,7 @@ export default (component) => {
     /** Handle date selections */
     handleBirthday: (birthday) => {component.setState({birthday}); },
     handleDate: (date) => {component.setState({date}); },
-    handleDateWritten: (date_written) => { component.setState({date_written}); },
+    handleDateWritten: (dateWritten) => { component.setState({dateWritten}); },
 
     /** Handle image selections */
     handleImage: (image) => { component.setState({image}); },

@@ -28,12 +28,9 @@ export default class Executives extends Component {
 
   getExec = () => {
     request({
-      url: '/getExec',
+      url: '/api/v1/members/executives',
       method: 'GET',
-      headers: {
-        'Authorization': process.env.AUTH_KEY,
-        'Content-Type': 'application/json',
-      },
+      headers: { 'Authorization': process.env.AUTH_KEY },
       onSuccess: (exec) => {
         this.setState({
           exec: exec,

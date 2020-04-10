@@ -1,30 +1,34 @@
 
 module.exports = {
-  resToClient: (res, err, json) => {
-    if (err && err !== true){
-      console.error(err.toString());
-      res.status(400).send({message: getErrMsg(err)});
-    } else {
-      json ? res.json(json) : res.status(200).send({ message: 'ok'});
+
+  /**
+   * Send a response to the client.
+   * @param {object} res - The response context of the service.
+   * @param {Error} err - The object containing information about the error.
+   * @param {number} expectedStatus - The expected status code of the
+   * @param {object} [json] - The response body to be sent back to the client.
+   * response. Defaults to 400.
+   */
+  respondToClient: (res, err, expectedStatus, json) => {
+    if (err && typeof err === 'object'){ // If there is an error...
+      const log = process.argv.includes('verbose') ? err : err.toString();
+      console.error(log);
+      return res.status(err.status || 500).json({message: err.message});
     }
+
+    return res.status(expectedStatus).json(json);
   },
-  renderErrPage: (req, res, err, server) => {
+
+  /**
+   * Display an error page on the web client with a description of the error.
+   * @param {object} req - The request information from the client.
+   * @param {object} res - The response context of the service
+   * @param {Error} err - The object containing information about the error.
+   * @param {object} server - The server object.
+   */
+  renderErrorPage: (req, res, err, server) => {
     if (err) console.error(err.toString());
-    return server.render(req, res, '/error', { message: err ? getErrMsg(err) : '' });
+    const message = err ? err.message : '';
+    return server.render(req, res, '/error', { message });
   }
-}
-
-getErrMsg = (err) => {
-  if (err.errno === 1062){
-    if (err.toString().includes("email")){ // If duplicate entry in MySQL
-      return "This email address already exists.";
-    } else if (err.toString().includes("username")){
-      return "The username you have chosen already exists.";
-    }
-  }
-
-  if (err.type === 'jwt') return 'jwt';
-  if (err.message === 'jwt expired') return `Awkward. The link you followed has expired. Don't say we didn't warn ya!`;
-
-  return err.message; 
 }

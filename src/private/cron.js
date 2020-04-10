@@ -9,7 +9,7 @@ module.exports = function(conn){
 
   /** Notify General Slack channel of team member birthdays at 7:00am */
   schedule.scheduleJob(birthdayReminderTime, function(){
-    const sql = "SELECT * FROM team WHERE DATE_FORMAT(birthday,'%m-%d') = DATE_FORMAT(CURDATE(),'%m-%d')";
+    const sql = "SELECT * FROM members WHERE DATE_FORMAT(birthday,'%m-%d') = DATE_FORMAT(CURDATE(),'%m-%d')";
     conn.query(sql, function (err, result) {
       if (err) return console.log(err.toString());
       if (!result.length) return console.log("Birthdays: It's no one's birthday today.");

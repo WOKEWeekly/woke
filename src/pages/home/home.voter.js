@@ -35,12 +35,9 @@ export default class TopicVoter extends Component {
   /** Retrieve a random polar topic from database */
   getRandomTopic = () => {
     request({
-      url: '/getRandomTopic',
+      url: '/api/v1/topics/random',
       method: 'GET',
-      headers: {
-        'Authorization': process.env.AUTH_KEY,
-        'Content-Type': 'application/json',
-      },
+      headers: { 'Authorization': process.env.AUTH_KEY },
       onSuccess: (topic) => {
         topic.loaded = true;
         this.setState({
@@ -58,23 +55,19 @@ export default class TopicVoter extends Component {
     let { topic, votes } = this.state;
     const option = event.target.name;
 
-    topic.vote = option;
-
     /** Update the vote count on topic */
     request({
-      url: '/incrementVote',
+      url: `/api/v1/topics/${topic.id}/vote/${option}`,
       method: 'PUT',
-      body: JSON.stringify(topic),
-      headers: {
-        'Authorization': process.env.AUTH_KEY,
-        'Content-Type': 'application/json',
-      },
-      onSuccess: () => {
-        topic[option]++;
-        votes++;
-        const result1 = (topic.yes / votes) * 100;
-        const result2 = (topic.no / votes) * 100;
-        this.setState({votes, result1, result2, hasVoted: true}, () => {
+      headers: { 'Authorization': process.env.AUTH_KEY },
+      onSuccess: ({yes, no}) => {
+        votes = yes + no;
+        this.setState({
+          votes,
+          result1: (yes / votes) * 100,
+          result2: (no / votes) * 100,
+          hasVoted: true
+        }, () => {
           setTimeout(() => { // Wait 5 seconds before loading new topic
             this.setState({ topic: { ...this.state.topic, loaded: false } });
             setTimeout(() => { this.getRandomTopic(); }, 1500);

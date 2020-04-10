@@ -40,12 +40,9 @@ class Users extends Component {
   /** Retrieve all registered users */
   getRegisteredUsers = () => {
     request({
-      url: '/getRegisteredUsers',
+      url: '/api/v1/users',
       method: 'GET',
-      headers: {
-        'Authorization': `Bearer ${this.props.user.token}`,
-        'Content-Type': 'application/json',
-      },
+      headers: { 'Authorization': `Bearer ${this.props.user.token}` },
       onSuccess: (result) => {
         this.setState({
           users: result,
@@ -144,13 +141,9 @@ class _User extends PureComponent {
   changeClearance = () => {
     const { id, firstname, lastname, clearance} = this.state;
     request({
-      url: '/changeClearance',
+      url: `/api/v1/users/${id}/clearance/${clearance}`,
       method: 'PUT',
-      body: JSON.stringify({id, clearance}),
-      headers: {
-        'Authorization': `Bearer ${this.props.user.token}`,
-        'Content-Type': 'application/json',
-      },
+      headers: { 'Authorization': `Bearer ${this.props.user.token}` },
       onSuccess: () => {
         alert.success(`You've successfully changed ${firstname} ${lastname}'s clearance.`);
         this.closeEdit();
@@ -163,13 +156,9 @@ class _User extends PureComponent {
   deleteUser = () => {
     const { id, firstname, lastname } = this.state;
     request({
-      url: '/deleteAccount',
+      url: `/api/v1/users/${id}`,
       method: 'DELETE',
-      body: JSON.stringify({id}),
-      headers: {
-        'Authorization': `Bearer ${this.props.user.token}`,
-        'Content-Type': 'application/json',
-      },
+      headers: { 'Authorization': `Bearer ${this.props.user.token}` },
       onSuccess: () => {
         alert.success(`You've deleted user: ${firstname} ${lastname}.`);
         this.closeDelete();

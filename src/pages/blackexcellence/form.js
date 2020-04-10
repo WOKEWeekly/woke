@@ -31,12 +31,9 @@ class CandidateForm extends Component {
 
   componentDidMount(){
     request({
-      url: '/getTeam',
+      url: '/api/v1/members/names',
       method: 'GET',
-      headers: {
-        'Admission': true,
-        'Content-Type': 'application/json',
-      },
+      headers: { 'Authorization': process.env.AUTH_KEY },
       onSuccess: (response) => {
         const members = [];
         response.forEach(member => {
@@ -47,7 +44,7 @@ class CandidateForm extends Component {
           b = b.label;
           return a < b ? -1 : a > b ? 1 : 0;
         });
-        this.setState({ members});
+        this.setState({ members });
       }
     });
   }
@@ -63,7 +60,7 @@ class CandidateForm extends Component {
 
     const { id, name, description, occupation, birthday, image, socials,
       ethnicity1, ethnicity2, ethnicity3, ethnicity4,
-      authorId, date_written } = this.props.candidate;
+      authorId, dateWritten } = this.props.candidate;
 
     const { members, ethnicModalVisible, socialsModalVisible } = this.state;
 
@@ -145,7 +142,7 @@ class CandidateForm extends Component {
                 </Col>
                 <Col md={{span: 5, offset: 2}}>
                   <Label>Date Written:</Label>
-                  <AuthoredDatePicker date={date_written} onConfirm={handleDateWritten} />
+                  <AuthoredDatePicker date={dateWritten} onConfirm={handleDateWritten} />
                 </Col>
             </Group>
             <Group>

@@ -11,6 +11,7 @@ import { Shader, Spacer } from '~/components/layout.js';
 
 import request from '~/constants/request.js';
 import { isValidSignup } from '~/constants/validations';
+import { TEST_USERS } from '~/test/configuration/data';
 
 import css from '~/styles/auth.scss';
 
@@ -35,16 +36,7 @@ class Signup extends Component {
   }
 
   fill = () => {
-    this.setState({
-      firstname: 'David',
-      lastname: 'Egbue',
-      email: 'd.master700@gmail.com',
-      username: 'david',
-      password1: 'wendy',
-      password2: 'wendy',
-      privacy: true,
-      subscribe: false
-    });
+    this.setState(TEST_USERS.CREATED);
   }
 
   /** Handle text changes */
@@ -65,13 +57,10 @@ class Signup extends Component {
     if (!isValidSignup(this.state)) return;
 
     request({
-      url: '/signup',
+      url: '/api/v1/users',
       method: 'POST',
       body: JSON.stringify(this.state),
-      headers: {
-        'Authorization': process.env.AUTH_KEY,
-        'Content-Type': 'application/json'
-      },
+      headers: {  'Authorization': process.env.AUTH_KEY },
       onSuccess: (user) => {
         this.props.saveUser(user);
         setAlert({ type: 'info', message: `Welcome, ${user.firstname}! Thank you for registering to the #WOKEWeekly website.` });

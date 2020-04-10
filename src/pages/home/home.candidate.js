@@ -13,7 +13,7 @@ import { cloudinary } from '~/constants/settings.js';
 
 import css from '~/styles/home.scss';
 
-class _RandomCandidate extends Component {
+class RandomCandidate extends Component {
   constructor(){
     super();
     this.state = {
@@ -33,15 +33,12 @@ class _RandomCandidate extends Component {
 
   getRandomCandidate = () => {
     request({
-      url: '/getRandomCandidate',
+      url: '/api/v1/candidates/random',
       method: 'GET',
-      headers: {
-        'Authorization': process.env.AUTH_KEY,
-        'Content-Type': 'application/json',
-      },
+      headers: { 'Authorization': process.env.AUTH_KEY },
       onSuccess: (candidate) => {
         candidate.loaded = true;
-        this.setState({candidate})
+        this.setState({candidate});
       }
     });
   }
@@ -94,4 +91,4 @@ const mapStateToProps = state => ({
   countries: state.countries
 });
 
-export default connect(mapStateToProps)(_RandomCandidate);
+export default connect(mapStateToProps)(RandomCandidate);

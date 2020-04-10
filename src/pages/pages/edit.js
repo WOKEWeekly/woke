@@ -26,7 +26,7 @@ class EditPage extends Component {
       pageText: props.pageText
     }
 
-    if (props.user.clearance < CLEARANCES.ACTIONS.EDIT_INFO){
+    if (props.user.clearance < CLEARANCES.ACTIONS.EDIT_PAGE){
       return location.href = this.state.backPath;
     }
   }
@@ -41,13 +41,10 @@ class EditPage extends Component {
     const { pageText, backPath } = this.state;
 
     request({
-      url: '/updatePage',
+      url: '/api/v1/pages',
       method: 'PUT',
       body: JSON.stringify({page: pageName, text: pageText}),
-      headers: {
-        'Authorization': `Bearer ${user.token}`,
-        'Content-Type': 'application/json'
-      },
+      headers: { 'Authorization': `Bearer ${user.token}` },
       onSuccess: () => {
         setAlert({ type: 'success', message: `You've successfully updated the '${title.substring(5)}'.` });
         location.href = backPath;

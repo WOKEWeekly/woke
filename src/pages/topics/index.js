@@ -65,12 +65,11 @@ class TopicBank extends Component {
   getTopics = (callback) => {
     const { user, hasAccess } = this.props;
     request({
-      url: '/getTopics',
+      url: '/api/v1/topics',
       method: 'GET',
       headers: {
         'Admission': hasAccess,
-        'Authorization': `Bearer ${user.token}`,
-        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${user.token}`
       },
       onSuccess: (response) => {
         this.setState({
@@ -295,17 +294,14 @@ class _Topic extends PureComponent {
 
   /** Delete topic from database */
   deleteTopic = () => {
-    const { item, user } = this.props;
+    const { item: topic, user } = this.props;
     request({
-      url: '/deleteTopic',
+      url: `/api/v1/topics/${topic.id}`,
       method: 'DELETE',
-      body: JSON.stringify(item),
-      headers: {
-        'Authorization': `Bearer ${user.token}`,
-        'Content-Type': 'application/json'
-      },
+      body: JSON.stringify(topic),
+      headers: { 'Authorization': `Bearer ${user.token}` },
       onSuccess: () => {
-        alert.success(`You've successfully deleted "${item.headline}: ${item.question}".`);
+        alert.success(`You've successfully deleted "${topic.headline}: ${topic.question}".`);
         this.props.getTopics(() => this.hideModal());
       }
     });

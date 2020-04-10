@@ -45,14 +45,10 @@ class ReviewCrud extends Component {
     let data;
 
     if (operation === 'add'){
-      data = JSON.stringify({
-        review,
-        changed: image !== ''
-      });
+      data = JSON.stringify(review);
     } else {
       data = JSON.stringify({
-        review1: this.props.review,
-        review2: review,
+        review: review,
         changed: image !== '' && image !== null && !cloudinary.check(image)
       });
     }
@@ -67,7 +63,7 @@ class ReviewCrud extends Component {
 
     /** Add review to database */
     request({
-      url:'/addReview',
+      url: '/api/v1/reviews',
       method: 'POST',
       body: data,
       headers: { 'Authorization': `Bearer ${this.props.user.token}` },
@@ -85,7 +81,7 @@ class ReviewCrud extends Component {
 
     /** Update review in database */
     request({
-      url: '/updateReview',
+      url: `/api/v1/reviews/${this.props.review.id}`,
       method: 'PUT',
       body: data,
       headers: { 'Authorization': `Bearer ${this.props.user.token}`, },
