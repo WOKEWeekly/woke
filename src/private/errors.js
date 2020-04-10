@@ -26,6 +26,11 @@ module.exports = {
     err.status = 404;
     return err;
   },
+  INVALID_ARTICLE_ID: (id) => {
+    const err = new Error(`There exists no article with ID '${id}'.`);
+    err.status = 404;
+    return err;
+  },
   INVALID_USER_ID: (id) => {
     const err = new Error(`There exists no user with ID '${id}'.`);
     err.status = 404;

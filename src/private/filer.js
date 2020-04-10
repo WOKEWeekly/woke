@@ -1,6 +1,7 @@
 const cloudinary = require('cloudinary').v2;
+const { zString } = require('zavid-modules');
 const { formatISODate } = require('../constants/date.js');
-const { DIRECTORY } = require('../constants/strings.js');
+const { DIRECTORY, ARTICLE_STATUS } = require('../constants/strings.js');
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_NAME, 
@@ -24,22 +25,27 @@ module.exports = {
     // Construct the slug and image filename
     switch (directory){
       case DIRECTORY.SESSIONS:
-        const title = constructCleanSlug(entity.title);
+        const title = zString.constructCleanSlug(entity.title);
         entity.slug = `${title}-${entity.dateHeld}`;
         filename = generateSessionFilename(entity.dateHeld, title);
         break;
       case DIRECTORY.BLACKEXCELLENCE:
-        entity.slug = constructCleanSlug(entity.name, entity.id);
+        entity.slug = zString.constructCleanSlug(entity.name);
         filename = generateCandidateFilename(entity.id, entity.slug);
         break;
       case DIRECTORY.TEAM:
-        entity.slug = constructCleanSlug(`${entity.firstname} ${entity.lastname}`);
+        entity.slug = zString.constructCleanSlug(`${entity.firstname} ${entity.lastname}`);
         filename = generateMemberFilename(entity.slug);
         if (!entity.verified) entity.slug = null;
         break;
       case DIRECTORY.REVIEWS:
-        const referee = constructCleanSlug(entity.referee);
+        const referee = zString.constructCleanSlug(entity.referee);
         filename = generateReviewFilename(entity.rating, referee);
+        break;
+      case DIRECTORY.ARTICLES:
+        entity.slug = zString.constructCleanSlug(`${entity.authorId} ${entity.title}`);
+        filename = generateArticleFilename(entity.slug);
+        if (entity.status === ARTICLE_STATUS.DRAFT) entity.slug = null;
         break;
     }
 
@@ -81,19 +87,9 @@ module.exports = {
   }
 }
 
-/**
- * Created formatted slugs for URLs.
- * @param {string} value - The value which the slug is based off.
- * @returns {string} A clean slug.
- */
-const constructCleanSlug = (value) => {
-  return value.toLowerCase()      // Turn to lowercase
-  .replace(/[^a-zA-Z 0-9]+/g, '')   // Remove all non-alphanumeric characters
-  .replace(/\s+/g, '-');            // Replace spaces with dashes
-};
-
 /** Generate filenames from entities */
 const generateSessionFilename = (date, title) => `${formatISODate(date)}_${title}`;
 const generateCandidateFilename = (id, slug) => `${id}_${slug}`;
 const generateMemberFilename = (slug) => slug;
 const generateReviewFilename = (rating, slug) => `${rating}-${slug}`;
+const generateArticleFilename = (slug) => `${slug}`;

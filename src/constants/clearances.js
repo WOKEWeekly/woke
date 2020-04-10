@@ -11,6 +11,7 @@ module.exports = {
     CRUD_SESSIONS: 6,       // Add, edit and delete sessions
     CRUD_TOPICS: 6,         // Add, edit and delete topics from the Topic Bank
     CRUD_TEAM: 6,           // Add, edit and delete team member profiles
+    CRUD_ARTICLES: 6,       // Add, edit and delete articles
 
     VIEW_TEAM: 7,           // View all team member details
     SEE_SUGGESTING_USER: 7, // See author of suggestions

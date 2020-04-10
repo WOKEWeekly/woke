@@ -316,6 +316,62 @@ const REVIEWS = {
   DELETE: "DELETE FROM reviews WHERE id = ?"
 };
 
+const ARTICLES = {
+  /**
+   * Constructs the SQL statement to create an article.
+   * @param {object} article - The object containing the article details.
+   * @returns {object} The SQL statement and the values.
+   */
+  CREATE: (article) => {
+    const sql = "INSERT INTO articles (title, content, category, excerpt, slug, image, author_id, status, date_published) VALUES ?";
+    const values = [[article.title, article.content, article.category, article.excerpt, article.slug, article.image, article.authorId, article.status, article.datePublished]];
+    return { sql, values };
+  },
+  READ: {
+    /**
+     * Constructs the SQL statement to return information for all articles.
+     * @param {string} [fields] - The fields to be queried.
+     * @returns {string} The constructed statement.
+     */
+    ALL: (fields = '*') => {
+      return `SELECT ${fields} FROM articles`;
+    },
+
+    /**
+     * Constructs the SQL statement to return information for a single article.
+     * @param {string} [fields] - The fields to be queried.
+     * @returns {string} The constructed statement.
+     */
+    SINGLE: (fields = '*') => {
+      const sql = `SELECT ${fields} FROM articles WHERE ID = ?`;
+      return sql;
+    },
+  },
+
+  /**
+   * Constructs the SQL statement to update an article.
+   * @param {number} id - The identifier of the article.
+   * @param {object} article - The object containing the article details.
+   * @param {boolean} imageHasChanged - Indicates whether the image has
+   * changed in this request.
+   * @returns {object} The SQL statement and the values.
+   */
+  UPDATE: (id, article, imageHasChanged) => {
+    let sql = "UPDATE articles SET title = ?, content = ?, category = ?, excerpt = ?, slug = ?, author_id = ?, status = ?, date_published = ? WHERE id = ?";
+    let values = [article.title, article.content, article.category, article.excerpt, article.slug, article.authorId, article.status, article.datePublished, id];
+
+    if (imageHasChanged){
+      sql = appendFieldToUpdateQuery('image', sql);
+      values = insertFieldInValues(article.image, values);
+    }
+
+    return { sql, values };
+  },
+
+  /** The SQL statement to delete an article. */
+  DELETE: "DELETE FROM articles WHERE id = ?"
+}
+
 const USERS = {
   /**
    * Constructs the SQL statement to create a user.
@@ -407,7 +463,7 @@ const TOKENS = {
   READ: (name) => {
     return `SELECT * FROM tokens WHERE name = '${name}'`;
   }
-}
+};
 
 module.exports = {
   SESSIONS,
@@ -415,6 +471,7 @@ module.exports = {
   MEMBERS,
   TOPICS,
   REVIEWS,
+  ARTICLES,
   USERS,
   PAGES,
   TOKENS

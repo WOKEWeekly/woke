@@ -2,6 +2,29 @@ const TEST_IMAGE = 'data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALA
 
 module.exports = {
 
+  TEST_ARTICLES: {
+    CREATED: {
+      title: "Crazy Blues",
+      content: "This is an added article via service tests.",
+      category: "Philsophy & Ethics",
+      excerpt: "Added service test article.",
+      image: TEST_IMAGE,
+      authorId: 1,
+      status: "DRAFT",
+      datePublished: null
+    },
+    UPDATED: {
+      title: "Wild Yellows",
+      content: "This is an updated article via service tests.",
+      category: "Society & Stereotypes",
+      excerpt: "Updated service test article.",
+      image: TEST_IMAGE,
+      authorId: 1,
+      status: "PUBLISHED",
+      datePublished: "2020-08-30"
+    }
+  },
+
   TEST_CANDIDATES: {
     CREATED: {
       id: 0,

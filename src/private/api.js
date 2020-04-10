@@ -525,6 +525,93 @@ module.exports = function(app, conn){
     });
   });
 
+  /** Retrieve all articles */
+  app.get('/api/v1/articles', validateReq, function(req, res){
+    const sql = SQL.ARTICLES.READ.ALL();
+    conn.query(sql, function (err, articles) {
+      respondToClient(res, err, 200, articles);
+    });
+  });
+
+  /** Retrieve individual article */
+  app.get('/api/v1/articles/:id([0-9]+)', validateReq, function(req, res){
+    const id = req.params.id;
+    conn.query(SQL.ARTICLES.READ.SINGLE(), id, function (err, [article] = []) {
+      if (err) return respondToClient(res, err);
+      if (!article) err = ERROR.INVALID_ARTICLE_ID(id);
+      respondToClient(res, err, 200, article);
+    });
+  });
+
+  /** Add new article to database */
+  app.post('/api/v1/articles', verifyToken(CLEARANCES.ACTIONS.CRUD_ARTICLES), function(req, res){
+    const article = req.body;
+
+    async.waterfall([
+      function(callback){ // Upload image to cloud
+        filer.uploadImage(article, DIRECTORY.ARTICLES, true, callback);
+      },
+      function(article, callback){ // Add article to database
+        const { sql, values } = SQL.ARTICLES.CREATE(article);
+        conn.query(sql, [values], function (err, result) {
+          err ? callback(err) : callback(null, result.insertId);
+        });
+      }
+    ], function(err, id){
+      respondToClient(res, err, 201, { id });
+    });
+  });
+
+  /** Update details of existing articles in database */
+  app.put('/api/v1/articles/:id', verifyToken(CLEARANCES.ACTIONS.CRUD_ARTICLES), function(req, res){
+    const id = req.params.id;
+    const { article, changed } = req.body;
+
+    async.waterfall([
+      function(callback){ // Delete old image if changed.
+        conn.query(SQL.ARTICLES.READ.SINGLE('image'), id, function (err, [article] = []) {
+          if (err) return callback(err);
+          if (!article) return callback(ERROR.INVALID_ARTICLE_ID(id));
+          if (!changed) return callback(null);
+          filer.destroyImage(article.image, callback);
+        });
+      },
+      function(callback){ // Equally, upload new image if changed
+        filer.uploadImage(article, DIRECTORY.ARTICLES, changed, callback);
+      },
+      function(article, callback){ // Update review in database
+        const { sql, values } = SQL.ARTICLES.UPDATE(id, article, changed);
+        conn.query(sql, values, function (err) {
+          err ? callback(err) : callback(null, article.slug);
+        });
+      }
+    ], function(err, slug){
+      respondToClient(res, err, 200, { slug });
+    });
+  });
+
+  /** Delete an existing article from database */
+  app.delete('/api/v1/articles/:id', verifyToken(CLEARANCES.ACTIONS.CRUD_ARTICLES), function(req, res){
+    const id = req.params.id;
+
+    async.waterfall([
+      function(callback){ // Delete image from cloud
+        conn.query(SQL.ARTICLES.READ.SINGLE('id', 'image'), id, function (err, [article] = []) {
+          if (err) return callback(err);
+          if (!article) return callback(ERROR.INVALID_ARTICLE_ID(id));
+          filer.destroyImage(article.image, callback);
+        });
+      },
+      function(callback){ // Delete article from database
+        conn.query(SQL.ARTICLES.DELETE, id, function (err) {
+          err ? callback(err) : callback(null);
+        });
+      }
+    ], function(err){
+      respondToClient(res, err, 204);
+    });
+  });
+
   /** Retrieve all users */
   app.get('/api/v1/users', verifyToken(CLEARANCES.ACTIONS.VIEW_USERS), function(req, res){
     const sql = SQL.USERS.READ.ALL("id, firstname, lastname, clearance, username, email, create_time, last_active");

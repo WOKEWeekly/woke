@@ -1,6 +1,7 @@
 module.exports = {
   DIRECTORY: {
     BLACKEXCELLENCE: 'blackexcellence',
+    ARTICLES: 'articles',
     REVIEWS: 'reviews',
     SESSIONS: 'sessions',
     TEAM: 'team'
@@ -20,4 +21,9 @@ module.exports = {
       MENTAL: 'mental'
     }
   },
+  ARTICLE_STATUS: {
+    DRAFT: 'DRAFT',
+    PRIVATE: 'PRIVATE',
+    PUBLISHED: 'PUBLISHED',
+  }
 }
