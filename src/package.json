@@ -3,7 +3,8 @@
     "build": "cross-env NODE_ENV=development next build",
     "dev": "cross-env LOCAL_ENV=true node server.js",
     "prod": "NODE_ENV=production node server.js",
-    "test": "mocha --no-timeout"
+    "test": "mocha --no-timeout",
+    "prod-test": "mocha --no-timeout --reporter mocha-junit-reporter"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^1.2.18",
@@ -67,6 +68,7 @@
     "chai": "^4.2.0",
     "cross-env": "^6.0.3",
     "mocha": "^6.2.0",
+    "mocha-junit-reporter": "^1.23.3",
     "supertest": "^4.0.2",
     "webpack": "^4.33.0"
   }

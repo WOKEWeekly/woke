@@ -18,6 +18,13 @@ pipeline {
               }
             }
         }
+        stage('Test') { 
+            steps {
+              dir('src'){
+                sh 'npm run prod-test'
+              }
+            }
+        }
         // stage('Deploy') {
         //   steps {
         //     sh '/home/rebuild-woke.sh Dockerfile-woke-from-jenkins'
