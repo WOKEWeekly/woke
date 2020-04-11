@@ -4,7 +4,7 @@ import Link from 'next/link';
 
 import { Col, Row } from 'react-bootstrap';
 
-import { AddEntityButton, RadioButtonGroup } from '~/components/button.js';
+import { AdminButton } from '~/components/button.js';
 import { SortDropdown } from '~/components/dropdown.js';
 import { Icon } from '~/components/icon.js';
 import { Cover, Shader, Spacer } from '~/components/layout.js';
@@ -30,13 +30,13 @@ class Blog extends Component {
     }
   }
 
-  /** Get articles on mount */
+  /** Get published articles on mount */
   componentDidMount() {
-    this.getArticles();
+    this.getPublishedArticles();
   }
 
-  /** Get all articles */
-  getArticles = () => {
+  /** Get published articles */
+  getPublishedArticles = () => {
     request({
       url: '/api/v1/articles/published',
       method: 'GET',
@@ -70,8 +70,7 @@ class Blog extends Component {
 
   render(){
 
-    const { isLoaded, articles, view } = this.state;
-    const { user } = this.props;
+    const { isLoaded, articles } = this.state;
 
     const ArticleCollection = () => {
       if (!isLoaded){
@@ -85,25 +84,23 @@ class Blog extends Component {
           items.push(<Article key={index} idx={index} item={item} />);
         }
 
-        return <div className={css.grid}>{items}</div>
+        return <div className={css.blogGrid}>{items}</div>
       }
     }
 
     return (
       <Shader>
         <Spacer gridrows={'auto 1fr auto'}>
-
           <Fader determinant={isLoaded} duration={1500}>
             <ArticleCollection/>
           </Fader>
-
-          <BottomToolbar>
-            {user.clearance >= CLEARANCES.ACTIONS.CRUD_ARTICLES ?
-            <AddEntityButton
-              title={'Add Article'}
-              onClick={() => location.href = '/blog/article/add'} /> : null}
-          </BottomToolbar>
         </Spacer>
+
+        <BottomToolbar>
+          <AdminButton
+            title={'Blog Admin'}
+            onClick={() => location.href = '/admin/articles'} />
+        </BottomToolbar>
       </Shader>
     );
   }

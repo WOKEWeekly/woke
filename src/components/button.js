@@ -116,6 +116,20 @@ export class BackButton extends Component {
   }
 }
 
+export class AdminButton extends Component {
+  render(){
+    return (
+      <Button
+        {...this.props}
+        className={css.button}
+        variant={'light'}>
+        <Icon color={'#212529'} name={'lock'} />
+        {this.props.title}
+      </Button>
+    )
+  }
+}
+
 /***********************
  * WIDGET BUTTONS
  ***********************/

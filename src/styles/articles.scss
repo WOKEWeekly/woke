@@ -1,6 +1,18 @@
 @import "variables";
 
-.grid {
+/************
+*** admin.js
+*************/
+
+.articleTabler {
+  @include entityTabler(4% 15% 15% 1fr 13% 1fr 4% 4% 4%);
+}
+
+/************
+*** index.js
+*************/
+
+.blogGrid {
   @include responsive-grid;
   border: .5em solid #2d203b;
   width: 100%;

@@ -24,7 +24,6 @@ module.exports = {
         function(token, callback){ // Verify token
           jwt.verify(token, process.env.JWT_SECRET, (err, auth) => {
             if (err){
-              req.logout();
               callback(ERROR.JWT_FAILURE(err.message));
             } else {
               callback(null, auth);

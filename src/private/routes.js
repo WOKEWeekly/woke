@@ -365,8 +365,15 @@ module.exports = function(app, conn, server){
     });
   });
 
+  /** Blog admin page */
+  app.get('/admin/articles', function(req, res){
+    return server.render(req, res, '/articles/admin', { 
+      title: 'Blog Admin'
+     });
+  });
+
   /** Add article */
-  app.get('/blog/article/add', function(req, res){
+  app.get('/admin/articles/add', function(req, res){
     return server.render(req, res, '/articles/crud', {
       title: 'Add New Article',
       operation: OPERATIONS.CREATE,
@@ -375,7 +382,7 @@ module.exports = function(app, conn, server){
   });
 
   /** Edit article */
-  app.get('/blog/article/edit/:id', function(req, res){
+  app.get('/admin/articles/edit/:id', function(req, res){
     const id = req.params.id;
     const sql = SQL.ARTICLES.READ.SINGLE('id');
     

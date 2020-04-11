@@ -210,9 +210,11 @@ export class Select extends Component {
   render(){
     const { name, placeholder, items, onChange } = this.props;
 
-    // Select widgets don't account for values of 0
+    // Make widgets account for values of '00' (time)
     let { value: currentValue = '' } = this.props;
     if (currentValue === 0) currentValue = '00';
+
+    const color = !currentValue && '#8E8E8E';
 
     return (
       <select
@@ -220,7 +222,7 @@ export class Select extends Component {
         name={name}
         value={currentValue || ''}
         onChange={onChange}
-        style={{ color: currentValue === '' && '#8E8E8E' }}>
+        style={{ color }}>
         <option value={''} disabled>{placeholder}</option>
         {items.map((item, index) => {
           const value = item.value || item.label || item;

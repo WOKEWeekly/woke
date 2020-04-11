@@ -25,7 +25,7 @@ class ArticleCrud extends Component {
       category: '',
       excerpt: '',
       image: null,
-      authorId: 0,
+      authorId: null,
       status: ARTICLE_STATUS.DRAFT,
       datePublished: new Date(),
 
@@ -85,7 +85,7 @@ class ArticleCrud extends Component {
       headers: { 'Authorization': `Bearer ${this.props.user.token}` },
       onSuccess: () => {
         setAlert({ type: 'success', message: `You've successfully added the article titled: ${this.state.title}.` });
-        location.href = '/blog';
+        location.href = '/admin/articles';
       }
     });
   }
@@ -103,7 +103,7 @@ class ArticleCrud extends Component {
       headers: { 'Authorization': `Bearer ${this.props.user.token}`, },
       onSuccess: () => {
         setAlert({ type: 'success', message: `You've successfully edited the article titled: ${this.state.title}.` });
-        location.href = `/blog`;
+        location.href = '/admin/articles';
       }
     });
   }
@@ -121,7 +121,7 @@ class ArticleCrud extends Component {
 
         confirmText={isCreateOperation ? 'Submit' : 'Update'}
         confirmFunc={isCreateOperation ? this.submitArticle : this.updateArticle}
-        cancelFunc={() => location.href = '/articles'}
+        cancelFunc={() => location.href = '/admin/articles'}
 
         operation={operation}
 

@@ -149,7 +149,9 @@ $break-xxl: 1408px; // Extra large devices (large desktops)
       display: grid;
       grid-template-columns: $columns;
       padding: .7em 0;
-      span { padding: 0 .5em; word-break: break-word; } }
+      span {
+        padding: 0 .5em; word-break: break-word;
+        .image { width: 100%; } } }
     .header {
       border-bottom: 1px solid rgba(255,255,255,.6);
       font-family: $title-font; }
