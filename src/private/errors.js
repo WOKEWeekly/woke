@@ -2,50 +2,13 @@ module.exports = {
   SQL_DUP_CODE: 'ER_DUP_ENTRY',
 
   /**
-   * // TODO: Replace all invalids methods with this
    * Constructs an error when entities contain invalid IDs.
    * @param {string} entity - The name of the entity.
    * @param {number} id - The ID number of the entity.
    * @returns {Error} A 404 error object containing the message.
    */
-  INVALID_ID: (entity, id) => {
+  INVALID_ENTITY_ID: (entity, id) => {
     const err = new Error(`There exists no ${entity} with ID: '${id}'.`);
-    err.status = 404;
-    return err;
-  },
-
-  INVALID_SESSION_ID: (id) => {
-    const err = new Error(`There exists no session with ID: '${id}'.`);
-    err.status = 404;
-    return err;
-  },
-  INVALID_CANDIDATE_ID: (id) => {
-    const err = new Error(`There exists no candidate with ID '${id}'.`);
-    err.status = 404;
-    return err;
-  },
-  INVALID_MEMBER_ID: (id) => {
-    const err = new Error(`There exists no team member with ID '${id}'.`);
-    err.status = 404;
-    return err;
-  },
-  INVALID_TOPIC_ID: (id) => {
-    const err = new Error(`There exists no topic with ID '${id}'.`);
-    err.status = 404;
-    return err;
-  },
-  INVALID_REVIEW_ID: (id) => {
-    const err = new Error(`There exists no review with ID '${id}'.`);
-    err.status = 404;
-    return err;
-  },
-  INVALID_ARTICLE_ID: (id) => {
-    const err = new Error(`There exists no article with ID '${id}'.`);
-    err.status = 404;
-    return err;
-  },
-  INVALID_USER_ID: (id) => {
-    const err = new Error(`There exists no user with ID '${id}'.`);
     err.status = 404;
     return err;
   },
@@ -55,39 +18,13 @@ module.exports = {
     return err;
   },
 
-  NONEXISTENT_CANDIDATE: () => {
-    const err = new Error("This candidate does not exist.");
-    err.status = 404;
-    return err;
-  },
-  NONEXISTENT_SESSION: () => {
-    const err = new Error("This session does not exist.");
-    err.status = 404;
-    return err;
-  },
-  NONEXISTENT_MEMBER: (isExecutive = false) => {
-    const title = isExecutive ? 'executive' : 'member';
-    const err = new Error(`This ${title} does not exist.`);
-    err.status = 404;
-    return err;
-  },
-  NONEXISTENT_REVIEW: () => {
-    const err = new Error("This topic does not exist.");
-    err.status = 404;
-    return err;
-  },
-  NONEXISTENT_TOPIC: () => {
-    const err = new Error("This topic does not exist.");
-    err.status = 404;
-    return err;
-  },
-  NONEXISTENT_ARTICLE: () => {
-    const err = new Error("This article does not exist.");
-    err.status = 404;
-    return err;
-  },
-  NONEXISTENT_PAGE: () => {
-    const err = new Error("This page does not exist.");
+  /**
+   * Constructs an error when entity is non-existent.
+   * @param {string} entity - The name of the entity.
+   * @returns {Error} A 404 error object containing the message.
+   */
+  NONEXISTENT_ENTITY: (entity) => {
+    const err = new Error(`This ${entity} does not exist.`);
     err.status = 404;
     return err;
   },

@@ -25,6 +25,36 @@ module.exports = {
     }
   },
 
+  TEST_AUTHORS: {
+    CREATED: {
+      firstname: "Samuel",
+      lastname: "Oak",
+      birthday: "1992-11-04",
+      ethnicity: JSON.stringify(['Sierra Leone', 'China']),
+      sex: "M",
+      description: "An added author from service tests.",
+      image: TEST_IMAGE,
+      socials: JSON.stringify({
+        instagram: 'samueloak'
+      }),
+      memberId: null
+    },
+    UPDATED: {
+      firstname: "Principal Samuel",
+      lastname: "Oak",
+      birthday: "1992-11-04",
+      ethnicity: JSON.stringify(['Sierra Leone', 'Japan']),
+      sex: "M",
+      description: "An updated author from service tests.",
+      image: TEST_IMAGE,
+      socials: JSON.stringify({
+        twitter: 'samueloak',
+        instagram: 'samueloak'
+      }),
+      memberId: null
+    },
+  },
+
   TEST_CANDIDATES: {
     CREATED: {
       id: 0,

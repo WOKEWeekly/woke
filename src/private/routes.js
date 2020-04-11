@@ -45,7 +45,7 @@ module.exports = function(app, conn, server){
     
     conn.query(sql, [slug], function (err, [session] = []) {
       if (err) return renderErrorPage(req, res, err, server);
-      if (!session) return renderErrorPage(req, res, ERROR.NONEXISTENT_SESSION(), server);
+      if (!session) return renderErrorPage(req, res, ERROR.NONEXISTENT_ENTITY(ENTITY.SESSION), server);
       
       return server.render(req, res, '/sessions/single', {
         title: `${session.title} | #WOKEWeekly`,
@@ -74,7 +74,7 @@ module.exports = function(app, conn, server){
     
     conn.query(sql, id, function (err, [session] = []) {
       if (err) return renderErrorPage(req, res, err, server);
-      if (!session) return renderErrorPage(req, res, ERROR.NONEXISTENT_SESSION(), server);
+      if (!session) return renderErrorPage(req, res, ERROR.NONEXISTENT_ENTITY(ENTITY.SESSION), server);
 
       return server.render(req, res, '/sessions/crud', {
         title: 'Edit Session',
@@ -121,7 +121,7 @@ module.exports = function(app, conn, server){
     
     conn.query(sql, id, function (err, [topic]) {
       if (err) return renderErrorPage(req, res, err, server);
-      if (!topic) return renderErrorPage(req, res, ERROR.NONEXISTENT_TOPIC(), server);
+      if (!topic) return renderErrorPage(req, res, ERROR.NONEXISTENT_ENTITY(ENTITY.TOPIC), server);
 
       return server.render(req, res, '/topics/crud', {
         title: 'Edit Topic',
@@ -161,7 +161,7 @@ module.exports = function(app, conn, server){
     
     conn.query(sql, id, function (err, [candidate] = []) {
       if (err) return renderErrorPage(req, res, err, server);
-      if (!candidate) return renderErrorPage(req, res, ERROR.NONEXISTENT_CANDIDATE(), server);
+      if (!candidate) return renderErrorPage(req, res, ERROR.NONEXISTENT_ENTITY(ENTITY.CANDIDATE), server);
 
       return server.render(req, res, '/blackexcellence/crud', {
         title: 'Edit Candidate',
@@ -180,7 +180,7 @@ module.exports = function(app, conn, server){
     
     conn.query(sql, id, function (err, [candidate] = []) {
       if (err) return renderErrorPage(req, res, err, server);
-      if (!candidate) return renderErrorPage(req, res, ERROR.NONEXISTENT_CANDIDATE(), server);
+      if (!candidate) return renderErrorPage(req, res, ERROR.NONEXISTENT_ENTITY(ENTITY.CANDIDATE), server);
       
       candidate.label = `#${candidate.id}: ${candidate.name}`;
       return server.render(req, res, '/blackexcellence/single', {
@@ -308,7 +308,7 @@ module.exports = function(app, conn, server){
     
     conn.query(sql, id, function (err, [review] = []) {
       if (err) return renderErrorPage(req, res, err, server);
-      if (!review) return renderErrorPage(req, res, ERROR.NONEXISTENT_REVIEW(), server);
+      if (!review) return renderErrorPage(req, res, ERROR.NONEXISTENT_ENTITY(ENTITY.REVIEW), server);
 
       server.render(req, res, '/reviews/crud', {
         title: 'Edit Review',
@@ -352,7 +352,7 @@ module.exports = function(app, conn, server){
     
     conn.query(sql, [slug], function (err, [article] = []) {
       if (err) return renderErrorPage(req, res, err, server);
-      if (!article) return renderErrorPage(req, res, ERROR.NONEXISTENT_ARTICLE(), server);
+      if (!article) return renderErrorPage(req, res, ERROR.NONEXISTENT_ENTITY(ENTITY.ARTICLE), server);
       
       return server.render(req, res, '/articles/single', {
         title: `${article.title} | #WOKEWeekly`,
@@ -388,7 +388,7 @@ module.exports = function(app, conn, server){
     
     conn.query(sql, id, function (err, [article] = []) {
       if (err) return renderErrorPage(req, res, err, server);
-      if (!article) return renderErrorPage(req, res, ERROR.NONEXISTENT_ARTICLE(), server);
+      if (!article) return renderErrorPage(req, res, ERROR.NONEXISTENT_ENTITY(ENTITY.ARTICLE), server);
 
       return server.render(req, res, '/articles/crud', {
         title: 'Edit Article',
@@ -594,7 +594,7 @@ const renderPage = (
   return function(req, res){
     conn.query(`SELECT * FROM pages WHERE name = '${pageName}'`, function (err, [page] = []) {
       if (err) return renderErrorPage(req, res, err, server);
-      if (!page) return renderErrorPage(req, res, ERROR.NONEXISTENT_PAGE(), server);
+      if (!page) return renderErrorPage(req, res, ERROR.NONEXISTENT_ENTITY(ENTITY.PAGE), server);
   
       const { name, title, include_domain, text, excerpt, card_image, bg_image,
         cover_image, cover_image_logo, cover_image_alt, theme,

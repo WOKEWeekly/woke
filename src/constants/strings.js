@@ -2,7 +2,15 @@ module.exports = {
 
   /** All entity names */
   ENTITY: {
-    AUTHOR: 'author'
+    ARTICLE: 'article',
+    AUTHOR: 'author',
+    CANDIDATE: 'candidate',
+    MEMBER: 'member',
+    PAGE: 'page',
+    REVIEW: 'review',
+    SESSION: 'session',
+    TOPIC: 'topic',
+    USER: 'user'
   },
 
   /** The CRUD operations for all entities */
@@ -13,12 +21,12 @@ module.exports = {
 
   /** The cloudinary directories for entities */
   DIRECTORY: {
-    BLACKEXCELLENCE: 'blackexcellence',
+    CANDIDATES: 'blackexcellence',
     ARTICLES: 'articles',
     AUTHORS: 'authors',
     REVIEWS: 'reviews',
     SESSIONS: 'sessions',
-    TEAM: 'team'
+    MEMBERS: 'team'
   },
 
   /** For each of the pages */
