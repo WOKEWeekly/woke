@@ -39,11 +39,27 @@ describe("Article Tests", function() {
       request({
         url: `/api/v1/articles`,
         method: 'GET',
+        headers: HEADERS.TOKEN(superuser),
+        done,
+        onSuccess: ({status, data}) => {
+          assert.equal(status, 200);
+          assert.isArray(data);
+        }
+      });
+    });
+
+    it("Get only published articles", function(done) {
+      request({
+        url: `/api/v1/articles/published`,
+        method: 'GET',
         headers: HEADERS.KEY,
         done,
         onSuccess: ({status, data}) => {
           assert.equal(status, 200);
           assert.isArray(data);
+          data.forEach(article => {
+            assert.equal(article.status, 'PUBLISHED');
+          });
         }
       });
     });

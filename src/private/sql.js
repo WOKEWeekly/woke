@@ -337,6 +337,10 @@ const ARTICLES = {
       return `SELECT ${fields} FROM articles`;
     },
 
+    PUBLISHED: (fields = '*') => {
+      return `SELECT ${fields} FROM articles WHERE status = 'PUBLISHED'`;
+    },
+
     /**
      * Constructs the SQL statement to return information for a single article.
      * @param {string} condition - The condition field for the WHERE clause.

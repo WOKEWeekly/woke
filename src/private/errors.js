@@ -68,6 +68,11 @@ module.exports = {
     err.status = 404;
     return err;
   },
+  NONEXISTENT_ARTICLE: () => {
+    const err = new Error("This article does not exist.");
+    err.status = 404;
+    return err;
+  },
   NONEXISTENT_PAGE: () => {
     const err = new Error("This page does not exist.");
     err.status = 404;

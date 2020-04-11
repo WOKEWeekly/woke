@@ -9,7 +9,7 @@ const { renderErrorPage } = require('./response.js');
 const SQL = require('./sql.js');
 
 const { cloudinary, domain, forms, siteDescription } = require('../constants/settings.js');
-const { PAGE } = require('../constants/strings.js');
+const { OPERATIONS, PAGE } = require('../constants/strings.js');
 
 let exigencies = {};
 
@@ -331,6 +331,64 @@ module.exports = function(app, conn, server){
       title: 'Sign Up | #WOKEWeekly',
       backgroundImage: 'bg-signup.jpg',
       url: '/signup',
+    });
+  });
+
+  /** Blog page */
+  app.get('/blog', function(req, res){
+    return server.render(req, res, '/articles', { 
+      title: 'The #WOKEWeekly Blog',
+      description: 'Explore the expressions of our writers who put pen to paper over the various dimensions within our community.',
+      url: '/blog',
+      cardImage: `public/bg/card-sessions.jpg`, // TODO: Change while designing
+      backgroundImage: 'bg-app.jpg'
+     });
+  });
+
+  /** Individual blog post */
+  app.get('/blog/:slug', function(req, res){
+    const slug = req.params.slug;
+    const sql = SQL.ARTICLES.READ.SINGLE('slug');
+    
+    conn.query(sql, [slug], function (err, [article] = []) {
+      if (err) return renderErrorPage(req, res, err, server);
+      if (!article) return renderErrorPage(req, res, ERROR.NONEXISTENT_ARTICLE(), server);
+      
+      return server.render(req, res, '/articles/single', {
+        title: `${article.title} | #WOKEWeekly`,
+        description: article.excerpt,
+        url: `/blog/${article.slug}`,
+        cardImage: article.image,
+        backgroundImage: 'bg-app.jpg', // TODO: Change while designing
+        article
+      });
+    });
+  });
+
+  /** Add article */
+  app.get('/blog/article/add', function(req, res){
+    return server.render(req, res, '/articles/crud', {
+      title: 'Add New Article',
+      operation: OPERATIONS.CREATE,
+      backgroundImage: 'bg-app.jpg'
+    });
+  });
+
+  /** Edit article */
+  app.get('/blog/article/edit/:id', function(req, res){
+    const id = req.params.id;
+    const sql = SQL.ARTICLES.READ.SINGLE('id');
+    
+    conn.query(sql, id, function (err, [article] = []) {
+      if (err) return renderErrorPage(req, res, err, server);
+      if (!article) return renderErrorPage(req, res, ERROR.NONEXISTENT_ARTICLE(), server);
+
+      return server.render(req, res, '/articles/crud', {
+        title: 'Edit Article',
+        backgroundImage: 'bg-app.jpg',
+        operation: 'edit',
+        article
+      });
     });
   });
 

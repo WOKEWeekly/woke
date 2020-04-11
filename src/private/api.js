@@ -526,8 +526,16 @@ module.exports = function(app, conn){
   });
 
   /** Retrieve all articles */
-  app.get('/api/v1/articles', validateReq, function(req, res){
+  app.get('/api/v1/articles', verifyToken(CLEARANCES.ACTIONS.CRUD_ARTICLES), function(req, res){
     const sql = SQL.ARTICLES.READ.ALL();
+    conn.query(sql, function (err, articles) {
+      respondToClient(res, err, 200, articles);
+    });
+  });
+
+  /** Retrieve only published articles */
+  app.get('/api/v1/articles/published', validateReq, function(req, res){
+    const sql = SQL.ARTICLES.READ.PUBLISHED();
     conn.query(sql, function (err, articles) {
       respondToClient(res, err, 200, articles);
     });

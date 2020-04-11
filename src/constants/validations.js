@@ -1,5 +1,6 @@
 import { alert } from '~/components/alert.js';
 import { checkCookies } from './cookies';
+import { ARTICLE_STATUS } from './strings';
 
 module.exports = {
   /**
@@ -58,6 +59,25 @@ module.exports = {
       if (!ifExists(topic.option1.trim(), 'Enter the first option to the question.')) return false;
       if (!ifExists(topic.option2.trim(), 'Enter the second option to the question.')) return false;
     }
+    return true;
+  },
+
+  /**
+   * Validation of article submission or update.
+   * @param {string} article - Article information to be validated.
+   * @returns {boolean} True if valid. False with error message if invalid.
+   */
+  isValidArticle: (article) => {
+    if (!ifExists(article.title.trim(), 'Enter the article title.')) return false;
+    if (!ifExists(article.status.trim(), 'Select the status of the article.')) return false;
+    if (ifTrue(article.authorId === 0, 'Select the author of this article.')) return false;
+    if (article.status === ARTICLE_STATUS.PUBLISHED){
+      if (!ifExists(article.category, 'Select the article\'s category.')) return false;
+      if (!ifExists(article.content.trim(), 'Write out the content of this article.')) return false;
+      if (!ifExists(article.excerpt.trim(), 'Enter the article\'s excerpt.')) return false;
+      if (!module.exports.isValidFile(article.image, 'article')) return false;
+    }
+
     return true;
   },
 

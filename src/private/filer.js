@@ -50,7 +50,7 @@ module.exports = {
     }
 
     // Discontinue if image has not changed
-    const noImageUpload = !imageHasChanged || !entity.image.length;
+    const noImageUpload = !imageHasChanged || !entity.image;
     if (noImageUpload) return next(null, entity);
 
     // Upload to cloudinary
