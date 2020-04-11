@@ -14,7 +14,7 @@ const { respondToClient } = require('./response.js');
 const SQL = require('./sql.js');
 
 const CLEARANCES = require('../constants/clearances.js');
-const { DIRECTORY } = require('../constants/strings.js');
+const { DIRECTORY, ENTITY } = require('../constants/strings.js');
 
 const noEmails = false;
 if (noEmails) console.warn("Emails are turned off.");
@@ -612,6 +612,93 @@ module.exports = function(app, conn){
       },
       function(callback){ // Delete article from database
         conn.query(SQL.ARTICLES.DELETE, id, function (err) {
+          err ? callback(err) : callback(null);
+        });
+      }
+    ], function(err){
+      respondToClient(res, err, 204);
+    });
+  });
+
+  /** Retrieve all author */
+  app.get('/api/v1/authors', verifyToken(CLEARANCES.ACTIONS.CRUD_AUTHORS), function(req, res){
+    const sql = SQL.AUTHORS.READ.ALL();
+    conn.query(sql, function (err, authors) {
+      respondToClient(res, err, 200, authors);
+    });
+  });
+
+  /** Retrieve individual author */
+  app.get('/api/v1/authors/:id([0-9]+)', validateReq, function(req, res){
+    const id = req.params.id;
+    conn.query(SQL.AUTHORS.READ.SINGLE('id'), id, function (err, [author] = []) {
+      if (err) return respondToClient(res, err);
+      if (!author) err = ERROR.INVALID_ID(ENTITY.AUTHOR, id);
+      respondToClient(res, err, 200, author);
+    });
+  });
+
+  /** Add new author to database */
+  app.post('/api/v1/authors', verifyToken(CLEARANCES.ACTIONS.CRUD_AUTHORS), function(req, res){
+    const author = req.body;
+
+    async.waterfall([
+      function(callback){ // Upload image to cloud
+        filer.uploadImage(author, DIRECTORY.AUTHORS, true, callback);
+      },
+      function(author, callback){ // Add author to database
+        const { sql, values } = SQL.AUTHORS.CREATE(author);
+        conn.query(sql, [values], function (err, result) {
+          err ? callback(err) : callback(null, result.insertId);
+        });
+      }
+    ], function(err, id){
+      respondToClient(res, err, 201, { id });
+    });
+  });
+
+  /** Update details of existing authors in database */
+  app.put('/api/v1/authors/:id', verifyToken(CLEARANCES.ACTIONS.CRUD_AUTHORS), function(req, res){
+    const id = req.params.id;
+    const { author, changed } = req.body;
+
+    async.waterfall([
+      function(callback){ // Delete old image if changed.
+        conn.query(SQL.AUTHORS.READ.SINGLE('id', 'image'), id, function (err, [author] = []) {
+          if (err) return callback(err);
+          if (!author) return callback(ERROR.INVALID_AUTHOR_ID(id));
+          if (!changed) return callback(null);
+          filer.destroyImage(author.image, callback);
+        });
+      },
+      function(callback){ // Equally, upload new image if changed
+        filer.uploadImage(author, DIRECTORY.AUTHORS, changed, callback);
+      },
+      function(author, callback){ // Update review in database
+        const { sql, values } = SQL.AUTHORS.UPDATE(id, author, changed);
+        conn.query(sql, values, function (err) {
+          err ? callback(err) : callback(null, author.slug);
+        });
+      }
+    ], function(err, slug){
+      respondToClient(res, err, 200, { slug });
+    });
+  });
+
+  /** Delete an existing author from database */
+  app.delete('/api/v1/authors/:id', verifyToken(CLEARANCES.ACTIONS.CRUD_AUTHORS), function(req, res){
+    const id = req.params.id;
+
+    async.waterfall([
+      function(callback){ // Delete image from cloud
+        conn.query(SQL.AUTHORS.READ.SINGLE('id', 'image'), id, function (err, [author] = []) {
+          if (err) return callback(err);
+          if (!author) return callback(ERROR.INVALID_AUTHOR_ID(id));
+          filer.destroyImage(author.image, callback);
+        });
+      },
+      function(callback){ // Delete author from database
+        conn.query(SQL.AUTHORS.DELETE, id, function (err) {
           err ? callback(err) : callback(null);
         });
       }

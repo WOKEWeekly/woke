@@ -1,5 +1,10 @@
 module.exports = {
-  
+
+  /** All entity names */
+  ENTITY: {
+    AUTHOR: 'author'
+  },
+
   /** The CRUD operations for all entities */
   OPERATIONS: {
     CREATE: 'add',
@@ -10,6 +15,7 @@ module.exports = {
   DIRECTORY: {
     BLACKEXCELLENCE: 'blackexcellence',
     ARTICLES: 'articles',
+    AUTHORS: 'authors',
     REVIEWS: 'reviews',
     SESSIONS: 'sessions',
     TEAM: 'team'

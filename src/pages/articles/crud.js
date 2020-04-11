@@ -34,9 +34,10 @@ class ArticleCrud extends Component {
   }
 
   componentDidMount(){
+    const { article, operation } = this.props
     this.setState({
-      ...this.props.article,
-      isCreateOperation: this.props.operation === OPERATIONS.CREATE
+      ...article,
+      isCreateOperation: operation === OPERATIONS.CREATE
     });
   }
 
