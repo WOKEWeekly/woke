@@ -13,6 +13,7 @@ describe("User Tests", function() {
   this.slow(10000);
   
   before(function(done){
+    
     async.waterfall([
       function(callback){
         jwt.sign({ user: superuser }, process.env.JWT_SECRET, { expiresIn: '1m' }, function(err, token){
@@ -20,16 +21,17 @@ describe("User Tests", function() {
           callback(err);
         });
       },
-      function(){ // Purge user table
+      function(callback){ // Purge user table
         request({
           url: `/api/v1/users`,
           method: 'PURGE',
           headers: HEADERS.TOKEN(superuser),
-          done,
-          onSuccess: () => {}
+          done: callback,
         });
       }
-    ]);
+    ], function(err){
+      done(err);
+    });
   });
 
   /** Test POST methods against users */

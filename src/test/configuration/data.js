@@ -6,7 +6,7 @@ module.exports = {
     CREATED: {
       title: "Crazy Blues",
       content: "This is an added article via service tests.",
-      category: "Philsophy & Ethics",
+      category: "Philosophy & Ethics",
       excerpt: "Added service test article.",
       image: TEST_IMAGE,
       authorId: 1,
