@@ -1,4 +1,5 @@
-const { assert, jwt, request, HEADERS } = require('./configuration/constants.js');
+
+const { assert, request, HEADERS } = require('./configuration/constants.js');
 const { TEST_AUTHORS, TEST_USERS } = require('./configuration/data.js');
 
 const superuser = TEST_USERS.NINE;
@@ -7,13 +8,6 @@ let AUTHOR_ID = 0;
 
 describe("Author Tests", function() {
   this.slow(10000);
-  
-  before(function(done){
-    jwt.sign({ user: superuser }, process.env.JWT_SECRET, { expiresIn: '1m' }, function(err, token){
-      superuser.token = token;
-      done();
-    });
-  });
 
   /** Test creating a new author */
   describe("Create", function() {

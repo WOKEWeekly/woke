@@ -1,4 +1,4 @@
-const { assert, jwt, request, HEADERS } = require('./configuration/constants.js');
+const { assert, request, HEADERS } = require('./configuration/constants.js');
 const { TEST_SESSIONS, TEST_USERS } = require('./configuration/data.js');
 
 const superuser = TEST_USERS.NINE;
@@ -7,13 +7,6 @@ let SESSION_ID = 0;
 
 describe("Session Tests", function() {
   this.slow(10000);
-  
-  before(function(done){
-    jwt.sign({ user: superuser }, process.env.JWT_SECRET, { expiresIn: '1m' }, function(err, token){
-      superuser.token = token;
-      done();
-    });
-  });
 
   /** Test creating a new session */
   describe("Create", function() {

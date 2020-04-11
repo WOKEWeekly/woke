@@ -893,7 +893,7 @@ module.exports = function(app, conn){
     });
   });
 
-  /** Clear added users */
+  /** Purge added users */
   app.purge('/api/v1/users', verifyToken(9), function(req, res){
     if (process.env.NODE_ENV === 'production') return respondToClient(res, ERROR.UNAUTHORIZED_REQUEST());
     conn.query(SQL.USERS.CLEAR, function(err){

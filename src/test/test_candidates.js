@@ -1,4 +1,4 @@
-const { assert, jwt, request, HEADERS } = require('./configuration/constants.js');
+const { assert, request, HEADERS } = require('./configuration/constants.js');
 const { TEST_CANDIDATES, TEST_USERS } = require('./configuration/data.js');
 
 const superuser = TEST_USERS.NINE;
@@ -9,20 +9,17 @@ describe("Candidate Tests", function() {
   this.slow(10000);
   
   before(function(done){
-    jwt.sign({ user: superuser }, process.env.JWT_SECRET, { expiresIn: '1m' }, function(err, token){
-      superuser.token = token;
-      request({
-        url: `/api/v1/candidates/latest`,
-        method: 'GET',
-        headers: HEADERS.KEY,
-        done,
-        onSuccess: ({data}) => {
-          const id = data ? data.id + 1 : 1;
-          CANDIDATE_ID = id;
-          TEST_CANDIDATES.CREATED.id = id;
-          TEST_CANDIDATES.UPDATED.id = id;
-        }
-      });
+    request({
+      url: `/api/v1/candidates/latest`,
+      method: 'GET',
+      headers: HEADERS.KEY,
+      done,
+      onSuccess: ({data}) => {
+        const id = data ? data.id + 1 : 1;
+        CANDIDATE_ID = id;
+        TEST_CANDIDATES.CREATED.id = id;
+        TEST_CANDIDATES.UPDATED.id = id;
+      }
     });
   });
 

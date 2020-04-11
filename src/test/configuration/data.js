@@ -1,4 +1,13 @@
+const jwt = require('jsonwebtoken');
+
+const SUPERUSER = {
+  id: 1,
+  firstname: 'Admin',
+  lastname: 'Istrator',
+  clearance: 9,
+};
 const TEST_IMAGE = 'data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==';
+const TOKEN = jwt.sign({ user: SUPERUSER }, process.env.JWT_SECRET, { expiresIn: '1m' });
 
 module.exports = {
 
@@ -182,12 +191,7 @@ module.exports = {
   },
 
   TEST_USERS: {
-    NINE: {
-      id: 1,
-      firstname: 'Admin',
-      lastname: 'Istrator',
-      clearance: 9
-    },
+    NINE: { ...SUPERUSER, token: TOKEN },
     FIVE: {
       id: 2,
       firstname: 'Test',
@@ -205,4 +209,4 @@ module.exports = {
       subscribe: false
     }
   }
-}
+};
