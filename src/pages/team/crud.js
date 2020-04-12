@@ -34,7 +34,7 @@ class MemberCrud extends Component {
       ...ethnicities,
       socials: {},
       verified: false,
-      slackID: ''
+      slackId: ''
     };
   }
 
@@ -78,7 +78,7 @@ class MemberCrud extends Component {
 
   buildRequest = () => {
     const { firstname, lastname, role, level, sex, image,
-      birthday, description, socials, verified, slackID } = this.state;
+      birthday, description, socials, verified, slackId } = this.state;
     const { operation } = this.props;
 
     if (!verified) this.setState({backPath: '/team'});
@@ -101,7 +101,7 @@ class MemberCrud extends Component {
       ethnicity: JSON.stringify(ethnicities),
       socials: JSON.stringify(socials),
       verified,
-      slackID: slackID !== null ? slackID.trim() : null
+      slackId: slackId !== null ? slackId.trim() : null
     };
 
     let data;

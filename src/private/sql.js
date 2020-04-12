@@ -156,7 +156,7 @@ const CANDIDATES = {
    * @returns {object} The SQL statement and the values.
    */
   CREATE: (candidate) => {
-    const sql = "INSERT INTO candidates (id, name, image, birthday, ethnicity, socials, occupation, description, author_id, date_written) VALUES ?";
+    const sql = "INSERT INTO candidates (id, name, image, birthday, ethnicity, socials, occupation, description, authorId, dateWritten) VALUES ?";
     const values = [[candidate.id, candidate.name, candidate.image, candidate.birthday, candidate.ethnicity, candidate.socials, candidate.occupation, candidate.description, candidate.authorId, candidate.dateWritten]];
     return { sql, values };
   },
@@ -181,10 +181,10 @@ const CANDIDATES = {
     /** The SQL statement to return the latest candidate. */
     LATEST: "SELECT * FROM candidates ORDER BY id DESC LIMIT 1",
 
-    /** Join candidate table with member table by author */
-    JOIN_MEMBERS: `SELECT candidates.*, CONCAT(members.firstname, ' ', members.lastname) AS author,
-    members.level AS author_level, members.slug AS author_slug
-    FROM candidates LEFT JOIN members ON candidates.author_id=members.id WHERE candidates.id = ?`
+    /** Join candidate table with author table */
+    JOIN_AUTHORS: `SELECT candidates.*, CONCAT(authors.firstname, ' ', authors.lastname) AS author,
+    authors.level AS authorLevel, members.slug AS authorSlug
+    FROM candidates LEFT JOIN members ON candidates.authorId=members.id WHERE candidates.id = ?`
   },
 
   /**
@@ -195,7 +195,7 @@ const CANDIDATES = {
    * @returns {object} The SQL statement and the values.
    */
   UPDATE: (id, candidate, imageHasChanged) => {
-    let sql = "UPDATE candidates SET id = ?, name = ?, birthday = ?, ethnicity = ?, socials = ?, occupation = ?, description = ?,author_id = ?, date_written = ? WHERE id = ?";
+    let sql = "UPDATE candidates SET id = ?, name = ?, birthday = ?, ethnicity = ?, socials = ?, occupation = ?, description = ?, authorId = ?, dateWritten = ? WHERE id = ?";
     let values = [candidate.id, candidate.name, candidate.birthday, candidate.ethnicity, candidate.socials, candidate.occupation, candidate.description, candidate.authorId, candidate.dateWritten, id];
 
     if (imageHasChanged){
@@ -217,8 +217,8 @@ const MEMBERS = {
    * @returns {object} The SQL statement and the values.
    */
   CREATE: (member) => {
-    const sql = "INSERT INTO members (firstname, lastname, image, level, birthday, sex, role, ethnicity, socials, slug, description, verified, slackID) VALUES ?";
-    const values = [[member.firstname, member.lastname, member.image, member.level, member.birthday, member.sex, member.role, member.ethnicity, member.socials, member.slug, member.description, member.verified, member.slackID]];
+    const sql = "INSERT INTO members (firstname, lastname, image, level, birthday, sex, role, ethnicity, socials, slug, description, verified, slackId) VALUES ?";
+    const values = [[member.firstname, member.lastname, member.image, member.level, member.birthday, member.sex, member.role, member.ethnicity, member.socials, member.slug, member.description, member.verified, member.slackId]];
     return { sql, values };
   },
   READ: {
@@ -259,8 +259,8 @@ const MEMBERS = {
    * @returns {object} The SQL statement and the values.
    */
   UPDATE: (id, member, imageHasChanged) => {
-    let sql = "UPDATE members SET firstname = ?, lastname = ?, image = ?, level = ?, birthday = ?, sex = ?, role = ?, ethnicity = ?, socials = ?, slug = ?, description = ?, verified = ?, slackID = ? WHERE id = ?";
-    let values = [member.firstname, member.lastname, member.image, member.level, member.birthday, member.sex, member.role, member.ethnicity, member.socials, member.slug, member.description, member.verified, member.slackID, id];
+    let sql = "UPDATE members SET firstname = ?, lastname = ?, image = ?, level = ?, birthday = ?, sex = ?, role = ?, ethnicity = ?, socials = ?, slug = ?, description = ?, verified = ?, slackId = ? WHERE id = ?";
+    let values = [member.firstname, member.lastname, member.image, member.level, member.birthday, member.sex, member.role, member.ethnicity, member.socials, member.slug, member.description, member.verified, member.slackId, id];
 
     if (imageHasChanged){
       sql = appendFieldToUpdateQuery('image', sql);
@@ -281,7 +281,7 @@ const TOPICS = {
    * @returns {object} The SQL statement and the values.
    */
   CREATE: (topic) => {
-    const sql = "INSERT INTO topics (headline, category, question, description, type, polarity, validated, sensitivity, option1, option2, user_id) VALUES ?";
+    const sql = "INSERT INTO topics (headline, category, question, description, type, polarity, validated, sensitivity, option1, option2, userId) VALUES ?";
     const values = [[topic.headline, topic.category, topic.question, topic.description, topic.type, topic.polarity, topic.validated, topic.sensitivity, topic.option1, topic.option2, topic.userId]];
     return { sql, values };
   },
@@ -489,7 +489,7 @@ const PAGES = {
    * @returns {object} The SQL statement and the values.
    */
   UPDATE: (page, text) => {
-    const sql = "UPDATE pages SET text = ?, last_modified = ? WHERE name = ?";
+    const sql = "UPDATE pages SET text = ?, lastModified = ? WHERE name = ?";
     const values = [text, new Date(), page];
     return { sql, values };
   }
@@ -499,6 +499,13 @@ const TOKENS = {
   READ: (name) => {
     return `SELECT * FROM tokens WHERE name = '${name}'`;
   }
+};
+
+const ALL = {
+  RENUMBER_IDS: (table) => {
+    const sql = `SET @id:=0; UPDATE ${table} SET id = @id:=(@id+1); ALTER TABLE ${table} AUTO_INCREMENT = 1;`
+    return sql;
+  },
 };
 
 module.exports = {
@@ -512,7 +519,7 @@ module.exports = {
   TOKENS,
   TOPICS,
   USERS
-}
+};
 
 /**
  * Appends a new field to an existing UPDATE query.

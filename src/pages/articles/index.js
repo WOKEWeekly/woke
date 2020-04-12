@@ -57,8 +57,8 @@ class Blog extends Component {
     const { articles } = this.state;
 
     articles.sort(function (a,b) {
-      a = a.date_published;
-      b = b.date_published;
+      a = a.datePublished;
+      b = b.datePublished;
       return a < b ? -1 : a > b ? 1 : 0
 		});
 
@@ -130,7 +130,7 @@ class Article extends PureComponent {
               onLoad={() => this.setState({isLoaded: true})} />
             <div className={css.details}>
               <Title className={css.title}>{item.title}</Title>
-              <Subtitle className={css.date}>{zDate.formatDate(item.date_published, true)}</Subtitle>
+              <Subtitle className={css.date}>{zDate.formatDate(item.datePublished, true)}</Subtitle>
             </div>
           </div>
         </Link>

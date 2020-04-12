@@ -54,21 +54,6 @@ describe("Member Tests", function() {
       });
     });
 
-    it("Get only member names", function(done) {
-      request({
-        url: `/api/v1/members/names`,
-        method: 'GET',
-        headers: HEADERS.KEY,
-        done,
-        onSuccess: ({status, data}) => {
-          assert.equal(status, 200);
-          assert.isArray(data);
-          const [candidate] = data;
-          assert.hasAllKeys(candidate, ['id', 'firstname', 'lastname']);
-        }
-      });
-    });
-
     it("Get only executive members", function(done) {
       request({
         url: `/api/v1/members/executives`,

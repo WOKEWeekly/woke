@@ -62,7 +62,7 @@ module.exports = {
       if (isNaN(id)){
         next();
       } else {
-        const sql = `UPDATE user SET last_active = ? WHERE id = ?`;
+        const sql = `UPDATE user SET lastActive = ? WHERE id = ?`;
         const values = [new Date(), id];
         
         conn.query(sql, values, () => {

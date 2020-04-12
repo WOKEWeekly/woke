@@ -261,14 +261,6 @@ module.exports = function(app, conn){
     });
   });
 
-  /** Retrieve the IDs, first names and surnames of team members */
-  app.get('/api/v1/members/names', validateReq, function(req, res){
-    const sql = SQL.MEMBERS.READ.ALL('id, firstname, lastname');
-    conn.query(sql, function (err, members) {
-      respondToClient(res, err, 200, members);
-    });
-  });
-
   /** Retrieve only executive team members */
   app.get('/api/v1/members/executives', validateReq, function(req, res){
     conn.query(SQL.MEMBERS.READ.EXECUTIVES, function (err, executives) {
@@ -709,7 +701,7 @@ module.exports = function(app, conn){
 
   /** Retrieve all users */
   app.get('/api/v1/users', verifyToken(CLEARANCES.ACTIONS.VIEW_USERS), function(req, res){
-    const sql = SQL.USERS.READ.ALL("id, firstname, lastname, clearance, username, email, create_time, last_active");
+    const sql = SQL.USERS.READ.ALL("id, firstname, lastname, clearance, username, email, createTime, lastActive");
     conn.query(sql, function (err, users) {
       respondToClient(res, err, 200, users);
     });
@@ -719,7 +711,7 @@ module.exports = function(app, conn){
   app.get('/api/v1/users/:id', validateReq, function(req, res){
     // TODO: Differentiate between self-reading and admin-reading.
     const id = req.params.id;
-    const sql = SQL.USERS.READ.SINGLE("id, firstname, lastname, clearance, username, email, create_time, last_active");
+    const sql = SQL.USERS.READ.SINGLE("id, firstname, lastname, clearance, username, email, createTime, lastActive");
 
     conn.query(sql, id, function (err, [user] = []) {
       if (err) return respondToClient(res, err);

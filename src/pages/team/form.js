@@ -37,7 +37,7 @@ class MemberForm extends Component {
     const { handleText, handleBirthday, handleImage, handleRadio, handleCheckboxButton, clearSelection, confirmSocials } = handlers;
 
     const { firstname, lastname, level, sex, role, description, birthday, image, socials,
-      ethnicity1, ethnicity2, ethnicity3, ethnicity4, verified, slackID } = this.props.member;
+      ethnicity1, ethnicity2, ethnicity3, ethnicity4, verified, slackId } = this.props.member;
 
     const { ethnicModalVisible, socialsModalVisible } = this.state;
 
@@ -114,8 +114,8 @@ class MemberForm extends Component {
               <Col md={4}>
                 <Label>Slack ID:</Label>
                 <TextInput
-                  name={'slackID'}
-                  value={slackID}
+                  name={'slackId'}
+                  value={slackId}
                   onChange={handleText}
                   placeholder={"e.g. UDL5UM6KG"} />
               </Col>

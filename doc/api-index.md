@@ -32,7 +32,7 @@ Returns all sessions.
         "image": "v1585776475/dev/sessions/2020-08-30_manchester-2020.jpg",
         "slug": "manchester-2020",
         "description": "An added description from Postman.",
-        "create_time": "2020-04-01T20:27:55.000Z"
+        "createTime": "2020-04-01T20:27:55.000Z"
     },
     {
       ...
@@ -58,7 +58,7 @@ Returns the session corresponding to specified ID.
     "image": "v1585776475/dev/sessions/2020-08-30_manchester-2020.jpg",
     "slug": "manchester-2020",
     "description": "An added description from Postman.",
-    "create_time": "2020-04-01T20:27:55.000Z"
+    "createTime": "2020-04-01T20:27:55.000Z"
 }
 ```
 
@@ -81,7 +81,7 @@ Returns the featured session, which would be a random upcoming session. If there
         "image": "v1586044151/dev/sessions/2020-08-30_manchester-2020.jpg",
         "slug": "manchester-2020-2020-08-30",
         "description": "An added description from Postman.",
-        "create_time": "2020-04-04T22:49:12.000Z"
+        "createTime": "2020-04-04T22:49:12.000Z"
     },
     "upcoming": true
 }
@@ -179,8 +179,8 @@ Returns all candidates.
         "socials": "{\"instagram\": \"postman\"}",
         "occupation": "Tester",
         "description": "An added candidate through Postman.",
-        "author_id": 1,
-        "date_written": "2019-03-01T00:00:00.000Z"
+        "authorId": 1,
+        "dateWritten": "2019-03-01T00:00:00.000Z"
     },
     {
       ...
@@ -207,8 +207,8 @@ Returns the candidate corresponding to specified ID.
     "socials": "{\"instagram\": \"postman\"}",
     "occupation": "Tester",
     "description": "An added candidate through Postman.",
-    "author_id": 1,
-    "date_written": "2019-03-01T00:00:00.000Z"
+    "authorId": 1,
+    "dateWritten": "2019-03-01T00:00:00.000Z"
 }
 ```
 

@@ -1,4 +1,3 @@
-
 const { assert, request, HEADERS } = require('./configuration/constants.js');
 const { TEST_AUTHORS, TEST_USERS } = require('./configuration/data.js');
 

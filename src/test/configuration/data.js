@@ -106,7 +106,7 @@ module.exports = {
       }),
       description: "An added member through service tests.",
       verified: 1,
-      slackID: null
+      slackId: null
     },
     UPDATED: {
       firstname: "Lolly",
@@ -123,7 +123,7 @@ module.exports = {
       }),
       description: "An updated member through service tests.",
       verified: 1,
-      slackID: null
+      slackId: null
     }
   },
 
@@ -173,7 +173,7 @@ module.exports = {
       sensitivity: false,
       option1: "Yes",
       option2: "No",
-      user_id: 1
+      userId: 1
     },
     UPDATED: {
       headline: "NHS",
@@ -186,7 +186,7 @@ module.exports = {
       sensitivity: true,
       option1: "Yes",
       option2: "No",
-      user_id: 1
+      userId: 1
     }
   },
 

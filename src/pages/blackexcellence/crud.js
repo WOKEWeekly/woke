@@ -55,7 +55,7 @@ class CandidateAdd extends Component {
 
     if (isEditOperation){
 
-      const { birthday, date_written, ethnicity, socials, author_id } = candidate;
+      const { birthday, dateWritten, ethnicity, socials } = candidate;
       const ethnicityArr = JSON.parse(ethnicity);
 
       /** Populate ethnicity array */
@@ -68,8 +68,7 @@ class CandidateAdd extends Component {
         ...candidate,
         socials: JSON.parse(socials),
         birthday: new Date(birthday),
-        authorId: author_id,
-        dateWritten: new Date(date_written),
+        dateWritten: new Date(dateWritten),
         ...ethnicities
       });
     }

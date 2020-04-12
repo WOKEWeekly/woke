@@ -596,9 +596,9 @@ const renderPage = (
       if (err) return renderErrorPage(req, res, err, server);
       if (!page) return renderErrorPage(req, res, ERROR.NONEXISTENT_ENTITY(ENTITY.PAGE), server);
   
-      const { name, title, include_domain, text, excerpt, card_image, bg_image,
-        cover_image, cover_image_logo, cover_image_alt, theme,
-        edit_title, edit_placeholder_text } = page;
+      const { name, title, includeDomain, text, excerpt, cardImage, backgroundImage,
+        coverImage, coverImageLogo, coverImageAlt, theme,
+        editTitle, editPlaceholderText } = page;
 
       let uri = '';
       let information = {};
@@ -608,14 +608,14 @@ const renderPage = (
         information = {
           pageName: name,
           pageText: text,
-          title: include_domain ? `${title} | #WOKEWeekly` : title,
+          title: includeDomain ? `${title} | #WOKEWeekly` : title,
           description: excerpt || createExcerpt(text),
           url: `/${name}`,
-          cardImage: card_image || 'public/bg/card-home.jpg',
-          backgroundImage: bg_image || 'bg-app.jpg',
-          coverImage: cover_image,
-          imageLogo: cover_image_logo,
-          imageAlt: cover_image_alt,
+          cardImage: cardImage || 'public/bg/card-home.jpg',
+          backgroundImage: backgroundImage || 'bg-app.jpg',
+          coverImage: coverImage,
+          imageLogo: coverImageLogo,
+          imageAlt: coverImageAlt,
           theme: theme || PAGE.THEMES.DEFAULT
         };
       } else {
@@ -623,9 +623,9 @@ const renderPage = (
         information = {
           pageName: name,
           pageText: text,
-          title: edit_title,
-          backgroundImage: bg_image || 'bg-app.jpg',
-          placeholderText: edit_placeholder_text,
+          title: editTitle,
+          backgroundImage: backgroundImage || 'bg-app.jpg',
+          placeholderText: editPlaceholderText,
           theme: theme || PAGE.THEMES.DEFAULT
         }
       }

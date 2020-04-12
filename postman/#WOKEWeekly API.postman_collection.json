@@ -52,6 +52,50 @@
 					"response": []
 				},
 				{
+					"name": "Get Published Articles Only",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "ccf00a33-bb9d-46fe-b356-541166dd19db",
+								"exec": [
+									"pm.test(\"Response is OK.\", () => {",
+									"    pm.expect(pm.response.code).to.equal(200);",
+									"});",
+									"",
+									"pm.test(\"Response is an array.\", () => {",
+									"    pm.expect(pm.response.json()).to.be.an('array');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "admission",
+								"type": "text",
+								"value": "true"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/api/v1/articles/published",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"articles",
+								"published"
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "Get Single Article",
 					"event": [
 						{
@@ -255,6 +299,264 @@
 								"v1",
 								"articles",
 								"{{ARTICLE_ID}}"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Authors",
+			"item": [
+				{
+					"name": "Get Authors",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "ccf00a33-bb9d-46fe-b356-541166dd19db",
+								"exec": [
+									"pm.test(\"Response is OK.\", () => {",
+									"    pm.expect(pm.response.code).to.equal(200);",
+									"});",
+									"",
+									"pm.test(\"Response is an array.\", () => {",
+									"    pm.expect(pm.response.json()).to.be.an('array');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "admission",
+								"type": "text",
+								"value": "true"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/api/v1/authors",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"authors"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Single Article",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "ccf00a33-bb9d-46fe-b356-541166dd19db",
+								"exec": [
+									"pm.test(\"Response is OK.\", () => {",
+									"    pm.expect(pm.response.code).to.equal(200);",
+									"});",
+									"",
+									"pm.test(\"Response is an object.\", () => {",
+									"    pm.expect(pm.response.json()).to.be.an('object');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "admission",
+								"type": "text",
+								"value": "true"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/api/v1/authors/{{AUTHOR_ID}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"authors",
+								"{{AUTHOR_ID}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add New Author",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "6b99fd75-abf4-4f39-b0c1-b2143a6630f8",
+								"exec": [
+									"var response = pm.response.json();",
+									"pm.globals.set(\"AUTHOR_ID\", response.id);",
+									"",
+									"pm.test(\"Author is created.\", () => {",
+									"    pm.expect(pm.response.code).to.equal(201);",
+									"});",
+									"",
+									"pm.test(\"Response contains ID.\", () => {",
+									"    pm.expect(pm.response.json()).to.have.property('id');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "admission",
+								"type": "text",
+								"value": "true"
+							},
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"firstname\": \"Peter\",\n\t\"lastname\": \"Parker\",\n\t\"birthday\": \"1985-12-03\",\n\t\"ethnicity\": \"[\\\"Madagascar\\\", \\\"Taiwan\\\"]\",\n\t\"sex\": \"M\",\n\t\"description\": \"An added author from service tests.\",\n\t\"image\": {{image1}},\n\t\"socials\": \"{\\\"instagram\\\":\\\"samueloak\\\"}\",\n\t\"memberId\": null\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/v1/authors",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"authors"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Article",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "6b99fd75-abf4-4f39-b0c1-b2143a6630f8",
+								"exec": [
+									"pm.test(\"Author is updated.\", () => {",
+									"    pm.expect(pm.response.code).to.equal(200);",
+									"});",
+									"",
+									"pm.test(\"Response contains slug.\", () => {",
+									"    pm.expect(pm.response.json()).to.have.property('slug');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "admission",
+								"type": "text",
+								"value": "true"
+							},
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"author\": {\n\t\t\"firstname\": \"Paul\",\n\t\t\"lastname\": \"Mensah\",\n\t\t\"birthday\": \"1986-12-03\",\n\t\t\"ethnicity\": \"[\\\"Sri Lanka\\\", \\\"Kenya\\\"]\",\n\t\t\"sex\": \"M\",\n\t\t\"description\": \"An updated author from Postman.\",\n\t\t\"image\": {{image1}},\n\t\t\"socials\": \"{\\\"twitter\\\":\\\"samueloak\\\", \\\"instagram\\\":\\\"samueloak\\\"}\",\n\t\t\"memberId\": null\n\t},\n\t\"changed\": true\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/v1/authors/{{AUTHOR_ID}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"authors",
+								"{{AUTHOR_ID}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Article",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "d4b7749b-622e-4440-83f9-5dea0571aea0",
+								"exec": [
+									"pm.test(\"Author is deleted.\", () => {",
+									"    pm.response.to.have.status(204);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "admission",
+								"value": "true",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/api/v1/authors/{{AUTHOR_ID}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"authors",
+								"{{AUTHOR_ID}}"
 							]
 						}
 					},
@@ -663,50 +965,6 @@
 								"api",
 								"v1",
 								"members"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Get Member Names Only",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"id": "ccf00a33-bb9d-46fe-b356-541166dd19db",
-								"exec": [
-									"pm.test(\"Response is OK.\", () => {",
-									"    pm.expect(pm.response.code).to.equal(200);",
-									"});",
-									"",
-									"pm.test(\"Response is an array.\", () => {",
-									"    pm.expect(pm.response.json()).to.be.an('array');",
-									"});"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "admission",
-								"value": "true",
-								"type": "text"
-							}
-						],
-						"url": {
-							"raw": "{{host}}/api/v1/members/names",
-							"host": [
-								"{{host}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"members",
-								"names"
 							]
 						}
 					},
@@ -1830,7 +2088,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"headline\": \"Nihilism\",\n    \"question\": \"Is life meaningless?\",\n    \"category\": \"Philosophy & Ethics\",\n    \"description\": \"This is an added topic through Postman.\",\n    \"type\": \"Debate\",\n    \"polarity\": true,\n    \"validated\": false,\n    \"sensitivity\": true,\n    \"option1\": \"Yes, it is.\",\n    \"option2\": \"No, it isn't.\",\n    \"user_id\": 1\n}",
+							"raw": "{\n    \"headline\": \"Nihilism\",\n    \"question\": \"Is life meaningless?\",\n    \"category\": \"Philosophy & Ethics\",\n    \"description\": \"This is an added topic through Postman.\",\n    \"type\": \"Debate\",\n    \"polarity\": true,\n    \"validated\": false,\n    \"sensitivity\": true,\n    \"option1\": \"Yes, it is.\",\n    \"option2\": \"No, it isn't.\",\n    \"userid\": 1\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1884,7 +2142,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"headline\": \"The Earth\",\n    \"question\": \"Are we finished?\",\n    \"category\": \"Family & Relationships\",\n    \"description\": \"This is an updated topic through Postman.\",\n    \"type\": \"Discussion\",\n    \"polarity\": false,\n    \"validated\": true,\n    \"sensitivity\": false,\n    \"option1\": \"We might be.\",\n    \"option2\": \"We're most definitely not.\",\n    \"user_id\": 1\n}",
+							"raw": "{\n    \"headline\": \"The Earth\",\n    \"question\": \"Are we finished?\",\n    \"category\": \"Family & Relationships\",\n    \"description\": \"This is an updated topic through Postman.\",\n    \"type\": \"Discussion\",\n    \"polarity\": false,\n    \"validated\": true,\n    \"sensitivity\": false,\n    \"option1\": \"We might be.\",\n    \"option2\": \"We're most definitely not.\",\n    \"userid\": 1\n}",
 							"options": {
 								"raw": {
 									"language": "json"
