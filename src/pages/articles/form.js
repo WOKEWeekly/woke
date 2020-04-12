@@ -19,7 +19,7 @@ class ArticleForm extends Component {
     super(props);
 
     this.state = {
-      members: []
+      authors: []
     }
     
     if (props.user.clearance < CLEARANCES.ACTIONS.CRUD_ARTICLES){
@@ -29,20 +29,20 @@ class ArticleForm extends Component {
 
   componentDidMount(){
     request({
-      url: '/api/v1/members/names',
+      url: '/api/v1/members/authors',
       method: 'GET',
       headers: { 'Authorization': process.env.AUTH_KEY },
       onSuccess: (response) => {
-        const members = [];
-        response.forEach(member => {
-          members.push({value: member.id, label: `${member.firstname} ${member.lastname}` })
+        const authors = [];
+        response.forEach(author => {
+          authors.push({value: author.id, label: `${author.firstname} ${author.lastname}` })
         });
-        members.sort((a, b) => {
+        authors.sort((a, b) => {
           a = a.label;
           b = b.label;
           return a < b ? -1 : a > b ? 1 : 0;
         });
-        this.setState({ members });
+        this.setState({ authors });
       }
     });
   }
@@ -105,7 +105,7 @@ class ArticleForm extends Component {
                   name={'authorId'}
                   value={authorId}
                   placeholder={'Select the author.'}
-                  items={this.state.members}
+                  items={this.state.authors}
                   onChange={handleText} />
               </Col>
               <Col md={{span: 4, offset: 2}}>

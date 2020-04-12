@@ -59,37 +59,6 @@ const ARTICLES = {
   DELETE: "DELETE FROM articles WHERE id = ?"
 };
 
-const AUTHORS = {
-  CREATE: (author) => {
-    const sql = "INSERT INTO authors (firstname, lastname, birthday, ethnicity, sex, description, socials, image, memberId, slug) VALUES ?";
-    const values = [[author.firstname, author.lastname, author.birthday, author.ethnicity, author.sex,
-      author.description, author.socials, author.image, author.memberId, author.slug]];
-    return { sql, values };
-  },
-  READ: {
-    ALL: (fields = '*') => {
-      return `SELECT ${fields} FROM authors`;
-    },
-    SINGLE: (condition, fields = '*') => {
-      const sql = `SELECT ${fields} FROM authors WHERE ${condition} = ?`;
-      return sql;
-    },
-  },
-  UPDATE: (id, author, imageHasChanged) => {
-    let sql = "UPDATE authors SET firstname = ?, lastname = ?, birthday = ?, ethnicity = ?, sex = ?, description = ?, socials = ?, memberId = ?, slug = ? WHERE id = ?";
-    let values = [author.firstname, author.lastname, author.birthday, author.ethnicity, author.sex,
-      author.description, author.socials, author.memberId, author.slug, id];
-
-    if (imageHasChanged){
-      sql = appendFieldToUpdateQuery('image', sql);
-      values = insertFieldInValues(author.image, values);
-    }
-
-    return { sql, values };
-  },
-  DELETE: "DELETE FROM authors WHERE id = ?"
-}
-
 const SESSIONS = {
   /**
    * Constructs the SQL statement to create a session.
@@ -182,8 +151,9 @@ const CANDIDATES = {
     LATEST: "SELECT * FROM candidates ORDER BY id DESC LIMIT 1",
 
     /** Join candidate table with author table */
-    JOIN_AUTHORS: `SELECT candidates.*, CONCAT(authors.firstname, ' ', authors.lastname) AS author,
-    authors.level AS authorLevel, members.slug AS authorSlug
+    JOIN_AUTHORS: `SELECT candidates.*,
+    CONCAT(members.firstname, ' ', members.lastname) AS authorName,
+    members.level AS authorLevel, members.slug AS authorSlug
     FROM candidates LEFT JOIN members ON candidates.authorId=members.id WHERE candidates.id = ?`
   },
 
@@ -243,6 +213,9 @@ const MEMBERS = {
 
     /** The SQL statement to return a random verified member. */
     RANDOM: "SELECT * FROM members WHERE verified = 1 ORDER BY RAND() LIMIT 1",
+
+    /** The SQL statement to retrieve all executive members. */
+    AUTHORS: "SELECT * FROM members WHERE isAuthor = 1",
 
     /** The SQL statement to retrieve all executive members. */
     EXECUTIVES: "SELECT * FROM members WHERE level = 'Executive' AND verified = 1",
@@ -510,7 +483,6 @@ const ALL = {
 
 module.exports = {
   ARTICLES,
-  AUTHORS,
   CANDIDATES,
   MEMBERS,
   PAGES,

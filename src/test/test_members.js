@@ -54,6 +54,22 @@ describe("Member Tests", function() {
       });
     });
 
+    it("Get only authors", function(done) {
+      request({
+        url: `/api/v1/members/authors`,
+        method: 'GET',
+        headers: HEADERS.KEY,
+        done,
+        onSuccess: ({status, data}) => {
+          assert.equal(status, 200);
+          assert.isArray(data);
+          data.forEach(member => {
+            assert.equal(member.isAuthor, true);
+          });
+        }
+      });
+    });
+
     it("Get only executive members", function(done) {
       request({
         url: `/api/v1/members/executives`,
@@ -63,8 +79,8 @@ describe("Member Tests", function() {
         onSuccess: ({status, data}) => {
           assert.equal(status, 200);
           assert.isArray(data);
-          data.forEach(candidate => {
-            assert.equal(candidate.level, 'Executive');
+          data.forEach(member => {
+            assert.equal(member.level, 'Executive');
           });
         }
       });

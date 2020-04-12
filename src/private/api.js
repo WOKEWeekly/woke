@@ -16,8 +16,8 @@ const SQL = require('./sql.js');
 const CLEARANCES = require('../constants/clearances.js');
 const { DIRECTORY, ENTITY } = require('../constants/strings.js');
 
-const noEmails = process.argv.includes('--no-emails');
-if (noEmails) console.warn("Emails are turned off.");
+const emailsOn = process.argv.includes('--emails');
+if (!emailsOn) console.warn("Emails are turned off.");
 
 module.exports = function(app, conn){
 
@@ -258,6 +258,13 @@ module.exports = function(app, conn){
   app.get('/api/v1/members/random', validateReq, function(req, res){
     conn.query(SQL.MEMBERS.READ.RANDOM, function (err, [member] = []) {
       respondToClient(res, err, 200, member);
+    });
+  });
+
+  /** Retrieve only authors */
+  app.get('/api/v1/members/authors', validateReq, function(req, res){
+    conn.query(SQL.MEMBERS.READ.AUTHORS, function (err, authors) {
+      respondToClient(res, err, 200, authors);
     });
   });
 
@@ -612,93 +619,6 @@ module.exports = function(app, conn){
     });
   });
 
-  /** Retrieve all author */
-  app.get('/api/v1/authors', verifyToken(CLEARANCES.ACTIONS.CRUD_AUTHORS), function(req, res){
-    const sql = SQL.AUTHORS.READ.ALL();
-    conn.query(sql, function (err, authors) {
-      respondToClient(res, err, 200, authors);
-    });
-  });
-
-  /** Retrieve individual author */
-  app.get('/api/v1/authors/:id([0-9]+)', validateReq, function(req, res){
-    const id = req.params.id;
-    conn.query(SQL.AUTHORS.READ.SINGLE('id'), id, function (err, [author] = []) {
-      if (err) return respondToClient(res, err);
-      if (!author) err = ERROR.INVALID_ENTITY_ID(ENTITY.AUTHOR, id);
-      respondToClient(res, err, 200, author);
-    });
-  });
-
-  /** Add new author to database */
-  app.post('/api/v1/authors', verifyToken(CLEARANCES.ACTIONS.CRUD_AUTHORS), function(req, res){
-    const author = req.body;
-
-    async.waterfall([
-      function(callback){ // Upload image to cloud
-        filer.uploadImage(author, DIRECTORY.AUTHORS, true, callback);
-      },
-      function(author, callback){ // Add author to database
-        const { sql, values } = SQL.AUTHORS.CREATE(author);
-        conn.query(sql, [values], function (err, result) {
-          err ? callback(err) : callback(null, result.insertId);
-        });
-      }
-    ], function(err, id){
-      respondToClient(res, err, 201, { id });
-    });
-  });
-
-  /** Update details of existing authors in database */
-  app.put('/api/v1/authors/:id', verifyToken(CLEARANCES.ACTIONS.CRUD_AUTHORS), function(req, res){
-    const id = req.params.id;
-    const { author, changed } = req.body;
-
-    async.waterfall([
-      function(callback){ // Delete old image if changed.
-        conn.query(SQL.AUTHORS.READ.SINGLE('id', 'image'), id, function (err, [author] = []) {
-          if (err) return callback(err);
-          if (!author) return callback(ERROR.INVALID_ENTITY_ID(ENTITY.AUTHOR, id));
-          if (!changed) return callback(null);
-          filer.destroyImage(author.image, callback);
-        });
-      },
-      function(callback){ // Equally, upload new image if changed
-        filer.uploadImage(author, DIRECTORY.AUTHORS, changed, callback);
-      },
-      function(author, callback){ // Update review in database
-        const { sql, values } = SQL.AUTHORS.UPDATE(id, author, changed);
-        conn.query(sql, values, function (err) {
-          err ? callback(err) : callback(null, author.slug);
-        });
-      }
-    ], function(err, slug){
-      respondToClient(res, err, 200, { slug });
-    });
-  });
-
-  /** Delete an existing author from database */
-  app.delete('/api/v1/authors/:id', verifyToken(CLEARANCES.ACTIONS.CRUD_AUTHORS), function(req, res){
-    const id = req.params.id;
-
-    async.waterfall([
-      function(callback){ // Delete image from cloud
-        conn.query(SQL.AUTHORS.READ.SINGLE('id', 'image'), id, function (err, [author] = []) {
-          if (err) return callback(err);
-          if (!author) return callback(ERROR.INVALID_ENTITY_ID(ENTITY.AUTHOR, id));
-          filer.destroyImage(author.image, callback);
-        });
-      },
-      function(callback){ // Delete author from database
-        conn.query(SQL.AUTHORS.DELETE, id, function (err) {
-          err ? callback(err) : callback(null);
-        });
-      }
-    ], function(err){
-      respondToClient(res, err, 204);
-    });
-  });
-
   /** Retrieve all users */
   app.get('/api/v1/users', verifyToken(CLEARANCES.ACTIONS.VIEW_USERS), function(req, res){
     const sql = SQL.USERS.READ.ALL("id, firstname, lastname, clearance, username, email, createTime, lastActive");
@@ -752,7 +672,7 @@ module.exports = function(app, conn){
       function(user, callback){ // Generate verification token to be sent via email
         jwt.sign({ user }, process.env.JWT_SECRET, { expiresIn: '24h' }, (err, token) => {
           if (err) return callback(err);
-          if (!noEmails) emails().sendWelcomeEmail(user, token);
+          if (emailsOn) emails().sendWelcomeEmail(user, token);
           callback(null, user)
         });
       },
@@ -909,7 +829,7 @@ module.exports = function(app, conn){
       function(user, callback){ // Generate verification token to send via email
         jwt.sign({user}, process.env.JWT_SECRET, { expiresIn: '30m' }, (err, token) => {
           if (err) return callback(err);
-          if (noEmails) return callback(null, {token});
+          if (!emailsOn) return callback(null, {token});
           emails(callback, [{token}]).resendVerificationEmail(user, token);
         });
       },
@@ -961,7 +881,7 @@ module.exports = function(app, conn){
       function(user, callback){ // Generate recovery token to be sent via email
         jwt.sign({user}, process.env.JWT_SECRET, { expiresIn: '30m'}, (err, token) => {
           if (err) return callback(err);
-          if (noEmails) return callback(null, {token});
+          if (!emailsOn) return callback(null, {token});
           emails(callback, [{token}]).sendAccountRecoveryEmail(user, token);
         });
       },

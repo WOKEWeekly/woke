@@ -21,7 +21,7 @@ class CandidateForm extends Component {
     this.state = {
       ethnicModalVisible: false,
       socialsModalVisible: false,
-      members: []
+      authors: []
     }
 
     if (props.user.clearance < CLEARANCES.ACTIONS.CRUD_SESSIONS){
@@ -31,20 +31,20 @@ class CandidateForm extends Component {
 
   componentDidMount(){
     request({
-      url: '/api/v1/members/names',
+      url: '/api/v1/members/authors',
       method: 'GET',
       headers: { 'Authorization': process.env.AUTH_KEY },
       onSuccess: (response) => {
-        const members = [];
-        response.forEach(member => {
-          members.push({value: member.id, label: `${member.firstname} ${member.lastname}` })
+        const authors = [];
+        response.forEach(author => {
+          authors.push({value: author.id, label: `${author.firstname} ${author.lastname}` })
         });
-        members.sort((a, b) => {
+        authors.sort((a, b) => {
           a = a.label;
           b = b.label;
           return a < b ? -1 : a > b ? 1 : 0;
         });
-        this.setState({ members });
+        this.setState({ authors });
       }
     });
   }
@@ -62,7 +62,7 @@ class CandidateForm extends Component {
       ethnicity1, ethnicity2, ethnicity3, ethnicity4,
       authorId, dateWritten } = this.props.candidate;
 
-    const { members, ethnicModalVisible, socialsModalVisible } = this.state;
+    const { authors, ethnicModalVisible, socialsModalVisible } = this.state;
 
     const ethnicities = countriesToString([ethnicity1, ethnicity2, ethnicity3, ethnicity4], countries);    
 
@@ -137,7 +137,7 @@ class CandidateForm extends Component {
                   name={'authorId'}
                   value={authorId}
                   placeholder={'Select the author.'}
-                  items={members}
+                  items={authors}
                   onChange={handleText} />
                 </Col>
                 <Col md={{span: 5, offset: 2}}>
