@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 
 import { setAlert } from '~/components/alert.js';
 
-import { zDate, zHandlers } from 'zavid-modules';
+import { zDate, zHandlers, zString } from 'zavid-modules';
 import request from '~/constants/request.js';
 import { cloudinary } from '~/constants/settings.js';
 import { ARTICLE_STATUS, OPERATIONS } from '~/constants/strings.js';
@@ -28,6 +28,7 @@ class ArticleCrud extends Component {
       authorId: null,
       status: ARTICLE_STATUS.DRAFT,
       datePublished: new Date(),
+      tags: '',
 
       isCreateOperation: true
     }
@@ -37,13 +38,13 @@ class ArticleCrud extends Component {
     const { article, operation } = this.props
     this.setState({
       ...article,
+      tags: zString.convertArrayToCsv(JSON.parse(article.tags)),
       isCreateOperation: operation === OPERATIONS.CREATE
     });
   }
 
   buildRequest = () => {
-    const { title, content, category, excerpt, image, authorId, status, datePublished } = this.state;
-
+    const { title, content, category, excerpt, tags, image, authorId, status, datePublished } = this.state;
     const { operation } = this.props;
 
     // Only have published date if the status is published
@@ -54,6 +55,7 @@ class ArticleCrud extends Component {
       content: content.trim(),
       category: category.trim(),
       excerpt: excerpt.trim(),
+      tags: JSON.stringify(zString.convertCsvToArray(tags)),
       image,
       authorId,
       status,

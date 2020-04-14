@@ -176,7 +176,7 @@ module.exports = function(app, conn, server){
   /** Individual #BlackExcellence Candidate page */
   app.get('/blackexcellence/candidate/:id', function(req, res){
     const id = req.params.id;
-    const sql = SQL.CANDIDATES.READ.JOIN_MEMBERS;
+    const sql = SQL.CANDIDATES.READ.SINGLE();
     
     conn.query(sql, id, function (err, [candidate] = []) {
       if (err) return renderErrorPage(req, res, err, server);

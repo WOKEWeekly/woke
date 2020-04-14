@@ -534,7 +534,8 @@ module.exports = function(app, conn){
 
   /** Retrieve only published articles */
   app.get('/api/v1/articles/published', validateReq, function(req, res){
-    const sql = SQL.ARTICLES.READ.PUBLISHED();
+    const { limit, order } = req.query;
+    const sql = SQL.ARTICLES.READ.PUBLISHED({limit, order});
     conn.query(sql, function (err, articles) {
       respondToClient(res, err, 200, articles);
     });
@@ -573,6 +574,8 @@ module.exports = function(app, conn){
   app.put('/api/v1/articles/:id', verifyToken(CLEARANCES.ACTIONS.CRUD_ARTICLES), function(req, res){
     const id = req.params.id;
     const { article, changed } = req.body;
+
+    console.log(article);
 
     async.waterfall([
       function(callback){ // Delete old image if changed.

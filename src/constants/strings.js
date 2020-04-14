@@ -3,7 +3,6 @@ module.exports = {
   /** All entity names */
   ENTITY: {
     ARTICLE: 'article',
-    AUTHOR: 'author',
     CANDIDATE: 'candidate',
     MEMBER: 'member',
     PAGE: 'page',
@@ -21,12 +20,11 @@ module.exports = {
 
   /** The cloudinary directories for entities */
   DIRECTORY: {
-    CANDIDATES: 'blackexcellence',
     ARTICLES: 'articles',
-    AUTHORS: 'authors',
+    CANDIDATES: 'blackexcellence',
+    MEMBERS: 'team',
     REVIEWS: 'reviews',
     SESSIONS: 'sessions',
-    MEMBERS: 'team'
   },
 
   /** For each of the pages */

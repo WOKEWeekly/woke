@@ -1,25 +1,20 @@
 import React, { Component, PureComponent } from 'react';
-import { connect } from 'react-redux';
 import Link from 'next/link';
-
-import { AdminButton } from '~/components/button.js';
-import { Shader, Spacer } from '~/components/layout.js';
-import { Loader, Empty } from '~/components/loader.js';
-import { Title, Subtitle, } from '~/components/text.js';
-import {BottomToolbar} from '~/components/toolbar.js';
-import { Zoomer, Fader } from '~/components/transitioner.js';
-
-import CLEARANCES from '~/constants/clearances.js';
-import request from '~/constants/request.js';
-import { cloudinary } from '~/constants/settings.js';
 
 import { zDate } from 'zavid-modules';
 
+import { Loader } from '~/components/loader.js';
+import { Title, Subtitle, Divider } from '~/components/text.js';
+import { Zoomer } from '~/components/transitioner.js';
+
+import request from '~/constants/request.js';
+import { cloudinary } from '~/constants/settings.js';
+
 import css from '~/styles/articles.scss';
 
-class Blog extends Component {
-  constructor(props){
-    super(props);
+export default class ArticleSidebar extends Component {
+  constructor(){
+    super();
     this.state = {
       articles: [],
       isLoaded: false
@@ -34,7 +29,7 @@ class Blog extends Component {
   /** Get published articles */
   getPublishedArticles = () => {
     request({
-      url: '/api/v1/articles/published?order=DESC',
+      url: '/api/v1/articles/published?limit=3&order=DESC',
       method: 'GET',
       headers: { 'Authorization': process.env.AUTH_KEY },
       onSuccess: (articles) => {
@@ -47,15 +42,13 @@ class Blog extends Component {
   }
 
   render(){
+    const { articles, isLoaded } = this.state;
 
-    const { isLoaded, articles } = this.state;
-    const { user } = this.props;
-
-    const ArticleCollection = () => {
+    const ArticleList = () => {
       if (!isLoaded){
         return <Loader/>;
       } else if (articles.length === 0) {
-        return <Empty message={'No articles found.'} />;
+        return <Empty message={'No other articles.'} />;
       } else {
         const items = [];
 
@@ -63,26 +56,16 @@ class Blog extends Component {
           items.push(<Article key={index} idx={index} item={item} />);
         }
 
-        return <div className={css.igrid}>{items}</div>
+        return <div>{items}</div>
       }
     }
-
     return (
-      <Shader>
-        <Spacer gridrows={'auto 1fr auto'}>
-          <Fader determinant={isLoaded} duration={1500}>
-            <ArticleCollection/>
-          </Fader>
-        </Spacer>
-
-        <BottomToolbar>
-          {user.clearance >= CLEARANCES.ACTIONS.CRUD_ARTICLES ?
-          <AdminButton
-            title={'Blog Admin'}
-            onClick={() => location.href = '/admin/articles'} /> : null}
-        </BottomToolbar>
-      </Shader>
-    );
+      <div className={css.sidebar}>
+        <Title className={css.heading}>Recent Posts</Title>
+        <Divider/>
+        <ArticleList />
+      </div>
+    )
   }
 }
 
@@ -96,32 +79,28 @@ class Article extends PureComponent {
     const { item, idx } = this.props;
   
     return (
+      <React.Fragment>
       <Zoomer
         determinant={this.state.isLoaded}
         duration={400}
-        delay={75 * idx}
-        className={css.icontainer}>
+        delay={75 * idx}>
         <Link href={`/blog/${item.slug}`}>
-          <div className={css.cell}>
+          <div className={css.item}>
             <img
               src={`${cloudinary.url}/${cloudinary.lazy_wide}/${item.image}`}
               alt={item.title}
               className={css.image}
               onLoad={() => this.setState({isLoaded: true})} />
-            <div className={css.details}>
+            <div>
               <Title className={css.title}>{item.title}</Title>
-              <Subtitle className={css.date}>{zDate.formatDate(item.datePublished, true)}</Subtitle>
+              <Subtitle className={css.details}>{zDate.formatDate(item.datePublished, true)}</Subtitle>
             </div>
           </div>
         </Link>
       </Zoomer>
+      <Divider/>
+      </React.Fragment>
     );
     
   }
 }
-
-const mapStateToProps = state => ({
-  user: state.user
-});
-
-export default connect(mapStateToProps)(Blog);

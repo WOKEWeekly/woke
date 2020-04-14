@@ -1,6 +1,59 @@
 @import "variables";
 
 /************
+*** index.js
+*************/
+
+.igrid {
+  @include responsive-grid(4);
+  width: 100%;
+  @media (max-width: $break-md) { border: none; }
+  .icontainer {
+    &:hover { z-index: 1;}
+    .cell {
+      @include scale-on-hover(1.07);
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      overflow: hidden;
+      margin: 1em;
+      .image { width: 100%; }
+      .details {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        justify-content: center;
+        padding: 0.8em 0.5em;
+        text-align: left;
+        .title { @include font-scaler(1.2); }
+        .date { @include font-scaler(.7); }
+      }
+    }
+  }
+}
+
+/*************
+*** single.js
+*************/
+
+.container {
+  margin: 1em 0;
+  .title { @include font-scaler(3); }
+  .content { @include font-scaler(1.2); }
+  .image {
+    margin: 1em 0;
+    width: 90%; }
+  .details {
+    @include font-scaler(0.9);
+    .author {
+      @extend .link-default;
+      text-decoration: none !important;
+    }
+  }
+}
+
+/************
 *** admin.js
 *************/
 
@@ -8,46 +61,34 @@
   @include entityTabler(4% 15% 15% 1fr 13% 1fr 4% 4% 4%);
 }
 
-/************
-*** index.js
-*************/
-
-.blogGrid {
-  @include responsive-grid;
-  border: .5em solid #2d203b;
-  width: 100%;
-  @media (max-width: $break-md) { border: none; }
-  .container {
-    &:hover { z-index: 1;
-      .details { background-color: #16051b !important;}}
-    .cell {
-      @include scale-on-hover(1.07);
-      border: $secondary-border;
-      border-radius: 10px;
-      cursor: pointer;
-      display: flex;
-      flex-direction: column;
-      height: 100%;
-      overflow: hidden;
-      .image { width: 100%; }
-      .details {
-        background-color: $primary-dark;
-        border-top: $secondary-border;
-        display: flex;
-        flex-direction: column;
-        height: 100%;
-        justify-content: center;
-        padding: 0.8em 0.5em;
-        text-align: center;
-        .title { font-size: .9em; }
-        .date { font-size: .75em; }
-      }
-    }
-  }
-}
-
 /*************
 *** form.js
 *************/
 
 .form { @extend .responsive-form; }
+
+/*************
+*** sidebar.js
+*************/
+
+.sidebar {
+  background: $sidebar;
+  padding: 1em;
+  .heading { @include font-scaler(1.7); }
+  .item {
+    @include scale-on-hover(1.03);
+    cursor: pointer;
+    .title { @include font-scaler(1.2); }
+    .content { @include font-scaler(1); }
+    .image {
+      margin: 1em 0;
+      width: 100%; }
+    .details {
+      @include font-scaler(0.7);
+      .author {
+        @extend .link-default;
+        text-decoration: none !important;
+      }
+    }
+  }
+}

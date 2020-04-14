@@ -51,7 +51,7 @@ class ArticleForm extends Component {
 
     const { heading, confirmText, confirmFunc, cancelFunc, handlers, operation } = this.props;
     const { handleText, handleDate, handleImage } = handlers;
-    const { title, content, category, excerpt, image, authorId, status, datePublished } = this.props.article;
+    const { title, content, category, excerpt, image, authorId, status, datePublished, tags } = this.props.article;
     
     return (
       <Shader>
@@ -130,6 +130,16 @@ class ArticleForm extends Component {
                   image={image}
                   operation={operation}
                   onChange={handleImage} />
+              </Col>
+            </Group>
+            <Group>
+              <Col>
+                <Label>Tags:</Label>
+                <ShortTextArea
+                  name={'tags'}
+                  value={tags}
+                  onChange={handleText}
+                  placeholder={"e.g. woke, society, black women"} />
               </Col>
             </Group>
           </div>

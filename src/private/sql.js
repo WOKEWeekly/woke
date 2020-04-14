@@ -1,12 +1,22 @@
+const JOINS = {
+  ARTICLES_MEMBERS: `CONCAT(members.firstname, ' ', members.lastname) AS authorName,
+    members.level AS authorLevel, members.slug AS authorSlug
+    FROM articles LEFT JOIN members ON articles.authorId=members.id`,
+  CANDIDATES_MEMBERS: `CONCAT(members.firstname, ' ', members.lastname) AS authorName,
+  members.level AS authorLevel, members.slug AS authorSlug
+  FROM candidates LEFT JOIN members ON candidates.authorId=members.id`,
+};
+
 const ARTICLES = {
+
   /**
    * Constructs the SQL statement to create an article.
    * @param {object} article - The object containing the article details.
    * @returns {object} The SQL statement and the values.
    */
   CREATE: (article) => {
-    const sql = "INSERT INTO articles (title, content, category, excerpt, slug, image, authorId, status, datePublished) VALUES ?";
-    const values = [[article.title, article.content, article.category, article.excerpt, article.slug, article.image, article.authorId, article.status, article.datePublished]];
+    const sql = "INSERT INTO articles (title, content, category, excerpt, tags, slug, image, authorId, status, datePublished) VALUES ?";
+    const values = [[article.title, article.content, article.category, article.excerpt, article.tags, article.slug, article.image, article.authorId, article.status, article.datePublished]];
     return { sql, values };
   },
   READ: {
@@ -16,11 +26,29 @@ const ARTICLES = {
      * @returns {string} The constructed statement.
      */
     ALL: (fields = '*') => {
-      return `SELECT ${fields} FROM articles`;
+      return `SELECT articles.${fields}, ${JOINS.ARTICLES_MEMBERS};`
     },
 
-    PUBLISHED: (fields = '*') => {
-      return `SELECT ${fields} FROM articles WHERE status = 'PUBLISHED'`;
+    PUBLISHED: ({ fields = '*', limit, order }) => {
+      const orderQuery = order ? ` ORDER BY datePublished ${order}` : '';
+      const limitQuery = limit ? ` LIMIT ${limit}` : '';
+
+      const baseQuery = `SELECT articles.${fields}, ${JOINS.ARTICLES_MEMBERS} WHERE status = 'PUBLISHED'`;
+      const sql = `${baseQuery}${orderQuery}${limitQuery}`;
+      return sql;
+
+      // const fieldArray = fields.split[', '];
+      // fields = new String();
+
+      // fieldArray.forEach(field => {
+      //   fields += `articles.${field}, `
+      // });
+
+      // // return `SELECT ${fields} FROM articles`;
+      // return `SELECT ${fields},
+      // CONCAT(members.firstname, ' ', members.lastname) AS authorName,
+      // members.level AS authorLevel, members.slug AS authorSlug
+      // FROM articles LEFT JOIN members ON articles.authorId=members.id;`;
     },
 
     /**
@@ -30,7 +58,7 @@ const ARTICLES = {
      * @returns {string} The constructed statement.
      */
     SINGLE: (condition, fields = '*') => {
-      const sql = `SELECT ${fields} FROM articles WHERE ${condition} = ?`;
+      const sql = `SELECT articles.${fields}, ${JOINS.ARTICLES_MEMBERS} WHERE articles.${condition} = ?`;
       return sql;
     },
   },
@@ -44,8 +72,8 @@ const ARTICLES = {
    * @returns {object} The SQL statement and the values.
    */
   UPDATE: (id, article, imageHasChanged) => {
-    let sql = "UPDATE articles SET title = ?, content = ?, category = ?, excerpt = ?, slug = ?, authorId = ?, status = ?, datePublished = ? WHERE id = ?";
-    let values = [article.title, article.content, article.category, article.excerpt, article.slug, article.authorId, article.status, article.datePublished, id];
+    let sql = "UPDATE articles SET title = ?, content = ?, category = ?, excerpt = ?, tags = ?, slug = ?, authorId = ?, status = ?, datePublished = ? WHERE id = ?";
+    let values = [article.title, article.content, article.category, article.excerpt, article.tags, article.slug, article.authorId, article.status, article.datePublished, id];
 
     if (imageHasChanged){
       sql = appendFieldToUpdateQuery('image', sql);
@@ -143,18 +171,12 @@ const CANDIDATES = {
      * @returns {string} The constructed statement.
      */
     SINGLE: (fields = '*') => {
-      const sql = `SELECT ${fields} FROM candidates WHERE ID = ?`;
+      const sql = `SELECT candidates.${fields}, ${JOINS.CANDIDATES_MEMBERS} WHERE candidates.id = ?`;
       return sql;
     },
 
     /** The SQL statement to return the latest candidate. */
     LATEST: "SELECT * FROM candidates ORDER BY id DESC LIMIT 1",
-
-    /** Join candidate table with author table */
-    JOIN_AUTHORS: `SELECT candidates.*,
-    CONCAT(members.firstname, ' ', members.lastname) AS authorName,
-    members.level AS authorLevel, members.slug AS authorSlug
-    FROM candidates LEFT JOIN members ON candidates.authorId=members.id WHERE candidates.id = ?`
   },
 
   /**
@@ -187,8 +209,8 @@ const MEMBERS = {
    * @returns {object} The SQL statement and the values.
    */
   CREATE: (member) => {
-    const sql = "INSERT INTO members (firstname, lastname, image, level, birthday, sex, role, ethnicity, socials, slug, description, verified, slackId) VALUES ?";
-    const values = [[member.firstname, member.lastname, member.image, member.level, member.birthday, member.sex, member.role, member.ethnicity, member.socials, member.slug, member.description, member.verified, member.slackId]];
+    const sql = "INSERT INTO members (firstname, lastname, image, level, birthday, sex, role, ethnicity, socials, slug, description, verified, slackId, isAuthor) VALUES ?";
+    const values = [[member.firstname, member.lastname, member.image, member.level, member.birthday, member.sex, member.role, member.ethnicity, member.socials, member.slug, member.description, member.verified, member.slackId, member.isAuthor]];
     return { sql, values };
   },
   READ: {
@@ -232,8 +254,8 @@ const MEMBERS = {
    * @returns {object} The SQL statement and the values.
    */
   UPDATE: (id, member, imageHasChanged) => {
-    let sql = "UPDATE members SET firstname = ?, lastname = ?, image = ?, level = ?, birthday = ?, sex = ?, role = ?, ethnicity = ?, socials = ?, slug = ?, description = ?, verified = ?, slackId = ? WHERE id = ?";
-    let values = [member.firstname, member.lastname, member.image, member.level, member.birthday, member.sex, member.role, member.ethnicity, member.socials, member.slug, member.description, member.verified, member.slackId, id];
+    let sql = "UPDATE members SET firstname = ?, lastname = ?, image = ?, level = ?, birthday = ?, sex = ?, role = ?, ethnicity = ?, socials = ?, slug = ?, description = ?, verified = ?, slackId = ?, isAuthor = ? WHERE id = ?";
+    let values = [member.firstname, member.lastname, member.image, member.level, member.birthday, member.sex, member.role, member.ethnicity, member.socials, member.slug, member.description, member.verified, member.slackId, member.isAuthor, id];
 
     if (imageHasChanged){
       sql = appendFieldToUpdateQuery('image', sql);

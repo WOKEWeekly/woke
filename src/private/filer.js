@@ -31,9 +31,6 @@ module.exports = {
     const env = process.env.LOCAL_ENV === 'true' ? 'dev' : 'prod';
     cloudinary.uploader.upload(entity.image, {
       public_id: `${env}/${directory}/${filename}`,
-      width: 1000,
-      height: 1000,
-      crop: 'limit',
       unique_filename: false
     }, (err, result) => {
       if (err) return next(err);
@@ -71,10 +68,6 @@ const generateSlugAndFilename = (entity, directory) => {
   let filename;
 
   switch (directory){
-    case DIRECTORY.AUTHORS:
-      entity.slug = zString.constructSimpleNameSlug(`${entity.firstname} ${entity.lastname}`);
-      filename = createAuthorFilename(entity.slug);
-      break;
     case DIRECTORY.ARTICLES:
       entity.slug = zString.constructCleanSlug(`${entity.authorId} ${entity.title}`);
       filename = createArticleFilename(entity.slug);
@@ -85,7 +78,7 @@ const generateSlugAndFilename = (entity, directory) => {
       filename = createCandidateFilename(entity.id, entity.slug);
       break;
     case DIRECTORY.MEMBERS:
-      entity.slug = zString.constructCleanSlug(`${entity.firstname} ${entity.lastname}`);
+      entity.slug = zString.constructSimpleNameSlug(`${entity.firstname} ${entity.lastname}`);
       filename = createMemberFilename(entity.slug);
       if (!entity.verified) entity.slug = null;
       break;
@@ -105,7 +98,6 @@ const generateSlugAndFilename = (entity, directory) => {
 
 /** Generate filenames from entities */
 const createArticleFilename = (slug) => `${slug}`;
-const createAuthorFilename = (slug) => `${slug}`;
 const createCandidateFilename = (id, slug) => `${id}_${slug}`;
 const createMemberFilename = (slug) => slug;
 const createReviewFilename = (rating, slug) => `${rating}-${slug}`;

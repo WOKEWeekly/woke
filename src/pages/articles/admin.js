@@ -1,24 +1,18 @@
 import React, { Component, PureComponent } from 'react';
 import { connect } from 'react-redux';
-import Link from 'next/link';
 
-import { Col, Row } from 'react-bootstrap';
-
-import { AddEntityButton, RadioButtonGroup } from '~/components/button.js';
-import { SortDropdown } from '~/components/dropdown.js';
+import { AddEntityButton, BackButton } from '~/components/button.js';
 import { Icon } from '~/components/icon.js';
-import { Default, Mobile, Cover, Shader, Spacer } from '~/components/layout.js';
+import { Default, Mobile, Shader } from '~/components/layout.js';
 import { Loader, Empty } from '~/components/loader.js';
 import { ConfirmModal } from '~/components/modal.js';
-import { Title, Subtitle, Divider, Paragraph, truncateText } from '~/components/text.js';
-import {BottomToolbar} from '~/components/toolbar.js';
-import { Zoomer, Slider, Fader } from '~/components/transitioner.js';
+import { Title } from '~/components/text.js';
+import { BottomToolbar } from '~/components/toolbar.js';
+import { Fader } from '~/components/transitioner.js';
 
 import CLEARANCES from '~/constants/clearances.js';
 import request from '~/constants/request.js';
 import { cloudinary } from '~/constants/settings.js';
-
-import { zDate } from 'zavid-modules';
 
 import css from '~/styles/articles.scss';
 
@@ -58,11 +52,6 @@ class BlogAdmin extends Component {
   render(){
 
     const { isLoaded, articles } = this.state;
-    if (!isLoaded){
-      return <Loader/>;
-    } else if (articles.length === 0) {
-      return <Empty message={'No articles found.'} />;
-    }
 
     const items = [];
 
@@ -98,8 +87,15 @@ class BlogAdmin extends Component {
     };
 
     const ArticleCollection = () => {
+      if (!isLoaded){
+        return <Loader/>;
+      } else if (!articles.length) {
+        return <Empty message={'There are no articles.'} />;
+      }
+
       return (
         <React.Fragment>
+          <Title className={css.heading}>Blog Articles</Title>
           <Default><ArticleTable/></Default>
           <Mobile><ArticleList/></Mobile>
         </React.Fragment>
@@ -109,11 +105,14 @@ class BlogAdmin extends Component {
     return (
       <React.Fragment>
         <Shader className={css.articleTabler}>
-          <Title className={css.heading}>Blog Articles</Title>
           <ArticleCollection/>
         </Shader>
 
         <BottomToolbar>
+          <BackButton
+            title={'Go to Blog'}
+            onClick={() => location.href = '/blog'} />
+
           <AddEntityButton
             title={'Add Article'}
             onClick={() => location.href = '/admin/articles/add'} />
@@ -191,7 +190,7 @@ class IArticle extends PureComponent {
         <Default>
           <span>{idx+1}</span>
           <span>{article.title}</span>
-          <span>{article.author}</span>
+          <span>{article.authorName}</span>
           <span>{article.category}</span>
           <span><ArticleImage/></span>
           <span>{article.status}</span>
@@ -203,6 +202,10 @@ class IArticle extends PureComponent {
           <div>
             <span><Icon name={'user'}/></span>
             <span className={css.name}>{article.title}</span>
+          </div>
+          <div>
+            <span><Icon name={'star'}/></span>
+            <span>{article.authorName}</span>
           </div>
           <div>
             <span><Icon name={'star'}/></span>
