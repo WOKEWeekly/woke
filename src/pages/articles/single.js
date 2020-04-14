@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { AdminButton, BackButton } from '~/components/button.js';
 import { Subtitle, Paragraph, Divider } from '~/components/text.js';
 import { BottomToolbar } from '~/components/toolbar.js';
-import { Shader, Spacer } from '~/components/layout.js';
+import { Partitioner, Shader, Spacer } from '~/components/layout.js';
 import { Fader, Slider } from '~/components/transitioner.js';
 
 import CLEARANCES from '~/constants/clearances.js';
@@ -105,7 +105,7 @@ class ArticlePage extends Component {
     return (
       <Spacer>
         <Shader>
-          <Container>
+          <Partitioner>
             <Row>
               <Col md={8}>
                 <Container className={css.container}>
@@ -120,7 +120,7 @@ class ArticlePage extends Component {
                 <ArticleSidebar/>
               </Col>
             </Row>
-          </Container>
+          </Partitioner>
         </Shader>
         
         <BottomToolbar>

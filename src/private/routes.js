@@ -335,35 +335,35 @@ module.exports = function(app, conn, server){
   });
 
   /** Blog page */
-  app.get('/blog', function(req, res){
-    return server.render(req, res, '/articles', { 
-      title: 'The #WOKEWeekly Blog',
-      description: 'Explore the expressions of our writers who put pen to paper over the various dimensions within our community.',
-      url: '/blog',
-      cardImage: `public/bg/card-sessions.jpg`, // TODO: Change while designing
-      backgroundImage: 'bg-app.jpg'
-     });
-  });
+  // app.get('/blog', function(req, res){
+  //   return server.render(req, res, '/articles', { 
+  //     title: 'The #WOKEWeekly Blog',
+  //     description: 'Explore the expressions of our writers who put pen to paper over the various dimensions within our community.',
+  //     url: '/blog',
+  //     cardImage: `public/bg/card-sessions.jpg`, // TODO: Change while designing
+  //     backgroundImage: 'bg-app.jpg'
+  //    });
+  // });
 
-  /** Individual blog post */
-  app.get('/blog/:slug', function(req, res){
-    const slug = req.params.slug;
-    const sql = SQL.ARTICLES.READ.SINGLE('slug');
+  // /** Individual blog post */
+  // app.get('/blog/:slug', function(req, res){
+  //   const slug = req.params.slug;
+  //   const sql = SQL.ARTICLES.READ.SINGLE('slug');
     
-    conn.query(sql, [slug], function (err, [article] = []) {
-      if (err) return renderErrorPage(req, res, err, server);
-      if (!article) return renderErrorPage(req, res, ERROR.NONEXISTENT_ENTITY(ENTITY.ARTICLE), server);
+  //   conn.query(sql, [slug], function (err, [article] = []) {
+  //     if (err) return renderErrorPage(req, res, err, server);
+  //     if (!article) return renderErrorPage(req, res, ERROR.NONEXISTENT_ENTITY(ENTITY.ARTICLE), server);
       
-      return server.render(req, res, '/articles/single', {
-        title: `${article.title} | #WOKEWeekly`,
-        description: article.excerpt,
-        url: `/blog/${article.slug}`,
-        cardImage: article.image,
-        backgroundImage: 'bg-app.jpg', // TODO: Change while designing
-        article
-      });
-    });
-  });
+  //     return server.render(req, res, '/articles/single', {
+  //       title: `${article.title} | #WOKEWeekly`,
+  //       description: article.excerpt,
+  //       url: `/blog/${article.slug}`,
+  //       cardImage: article.image,
+  //       backgroundImage: 'bg-app.jpg', // TODO: Change while designing
+  //       article
+  //     });
+  //   });
+  // });
 
   /** Blog admin page */
   app.get('/admin/articles', function(req, res){

@@ -429,6 +429,10 @@
   &-mental { @extend .cover; border-bottom: 1px solid $mental; }
 }
 
+.partitioner {
+  @media (max-width: $break-lg) { max-width: 100% !important; }
+}
+
 /****************/
 /** loader.js **/
 /****************/

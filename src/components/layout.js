@@ -12,7 +12,7 @@ export const isSmallDevice = () => {
 }
 
 
-class _Cover extends Component {
+class ICover extends Component {
   constructor(){
     super();
     this.state = {
@@ -53,6 +53,16 @@ class _Cover extends Component {
     );
 		
 	}
+}
+
+export class Partitioner extends Component {
+  render(){
+    return (
+      <Container {...this.props} className={css.partitioner}>
+        {this.props.children}
+      </Container>
+    );
+  }
 }
 
 export class Shader extends Component {
@@ -97,4 +107,4 @@ const mapStateToProps = state => ({
   theme: state.theme
 });
 
-export const Cover = connect(mapStateToProps)(_Cover);
+export const Cover = connect(mapStateToProps)(ICover);
