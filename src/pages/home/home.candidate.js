@@ -37,8 +37,10 @@ class RandomCandidate extends Component {
       method: 'GET',
       headers: { 'Authorization': process.env.AUTH_KEY },
       onSuccess: (candidate) => {
-        candidate.loaded = true;
-        this.setState({candidate});
+        if (candidate){
+          candidate.loaded = true;
+          this.setState({candidate});
+        }
       }
     });
   }

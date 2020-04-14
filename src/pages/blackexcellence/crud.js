@@ -20,10 +20,10 @@ class CandidateAdd extends Component {
   constructor() {
     super();
     this.state = {
-      id: 0,
+      id: null,
       name: '',
       occupation: '',
-      birthday: new Date(1990, 0, 1),
+      birthday: null,
       description: '',
       image: '',
       ethnicity1: '',
@@ -31,7 +31,7 @@ class CandidateAdd extends Component {
       ethnicity3: '',
       ethnicity4: '',
       socials: {},
-      authorId: 0,
+      authorId: null,
       dateWritten: new Date()
     };
   }
@@ -45,7 +45,7 @@ class CandidateAdd extends Component {
       url: '/api/v1/candidates/latest',
       method: 'GET',
       headers: { 'Authorization': process.env.AUTH_KEY },
-      onSuccess: ({id}) => {
+      onSuccess: ({id = 0}) => {
         if (!isEditOperation){
           id = id + 1;
           this.setState({id});
@@ -55,7 +55,7 @@ class CandidateAdd extends Component {
 
     if (isEditOperation){
 
-      const { birthday, date_written, ethnicity, socials, author_id } = candidate;
+      const { birthday, dateWritten, ethnicity, socials } = candidate;
       const ethnicityArr = JSON.parse(ethnicity);
 
       /** Populate ethnicity array */
@@ -68,8 +68,7 @@ class CandidateAdd extends Component {
         ...candidate,
         socials: JSON.parse(socials),
         birthday: new Date(birthday),
-        authorId: author_id,
-        dateWritten: new Date(date_written),
+        dateWritten: new Date(dateWritten),
         ...ethnicities
       });
     }

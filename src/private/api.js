@@ -14,10 +14,10 @@ const { respondToClient } = require('./response.js');
 const SQL = require('./sql.js');
 
 const CLEARANCES = require('../constants/clearances.js');
-const { DIRECTORY } = require('../constants/strings.js');
+const { DIRECTORY, ENTITY } = require('../constants/strings.js');
 
-const noEmails = false;
-if (noEmails) console.warn("Emails are turned off.");
+const emailsOn = process.argv.includes('--emails');
+if (!emailsOn) console.warn("Emails are turned off.");
 
 module.exports = function(app, conn){
 
@@ -36,7 +36,7 @@ module.exports = function(app, conn){
     const id = req.params.id;
     conn.query(SQL.SESSIONS.READ.SINGLE('id'), id, function (err, [session] = []) {
       if (err) return respondToClient(res, err);
-      if (!session) err = ERROR.INVALID_SESSION_ID(id);
+      if (!session) err = ERROR.INVALID_ENTITY_ID(ENTITY.SESSION, id);
       respondToClient(res, err, 200, session);
     });
   });
@@ -91,7 +91,7 @@ module.exports = function(app, conn){
       function(callback){ // Delete old image if changed.
         conn.query(SQL.SESSIONS.READ.SINGLE('id', 'image'), id, function (err, [session] = []) {
           if (err) return callback(err);
-          if (!session) return callback(ERROR.INVALID_SESSION_ID(id));
+          if (!session) return callback(ERROR.INVALID_ENTITY_ID(ENTITY.SESSION, id));
           if (!changed) return callback(null);
           filer.destroyImage(session.image, callback);
         });
@@ -118,7 +118,7 @@ module.exports = function(app, conn){
       function(callback){ // Delete image from cloud
         conn.query(SQL.SESSIONS.READ.SINGLE('id', 'image'), id, function (err, [session] = []) {
           if (err) return callback(err);
-          if (!session) return callback(ERROR.INVALID_SESSION_ID(id));
+          if (!session) return callback(ERROR.INVALID_ENTITY_ID(ENTITY.SESSION, id));
           filer.destroyImage(session.image, callback);
         });
       },
@@ -144,7 +144,7 @@ module.exports = function(app, conn){
     const id = req.params.id;
     conn.query(SQL.CANDIDATES.READ.SINGLE(), id, function (err, [candidate] = []) {
       if (err) return respondToClient(res, err);
-      if (!candidate) err = ERROR.INVALID_CANDIDATE_ID(id);
+      if (!candidate) err = ERROR.INVALID_ENTITY_ID(ENTITY.CANDIDATE, id);
       respondToClient(res, err, 200, candidate);
     });
   });
@@ -169,7 +169,7 @@ module.exports = function(app, conn){
 
     async.waterfall([
       function(callback){ // Upload image to cloud
-        filer.uploadImage(candidate, DIRECTORY.BLACKEXCELLENCE, true, callback);
+        filer.uploadImage(candidate, DIRECTORY.CANDIDATES, true, callback);
       },
       function(candidate, callback){ // Add candidate to database
         const { sql, values } = SQL.CANDIDATES.CREATE(candidate);
@@ -196,13 +196,13 @@ module.exports = function(app, conn){
       function(callback){ // Delete original image from cloud
         conn.query(SQL.CANDIDATES.READ.SINGLE('image'), id, function (err, [candidate] = []) {
           if (err) return callback(err);
-          if (!candidate) return callback(ERROR.INVALID_CANDIDATE_ID(id));
+          if (!candidate) return callback(ERROR.INVALID_ENTITY_ID(ENTITY.CANDIDATE, id));
           if (!changed) return callback(null);
           filer.destroyImage(candidate.image, callback);
         });
       },
       function(callback){ // Equally, upload new image if changed
-        filer.uploadImage(candidate, DIRECTORY.BLACKEXCELLENCE, changed, callback);
+        filer.uploadImage(candidate, DIRECTORY.CANDIDATES, changed, callback);
       },
       function(candidate, callback){ // Update candidate in database
         const { sql, values } = SQL.CANDIDATES.UPDATE(id, candidate, changed);
@@ -223,7 +223,7 @@ module.exports = function(app, conn){
       function(callback){ // Delete image from cloud
         conn.query(SQL.CANDIDATES.READ.SINGLE('image'), id, function (err, [candidate] = []) {
           if (err) return callback(err);
-          if (!candidate) return callback(ERROR.INVALID_CANDIDATE_ID(id));
+          if (!candidate) return callback(ERROR.INVALID_ENTITY_ID(ENTITY.CANDIDATE, id));
           filer.destroyImage(candidate.image, callback);
         });
       },
@@ -249,7 +249,7 @@ module.exports = function(app, conn){
     const id = req.params.id;
     conn.query(SQL.MEMBERS.READ.SINGLE(), id, function (err, [member] = []) {
       if (err) return respondToClient(res, err);
-      if (!member) err = ERROR.INVALID_MEMBER_ID(id);
+      if (!member) err = ERROR.INVALID_ENTITY_ID(ENTITY.MEMBER, id);
       respondToClient(res, err, 200, member);
     });
   });
@@ -261,11 +261,10 @@ module.exports = function(app, conn){
     });
   });
 
-  /** Retrieve the IDs, first names and surnames of team members */
-  app.get('/api/v1/members/names', validateReq, function(req, res){
-    const sql = SQL.MEMBERS.READ.ALL('id, firstname, lastname');
-    conn.query(sql, function (err, members) {
-      respondToClient(res, err, 200, members);
+  /** Retrieve only authors */
+  app.get('/api/v1/members/authors', validateReq, function(req, res){
+    conn.query(SQL.MEMBERS.READ.AUTHORS, function (err, authors) {
+      respondToClient(res, err, 200, authors);
     });
   });
 
@@ -282,7 +281,7 @@ module.exports = function(app, conn){
 
     async.waterfall([
       function(callback){ // Upload image to cloud
-        filer.uploadImage(member, DIRECTORY.TEAM, true, callback);
+        filer.uploadImage(member, DIRECTORY.MEMBERS, true, callback);
       },
       function(member, callback){ // Add member to database
         const { sql, values } = SQL.MEMBERS.CREATE(member);
@@ -304,13 +303,13 @@ module.exports = function(app, conn){
       function(callback){ // Delete old image if changed.
         conn.query(SQL.MEMBERS.READ.SINGLE('image'), id, function (err, [member] = []) {
           if (err) return callback(err);
-          if (!member) return callback(ERROR.INVALID_MEMBER_ID(id));
+          if (!member) return callback(ERROR.INVALID_ENTITY_ID(ENTITY.MEMBER, id));
           if (!changed) return callback(null);
           filer.destroyImage(member.image, callback);
         });
       },
       function(callback){ // Equally, upload new image if changed
-        filer.uploadImage(member, DIRECTORY.TEAM, changed, callback);
+        filer.uploadImage(member, DIRECTORY.MEMBERS, changed, callback);
       },
       function(member, callback){ // Update member in database
         const { sql, values } = SQL.MEMBERS.UPDATE(id, member, changed);
@@ -331,7 +330,7 @@ module.exports = function(app, conn){
       function(callback){ // Delete image from cloud
         conn.query(SQL.MEMBERS.READ.SINGLE('image'), id, function (err, [member] = []) {
           if (err) return callback(err);
-          if (!member) return callback(ERROR.INVALID_MEMBER_ID(id));
+          if (!member) return callback(ERROR.INVALID_ENTITY_ID(ENTITY.MEMBER, id));
           filer.destroyImage(member.image, callback);
         });
       },
@@ -357,7 +356,7 @@ module.exports = function(app, conn){
     const id = req.params.id;
     conn.query(SQL.TOPICS.READ.SINGLE(), id, function (err, [topic] = []) {
       if (err) return respondToClient(res, err);
-      if (!topic) err = ERROR.INVALID_TOPIC_ID(id);
+      if (!topic) err = ERROR.INVALID_ENTITY_ID(ENTITY.TOPIC, id);
       respondToClient(res, err, 200, topic);
     });
   });
@@ -394,7 +393,7 @@ module.exports = function(app, conn){
     const { sql, values } = SQL.TOPICS.UPDATE.DETAILS(id, topic);
     conn.query(sql, values, function (err, result) {
       if (err) return respondToClient(res, err);
-      if (result.affectedRows === 0) err = ERROR.INVALID_TOPIC_ID(id);
+      if (result.affectedRows === 0) err = ERROR.INVALID_ENTITY_ID(ENTITY.TOPIC, id);
       respondToClient(res, err, 200);
     });
   });
@@ -406,7 +405,7 @@ module.exports = function(app, conn){
       function(callback){ // Increment vote
         conn.query(SQL.TOPICS.UPDATE.VOTE(id, option), function (err, result) {
           if (err) return respondToClient(res, err);
-          if (result.affectedRows === 0) err = ERROR.INVALID_TOPIC_ID(id);
+          if (result.affectedRows === 0) err = ERROR.INVALID_ENTITY_ID(ENTITY.TOPIC, id);
           err ? callback(err) : callback(null);
         });
       },
@@ -426,7 +425,7 @@ module.exports = function(app, conn){
     conn.query(SQL.TOPICS.DELETE, id, function (err, result) {
       // TODO: Slack notifications for deleted topics
       if (err) return respondToClient(res, err);
-      if (result.affectedRows === 0) err = ERROR.INVALID_TOPIC_ID(id);
+      if (result.affectedRows === 0) err = ERROR.INVALID_ENTITY_ID(ENTITY.TOPIC, id);
       respondToClient(res, err, 204);
     });
   });
@@ -444,7 +443,7 @@ module.exports = function(app, conn){
     const id = req.params.id;
     conn.query(SQL.REVIEWS.READ.SINGLE(), id, function (err, [review] = []) {
       if (err) return respondToClient(res, err);
-      if (!review) err = ERROR.INVALID_REVIEW_ID(id);
+      if (!review) err = ERROR.INVALID_ENTITY_ID(ENTITY.REVIEW, id);
       respondToClient(res, err, 200, review);
     });
   });
@@ -484,7 +483,7 @@ module.exports = function(app, conn){
       function(callback){ // Delete old image if changed.
         conn.query(SQL.REVIEWS.READ.SINGLE('image'), id, function (err, [review] = []) {
           if (err) return callback(err);
-          if (!review) return callback(ERROR.INVALID_REVIEW_ID(id));
+          if (!review) return callback(ERROR.INVALID_ENTITY_ID(ENTITY.REVIEW, id));
           if (!changed) return callback(null);
           filer.destroyImage(review.image, callback);
         });
@@ -511,7 +510,7 @@ module.exports = function(app, conn){
       function(callback){ // Delete image from cloud
         conn.query(SQL.REVIEWS.READ.SINGLE('image'), id, function (err, [review] = []) {
           if (err) return callback(err);
-          if (!review) return callback(ERROR.INVALID_REVIEW_ID(id));
+          if (!review) return callback(ERROR.INVALID_ENTITY_ID(ENTITY.REVIEW, id));
           filer.destroyImage(review.image, callback);
         });
       },
@@ -525,9 +524,107 @@ module.exports = function(app, conn){
     });
   });
 
+  /** Retrieve all articles */
+  app.get('/api/v1/articles', verifyToken(CLEARANCES.ACTIONS.CRUD_ARTICLES), function(req, res){
+    const sql = SQL.ARTICLES.READ.ALL();
+    conn.query(sql, function (err, articles) {
+      respondToClient(res, err, 200, articles);
+    });
+  });
+
+  /** Retrieve only published articles */
+  app.get('/api/v1/articles/published', validateReq, function(req, res){
+    const { limit, order } = req.query;
+    const sql = SQL.ARTICLES.READ.PUBLISHED({limit, order});
+    conn.query(sql, function (err, articles) {
+      respondToClient(res, err, 200, articles);
+    });
+  });
+
+  /** Retrieve individual article */
+  app.get('/api/v1/articles/:id([0-9]+)', validateReq, function(req, res){
+    const id = req.params.id;
+    conn.query(SQL.ARTICLES.READ.SINGLE('id'), id, function (err, [article] = []) {
+      if (err) return respondToClient(res, err);
+      if (!article) err = ERROR.INVALID_ENTITY_ID(ENTITY.ARTICLE, id);
+      respondToClient(res, err, 200, article);
+    });
+  });
+
+  /** Add new article to database */
+  app.post('/api/v1/articles', verifyToken(CLEARANCES.ACTIONS.CRUD_ARTICLES), function(req, res){
+    const article = req.body;
+
+    async.waterfall([
+      function(callback){ // Upload image to cloud
+        filer.uploadImage(article, DIRECTORY.ARTICLES, true, callback);
+      },
+      function(article, callback){ // Add article to database
+        const { sql, values } = SQL.ARTICLES.CREATE(article);
+        conn.query(sql, [values], function (err, result) {
+          err ? callback(err) : callback(null, result.insertId);
+        });
+      }
+    ], function(err, id){
+      respondToClient(res, err, 201, { id });
+    });
+  });
+
+  /** Update details of existing articles in database */
+  app.put('/api/v1/articles/:id', verifyToken(CLEARANCES.ACTIONS.CRUD_ARTICLES), function(req, res){
+    const id = req.params.id;
+    const { article, changed } = req.body;
+
+    console.log(article);
+
+    async.waterfall([
+      function(callback){ // Delete old image if changed.
+        conn.query(SQL.ARTICLES.READ.SINGLE('id', 'image'), id, function (err, [article] = []) {
+          if (err) return callback(err);
+          if (!article) return callback(ERROR.INVALID_ENTITY_ID(ENTITY.ARTICLE, id));
+          if (!changed) return callback(null);
+          filer.destroyImage(article.image, callback);
+        });
+      },
+      function(callback){ // Equally, upload new image if changed
+        filer.uploadImage(article, DIRECTORY.ARTICLES, changed, callback);
+      },
+      function(article, callback){ // Update review in database
+        const { sql, values } = SQL.ARTICLES.UPDATE(id, article, changed);
+        conn.query(sql, values, function (err) {
+          err ? callback(err) : callback(null, article.slug);
+        });
+      }
+    ], function(err, slug){
+      respondToClient(res, err, 200, { slug });
+    });
+  });
+
+  /** Delete an existing article from database */
+  app.delete('/api/v1/articles/:id', verifyToken(CLEARANCES.ACTIONS.CRUD_ARTICLES), function(req, res){
+    const id = req.params.id;
+
+    async.waterfall([
+      function(callback){ // Delete image from cloud
+        conn.query(SQL.ARTICLES.READ.SINGLE('id', 'image'), id, function (err, [article] = []) {
+          if (err) return callback(err);
+          if (!article) return callback(ERROR.INVALID_ENTITY_ID(ENTITY.ARTICLE, id));
+          filer.destroyImage(article.image, callback);
+        });
+      },
+      function(callback){ // Delete article from database
+        conn.query(SQL.ARTICLES.DELETE, id, function (err) {
+          err ? callback(err) : callback(null);
+        });
+      }
+    ], function(err){
+      respondToClient(res, err, 204);
+    });
+  });
+
   /** Retrieve all users */
   app.get('/api/v1/users', verifyToken(CLEARANCES.ACTIONS.VIEW_USERS), function(req, res){
-    const sql = SQL.USERS.READ.ALL("id, firstname, lastname, clearance, username, email, create_time, last_active");
+    const sql = SQL.USERS.READ.ALL("id, firstname, lastname, clearance, username, email, createTime, lastActive");
     conn.query(sql, function (err, users) {
       respondToClient(res, err, 200, users);
     });
@@ -537,11 +634,11 @@ module.exports = function(app, conn){
   app.get('/api/v1/users/:id', validateReq, function(req, res){
     // TODO: Differentiate between self-reading and admin-reading.
     const id = req.params.id;
-    const sql = SQL.USERS.READ.SINGLE("id, firstname, lastname, clearance, username, email, create_time, last_active");
+    const sql = SQL.USERS.READ.SINGLE("id, firstname, lastname, clearance, username, email, createTime, lastActive");
 
     conn.query(sql, id, function (err, [user] = []) {
       if (err) return respondToClient(res, err);
-      if (!user) err = ERROR.INVALID_USER_ID(id);
+      if (!user) err = ERROR.INVALID_ENTITY_ID(ENTITY.USER, id);
       respondToClient(res, err, 200, user);
     });
   });
@@ -578,7 +675,7 @@ module.exports = function(app, conn){
       function(user, callback){ // Generate verification token to be sent via email
         jwt.sign({ user }, process.env.JWT_SECRET, { expiresIn: '24h' }, (err, token) => {
           if (err) return callback(err);
-          if (!noEmails) emails().sendWelcomeEmail(user, token);
+          if (emailsOn) emails().sendWelcomeEmail(user, token);
           callback(null, user)
         });
       },
@@ -649,7 +746,7 @@ module.exports = function(app, conn){
         if (duplicateUsername) return respondToClient(res, ERROR.DUPLICATE_USERNAME());
         return respondToClient(res, err);
       }
-      if (result.affectedRows === 0) return respondToClient(res, ERROR.INVALID_USER_ID(id));
+      if (result.affectedRows === 0) return respondToClient(res, ERROR.INVALID_ENTITY_ID(ENTITY.USER, id));
 
       respondToClient(res, err, 200);
     });
@@ -664,7 +761,7 @@ module.exports = function(app, conn){
       function(callback){ // Get current password of user
         conn.query(SQL.USERS.READ.SINGLE(), id, function(err, [user] = []){
           if (err) return callback(err);
-          if (!user) return callback(ERROR.INVALID_USER_ID(id));
+          if (!user) return callback(ERROR.INVALID_ENTITY_ID(ENTITY.USER, id));
           callback(null, user.password);
         });
       },
@@ -706,12 +803,12 @@ module.exports = function(app, conn){
     const id = req.params.id;
     conn.query(SQL.USERS.DELETE, id, function(err, result){	
       if (err) return respondToClient(res, err);
-      if (result.affectedRows === 0) err = ERROR.INVALID_USER_ID(id);
+      if (result.affectedRows === 0) err = ERROR.INVALID_ENTITY_ID(ENTITY.USER, id);
       respondToClient(res, err, 204);
     });
   });
 
-  /** Clear added users */
+  /** Purge added users */
   app.purge('/api/v1/users', verifyToken(9), function(req, res){
     if (process.env.NODE_ENV === 'production') return respondToClient(res, ERROR.UNAUTHORIZED_REQUEST());
     conn.query(SQL.USERS.CLEAR, function(err){
@@ -735,7 +832,7 @@ module.exports = function(app, conn){
       function(user, callback){ // Generate verification token to send via email
         jwt.sign({user}, process.env.JWT_SECRET, { expiresIn: '30m' }, (err, token) => {
           if (err) return callback(err);
-          if (noEmails) return callback(null, {token});
+          if (!emailsOn) return callback(null, {token});
           emails(callback, [{token}]).resendVerificationEmail(user, token);
         });
       },
@@ -787,7 +884,7 @@ module.exports = function(app, conn){
       function(user, callback){ // Generate recovery token to be sent via email
         jwt.sign({user}, process.env.JWT_SECRET, { expiresIn: '30m'}, (err, token) => {
           if (err) return callback(err);
-          if (noEmails) return callback(null, {token});
+          if (!emailsOn) return callback(null, {token});
           emails(callback, [{token}]).sendAccountRecoveryEmail(user, token);
         });
       },
@@ -815,7 +912,7 @@ module.exports = function(app, conn){
         const { sql, values } = SQL.USERS.UPDATE('password', id, hash)
         conn.query(sql, values, function(err, result){
           if (err) return callback(err);
-          if (result.affectedRows === 0) err = ERROR.INVALID_USER_ID(id);
+          if (result.affectedRows === 0) err = ERROR.INVALID_ENTITY_ID(ENTITY.USER, id);
           err ? callback(err) : callback(null);
         });
       }

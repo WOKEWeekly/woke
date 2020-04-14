@@ -210,8 +210,8 @@ class _User extends PureComponent {
             <span>{item.clearance}</span>
             <span>{item.email}</span>
             <span>{item.username}</span>
-            <span>{formatDateTime(item.last_active)}</span>
-            <span>{formatDate(item.create_time)}</span>
+            <span>{formatDateTime(item.lastActive)}</span>
+            <span>{formatDate(item.createTime)}</span>
             <span><button className={css.invisible_button} onClick={this.openEdit}><Icon name={'edit'} /></button></span>
             <span><button className={css.invisible_button} onClick={this.openDelete}><Icon name={'trash'} /></button></span>
           </Default>
@@ -234,11 +234,11 @@ class _User extends PureComponent {
             </div>
             <div>
               <span><Icon name={'clock'}/></span>
-              <span>{formatDateTime(item.last_active)}</span>
+              <span>{formatDateTime(item.lastActive)}</span>
             </div>
             <div>
               <span><Icon name={'calendar-alt'}/></span>
-              <span>{formatDate(item.create_time)}</span>
+              <span>{formatDate(item.createTime)}</span>
             </div>
             <div className={css.index}>{idx+1}</div>
             <div className={css.crud}>

@@ -1,3 +1,4 @@
+
 module.exports = {
   categories: [
     { label: 'Academia', short: 'academia' },

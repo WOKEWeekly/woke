@@ -75,8 +75,8 @@ const constructBirthdayMessage = (member) => {
 
   let message = `${getRandomMessage(intros)} to our ${member.role}, *${member.firstname} ${member.lastname}*, on ${pronoun} birthday! Happy Birthday to you, ${title}! ${getRandomMessage(outros)}`;
 
-  if (member.slackID !== null){
-    message += ` <@${member.slackID}>`
+  if (member.slackId !== null){
+    message += ` <@${member.slackId}>`
   }
 
   return message;

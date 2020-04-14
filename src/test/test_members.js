@@ -1,4 +1,4 @@
-const { assert, jwt, request, HEADERS } = require('./configuration/constants.js');
+const { assert, request, HEADERS } = require('./configuration/constants.js');
 const { TEST_MEMBERS, TEST_USERS } = require('./configuration/data.js');
 
 const superuser = TEST_USERS.NINE;
@@ -7,13 +7,6 @@ let MEMBER_ID = 0;
 
 describe("Member Tests", function() {
   this.slow(10000);
-  
-  before(function(done){
-    jwt.sign({ user: superuser }, process.env.JWT_SECRET, { expiresIn: '1m' }, function(err, token){
-      superuser.token = token;
-      done();
-    });
-  });
 
   /** Test creating a new member */
   describe("Create", function() {
@@ -61,17 +54,18 @@ describe("Member Tests", function() {
       });
     });
 
-    it("Get only member names", function(done) {
+    it("Get only authors", function(done) {
       request({
-        url: `/api/v1/members/names`,
+        url: `/api/v1/members/authors`,
         method: 'GET',
         headers: HEADERS.KEY,
         done,
         onSuccess: ({status, data}) => {
           assert.equal(status, 200);
           assert.isArray(data);
-          const [candidate] = data;
-          assert.hasAllKeys(candidate, ['id', 'firstname', 'lastname']);
+          data.forEach(member => {
+            assert.equal(member.isAuthor, true);
+          });
         }
       });
     });
@@ -85,8 +79,8 @@ describe("Member Tests", function() {
         onSuccess: ({status, data}) => {
           assert.equal(status, 200);
           assert.isArray(data);
-          data.forEach(candidate => {
-            assert.equal(candidate.level, 'Executive');
+          data.forEach(member => {
+            assert.equal(member.level, 'Executive');
           });
         }
       });

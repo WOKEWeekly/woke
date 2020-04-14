@@ -1,6 +1,7 @@
 const cloudinary = require('cloudinary').v2;
+const { zString } = require('zavid-modules');
 const { formatISODate } = require('../constants/date.js');
-const { DIRECTORY } = require('../constants/strings.js');
+const { DIRECTORY, ARTICLE_STATUS } = require('../constants/strings.js');
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_NAME, 
@@ -11,49 +12,25 @@ cloudinary.config({
 module.exports = {
 
   /**
-   * Construct slug and upload image cloudinary
-   * @param {object} entity - The entity object.
+   * Upload image cloudinary
+   * @param {object} iEntity - The initial entity object.
    * @param {string} directory - The Cloudinary directory the image should be uploaded to.
    * @param {boolean} imageHasChanged - Indicates whether the image has changed. If it has not,
    * this method will only construct the slug.
    * @param {Function} next - The next callback function in the series.
    */
-  uploadImage: (entity, directory, imageHasChanged, next) => {
-    let filename;
-
+  uploadImage: (iEntity, directory, imageHasChanged, next) => {
     // Construct the slug and image filename
-    switch (directory){
-      case DIRECTORY.SESSIONS:
-        const title = constructCleanSlug(entity.title);
-        entity.slug = `${title}-${entity.dateHeld}`;
-        filename = generateSessionFilename(entity.dateHeld, title);
-        break;
-      case DIRECTORY.BLACKEXCELLENCE:
-        entity.slug = constructCleanSlug(entity.name, entity.id);
-        filename = generateCandidateFilename(entity.id, entity.slug);
-        break;
-      case DIRECTORY.TEAM:
-        entity.slug = constructCleanSlug(`${entity.firstname} ${entity.lastname}`);
-        filename = generateMemberFilename(entity.slug);
-        if (!entity.verified) entity.slug = null;
-        break;
-      case DIRECTORY.REVIEWS:
-        const referee = constructCleanSlug(entity.referee);
-        filename = generateReviewFilename(entity.rating, referee);
-        break;
-    }
+    const { entity, filename } = generateSlugAndFilename(iEntity, directory);
 
     // Discontinue if image has not changed
-    const noImageUpload = !imageHasChanged || !entity.image.length;
+    const noImageUpload = !imageHasChanged || !entity.image;
     if (noImageUpload) return next(null, entity);
 
     // Upload to cloudinary
     const env = process.env.LOCAL_ENV === 'true' ? 'dev' : 'prod';
     cloudinary.uploader.upload(entity.image, {
       public_id: `${env}/${directory}/${filename}`,
-      width: 1000,
-      height: 1000,
-      crop: 'limit',
       unique_filename: false
     }, (err, result) => {
       if (err) return next(err);
@@ -82,18 +59,46 @@ module.exports = {
 }
 
 /**
- * Created formatted slugs for URLs.
- * @param {string} value - The value which the slug is based off.
- * @returns {string} A clean slug.
+ * Construct slug and filenames.
+ * @param {object} entity - The entity object.
+ * @param {string} directory - The Cloudinary directory the image should be uploaded to.
+ * @returns {object} The filename as well as the entity with the assigned slug.
  */
-const constructCleanSlug = (value) => {
-  return value.toLowerCase()      // Turn to lowercase
-  .replace(/[^a-zA-Z 0-9]+/g, '')   // Remove all non-alphanumeric characters
-  .replace(/\s+/g, '-');            // Replace spaces with dashes
-};
+const generateSlugAndFilename = (entity, directory) => {
+  let filename;
+
+  switch (directory){
+    case DIRECTORY.ARTICLES:
+      entity.slug = zString.constructCleanSlug(`${entity.authorId} ${entity.title}`);
+      filename = createArticleFilename(entity.slug);
+      if (entity.status === ARTICLE_STATUS.DRAFT) entity.slug = null;
+      break;
+    case DIRECTORY.CANDIDATES:
+      entity.slug = zString.constructCleanSlug(entity.name);
+      filename = createCandidateFilename(entity.id, entity.slug);
+      break;
+    case DIRECTORY.MEMBERS:
+      entity.slug = zString.constructSimpleNameSlug(`${entity.firstname} ${entity.lastname}`);
+      filename = createMemberFilename(entity.slug);
+      if (!entity.verified) entity.slug = null;
+      break;
+    case DIRECTORY.REVIEWS:
+      const referee = zString.constructCleanSlug(entity.referee);
+      filename = createReviewFilename(entity.rating, referee);
+      break;
+    case DIRECTORY.SESSIONS:
+      const title = zString.constructCleanSlug(entity.title);
+      entity.slug = `${title}-${entity.dateHeld}`;
+      filename = createSessionFilename(entity.dateHeld, title);
+      break;
+  }
+
+  return { entity, filename };
+}
 
 /** Generate filenames from entities */
-const generateSessionFilename = (date, title) => `${formatISODate(date)}_${title}`;
-const generateCandidateFilename = (id, slug) => `${id}_${slug}`;
-const generateMemberFilename = (slug) => slug;
-const generateReviewFilename = (rating, slug) => `${rating}-${slug}`;
+const createArticleFilename = (slug) => `${slug}`;
+const createCandidateFilename = (id, slug) => `${id}_${slug}`;
+const createMemberFilename = (slug) => slug;
+const createReviewFilename = (rating, slug) => `${rating}-${slug}`;
+const createSessionFilename = (date, title) => `${formatISODate(date)}_${title}`;

@@ -1,15 +1,15 @@
 {
 	"info": {
-		"_postman_id": "d0794391-b80a-4f9d-8a29-b464e8c0056d",
+		"_postman_id": "a6c387db-1a74-4cad-9612-502f08844604",
 		"name": "#WOKEWeekly API",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
 		{
-			"name": "Sessions",
+			"name": "Articles",
 			"item": [
 				{
-					"name": "Get Sessions",
+					"name": "Get Articles",
 					"event": [
 						{
 							"listen": "test",
@@ -33,26 +33,70 @@
 						"header": [
 							{
 								"key": "admission",
-								"value": "true",
-								"type": "text"
+								"type": "text",
+								"value": "true"
 							}
 						],
 						"url": {
-							"raw": "{{host}}/api/v1/sessions",
+							"raw": "{{host}}/api/v1/articles",
 							"host": [
 								"{{host}}"
 							],
 							"path": [
 								"api",
 								"v1",
-								"sessions"
+								"articles"
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "Get Single Session",
+					"name": "Get Published Articles Only",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "ccf00a33-bb9d-46fe-b356-541166dd19db",
+								"exec": [
+									"pm.test(\"Response is OK.\", () => {",
+									"    pm.expect(pm.response.code).to.equal(200);",
+									"});",
+									"",
+									"pm.test(\"Response is an array.\", () => {",
+									"    pm.expect(pm.response.json()).to.be.an('array');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "admission",
+								"type": "text",
+								"value": "true"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/api/v1/articles/published",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"articles",
+								"published"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Single Article",
 					"event": [
 						{
 							"listen": "test",
@@ -81,66 +125,22 @@
 							}
 						],
 						"url": {
-							"raw": "{{host}}/api/v1/sessions/{{SESSION_ID}}",
+							"raw": "{{host}}/api/v1/articles/{{ARTICLE_ID}}",
 							"host": [
 								"{{host}}"
 							],
 							"path": [
 								"api",
 								"v1",
-								"sessions",
-								"{{SESSION_ID}}"
+								"articles",
+								"{{ARTICLE_ID}}"
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "Get Featured Session",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"id": "ccf00a33-bb9d-46fe-b356-541166dd19db",
-								"exec": [
-									"pm.test(\"Response is OK.\", () => {",
-									"    pm.expect(pm.response.code).to.equal(200);",
-									"});",
-									"",
-									"pm.test(\"Response is contains expected keys.\", () => {",
-									"    pm.expect(pm.response.json()).to.have.all.keys('session', 'upcoming');",
-									"});"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "admission",
-								"type": "text",
-								"value": "true"
-							}
-						],
-						"url": {
-							"raw": "{{host}}/api/v1/sessions/featured",
-							"host": [
-								"{{host}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"sessions",
-								"featured"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Add New Session",
+					"name": "Add New Article",
 					"event": [
 						{
 							"listen": "test",
@@ -148,9 +148,9 @@
 								"id": "6b99fd75-abf4-4f39-b0c1-b2143a6630f8",
 								"exec": [
 									"var response = pm.response.json();",
-									"pm.globals.set(\"SESSION_ID\", response.id);",
+									"pm.globals.set(\"ARTICLE_ID\", response.id);",
 									"",
-									"pm.test(\"Session is created.\", () => {",
+									"pm.test(\"Article is created.\", () => {",
 									"    pm.expect(pm.response.code).to.equal(201);",
 									"});",
 									"",
@@ -167,19 +167,19 @@
 						"header": [
 							{
 								"key": "admission",
-								"value": "true",
-								"type": "text"
+								"type": "text",
+								"value": "true"
 							},
 							{
 								"key": "Content-Type",
 								"name": "Content-Type",
-								"value": "application/json",
-								"type": "text"
+								"type": "text",
+								"value": "application/json"
 							}
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"title\": \"Manchester 2020\",\n\t\"dateHeld\": \"2020-08-30\",\n\t\"timeHeld\": \"18:00\",\n\t\"description\": \"An added description from Postman.\",\n\t\"image\": {{image1}}\n}",
+							"raw": "{\n\t\"title\": \"Crazy Blues\",\n\t\"content\": \"This is an added article via Postman.\",\n\t\"category\": \"Philosophy & Ethics\",\n\t\"excerpt\": \"Added Postman article.\",\n\t\"image\": {{image1}},\n\t\"authorId\": 1,\n\t\"status\": \"DRAFT\",\n\t\"datePublished\": null\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -187,28 +187,28 @@
 							}
 						},
 						"url": {
-							"raw": "{{host}}/api/v1/sessions",
+							"raw": "{{host}}/api/v1/articles",
 							"host": [
 								"{{host}}"
 							],
 							"path": [
 								"api",
 								"v1",
-								"sessions"
+								"articles"
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "Update Session",
+					"name": "Update Article",
 					"event": [
 						{
 							"listen": "test",
 							"script": {
 								"id": "6b99fd75-abf4-4f39-b0c1-b2143a6630f8",
 								"exec": [
-									"pm.test(\"Session is updated.\", () => {",
+									"pm.test(\"Article is updated.\", () => {",
 									"    pm.expect(pm.response.code).to.equal(200);",
 									"});",
 									"",
@@ -237,7 +237,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"session\": {\n\t    \"title\": \"New York 2021\",\n\t    \"dateHeld\": \"2021-08-30\",\n\t    \"timeHeld\": \"23:00:00\",\n\t    \"description\": \"An updated description from Postman.\",\n\t    \"image\": {{image2}}\n\t},\n\t\"changed\": true\n}",
+							"raw": "{\n\t\"article\": {\n\t\t\"title\": \"Electric Pinks\",\n\t\t\"content\": \"This is an updated article via Postman.\",\n\t\t\"category\": \"Philosophy & Ethics\",\n\t\t\"excerpt\": \"Updated Postman article.\",\n\t\t\"image\": {{image2}},\n\t\t\"authorId\": 1,\n\t\t\"status\": \"PUBLISHED\",\n\t\t\"datePublished\": \"2020-08-30\"\n\t},\n\t\"changed\": true\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -245,29 +245,29 @@
 							}
 						},
 						"url": {
-							"raw": "{{host}}/api/v1/sessions/{{SESSION_ID}}",
+							"raw": "{{host}}/api/v1/articles/{{ARTICLE_ID}}",
 							"host": [
 								"{{host}}"
 							],
 							"path": [
 								"api",
 								"v1",
-								"sessions",
-								"{{SESSION_ID}}"
+								"articles",
+								"{{ARTICLE_ID}}"
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "Delete Session",
+					"name": "Delete Article",
 					"event": [
 						{
 							"listen": "test",
 							"script": {
 								"id": "d4b7749b-622e-4440-83f9-5dea0571aea0",
 								"exec": [
-									"pm.test(\"Session is deleted.\", () => {",
+									"pm.test(\"Article is deleted.\", () => {",
 									"    pm.response.to.have.status(204);",
 									"});"
 								],
@@ -290,15 +290,15 @@
 							}
 						],
 						"url": {
-							"raw": "{{host}}/api/v1/sessions/{{SESSION_ID}}",
+							"raw": "{{host}}/api/v1/articles/{{ARTICLE_ID}}",
 							"host": [
 								"{{host}}"
 							],
 							"path": [
 								"api",
 								"v1",
-								"sessions",
-								"{{SESSION_ID}}"
+								"articles",
+								"{{ARTICLE_ID}}"
 							]
 						}
 					},
@@ -713,50 +713,6 @@
 					"response": []
 				},
 				{
-					"name": "Get Member Names Only",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"id": "ccf00a33-bb9d-46fe-b356-541166dd19db",
-								"exec": [
-									"pm.test(\"Response is OK.\", () => {",
-									"    pm.expect(pm.response.code).to.equal(200);",
-									"});",
-									"",
-									"pm.test(\"Response is an array.\", () => {",
-									"    pm.expect(pm.response.json()).to.be.an('array');",
-									"});"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "admission",
-								"value": "true",
-								"type": "text"
-							}
-						],
-						"url": {
-							"raw": "{{host}}/api/v1/members/names",
-							"host": [
-								"{{host}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"members",
-								"names"
-							]
-						}
-					},
-					"response": []
-				},
-				{
 					"name": "Get Executives Only",
 					"event": [
 						{
@@ -1057,423 +1013,6 @@
 			"protocolProfileBehavior": {}
 		},
 		{
-			"name": "Topics",
-			"item": [
-				{
-					"name": "Get Topics",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"id": "ccf00a33-bb9d-46fe-b356-541166dd19db",
-								"exec": [
-									"pm.test(\"Response is OK.\", () => {",
-									"    pm.expect(pm.response.code).to.equal(200);",
-									"});",
-									"",
-									"pm.test(\"Response is an array.\", () => {",
-									"    pm.expect(pm.response.json()).to.be.an('array');",
-									"});"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "admission",
-								"type": "text",
-								"value": "true"
-							}
-						],
-						"url": {
-							"raw": "{{host}}/api/v1/topics",
-							"host": [
-								"{{host}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"topics"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Get Single Topic",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"id": "ccf00a33-bb9d-46fe-b356-541166dd19db",
-								"exec": [
-									"pm.test(\"Response is OK.\", () => {",
-									"    pm.expect(pm.response.code).to.equal(200);",
-									"});",
-									"",
-									"pm.test(\"Response is an object.\", () => {",
-									"    pm.expect(pm.response.json()).to.be.an('object');",
-									"});"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "admission",
-								"type": "text",
-								"value": "true"
-							}
-						],
-						"url": {
-							"raw": "{{host}}/api/v1/topics/{{TOPIC_ID}}",
-							"host": [
-								"{{host}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"topics",
-								"{{TOPIC_ID}}"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Get Random Topic",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"id": "ccf00a33-bb9d-46fe-b356-541166dd19db",
-								"exec": [
-									"pm.test(\"Response is OK.\", () => {",
-									"    pm.expect(pm.response.code).to.equal(200);",
-									"});",
-									"",
-									"pm.test(\"Response is contains expected keys.\", () => {",
-									"    pm.expect(pm.response.json()).to.be.an('object');",
-									"});"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "admission",
-								"type": "text",
-								"value": "true"
-							}
-						],
-						"url": {
-							"raw": "{{host}}/api/v1/topics/random",
-							"host": [
-								"{{host}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"topics",
-								"random"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Regenerate Topic Bank Token",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"id": "ccf00a33-bb9d-46fe-b356-541166dd19db",
-								"exec": [
-									"pm.test(\"Response is OK.\", () => {",
-									"    pm.expect(pm.response.code).to.equal(200);",
-									"});",
-									"",
-									"pm.test(\"Response is contains expected keys.\", () => {",
-									"    pm.expect(pm.response.json()).to.have.property('token');",
-									"});"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "admission",
-								"type": "text",
-								"value": "true"
-							}
-						],
-						"url": {
-							"raw": "{{host}}/api/v1/topics/token",
-							"host": [
-								"{{host}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"topics",
-								"token"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Add New Topic",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"id": "6b99fd75-abf4-4f39-b0c1-b2143a6630f8",
-								"exec": [
-									"var response = pm.response.json();",
-									"pm.globals.set(\"TOPIC_ID\", response.id);",
-									"",
-									"pm.test(\"Topic is created.\", () => {",
-									"    pm.expect(pm.response.code).to.equal(201);",
-									"});",
-									"",
-									"pm.test(\"Response contains ID.\", () => {",
-									"    pm.expect(pm.response.json()).to.have.property('id');",
-									"});"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "admission",
-								"value": "true",
-								"type": "text"
-							},
-							{
-								"key": "Content-Type",
-								"name": "Content-Type",
-								"value": "application/json",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"headline\": \"Nihilism\",\n    \"question\": \"Is life meaningless?\",\n    \"category\": \"Philosophy & Ethics\",\n    \"description\": \"This is an added topic through Postman.\",\n    \"type\": \"Debate\",\n    \"polarity\": true,\n    \"validated\": false,\n    \"sensitivity\": true,\n    \"option1\": \"Yes, it is.\",\n    \"option2\": \"No, it isn't.\",\n    \"user_id\": 1\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{host}}/api/v1/topics",
-							"host": [
-								"{{host}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"topics"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Update Topic",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"id": "6b99fd75-abf4-4f39-b0c1-b2143a6630f8",
-								"exec": [
-									"pm.test(\"Topic is updated.\", () => {",
-									"    pm.expect(pm.response.code).to.equal(200);",
-									"});"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "PUT",
-						"header": [
-							{
-								"key": "admission",
-								"type": "text",
-								"value": "true"
-							},
-							{
-								"key": "Content-Type",
-								"name": "Content-Type",
-								"type": "text",
-								"value": "application/json"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"headline\": \"The Earth\",\n    \"question\": \"Are we finished?\",\n    \"category\": \"Family & Relationships\",\n    \"description\": \"This is an updated topic through Postman.\",\n    \"type\": \"Discussion\",\n    \"polarity\": false,\n    \"validated\": true,\n    \"sensitivity\": false,\n    \"option1\": \"We might be.\",\n    \"option2\": \"We're most definitely not.\",\n    \"user_id\": 1\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{host}}/api/v1/topics/{{TOPIC_ID}}",
-							"host": [
-								"{{host}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"topics",
-								"{{TOPIC_ID}}"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Vote Topic",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"id": "6b99fd75-abf4-4f39-b0c1-b2143a6630f8",
-								"exec": [
-									"pm.test(\"Topic vote incremented.\", () => {",
-									"    pm.expect(pm.response.code).to.equal(200);",
-									"});",
-									"",
-									"pm.test(\"Response contains votes.\", () => {",
-									"    pm.expect(pm.response.json()).to.have.property('yes');",
-									"    pm.expect(pm.response.json()).to.have.property('no');",
-									"});"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "PUT",
-						"header": [
-							{
-								"key": "admission",
-								"type": "text",
-								"value": "true"
-							},
-							{
-								"key": "Content-Type",
-								"name": "Content-Type",
-								"type": "text",
-								"value": "application/json"
-							}
-						],
-						"url": {
-							"raw": "{{host}}/api/v1/topics/{{TOPIC_ID}}/vote/no",
-							"host": [
-								"{{host}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"topics",
-								"{{TOPIC_ID}}",
-								"vote",
-								"no"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Delete Topic",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"id": "d4b7749b-622e-4440-83f9-5dea0571aea0",
-								"exec": [
-									"pm.test(\"Topic is deleted.\", () => {",
-									"    pm.response.to.have.status(204);",
-									"});"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "DELETE",
-						"header": [
-							{
-								"key": "admission",
-								"value": "true",
-								"type": "text"
-							},
-							{
-								"key": "Content-Type",
-								"value": "application/json",
-								"type": "text"
-							}
-						],
-						"url": {
-							"raw": "{{host}}/api/v1/topics/{{TOPIC_ID}}",
-							"host": [
-								"{{host}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"topics",
-								"{{TOPIC_ID}}"
-							]
-						}
-					},
-					"response": []
-				}
-			],
-			"event": [
-				{
-					"listen": "prerequest",
-					"script": {
-						"id": "a98fd316-944f-4b7d-a178-62dacb728319",
-						"type": "text/javascript",
-						"exec": [
-							""
-						]
-					}
-				},
-				{
-					"listen": "test",
-					"script": {
-						"id": "0cc2a17d-0256-47ea-9af7-a271cbf88d77",
-						"type": "text/javascript",
-						"exec": [
-							""
-						]
-					}
-				}
-			],
-			"protocolProfileBehavior": {}
-		},
-		{
 			"name": "Reviews",
 			"item": [
 				{
@@ -1767,6 +1306,725 @@
 						}
 					},
 					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Sessions",
+			"item": [
+				{
+					"name": "Get Sessions",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "ccf00a33-bb9d-46fe-b356-541166dd19db",
+								"exec": [
+									"pm.test(\"Response is OK.\", () => {",
+									"    pm.expect(pm.response.code).to.equal(200);",
+									"});",
+									"",
+									"pm.test(\"Response is an array.\", () => {",
+									"    pm.expect(pm.response.json()).to.be.an('array');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "admission",
+								"value": "true",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/api/v1/sessions",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"sessions"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Single Session",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "ccf00a33-bb9d-46fe-b356-541166dd19db",
+								"exec": [
+									"pm.test(\"Response is OK.\", () => {",
+									"    pm.expect(pm.response.code).to.equal(200);",
+									"});",
+									"",
+									"pm.test(\"Response is an object.\", () => {",
+									"    pm.expect(pm.response.json()).to.be.an('object');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "admission",
+								"type": "text",
+								"value": "true"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/api/v1/sessions/{{SESSION_ID}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"sessions",
+								"{{SESSION_ID}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Featured Session",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "ccf00a33-bb9d-46fe-b356-541166dd19db",
+								"exec": [
+									"pm.test(\"Response is OK.\", () => {",
+									"    pm.expect(pm.response.code).to.equal(200);",
+									"});",
+									"",
+									"pm.test(\"Response is contains expected keys.\", () => {",
+									"    pm.expect(pm.response.json()).to.have.all.keys('session', 'upcoming');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "admission",
+								"type": "text",
+								"value": "true"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/api/v1/sessions/featured",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"sessions",
+								"featured"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add New Session",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "6b99fd75-abf4-4f39-b0c1-b2143a6630f8",
+								"exec": [
+									"var response = pm.response.json();",
+									"pm.globals.set(\"SESSION_ID\", response.id);",
+									"",
+									"pm.test(\"Session is created.\", () => {",
+									"    pm.expect(pm.response.code).to.equal(201);",
+									"});",
+									"",
+									"pm.test(\"Response contains ID.\", () => {",
+									"    pm.expect(pm.response.json()).to.have.property('id');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "admission",
+								"value": "true",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"title\": \"Manchester 2020\",\n\t\"dateHeld\": \"2020-08-30\",\n\t\"timeHeld\": \"18:00\",\n\t\"description\": \"An added description from Postman.\",\n\t\"image\": {{image1}}\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/v1/sessions",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"sessions"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Session",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "6b99fd75-abf4-4f39-b0c1-b2143a6630f8",
+								"exec": [
+									"pm.test(\"Session is updated.\", () => {",
+									"    pm.expect(pm.response.code).to.equal(200);",
+									"});",
+									"",
+									"pm.test(\"Response contains slug.\", () => {",
+									"    pm.expect(pm.response.json()).to.have.property('slug');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "admission",
+								"type": "text",
+								"value": "true"
+							},
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"session\": {\n\t    \"title\": \"New York 2021\",\n\t    \"dateHeld\": \"2021-08-30\",\n\t    \"timeHeld\": \"23:00:00\",\n\t    \"description\": \"An updated description from Postman.\",\n\t    \"image\": {{image2}}\n\t},\n\t\"changed\": true\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/v1/sessions/{{SESSION_ID}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"sessions",
+								"{{SESSION_ID}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Session",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "d4b7749b-622e-4440-83f9-5dea0571aea0",
+								"exec": [
+									"pm.test(\"Session is deleted.\", () => {",
+									"    pm.response.to.have.status(204);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "admission",
+								"value": "true",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/api/v1/sessions/{{SESSION_ID}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"sessions",
+								"{{SESSION_ID}}"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Topics",
+			"item": [
+				{
+					"name": "Get Topics",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "ccf00a33-bb9d-46fe-b356-541166dd19db",
+								"exec": [
+									"pm.test(\"Response is OK.\", () => {",
+									"    pm.expect(pm.response.code).to.equal(200);",
+									"});",
+									"",
+									"pm.test(\"Response is an array.\", () => {",
+									"    pm.expect(pm.response.json()).to.be.an('array');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "admission",
+								"type": "text",
+								"value": "true"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/api/v1/topics",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"topics"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Single Topic",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "ccf00a33-bb9d-46fe-b356-541166dd19db",
+								"exec": [
+									"pm.test(\"Response is OK.\", () => {",
+									"    pm.expect(pm.response.code).to.equal(200);",
+									"});",
+									"",
+									"pm.test(\"Response is an object.\", () => {",
+									"    pm.expect(pm.response.json()).to.be.an('object');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "admission",
+								"type": "text",
+								"value": "true"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/api/v1/topics/{{TOPIC_ID}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"topics",
+								"{{TOPIC_ID}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Random Topic",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "ccf00a33-bb9d-46fe-b356-541166dd19db",
+								"exec": [
+									"pm.test(\"Response is OK.\", () => {",
+									"    pm.expect(pm.response.code).to.equal(200);",
+									"});",
+									"",
+									"pm.test(\"Response is contains expected keys.\", () => {",
+									"    pm.expect(pm.response.json()).to.be.an('object');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "admission",
+								"type": "text",
+								"value": "true"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/api/v1/topics/random",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"topics",
+								"random"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Regenerate Topic Bank Token",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "ccf00a33-bb9d-46fe-b356-541166dd19db",
+								"exec": [
+									"pm.test(\"Response is OK.\", () => {",
+									"    pm.expect(pm.response.code).to.equal(200);",
+									"});",
+									"",
+									"pm.test(\"Response is contains expected keys.\", () => {",
+									"    pm.expect(pm.response.json()).to.have.property('token');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "admission",
+								"type": "text",
+								"value": "true"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/api/v1/topics/token",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"topics",
+								"token"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add New Topic",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "6b99fd75-abf4-4f39-b0c1-b2143a6630f8",
+								"exec": [
+									"var response = pm.response.json();",
+									"pm.globals.set(\"TOPIC_ID\", response.id);",
+									"",
+									"pm.test(\"Topic is created.\", () => {",
+									"    pm.expect(pm.response.code).to.equal(201);",
+									"});",
+									"",
+									"pm.test(\"Response contains ID.\", () => {",
+									"    pm.expect(pm.response.json()).to.have.property('id');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "admission",
+								"value": "true",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"headline\": \"Nihilism\",\n    \"question\": \"Is life meaningless?\",\n    \"category\": \"Philosophy & Ethics\",\n    \"description\": \"This is an added topic through Postman.\",\n    \"type\": \"Debate\",\n    \"polarity\": true,\n    \"validated\": false,\n    \"sensitivity\": true,\n    \"option1\": \"Yes, it is.\",\n    \"option2\": \"No, it isn't.\",\n    \"userid\": 1\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/v1/topics",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"topics"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Topic",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "6b99fd75-abf4-4f39-b0c1-b2143a6630f8",
+								"exec": [
+									"pm.test(\"Topic is updated.\", () => {",
+									"    pm.expect(pm.response.code).to.equal(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "admission",
+								"type": "text",
+								"value": "true"
+							},
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"headline\": \"The Earth\",\n    \"question\": \"Are we finished?\",\n    \"category\": \"Family & Relationships\",\n    \"description\": \"This is an updated topic through Postman.\",\n    \"type\": \"Discussion\",\n    \"polarity\": false,\n    \"validated\": true,\n    \"sensitivity\": false,\n    \"option1\": \"We might be.\",\n    \"option2\": \"We're most definitely not.\",\n    \"userid\": 1\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/v1/topics/{{TOPIC_ID}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"topics",
+								"{{TOPIC_ID}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Vote Topic",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "6b99fd75-abf4-4f39-b0c1-b2143a6630f8",
+								"exec": [
+									"pm.test(\"Topic vote incremented.\", () => {",
+									"    pm.expect(pm.response.code).to.equal(200);",
+									"});",
+									"",
+									"pm.test(\"Response contains votes.\", () => {",
+									"    pm.expect(pm.response.json()).to.have.property('yes');",
+									"    pm.expect(pm.response.json()).to.have.property('no');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "admission",
+								"type": "text",
+								"value": "true"
+							},
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/api/v1/topics/{{TOPIC_ID}}/vote/no",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"topics",
+								"{{TOPIC_ID}}",
+								"vote",
+								"no"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Topic",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "d4b7749b-622e-4440-83f9-5dea0571aea0",
+								"exec": [
+									"pm.test(\"Topic is deleted.\", () => {",
+									"    pm.response.to.have.status(204);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "admission",
+								"value": "true",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/api/v1/topics/{{TOPIC_ID}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"topics",
+								"{{TOPIC_ID}}"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "a98fd316-944f-4b7d-a178-62dacb728319",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "0cc2a17d-0256-47ea-9af7-a271cbf88d77",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
 				}
 			],
 			"protocolProfileBehavior": {}

@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 
 import { SubmitButton, CancelButton, CheckboxButton, AddEntityButton, RadioButtonGroup } from '~/components/button.js';
 import { BirthdayPicker } from '~/components/datepicker.js';
-import { Heading, Group, Label, Select, TextInput, ClickInput, LongTextArea, FileSelector } from '~/components/form.js';
+import { Heading, Group, Label, Select, TextInput, ClickInput, ShortTextArea, LongTextArea, FileSelector } from '~/components/form.js';
 import { SocialsList } from '~/components/icon.js';
 import { Shader, Spacer } from '~/components/layout.js';
 import { EthnicModal, SocialsModal } from '~/components/modal.js';
@@ -37,7 +37,7 @@ class MemberForm extends Component {
     const { handleText, handleBirthday, handleImage, handleRadio, handleCheckboxButton, clearSelection, confirmSocials } = handlers;
 
     const { firstname, lastname, level, sex, role, description, birthday, image, socials,
-      ethnicity1, ethnicity2, ethnicity3, ethnicity4, verified, slackID } = this.props.member;
+      ethnicity1, ethnicity2, ethnicity3, ethnicity4, verified, slackId, isAuthor, excerpt } = this.props.member;
 
     const { ethnicModalVisible, socialsModalVisible } = this.state;
 
@@ -114,21 +114,29 @@ class MemberForm extends Component {
               <Col md={4}>
                 <Label>Slack ID:</Label>
                 <TextInput
-                  name={'slackID'}
-                  value={slackID}
+                  name={'slackId'}
+                  value={slackId}
                   onChange={handleText}
                   placeholder={"e.g. UDL5UM6KG"} />
               </Col>
             </Group>
             <Group>
-              <Col md={7}>
+              <Col md={6}>
                 <Label>Socials:</Label>
                 <AddEntityButton
                   title={'Add Socials'}
                   onClick={this.showSocialsModal} />
                 <SocialsList socials={socials} />
               </Col>
-              <Col md={5}>
+              <Col md={3}>
+                <Label>Author:</Label>
+                <CheckboxButton
+                  name={'isAuthor'}
+                  checked={isAuthor}
+                  onChange={handleCheckboxButton}
+                  label={'This member is an author.'} />
+              </Col>
+              <Col md={3}>
                 <Label>Status:</Label>
                 <CheckboxButton
                   name={'verified'}
@@ -144,7 +152,7 @@ class MemberForm extends Component {
                   name={'description'}
                   value={description}
                   onChange={handleText}
-                  placeholder={"Write out biography of member..."} />
+                  placeholder={"Write out the member's full biography..."} />
               </Col>
             </Group>
             <Group>

@@ -9,7 +9,7 @@ const { renderErrorPage } = require('./response.js');
 const SQL = require('./sql.js');
 
 const { cloudinary, domain, forms, siteDescription } = require('../constants/settings.js');
-const { PAGE } = require('../constants/strings.js');
+const { OPERATIONS, PAGE } = require('../constants/strings.js');
 
 let exigencies = {};
 
@@ -45,7 +45,7 @@ module.exports = function(app, conn, server){
     
     conn.query(sql, [slug], function (err, [session] = []) {
       if (err) return renderErrorPage(req, res, err, server);
-      if (!session) return renderErrorPage(req, res, ERROR.NONEXISTENT_SESSION(), server);
+      if (!session) return renderErrorPage(req, res, ERROR.NONEXISTENT_ENTITY(ENTITY.SESSION), server);
       
       return server.render(req, res, '/sessions/single', {
         title: `${session.title} | #WOKEWeekly`,
@@ -74,7 +74,7 @@ module.exports = function(app, conn, server){
     
     conn.query(sql, id, function (err, [session] = []) {
       if (err) return renderErrorPage(req, res, err, server);
-      if (!session) return renderErrorPage(req, res, ERROR.NONEXISTENT_SESSION(), server);
+      if (!session) return renderErrorPage(req, res, ERROR.NONEXISTENT_ENTITY(ENTITY.SESSION), server);
 
       return server.render(req, res, '/sessions/crud', {
         title: 'Edit Session',
@@ -121,7 +121,7 @@ module.exports = function(app, conn, server){
     
     conn.query(sql, id, function (err, [topic]) {
       if (err) return renderErrorPage(req, res, err, server);
-      if (!topic) return renderErrorPage(req, res, ERROR.NONEXISTENT_TOPIC(), server);
+      if (!topic) return renderErrorPage(req, res, ERROR.NONEXISTENT_ENTITY(ENTITY.TOPIC), server);
 
       return server.render(req, res, '/topics/crud', {
         title: 'Edit Topic',
@@ -161,7 +161,7 @@ module.exports = function(app, conn, server){
     
     conn.query(sql, id, function (err, [candidate] = []) {
       if (err) return renderErrorPage(req, res, err, server);
-      if (!candidate) return renderErrorPage(req, res, ERROR.NONEXISTENT_CANDIDATE(), server);
+      if (!candidate) return renderErrorPage(req, res, ERROR.NONEXISTENT_ENTITY(ENTITY.CANDIDATE), server);
 
       return server.render(req, res, '/blackexcellence/crud', {
         title: 'Edit Candidate',
@@ -176,11 +176,11 @@ module.exports = function(app, conn, server){
   /** Individual #BlackExcellence Candidate page */
   app.get('/blackexcellence/candidate/:id', function(req, res){
     const id = req.params.id;
-    const sql = SQL.CANDIDATES.READ.JOIN_MEMBERS;
+    const sql = SQL.CANDIDATES.READ.SINGLE();
     
     conn.query(sql, id, function (err, [candidate] = []) {
       if (err) return renderErrorPage(req, res, err, server);
-      if (!candidate) return renderErrorPage(req, res, ERROR.NONEXISTENT_CANDIDATE(), server);
+      if (!candidate) return renderErrorPage(req, res, ERROR.NONEXISTENT_ENTITY(ENTITY.CANDIDATE), server);
       
       candidate.label = `#${candidate.id}: ${candidate.name}`;
       return server.render(req, res, '/blackexcellence/single', {
@@ -308,7 +308,7 @@ module.exports = function(app, conn, server){
     
     conn.query(sql, id, function (err, [review] = []) {
       if (err) return renderErrorPage(req, res, err, server);
-      if (!review) return renderErrorPage(req, res, ERROR.NONEXISTENT_REVIEW(), server);
+      if (!review) return renderErrorPage(req, res, ERROR.NONEXISTENT_ENTITY(ENTITY.REVIEW), server);
 
       server.render(req, res, '/reviews/crud', {
         title: 'Edit Review',
@@ -331,6 +331,71 @@ module.exports = function(app, conn, server){
       title: 'Sign Up | #WOKEWeekly',
       backgroundImage: 'bg-signup.jpg',
       url: '/signup',
+    });
+  });
+
+  /** Blog page */
+  // app.get('/blog', function(req, res){
+  //   return server.render(req, res, '/articles', { 
+  //     title: 'The #WOKEWeekly Blog',
+  //     description: 'Explore the expressions of our writers who put pen to paper over the various dimensions within our community.',
+  //     url: '/blog',
+  //     cardImage: `public/bg/card-sessions.jpg`, // TODO: Change while designing
+  //     backgroundImage: 'bg-app.jpg'
+  //    });
+  // });
+
+  // /** Individual blog post */
+  // app.get('/blog/:slug', function(req, res){
+  //   const slug = req.params.slug;
+  //   const sql = SQL.ARTICLES.READ.SINGLE('slug');
+    
+  //   conn.query(sql, [slug], function (err, [article] = []) {
+  //     if (err) return renderErrorPage(req, res, err, server);
+  //     if (!article) return renderErrorPage(req, res, ERROR.NONEXISTENT_ENTITY(ENTITY.ARTICLE), server);
+      
+  //     return server.render(req, res, '/articles/single', {
+  //       title: `${article.title} | #WOKEWeekly`,
+  //       description: article.excerpt,
+  //       url: `/blog/${article.slug}`,
+  //       cardImage: article.image,
+  //       backgroundImage: 'bg-app.jpg', // TODO: Change while designing
+  //       article
+  //     });
+  //   });
+  // });
+
+  /** Blog admin page */
+  app.get('/admin/articles', function(req, res){
+    return server.render(req, res, '/articles/admin', { 
+      title: 'Blog Admin'
+     });
+  });
+
+  /** Add article */
+  app.get('/admin/articles/add', function(req, res){
+    return server.render(req, res, '/articles/crud', {
+      title: 'Add New Article',
+      operation: OPERATIONS.CREATE,
+      backgroundImage: 'bg-app.jpg'
+    });
+  });
+
+  /** Edit article */
+  app.get('/admin/articles/edit/:id', function(req, res){
+    const id = req.params.id;
+    const sql = SQL.ARTICLES.READ.SINGLE('id');
+    
+    conn.query(sql, id, function (err, [article] = []) {
+      if (err) return renderErrorPage(req, res, err, server);
+      if (!article) return renderErrorPage(req, res, ERROR.NONEXISTENT_ENTITY(ENTITY.ARTICLE), server);
+
+      return server.render(req, res, '/articles/crud', {
+        title: 'Edit Article',
+        backgroundImage: 'bg-app.jpg',
+        operation: 'edit',
+        article
+      });
     });
   });
 
@@ -529,11 +594,11 @@ const renderPage = (
   return function(req, res){
     conn.query(`SELECT * FROM pages WHERE name = '${pageName}'`, function (err, [page] = []) {
       if (err) return renderErrorPage(req, res, err, server);
-      if (!page) return renderErrorPage(req, res, ERROR.NONEXISTENT_PAGE(), server);
+      if (!page) return renderErrorPage(req, res, ERROR.NONEXISTENT_ENTITY(ENTITY.PAGE), server);
   
-      const { name, title, include_domain, text, excerpt, card_image, bg_image,
-        cover_image, cover_image_logo, cover_image_alt, theme,
-        edit_title, edit_placeholder_text } = page;
+      const { name, title, includeDomain, text, excerpt, cardImage, backgroundImage,
+        coverImage, coverImageLogo, coverImageAlt, theme,
+        editTitle, editPlaceholderText } = page;
 
       let uri = '';
       let information = {};
@@ -543,14 +608,14 @@ const renderPage = (
         information = {
           pageName: name,
           pageText: text,
-          title: include_domain ? `${title} | #WOKEWeekly` : title,
+          title: includeDomain ? `${title} | #WOKEWeekly` : title,
           description: excerpt || createExcerpt(text),
           url: `/${name}`,
-          cardImage: card_image || 'public/bg/card-home.jpg',
-          backgroundImage: bg_image || 'bg-app.jpg',
-          coverImage: cover_image,
-          imageLogo: cover_image_logo,
-          imageAlt: cover_image_alt,
+          cardImage: cardImage || 'public/bg/card-home.jpg',
+          backgroundImage: backgroundImage || 'bg-app.jpg',
+          coverImage: coverImage,
+          imageLogo: coverImageLogo,
+          imageAlt: coverImageAlt,
           theme: theme || PAGE.THEMES.DEFAULT
         };
       } else {
@@ -558,9 +623,9 @@ const renderPage = (
         information = {
           pageName: name,
           pageText: text,
-          title: edit_title,
-          backgroundImage: bg_image || 'bg-app.jpg',
-          placeholderText: edit_placeholder_text,
+          title: editTitle,
+          backgroundImage: backgroundImage || 'bg-app.jpg',
+          placeholderText: editPlaceholderText,
           theme: theme || PAGE.THEMES.DEFAULT
         }
       }

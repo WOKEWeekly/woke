@@ -276,6 +276,7 @@
     border-radius: 8px;
     display: flex;
     overflow: hidden;
+    margin: 1em 0;
     width: fit-content;
     .file_button {
       border: none;
@@ -426,6 +427,10 @@
   &-default { @extend .cover; border-bottom: 1px solid $primary; }
   &-blackex { @extend .cover; border-bottom: 1px solid $blackex; }
   &-mental { @extend .cover; border-bottom: 1px solid $mental; }
+}
+
+.partitioner {
+  @media (max-width: $break-lg) { max-width: 100% !important; }
 }
 
 /****************/

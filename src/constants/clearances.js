@@ -11,11 +11,13 @@ module.exports = {
     CRUD_SESSIONS: 6,       // Add, edit and delete sessions
     CRUD_TOPICS: 6,         // Add, edit and delete topics from the Topic Bank
     CRUD_TEAM: 6,           // Add, edit and delete team member profiles
+    CRUD_ARTICLES: 6,       // Add, edit and delete articles
 
     VIEW_TEAM: 7,           // View all team member details
     SEE_SUGGESTING_USER: 7, // See author of suggestions
     DELETE_SUGGESTION: 7,   // Delete suggestions for all users
-
+    
+    CRUD_AUTHORS: 8,          // Add, edit and delete authors
     VIEW_USERS: 8,          // View all registered user details
     CRUD_USERS: 8,          // Change the clearances of other users
     CRUD_REVIEWS: 8,           // Add, edit and delete team member profiles

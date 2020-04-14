@@ -66,19 +66,19 @@ class CandidatePage extends Component {
     const { isLoaded, imageLoaded } = this.state;
 
     const getDetails = () => {
-      const { author, author_level, author_slug, date_written: dateWritten } = candidate;
-      if (!author) return null;
+      const { authorName, authorLevel, authorSlug, dateWritten } = candidate;
+      if (!authorName) return null;
 
       let link = '';
-      if (author_level === 'Executive')
-        link = `/executives/${author_slug}`;
-      else
-        link = `/team/member/${author_slug}`;
+      if (authorLevel === 'Executive')	
+        link = `/executives/${authorSlug}`;	
+      else	
+        link = `/team/member/${authorSlug}`;
 
       return (
       <Subtitle className={css.meta}>
         Written by 
-        <a className={css.author} href={link}> {author}</a>
+        <a className={css.author} href={link}> {authorName}</a>
         , {formatDate(dateWritten)}
       </Subtitle>
       );

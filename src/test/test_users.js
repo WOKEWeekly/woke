@@ -1,4 +1,4 @@
-const { assert, jwt, request, HEADERS } = require('./configuration/constants.js');
+const { assert, request, HEADERS } = require('./configuration/constants.js');
 const { TEST_USERS } = require('./configuration/data.js');
 
 const superuser = TEST_USERS.NINE;
@@ -12,17 +12,11 @@ describe("User Tests", function() {
   this.slow(10000);
   
   before(function(done){
-    jwt.sign({ user: superuser }, process.env.JWT_SECRET, { expiresIn: '1m' }, function(err, token){
-      superuser.token = token;
-
-      // Clear data in table
-      request({
-        url: `/api/v1/users`,
-        method: 'PURGE',
-        headers: HEADERS.TOKEN(superuser),
-        done,
-        onSuccess: () => {}
-      });
+    request({
+      url: `/api/v1/users`,
+      method: 'PURGE',
+      headers: HEADERS.TOKEN(superuser),
+      done,
     });
   });
 

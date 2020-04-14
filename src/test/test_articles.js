@@ -1,36 +1,36 @@
 const { assert, request, HEADERS } = require('./configuration/constants.js');
-const { TEST_TOPICS, TEST_USERS } = require('./configuration/data.js');
+const { TEST_ARTICLES, TEST_USERS } = require('./configuration/data.js');
 
 const superuser = TEST_USERS.NINE;
 
-let TOPIC_ID = 0;
+let ARTICLE_ID = 0;
 
-describe("Topic Tests", function() {
+describe("Article Tests", function() {
   this.slow(10000);
 
-  /** Test creating a new topic */
+  /** Test creating a new article */
   describe("Create", function() {
-    it("Add topic", function(done) {
+    it("Add article", function(done) {
       request({
-        url: `/api/v1/topics`,
+        url: `/api/v1/articles`,
         method: 'POST',
-        body: JSON.stringify(TEST_TOPICS.CREATED),
+        body: JSON.stringify(TEST_ARTICLES.CREATED),
         headers: HEADERS.TOKEN(superuser),
         done,
         onSuccess: ({status, data}) => {
           assert.equal(status, 201);
           assert.hasAllKeys(data, ['id']);
-          TOPIC_ID = data.id;
+          ARTICLE_ID = data.id;
         }
       });
     });
   });
 
-  /** Test retrieval of all topics */
+  /** Test retrieval of all articles */
   describe("Read", function() {
-    it("Get all topics", function(done) {
+    it("Get all articles", function(done) {
       request({
-        url: `/api/v1/topics`,
+        url: `/api/v1/articles`,
         method: 'GET',
         headers: HEADERS.TOKEN(superuser),
         done,
@@ -41,9 +41,25 @@ describe("Topic Tests", function() {
       });
     });
 
-    it("Get random topic", function(done) {
+    it("Get only published articles", function(done) {
       request({
-        url: `/api/v1/topics/random`,
+        url: `/api/v1/articles/published`,
+        method: 'GET',
+        headers: HEADERS.KEY,
+        done,
+        onSuccess: ({status, data}) => {
+          assert.equal(status, 200);
+          assert.isArray(data);
+          data.forEach(article => {
+            assert.equal(article.status, 'PUBLISHED');
+          });
+        }
+      });
+    });
+
+    it("Get single article", function(done) {
+      request({
+        url: `/api/v1/articles/${ARTICLE_ID}`,
         method: 'GET',
         headers: HEADERS.KEY,
         done,
@@ -54,22 +70,9 @@ describe("Topic Tests", function() {
       });
     });
 
-    it("Get single topic", function(done) {
+    it("Attempt get single article with invalid ID", function(done) {
       request({
-        url: `/api/v1/topics/${TOPIC_ID}`,
-        method: 'GET',
-        headers: HEADERS.KEY,
-        done,
-        onSuccess: ({status, data}) => {
-          assert.equal(status, 200);
-          assert.isObject(data);
-        }
-      });
-    });
-
-    it("Attempt get single topic with invalid ID", function(done) {
-      request({
-        url: `/api/v1/topics/0`,
+        url: `/api/v1/articles/0`,
         method: 'GET',
         headers: HEADERS.KEY,
         done,
@@ -78,55 +81,53 @@ describe("Topic Tests", function() {
         }
       });
     });
-
-    it("Regenerate Topic Bank access token", function(done) {
-      request({
-        url: `/api/v1/topics/token`,
-        method: 'GET',
-        headers: HEADERS.TOKEN(superuser),
-        done,
-        onSuccess: ({status, data}) => {
-          assert.equal(status, 200);
-          assert.hasAllKeys(data, ['token']);
-        }
-      });
-    });
   });
 
 
-  /** Test updating the topic */
+  /** Test updating the article */
   describe("Update", function() {
-    it("Update topic", function(done) {
+    it("Update article without image change", function(done) {
       request({
-        url: `/api/v1/topics/${TOPIC_ID}`,
+        url: `/api/v1/articles/${ARTICLE_ID}`,
         method: 'PUT',
-        body: JSON.stringify(TEST_TOPICS.UPDATED),
+        body: JSON.stringify({
+          article: TEST_ARTICLES.UPDATED,
+          changed: false
+        }),
         headers: HEADERS.TOKEN(superuser),
-        done,
-        onSuccess: ({status}) => {
-          assert.equal(status, 200);
-        }
-      });
-    });
-
-    it("Vote on topic", function(done) {
-      request({
-        url: `/api/v1/topics/${TOPIC_ID}/vote/yes`,
-        method: 'PUT',
-        headers: HEADERS.KEY,
         done,
         onSuccess: ({status, data}) => {
           assert.equal(status, 200);
-          assert.hasAllKeys(data, ['yes', 'no']);
+          assert.hasAllKeys(data, ['slug']);
         }
       });
     });
 
-    it("Attempt update topic with invalid ID", function(done) {
+    it("Update article with image change", function(done) {
       request({
-        url: `/api/v1/topics/0`,
+        url: `/api/v1/articles/${ARTICLE_ID}`,
         method: 'PUT',
-        body: JSON.stringify(TEST_TOPICS.UPDATED),
+        body: JSON.stringify({
+          article: TEST_ARTICLES.UPDATED,
+          changed: true
+        }),
+        headers: HEADERS.TOKEN(superuser),
+        done,
+        onSuccess: ({status, data}) => {
+          assert.equal(status, 200);
+          assert.hasAllKeys(data, ['slug']);
+        }
+      });
+    });
+
+    it("Attempt update article with invalid ID", function(done) {
+      request({
+        url: `/api/v1/articles/0`,
+        method: 'PUT',
+        body: JSON.stringify({
+          article: TEST_ARTICLES.UPDATED,
+          changed: true
+        }),
         headers: HEADERS.TOKEN(superuser),
         done,
         onError: ({status}) => {
@@ -136,11 +137,11 @@ describe("Topic Tests", function() {
     });
   });
 
-  /** Test deleting the topic */
+  /** Test deleting the article */
   describe("Delete", function() {
-    it("Delete topic", function(done) {
+    it("Delete article", function(done) {
       request({
-        url: `/api/v1/topics/${TOPIC_ID}`,
+        url: `/api/v1/articles/${ARTICLE_ID}`,
         method: 'DELETE',
         headers: HEADERS.TOKEN(superuser),
         done,
@@ -150,9 +151,9 @@ describe("Topic Tests", function() {
       });
     });
 
-    it("Attempt delete topic with invalid ID", function(done) {
+    it("Attempt delete article with invalid ID", function(done) {
       request({
-        url: `/api/v1/topics/0`,
+        url: `/api/v1/articles/0`,
         method: 'DELETE',
         headers: HEADERS.TOKEN(superuser),
         done,

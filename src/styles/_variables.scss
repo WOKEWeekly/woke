@@ -8,6 +8,8 @@ $primary-light: rgba(142, 116, 171, .5);
 $primary-dark: rgba(28, 8, 34, .8);
 $dark: rgb(13, 12, 14);
 
+$sidebar: rgba(8, 2, 10, .8);
+
 $blackex: #22b2c3;
 $mental: #159e43;
 
@@ -123,12 +125,31 @@ $break-xxl: 1408px; // Extra large devices (large desktops)
   }
 }
 
-@mixin responsive-grid {
+// @mixin responsive-grid {
+//   display: grid;
+//   grid-template-columns: repeat(6, calc(100% / 6));
+//   @media (max-width: $break-xl) { grid-template-columns: repeat(5, 20%); }
+//   @media (max-width: $break-lg) { grid-template-columns: repeat(4, 25%); }
+//   @media (max-width: $break-md) { grid-template-columns: repeat(3, calc(100% / 3)); }
+//   @media (max-width: $break-sm) { grid-template-columns: repeat(2, 50%); }
+// }
+
+@mixin responsive-grid($maxCol: 6) {
   display: grid;
-  grid-template-columns: repeat(6, calc(100% / 6));
-  @media (max-width: $break-xl) { grid-template-columns: repeat(5, 20%); }
-  @media (max-width: $break-lg) { grid-template-columns: repeat(4, 25%); }
-  @media (max-width: $break-md) { grid-template-columns: repeat(3, calc(100% / 3)); }
+  grid-template-columns: repeat($maxCol, calc(100% / #{$maxCol}));
+
+  @if $maxCol > 5 {
+    @media (max-width: $break-xl) { grid-template-columns: repeat(5, 20%); }
+  }
+
+  @if $maxCol > 4 {
+    @media (max-width: $break-lg) { grid-template-columns: repeat(4, 25%); }
+  }
+
+  @if $maxCol > 3 {
+    @media (max-width: $break-md) { grid-template-columns: repeat(3, calc(100% / 3)); }
+  }
+
   @media (max-width: $break-sm) { grid-template-columns: repeat(2, 50%); }
 }
 
@@ -149,7 +170,9 @@ $break-xxl: 1408px; // Extra large devices (large desktops)
       display: grid;
       grid-template-columns: $columns;
       padding: .7em 0;
-      span { padding: 0 .5em; word-break: break-word; } }
+      span {
+        padding: 0 .5em; word-break: break-word;
+        .image { width: 100%; } } }
     .header {
       border-bottom: 1px solid rgba(255,255,255,.6);
       font-family: $title-font; }

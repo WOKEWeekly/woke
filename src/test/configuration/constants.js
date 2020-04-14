@@ -9,9 +9,6 @@ module.exports = {
   /** For the assertion library */
   assert: require('chai').assert,
 
-  /** For the JSON web token library */
-  jwt: require('jsonwebtoken'),
-
   /**
    * Abstract function for HTTP requests.
    * @param {string} request.url - The url to make the request to.

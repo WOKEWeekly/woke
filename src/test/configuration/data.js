@@ -1,6 +1,38 @@
+const jwt = require('jsonwebtoken');
+
+const SUPERUSER = {
+  id: 1,
+  firstname: 'Admin',
+  lastname: 'Istrator',
+  clearance: 9,
+};
 const TEST_IMAGE = 'data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==';
+const TOKEN = jwt.sign({ user: SUPERUSER }, process.env.JWT_SECRET, { expiresIn: '1m' });
 
 module.exports = {
+
+  TEST_ARTICLES: {
+    CREATED: {
+      title: "Crazy Blues",
+      content: "This is an added article via service tests.",
+      category: "Philosophy & Ethics",
+      excerpt: "Added service test article.",
+      image: TEST_IMAGE,
+      authorId: 1,
+      status: "DRAFT",
+      datePublished: null
+    },
+    UPDATED: {
+      title: "Wild Yellows",
+      content: "This is an updated article via service tests.",
+      category: "Society & Stereotypes",
+      excerpt: "Updated service test article.",
+      image: TEST_IMAGE,
+      authorId: 1,
+      status: "PUBLISHED",
+      datePublished: "2020-08-30"
+    }
+  },
 
   TEST_CANDIDATES: {
     CREATED: {
@@ -43,8 +75,10 @@ module.exports = {
         instagram: 'sallyw'
       }),
       description: "An added member through service tests.",
-      verified: 1,
-      slackID: null
+      verified: true,
+      slackId: null,
+      isAuthor: true,
+      excerpt: 'Sally is an amazing woman.'
     },
     UPDATED: {
       firstname: "Lolly",
@@ -60,8 +94,10 @@ module.exports = {
         instagram: 'sallyw'
       }),
       description: "An updated member through service tests.",
-      verified: 1,
-      slackID: null
+      verified: true,
+      slackId: null,
+      isAuthor: true,
+      excerpt: "Lolly is an adorable woman."
     }
   },
 
@@ -111,7 +147,7 @@ module.exports = {
       sensitivity: false,
       option1: "Yes",
       option2: "No",
-      user_id: 1
+      userId: 1
     },
     UPDATED: {
       headline: "NHS",
@@ -124,17 +160,12 @@ module.exports = {
       sensitivity: true,
       option1: "Yes",
       option2: "No",
-      user_id: 1
+      userId: 1
     }
   },
 
   TEST_USERS: {
-    NINE: {
-      id: 1,
-      firstname: 'Admin',
-      lastname: 'Istrator',
-      clearance: 9
-    },
+    NINE: { ...SUPERUSER, token: TOKEN },
     FIVE: {
       id: 2,
       firstname: 'Test',
@@ -152,4 +183,4 @@ module.exports = {
       subscribe: false
     }
   }
-}
+};
