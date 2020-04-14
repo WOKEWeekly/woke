@@ -8,7 +8,7 @@ const ERROR = require('./errors.js');
 const { renderErrorPage } = require('./response.js');
 const SQL = require('./sql.js');
 
-const { cloudinary, domain, forms, siteDescription } = require('../constants/settings.js');
+const { accounts, cloudinary, domain, forms, siteDescription } = require('../constants/settings.js');
 const { OPERATIONS, PAGE } = require('../constants/strings.js');
 
 let exigencies = {};
@@ -447,6 +447,16 @@ module.exports = function(app, conn, server){
     server.render(req, res, '/_auth/admin', {
       title: 'Admin Tools | #WOKEWeekly',
     });
+  });
+
+  /***************************************************************
+   * ACTIONS
+   **************************************************************/
+
+  /** Subscribe to YouTube */
+  app.get('/subscribe', function(req, res){
+    res.writeHead(301, { Location: accounts.youtube });
+    res.end();
   });
 
   /***************************************************************
