@@ -452,6 +452,12 @@ module.exports = function(app, conn, server){
   /***************************************************************
    * ACTIONS
    **************************************************************/
+  
+   /** Link to Spotify */
+  app.get('/podcast', function(req, res){
+    res.writeHead(301, { Location: accounts.spotify });
+    res.end();
+  });
 
   /** Subscribe to YouTube */
   app.get('/subscribe', function(req, res){
