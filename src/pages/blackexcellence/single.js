@@ -65,22 +65,32 @@ class CandidatePage extends Component {
 
     const { isLoaded, imageLoaded } = this.state;
 
-    const getDetails = () => {
+    const CandidateDetails = () => {
       const { authorName, authorLevel, authorSlug, dateWritten } = candidate;
-      if (!authorName) return null;
+      const date = formatDate(dateWritten)
 
-      let link = '';
-      if (authorLevel === 'Executive')	
-        link = `/executives/${authorSlug}`;	
-      else	
-        link = `/team/member/${authorSlug}`;
+      let text = '';
+      if (!authorName){
+        text = date;
+      } else if (!authorSlug){
+        text = `Written by ${authorName}, ${date}`
+      } else {
+        let link = '';
+        if (authorLevel === 'Executive')	
+          link = `/executives/${authorSlug}`;	
+        else	
+          link = `/team/member/${authorSlug}`;
+
+        text = (
+          <React.Fragment>
+            Written by
+            <a className={css.author} href={link}> {authorName}</a>, {date}
+          </React.Fragment>
+        );
+      }
 
       return (
-      <Subtitle className={css.meta}>
-        Written by 
-        <a className={css.author} href={link}> {authorName}</a>
-        , {formatDate(dateWritten)}
-      </Subtitle>
+      <Subtitle className={css.meta}>{text}</Subtitle>
       );
     }
 
@@ -112,7 +122,7 @@ class CandidatePage extends Component {
                   {candidate.age} • {candidate.occupation} • {candidate.demonyms}
                 </Subtitle>
                 <PromoIconsBar socials={candidate.socials} />
-                {getDetails()}
+                <CandidateDetails/>
               </Fader>
               <Fader
                 determinant={isLoaded}
