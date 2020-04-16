@@ -43,8 +43,7 @@
   .content { @include font-scaler(1.2); }
   .image {
     margin: 1em 0;
-    width: 90%;
-    @media (max-width: $break-md) { width: 100%; }}
+    width: 100%;}
   .details {
     @include font-scaler(0.9);
     .author {

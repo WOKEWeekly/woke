@@ -111,7 +111,6 @@ class ArticlePage extends Component {
                 <Container className={css.container}>
                   <BlogTitle/>
                   <BlogDetails/>
-                  <Divider/>
                   <CoverImage/>
                   <Content/>
                 </Container>
