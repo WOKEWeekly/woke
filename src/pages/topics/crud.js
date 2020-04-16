@@ -1,5 +1,6 @@
 import React, { Component} from 'react';
 import { connect } from 'react-redux';
+import { zHandlers } from 'zavid-modules';
 
 import { setAlert } from '~/components/alert.js';
 import handlers from '~/constants/handlers.js';
@@ -96,7 +97,7 @@ class TopicCrud extends Component {
       <TopicForm
         heading={title}
         topic={this.state}
-        handlers={handlers(this)}
+        handlers={zHandlers(this)}
         
         confirmText={operation === 'add' ? 'Submit' : 'Update'}
         confirmFunc={operation === 'add' ? this.submitTopic : this.updateTopic}

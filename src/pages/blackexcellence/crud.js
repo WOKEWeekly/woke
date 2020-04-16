@@ -1,9 +1,9 @@
 import React, { Component} from 'react';
 import { connect } from 'react-redux';
+import { zHandlers } from 'zavid-modules';
 
 import { setAlert } from '~/components/alert.js';
 
-import handlers from '~/constants/handlers.js';
 import request from '~/constants/request.js';
 import { cloudinary } from '~/constants/settings.js';
 import { isValidCandidate } from '~/constants/validations.js';
@@ -158,7 +158,7 @@ class CandidateAdd extends Component {
       <CandidateForm
         heading={title}
         candidate={this.state}
-        handlers={handlers(this)}
+        handlers={zHandlers(this)}
 
         confirmText={operation === 'add' ? 'Submit' : 'Update'}
         confirmFunc={operation === 'add' ? this.submitCandidate : this.updateCandidate}

@@ -1,10 +1,9 @@
 import React, { Component} from 'react';
 import { connect } from 'react-redux';
-import { zDate } from 'zavid-modules';
+import { zDate, zHandlers } from 'zavid-modules';
 
 import { setAlert } from '~/components/alert.js';
 
-import handlers from '~/constants/handlers.js';
 import request from '~/constants/request.js';
 import { cloudinary } from '~/constants/settings.js';
 import { isValidMember } from '~/constants/validations.js';
@@ -168,7 +167,7 @@ class MemberCrud extends Component {
       <MemberForm
         heading={title}
         member={this.state}
-        handlers={handlers(this)}
+        handlers={zHandlers(this)}
 
         confirmText={operation === 'add' ? 'Submit' : 'Update'}
         confirmFunc={operation === 'add' ? this.submitMember : this.updateMember}

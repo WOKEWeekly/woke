@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Col, Modal as DefaultModal } from 'react-bootstrap';
+import { zHandlers } from 'zavid-modules';
 
 import { SubmitButton, CancelButton, DeleteButton } from '~/components/button.js';
 import { Group, Label, Select, UsernameInput } from '~/components/form.js';
@@ -8,7 +9,6 @@ import { SocialIcon } from '~/components/icon.js';
 import { Paragraph } from '~/components/text.js';
 import css from '~/styles/_components.scss';
 
-import handlers from '~/constants/handlers';
 import { socialPlatforms } from '~/constants/settings';
 
 export class Modal extends Component {
@@ -197,7 +197,7 @@ export class SocialsModal extends Component {
               <UsernameInput
                 name={idx}
                 value={this.state[idx]}
-                onChange={handlers(this).handleText}
+                onChange={zHandlers(this).handleText}
                 placeholder={`${social.name} ${social.domain === '' ? 'URL' : 'username'}`} />
             </div>
           </Col>
