@@ -36,9 +36,10 @@ class ArticleCrud extends Component {
 
   componentDidMount(){
     const { article, operation } = this.props
+    const tags = article && zString.convertArrayToCsv(JSON.parse(article.tags));
     this.setState({
       ...article,
-      tags: zString.convertArrayToCsv(JSON.parse(article.tags)),
+      tags,
       isCreateOperation: operation === OPERATIONS.CREATE
     });
   }
