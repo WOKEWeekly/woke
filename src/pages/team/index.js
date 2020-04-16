@@ -1,5 +1,6 @@
 import React, { Component, PureComponent } from 'react';
 import { connect } from 'react-redux';
+import { zDate } from 'zavid-modules';
 
 import { alert } from '~/components/alert.js';
 import { AddEntityButton } from '~/components/button.js';
@@ -12,7 +13,6 @@ import { Title } from '~/components/text.js';
 import { BottomToolbar } from '~/components/toolbar.js';
 
 import { countriesToString } from '~/constants/countries.js';
-import { formatDate } from '~/constants/date.js';
 import CLEARANCES from '~/constants/clearances.js';
 import request from '~/constants/request.js';
 
@@ -185,7 +185,7 @@ class _Member extends PureComponent {
           <span>{item.level}</span>
           <span>{item.role}</span>
           <span>{item.demonyms}</span>
-          <span>{formatDate(item.birthday)}</span>
+          <span>{zDate.formatDate(item.birthday)}</span>
           <span><LinkButton /></span>
           <span><button className={css.invisible_button} onClick={() => this.editMember(item)}><Icon name={'edit'} /></button></span>
           <span><button className={css.invisible_button} onClick={this.openDelete}><Icon name={'trash'} /></button></span>
@@ -209,7 +209,7 @@ class _Member extends PureComponent {
           </div>
           <div>
             <span><Icon name={'birthday-cake'}/></span>
-            <span>{formatDate(item.birthday)}</span>
+            <span>{zDate.formatDate(item.birthday)}</span>
           </div>
           <div className={css.index}>{idx+1}</div>
           <div className={css.crud}>

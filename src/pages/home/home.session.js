@@ -5,9 +5,10 @@ import LazyLoader from 'react-visibility-sensor';
 import { Title, Subtitle, Divider, Paragraph, truncateText } from '~/components/text.js';
 import { Fader } from '~/components/transitioner.js';
 
-import { formatDate } from '~/constants/date.js';
 import request from '~/constants/request.js';
 import { cloudinary } from '~/constants/settings.js';
+
+import { zDate } from 'zavid-modules';
 
 import css from '~/styles/home.scss';
 
@@ -62,7 +63,7 @@ export default class UpcomingSession extends Component {
               </Link> : null}
               <div className={css.details}>
                 <Title className={css.title}>{session.title}</Title>
-                <Subtitle className={css.subtitle}>{formatDate(session.dateHeld, true)}</Subtitle>
+                <Subtitle className={css.subtitle}>{zDate.formatDate(session.dateHeld, true)}</Subtitle>
                 <Divider/>
                 <Paragraph
                   link={link}

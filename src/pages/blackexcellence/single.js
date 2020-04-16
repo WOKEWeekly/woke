@@ -13,11 +13,12 @@ import { Fader, Slider } from '~/components/transitioner.js';
 
 import CLEARANCES from '~/constants/clearances.js';
 import { countriesToString } from '~/constants/countries.js';
-import { formatDate, calculateAge } from '~/constants/date.js';
 import request from '~/constants/request.js';
 import { cloudinary } from '~/constants/settings.js';
 
 import css from '~/styles/blackex.scss';
+
+import { zDate } from 'zavid-modules';
 
 class CandidatePage extends Component {
   constructor(){
@@ -60,14 +61,14 @@ class CandidatePage extends Component {
   render(){
     const { candidate, user, countries } = this.props;
     candidate.description = candidate.description.trim().length > 0 ? candidate.description : 'No description.';
-    candidate.age = calculateAge(candidate.birthday);
+    candidate.age = zDate.calculateAge(candidate.birthday);
     candidate.demonyms = countriesToString(JSON.parse(candidate.ethnicity), countries);
 
     const { isLoaded, imageLoaded } = this.state;
 
     const CandidateDetails = () => {
       const { authorName, authorLevel, authorSlug, dateWritten } = candidate;
-      const date = formatDate(dateWritten)
+      const date = zDate.formatDate(dateWritten);
 
       let text = '';
       if (!authorName){

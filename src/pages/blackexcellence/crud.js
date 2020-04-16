@@ -3,12 +3,12 @@ import { connect } from 'react-redux';
 
 import { setAlert } from '~/components/alert.js';
 
-import { formatISODate } from '~/constants/date.js';
 import handlers from '~/constants/handlers.js';
 import request from '~/constants/request.js';
 import { cloudinary } from '~/constants/settings.js';
-
 import { isValidCandidate } from '~/constants/validations.js';
+
+import { zDate } from 'zavid-modules';
 
 import CandidateForm from './form.js';
 
@@ -94,12 +94,12 @@ class CandidateAdd extends Component {
       name: name.trim(),
       occupation: occupation.trim(),
       image: image,
-      birthday: formatISODate(birthday),
+      birthday: zDate.formatISODate(birthday),
       ethnicity: JSON.stringify(ethnicities),
       description: description,
       socials: JSON.stringify(socials),
       authorId,
-      dateWritten: formatISODate(dateWritten)
+      dateWritten: zDate.formatISODate(dateWritten)
     };
 
     let data;

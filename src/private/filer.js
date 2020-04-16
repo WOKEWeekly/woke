@@ -1,6 +1,5 @@
 const cloudinary = require('cloudinary').v2;
-const { zString } = require('zavid-modules');
-const { formatISODate } = require('../constants/date.js');
+const { zDate, zString } = require('zavid-modules');
 const { DIRECTORY, ARTICLE_STATUS } = require('../constants/strings.js');
 
 cloudinary.config({
@@ -101,4 +100,4 @@ const createArticleFilename = (slug) => `${slug}`;
 const createCandidateFilename = (id, slug) => `${id}_${slug}`;
 const createMemberFilename = (slug) => slug;
 const createReviewFilename = (rating, slug) => `${rating}-${slug}`;
-const createSessionFilename = (date, title) => `${formatISODate(date)}_${title}`;
+const createSessionFilename = (date, title) => `${zDate.formatISODate(date)}_${title}`;

@@ -52,6 +52,19 @@ class ArticleForm extends Component {
     const { heading, confirmText, confirmFunc, cancelFunc, handlers, operation } = this.props;
     const { handleText, handleDate, handleImage } = handlers;
     const { title, content, category, excerpt, image, authorId, status, datePublished, tags } = this.props.article;
+
+    const DatePublished = () => {
+      if (status !== ARTICLE_STATUS.PUBLISHED) return null;
+
+      return (
+        <Group>
+          <Col>
+            <Label>Date Published:</Label>
+            <AuthoredDatePicker date={datePublished} onConfirm={date => handleDate(date, 'datePublished')} />
+          </Col>
+        </Group>
+      )
+    }
     
     return (
       <Shader>
@@ -118,12 +131,7 @@ class ArticleForm extends Component {
                   onChange={handleText} />
               </Col>
             </Group>
-            <Group>
-              <Col>
-                <Label>Date Published:</Label>
-                <AuthoredDatePicker date={datePublished} onConfirm={date => handleDate(date, 'datePublished')} />
-              </Col>
-            </Group>
+            <DatePublished/>
             <Group>
               <Col>
                 <FileSelector

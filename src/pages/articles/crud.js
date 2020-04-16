@@ -27,7 +27,7 @@ class ArticleCrud extends Component {
       image: null,
       authorId: null,
       status: ARTICLE_STATUS.DRAFT,
-      datePublished: new Date(),
+      datePublished: null,
       tags: '',
 
       isCreateOperation: true

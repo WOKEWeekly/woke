@@ -9,36 +9,29 @@ import css from '~/styles/_components.scss';
 import { Icon } from './icon';
 import moment from 'moment';
 
-import { zDate } from 'zavid-modules';
+import { zDate, zHandlers } from 'zavid-modules';
 
 export class DatePicker extends Component {
   constructor(props){
     super(props);
 
-    const { date } = props;
+    const { dateOfMonth, month, year } = extractDates(this.props.date);
+
     this.state = {
-      dateOfMonth: moment().date(moment(date).date()).format("Do"),
-      month: moment(date).format('MMMM'),
-      year: moment(date).year(),
+      dateOfMonth,
+      month,
+      year,
       visible: false
     }
   }
 
   /** Account for changes to input */
   static getDerivedStateFromProps({date}, state) {
-    if (state.visible) return state;
-    return {
-      dateOfMonth: moment().date(moment(date).date()).format("Do"),
-      month: moment(date).format('MMMM'),
-      year: moment(date).year()
-    }
+    if (date && state.visible) return state;
+    return extractDates(date);
   }
 
-  handleDateChange = (e) => {
-    const { name, value } = e.target;
-    this.setState({ [name]: value });
-  }
-
+  /** Update component dates on selection */
   confirm = () => {
     let { dateOfMonth, month, year } = this.state;
     month = parseInt(moment().month(month).format("M")) - 1;
@@ -75,6 +68,8 @@ export class DatePicker extends Component {
       return array;
     };
 
+    const { handleText } = zHandlers(this);
+
     const body = (
       <Group className={css.dateModal}>
         <Col xs={3}>
@@ -83,7 +78,7 @@ export class DatePicker extends Component {
             items={getDates()}
             value={dateOfMonth}
             placeholder={'DD'}
-            onChange={this.handleDateChange} />
+            onChange={handleText} />
         </Col>
         <Col xs={6}>
           <Select
@@ -91,7 +86,7 @@ export class DatePicker extends Component {
             name={'month'}
             value={month}
             placeholder={'MMMM'}
-            onChange={this.handleDateChange} />
+            onChange={handleText} />
         </Col>
         <Col xs={3}>
           <Select
@@ -99,7 +94,7 @@ export class DatePicker extends Component {
             name={'year'}
             value={year}
             placeholder={'YYYY'}
-            onChange={this.handleDateChange} />
+            onChange={handleText} />
         </Col>
       </Group>
     );
@@ -143,7 +138,7 @@ export class EventDatePicker extends Component {
     return (
       <DatePicker
         name={this.props.name}
-        date={this.props.date || ''}
+        date={this.props.date}
         onConfirm={this.props.onConfirm}
         placeholderText={'Select a date.'}
         minDate={creationDate}
@@ -157,7 +152,7 @@ export class BirthdayPicker extends Component {
     return (
       <DatePicker
         name={this.props.name}
-        date={this.props.date || ''}
+        date={this.props.date}
         onConfirm={this.props.onConfirm}
         placeholderText={'Select date of birth.'}
         maxDate={new Date()} />
@@ -167,12 +162,10 @@ export class BirthdayPicker extends Component {
 
 export class AuthoredDatePicker extends Component {
   render(){
-    let date = new Date(2018, 11, 9);
-    date = date.toString();
     return (
       <DatePicker
         name={this.props.name}
-        date={this.props.date || date}
+        date={this.props.date}
         onConfirm={this.props.onConfirm}
         placeholderText={'Select the date written.'}
         minDate={creationDate}
@@ -180,4 +173,12 @@ export class AuthoredDatePicker extends Component {
         withDayOfWeek />
     );
   }
+}
+
+const extractDates = (date) => {
+  const dateOfMonth = date ? moment().date(moment(date).date()).format("Do") : null;
+  const month = date ? moment(date).format('MMMM') : null;
+  const year = date ? moment(date).year() : null;
+
+  return { dateOfMonth, month, year };
 }

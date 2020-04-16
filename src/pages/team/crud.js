@@ -1,9 +1,9 @@
 import React, { Component} from 'react';
 import { connect } from 'react-redux';
+import { zDate } from 'zavid-modules';
 
 import { setAlert } from '~/components/alert.js';
 
-import { formatISODate } from '~/constants/date.js';
 import handlers from '~/constants/handlers.js';
 import request from '~/constants/request.js';
 import { cloudinary } from '~/constants/settings.js';
@@ -98,7 +98,7 @@ class MemberCrud extends Component {
       role: role.trim(),
       sex,
       image,
-      birthday: formatISODate(birthday),
+      birthday: zDate.formatISODate(birthday),
       description: description,
       ethnicity: JSON.stringify(ethnicities),
       socials: JSON.stringify(socials),
