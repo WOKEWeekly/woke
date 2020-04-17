@@ -34,10 +34,10 @@ class MemberForm extends Component {
 
   render(){
     const { heading, confirmText, confirmFunc, cancelFunc, countries, handlers, operation } = this.props;
-    const { handleText, handleBirthday, handleImage, handleRadio, handleCheckboxButton, clearSelection, confirmSocials } = handlers;
+    const { handleText, handleDate, handleImage, handleRadio, handleCheckboxButton, clearSelection, confirmSocials } = handlers;
 
     const { firstname, lastname, level, sex, role, description, birthday, image, socials,
-      ethnicity1, ethnicity2, ethnicity3, ethnicity4, verified, slackId, isAuthor, excerpt } = this.props.member;
+      ethnicity1, ethnicity2, ethnicity3, ethnicity4, verified, slackId, isAuthor } = this.props.member;
 
     const { ethnicModalVisible, socialsModalVisible } = this.state;
 
@@ -90,7 +90,7 @@ class MemberForm extends Component {
             <Group>
               <Col md={7}>
                 <Label>Birthday:</Label>
-                <BirthdayPicker date={birthday} onConfirm={handleBirthday} />
+                <BirthdayPicker name={'birthday'} date={birthday} onConfirm={handleDate} />
               </Col>
               <Col md={5}>
                 <Label>Level:</Label>

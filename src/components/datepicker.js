@@ -7,7 +7,6 @@ import { Modal } from '~/components/modal.js';
 import { creationDate } from '~/constants/settings.js';
 import css from '~/styles/_components.scss';
 import { Icon } from './icon';
-import moment from 'moment';
 
 import { zDate, zHandlers } from 'zavid-modules';
 
@@ -15,12 +14,8 @@ export class DatePicker extends Component {
   constructor(props){
     super(props);
 
-    const { dateOfMonth, month, year } = extractDates(this.props.date);
-
     this.state = {
-      dateOfMonth,
-      month,
-      year,
+      ...extractDates(this.props.date),
       visible: false
     }
   }
@@ -31,10 +26,10 @@ export class DatePicker extends Component {
     return extractDates(date);
   }
 
-  /** Update component dates on selection */
+  /** Update component dates on confirmation */
   confirm = () => {
     let { dateOfMonth, month, year } = this.state;
-    month = parseInt(moment().month(month).format("M")) - 1;
+    month = zDate.MONTHS[month.toUpperCase()].NUMBER - 1;
     dateOfMonth = parseInt(dateOfMonth.replace(/([0-9]+)(.*)/g, '$1'));
     
     const date = new Date(year, month, dateOfMonth);
@@ -42,31 +37,15 @@ export class DatePicker extends Component {
     this.close();
   }
 
+  /** Close modal */
   close = () => this.setState({ visible: false})
 
   render(){
     const { date, placeholderText, minDate, maxDate, withDayOfWeek } = this.props;
     const { dateOfMonth, month, year, visible } = this.state;
 
-    const momentMonth = moment().month(month).format("M");
-    const daysInMonth = moment(`${year}-${momentMonth}`, 'YYYY-MM').daysInMonth();
-
-    const getDates = () => {
-      const array = [];
-      for (let i = 1; i <= daysInMonth; i++){
-        array.push(`${i}${zDate.getDateSuffix(i)}`);
-      }
-      return array;
-    };
-
-    const getYears = () => {
-      const array = [];
-      const startYear = parseInt(moment(minDate ? minDate : moment().subtract(40, 'years')).format('YYYY'));
-      const endYear = parseInt(moment(maxDate ? maxDate : moment().add(3, 'years')).format('YYYY'));
-
-      for (let i = startYear; i <= endYear; i++) array.push(i);
-      return array;
-    };
+    const startYear = minDate && minDate.getFullYear();
+    const endYear = maxDate && maxDate.getFullYear();
 
     const { handleText } = zHandlers(this);
 
@@ -75,24 +54,24 @@ export class DatePicker extends Component {
         <Col xs={3}>
           <Select
             name={'dateOfMonth'}
-            items={getDates()}
             value={dateOfMonth}
+            items={zDate.getDatesForMonth(month)}
             placeholder={'DD'}
             onChange={handleText} />
         </Col>
         <Col xs={6}>
           <Select
-            items={moment.months()}
             name={'month'}
             value={month}
+            items={zDate.getAllMonths()}
             placeholder={'MMMM'}
             onChange={handleText} />
         </Col>
         <Col xs={3}>
           <Select
-            items={getYears()}
             name={'year'}
             value={year}
+            items={zDate.getYearsInRange(startYear, endYear)}
             placeholder={'YYYY'}
             onChange={handleText} />
         </Col>
@@ -175,10 +154,19 @@ export class AuthoredDatePicker extends Component {
   }
 }
 
+/**
+ * 
+ * @param {Date} date 
+ */
 const extractDates = (date) => {
-  const dateOfMonth = date ? moment().date(moment(date).date()).format("Do") : null;
-  const month = date ? moment(date).format('MMMM') : null;
-  const year = date ? moment(date).year() : null;
+  let dateOfMonth, month, year;
+
+  if (date !== null){
+    const day = date.getDay() + 1;
+    dateOfMonth = `${day}${zDate.getDateSuffix(day)}`;
+    month = zDate.getMonthByNumber(date.getMonth() + 1);
+    year = date.getFullYear();
+  }
 
   return { dateOfMonth, month, year };
 }

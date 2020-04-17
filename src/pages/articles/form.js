@@ -60,7 +60,7 @@ class ArticleForm extends Component {
         <Group>
           <Col>
             <Label>Date Published:</Label>
-            <AuthoredDatePicker date={datePublished} onConfirm={date => handleDate(date, 'datePublished')} />
+            <AuthoredDatePicker name={'datePublished'} date={datePublished} onConfirm={handleDate} />
           </Col>
         </Group>
       )

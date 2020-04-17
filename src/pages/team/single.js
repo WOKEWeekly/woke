@@ -40,7 +40,7 @@ class MemberPage extends Component {
     const { member, user, countries } = this.props;
     member.fullname = `${member.firstname} ${member.lastname}`;
     member.description = member.description && member.description.trim().length > 0 ? member.description : 'No description.';
-    member.age = zDate.rendercalculateAge(member.birthday);
+    member.age = zDate.calculateAge(member.birthday);
     member.demonyms = countriesToString(JSON.parse(member.ethnicity), countries);
 
     const isExecutive = member.level === 'Executive';
