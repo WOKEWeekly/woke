@@ -2,6 +2,8 @@ import React, { Component} from 'react';
 import { Container } from 'react-bootstrap';
 import { connect } from 'react-redux';
 
+import { zDate } from 'zavid-modules';
+
 import { setAlert } from '~/components/alert.js';
 import { EditEntityButton, DeleteEntityButton, BackButton } from '~/components/button.js';
 import { ConfirmModal } from '~/components/modal.js';
@@ -11,7 +13,6 @@ import { Shader, Spacer } from '~/components/layout.js';
 import { Fader, Slider } from '~/components/transitioner.js';
 
 import CLEARANCES from '~/constants/clearances.js';
-import { formatDate } from '~/constants/date.js';
 import request from '~/constants/request.js';
 import { cloudinary } from '~/constants/settings.js';
 
@@ -84,7 +85,7 @@ class SessionPage extends Component {
                 determinant={isLoaded}
                 duration={500}
                 delay={500}>
-                <Subtitle className={css.subtitle}>{formatDate(session.dateHeld, true)}</Subtitle>
+                <Subtitle className={css.subtitle}>{zDate.formatDate(session.dateHeld, true)}</Subtitle>
               </Fader>
               <Fader
                 determinant={isLoaded}

@@ -5,7 +5,6 @@ const withCss = require("@zeit/next-css");
 const withPlugins = require("next-compose-plugins");
 
 const DotEnv = require('dotenv-webpack');
-const MomentLocalesPlugin = require('moment-locales-webpack-plugin');
 const server = require('./server.js')
 
 module.exports = withPlugins([
@@ -37,8 +36,7 @@ module.exports = withPlugins([
             path: server.config,
             systemvars: true,
             silent: true
-          }),
-          new MomentLocalesPlugin(),
+          })
         ];
 
         return config

@@ -5,9 +5,9 @@ module.exports = {
    * Send a response to the client.
    * @param {object} res - The response context of the service.
    * @param {Error} err - The object containing information about the error.
-   * @param {number} expectedStatus - The expected status code of the
+   * @param {number} expectedStatus - The expected status code of the response.
+   * Defaults to 400.
    * @param {object} [json] - The response body to be sent back to the client.
-   * response. Defaults to 400.
    */
   respondToClient: (res, err, expectedStatus, json) => {
     if (err && typeof err === 'object'){ // If there is an error...

@@ -1,25 +1,23 @@
 import React, { Component} from 'react';
 import {Col} from 'react-bootstrap';
 
+
+import { alert } from '~/components/alert.js';
 import { SubmitButton, CancelButton } from '~/components/button.js';
 import { Group, Select, TextInput } from '~/components/form.js';
 import { Modal } from '~/components/modal.js';
 import { creationDate } from '~/constants/settings.js';
 import css from '~/styles/_components.scss';
 import { Icon } from './icon';
-import moment from 'moment';
 
-import { zDate } from 'zavid-modules';
+import { zDate, zHandlers } from 'zavid-modules';
 
 export class DatePicker extends Component {
   constructor(props){
     super(props);
 
-    const { date } = props;
     this.state = {
-      dateOfMonth: moment().date(moment(date).date()).format("Do"),
-      month: moment(date).format('MMMM'),
-      year: moment(date).year(),
+      ...extractDates(props.date),
       visible: false
     }
   }
@@ -27,87 +25,70 @@ export class DatePicker extends Component {
   /** Account for changes to input */
   static getDerivedStateFromProps({date}, state) {
     if (state.visible) return state;
-    return {
-      dateOfMonth: moment().date(moment(date).date()).format("Do"),
-      month: moment(date).format('MMMM'),
-      year: moment(date).year()
-    }
+    return extractDates(date);
   }
 
-  handleDateChange = (e) => {
-    const { name, value } = e.target;
-    this.setState({ [name]: value });
-  }
+  /** Update component dates on confirmation */
+  confirmDateSelection = () => {
+    let { day, month, year } = this.state;
 
-  confirm = () => {
-    let { dateOfMonth, month, year } = this.state;
-    month = parseInt(moment().month(month).format("M")) - 1;
-    dateOfMonth = parseInt(dateOfMonth.replace(/([0-9]+)(.*)/g, '$1'));
+    if (!day) return alert.error('Please set the day of the month.');
+    if (!month) return alert.error('Please set month of the year.');
+    if (!year) return alert.error('Please set the year.');
+
+    month = zDate.MONTHS[month.toUpperCase()].NUMBER - 1;
+    day = parseInt(day.replace(/([0-9]+)(.*)/g, '$1'));
     
-    const date = new Date(year, month, dateOfMonth);
+    const date = new Date(year, month, day);
     this.props.onConfirm(date, this.props.name);
-    this.close();
+    this.closeDateModal();
   }
 
-  close = () => this.setState({ visible: false})
+  /** Close modal */
+  closeDateModal = () => this.setState({ visible: false})
 
   render(){
     const { date, placeholderText, minDate, maxDate, withDayOfWeek } = this.props;
-    const { dateOfMonth, month, year, visible } = this.state;
+    const { day, month, year, visible } = this.state;
 
-    const momentMonth = moment().month(month).format("M");
-    const daysInMonth = moment(`${year}-${momentMonth}`, 'YYYY-MM').daysInMonth();
+    const startYear = minDate && minDate.getFullYear();
+    const endYear = maxDate && maxDate.getFullYear();
 
-    const getDates = () => {
-      const array = [];
-      for (let i = 1; i <= daysInMonth; i++){
-        array.push(`${i}${zDate.getDateSuffix(i)}`);
-      }
-      return array;
-    };
-
-    const getYears = () => {
-      const array = [];
-      const startYear = parseInt(moment(minDate ? minDate : moment().subtract(40, 'years')).format('YYYY'));
-      const endYear = parseInt(moment(maxDate ? maxDate : moment().add(3, 'years')).format('YYYY'));
-
-      for (let i = startYear; i <= endYear; i++) array.push(i);
-      return array;
-    };
+    const { handleText } = zHandlers(this);
 
     const body = (
       <Group className={css.dateModal}>
         <Col xs={3}>
           <Select
-            name={'dateOfMonth'}
-            items={getDates()}
-            value={dateOfMonth}
+            name={'day'}
+            value={day}
+            items={zDate.getDatesForMonth(month)}
             placeholder={'DD'}
-            onChange={this.handleDateChange} />
+            onChange={handleText} />
         </Col>
         <Col xs={6}>
           <Select
-            items={moment.months()}
             name={'month'}
             value={month}
+            items={zDate.getAllMonths()}
             placeholder={'MMMM'}
-            onChange={this.handleDateChange} />
+            onChange={handleText} />
         </Col>
         <Col xs={3}>
           <Select
-            items={getYears()}
             name={'year'}
             value={year}
+            items={zDate.getYearsInRange(startYear, endYear)}
             placeholder={'YYYY'}
-            onChange={this.handleDateChange} />
+            onChange={handleText} />
         </Col>
       </Group>
     );
 
     const footer = (
       <React.Fragment>
-        <SubmitButton onClick={this.confirm}>Confirm</SubmitButton>
-        <CancelButton onClick={this.close}>Close</CancelButton>
+        <SubmitButton onClick={this.confirmDateSelection}>Confirm</SubmitButton>
+        <CancelButton onClick={this.closeDateModal}>Close</CancelButton>
       </React.Fragment>
     );
 
@@ -121,7 +102,7 @@ export class DatePicker extends Component {
             name={'calendar-alt'}
             className={css.calendarIcon} />
           <TextInput
-            value={zDate.formatDate(date, withDayOfWeek) || ''}
+            value={date ? zDate.formatDate(date, withDayOfWeek) : null}
             placeholder={placeholderText}
             style={{textAlign: 'left'}}
             className={css.dateinput}
@@ -143,7 +124,7 @@ export class EventDatePicker extends Component {
     return (
       <DatePicker
         name={this.props.name}
-        date={this.props.date || ''}
+        date={this.props.date}
         onConfirm={this.props.onConfirm}
         placeholderText={'Select a date.'}
         minDate={creationDate}
@@ -157,7 +138,7 @@ export class BirthdayPicker extends Component {
     return (
       <DatePicker
         name={this.props.name}
-        date={this.props.date || ''}
+        date={this.props.date}
         onConfirm={this.props.onConfirm}
         placeholderText={'Select date of birth.'}
         maxDate={new Date()} />
@@ -167,12 +148,10 @@ export class BirthdayPicker extends Component {
 
 export class AuthoredDatePicker extends Component {
   render(){
-    let date = new Date(2018, 11, 9);
-    date = date.toString();
     return (
       <DatePicker
         name={this.props.name}
-        date={this.props.date || date}
+        date={this.props.date}
         onConfirm={this.props.onConfirm}
         placeholderText={'Select the date written.'}
         minDate={creationDate}
@@ -180,4 +159,25 @@ export class AuthoredDatePicker extends Component {
         withDayOfWeek />
     );
   }
+}
+
+/**
+ * Extract the day, month and year from a specified date.
+ * @param {Date} date - The specified date.
+ * @returns {object[]} The day, month and year.
+ */
+const extractDates = (date) => {
+  let day, month, year;
+
+  if (date !== null){
+    date = new Date(date);
+    const dayNum = date.getDate();
+    const monthNum = date.getMonth() + 1;
+
+    day = zDate.getDateAndSuffix(dayNum);
+    month = zDate.getMonthByNumber(monthNum);
+    year = date.getFullYear();
+  }
+
+  return { day, month, year };
 }

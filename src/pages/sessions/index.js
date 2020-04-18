@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { saveSessionSort, saveSessionView } from '~/reducers/actions';
+import { zDate } from 'zavid-modules';
 
 import { AddEntityButton, RadioButtonGroup } from '~/components/button.js';
 import { SortDropdown } from '~/components/dropdown.js';
@@ -14,7 +15,6 @@ import { Title, Subtitle, Divider, Paragraph, truncateText } from '~/components/
 import {BottomToolbar} from '~/components/toolbar.js';
 import { Zoomer, Slider, Fader } from '~/components/transitioner.js';
 
-import { formatDate } from '~/constants/date.js';
 import CLEARANCES from '~/constants/clearances.js';
 import request from '~/constants/request.js';
 import { cloudinary } from '~/constants/settings.js';
@@ -180,7 +180,7 @@ class Session extends PureComponent {
                 onLoad={() => this.setState({isLoaded: true})} />
               <div className={css.details}>
                 <Title className={css.title}>{item.title}</Title>
-                <Subtitle className={css.date}>{formatDate(item.dateHeld, true)}</Subtitle>
+                <Subtitle className={css.date}>{zDate.formatDate(item.dateHeld, true)}</Subtitle>
               </div>
             </div>
           </Link>
@@ -205,7 +205,7 @@ class Session extends PureComponent {
               <Col md={8}>
                 <div className={css.details}>
                   <Title className={css.title}>{item.title}</Title>
-                  <Subtitle className={css.date}>{formatDate(item.dateHeld, true)}</Subtitle>
+                  <Subtitle className={css.date}>{zDate.formatDate(item.dateHeld, true)}</Subtitle>
                   <Divider />
                   <Paragraph
                     className={css.description}

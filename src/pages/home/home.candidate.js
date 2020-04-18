@@ -7,9 +7,10 @@ import { Title, Subtitle, Divider, Paragraph, truncateText } from '~/components/
 import { Fader } from '~/components/transitioner.js';
 
 import { countriesToString } from '~/constants/countries.js';
-import { calculateAge } from '~/constants/date.js';
 import request from '~/constants/request.js';
 import { cloudinary } from '~/constants/settings.js';
+
+import { zDate } from 'zavid-modules';
 
 import css from '~/styles/home.scss';
 
@@ -51,7 +52,7 @@ class RandomCandidate extends Component {
 
     if (candidate.name && candidate.loaded){
       candidate.firstname = candidate.name.split(' ')[0];
-      candidate.age = calculateAge(candidate.birthday);
+      candidate.age = zDate.calculateAge(candidate.birthday);
       candidate.description = candidate.description.trim().length > 0 ? candidate.description : 'No description.';
       candidate.demonyms = countriesToString(JSON.parse(candidate.ethnicity), countries);
     }

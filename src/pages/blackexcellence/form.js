@@ -56,7 +56,7 @@ class CandidateForm extends Component {
 
   render(){
     const { heading, confirmText, confirmFunc, cancelFunc, handlers, countries, operation } = this.props;
-    const { handleText, handleBirthday, handleDateWritten, handleImage, clearSelection, confirmSocials, } = handlers;
+    const { handleText, handleDate, handleImage, clearSelection, confirmSocials, } = handlers;
 
     const { id, name, description, occupation, birthday, image, socials,
       ethnicity1, ethnicity2, ethnicity3, ethnicity4,
@@ -91,7 +91,7 @@ class CandidateForm extends Component {
               </Col>
               <Col md={4}>
                 <Label>Birthday:</Label>
-                <BirthdayPicker date={birthday} onConfirm={handleBirthday} />
+                <BirthdayPicker name={'birthday'} date={birthday} onConfirm={handleDate} />
               </Col>
             </Group>
             <Group>
@@ -142,7 +142,7 @@ class CandidateForm extends Component {
                 </Col>
                 <Col md={{span: 5, offset: 2}}>
                   <Label>Date Written:</Label>
-                  <AuthoredDatePicker date={dateWritten} onConfirm={handleDateWritten} />
+                  <AuthoredDatePicker name={'dateWritten'} date={dateWritten} onConfirm={handleDate} />
                 </Col>
             </Group>
             <Group>

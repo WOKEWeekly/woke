@@ -1,6 +1,7 @@
 import React, { Component} from 'react';
 import { Container } from 'react-bootstrap';
 import { connect } from 'react-redux';
+import { zDate } from 'zavid-modules';
 
 import { EditEntityButton, BackButton } from '~/components/button.js';
 import { PromoIconsBar } from '~/components/icon.js';
@@ -11,7 +12,6 @@ import { Fader, Slider } from '~/components/transitioner.js';
 
 import CLEARANCES from '~/constants/clearances.js';
 import { countriesToString } from '~/constants/countries.js';
-import { calculateAge } from '~/constants/date.js';
 import { cloudinary } from '~/constants/settings.js';
 import css from '~/styles/team.scss';
 
@@ -40,7 +40,7 @@ class MemberPage extends Component {
     const { member, user, countries } = this.props;
     member.fullname = `${member.firstname} ${member.lastname}`;
     member.description = member.description && member.description.trim().length > 0 ? member.description : 'No description.';
-    member.age = calculateAge(member.birthday);
+    member.age = zDate.calculateAge(member.birthday);
     member.demonyms = countriesToString(JSON.parse(member.ethnicity), countries);
 
     const isExecutive = member.level === 'Executive';

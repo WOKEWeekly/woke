@@ -27,7 +27,7 @@ class ArticleCrud extends Component {
       image: null,
       authorId: null,
       status: ARTICLE_STATUS.DRAFT,
-      datePublished: new Date(),
+      datePublished: null,
       tags: '',
 
       isCreateOperation: true
@@ -36,9 +36,10 @@ class ArticleCrud extends Component {
 
   componentDidMount(){
     const { article, operation } = this.props
+    const tags = article && zString.convertArrayToCsv(JSON.parse(article.tags));
     this.setState({
       ...article,
-      tags: zString.convertArrayToCsv(JSON.parse(article.tags)),
+      tags,
       isCreateOperation: operation === OPERATIONS.CREATE
     });
   }

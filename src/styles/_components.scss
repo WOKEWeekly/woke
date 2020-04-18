@@ -526,7 +526,9 @@
     font-family: $title-font;
     font-size: 1.2em;
     padding: .2em 0;}
-  .body { margin: 1rem 0; }
+  .body {
+    line-height: 1.7;
+    margin: 1.3rem 0; }
   .listitem {
     display: grid;
     grid-template-columns: 1.5em 1fr;

@@ -54,6 +54,7 @@ class ArticlePage extends Component {
     /** The details of the blog */
     const BlogDetails = () => {
       const { authorName, authorLevel, authorSlug, datePublished } = article;
+      const date = datePublished && zDate.formatDate(datePublished, true);
       if (!authorName) return null;
 
       let link = '';
@@ -69,7 +70,7 @@ class ArticlePage extends Component {
           delay={500}>
           <Subtitle className={css.details}>
             Written by 
-            <a className={css.author} href={link}> {authorName}</a> • {zDate.formatDate(datePublished, true)}
+            <a className={css.author} href={link}> {authorName}</a> {date && `• ${date}`}
           </Subtitle>
         </Fader>
       );
@@ -111,7 +112,6 @@ class ArticlePage extends Component {
                 <Container className={css.container}>
                   <BlogTitle/>
                   <BlogDetails/>
-                  <Divider/>
                   <CoverImage/>
                   <Content/>
                 </Container>

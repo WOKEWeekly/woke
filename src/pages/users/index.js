@@ -1,6 +1,7 @@
 import React, { Component, PureComponent } from 'react';
 import { connect } from 'react-redux';
 import { Col } from 'react-bootstrap';
+import { zDate } from 'zavid-modules';
 
 import { alert } from '~/components/alert.js';
 import { SubmitButton, CancelButton } from '~/components/button.js';
@@ -13,7 +14,6 @@ import { Fader } from '~/components/transitioner.js';
 import { Title } from '~/components/text.js';
 
 import CLEARANCES from '~/constants/clearances.js';
-import { formatDate, formatDateTime } from '~/constants/date.js';
 import request from '~/constants/request.js';
 
 import css from '~/styles/team.scss';
@@ -210,8 +210,8 @@ class _User extends PureComponent {
             <span>{item.clearance}</span>
             <span>{item.email}</span>
             <span>{item.username}</span>
-            <span>{formatDateTime(item.lastActive)}</span>
-            <span>{formatDate(item.createTime)}</span>
+            <span>{zDate.formatDateTime(item.lastActive)}</span>
+            <span>{zDate.formatDate(item.createTime)}</span>
             <span><button className={css.invisible_button} onClick={this.openEdit}><Icon name={'edit'} /></button></span>
             <span><button className={css.invisible_button} onClick={this.openDelete}><Icon name={'trash'} /></button></span>
           </Default>
@@ -234,11 +234,11 @@ class _User extends PureComponent {
             </div>
             <div>
               <span><Icon name={'clock'}/></span>
-              <span>{formatDateTime(item.lastActive)}</span>
+              <span>{zDate.formatDateTime(item.lastActive)}</span>
             </div>
             <div>
               <span><Icon name={'calendar-alt'}/></span>
-              <span>{formatDate(item.createTime)}</span>
+              <span>{zDate.formatDate(item.createTime)}</span>
             </div>
             <div className={css.index}>{idx+1}</div>
             <div className={css.crud}>
