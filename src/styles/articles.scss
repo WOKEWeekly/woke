@@ -1,5 +1,11 @@
 @import "variables";
 
+.authorThumbnail {
+  border-radius: 50%;
+  float: left;
+  margin-right: .7em;
+}
+
 /************
 *** index.js
 *************/
@@ -41,11 +47,6 @@
   margin: 1em 0;
   .title { @include font-scaler(3); }
   .content { @include font-scaler(1.25); }
-  .authorThumbnail {
-    border-radius: 50%;
-    float: left;
-    margin-right: .7em;
-  }
   .image {
     border-radius: 10px;
     margin: 1em 0;
@@ -63,7 +64,7 @@
     }
   }
   .details {
-    @include font-scaler(0.9);
+    @include font-scaler(0.8);
     .author {
       @extend .link-default;
       text-decoration: none !important;
@@ -74,7 +75,9 @@
 .tagblock {
   .tag {
     @include font-scaler(0.8);
-    background: #ead9ff;
+    // background: #ead9ff;
+    background: rgb(255,255,255);
+    background: linear-gradient(180deg, rgba(255,255,255,1) 0%, rgba(208,173,255,1) 100%);
     border-radius: 30px;
     color: black;
     display: inline-block;
@@ -90,7 +93,7 @@
 *************/
 
 .articleTabler {
-  @include entityTabler(4% 15% 15% 1fr 13% 1fr 4% 4% 4%);
+  @include entityTabler(4% 15% 15% 1fr 7% 1fr 4% 4% 4%);
 }
 
 /*************
