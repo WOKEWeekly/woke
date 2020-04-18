@@ -20,7 +20,7 @@ class SessionCrud extends Component {
     this.state = {
       id: 0,
       title: '',
-      dateHeld: new Date(),
+      dateHeld: null,
       timeHeld: null,
       description: '',
       image: ''

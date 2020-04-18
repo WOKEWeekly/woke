@@ -28,7 +28,7 @@ class MemberCrud extends Component {
       role: '',
       sex: 'M',
       image: '',
-      birthday: new Date(2000, 0, 1),
+      birthday: null,
       description: '',
       ...ethnicities,
       socials: {},

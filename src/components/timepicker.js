@@ -7,42 +7,22 @@ import { Modal } from '~/components/modal.js';
 import css from '~/styles/_components.scss';
 import { Icon } from './icon';
 
-import { zDate } from 'zavid-modules';
+import { zDate, zHandlers } from 'zavid-modules';
 
 export class TimePicker extends Component {
   constructor(props){
     super(props);
 
-    const { time } = props;
     this.state = {
-      hour: new Date(time).getHours(),
-      minute: new Date(time).getMinutes(),
+      ...extractTime(props.time),
       visible: false
     }
   }
 
   /** Account for changes to input */
   static getDerivedStateFromProps({time}, state) {
-    if (state.visible || !time) return state;
-
-    let hour, minute;
-
-    // Extract hour and minute from time value
-    if (typeof time === 'string'){
-      hour = parseInt(time.substring(0, 2));
-      minute = parseInt(time.substring(3, 5));
-    } else {
-      hour = new Date(time).getHours();
-      minute = new Date(time).getMinutes();
-    }
-
-    return { hour, minute };
-  }
-
-  /** Handle the change of time values */
-  handleTimeChange = (e) => {
-    const { name, value } = e.target;
-    this.setState({ [name]: value });
+    if (state.visible) return state;
+    return extractTime(time);
   }
 
   /** Apply change to selected time value */
@@ -62,48 +42,28 @@ export class TimePicker extends Component {
   
   render(){
 
-    const { time, placeholderText } = this.props;
+    const { time } = this.props;
     const { hour, minute, visible } = this.state;
 
-    const getHours = () => {
-      const hours = [];
-      for (let i = 0; i <= 23; i++) {
-        hours.push({
-          label: i < 10 ? '0' + i : i,
-          value: i.toString()
-        });
-      }
-      return hours;
-    };
-    
-    const getMinutes = () => {
-      const minutes = [];
-      for (let i = 0; i <= 55; i += 5) {
-        minutes.push({
-          label: i < 10 ? '0' + i : i,
-          value: i.toString()
-        });
-      }
-      return minutes;
-    };
+    const { handleText } = zHandlers(this);
 
     const body = (
       <Group className={css.dateModal}>
         <Col xs={6}>
           <Select
             name={'hour'}
-            items={getHours()}
+            items={zDate.getAllHours()}
             value={hour}
             placeholder={'HH'}
-            onChange={this.handleTimeChange} />
+            onChange={handleText} />
         </Col>
         <Col xs={6}>
           <Select
             name={'minute'}
-            items={getMinutes()}
+            items={zDate.getAllMinutes(5)}
             value={minute}
             placeholder={'mm'}
-            onChange={this.handleTimeChange} />
+            onChange={handleText} />
         </Col>
       </Group>
     );
@@ -125,8 +85,8 @@ export class TimePicker extends Component {
             name={'clock'}
             className={css.calendarIcon} />
           <TextInput
-            value={zDate.formatISOTime(time, false) || '-'}
-            placeholder={placeholderText}
+            value={time ? zDate.formatISOTime(time, false) : null}
+            placeholder={'HH:mm'}
             style={{textAlign: 'left'}}
             className={css.dateinput}
             readOnly />
@@ -140,4 +100,28 @@ export class TimePicker extends Component {
       </React.Fragment>
     )
   }
+}
+
+/**
+ * Extract the hour and minute from a specified time.
+ * @param {(string|Date}} time - The specified time.
+ * @returns {object[]} The hour and minute.
+ */
+const extractTime = (time) => {
+  let hour, minute;
+
+  if (time !== null){
+    
+    // Extract hour and minute from time value
+    if (typeof time === 'string'){
+      hour = parseInt(time.substring(0, 2));
+      minute = parseInt(time.substring(3, 5));
+    } else {
+      const date = new Date(time);
+      hour = date.getHours();
+      minute = date.getMinutes();
+    }
+  }
+
+  return { hour, minute };
 }

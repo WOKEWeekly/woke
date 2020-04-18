@@ -1,6 +1,8 @@
 import React, { Component} from 'react';
 import {Col} from 'react-bootstrap';
 
+
+import { alert } from '~/components/alert.js';
 import { SubmitButton, CancelButton } from '~/components/button.js';
 import { Group, Select, TextInput } from '~/components/form.js';
 import { Modal } from '~/components/modal.js';
@@ -15,34 +17,39 @@ export class DatePicker extends Component {
     super(props);
 
     this.state = {
-      ...extractDates(this.props.date),
+      ...extractDates(props.date),
       visible: false
     }
   }
 
   /** Account for changes to input */
   static getDerivedStateFromProps({date}, state) {
-    if (date && state.visible) return state;
+    if (state.visible) return state;
     return extractDates(date);
   }
 
   /** Update component dates on confirmation */
-  confirm = () => {
-    let { dateOfMonth, month, year } = this.state;
+  confirmDateSelection = () => {
+    let { day, month, year } = this.state;
+
+    if (!day) return alert.error('Please set the day of the month.');
+    if (!month) return alert.error('Please set month of the year.');
+    if (!year) return alert.error('Please set the year.');
+
     month = zDate.MONTHS[month.toUpperCase()].NUMBER - 1;
-    dateOfMonth = parseInt(dateOfMonth.replace(/([0-9]+)(.*)/g, '$1'));
+    day = parseInt(day.replace(/([0-9]+)(.*)/g, '$1'));
     
-    const date = new Date(year, month, dateOfMonth);
+    const date = new Date(year, month, day);
     this.props.onConfirm(date, this.props.name);
-    this.close();
+    this.closeDateModal();
   }
 
   /** Close modal */
-  close = () => this.setState({ visible: false})
+  closeDateModal = () => this.setState({ visible: false})
 
   render(){
     const { date, placeholderText, minDate, maxDate, withDayOfWeek } = this.props;
-    const { dateOfMonth, month, year, visible } = this.state;
+    const { day, month, year, visible } = this.state;
 
     const startYear = minDate && minDate.getFullYear();
     const endYear = maxDate && maxDate.getFullYear();
@@ -53,8 +60,8 @@ export class DatePicker extends Component {
       <Group className={css.dateModal}>
         <Col xs={3}>
           <Select
-            name={'dateOfMonth'}
-            value={dateOfMonth}
+            name={'day'}
+            value={day}
             items={zDate.getDatesForMonth(month)}
             placeholder={'DD'}
             onChange={handleText} />
@@ -80,8 +87,8 @@ export class DatePicker extends Component {
 
     const footer = (
       <React.Fragment>
-        <SubmitButton onClick={this.confirm}>Confirm</SubmitButton>
-        <CancelButton onClick={this.close}>Close</CancelButton>
+        <SubmitButton onClick={this.confirmDateSelection}>Confirm</SubmitButton>
+        <CancelButton onClick={this.closeDateModal}>Close</CancelButton>
       </React.Fragment>
     );
 
@@ -95,7 +102,7 @@ export class DatePicker extends Component {
             name={'calendar-alt'}
             className={css.calendarIcon} />
           <TextInput
-            value={zDate.formatDate(date, withDayOfWeek) || ''}
+            value={date ? zDate.formatDate(date, withDayOfWeek) : null}
             placeholder={placeholderText}
             style={{textAlign: 'left'}}
             className={css.dateinput}
@@ -155,18 +162,22 @@ export class AuthoredDatePicker extends Component {
 }
 
 /**
- * 
- * @param {Date} date 
+ * Extract the day, month and year from a specified date.
+ * @param {Date} date - The specified date.
+ * @returns {object[]} The day, month and year.
  */
 const extractDates = (date) => {
-  let dateOfMonth, month, year;
+  let day, month, year;
 
   if (date !== null){
-    const day = date.getDay() + 1;
-    dateOfMonth = `${day}${zDate.getDateSuffix(day)}`;
-    month = zDate.getMonthByNumber(date.getMonth() + 1);
+    date = new Date(date);
+    const dayNum = date.getDate();
+    const monthNum = date.getMonth() + 1;
+
+    day = zDate.getDateAndSuffix(dayNum);
+    month = zDate.getMonthByNumber(monthNum);
     year = date.getFullYear();
   }
 
-  return { dateOfMonth, month, year };
+  return { day, month, year };
 }
