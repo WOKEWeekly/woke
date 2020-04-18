@@ -43,11 +43,10 @@ To run all of the service tests:
 
 1. Ensure you have a command prompt / terminal open at `woke/src`.
 
-2. Run the following command:
+2. Run the following command to run all of the service tests using Mocha and display the test results:
    ```
    npm run test
    ```
-   This should run all of the service tests using Mocha and display the test results.
 
    Alternatively, if you want to only run a single test suite, run the following command:
    ```
