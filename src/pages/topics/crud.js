@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import { zHandlers } from 'zavid-modules';
 
 import { setAlert } from '~/components/alert.js';
-import handlers from '~/constants/handlers.js';
 import request from '~/constants/request.js';
 import { isValidTopic } from '~/constants/validations.js';
 
