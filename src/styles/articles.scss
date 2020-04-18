@@ -41,14 +41,21 @@
   margin: 1em 0;
   .title { @include font-scaler(3); }
   .content { @include font-scaler(1.25); }
+  .authorThumbnail {
+    border-radius: 50%;
+    float: left;
+    margin-right: .7em;
+  }
   .image {
+    border-radius: 10px;
     margin: 1em 0;
     width: 100%;}
   .authorProfile {
-    .thumbnail {
-      border-radius: 50%;
-      float: left;
-      margin-right: 1em;
+    .author {
+      @include font-scaler(.8);
+      font-style: italic; }
+    .name {
+      @include font-scaler(1.1);
     }
     .description {
       @include font-scaler(1);
@@ -92,6 +99,7 @@
     .title { @include font-scaler(1.2); }
     .content { @include font-scaler(1); }
     .image {
+      border-radius: 10px;
       margin: 1em 0;
       width: 100%; }
     .details {

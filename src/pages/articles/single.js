@@ -69,9 +69,16 @@ class ArticlePage extends Component {
           determinant={isLoaded}
           duration={500}
           delay={500}>
+          {authorImage ?
+          <img
+            src={`${cloudinary.url}/w_42,h_42,c_scale/${authorImage}`}
+            alt={authorName}
+            className={css.authorThumbnail} /> : null}
           <Subtitle className={css.details}>
             Written by 
-            <a className={css.author} href={link}> {authorName}</a> {date && `• ${date}`}
+            <a className={css.author} href={link}> {authorName}</a>
+            <br/>
+            {date ? date : 'Unlisted'}
           </Subtitle>
         </Fader>
       );
@@ -115,9 +122,9 @@ class ArticlePage extends Component {
           <img
             src={`${cloudinary.url}/${cloudinary.thumbnail}/${authorImage}`}
             alt={authorName}
-            className={css.thumbnail} />
-          <Subtitle>Author</Subtitle>
-          <Title>{authorName}</Title>
+            className={css.authorThumbnail} />
+          <Subtitle className={css.author}>Author</Subtitle>
+          <Title className={css.name}>{authorName}</Title>
           <PromoIconsBar socials={authorSocials} />
           <Paragraph className={css.description}>{createExcerpt(authorDescription)}</Paragraph>
         </Fader>

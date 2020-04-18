@@ -27,7 +27,7 @@ class ArticleCrud extends Component {
       image: null,
       authorId: null,
       status: ARTICLE_STATUS.DRAFT,
-      datePublished: null,
+      datePublished: new Date(),
       tags: '',
 
       isCreateOperation: true
@@ -37,9 +37,11 @@ class ArticleCrud extends Component {
   componentDidMount(){
     const { article, operation } = this.props
     const tags = article && zString.convertArrayToCsv(JSON.parse(article.tags));
+    const datePublished = article.status !== ARTICLE_STATUS.PUBLISHED ? (new Date()) : article.datePublished;
     this.setState({
       ...article,
       tags,
+      datePublished,
       isCreateOperation: operation === OPERATIONS.CREATE
     });
   }
@@ -49,7 +51,7 @@ class ArticleCrud extends Component {
     const { operation } = this.props;
 
     // Only have published date if the status is published
-    const dateOfPublish = status !== ARTICLE_STATUS.PUBLISHED ? null : zDate.formatISODate(datePublished);
+    const date = status !== ARTICLE_STATUS.PUBLISHED ? null : zDate.formatISODate(datePublished);
 
     const article = {
       title: title.trim(), 
@@ -60,7 +62,7 @@ class ArticleCrud extends Component {
       image,
       authorId,
       status,
-      datePublished: dateOfPublish
+      datePublished: date
     };
 
     let data;
