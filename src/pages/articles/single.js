@@ -1,18 +1,18 @@
-import React, { Component} from 'react';
+import React, { Component, PureComponent } from 'react';
 import { Col, Row, Container } from 'react-bootstrap';
 import { connect } from 'react-redux';
+import { zDate } from 'zavid-modules';
 
 import { AdminButton, BackButton } from '~/components/button.js';
 import { PromoIconsBar } from '~/components/icon.js';
-import { Title, Subtitle, Paragraph, Divider, ReadMore, createExcerpt } from '~/components/text.js';
+import { Title, Subtitle, Paragraph, Divider, createExcerpt } from '~/components/text.js';
 import { BottomToolbar } from '~/components/toolbar.js';
 import { Partitioner, Shader, Spacer } from '~/components/layout.js';
+import { SocialMediaShareBlock } from '~/components/socialmedia.js';
 import { Fader, Slider } from '~/components/transitioner.js';
 
 import CLEARANCES from '~/constants/clearances.js';
 import { cloudinary } from '~/constants/settings.js';
-
-import { zDate } from 'zavid-modules';
 
 import css from '~/styles/articles.scss';
 
@@ -44,6 +44,8 @@ class ArticlePage extends Component {
     const { article, user } = this.props;
     const { authorName, authorImage, authorLevel, authorSlug, authorDescription, authorSocials, datePublished } = article;
     article.content = article.content.trim().length > 0 ? article.content : 'No content.';
+
+    const shareMessage = `"${article.title}" by ${authorName} on The #WOKEWeekly Blog`;
 
     const { isLoaded } = this.state;
 
@@ -116,6 +118,16 @@ class ArticlePage extends Component {
       )
     };
 
+    /** The block of tags */
+    const TagBlock = () => {
+      if (!article.tags) return null;
+      const tags = JSON.parse(article.tags).map((tag, idx) => {
+        return <Tag key={idx} idx={idx} word={tag} />;
+      });
+
+      return <div className={css.tagblock}>{tags}</div>
+    };
+
     /** The author profile */
     const AuthorProfile = () => {
       return (
@@ -147,6 +159,10 @@ class ArticlePage extends Component {
                   <BlogDetails/>
                   <CoverImage/>
                   <Content/>
+                  <TagBlock/>
+                  <SocialMediaShareBlock
+                    message={shareMessage}
+                    url={location.href} />
                   <Divider/>
                   <AuthorProfile/>
                 </Container>
@@ -170,6 +186,15 @@ class ArticlePage extends Component {
         </BottomToolbar>
       </Spacer>
     );
+  }
+}
+
+class Tag extends PureComponent {
+  render(){
+    const { word } = this.props;
+    return(
+      <span className={css.tag}>#{word.toUpperCase()}</span>
+    )
   }
 }
 

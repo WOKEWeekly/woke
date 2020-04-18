@@ -21,7 +21,7 @@ $secondary-border: 1px solid rgb(245, 222, 179);
 $underline: 1px solid $faded-white;
 
 $toolbar: rgba(0,0,0,.95);
-$navbar-height: 9vh;
+$navbar-height: 65px;
 
 /** Media queries */
 $break-sm: 576px; // Small devices (landscape phones)
@@ -124,15 +124,6 @@ $break-xxl: 1408px; // Extra large devices (large desktops)
     .description { @include font-scaler(1.2); }
   }
 }
-
-// @mixin responsive-grid {
-//   display: grid;
-//   grid-template-columns: repeat(6, calc(100% / 6));
-//   @media (max-width: $break-xl) { grid-template-columns: repeat(5, 20%); }
-//   @media (max-width: $break-lg) { grid-template-columns: repeat(4, 25%); }
-//   @media (max-width: $break-md) { grid-template-columns: repeat(3, calc(100% / 3)); }
-//   @media (max-width: $break-sm) { grid-template-columns: repeat(2, 50%); }
-// }
 
 @mixin responsive-grid($maxCol: 6) {
   display: grid;
