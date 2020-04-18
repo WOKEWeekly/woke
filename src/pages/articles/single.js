@@ -19,10 +19,15 @@ import css from '~/styles/articles.scss';
 import ArticleSidebar from './sidebar';
 
 class ArticlePage extends Component {
-  constructor(){
-    super();
+  constructor(props){
+    super(props);
     this.state = {
       isLoaded: false,
+    }
+
+    // TODO: Remove when finished
+    if (props.user.clearance < CLEARANCES.ACTIONS.CRUD_ARTICLES){
+      return location.href = '/';
     }
   }
 
