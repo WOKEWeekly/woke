@@ -37,7 +37,7 @@ This following instructions should help you get your development environment up 
 
 Before pushing your commits to this repository, especially after making changes to server-side code, you should ensure that all service tests pass. 
 
-The following instructions assume that you have at least fulfilled instructions 1 - 4 from the Development Environment Setup section.
+>The following instructions assume that you have at least fulfilled instructions 1 - 4 from the [Development Environment Setup](#development-environment-setup) section.
 
 To run all of the service tests:
 
