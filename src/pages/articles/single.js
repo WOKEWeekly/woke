@@ -3,7 +3,8 @@ import { Col, Row, Container } from 'react-bootstrap';
 import { connect } from 'react-redux';
 
 import { AdminButton, BackButton } from '~/components/button.js';
-import { Subtitle, Paragraph, Divider } from '~/components/text.js';
+import { PromoIconsBar } from '~/components/icon.js';
+import { Title, Subtitle, Paragraph, Divider, ReadMore, createExcerpt } from '~/components/text.js';
 import { BottomToolbar } from '~/components/toolbar.js';
 import { Partitioner, Shader, Spacer } from '~/components/layout.js';
 import { Fader, Slider } from '~/components/transitioner.js';
@@ -18,10 +19,15 @@ import css from '~/styles/articles.scss';
 import ArticleSidebar from './sidebar';
 
 class ArticlePage extends Component {
-  constructor(){
-    super();
+  constructor(props){
+    super(props);
     this.state = {
       isLoaded: false,
+    }
+
+    // TODO: Remove when finished
+    if (props.user.clearance < CLEARANCES.ACTIONS.CRUD_ARTICLES){
+      return location.href = '/';
     }
   }
 
@@ -36,6 +42,7 @@ class ArticlePage extends Component {
 
   render(){
     const { article, user } = this.props;
+    const { authorName, authorImage, authorLevel, authorSlug, authorDescription, authorSocials, datePublished } = article;
     article.content = article.content.trim().length > 0 ? article.content : 'No content.';
 
     const { isLoaded } = this.state;
@@ -53,7 +60,6 @@ class ArticlePage extends Component {
 
     /** The details of the blog */
     const BlogDetails = () => {
-      const { authorName, authorLevel, authorSlug, datePublished } = article;
       const date = datePublished && zDate.formatDate(datePublished, true);
       if (!authorName) return null;
 
@@ -68,9 +74,16 @@ class ArticlePage extends Component {
           determinant={isLoaded}
           duration={500}
           delay={500}>
+          {authorImage ?
+          <img
+            src={`${cloudinary.url}/w_42,h_42,c_scale/${authorImage}`}
+            alt={authorName}
+            className={css.authorThumbnail} /> : null}
           <Subtitle className={css.details}>
             Written by 
-            <a className={css.author} href={link}> {authorName}</a> {date && `• ${date}`}
+            <a className={css.author} href={link}> {authorName}</a>
+            <br/>
+            {date ? date : 'Unlisted'}
           </Subtitle>
         </Fader>
       );
@@ -103,6 +116,26 @@ class ArticlePage extends Component {
       )
     };
 
+    /** The author profile */
+    const AuthorProfile = () => {
+      return (
+        <Fader
+          determinant={isLoaded}
+          duration={500}
+          delay={1000}
+          className={css.authorProfile}>
+          <img
+            src={`${cloudinary.url}/${cloudinary.thumbnail}/${authorImage}`}
+            alt={authorName}
+            className={css.authorThumbnail} />
+          <Subtitle className={css.author}>Author</Subtitle>
+          <Title className={css.name}>{authorName}</Title>
+          <PromoIconsBar socials={authorSocials} />
+          <Paragraph className={css.description}>{createExcerpt(authorDescription)}</Paragraph>
+        </Fader>
+      )
+    };
+
     return (
       <Spacer>
         <Shader>
@@ -114,6 +147,8 @@ class ArticlePage extends Component {
                   <BlogDetails/>
                   <CoverImage/>
                   <Content/>
+                  <Divider/>
+                  <AuthorProfile/>
                 </Container>
               </Col>
               <Col md={4}>
