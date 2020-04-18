@@ -36,14 +36,16 @@ class ArticleCrud extends Component {
 
   componentDidMount(){
     const { article, operation } = this.props
-    const tags = article && zString.convertArrayToCsv(JSON.parse(article.tags));
-    const datePublished = article.status !== ARTICLE_STATUS.PUBLISHED ? (new Date()) : article.datePublished;
-    this.setState({
-      ...article,
-      tags,
-      datePublished,
-      isCreateOperation: operation === OPERATIONS.CREATE
-    });
+    if (article){
+      const tags = zString.convertArrayToCsv(JSON.parse(article.tags));
+      const datePublished = article.status !== ARTICLE_STATUS.PUBLISHED ? (new Date()) : article.datePublished;
+      this.setState({
+        ...article,
+        tags,
+        datePublished,
+        isCreateOperation: operation === OPERATIONS.CREATE
+      });
+    }
   }
 
   buildRequest = () => {
