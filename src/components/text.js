@@ -215,7 +215,7 @@ const applySubstitutions = (text, substitutions) => {
 /**
  * Truncate a piece of text to a certain number of words.
  * @param {string} text - The text to be truncated.
- * @param {int} [limit=45] - The number of words to be truncated to. Default value is 45.
+ * @param {int} [limit] - The number of words to be truncated to. Default value is 45.
  * @returns The truncated text.
  */
 export const truncateText = (text, limit = 45) => {
@@ -244,6 +244,36 @@ export const truncateText = (text, limit = 45) => {
   if (words.length <= limit) return text;
 
   return `${text}....`;
+}
+
+/**
+ * // TODO: Abstract this and other text functions into separate file.
+ * Create an excerpt from the description of a web page.
+ * @param {string} text - Piece of text to be served.
+ * @returns {string} The excerpt shown in previews.
+ */
+export const createExcerpt = (text) => {
+  if (!text) text = '';
+
+  const parts = text.split('\n').map(paragraph => {
+    if (paragraph.length === 0) return null;
+
+    switch (paragraph.charAt(0)){
+      case '*': return null;                    // For headings
+      case '>': return paragraph.substring(1);  // For subheadings
+      case ';': return null;                    // For images
+      case '•': return paragraph;               // For list items
+
+      // Normal paragraph text
+      default:
+        const linkRegex = new RegExp(/\<\[(.*?)\]\s(.*?)\>/g);  // Regular expression for links
+        const subRegex = new RegExp(/\<\$(.*?)\$\>/g);          // Regular expression for substitutions
+        return paragraph.replace(subRegex, null).replace(linkRegex, '$1');
+    }
+  });
+
+  text = parts.filter(e => e != null);
+  return text[0];
 }
 
 const mapStateToProps = state => ({

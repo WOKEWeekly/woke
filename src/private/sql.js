@@ -1,10 +1,12 @@
 const JOINS = {
   ARTICLES_MEMBERS: `CONCAT(members.firstname, ' ', members.lastname) AS authorName,
-    members.level AS authorLevel, members.slug AS authorSlug
+    members.level AS authorLevel, members.slug AS authorSlug, members.image AS authorImage,
+    members.description AS authorDescription, members.socials AS authorSocials
     FROM articles LEFT JOIN members ON articles.authorId=members.id`,
   CANDIDATES_MEMBERS: `CONCAT(members.firstname, ' ', members.lastname) AS authorName,
-  members.level AS authorLevel, members.slug AS authorSlug
-  FROM candidates LEFT JOIN members ON candidates.authorId=members.id`,
+    members.level AS authorLevel, members.slug AS authorSlug, members.image AS authorImage,
+    members.description AS authorDescription, members.socials AS authorSocials
+    FROM candidates LEFT JOIN members ON candidates.authorId=members.id`,
 };
 
 const ARTICLES = {

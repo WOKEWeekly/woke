@@ -40,10 +40,21 @@
 .container {
   margin: 1em 0;
   .title { @include font-scaler(3); }
-  .content { @include font-scaler(1.2); }
+  .content { @include font-scaler(1.25); }
   .image {
     margin: 1em 0;
     width: 100%;}
+  .authorProfile {
+    .thumbnail {
+      border-radius: 50%;
+      float: left;
+      margin-right: 1em;
+    }
+    .description {
+      @include font-scaler(1);
+      font-style: italic;
+    }
+  }
   .details {
     @include font-scaler(0.9);
     .author {

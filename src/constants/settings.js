@@ -37,6 +37,8 @@ module.exports = {
     /** Lazy transformations for wide images */
     lazy_wide: '/w_1280,h_720,c_fill',
 
+    thumbnail: 'w_96,h_96,c_scale',
+
     /** Base url for Cloudinary images */
     url: 'https://res.cloudinary.com/wokeweekly/image/upload',
   },
