@@ -1,6 +1,12 @@
 ## Development Environment Setup
 
-1. Request the `config.env` file from this repository's administrator and place it in the file as follows:
+This following instructions should help you get your development environment up and running so that you can make changes and test code locally.
+
+1. For starters, if you don't already have Node.js, download it from here: [https://nodejs.org/en/download/]
+
+2. Clone this repository into a folder on your computer. Preferably, the folder should be empty.
+
+3. Request the `config.env` file from #WOKEWeekly's Senior Developer and place it in your folder besides the cloned repository structure so that it looks something like the following:
 
     ```
     workspace
@@ -13,37 +19,38 @@
     └─── config.env
     ```
 
-2. Download Node.js via link: [https://nodejs.org/en/download/]
+    In the example above, `/workspace` is the name of the empty folder the repository was cloned into.
 
-3. Navigate to `/src` and run `npm install` to install `node_modules`.
+4. Open a command prompt / terminal and navigate to `woke/src`. Then run the following command to install this project's dependencies i.e. the `node_modules`:
+   ```sh
+   npm install
+   ```
 
-4. Run `npm run dev` to start the project in development mode.
+5. Run the following command to start the project in development mode:
+   ```sh
+   npm run dev
+   ```
 
-5. Browse `http://localhost:3000`.
+6. On any internet browser, go to `http://localhost:3000`. The website should be running in development mode.
 
----
-**VS Code**
+## Run Service Tests
 
-- **CTRL + J** shortcut for opening up terminal, the terminal is used to run commands.
+Before pushing your commits to this repository, especially after making changes to server-side code, you should ensure that all service tests pass. 
 
+The following instructions assume that you have at least fulfilled instructions 1 - 4 from the Development Environment Setup section.
 
-- **git checkout (name of branch you want to go to)**
+To run all of the service tests:
 
-- **git branch -D (name of branch to delete)** 
+1. Ensure you have a command prompt / terminal open at `woke/src`.
 
-- **git checkout -b (branch name)** = adding a branch 
+2. Run the following command:
+   ```
+   npm run test
+   ```
+   This should run all of the service tests using Mocha and display the test results.
 
-- **git add .** – prepares branch to be committed
-
-- **git commit -m “(caption/ explanation of what the commit is for)”**
-
-- **git push** - this command pushes the changes through to Github where you ‘pull request’ and the authorised user will approve/decline your request.
-
-- **git pull** - pulls through changes to VS Code
-
----
-
-**CTRL + K** , then **V** to preview Markdown.
-
-
-
+   Alternatively, if you want to only run a single test suite, run the following command:
+   ```
+   npm run test -- ./test/[test-filename].js
+   ```
+   Replace  `[test-filename]` with the name of the test suite file.
