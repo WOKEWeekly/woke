@@ -71,6 +71,20 @@
   }
 }
 
+.tagblock {
+  .tag {
+    @include font-scaler(0.8);
+    background: #ead9ff;
+    border-radius: 30px;
+    color: black;
+    display: inline-block;
+    line-height: 3;
+    font-family: $title-font;
+    margin: .2em;
+    padding: 0 1.2em;
+  }
+}
+
 /************
 *** admin.js
 *************/
