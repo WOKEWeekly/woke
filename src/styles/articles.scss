@@ -43,6 +43,10 @@
 *** single.js
 *************/
 
+.columnparts {
+  @media (max-width: $break-md) { padding: 0 !important; }
+}
+
 .container {
   margin: 1em 0;
   .title { @include font-scaler(3); }
@@ -74,10 +78,9 @@
 
 .tagblock {
   .tag {
-    @include font-scaler(0.8);
-    // background: #ead9ff;
+    @include font-scaler(0.7);
     background: rgb(255,255,255);
-    background: linear-gradient(180deg, rgba(255,255,255,1) 0%, rgba(208,173,255,1) 100%);
+    background: linear-gradient(180deg, rgba(255,255,255,1) 0%, rgba(230,212,255,1) 100%);
     border-radius: 30px;
     color: black;
     display: inline-block;

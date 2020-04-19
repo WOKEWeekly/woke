@@ -153,7 +153,7 @@ class ArticlePage extends Component {
         <Shader>
           <Partitioner>
             <Row>
-              <Col md={8}>
+              <Col md={8} className={css.columnparts}>
                 <Container className={css.container}>
                   <BlogTitle/>
                   <BlogDetails/>
@@ -167,7 +167,7 @@ class ArticlePage extends Component {
                   <AuthorProfile/>
                 </Container>
               </Col>
-              <Col md={4}>
+              <Col md={4} className={css.columnparts}>
                 <ArticleSidebar/>
               </Col>
             </Row>
