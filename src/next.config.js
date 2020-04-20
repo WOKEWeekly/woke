@@ -9,7 +9,6 @@ const server = require('./server.js')
 
 module.exports = withPlugins([
   [
-    withCss,
     {
       webpack: function(config) {
         config.devtool = 'cheap-module-source-map';
@@ -42,15 +41,5 @@ module.exports = withPlugins([
         return config
       },
     }
-  ],
-  [
-    withSass,
-    {
-      cssModules: true,
-      cssLoaderOptions: {
-        importLoaders: 1,
-        localIdentName: "[local]___[hash:base64:5]",
-      },
-    },
   ]
 ])
