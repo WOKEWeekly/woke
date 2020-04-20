@@ -1,6 +1,6 @@
 import React, { Component} from 'react';
 import classNames from 'classnames';
-import css from '~/styles/_components.scss';
+import css from '~/styles/components/Voter.module.scss';
 
 import { Mover } from '~/components/transitioner.js';
 

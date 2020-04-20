@@ -11,7 +11,8 @@
   .remember { @media (max-width: $break-md) { margin-top: 1em; } }
 }
 
-:global(.modal-dialog) { max-width: 500px !important; }
+// TODO: Removed :global
+.modal-dialog { max-width: 500px !important; }
 
 /******************************************
 *** signup.js

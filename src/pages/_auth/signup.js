@@ -13,7 +13,7 @@ import request from '~/constants/request.js';
 import { isValidSignup } from '~/constants/validations';
 import { TEST_USERS } from '~/test/configuration/data';
 
-import css from '~/styles/auth.scss';
+import css from '~/styles/Auth.module.scss';
 
 class Signup extends Component {
   constructor(props){

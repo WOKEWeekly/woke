@@ -14,7 +14,7 @@ import { Modal, ConfirmModal } from '~/components/modal.js';
 import CLEARANCES from '~/constants/clearances.js';
 import { isValidUsername, isValidPassword } from '~/constants/validations';
 import request from '~/constants/request.js';
-import css from '~/styles/auth.scss';
+import css from '~/styles/Auth.module.scss';
 
 class Account extends Component {
   static getInitialProps({query}) {

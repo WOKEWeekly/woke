@@ -1,0 +1,31 @@
+@import "../variables";
+
+.toolbar {
+  background-color: $toolbar;
+  height: 5vh;
+  padding: 1.5em 0;
+  position: -webkit-sticky;
+  position: sticky;
+  width: 100%;
+  z-index: 1;
+  .container {
+    align-items: center;
+    display: flex;
+    justify-content: space-between;
+    height: 100%;
+  }
+}
+
+.top_toolbar {
+  @extend .toolbar;
+  top: $navbar-height;
+  @media (max-width: $break-md) { top: 8vh; }
+}
+
+.bottom_toolbar {
+  @extend .toolbar;
+  bottom: 0%;
+  button, label {
+    @media (max-width: $break-md) { font-size: .8em !important; }
+  }
+}

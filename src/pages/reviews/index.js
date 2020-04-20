@@ -11,7 +11,7 @@ import request from '~/constants/request.js';
 
 import Review from '~/pages/reviews/unit.js';
 
-import css from '~/styles/home.scss';
+import css from '~/styles/pages/Home.module.scss';
 import '~/styles/_categories.scss';
 
 class ReviewsList extends Component {

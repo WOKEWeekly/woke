@@ -14,7 +14,7 @@ import CLEARANCES from '~/constants/clearances.js';
 import request from '~/constants/request.js';
 import { cloudinary } from '~/constants/settings.js';
 
-import css from '~/styles/articles.scss';
+import css from '~/styles/pages/Articles.module.scss';
 
 class BlogAdmin extends Component {
   constructor(props){

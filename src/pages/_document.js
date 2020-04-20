@@ -1,7 +1,6 @@
 import Document, { Html, Head, Main, NextScript } from 'next/document';
 import { cloudinary, domain } from '~/constants/settings.js';
 import { truncateText } from '~/components/text.js';
-import css from '~/styles/_partials.scss';
 
 export default class MyDocument extends Document {
   static async getInitialProps(ctx) {
@@ -18,6 +17,25 @@ export default class MyDocument extends Document {
         <body className={css.body}>
           <Main />
           <NextScript />
+          <style jsx>{`
+            background: {  
+              attachment: fixed;
+              color: black;
+              position: center;
+              repeat: no-repeat;
+              size: cover;
+            }
+            height: 100vh;
+            opacity: 0;
+            transition: opacity .8s;
+            -webkit-transition: opacity .8s;
+          
+            > div:first-child {
+              display: grid;
+              grid-template-rows: auto auto 1fr auto;
+              min-height: 100%;
+            }
+          `}</style>
         </body>
       </Html>
     );

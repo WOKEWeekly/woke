@@ -16,7 +16,7 @@ import { countriesToString } from '~/constants/countries.js';
 import CLEARANCES from '~/constants/clearances.js';
 import request from '~/constants/request.js';
 
-import css from '~/styles/team.scss';
+import css from '~/styles/pages/Members.module.scss';
 
 class Team extends Component {
   constructor(props){

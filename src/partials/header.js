@@ -12,7 +12,7 @@ import CLEARANCES from '~/constants/clearances.js';
 import { accounts, cloudinary } from '~/constants/settings.js';
 
 import Login from '~/pages/_auth/login';
-import css from '~/styles/_partials.scss';
+import css from '~/styles/Partials.module.scss';
 
 /** Little top bar for social media icons and account details */
 class PreNavbar extends Component {

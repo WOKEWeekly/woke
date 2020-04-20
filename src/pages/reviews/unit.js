@@ -14,7 +14,7 @@ import CLEARANCES from '~/constants/clearances.js';
 import request from '~/constants/request.js';
 import { cloudinary } from '~/constants/settings.js';
 
-import css from '~/styles/home.scss';
+import css from '~/styles/pages/Home.module.scss';
 
 class Review extends PureComponent {
   constructor(props){

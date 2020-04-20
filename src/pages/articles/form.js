@@ -12,7 +12,7 @@ import CLEARANCES from '~/constants/clearances.js';
 import request from '~/constants/request.js';
 import { ARTICLE_STATUS } from '~/constants/strings.js';
 
-import css from '~/styles/articles.scss';
+import css from '~/styles/pages/Articles.module.scss';
 
 class ArticleForm extends Component {
   constructor(props){

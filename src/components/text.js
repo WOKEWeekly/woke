@@ -5,7 +5,7 @@ import classNames from 'classnames';
 
 import { Icon } from '~/components/icon.js';
 import { cloudinary } from '~/constants/settings.js';
-import css from '~/styles/_components.scss';
+import css from '~/styles/components/Text.module.scss';
 
 export class Title extends Component {
   render(){

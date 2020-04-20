@@ -4,7 +4,7 @@ import { Fader } from '~/components/transitioner.js';
 import request from '~/constants/request.js';
 
 import Review from '~/pages/reviews/unit.js';
-import css from '~/styles/home.scss';
+import css from '~/styles/pages/Home.module.scss';
 import { ReadMore } from '../../components/text';
 
 export default class ReviewsPreview extends Component {

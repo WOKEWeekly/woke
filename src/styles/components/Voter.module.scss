@@ -1,0 +1,41 @@
+@import "../variables";
+
+.voter {
+  border-radius: 30px;
+  display: flex;
+  margin: 0 auto;
+  overflow: hidden;
+  min-height: 6em;
+  width: 100%;
+  .options {
+    @include font-scaler(1.4);
+    all: initial;
+    align-items: center;
+    color: white;
+    cursor: pointer;
+    display: flex;
+    font-family: $body-font;
+    justify-content: center;
+    padding: .5em;
+    user-select: none;
+    transition: all .3s;
+    text-align: center;
+    width: 50%;
+    &:focus { outline: none; }}
+  .yes {
+    @extend .options;
+    background-color: rgba(0, 128, 0, .4);
+    &:hover { background-color: rgba(0, 128, 0, .8); }}
+  .yesVoted {
+    @extend .options;
+    background-color: rgba(0, 128, 0, .8);
+    cursor: initial;}
+  .no {
+    @extend .options;
+    background-color: rgba(255, 0, 0, .4);
+    &:hover { background-color: rgba(255, 0, 0, .8) } }
+  .noVoted {
+    @extend .options;
+    background-color: rgba(255, 0, 0, .8);
+    cursor: initial; }
+}

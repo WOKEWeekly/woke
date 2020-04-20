@@ -9,7 +9,7 @@ import { Fader } from '~/components/transitioner.js';
 import { cloudinary } from '~/constants/settings.js';
 
 import CLEARANCES from '~/constants/clearances.js';
-import css from '~/styles/info.scss';
+import css from '~/styles/pages/Information.module.scss';
 
 class Variants extends Component {
   /** Retrieve information from server */

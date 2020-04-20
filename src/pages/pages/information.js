@@ -12,7 +12,7 @@ import { Fader } from '~/components/transitioner.js';
 import CLEARANCES from '~/constants/clearances.js';
 import { accounts, forms } from '~/constants/settings.js';
 
-import css from '~/styles/info.scss';
+import css from '~/styles/pages/Information.module.scss';
 
 
 class Info extends Component {

@@ -4,7 +4,7 @@ import {Col} from 'react-bootstrap';
 import { SubmitButton, CancelButton } from '~/components/button.js';
 import { Group, Select, TextInput } from '~/components/form.js';
 import { Modal } from '~/components/modal.js';
-import css from '~/styles/_components.scss';
+import css from '~/styles/components/Form.module.scss';
 import { Icon } from './icon';
 
 import { zDate, zHandlers } from 'zavid-modules';

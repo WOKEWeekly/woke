@@ -10,7 +10,7 @@ import { Shader } from '~/components/layout.js';
 import request from '~/constants/request.js';
 import { isValidPassword } from '~/constants/validations.js';
 
-import css from '~/styles/auth.scss';
+import css from '~/styles/Auth.module.scss';
 
 class ResetPassword extends Component {
   static async getInitialProps({ query }) {

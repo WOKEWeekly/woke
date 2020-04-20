@@ -12,7 +12,7 @@ import { cloudinary } from '~/constants/settings.js';
 
 import { zDate } from 'zavid-modules';
 
-import css from '~/styles/home.scss';
+import css from '~/styles/pages/Home.module.scss';
 
 class RandomCandidate extends Component {
   constructor(){

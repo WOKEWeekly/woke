@@ -10,7 +10,7 @@ import { Fader } from '~/components/transitioner.js';
 import request from '~/constants/request.js';
 import { cloudinary } from '~/constants/settings.js';
 
-import css from '~/styles/home.scss';
+import css from '~/styles/pages/Home.module.scss';
 
 export default class RandomMember extends Component{
   constructor(){

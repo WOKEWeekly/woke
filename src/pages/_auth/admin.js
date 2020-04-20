@@ -9,7 +9,7 @@ import { ConfirmModal } from '~/components/modal.js';
 
 import { domain } from '~/constants/settings.js';
 import request from '~/constants/request.js';
-import css from '~/styles/auth.scss';
+import css from '~/styles/Auth.module.scss';
 
 class Admin extends Component {
   constructor(props){

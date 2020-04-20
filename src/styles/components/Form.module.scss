@@ -1,0 +1,204 @@
+@import "../variables";
+@import "./Button.module.scss";
+
+.formHeading {
+  @extend .text;
+  font-size: 2.2em;
+  margin-bottom: .5em;
+  @media (max-width: $break-md) {
+    font-size: 1.8em;
+    text-align: center;
+  }
+}
+
+.group {
+  padding: .2em 0;
+  @media (max-width: $break-md) {
+    margin-bottom: 0 !important;
+    padding: 0;
+  }
+  .label {
+    color: white;
+    display: block;
+    font-family: $title-font;
+    font-size: 1.1em;
+  }
+  .input {
+    @extend .text;
+    background: none;
+    border: none;
+    border-radius: 0;
+    border-bottom: $underline;
+    font-size: 1.2em;
+    outline: none;
+    padding: .4em;
+    width: 100%;
+    @media (max-width: $break-md) { font-size: 1em; padding: .4em 0}
+  }
+  .textarea {
+    @extend .text;
+    border-bottom: $underline !important;
+    font-size: 1.2em;
+    padding: .4em;
+    @media (max-width: $break-md) { font-size: 1em; padding: .4em 0}
+  }
+  .wordcount {
+    color: $faded-white;
+    font-family: $title-font;
+    margin: 0;
+    text-align: right;
+    width: 100%;
+  }
+  .select {
+    @extend .input;
+    border-radius: 0;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    option {
+      background: $dark;
+    }
+  }
+  .checkbox {
+    @extend .text;
+    display: flex;
+    align-items: baseline;
+    .box {
+      margin-right: .5em;
+    }
+  }
+  .file {
+    border: 1px solid white;
+    border-radius: 8px;
+    display: flex;
+    overflow: hidden;
+    margin: 1em 0;
+    width: fit-content;
+    .file_button {
+      border: none;
+      border-radius: 8px;
+      color: white;
+      cursor: pointer;
+      font-family: $body-font;
+      padding: .7em 1.2em;
+      margin: 0;
+      transition-duration: .3s;
+      -webkit-transition-duration: .3s;
+      &-default {@extend .file_button, .submit-default; min-width: initial;}
+      &-blackex {@extend .file_button, .submit-blackex; min-width: initial;}
+      &-mental {@extend .file_button, .submit-mental; min-width: initial;} }
+    .file_input {
+      background: white !important;
+      font-family: $body-font;
+      padding: .5em .5em;
+    }
+    + .fileImage {
+      height: 50vh;
+      margin-top: 1em;
+      @media (max-width: $break-md) {
+        height: initial;
+        width: 100%;
+      }
+      img {
+        border: $secondary-border;
+        height: 100%;
+        @media (max-width: $break-md) {
+          height: initial;
+          width: 100%;
+        }
+      }
+    }
+  }
+
+  @media (max-width: $break-md) {
+    > div { margin: .8em 0; }
+  }
+}
+
+.searchContainer {
+  background: $dark;
+  border-radius: 30px;
+  padding: .3em .7em;
+  @media (max-width: $break-md) { width: 75%; }
+  .searchBar {
+    @extend .text;
+    background: none;
+    border: none;
+    min-width: 250px;
+    outline: none;
+    @media (max-width: $break-md) {
+      font-size: 1em;
+      min-width: initial;
+      width: 90%;
+    }
+  }
+}
+
+/******************************/
+/** datepicker ****************/
+/******************************/
+
+.datepicker {
+  all: initial;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  border-bottom: $underline;
+  padding: .2em 0;
+  .calendarIcon {
+    margin: 0 .2em 0 .4em !important;
+    @media (max-width: $break-md) { margin-right: .5em !important; }
+  }
+  .dateinput {
+    border: none !important;
+    cursor: pointer;
+  }
+}
+
+.dateModal {
+  justify-content: space-evenly;
+  padding: 2em;
+  select {
+    font-size: 1.4em !important;
+    @media (max-width: $break-md) { font-size: 1.2em !important; }}
+}
+
+/******************************/
+/** dropdown ******************/
+/******************************/
+
+.dropdown_menu {
+  background-color: $dark !important;
+  border-radius: 10px;
+  overflow: hidden;
+  width: max-content;
+  .dropdown_item { padding: 0.5em 1em; }
+  a { color: white; }
+}
+
+.filter_menu {
+  background-color: $dark !important;
+  border-radius: 10px;
+  padding: 1em !important;
+  overflow: hidden;
+  white-space: nowrap;
+  label {
+    align-items: baseline;
+    color: white;
+    display: flex;
+  }
+  input[type="checkbox"] {
+    margin-right: .5em;
+  }
+}
+
+/****************/
+/** rator *******/
+/****************/
+
+.starBar {
+  display: flex;
+  padding: 0.8em 0 0;
+  button { padding: 0; }
+  .starIcon { font-size: 1.6em; }
+}

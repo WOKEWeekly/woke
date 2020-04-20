@@ -10,7 +10,7 @@ import { Slider } from '~/components/transitioner.js';
 import request from '~/constants/request.js';
 import { cloudinary } from '~/constants/settings.js';
 
-import css from '~/styles/team.scss';
+import css from '~/styles/pages/Members.module.scss';
 import '~/styles/_categories.scss';
 
 export default class Executives extends Component {

@@ -13,7 +13,7 @@ import { Fader, Slider } from '~/components/transitioner.js';
 import CLEARANCES from '~/constants/clearances.js';
 import { countriesToString } from '~/constants/countries.js';
 import { cloudinary } from '~/constants/settings.js';
-import css from '~/styles/team.scss';
+import css from '~/styles/pages/Members.module.scss';
 
 class MemberPage extends Component {
 

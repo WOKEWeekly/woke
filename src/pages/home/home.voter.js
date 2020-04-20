@@ -8,7 +8,7 @@ import { Voter } from '~/components/voter.js';
 
 import request from '~/constants/request.js';
 
-import css from '~/styles/home.scss';
+import css from '~/styles/pages/Home.module.scss';
 
 export default class TopicVoter extends Component {
   constructor(){

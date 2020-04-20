@@ -16,7 +16,7 @@ import CLEARANCES from '~/constants/clearances.js';
 import request from '~/constants/request.js';
 import { cloudinary } from '~/constants/settings.js';
 
-import css from '~/styles/sessions.scss';
+import css from '~/styles/pages/Sessions.module.scss';
 
 class SessionPage extends Component {
   constructor(){

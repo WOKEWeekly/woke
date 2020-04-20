@@ -1,6 +1,6 @@
 import { toast, cssTransition } from 'react-toastify';
 import classNames from 'classnames';
-import css from '~/styles/_components.scss';
+import css from '~/styles/components/Alert.module.scss';
 
 const animation = cssTransition({
   enter: css.fadeIn,

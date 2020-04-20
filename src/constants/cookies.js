@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { alert } from '~/components/alert.js';
 import { Icon } from '~/components/icon';
 import { Fader } from '~/components/transitioner.js';
-import css from '~/styles/_components.scss';
+import css from '~/styles/components/Alert.module.scss';
 
 export class CookiePrompt extends Component {
   constructor(){

@@ -14,7 +14,7 @@ import { Fader, Slider } from '~/components/transitioner.js';
 import CLEARANCES from '~/constants/clearances.js';
 import { cloudinary } from '~/constants/settings.js';
 
-import css from '~/styles/articles.scss';
+import css from '~/styles/pages/Articles.module.scss';
 
 import ArticleSidebar from './sidebar';
 

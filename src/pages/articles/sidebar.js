@@ -10,7 +10,7 @@ import { Zoomer } from '~/components/transitioner.js';
 import request from '~/constants/request.js';
 import { cloudinary } from '~/constants/settings.js';
 
-import css from '~/styles/articles.scss';
+import css from '~/styles/pages/Articles.module.scss';
 
 export default class ArticleSidebar extends Component {
   constructor(){
