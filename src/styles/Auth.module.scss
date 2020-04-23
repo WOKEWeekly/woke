@@ -1,4 +1,4 @@
-@import "variables";
+@import "Variables";
 
 /******************************************
 *** login.js
@@ -10,9 +10,6 @@
   .group { @media (max-width: $break-md) { padding: .5em 0; } }
   .remember { @media (max-width: $break-md) { margin-top: 1em; } }
 }
-
-// TODO: Removed :global
-.modal-dialog { max-width: 500px !important; }
 
 /******************************************
 *** signup.js

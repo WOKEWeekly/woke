@@ -1,6 +1,6 @@
 
-@import "_variables.scss";
-@import "./components/Button.module.scss";
+@import "../Variables";
+@import "../components/Button.module.scss";
 
 .container {
   @extend .responsive-container;

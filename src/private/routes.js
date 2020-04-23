@@ -612,7 +612,7 @@ const renderPage = (
       if (err) return renderErrorPage(req, res, err, server);
       if (!page) return renderErrorPage(req, res, ERROR.NONEXISTENT_ENTITY(ENTITY.PAGE), server);
   
-      const { name, title, includeDomain, text, excerpt, cardImage, backgroundImage,
+      const { name, title, includeDomain, text, excerpt, cardImage, bgImage,
         coverImage, coverImageLogo, coverImageAlt, theme,
         editTitle, editPlaceholderText } = page;
 
@@ -628,7 +628,7 @@ const renderPage = (
           description: excerpt || createExcerpt(text),
           url: `/${name}`,
           cardImage: cardImage || 'public/bg/card-home.jpg',
-          backgroundImage: backgroundImage || 'bg-app.jpg',
+          backgroundImage: bgImage || 'bg-app.jpg',
           coverImage: coverImage,
           imageLogo: coverImageLogo,
           imageAlt: coverImageAlt,
@@ -640,7 +640,7 @@ const renderPage = (
           pageName: name,
           pageText: text,
           title: editTitle,
-          backgroundImage: backgroundImage || 'bg-app.jpg',
+          backgroundImage: bgImage || 'bg-app.jpg',
           placeholderText: editPlaceholderText,
           theme: theme || PAGE.THEMES.DEFAULT
         }

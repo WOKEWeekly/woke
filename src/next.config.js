@@ -1,7 +1,5 @@
 require('dotenv').config()
 
-const withSass = require("@zeit/next-sass");
-const withCss = require("@zeit/next-css");
 const withPlugins = require("next-compose-plugins");
 
 const DotEnv = require('dotenv-webpack');
@@ -11,7 +9,7 @@ module.exports = withPlugins([
   [
     {
       webpack: function(config) {
-        config.devtool = 'cheap-module-source-map';
+        // config.devtool = 'cheap-module-source-map';
         config.node = {
           fs: 'empty',
           child_process: 'empty',

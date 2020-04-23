@@ -209,7 +209,7 @@ class Session extends PureComponent {
                   <Divider />
                   <Paragraph
                     className={css.description}
-                    more={true}>
+                    moreText={'Read more'}>
                     {truncateText(item.description, 60)}
                   </Paragraph>
                 </div>

@@ -1,23 +1,8 @@
-@import "../variables";
+@import "../Variables";
 
 .modal_header, .modal_body, .modal_footer { background: $dark; }
 .modal_body, .modal_footer { border: none !important; }
 .modal_footer { padding-top: 0 !important; }
-
-// TODO: Removed :global
-
-.modal-dialog {
-  max-width: 600px !important;
-}
-.modal-open {
-  padding: 0 !important;
-  overflow-y: auto
-}
-.modal-content {
-  border: 1px solid $faded-white !important;
-  border-radius: 15px !important;
-  overflow: hidden;
-}
 
 .social_fields {
   display: flex;

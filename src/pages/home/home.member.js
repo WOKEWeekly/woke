@@ -79,7 +79,7 @@ export default class RandomMember extends Component{
                     <Divider/>
                     <Paragraph
                       link={link}
-                      more={`Read more on ${member.firstname}`}
+                      moreText={`Read more on ${member.firstname}`}
                       className={css.paragraph}>{truncateText(member.description)}</Paragraph>
                   </div>
                 </Col>

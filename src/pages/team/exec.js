@@ -7,41 +7,24 @@ import { Loader, Empty } from '~/components/loader.js';
 import { Title, Subtitle, Divider, Paragraph, truncateText } from '~/components/text.js';
 import { Slider } from '~/components/transitioner.js';
 
+import fetch from 'node-fetch';
+
 import request from '~/constants/request.js';
 import { cloudinary } from '~/constants/settings.js';
 
 import css from '~/styles/pages/Members.module.scss';
-import '~/styles/_categories.scss';
 
-export default class Executives extends Component {
+class Executives extends Component {
   constructor(){
     super();
     this.state = {
-      exec: [],
-      isLoaded: false
+      isLoaded: true
     };
   }
 
-  componentDidMount(){
-    this.getExec();
-  }
-
-  getExec = () => {
-    request({
-      url: '/api/v1/members/executives',
-      method: 'GET',
-      headers: { 'Authorization': process.env.AUTH_KEY },
-      onSuccess: (exec) => {
-        this.setState({
-          exec: exec,
-          isLoaded: true
-        });
-      }
-    });
-  }
-
   render(){
-    const { exec, isLoaded } = this.state;
+    const { isLoaded } = this.state;
+    const { exec } = this.props;
 
     const heading = 'Meet The Executives';
     const description = 'The masterminds behind the cause.';
@@ -96,14 +79,16 @@ class Exec extends PureComponent {
 
     const isEven = (idx % 2 == 0);
 
+    const link = `/executives/${item.slug}`;
+
     return (
       <Slider
         key={idx}
-        determinant={this.state.isLoaded}
+        determinant={true}
         duration={750}
         delay={1000 + (500 * idx)}
         direction={isEven ? 'left' : 'right'}>
-        <Link href={`/executives/${item.slug}`}>
+        <Link href={link}>
           <div className={css.item}>
             <Row>
               <Col md={{span: 4, order: isEven ? 1 : 2}}>
@@ -119,7 +104,8 @@ class Exec extends PureComponent {
                   <Divider />
                   <Paragraph
                     className={css.paragraph}
-                    more={`More on ${item.firstname}`}>
+                    link={link}
+                    moreText={`More on ${item.firstname}`}>
                     {truncateText(item.description, 60)}
                   </Paragraph>
                 </div>
@@ -131,3 +117,16 @@ class Exec extends PureComponent {
     );
   }
 }
+
+export async function getServerSideProps(){
+  const response = await fetch("http://localhost:3000/api/v1/members/executives", { headers: { 'Authorization': process.env.AUTH_KEY }});
+  const data = await response.json();
+
+  return {
+    props: {
+      exec: data
+    }
+  }
+}
+
+export default Executives;

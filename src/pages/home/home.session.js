@@ -67,7 +67,7 @@ export default class UpcomingSession extends Component {
                 <Divider/>
                 <Paragraph
                   link={link}
-                  more={'Find out more'}
+                  moreText={'Find out more'}
                   className={css.paragraph}>{truncateText(session.description)}</Paragraph>
               </div>
             </div>

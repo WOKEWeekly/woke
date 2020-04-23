@@ -17,6 +17,8 @@ import { saveCountries, setTheme } from '~/reducers/actions';
 import { PreNavBar, MainNavBar } from "~/partials/header.js";
 import Footer from "~/partials/footer.js";
 
+import '~/styles/App.scss';
+import '~/styles/Categories.scss';
 import 'react-toastify/dist/ReactToastify.min.css';
 
 library.add(fab, far, fas);

@@ -35,11 +35,17 @@ export class Subtitle extends Component {
 
 export class IParagraph extends Component {
   render(){
-    let { children = '', substitutions, theme, link, more } = this.props;
+    let { children = '', substitutions, theme, link, moreText } = this.props;
     const classes = classNames(css.paragraph, this.props.className);
 
 	  children = applySubstitutions(children, substitutions);
     children = prefixFormatting(children, css[`link-${theme.toLowerCase()}`]);
+
+    const ReadMoreLabel = () => {
+      if (!moreText) return null;
+      if (moreText === true) moreText = null;
+      return <ReadMore link={link} text={moreText} />;
+    }
 
     return (
       <React.Fragment>
@@ -48,7 +54,7 @@ export class IParagraph extends Component {
           className={classes}>
           {children}
         </pre>
-        {more ? <ReadMore link={link} text={more === true ? null : more} /> : null}
+        <ReadMoreLabel/>
       </React.Fragment>
     )
   }
@@ -76,9 +82,9 @@ export class Divider extends Component {
 
 export class ReadMore extends Component {
   render(){
-    const text = this.props.text || 'Read more';
+    const { link, text = 'Read more' } = this.props;
     return (
-      <Link href={this.props.link}>
+      <Link href={link}>
         <div className={css.readmore}>
           <Icon name={'external-link-alt'} className={css.linkIcon} />{text}
         </div>
@@ -219,7 +225,7 @@ const applySubstitutions = (text, substitutions) => {
  * @returns The truncated text.
  */
 export const truncateText = (text, limit = 45) => {
-  if (!text) text = '';
+  if (!text) return '';
 
   const parts = text.split(' ').map(paragraph => {
     if (paragraph.length === 0) return null;

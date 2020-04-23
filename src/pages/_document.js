@@ -14,28 +14,9 @@ export default class MyDocument extends Document {
     return (
       <Html>
         <Head><Meta {...query}/></Head>
-        <body className={css.body}>
+        <body className={"body"}>
           <Main />
           <NextScript />
-          <style jsx>{`
-            background: {  
-              attachment: fixed;
-              color: black;
-              position: center;
-              repeat: no-repeat;
-              size: cover;
-            }
-            height: 100vh;
-            opacity: 0;
-            transition: opacity .8s;
-            -webkit-transition: opacity .8s;
-          
-            > div:first-child {
-              display: grid;
-              grid-template-rows: auto auto 1fr auto;
-              min-height: 100%;
-            }
-          `}</style>
         </body>
       </Html>
     );
