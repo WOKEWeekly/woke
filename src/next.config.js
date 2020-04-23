@@ -1,3 +1,5 @@
+require('dotenv').config()
+
 const DotEnv = require('dotenv-webpack');
 const server = require('./server.js')
 
@@ -30,5 +32,5 @@ module.exports = {
     ];
 
     return config
-  }
+  },
 }
