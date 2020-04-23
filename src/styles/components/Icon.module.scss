@@ -44,3 +44,11 @@
   &-blackex { @extend .socials; a { @extend .link-blackex; } }
   &-mental { @extend .socials; a { @extend .link-mental; } }
 }
+
+/** Social Media Share Block **/
+.smshareblock {
+  margin: 1.5em 0;
+  button {
+    margin-right: .2em;
+  }
+}
