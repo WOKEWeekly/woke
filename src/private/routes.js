@@ -9,7 +9,7 @@ const { renderErrorPage } = require('./response.js');
 const SQL = require('./sql.js');
 
 const { accounts, cloudinary, domain, forms, siteDescription } = require('../constants/settings.js');
-const { OPERATIONS, PAGE } = require('../constants/strings.js');
+const { ENTITY, OPERATIONS, PAGE } = require('../constants/strings.js');
 
 let exigencies = {};
 
@@ -214,7 +214,7 @@ module.exports = function(app, conn, server){
     
     conn.query(sql, [slug], function (err, [exec] = []) {
       if (err) return renderErrorPage(req, res, err, server);
-      if (!exec) return renderErrorPage(req, res, ERROR.NONEXISTENT_MEMBER(true), server);
+      if (!exec) return renderErrorPage(req, res, ERROR.NONEXISTENT_ENTITY(ENTITY.MEMBER), server);
       
       return server.render(req, res, '/team/single', {
         title: `${exec.firstname} ${exec.lastname} | #WOKEWeekly`,
@@ -242,7 +242,7 @@ module.exports = function(app, conn, server){
     
     conn.query(sql, slug, function (err, [member] = []) {
       if (err) return renderErrorPage(req, res, err, server);
-      if (!member) return renderErrorPage(req, res, ERROR.NONEXISTENT_MEMBER(false), server);
+      if (!member) return renderErrorPage(req, res, ERROR.NONEXISTENT_ENTITY(ENTITY.MEMBER), server);
 
       return server.render(req, res, '/team/single', { 
         title: `${member.firstname} ${member.lastname} | #WOKEWeekly`,
@@ -272,7 +272,7 @@ module.exports = function(app, conn, server){
     
     conn.query(sql, id, function (err, [member] = []) {
       if (err) return renderErrorPage(req, res, err, server);
-      if (!member) return renderErrorPage(req, res, ERROR.NONEXISTENT_MEMBER(false), server);
+      if (!member) return renderErrorPage(req, res, ERROR.NONEXISTENT_ENTITY(ENTITY.MEMBER), server);
 
       return server.render(req, res, '/team/crud', { 
         title: 'Edit Team Member',
