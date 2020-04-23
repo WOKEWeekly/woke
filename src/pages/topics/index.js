@@ -21,8 +21,7 @@ import CATEGORIES from '~/constants/categories.js';
 import CLEARANCES from '~/constants/clearances.js';
 import request from '~/constants/request.js';
 
-import css from '~/styles/topics.scss';
-import '~/styles/_categories.scss';
+import css from '~/styles/pages/Topics.module.scss';
 
 const { categories, types, polarity, misc } = CATEGORIES;
 

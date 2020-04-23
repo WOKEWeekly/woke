@@ -7,7 +7,7 @@ import { Icon } from '~/components/icon.js';
 import { Fader, Zoomer } from '~/components/transitioner.js';
 import { cloudinary } from '~/constants/settings.js';
 
-import css from '~/styles/_components.scss';
+import css from '~/styles/components/Form.module.scss';
 import { zForm } from 'zavid-modules';
 
 /** For the form heading */

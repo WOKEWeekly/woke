@@ -7,7 +7,7 @@ import { SubmitButton, CancelButton, DeleteButton } from '~/components/button.js
 import { Group, Label, Select, UsernameInput } from '~/components/form.js';
 import { SocialIcon } from '~/components/icon.js';
 import { Paragraph } from '~/components/text.js';
-import css from '~/styles/_components.scss';
+import css from '~/styles/components/Modal.module.scss';
 
 import { socialPlatforms } from '~/constants/settings';
 

@@ -575,8 +575,6 @@ module.exports = function(app, conn){
     const id = req.params.id;
     const { article, changed } = req.body;
 
-    console.log(article);
-
     async.waterfall([
       function(callback){ // Delete old image if changed.
         conn.query(SQL.ARTICLES.READ.SINGLE('id', 'image'), id, function (err, [article] = []) {

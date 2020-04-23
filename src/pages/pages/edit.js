@@ -9,7 +9,7 @@ import { Shader, Spacer } from '~/components/layout.js';
 
 import CLEARANCES from '~/constants/clearances.js';
 import request from '~/constants/request.js';
-import css from '~/styles/info.scss';
+import css from '~/styles/pages/Information.module.scss';
 
 class EditPage extends Component {
   /** Retrieve informaiton from server */

@@ -6,7 +6,7 @@ import { Divider } from '~/components/text.js';
 
 import { accounts, emails } from '~/constants/settings.js';
 
-import css from '~/styles/_partials.scss';
+import css from '~/styles/Partials.module.scss';
 
 export default class Footer extends Component {
   constructor(){

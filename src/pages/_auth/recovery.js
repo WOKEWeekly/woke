@@ -9,7 +9,7 @@ import { Shader } from '~/components/layout.js';
 import request from '~/constants/request.js';
 import { isValidEmail } from '~/constants/validations.js';
 
-import css from '~/styles/auth.scss';
+import css from '~/styles/Auth.module.scss';
 
 class Recovery extends Component {
   constructor(props){

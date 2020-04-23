@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Dropdown } from 'react-bootstrap';
 
-import css from '~/styles/_components.scss';
+import css from '~/styles/components/Form.module.scss';
 import { Icon } from '~/components/icon.js';
 
 import { zIndices } from './layout';

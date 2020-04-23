@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import Responsive from 'react-responsive';
 import {Container} from 'react-bootstrap';
 import classNames from 'classnames';
-import css from '~/styles/_components.scss';
+import css from '~/styles/components/Layout.module.scss';
 import { Fader } from '~/components/transitioner.js';
 import { cloudinary } from '~/constants/settings.js';
 

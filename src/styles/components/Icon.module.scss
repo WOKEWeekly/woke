@@ -1,0 +1,46 @@
+@import "../Variables";
+
+.socialIcon {
+  &-default { color: $primary; }
+  &-blackex { color: $blackex; }
+  &-mental { color: $mental; }
+}
+
+.header_socials {
+  font-size: 1.5em;
+  margin: 0 .1em;
+  @media (max-width: $break-md) {
+    font-size: 1.3em; }
+}
+
+.footer_socials {
+  @include scale-on-hover(1.1);
+  background-color: black;
+  border-radius: 30px;
+  display: inline-block;
+  padding: 1em 0;
+  text-align: center;
+  width: 5.5em;
+}
+
+.promo_bar {
+  .promo_socials {
+    font-size: 1.2em;
+    margin: .2em;
+  }
+}
+
+.socials {
+  color: #8E8E8E;
+  font-family: $title-font;
+  word-break: break-all;
+  a {
+    font-family: $body-font;
+    font-weight: bold;
+    margin-left: .5em;
+  }
+
+  &-default { @extend .socials; a { @extend .link-default; } }
+  &-blackex { @extend .socials; a { @extend .link-blackex; } }
+  &-mental { @extend .socials; a { @extend .link-mental; } }
+}

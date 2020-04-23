@@ -2,11 +2,16 @@ import React, { Component} from 'react';
 import { Title } from './text';
 import { FacebookShareButton, TwitterShareButton, WhatsappShareButton, LinkedinShareButton,
   FacebookIcon, TwitterIcon, LinkedinIcon, WhatsappIcon } from 'react-share';
-import css from '~/styles/_components.scss'
 
 export class SocialMediaShareBlock extends Component {
   render(){
     const { message, url } = this.props;
+
+    const css = {
+      smshareblock: { margin: '1.5em 0' },
+      button
+    } 
+
     return (
       <div className={css.smshareblock}>
         <Title>Share This Post:</Title>
@@ -16,6 +21,14 @@ export class SocialMediaShareBlock extends Component {
           <ShareLinkedin message={message} url={url} />
           <ShareWhatsapp message={message} url={url} />
         </div>
+        <style jsx>{`
+          .smshareblock {
+            margin: 1.5em 0;
+            button {
+              margin-right: .2em;
+            }
+          }
+        `}</style>
       </div>
     )
   }

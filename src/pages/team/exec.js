@@ -10,8 +10,7 @@ import { Slider } from '~/components/transitioner.js';
 import request from '~/constants/request.js';
 import { cloudinary } from '~/constants/settings.js';
 
-import css from '~/styles/team.scss';
-import '~/styles/_categories.scss';
+import css from '~/styles/pages/Members.module.scss';
 
 export default class Executives extends Component {
   constructor(){
@@ -96,6 +95,8 @@ class Exec extends PureComponent {
 
     const isEven = (idx % 2 == 0);
 
+    const link = `/executives/${item.slug}`;
+
     return (
       <Slider
         key={idx}
@@ -103,7 +104,7 @@ class Exec extends PureComponent {
         duration={750}
         delay={1000 + (500 * idx)}
         direction={isEven ? 'left' : 'right'}>
-        <Link href={`/executives/${item.slug}`}>
+        <Link href={link}>
           <div className={css.item}>
             <Row>
               <Col md={{span: 4, order: isEven ? 1 : 2}}>
@@ -119,7 +120,8 @@ class Exec extends PureComponent {
                   <Divider />
                   <Paragraph
                     className={css.paragraph}
-                    more={`More on ${item.firstname}`}>
+                    link={link}
+                    moretext={`More on ${item.firstname}`}>
                     {truncateText(item.description, 60)}
                   </Paragraph>
                 </div>

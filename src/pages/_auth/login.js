@@ -11,7 +11,7 @@ import { Modal } from '~/components/modal.js';
 import { setCookie, getCookie } from '~/constants/cookies';
 import request from '~/constants/request.js';
 import { isValidLogin } from '~/constants/validations.js';
-import css from '~/styles/auth.scss';
+import css from '~/styles/Auth.module.scss';
 
 class LoginModal extends Component {
   constructor(props){

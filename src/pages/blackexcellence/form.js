@@ -13,7 +13,7 @@ import { countriesToString } from '~/constants/countries.js';
 import CLEARANCES from '~/constants/clearances.js';
 import request from '~/constants/request.js';
 
-import css from '~/styles/blackex.scss';
+import css from '~/styles/pages/Candidates.module.scss';
 
 class CandidateForm extends Component {
   constructor(props){

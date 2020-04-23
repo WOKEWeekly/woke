@@ -10,7 +10,7 @@ import {categories} from '~/constants/categories.js';
 import CLEARANCES from '~/constants/clearances.js';
 
 
-import css from '~/styles/topics.scss'
+import css from '~/styles/pages/Topics.module.scss'
 
 class TopicForm extends Component {
   constructor(props){

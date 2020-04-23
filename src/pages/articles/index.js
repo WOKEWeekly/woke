@@ -15,7 +15,7 @@ import { cloudinary } from '~/constants/settings.js';
 
 import { zDate } from 'zavid-modules';
 
-import css from '~/styles/articles.scss';
+import css from '~/styles/pages/Articles.module.scss';
 
 class Blog extends Component {
   constructor(props){

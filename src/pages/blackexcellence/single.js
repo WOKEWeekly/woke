@@ -16,7 +16,7 @@ import { countriesToString } from '~/constants/countries.js';
 import request from '~/constants/request.js';
 import { cloudinary } from '~/constants/settings.js';
 
-import css from '~/styles/blackex.scss';
+import css from '~/styles/pages/Candidates.module.scss';
 
 import { zDate } from 'zavid-modules';
 

@@ -15,8 +15,7 @@ import CLEARANCES from '~/constants/clearances.js';
 import request from '~/constants/request.js';
 import { cloudinary } from '~/constants/settings.js';
 
-import css from '~/styles/blackex.scss';
-import '~/styles/_categories.scss';
+import css from '~/styles/pages/Candidates.module.scss';
 
 
 class BlackExcellence extends Component {

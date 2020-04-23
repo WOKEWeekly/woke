@@ -12,7 +12,7 @@ import { cloudinary } from '~/constants/settings.js';
 
 import { zDate } from 'zavid-modules';
 
-import css from '~/styles/home.scss';
+import css from '~/styles/pages/Home.module.scss';
 
 class RandomCandidate extends Component {
   constructor(){
@@ -80,7 +80,7 @@ class RandomCandidate extends Component {
                 <Divider/>
                 <Paragraph
                   link={link}
-                  more={`Discover more on ${candidate.firstname}`}
+                  moretext={`Discover more on ${candidate.firstname}`}
                   className={css.paragraph}>{truncateText(candidate.description)}</Paragraph>
               </div>
             </div>

@@ -7,7 +7,7 @@ import { Paragraph } from '~/components/text.js';
 import { Fader } from '~/components/transitioner.js';
 import { cloudinary } from '~/constants/settings.js';
 
-import css from '~/styles/home.scss';
+import css from '~/styles/pages/Home.module.scss';
 
 const ThreePart = React.lazy(() => import('./home.advertiser'));
 const ReviewsPreview = React.lazy(() => import('./home.reviews'));

@@ -19,7 +19,7 @@ import CLEARANCES from '~/constants/clearances.js';
 import request from '~/constants/request.js';
 import { cloudinary } from '~/constants/settings.js';
 
-import css from '~/styles/sessions.scss';
+import css from '~/styles/pages/Sessions.module.scss';
 
 
 class Sessions extends Component {
@@ -209,7 +209,7 @@ class Session extends PureComponent {
                   <Divider />
                   <Paragraph
                     className={css.description}
-                    more={true}>
+                    moretext={'Read more'}>
                     {truncateText(item.description, 60)}
                   </Paragraph>
                 </div>

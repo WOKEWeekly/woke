@@ -1,7 +1,6 @@
 import Document, { Html, Head, Main, NextScript } from 'next/document';
 import { cloudinary, domain } from '~/constants/settings.js';
 import { truncateText } from '~/components/text.js';
-import css from '~/styles/_partials.scss';
 
 export default class MyDocument extends Document {
   static async getInitialProps(ctx) {
@@ -15,7 +14,7 @@ export default class MyDocument extends Document {
     return (
       <Html>
         <Head><Meta {...query}/></Head>
-        <body className={css.body}>
+        <body className={"body"}>
           <Main />
           <NextScript />
         </body>
