@@ -80,7 +80,7 @@ class RandomCandidate extends Component {
                 <Divider/>
                 <Paragraph
                   link={link}
-                  moreText={`Discover more on ${candidate.firstname}`}
+                  moretext={`Discover more on ${candidate.firstname}`}
                   className={css.paragraph}>{truncateText(candidate.description)}</Paragraph>
               </div>
             </div>

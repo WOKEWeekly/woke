@@ -7,24 +7,40 @@ import { Loader, Empty } from '~/components/loader.js';
 import { Title, Subtitle, Divider, Paragraph, truncateText } from '~/components/text.js';
 import { Slider } from '~/components/transitioner.js';
 
-import fetch from 'node-fetch';
-
 import request from '~/constants/request.js';
 import { cloudinary } from '~/constants/settings.js';
 
 import css from '~/styles/pages/Members.module.scss';
 
-class Executives extends Component {
+export default class Executives extends Component {
   constructor(){
     super();
     this.state = {
-      isLoaded: true
+      exec: [],
+      isLoaded: false
     };
   }
 
+  componentDidMount(){
+    this.getExec();
+  }
+
+  getExec = () => {
+    request({
+      url: '/api/v1/members/executives',
+      method: 'GET',
+      headers: { 'Authorization': process.env.AUTH_KEY },
+      onSuccess: (exec) => {
+        this.setState({
+          exec: exec,
+          isLoaded: true
+        });
+      }
+    });
+  }
+
   render(){
-    const { isLoaded } = this.state;
-    const { exec } = this.props;
+    const { exec, isLoaded } = this.state;
 
     const heading = 'Meet The Executives';
     const description = 'The masterminds behind the cause.';
@@ -84,7 +100,7 @@ class Exec extends PureComponent {
     return (
       <Slider
         key={idx}
-        determinant={true}
+        determinant={this.state.isLoaded}
         duration={750}
         delay={1000 + (500 * idx)}
         direction={isEven ? 'left' : 'right'}>
@@ -105,7 +121,7 @@ class Exec extends PureComponent {
                   <Paragraph
                     className={css.paragraph}
                     link={link}
-                    moreText={`More on ${item.firstname}`}>
+                    moretext={`More on ${item.firstname}`}>
                     {truncateText(item.description, 60)}
                   </Paragraph>
                 </div>
@@ -117,16 +133,3 @@ class Exec extends PureComponent {
     );
   }
 }
-
-export async function getServerSideProps(){
-  const response = await fetch("http://localhost:3000/api/v1/members/executives", { headers: { 'Authorization': process.env.AUTH_KEY }});
-  const data = await response.json();
-
-  return {
-    props: {
-      exec: data
-    }
-  }
-}
-
-export default Executives;

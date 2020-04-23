@@ -35,16 +35,16 @@ export class Subtitle extends Component {
 
 export class IParagraph extends Component {
   render(){
-    let { children = '', substitutions, theme, link, moreText } = this.props;
+    let { children = '', substitutions, theme, link, moretext } = this.props;
     const classes = classNames(css.paragraph, this.props.className);
 
 	  children = applySubstitutions(children, substitutions);
     children = prefixFormatting(children, css[`link-${theme.toLowerCase()}`]);
 
     const ReadMoreLabel = () => {
-      if (!moreText) return null;
-      if (moreText === true) moreText = null;
-      return <ReadMore link={link} text={moreText} />;
+      if (!moretext) return null;
+      if (moretext === true) moretext = null;
+      return <ReadMore link={link} text={moretext} />;
     }
 
     return (
