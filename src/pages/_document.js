@@ -26,7 +26,7 @@ export default class MyDocument extends Document {
 /** Add metadata to each webpage */
 const Meta = ({
   title = 'Page Not Found',
-  url = null,
+  ogUrl = '',
   description = '',
   cardImage = 'public/bg/card-home.jpg'
 }) => (
@@ -49,7 +49,7 @@ const Meta = ({
     <meta property="og:title" content={title} />
     <meta property="og:description" content={truncateText(description, 30)} />
     <meta property="og:type" content="website" />
-    <meta property="og:url" content={`${domain}${url}`} />
+    <meta property="og:url" content={`${domain}${ogUrl}`} />
 
     <meta property="og:image" content={`${cloudinary.url}/${cardImage}`} />
     <meta property="og:image:height" content="800" />

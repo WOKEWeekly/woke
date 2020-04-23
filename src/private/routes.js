@@ -22,7 +22,7 @@ module.exports = function(app, conn, server){
     return server.render(req, res, '/home', { 
       title: '#WOKEWeekly - Awakening Through Conversation',
       description: siteDescription,
-      url: '/',
+      ogUrl: '/',
       backgroundImage: 'bg-app.jpg'
     });
   });
@@ -32,7 +32,7 @@ module.exports = function(app, conn, server){
     return server.render(req, res, '/sessions', { 
       title: 'Sessions | #WOKEWeekly',
       description: 'Where the magic happens...',
-      url: '/sessions',
+      ogUrl: '/sessions',
       cardImage: `public/bg/card-sessions.jpg`,
       backgroundImage: 'bg-sessions.jpg'
      });
@@ -50,7 +50,7 @@ module.exports = function(app, conn, server){
       return server.render(req, res, '/sessions/single', {
         title: `${session.title} | #WOKEWeekly`,
         description: createExcerpt(session.description),
-        url: `/sessions/${session.slug}`,
+        ogUrl: `/sessions/${session.slug}`,
         cardImage: session.image,
         backgroundImage: 'bg-sessions.jpg',
         session
@@ -97,7 +97,7 @@ module.exports = function(app, conn, server){
       return server.render(req, res, '/topics', {
         title: 'Topic Bank | #WOKEWeekly',
         description: 'The currency of the franchise.',
-        url: '/topics',
+        ogUrl: '/topics',
         cardImage: `public/bg/card-topics.jpg`,
         backgroundImage: 'bg-topics.jpg',
         hasAccess
@@ -137,7 +137,7 @@ module.exports = function(app, conn, server){
     return server.render(req, res, '/blackexcellence', {
       title: '#BlackExcellence | #WOKEWeekly',
       description: 'Recognising the intrinsic potential in young black rising stars who are excelling in their respective fields and walks of life.',
-      url: '/blackexcellence',
+      ogUrl: '/blackexcellence',
       backgroundImage: 'bg-blackex.jpg',
       cardImage: `public/bg/card-blackex.jpg`,
       theme: 'blackex'
@@ -186,7 +186,7 @@ module.exports = function(app, conn, server){
       return server.render(req, res, '/blackexcellence/single', {
         title: `${candidate.label} | #WOKEWeekly`,
         description: createExcerpt(candidate.description),
-        url: `/blackexcellence/candidate/${candidate.id}`,
+        ogUrl: `/blackexcellence/candidate/${candidate.id}`,
         cardImage: candidate.image,
         alt: candidate.label,
         backgroundImage: 'bg-blackex.jpg',
@@ -201,7 +201,7 @@ module.exports = function(app, conn, server){
     return server.render(req, res, '/team/exec', {
       title: 'Meet The Executives | #WOKEWeekly',
       description: 'The masterminds behind the cause.',
-      url: '/executives',
+      ogUrl: '/executives',
       cardImage: 'public/bg/card-team.jpg',
       backgroundImage: 'bg-team.jpg',
     });
@@ -219,7 +219,7 @@ module.exports = function(app, conn, server){
       return server.render(req, res, '/team/single', {
         title: `${exec.firstname} ${exec.lastname} | #WOKEWeekly`,
         description: createExcerpt(exec.description),
-        url: `/executives/${exec.slug}`,
+        ogUrl: `/executives/${exec.slug}`,
         cardImage: exec.image,
         backgroundImage: 'bg-team.jpg',
         member: exec
@@ -247,7 +247,7 @@ module.exports = function(app, conn, server){
       return server.render(req, res, '/team/single', { 
         title: `${member.firstname} ${member.lastname} | #WOKEWeekly`,
         description: createExcerpt(member.description),
-        url: `/team/member/${member.slug}`,
+        ogUrl: `/team/member/${member.slug}`,
         cardImage: member.image,
         alt: `${member.firstname} ${member.lastname}`,
         backgroundImage: 'bg-team.jpg',
@@ -288,7 +288,7 @@ module.exports = function(app, conn, server){
     return server.render(req, res, '/reviews', {
       title: 'Reviews | #WOKEWeekly',
       description: 'Read what the people have to say about us.',
-      url: '/reviews',
+      ogUrl: '/reviews',
       cardImage: `public/bg/card-reviews.jpg`,
     });
   });
@@ -330,7 +330,7 @@ module.exports = function(app, conn, server){
     return server.render(req, res, '/_auth/signup', {
       title: 'Sign Up | #WOKEWeekly',
       backgroundImage: 'bg-signup.jpg',
-      url: '/signup',
+      ogUrl: '/signup',
     });
   });
 
@@ -339,7 +339,7 @@ module.exports = function(app, conn, server){
     return server.render(req, res, '/articles', { 
       title: 'The #WOKEWeekly Blog',
       description: 'Explore the expressions of our writers who put pen to paper over the various dimensions within our community.',
-      url: '/blog',
+      ogUrl: '/blog',
       cardImage: `public/bg/card-sessions.jpg`, // TODO: Change while designing
       backgroundImage: 'bg-app.jpg'
      });
@@ -357,7 +357,7 @@ module.exports = function(app, conn, server){
       return server.render(req, res, '/articles/single', {
         title: `${article.title} | #WOKEWeekly`,
         description: article.excerpt,
-        url: `/blog/${article.slug}`,
+        ogUrl: `/blog/${article.slug}`,
         cardImage: article.image,
         backgroundImage: 'bg-app.jpg', // TODO: Change while designing
         article
@@ -415,7 +415,7 @@ module.exports = function(app, conn, server){
     ], function(err, justVerified, user = {}){
       server.render(req, res, '/_auth/account', {
         title: 'Account | #WOKEWeekly',
-        url: '/account',
+        ogUrl: '/account',
         justVerified: justVerified,
         verifiedUser: user
       });
@@ -426,7 +426,7 @@ module.exports = function(app, conn, server){
   app.get('/account/recovery', function(req, res){
     return server.render(req, res, '/_auth/recovery', {
       title: 'Forgot Password | #WOKEWeekly',
-      url: '/account/recovery',
+      ogUrl: '/account/recovery',
     });
   });
 
@@ -626,7 +626,7 @@ const renderPage = (
           pageText: text,
           title: includeDomain ? `${title} | #WOKEWeekly` : title,
           description: excerpt || createExcerpt(text),
-          url: `/${name}`,
+          ogUrl: `/${name}`,
           cardImage: cardImage || 'public/bg/card-home.jpg',
           backgroundImage: bgImage || 'bg-app.jpg',
           coverImage: coverImage,
