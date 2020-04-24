@@ -40,12 +40,14 @@ pipeline {
       }
     }
     stage('Test') {
-      dir('src'){
-        sh 'npm run test-ci'
+      steps {
+        dir('src'){
+          sh 'npm run test-ci'
+        }
       }
     }
   }
-  
+
   post {
     always {
       dir('src'){
