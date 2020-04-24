@@ -1,3 +1,4 @@
 # Configuration files
 node_modules
 .next
+config.env
