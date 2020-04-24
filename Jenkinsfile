@@ -36,6 +36,13 @@ pipeline {
                 }
             }
         }
+        stage('Re-Clean') { 
+            steps {
+                dir('src'){
+                  sh 'rm -rf node_modules .next'
+                }
+            }
+        }
         // stage('Deploy') {
         //   steps {
         //     sh '/home/rebuild-woke.sh Dockerfile-woke-from-jenkins'
