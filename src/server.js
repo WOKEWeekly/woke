@@ -3,7 +3,7 @@ const app = express();
 
 const next = require('next');
 const dev = process.env.NODE_ENV !== 'production';
-const config = dev ? '../../config.env' : '/home/config.env';
+const config = './config.env';
 const server = next({ dev });
 const handle = server.getRequestHandler();
 
@@ -12,14 +12,14 @@ const cookieParser = require('cookie-parser');
 const cors = require('cors');
 const dotenv = require('dotenv').config({path: config });
 const mysql = require('mysql');
-const port = parseInt(process.env.PORT, 10) || 3000;
+const port = process.env.PORT || 3000;
 
 app.use(bodyParser.json({ limit: '2MB' }));
 app.use(cookieParser());
 app.use(cors());
 
-if (dotenv.error) {
-  throw new Error(`Environment file doesn't exist at ${config}.`);
+if (dotenv.error && !process.env.PORT) {
+  throw new Error(`No environment variables loaded.`);
 }
 
 server.prepare().then(() => {
