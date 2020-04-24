@@ -465,6 +465,12 @@ module.exports = function(app, conn, server){
     res.end();
   });
 
+  /** Subscribe to YouTube */
+  app.get('/zoom', function(req, res){
+    res.writeHead(301, { Location: accounts.zoom });
+    res.end();
+  });
+
   /***************************************************************
    * FORMS
    **************************************************************/

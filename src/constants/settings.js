@@ -10,7 +10,8 @@ module.exports = {
     linkedin: "https://www.linkedin.com/company/wokeweeklyuk",
     youtube: "https://www.youtube.com/channel/UC4aZ79_Ge_4BkCW-Y3UriLw?sub_confirmation=1",
     spotify: "https://open.spotify.com/show/2IUSFVvNfsJBiTXMwruTIG",
-    paypal: 'https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=BUWDQJCN66KRL&source=url'
+    paypal: 'https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=BUWDQJCN66KRL&source=url',
+    zoom: 'https://us02web.zoom.us/j/84546437303'
   },
 
   /** Cloudinary fields */
