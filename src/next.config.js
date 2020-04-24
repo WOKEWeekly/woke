@@ -4,6 +4,7 @@ const DotEnv = require('dotenv-webpack');
 const server = require('./server.js')
 
 module.exports = {
+  useFileSystemPublicRoutes: false,
   webpack: function(config) {
     config.node = {
       fs: 'empty',
