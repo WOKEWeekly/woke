@@ -41,9 +41,6 @@ pipeline {
       always {
         dir('src'){
           sh 'rm -rf node_modules'
-          dir ('.next'){
-            sh 'rm -rf !(BUILD_ID)'
-          }
         }
       }
     }
