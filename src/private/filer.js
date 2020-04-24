@@ -1,6 +1,7 @@
 const cloudinary = require('cloudinary').v2;
 const { zDate, zString } = require('zavid-modules');
 const { DIRECTORY, ARTICLE_STATUS } = require('../constants/strings.js');
+const { dev } = require('../server.js');
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_NAME, 
@@ -27,7 +28,7 @@ module.exports = {
     if (noImageUpload) return next(null, entity);
 
     // Upload to cloudinary
-    const env = process.env.LOCAL_ENV === 'true' ? 'dev' : 'prod';
+    const env = dev ? 'dev' : 'prod';
     cloudinary.uploader.upload(entity.image, {
       public_id: `${env}/${directory}/${filename}`,
       unique_filename: false

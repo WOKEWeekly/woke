@@ -1,10 +1,11 @@
 const { WebClient } = require('@slack/web-api');
+const { dev } = require('../server.js');
 const token = process.env.SLACK_TOKEN;
 
 const slack = new WebClient(token);
 
 const mySlackID = 'UDEMRRR8T';
-const channel = process.env.LOCAL_ENV ? mySlackID : 'general';
+const channel = dev ? mySlackID : 'general';
 
 const { zDate } = require('zavid-modules');
 

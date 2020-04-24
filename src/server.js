@@ -3,7 +3,7 @@ const app = express();
 
 const next = require('next');
 const dev = process.env.NODE_ENV !== 'production';
-const config = process.env.LOCAL_ENV ? '../../config.env' : '/home/config.env';
+const config = dev ? '../../config.env' : '/home/config.env';
 const server = next({ dev });
 const handle = server.getRequestHandler();
 
@@ -55,4 +55,4 @@ require('./private/api.js')(app, conn);
 require('./private/routes.js')(app, conn, server);
 require('./private/cron.js')(conn);
 
-module.exports = { config }
+module.exports = { config, dev }

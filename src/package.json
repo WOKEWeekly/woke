@@ -1,7 +1,7 @@
 {
   "scripts": {
-    "build": "cross-env NODE_ENV=development next build",
-    "dev": "cross-env LOCAL_ENV=true node server.js",
+    "build": "next build",
+    "dev": "node server.js",
     "prod": "NODE_ENV=production node server.js",
     "test": "mocha --no-timeout",
     "prod-test": "mocha --no-timeout --reporter mocha-junit-reporter"
