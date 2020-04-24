@@ -163,6 +163,8 @@ class Session extends PureComponent {
   render(){
     const { item, idx, view } = this.props;
     item.description = item.description && item.description.trim().length > 0 ? item.description : 'No description.';
+
+    const link = `/session/${item.slug}`;
     
     if (view === 'grid'){
       return (
@@ -171,7 +173,7 @@ class Session extends PureComponent {
           duration={400}
           delay={75 * idx}
           className={css.container}>
-          <Link href={`/session/${item.slug}`}>
+          <Link href={link}>
             <div className={css.cell}>
               <img
                 src={`${cloudinary.url}/${cloudinary.lazy}/${item.image}`}
@@ -193,7 +195,7 @@ class Session extends PureComponent {
           duration={400}
           delay={75 * idx}
           direction={'left'}>
-          <a href={`/session/${item.slug}`}>
+          <a href={link}>
             <Row className={css.item}>
               <Col md={4} className={'p-0'}>
                 <img
@@ -209,6 +211,7 @@ class Session extends PureComponent {
                   <Divider />
                   <Paragraph
                     className={css.description}
+                    link={link}
                     moretext={'Read more'}>
                     {truncateText(item.description, 60)}
                   </Paragraph>
