@@ -6,7 +6,7 @@ pipeline {
         stage('Clean') { 
             steps {
                 dir('src'){
-                  sh 'rm -rf node_modules .next'
+                    sh 'rm -rf node_modules .next'
                 }
             }
         }
@@ -31,22 +31,17 @@ pipeline {
             }
             steps {
                 dir('src'){
-                  sh 'npm install'
-                  sh 'npm run build-ci'
+                    sh 'npm install'
+                    sh 'npm run build'
                 }
             }
         }
-        stage('Re-Clean') { 
-            steps {
-                dir('src'){
-                  sh 'rm -rf node_modules .next'
-                }
-            }
+    }
+    post {
+      always {
+        dir('src'){
+          sh 'rm -rf node_modules .next'
         }
-        // stage('Deploy') {
-        //   steps {
-        //     sh '/home/rebuild-woke.sh Dockerfile-woke-from-jenkins'
-        //   }
-        // }
+      }
     }
 }
