@@ -13,7 +13,7 @@ pipeline {
         stage('Build') { 
             environment {
                 JWT_SECRET = credentials('jwt-secret')
-                AUTH_KEY = credentials('authorized-key')
+                AUTH_KEY = credentials('authorization-key')
                 PORT = 3000
                 MYSQL_HOST = credentials('mysql-host')
                 MYSQL_NAME = credentials('mysql-name')
