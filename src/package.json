@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "build": "NODE_ENV=development next build",
+    "build": "next build",
     "dev": "node server.js",
     "prod": "NODE_ENV=production node server.js",
     "test": "mocha --no-timeout",

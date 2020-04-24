@@ -1,4 +1,4 @@
-require('dotenv').config({path:'../../config.env'});
+require('dotenv').config({path: './config.env' });
 
 const host = "http://localhost:3000";
 const axios = require('axios');

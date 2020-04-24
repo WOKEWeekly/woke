@@ -21,7 +21,6 @@ module.exports = {
       }
     });
 
-    config.plugins = config.plugins || []
     config.plugins = [
       ...config.plugins,
       new DotEnv({
