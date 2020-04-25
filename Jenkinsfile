@@ -42,6 +42,7 @@ pipeline {
     stage('Test') {
       steps {
         dir('src'){
+          echo 'Testing'
           sh 'npm run dev && npm run test-ci'
         }
       }
