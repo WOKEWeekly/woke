@@ -42,7 +42,7 @@ pipeline {
     stage('Test') {
       steps {
         dir('src'){
-          sh 'npm run dev && npm run test-ci'
+          sh 'npm run dev && npm run test'
         }
       }
     }
