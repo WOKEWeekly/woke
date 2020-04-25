@@ -42,6 +42,7 @@ pipeline {
     stage('Test') {
       steps {
         dir('src'){
+          sh 'npm run dev'
           sh 'npm run test-ci'
         }
       }
