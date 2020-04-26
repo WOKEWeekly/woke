@@ -56,8 +56,8 @@ pipeline {
     always {
       dir('src'){
         sh 'rm -rf node_modules'
+        junit './test-results.xml'
       }
-      junit './test-results.xml'
     }
   }
 }
