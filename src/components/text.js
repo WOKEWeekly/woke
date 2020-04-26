@@ -182,10 +182,10 @@ const applyFormatting = (text, hyperlinkClass) => {
 
     // Hyperlink text
     if (
-		partText.startsWith('/') ||
-		partText.startsWith('mailto:') ||
-		partText.startsWith('http')
-	){
+      partText.startsWith('/') ||
+      partText.startsWith('mailto:') ||
+      partText.startsWith('http')
+    ){
       array.splice(count, 1);
       return (
       <a

@@ -148,37 +148,6 @@ export class SearchBar extends Component {
  * TEXTAREAS
  **************************/
 
- class TextArea extends Component {
-  constructor(props){
-    super(props);
-    this.state = { rows: props.minRows }
-  }
-
-  handleTextChange = (event) => {
-    this.props.onChange(event);
-    const limit = this.props.minRows;
-
-    const text = event.target.value;
-    const lines = text.split(/\r*\n/).length;
-    const rows = lines > limit ? lines : limit;
-
-    this.setState({ wordCount: text.length, rows });
-  }
-
-  render(){
-    const { name, placeholder, value } = this.props;
-    return (
-      <textarea
-        name={name}
-        placeholder={placeholder}
-        className={css.textarea}
-        rows={this.state.rows}
-        value={value || ''}
-        onChange={this.handleTextChange} />
-    )
-  }
- }
-
 /** For inline long text inputs */
 export class ShortTextArea extends Component {
   render(){
