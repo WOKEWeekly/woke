@@ -4,8 +4,8 @@
     "build-ci": "next build",
     "dev": "node server.js",
     "prod": "NODE_ENV=production node server.js",
-    "test": "mocha --no-timeout",
-    "test-ci": "mocha --no-timeout --reporter mocha-junit-reporter"
+    "test": "mocha --no-timeout --dev-testing",
+    "test-ci": "mocha --no-timeout --stage-testing --reporter mocha-junit-reporter"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^1.2.28",

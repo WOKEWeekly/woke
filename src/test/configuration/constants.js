@@ -1,8 +1,19 @@
-require('dotenv').config({path: './config.env' });
-
-const host = "http://localhost:3000";
+const { startTestServer, isStageTesting } = require('../../server.js');
 const axios = require('axios');
-axios.defaults.baseURL = host;
+axios.defaults.baseURL = "http://localhost:3000";
+
+// If staging environment, start server before running tests.
+if (isStageTesting){
+  console.warn("Running service tests in staging environment.");
+  before(function(done){
+    startTestServer(done);
+  });
+}
+
+// Stop server / return control to terminal after running tests.
+after(function(){
+  setTimeout(() => process.exit(0), 2000);
+});
 
 module.exports = {
 

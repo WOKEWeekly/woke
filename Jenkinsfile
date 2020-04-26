@@ -33,17 +33,20 @@ pipeline {
     }
     stage('Build') { 
       steps {
-        dir('src'){
-          sh 'npm ci'
-          sh 'npm run build'
+        timeout(time: 3, unit: 'MINUTES') {
+          dir('src'){
+            sh 'npm ci'
+            sh 'npm run build'
+          }
         }
       }
     }
     stage('Test') {
       steps {
-        dir('src'){
-          echo 'Testing'
-          sh 'npm run dev && npm run test-ci'
+        timeout(time: 3, unit: 'MINUTES') {
+          dir('src'){
+            sh 'npm run test-ci'
+          }
         }
       }
     }

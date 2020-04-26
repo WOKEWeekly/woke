@@ -1,12 +1,16 @@
 const express = require('express');
 const app = express();
 
-const next = require('next');
 const dev = process.env.NODE_ENV !== 'production';
 const config = './config.env';
-const server = next({ dev });
+const isStageTesting = process.argv.includes('--stage-testing');
+const isDevTesting = process.argv.includes('--dev-testing');
+
+const next = require('next');
+const server = next({ dev, quiet: isStageTesting });
 const handle = server.getRequestHandler();
 
+const async = require('async');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
@@ -18,23 +22,7 @@ app.use(bodyParser.json({ limit: '2MB' }));
 app.use(cookieParser());
 app.use(cors());
 
-if (dotenv.error && !process.env.PORT) {
-  throw new Error(`No environment variables loaded.`);
-}
-
-server.prepare().then(() => {
-	app.get('*', (req, res) => handle(req, res));
-	app.listen(port, (err) => {
-		if (err) throw err;
-		console.log(`Server running on http://localhost:${port}`);
-	});
-});
-
-/*******************************************
-* MySQL Database
-*******************************************/
-
-/** Initialise MySQL database */
+// Initialise MySQL database
 const conn = mysql.createConnection({
   host: process.env.MYSQL_HOST,
   user: process.env.MYSQL_USER,
@@ -42,17 +30,54 @@ const conn = mysql.createConnection({
   database: process.env.MYSQL_NAME,
 });
 
-/** Connect to MySQL database */
-conn.connect(function(err) {
-  console.log(err ? err.toString() : 'Connected to database.');
-});
+// Check for loaded environment variables
+if (dotenv.error && !process.env.PORT) {
+  throw new Error(`No environment variables loaded.`);
+}
 
-/*******************************************
-* Microservices
-*******************************************/
+// Start client server
+if (!isStageTesting && !isDevTesting){
+  startClientServer();
+}
 
-require('./private/api.js')(app, conn);
-require('./private/routes.js')(app, conn, server);
-require('./private/cron.js')(conn);
+function startClientServer(){
+  startServer();
+  require('./private/api.js')(app, conn);
+  require('./private/routes.js')(app, conn, server);
+  require('./private/cron.js')(conn);
+}
 
-module.exports = { config, dev }
+function startTestServer(next){
+  startServer(next);
+  require('./private/api.js')(app, conn);
+}
+
+function startServer(next){
+  async.parallel([
+    function(callback){ // Start the server
+      server.prepare().then(() => {
+        app.get('*', (req, res) => handle(req, res));
+        app.listen(port, (err) => {
+          if (!err) console.log(`Server running on http://localhost:${port}`);
+          callback(err);
+        });
+      });
+    },
+    function(callback){ // Connect to MySQL database
+      conn.connect(function(err) {
+        if (!err) console.log('Connected to database.');
+        callback(err);
+      });
+    }
+  ], function(err){
+    if (err) throw err;
+    if (next) next();
+  });
+}
+
+module.exports = {
+  startTestServer,
+  config,
+  dev,
+  isStageTesting
+}
