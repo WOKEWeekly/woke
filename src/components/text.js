@@ -166,8 +166,8 @@ const prefixFormatting = (text, hyperlinkClass) => {
 const applyFormatting = (text, hyperlinkClass) => {
   if (text === null) return '';
 
-  const linkRegex = new RegExp(/\<\[(.*?)\]\s(.*?)\>/); // Regex for links
   const boldRegex = new RegExp(/(\*\*.*?\*\*)/); // Regex for bold text
+  const linkRegex = new RegExp(/\<\[(.*?)\]\s(.*?)\>/); // Regex for links
 
   const regexArray = [linkRegex.source, boldRegex.source];
   const combined = new RegExp(regexArray.join('|'), 'g');
