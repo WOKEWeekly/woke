@@ -17,6 +17,7 @@ const cors = require('cors');
 const dotenv = require('dotenv').config({path: config });
 const mysql = require('mysql');
 const port = process.env.PORT || 3000;
+const setDb = require("./private/api/db").setDb;
 
 app.use(bodyParser.json({ limit: '2MB' }));
 app.use(cookieParser());
@@ -42,7 +43,6 @@ if (!isStageTesting && !isDevTesting){
 
 function startClientServer(){
   startServer();
-  require('./private/api.js')(app, conn);
   require('./private/routes.js')(app, conn, server);
   require('./private/cron.js')(conn);
 }
@@ -65,7 +65,11 @@ function startServer(next){
     },
     function(callback){ // Connect to MySQL database
       conn.connect(function(err) {
-        if (!err) console.log('Connected to database.');
+        if (!err) {
+          setDb(conn);
+          require("./private/api.js")(app, conn);
+          console.log("Connected to database.");
+        }        
         callback(err);
       });
     }

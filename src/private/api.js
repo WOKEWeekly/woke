@@ -12,6 +12,7 @@ const filer = require('./filer.js');
 const { verifyToken, validateReq, logUserActivity } = require('./middleware.js');
 const { respondToClient } = require('./response.js');
 const SQL = require('./sql.js');
+const sessionRoutes = require('./api/routes/sessions');
 
 const CLEARANCES = require('../constants/clearances.js');
 const { DIRECTORY, ENTITY } = require('../constants/strings.js');
@@ -24,113 +25,7 @@ module.exports = function(app, conn){
   /** Log user activity on each request */
   app.use('/api', logUserActivity(conn));
 
-  /** Retrieve all sessions */
-  app.get('/api/v1/sessions', validateReq, function(req, res){
-    conn.query(SQL.SESSIONS.READ.ALL, function (err, sessions) {
-      respondToClient(res, err, 200, sessions);
-    });
-  });
-
-  /** Retrieve individual session */
-  app.get('/api/v1/sessions/:id([0-9]+)', validateReq, function(req, res){
-    const id = req.params.id;
-    conn.query(SQL.SESSIONS.READ.SINGLE('id'), id, function (err, [session] = []) {
-      if (err) return respondToClient(res, err);
-      if (!session) err = ERROR.INVALID_ENTITY_ID(ENTITY.SESSION, id);
-      respondToClient(res, err, 200, session);
-    });
-  });
-
-  /** Get upcoming session */
-  app.get('/api/v1/sessions/featured', validateReq, function(req, res){
-    async.waterfall([
-      function(callback){ // Get a random upcoming session
-        conn.query(SQL.SESSIONS.READ.UPCOMING, function (err, [session] = []) {
-          if (err) return callback(err);
-          if (!session) return callback(null);
-          callback(true, { session, upcoming: true });
-        });
-      },
-      function(callback){ // If not, get latest session
-        conn.query(SQL.SESSIONS.READ.LATEST, function (err, [session] = []) {
-          if (err) return callback(err);
-          if (!session) return callback(null);
-          callback(null, { session, upcoming: false });
-        });
-      }
-    ], function(err, session){
-      respondToClient(res, err, 200, session);
-    });
-  });
-
-  /** Add new session to database */
-  app.post('/api/v1/sessions', verifyToken(CLEARANCES.ACTIONS.CRUD_SESSIONS), function(req, res){
-    const session = req.body;
-
-    async.waterfall([
-      function(callback){ // Upload image to cloud
-        filer.uploadImage(session, DIRECTORY.SESSIONS, true, callback);
-      },
-      function(session, callback){ // Add session to database
-        const { sql, values } = SQL.SESSIONS.CREATE(session);
-        conn.query(sql, [values], function (err, result) {
-          err ? callback(err) : callback(null, result.insertId);
-        });
-      }
-    ], function(err, id){
-      respondToClient(res, err, 201, { id });
-    });
-  });
-
-  /** Update details of existing session in database */
-  app.put('/api/v1/sessions/:id', verifyToken(CLEARANCES.ACTIONS.CRUD_SESSIONS), function(req, res){
-    const id = req.params.id;
-    const { session, changed } = req.body;
-
-    async.waterfall([
-      function(callback){ // Delete old image if changed.
-        conn.query(SQL.SESSIONS.READ.SINGLE('id', 'image'), id, function (err, [session] = []) {
-          if (err) return callback(err);
-          if (!session) return callback(ERROR.INVALID_ENTITY_ID(ENTITY.SESSION, id));
-          if (!changed) return callback(null);
-          filer.destroyImage(session.image, callback);
-        });
-      },
-      function(callback){ // Equally, upload new image if changed
-        filer.uploadImage(session, DIRECTORY.SESSIONS, changed, callback);
-      },
-      function(session, callback){ // Update session in database
-        const { sql, values } = SQL.SESSIONS.UPDATE(id, session, changed);
-        conn.query(sql, values, function (err) {
-          err ? callback(err) : callback(null, session.slug);
-        });
-      }
-    ], function(err, slug){
-      respondToClient(res, err, 200, { slug });
-    });
-  });
-
-  /** Delete an existing session from database */
-  app.delete('/api/v1/sessions/:id', verifyToken(CLEARANCES.ACTIONS.CRUD_SESSIONS), function(req, res){
-    const id = req.params.id;
-
-    async.waterfall([
-      function(callback){ // Delete image from cloud
-        conn.query(SQL.SESSIONS.READ.SINGLE('id', 'image'), id, function (err, [session] = []) {
-          if (err) return callback(err);
-          if (!session) return callback(ERROR.INVALID_ENTITY_ID(ENTITY.SESSION, id));
-          filer.destroyImage(session.image, callback);
-        });
-      },
-      function(callback){ // Delete session from database
-        conn.query(SQL.SESSIONS.DELETE, id, function (err) {
-          err ? callback(err) : callback(null);
-        });
-      }
-    ], function(err){
-      respondToClient(res, err, 204);
-    });
-  });
+  app.use('/api/v1/sessions', sessionRoutes);
 
   /** Retrieve all candidates */
   app.get('/api/v1/candidates', validateReq, function(req, res){
