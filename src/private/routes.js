@@ -467,7 +467,7 @@ module.exports = function(app, conn, server){
 
   /** Current zoom link */
   app.get('/zoom', function(req, res){
-    res.writeHead(301, { Location: accounts.zoom });
+    res.writeHead(301, { Location: accounts.zoom, 'Cache-Control': 'no-cache' });
     res.end();
   });
 
