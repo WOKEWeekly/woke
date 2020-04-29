@@ -450,10 +450,10 @@ module.exports = function(app, conn, server){
   });
 
   /***************************************************************
-   * ACTIONS
-   **************************************************************/
+  * OTHER MEDIA
+  **************************************************************/
   
-   /** Link to Spotify */
+  /** Link to Spotify */
   app.get('/podcast', function(req, res){
     res.writeHead(301, { Location: accounts.spotify });
     res.end();
@@ -465,7 +465,7 @@ module.exports = function(app, conn, server){
     res.end();
   });
 
-  /** Subscribe to YouTube */
+  /** Current zoom link */
   app.get('/zoom', function(req, res){
     res.writeHead(301, { Location: accounts.zoom });
     res.end();
