@@ -32,7 +32,7 @@ class Info extends Component {
 
   render(){
     const { isLoaded } = this.state;
-    const { user, pageText, url, lastModified } = this.props;
+    const { user, pageText, ogUrl, lastModified } = this.props;
 
     return (
       <Fader determinant={isLoaded} duration={750}>
@@ -43,14 +43,14 @@ class Info extends Component {
                 className={css.text}
                 substitutions={{lastModified: zDate.formatDate(lastModified)}}>{pageText}</Paragraph>
 
-              {url === '/donate' ?
+              {ogUrl === '/donate' ?
                 <button className={css.infoButton} onClick={() => window.open(accounts.paypal, '_blank')}>
                   <Icon name={'paypal'} prefix={'fab'} />
                   Donate with PayPal
                 </button>
               : null}
 
-              {url === '/recruitment' ?
+              {ogUrl === '/recruitment' ?
                 <button className={css.infoButton} onClick={() => window.open(forms.recruitment, '_blank')}>
                   <Icon name={'user-plus'} prefix={'fas'} />
                   Join the Team
@@ -63,7 +63,7 @@ class Info extends Component {
             <BottomToolbar>
               <EditEntityButton
                 title={'Edit Text'}
-                onClick={() => location.href = `${url}/edit/`} />
+                onClick={() => location.href = `${ogUrl}/edit/`} />
             </BottomToolbar>
           : null}
           </Spacer>
