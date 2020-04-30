@@ -5,9 +5,7 @@ const fs = require('fs');
 module.exports = {
   useFileSystemPublicRoutes: false,
   generateBuildId: async () => {
-    const revision = fs.readFileSync('../git/HEAD').toString();
-    if (revision.indexOf(':') === -1) return revision;
-    return fs.readFileSync('.git/' + revision.substring(5)).toString();
+    return "newBuildId"
   },
   webpack: function (config) {
     config.node = {
