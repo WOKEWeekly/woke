@@ -1,15 +1,13 @@
 const DotEnv = require('dotenv-webpack');
 const server = require('./server.js');
+const fs = require('fs');
 
 module.exports = {
   useFileSystemPublicRoutes: false,
   generateBuildId: async () => {
-    const revision = require('child_process')
-      .execSync('git rev-parse HEAD')
-      .toString()
-      .trim();
-
-    return revision;
+    const revision = fs.readFileSync('../git/HEAD').toString();
+    if (revision.indexOf(':') === -1) return revision;
+    return fs.readFileSync('.git/' + revision.substring(5)).toString();
   },
   webpack: function (config) {
     config.node = {
