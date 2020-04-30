@@ -1,25 +1,31 @@
-require('dotenv').config()
-
 const DotEnv = require('dotenv-webpack');
-const server = require('./server.js')
+const server = require('./server.js');
 
 module.exports = {
   useFileSystemPublicRoutes: false,
-  webpack: function(config) {
+  generateBuildId: async () => {
+    const revision = require('child_process')
+      .execSync('git rev-parse HEAD')
+      .toString()
+      .trim();
+
+    return revision;
+  },
+  webpack: function (config) {
     config.node = {
       fs: 'empty',
       child_process: 'empty',
-      module: 'empty'
+      module: 'empty',
     };
     config.module.rules.push({
       test: /\.(eot|woff|woff2|ttf|svg|png|jpg|gif)$/,
       use: {
-        loader: "url-loader",
+        loader: 'url-loader',
         options: {
           limit: 100000,
-          name: "[name].[ext]",
+          name: '[name].[ext]',
         },
-      }
+      },
     });
 
     config.plugins = [
@@ -27,10 +33,10 @@ module.exports = {
       new DotEnv({
         path: server.config,
         systemvars: true,
-        silent: true
-      })
+        silent: true,
+      }),
     ];
 
-    return config
+    return config;
   },
-}
+};
