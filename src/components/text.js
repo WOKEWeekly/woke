@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import Link from 'next/link';
 import classNames from 'classnames';
 
 import { Icon } from '~/components/icon.js';
@@ -84,11 +83,11 @@ export class ReadMore extends Component {
   render(){
     const { link, text = 'Read more' } = this.props;
     return (
-      <Link href={link}>
+      <a href={link}>
         <div className={css.readmore}>
           <Icon name={'external-link-alt'} className={css.linkIcon} />{text}
         </div>
-      </Link>
+      </a>
     )
   }
 }

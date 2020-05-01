@@ -1,6 +1,5 @@
 import React, { Component, PureComponent } from 'react';
 import { Col, Row } from 'react-bootstrap';
-import Link from 'next/link';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { saveSessionSort, saveSessionView } from '~/reducers/actions';
@@ -173,7 +172,7 @@ class Session extends PureComponent {
           duration={400}
           delay={75 * idx}
           className={css.container}>
-          <Link href={link}>
+          <a href={link}>
             <div className={css.cell}>
               <img
                 src={`${cloudinary.url}/${cloudinary.lazy}/${item.image}`}
@@ -185,7 +184,7 @@ class Session extends PureComponent {
                 <Subtitle className={css.date}>{zDate.formatDate(item.dateHeld, true)}</Subtitle>
               </div>
             </div>
-          </Link>
+          </a>
         </Zoomer>
       );
     } else {

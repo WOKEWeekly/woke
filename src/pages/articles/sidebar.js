@@ -1,5 +1,4 @@
 import React, { Component, PureComponent } from 'react';
-import Link from 'next/link';
 
 import { zDate } from 'zavid-modules';
 
@@ -84,7 +83,7 @@ class Article extends PureComponent {
         determinant={this.state.isLoaded}
         duration={400}
         delay={75 * idx}>
-        <Link href={`/blog/${item.slug}`}>
+        <a href={`/blog/${item.slug}`}>
           <div className={css.item}>
             <img
               src={`${cloudinary.url}/${cloudinary.lazy_wide}/${item.image}`}
@@ -96,7 +95,7 @@ class Article extends PureComponent {
               <Subtitle className={css.details}>{zDate.formatDate(item.datePublished, true)}</Subtitle>
             </div>
           </div>
-        </Link>
+        </a>
       </Zoomer>
       <Divider/>
       </React.Fragment>

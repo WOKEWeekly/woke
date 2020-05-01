@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import Link from 'next/link';
 import LazyLoader from 'react-visibility-sensor';
 
 import { Title, Subtitle, Divider, Paragraph, truncateText } from '~/components/text.js';
@@ -55,12 +54,12 @@ export default class UpcomingSession extends Component {
             <Title className={css.heading}>{heading}</Title>
             <div>
               {session.image ?
-              <Link href={link}>
+              <a href={link}>
                 <img
                   src={`${cloudinary.url}/${session.image}`}
                   alt={session.title}
                   className={css.image} />
-              </Link> : null}
+              </a> : null}
               <div className={css.details}>
                 <Title className={css.title}>{session.title}</Title>
                 <Subtitle className={css.subtitle}>{zDate.formatDate(session.dateHeld, true)}</Subtitle>

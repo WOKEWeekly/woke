@@ -1,6 +1,5 @@
 import React, { Component, PureComponent } from 'react';
 import { connect } from 'react-redux';
-import Link from 'next/link';
 
 import { AdminButton } from '~/components/button.js';
 import { Shader, Spacer } from '~/components/layout.js';
@@ -106,7 +105,7 @@ class Article extends PureComponent {
         duration={400}
         delay={75 * idx}
         className={css.icontainer}>
-        <Link href={`/blog/${item.slug}`}>
+        <a href={`/blog/${item.slug}`}>
           <div className={css.cell}>
             <img
               src={`${cloudinary.url}/${cloudinary.lazy_wide}/${item.image}`}
@@ -118,7 +117,7 @@ class Article extends PureComponent {
               <Subtitle className={css.date}>{zDate.formatDate(item.datePublished, true)}</Subtitle>
             </div>
           </div>
-        </Link>
+        </a>
       </Zoomer>
     );
     

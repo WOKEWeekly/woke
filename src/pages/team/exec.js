@@ -1,6 +1,5 @@
 import React, { Component, PureComponent } from 'react';
 import { Container, Col, Row } from 'react-bootstrap';
-import Link from 'next/link';
 
 import { Cover, Shader, Spacer } from '~/components/layout.js';
 import { Loader, Empty } from '~/components/loader.js';
@@ -104,7 +103,7 @@ class Exec extends PureComponent {
         duration={750}
         delay={1000 + (500 * idx)}
         direction={isEven ? 'left' : 'right'}>
-        <Link href={link}>
+        <a href={link}>
           <div className={css.item}>
             <Row>
               <Col md={{span: 4, order: isEven ? 1 : 2}}>
@@ -128,7 +127,7 @@ class Exec extends PureComponent {
               </Col>
             </Row>
           </div>
-        </Link>
+        </a>
       </Slider>
     );
   }

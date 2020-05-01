@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import {Col, Row} from 'react-bootstrap';
-import Link from 'next/link';
 import LazyLoader from 'react-visibility-sensor';
 
 import { Default, Mobile } from '~/components/layout.js';
@@ -64,12 +63,12 @@ export default class RandomMember extends Component{
               <Row>
                 <Col md={4}>
                   {member.image ?
-                  <Link href={link}>
+                  <a href={link}>
                     <img
                       src={`${cloudinary.url}/${member.image}`}
                       alt={member.fullname}
                       className={css.image} />
-                  </Link> : null}
+                  </a> : null}
                 </Col>
                 <Col md={8}>
                 <Default><Title className={css.heading}>{heading}</Title></Default>

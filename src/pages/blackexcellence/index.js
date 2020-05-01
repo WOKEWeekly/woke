@@ -2,7 +2,6 @@ import React, { Component, PureComponent } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { saveCandidateSort } from '~/reducers/actions';
-import Link from 'next/link';
 
 import { AddEntityButton } from '~/components/button.js';
 import { SortDropdown } from '~/components/dropdown.js';
@@ -172,7 +171,7 @@ class Candidate extends PureComponent {
         determinant={this.state.isLoaded}
         duration={500}
         delay={75 * idx}>
-        <Link href={`/blackexcellence/candidate/${item.id}`}>
+        <a href={`/blackexcellence/candidate/${item.id}`}>
           <div className={css.cell}>
             <img
               src={`${cloudinary.url}/${cloudinary.lazy}/${item.image}`}
@@ -181,7 +180,7 @@ class Candidate extends PureComponent {
               onLoad={this.showImage}
               onError={this.showImage} />
           </div>
-        </Link>
+        </a>
       </Fader>
     );
   }

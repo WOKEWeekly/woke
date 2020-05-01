@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import Link from 'next/link';
 import LazyLoader from 'react-visibility-sensor';
 
 import { Title, Subtitle, Divider, Paragraph, truncateText } from '~/components/text.js';
@@ -66,12 +65,12 @@ class RandomCandidate extends Component {
             <Title className={css.heading}>Check out our candidate:</Title>
             <div>
               {candidate.image ?
-              <Link href={link}>
+              <a href={link}>
                 <img
                   src={`${cloudinary.url}/${candidate.image}`}
                   alt={candidate.name}
                   className={css.image} />
-              </Link> : null}
+              </a> : null}
               <div className={css.details}>
                 <Title className={css.title}>{candidate.name}</Title>
                 <Subtitle className={css.subtitle}>
