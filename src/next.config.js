@@ -1,9 +1,11 @@
 const DotEnv = require('dotenv-webpack');
 const server = require('./server.js');
-const fs = require('fs');
 
 module.exports = {
   useFileSystemPublicRoutes: false,
+  generateBuildId: async () => {
+    return require('child_process').execSync('git rev-parse HEAD').toString();
+  },
   webpack: function (config) {
     config.node = {
       fs: 'empty',

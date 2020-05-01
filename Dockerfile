@@ -6,4 +6,5 @@ RUN apk add --no-cache --update \
   libstdc++ \
   linux-headers \
   make \
-  python
+  python \
+  git
