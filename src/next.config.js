@@ -4,9 +4,6 @@ const fs = require('fs');
 
 module.exports = {
   useFileSystemPublicRoutes: false,
-  generateBuildId: async () => {
-    return "newBuildId"
-  },
   webpack: function (config) {
     config.node = {
       fs: 'empty',
