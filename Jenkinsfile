@@ -59,5 +59,10 @@ pipeline {
         sh 'rm -rf node_modules'
       }
     }
+    success {
+      dir('src'){
+        sh 'cp BUILD_ID ./.next'
+      }
+    }
   }
 }
