@@ -6,7 +6,7 @@ module.exports = {
   useFileSystemPublicRoutes: false,
   generateBuildId: async () => {
     const hash = require('child_process').execSync('git rev-parse HEAD').toString();
-    fs.mkdirSync('./.next/BUILD_ID');
+    fs.mkdirSync('.next');
     fs.writeFileSync('./.next/BUILD_ID', hash);
     return hash;
   },
