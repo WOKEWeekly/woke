@@ -4,11 +4,6 @@ const fs = require('fs');
 
 module.exports = {
   useFileSystemPublicRoutes: false,
-  generateBuildId: async () => {
-    const hash = require('child_process').execSync('git rev-parse HEAD').toString();
-    fs.writeFileSync('BUILD_ID', hash);
-    return hash;
-  },
   webpack: function (config) {
     config.node = {
       fs: 'empty',
