@@ -1,6 +1,5 @@
 const DotEnv = require('dotenv-webpack');
 const server = require('./server.js');
-const fs = require('fs');
 
 module.exports = {
   useFileSystemPublicRoutes: false,
