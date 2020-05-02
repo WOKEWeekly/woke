@@ -3,7 +3,7 @@ import React, { Component, PureComponent } from 'react';
 import { zDate } from 'zavid-modules';
 
 import { Loader } from '~/components/loader.js';
-import { Title, Subtitle, Divider } from '~/components/text.js';
+import { Title, Subtitle, Divider, VanillaLink } from '~/components/text.js';
 import { Zoomer } from '~/components/transitioner.js';
 
 import request from '~/constants/request.js';
@@ -83,7 +83,7 @@ class Article extends PureComponent {
         determinant={this.state.isLoaded}
         duration={400}
         delay={75 * idx}>
-        <a href={`/blog/${item.slug}`}>
+        <VanillaLink href={`/blog/${item.slug}`}>
           <div className={css.item}>
             <img
               src={`${cloudinary.url}/${cloudinary.lazy_wide}/${item.image}`}
@@ -95,7 +95,7 @@ class Article extends PureComponent {
               <Subtitle className={css.details}>{zDate.formatDate(item.datePublished, true)}</Subtitle>
             </div>
           </div>
-        </a>
+        </VanillaLink>
       </Zoomer>
       <Divider/>
       </React.Fragment>

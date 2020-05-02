@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { AdminButton } from '~/components/button.js';
 import { Shader, Spacer } from '~/components/layout.js';
 import { Loader, Empty } from '~/components/loader.js';
-import { Title, Subtitle, } from '~/components/text.js';
+import { Title, Subtitle, VanillaLink } from '~/components/text.js';
 import {BottomToolbar} from '~/components/toolbar.js';
 import { Zoomer, Fader } from '~/components/transitioner.js';
 
@@ -105,7 +105,7 @@ class Article extends PureComponent {
         duration={400}
         delay={75 * idx}
         className={css.icontainer}>
-        <a href={`/blog/${item.slug}`}>
+        <VanillaLink href={`/blog/${item.slug}`}>
           <div className={css.cell}>
             <img
               src={`${cloudinary.url}/${cloudinary.lazy_wide}/${item.image}`}
@@ -117,7 +117,7 @@ class Article extends PureComponent {
               <Subtitle className={css.date}>{zDate.formatDate(item.datePublished, true)}</Subtitle>
             </div>
           </div>
-        </a>
+        </VanillaLink>
       </Zoomer>
     );
     

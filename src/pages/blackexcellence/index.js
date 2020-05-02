@@ -7,6 +7,7 @@ import { AddEntityButton } from '~/components/button.js';
 import { SortDropdown } from '~/components/dropdown.js';
 import { Cover, Shader, Spacer } from '~/components/layout.js';
 import { Loader, Empty } from '~/components/loader.js';
+import { VanillaLink } from '~/components/text.js';
 import { BottomToolbar } from '~/components/toolbar.js';
 import { Fader } from '~/components/transitioner.js';
 
@@ -171,7 +172,7 @@ class Candidate extends PureComponent {
         determinant={this.state.isLoaded}
         duration={500}
         delay={75 * idx}>
-        <a href={`/blackexcellence/candidate/${item.id}`}>
+        <VanillaLink href={`/blackexcellence/candidate/${item.id}`}>
           <div className={css.cell}>
             <img
               src={`${cloudinary.url}/${cloudinary.lazy}/${item.image}`}
@@ -180,7 +181,7 @@ class Candidate extends PureComponent {
               onLoad={this.showImage}
               onError={this.showImage} />
           </div>
-        </a>
+        </VanillaLink>
       </Fader>
     );
   }

@@ -10,7 +10,7 @@ import { SortDropdown } from '~/components/dropdown.js';
 import { Icon } from '~/components/icon.js';
 import { Cover, Shader, Spacer } from '~/components/layout.js';
 import { Loader, Empty } from '~/components/loader.js';
-import { Title, Subtitle, Divider, Paragraph, truncateText } from '~/components/text.js';
+import { Title, Subtitle, Divider, Paragraph, VanillaLink, truncateText } from '~/components/text.js';
 import {BottomToolbar} from '~/components/toolbar.js';
 import { Zoomer, Slider, Fader } from '~/components/transitioner.js';
 
@@ -126,7 +126,7 @@ class Sessions extends Component {
             height={200}
             className={css.cover} />
 
-          <Fader determinant={isLoaded} duration={1500}>
+          <Fader determinant={isLoaded} duration={1500} className={css.sessionCollectionContainer}>
             <SessionCollection/>
           </Fader>
 
@@ -159,7 +159,12 @@ class Session extends PureComponent {
     this.state = { isLoaded: false }
   }
 
+  componentDidMount(){
+    this.setState({ isLoaded: true })
+  }
+
   render(){
+    const { isLoaded } = this.state;
     const { item, idx, view } = this.props;
     item.description = item.description && item.description.trim().length > 0 ? item.description : 'No description.';
 
@@ -168,40 +173,38 @@ class Session extends PureComponent {
     if (view === 'grid'){
       return (
         <Zoomer
-          determinant={this.state.isLoaded}
+          determinant={isLoaded}
           duration={400}
           delay={75 * idx}
           className={css.container}>
-          <a href={link}>
+          <VanillaLink href={link}>
             <div className={css.cell}>
               <img
                 src={`${cloudinary.url}/${cloudinary.lazy}/${item.image}`}
                 alt={item.title}
-                className={css.image}
-                onLoad={() => this.setState({isLoaded: true})} />
+                className={css.image} />
               <div className={css.details}>
                 <Title className={css.title}>{item.title}</Title>
                 <Subtitle className={css.date}>{zDate.formatDate(item.dateHeld, true)}</Subtitle>
               </div>
             </div>
-          </a>
+          </VanillaLink>
         </Zoomer>
       );
     } else {
       return (
         <Slider
-          determinant={this.state.isLoaded}
+          determinant={isLoaded}
           duration={400}
           delay={75 * idx}
           direction={'left'}>
-          <a href={link}>
+          <VanillaLink href={link}>
             <Row className={css.item}>
               <Col md={4} className={'p-0'}>
                 <img
                   src={`${cloudinary.url}/${cloudinary.lazy}/${item.image}`}
                   alt={item.title}
-                  className={css.image}
-                  onLoad={() => this.setState({isLoaded: true})} />
+                  className={css.image} />
               </Col>
               <Col md={8}>
                 <div className={css.details}>
@@ -217,7 +220,7 @@ class Session extends PureComponent {
                 </div>
               </Col>
             </Row>
-          </a>
+          </VanillaLink>
         </Slider>
       );
     }

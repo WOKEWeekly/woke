@@ -83,11 +83,11 @@ export class ReadMore extends Component {
   render(){
     const { link, text = 'Read more' } = this.props;
     return (
-      <a href={link}>
+      <VanillaLink href={link}>
         <div className={css.readmore}>
           <Icon name={'external-link-alt'} className={css.linkIcon} />{text}
         </div>
-      </a>
+      </VanillaLink>
     )
   }
 }
@@ -99,6 +99,15 @@ export class ExpandText extends Component {
       <button className={css.invisible_button} onClick={onClick} style={{padding: 0}}>
         <div className={css.expandText}>{text}</div>
       </button>
+    )
+  }
+}
+
+export class VanillaLink extends Component {
+  render(){
+    const { href, children } = this.props;
+    return (
+      <a className={css.noUnderline} href={href}>{children}</a>
     )
   }
 }

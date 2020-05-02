@@ -109,6 +109,7 @@ $break-xxl: 1408px; // Extra large devices (large desktops)
 
 @mixin entity($float, $width){
   margin: 1em 0;
+  overflow-x: hidden;
   .image {
     border-radius: 8px;
     float: $float;
