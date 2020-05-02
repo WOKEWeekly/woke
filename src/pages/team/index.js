@@ -55,48 +55,49 @@ class Team extends Component {
 
     const { isLoaded, members } = this.state;
 
-    if (!isLoaded){
-      return <Loader/>;
-    } else if (members.length === 0) {
-      return <Empty message={'No members found.'} />;
-    }
-
-    const items = [];
-
-    for (const [index, item] of members.entries()) {
-      items.push(<Member key={index} idx={index} item={item} getTeam={this.getTeam} />);
-    }
-
-    const MemberTable = () => {
-      const headerRow = (
-        <div className={css.header}>
-          <span>#</span>
-          <span>Name</span>
-          <span>Level</span>
-          <span>Role</span>
-          <span>Ethnicity</span>
-          <span>Birthday</span>
-          <span/>
-          <span/>
-          <span/>
-        </div>
-      )
-
-      return (
-        <div className={css.grid}>
-          {headerRow}
-          {items}
-        </div>
-      );
-    };
-
-    const MemberList = () => {
-      return <div className={css.list}>{items}</div>;
-    };
-
     const MemberCollection = () => {
+      if (!isLoaded){
+        return <Loader/>;
+      } else if (members.length === 0) {
+        return <Empty message={'No members found.'} />;
+      }
+  
+      const items = [];
+  
+      for (const [index, item] of members.entries()) {
+        items.push(<Member key={index} idx={index} item={item} getTeam={this.getTeam} />);
+      }
+  
+      const MemberTable = () => {
+        const headerRow = (
+          <div className={css.header}>
+            <span>#</span>
+            <span>Name</span>
+            <span>Level</span>
+            <span>Role</span>
+            <span>Ethnicity</span>
+            <span>Birthday</span>
+            <span/>
+            <span/>
+            <span/>
+          </div>
+        )
+  
+        return (
+          <div className={css.grid}>
+            {headerRow}
+            {items}
+          </div>
+        );
+      };
+  
+      const MemberList = () => {
+        return <div className={css.list}>{items}</div>;
+      };
+
       return (
         <React.Fragment>
+          <Title className={css.heading}>List of #WOKEWeekly Team Members</Title>
           <Default><MemberTable/></Default>
           <Mobile><MemberList/></Mobile>
         </React.Fragment>
@@ -106,7 +107,6 @@ class Team extends Component {
     return (
       <React.Fragment>
         <Shader className={css.memberTabler}>
-          <Title className={css.heading}>List of #WOKEWeekly Team Members</Title>
           <MemberCollection/>
         </Shader>
 
@@ -120,7 +120,7 @@ class Team extends Component {
 	}
 }
 
-class _Member extends PureComponent {
+class IMember extends PureComponent {
   constructor(props){
     super(props);
     this.state = {
@@ -236,5 +236,5 @@ const mapStateToProps = state => ({
   countries: state.countries
 });
 
-const Member = connect(mapStateToProps)(_Member);
+const Member = connect(mapStateToProps)(IMember);
 export default connect(mapStateToProps)(Team);
