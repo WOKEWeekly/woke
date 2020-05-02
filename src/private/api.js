@@ -23,6 +23,7 @@ const sessionsRoutes = require('./api/routes/sessions');
 const candidatesRoutes = require('./api/routes/candidates');
 const membersRoutes = require('./api/routes/members');
 const topicsRoutes = require('./api/routes/topics');
+const reviewsRoutes = require('./api/routes/reviews');
 
 const CLEARANCES = require('../constants/clearances.js');
 const {
@@ -50,110 +51,8 @@ module.exports = function (app, conn) {
   // topics routes
   app.use('/api/v1/topics', topicsRoutes);
 
-  /** Retrieve all reviews */
-  app.get('/api/v1/reviews', validateReq, function (req, res) {
-    const sql = SQL.REVIEWS.READ.ALL();
-    conn.query(sql, function (err, reviews) {
-      respondToClient(res, err, 200, reviews);
-    });
-  });
-
-  /** Retrieve individual review */
-  app.get('/api/v1/reviews/:id([0-9]+)', validateReq, function (req, res) {
-    const id = req.params.id;
-    conn.query(SQL.REVIEWS.READ.SINGLE(), id, function (err, [review] = []) {
-      if (err) return respondToClient(res, err);
-      if (!review) err = ERROR.INVALID_ENTITY_ID(ENTITY.REVIEW, id);
-      respondToClient(res, err, 200, review);
-    });
-  });
-
-  /** Retrieve 3 5-star reviews with images */
-  app.get('/api/v1/reviews/featured', validateReq, function (req, res) {
-    conn.query(SQL.REVIEWS.READ.FEATURED, function (err, reviews) {
-      respondToClient(res, err, 200, reviews);
-    });
-  });
-
-  /** Add new review to database */
-  app.post('/api/v1/reviews', verifyToken(CLEARANCES.ACTIONS.CRUD_REVIEWS), function (req, res) {
-    const review = req.body;
-
-    async.waterfall([
-      function (callback) { // Upload image to cloud
-        filer.uploadImage(review, DIRECTORY.REVIEWS, true, callback);
-      },
-      function (review, callback) { // Add review to database
-        const {
-          sql,
-          values
-        } = SQL.REVIEWS.CREATE(review);
-        conn.query(sql, [values], function (err, result) {
-          err ? callback(err) : callback(null, result.insertId);
-        });
-      }
-    ], function (err, id) {
-      respondToClient(res, err, 201, {
-        id
-      });
-    });
-  });
-
-  /** Update details of existing review in database */
-  app.put('/api/v1/reviews/:id', verifyToken(CLEARANCES.ACTIONS.CRUD_REVIEWS), function (req, res) {
-    const id = req.params.id;
-    const {
-      review,
-      changed
-    } = req.body;
-
-    async.waterfall([
-      function (callback) { // Delete old image if changed.
-        conn.query(SQL.REVIEWS.READ.SINGLE('image'), id, function (err, [review] = []) {
-          if (err) return callback(err);
-          if (!review) return callback(ERROR.INVALID_ENTITY_ID(ENTITY.REVIEW, id));
-          if (!changed) return callback(null);
-          filer.destroyImage(review.image, callback);
-        });
-      },
-      function (callback) { // Equally, upload new image if changed
-        filer.uploadImage(review, DIRECTORY.REVIEWS, changed, callback);
-      },
-      function (review, callback) { // Update review in database
-        const {
-          sql,
-          values
-        } = SQL.REVIEWS.UPDATE(id, review, changed);
-        conn.query(sql, values, function (err) {
-          err ? callback(err) : callback(null);
-        });
-      }
-    ], function (err) {
-      respondToClient(res, err, 200);
-    });
-  });
-
-  /** Delete an existing review from database */
-  app.delete('/api/v1/reviews/:id', verifyToken(CLEARANCES.ACTIONS.CRUD_REVIEWS), function (req, res) {
-    const id = req.params.id;
-
-    async.waterfall([
-      function (callback) { // Delete image from cloud
-        conn.query(SQL.REVIEWS.READ.SINGLE('image'), id, function (err, [review] = []) {
-          if (err) return callback(err);
-          if (!review) return callback(ERROR.INVALID_ENTITY_ID(ENTITY.REVIEW, id));
-          filer.destroyImage(review.image, callback);
-        });
-      },
-      function (callback) { // Delete review from database
-        conn.query(SQL.REVIEWS.DELETE, id, function (err) {
-          err ? callback(err) : callback(null);
-        });
-      }
-    ], function (err) {
-      respondToClient(res, err, 204);
-    });
-  });
+  // reviews routes
+  app.use('/api/v1/reviews', reviewsRoutes);
 
   /** Retrieve all articles */
   app.get('/api/v1/articles', verifyToken(CLEARANCES.ACTIONS.CRUD_ARTICLES), function (req, res) {

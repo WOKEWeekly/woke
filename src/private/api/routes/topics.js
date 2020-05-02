@@ -22,7 +22,7 @@ router.get('/:id([0-9]+)', validateReq, TopicsController.getTopic);
 router.get('/random', validateReq, TopicsController.getRandomTopic);
 // GET generated topic token
 router.get('/token', verifyToken(CLEARANCES.ACTIONS.GENERATE_NEW_TOKEN), TopicsController.getTopicToken);
-// POST new top
+// POST new topic
 router.post('/', verifyToken(CLEARANCES.ACTIONS.CRUD_TOPICS), TopicsController.addTopic);
 // PUT topic update
 router.put('/:id', verifyToken(CLEARANCES.ACTIONS.CRUD_TOPICS), TopicsController.updateTopic);
