@@ -4,6 +4,7 @@ module.exports = {
   ENTITY: {
     ARTICLE: 'article',
     CANDIDATE: 'candidate',
+    DOCUMENT: 'document',
     MEMBER: 'member',
     PAGE: 'page',
     REVIEW: 'review',
@@ -25,6 +26,14 @@ module.exports = {
     MEMBERS: 'team',
     REVIEWS: 'reviews',
     SESSIONS: 'sessions',
+  },
+
+  ROUTES: {
+    DOCUMENTS: [
+      '/blackexcellence-tribute-guide',
+      '/constitution',
+      '/sponsorship-proposal'
+    ],
   },
 
   /** For each of the pages */

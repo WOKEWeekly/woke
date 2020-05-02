@@ -9,13 +9,22 @@ const { renderErrorPage } = require('./response.js');
 const SQL = require('./sql.js');
 
 const { accounts, cloudinary, domain, forms, siteDescription } = require('../constants/settings.js');
-const { ENTITY, OPERATIONS, PAGE } = require('../constants/strings.js');
+const { ENTITY, OPERATIONS, PAGE, ROUTES } = require('../constants/strings.js');
 
 let exigencies = {};
 
 module.exports = function(app, conn, server){
 
-  exigencies = { conn, server }
+  exigencies = { conn, server };
+  const knex = require('knex')({
+    client: 'mysql',
+    connection: {
+      host: process.env.MYSQL_HOST,
+      user: process.env.MYSQL_USER,
+      password: process.env.MYSQL_PWD,
+      database: process.env.MYSQL_NAME
+    }
+  });
 
   /** Home page */
   app.get(['/', '/home'], function(req, res){
@@ -493,23 +502,15 @@ module.exports = function(app, conn, server){
     res.end();
   });
 
-  /***************************************************************
-   * RESOURCES
-   **************************************************************/
-     
-  /** Constitution PDF */
-  app.get('/constitution', function(req, res){
-    request(`${cloudinary.url}/resources/Constitution.pdf`).pipe(res);
-  });
 
-  /** Sponsorship Proposal PDF */
-  app.get('/sponsorship-proposal', function(req, res){
-    request(`${cloudinary.url}/v1579300643/resources/Sponsorship_Proposal.pdf`).pipe(res);
-  });
-
-  /** #Blackexcellence Tribute Guide PDF */
-  app.get('/blackexcellence-tribute-guide', function(req, res){
-    request(`${cloudinary.url}/resources/BlackExcellence_Tribute_Guide.pdf`).pipe(res);
+  /** Route for all documents */
+  app.get(ROUTES.DOCUMENTS, function(req, res){
+    const query = knex.select().from('documents').where('name', req.path.substring(1));
+    query.asCallback(function (err, [document] = []) {
+      if (err) return renderErrorPage(req, res, err, server);
+      if (!document) return renderErrorPage(req, res, ERROR.NONEXISTENT_ENTITY(ENTITY.DOCUMENT), server);
+      return renderDocument(res, document);
+    });
   });
 
   /** Robots.txt page */
@@ -599,6 +600,25 @@ module.exports = function(app, conn, server){
   app.get('/recruitment', renderPage('recruitment', PAGE.KINDS.INFO));
   app.get('/recruitment/edit', renderPage('recruitment', PAGE.KINDS.INFO, PAGE.OPERATIONS.UPDATE));
 
+}
+
+/**
+ * Render a document, particularly a PDF, from Cloudinary.
+ * @param {Object} res - The response context.
+ * @param {Object} document - The document object containing
+ * the file and version.
+ */
+const renderDocument = (res, document) => {
+  const { file, version } = document;
+  let url;
+
+  if (version){
+    url = `${cloudinary.url}/${version}/public/docs/${file}`
+  } else {
+    url = `${cloudinary.url}/public/docs/${file}`
+  }
+
+  request(url).pipe(res); 
 }
 
 /**
