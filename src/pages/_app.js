@@ -43,7 +43,7 @@ export default class WOKE extends App {
     } = this.props.router.query;
 
     // Set the theme
-    store.dispatch(setTheme(theme));
+    setTimeout(() => store.dispatch(setTheme(theme), 500));
 
     // Fade background image into view
     const image = new Image();
