@@ -506,10 +506,25 @@ module.exports = function(app, conn, server){
   /** Route for all documents */
   app.get(ROUTES.DOCUMENTS, function(req, res){
     const query = knex.select().from('documents').where('name', req.path.substring(1));
-    query.asCallback(function (err, [document] = []) {
+    query.asCallback(function(err, [document] = []) {
       if (err) return renderErrorPage(req, res, err, server);
       if (!document) return renderErrorPage(req, res, ERROR.NONEXISTENT_ENTITY(ENTITY.DOCUMENT), server);
       return renderDocument(res, document);
+    });
+  });
+
+  /** Route for all pages */
+  app.get(ROUTES.PAGES, function(req, res){
+    // e.g. /about/edit -> about
+    const base = req.path.match(/\/[a-z]+/)[0].substring(1);
+    const { READ, UPDATE } = PAGE.OPERATIONS;
+    const operation = req.path.includes('edit') ? UPDATE : READ;
+    
+    const query = knex.select().from('pages').where('name', base);
+    query.asCallback(function(err, [page] = []) {
+      if (err) return renderErrorPage(req, res, err, server);
+      if (!page) return renderErrorPage(req, res, ERROR.NONEXISTENT_ENTITY(ENTITY.PAGE), server);
+      return renderPage(req, res, page, operation);
     });
   });
 
@@ -555,9 +570,9 @@ module.exports = function(app, conn, server){
         });
       },
       function(callback){
-        conn.query(`SELECT page_name FROM pages;`, function (err, result) {
+        conn.query(`SELECT name FROM pages;`, function (err, result) {
           if (err) return callback(err);
-          result.forEach(page => routes.push(`/${page.page_name}`));
+          result.forEach(page => routes.push(`/${page.name}`));
           callback(null);
         });
       }
@@ -578,28 +593,6 @@ module.exports = function(app, conn, server){
       });
     });
   });
-
-  app.get('/about', renderPage('about', PAGE.KINDS.INFO));
-  app.get('/about/edit', renderPage('about', PAGE.KINDS.INFO, PAGE.OPERATIONS.UPDATE));
-
-  app.get('/cookies', renderPage('cookies', PAGE.KINDS.INFO));
-  app.get('/cookies/edit', renderPage('cookies', PAGE.KINDS.INFO, PAGE.OPERATIONS.UPDATE));
-
-  app.get('/donate', renderPage('donate', PAGE.KINDS.INFO));
-  app.get('/donate/edit', renderPage('donate', PAGE.KINDS.INFO, PAGE.OPERATIONS.UPDATE));
-
-  app.get('/faq', renderPage('faq', PAGE.KINDS.INFO));
-  app.get('/faq/edit', renderPage('faq', PAGE.KINDS.INFO, PAGE.OPERATIONS.UPDATE));
-
-  app.get('/mentalhealth', renderPage('mentalhealth', PAGE.KINDS.VARIANTS));
-  app.get('/mentalhealth/edit', renderPage('mentalhealth', PAGE.KINDS.VARIANTS, PAGE.OPERATIONS.UPDATE));
-
-  app.get('/privacy', renderPage('privacy', PAGE.KINDS.INFO));
-  app.get('/privacy/edit', renderPage('privacy', PAGE.KINDS.INFO, PAGE.OPERATIONS.UPDATE));
-
-  app.get('/recruitment', renderPage('recruitment', PAGE.KINDS.INFO));
-  app.get('/recruitment/edit', renderPage('recruitment', PAGE.KINDS.INFO, PAGE.OPERATIONS.UPDATE));
-
 }
 
 /**
@@ -624,57 +617,46 @@ const renderDocument = (res, document) => {
 /**
  * Dynamically render a page from the database.
  * @param {string} pageName - The name of the page.
- * @param {string} kind - Either PAGE.KINDS.VARIANTS or 'information'.
  * @param {string} [operation] - Either 'READ' or 'UPDATE'. Defaults to 'READ'.
  */
-const renderPage = (
-    pageName,
-    kind,
-    operation = PAGE.OPERATIONS.READ
-  ) => {
-  const { conn, server } = exigencies;
-  return function(req, res){
-    conn.query(`SELECT * FROM pages WHERE name = '${pageName}'`, function (err, [page] = []) {
-      if (err) return renderErrorPage(req, res, err, server);
-      if (!page) return renderErrorPage(req, res, ERROR.NONEXISTENT_ENTITY(ENTITY.PAGE), server);
-  
-      const { name, title, includeDomain, text, excerpt, cardImage, bgImage,
-        coverImage, coverImageLogo, coverImageAlt, theme,
-        editTitle, editPlaceholderText } = page;
+const renderPage = (req, res, page, operation) => {
+  const { server } = exigencies;
 
-      let uri = '';
-      let information = {};
-  
-      if (operation === PAGE.OPERATIONS.READ){
-        uri = `/pages/${kind}`;
-        information = {
-          pageName: name,
-          pageText: text,
-          title: includeDomain ? `${title} | #WOKEWeekly` : title,
-          description: excerpt || createExcerpt(text),
-          ogUrl: `/${name}`,
-          cardImage: cardImage || 'public/bg/card-home.jpg',
-          backgroundImage: bgImage || 'bg-app.jpg',
-          coverImage: coverImage,
-          imageLogo: coverImageLogo,
-          imageAlt: coverImageAlt,
-          theme: theme || PAGE.THEMES.DEFAULT
-        };
-      } else {
-        uri = `/pages/edit`;
-        information = {
-          pageName: name,
-          pageText: text,
-          title: editTitle,
-          backgroundImage: bgImage || 'bg-app.jpg',
-          placeholderText: editPlaceholderText,
-          theme: theme || PAGE.THEMES.DEFAULT
-        }
-      }
+  const { name, title, kind, includeDomain, text, excerpt, cardImage, bgImage,
+    coverImage, coverImageLogo, coverImageAlt, theme,
+    editTitle, editPlaceholderText } = page;
 
-      return server.render(req, res, uri, information);
-    });
+  let uri = '';
+  let information = {};
+
+  if (operation === PAGE.OPERATIONS.READ){
+    uri = `/pages/${kind.toLowerCase()}`;
+    information = {
+      pageName: name,
+      pageText: text,
+      title: includeDomain ? `${title} | #WOKEWeekly` : title,
+      description: excerpt || createExcerpt(text),
+      ogUrl: `/${name}`,
+      cardImage: cardImage || 'public/bg/card-home.jpg',
+      backgroundImage: bgImage || 'bg-app.jpg',
+      coverImage: coverImage,
+      imageLogo: coverImageLogo,
+      imageAlt: coverImageAlt,
+      theme: theme || PAGE.THEMES.DEFAULT
+    };
+  } else if (operation === PAGE.OPERATIONS.UPDATE) {
+    uri = `/pages/edit`;
+    information = {
+      pageName: name,
+      pageText: text,
+      title: editTitle,
+      backgroundImage: bgImage || 'bg-app.jpg',
+      placeholderText: editPlaceholderText,
+      theme: theme || PAGE.THEMES.DEFAULT
+    }
   }
+
+  return server.render(req, res, uri, information);
 }
 
 /**

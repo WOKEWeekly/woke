@@ -12,7 +12,6 @@ import CLEARANCES from '~/constants/clearances.js';
 import css from '~/styles/pages/Information.module.scss';
 
 class Variants extends Component {
-  /** Retrieve information from server */
   static async getInitialProps({ query }) {
     return { ...query };
   }
@@ -27,7 +26,7 @@ class Variants extends Component {
   }
 
   render(){
-    const { user, description, url, pageText,
+    const { user, description, ogUrl, pageText,
     coverImage, imageLogo, imageAlt, } = this.props;
     
     const image = <img
@@ -55,7 +54,7 @@ class Variants extends Component {
             <BottomToolbar>
               <EditEntityButton
                 title={'Edit Page'}
-                onClick={() => location.href = `${url}/edit/`} />
+                onClick={() => location.href = `${ogUrl}/edit/`} />
             </BottomToolbar>
           : null}
         </Spacer>
