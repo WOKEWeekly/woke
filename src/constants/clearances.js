@@ -24,6 +24,7 @@ module.exports = {
     SEND_NOTIFICATIONS: 8,  // Send notifications to all users
     EDIT_PAGE: 8,            // Edit information pages
 
+    CRUD_DOCUMENTS: 8,
     GENERATE_NEW_TOKEN: 9,   // Generate new access tokens
   },
   LEVELS: {

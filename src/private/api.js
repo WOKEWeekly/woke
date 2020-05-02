@@ -19,7 +19,7 @@ const { DIRECTORY, ENTITY } = require('../constants/strings.js');
 const emailsOn = process.env.NODE_ENV === 'production' || process.argv.includes('--emails');
 if (!emailsOn) console.warn("Emails are turned off.");
 
-module.exports = function(app, conn){
+module.exports = function(app, conn, knex){
 
   /** Log user activity on each request */
   app.use('/api', logUserActivity(conn));
@@ -926,7 +926,55 @@ module.exports = function(app, conn){
 
     conn.query(sql, values, function (err, result) {
       if (err) return respondToClient(res, err);
-      if (result.affectedRows === 0) err = ERROR.INVALID_PAGE_NAME(page);
+      if (result.affectedRows === 0) err = ERROR.INVALID_ENTITY_NAME(ENTITY.PAGE, page);
+      respondToClient(res, err, 200);
+    });
+  });
+
+  /** Retrieve all documents */
+  app.get('/api/v1/documents', verifyToken(CLEARANCES.ACTIONS.CRUD_DOCUMENTS), function(req, res){
+    const query = knex.select().from('documents');
+    query.asCallback(function (err, documents) {
+      respondToClient(res, err, 200, documents);
+    });
+  });
+
+  /** Retrieve individual document */
+  app.get('/api/v1/documents/:name', verifyToken(CLEARANCES.ACTIONS.CRUD_DOCUMENTS), function(req, res){
+    const { name } = req.params;
+    const query = knex.select().from('documents').where('name', name);
+    query.asCallback(function (err, [document] = []) {
+      if (err) return respondToClient(res, err);
+      if (!document) err = ERROR.INVALID_ENTITY_NAME(ENTITY.DOCUMENT, name);
+      respondToClient(res, err, 200, document);
+    });
+  });
+
+  /** Update document */
+  app.put('/api/v1/documents/:name', verifyToken(CLEARANCES.ACTIONS.CRUD_DOCUMENTS), function(req, res){
+    const { name } = req.params;
+    const document = req.body;
+
+    async.waterfall([
+      function(callback){ // Delete original image from cloud
+        const query = knex.select('single').from('documents').where('name', name);
+        query.asCallback(function (err, [document] = []) {
+          if (err) return callback(err);
+          if (!document) return callback(ERROR.INVALID_ENTITY_NAME(ENTITY.DOCUMENT, name));
+          if (!changed) return callback(null);
+          filer.destroyDocument(document.name, callback);
+        });
+      },
+      function(callback){ // Upload new document
+        filer.uploadDocument(document, callback);
+      },
+      function(document, callback){ // Update session in database
+        const query = knex('documents').update(document).where('name', name);
+        query.asCallback(function(err) {
+          callback(err);
+        });
+      }
+    ], function(err){
       respondToClient(res, err, 200);
     });
   });

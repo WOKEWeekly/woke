@@ -9,53 +9,89 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET
 });
 
-module.exports = {
+/**
+ * Upload image cloudinary
+ * @param {object} iEntity - The initial entity object.
+ * @param {string} directory - The Cloudinary directory the image should be uploaded to.
+ * @param {boolean} imageHasChanged - Indicates whether the image has changed. If it has not,
+ * this method will only construct the slug.
+ * @param {Function} next - The next callback function in the series.
+ */
+exports.uploadImage = (iEntity, directory, imageHasChanged, next) => {
+  // Construct the slug and image filename
+  const { entity, filename } = generateSlugAndFilename(iEntity, directory);
 
-  /**
-   * Upload image cloudinary
-   * @param {object} iEntity - The initial entity object.
-   * @param {string} directory - The Cloudinary directory the image should be uploaded to.
-   * @param {boolean} imageHasChanged - Indicates whether the image has changed. If it has not,
-   * this method will only construct the slug.
-   * @param {Function} next - The next callback function in the series.
-   */
-  uploadImage: (iEntity, directory, imageHasChanged, next) => {
-    // Construct the slug and image filename
-    const { entity, filename } = generateSlugAndFilename(iEntity, directory);
+  // Discontinue if image has not changed
+  const noImageUpload = !imageHasChanged || !entity.image;
+  if (noImageUpload) return next(null, entity);
 
-    // Discontinue if image has not changed
-    const noImageUpload = !imageHasChanged || !entity.image;
-    if (noImageUpload) return next(null, entity);
+  // Upload to cloudinary
+  const env = dev ? 'dev' : 'prod';
+  cloudinary.uploader.upload(entity.image, {
+    public_id: `${env}/${directory}/${filename}`,
+    unique_filename: false
+  }, (err, result) => {
+    if (err) return next(err);
+    const { public_id, version, format } = result;
+    entity.image = `v${version}/${public_id}.${format}`;
+    next(null, entity);
+  });
+}
 
-    // Upload to cloudinary
-    const env = dev ? 'dev' : 'prod';
-    cloudinary.uploader.upload(entity.image, {
-      public_id: `${env}/${directory}/${filename}`,
-      unique_filename: false
-    }, (err, result) => {
-      if (err) return next(err);
-      const { public_id, version, format } = result;
-      entity.image = `v${version}/${public_id}.${format}`;
-      next(null, entity);
-    });
-  },
+/**
+ * Delete an image from Cloudinary.
+ * @param {string} image - The string identifier for the image.
+ * @param {Function} next - Calls the next function.
+ */
+exports.destroyImage = (image, next) => {
+  if (!image) return next(null);
+  
+  // e.g. public_id = "dev/sessions/2020-08-03_manchester"
+  const public_id = image.substring(image.indexOf('/') + 1, image.indexOf('.'));
 
-  /**
-   * Delete an image from Cloudinary.
-   * @param {string} image - The string identifier for the image.
-   * @param {Function} next - Calls the next function.
-   */
-  destroyImage: (image, next) => {
-    if (!image) return next(null);
-    
-    // e.g. public_id = "dev/sessions/2020-08-03_manchester"
-    const public_id = image.substring(image.indexOf('/') + 1, image.indexOf('.'));
+  cloudinary.uploader.destroy(public_id, (err) => {
+    if (err) console.warn(err);
+    next(null);
+  });
+}
 
-    cloudinary.uploader.destroy(public_id, (err) => {
-      if (err) console.warn(err);
-      next(null);
-    });
-  }
+/**
+ * Upload document to Cloudinary.
+ * @param {object} document - The document to be uploaded.
+ * @param {Function} next - The next callback function in the series.
+ */
+exports.uploadDocument = (document, next) => {
+  // Construct the slug and filename
+  const name = constructCleanSlug(document.title);
+
+  // Upload to cloudinary
+  cloudinary.uploader.upload(entity.image, {
+    public_id: `public/docs/${name}`,
+    unique_filename: false
+  }, (err, result) => {
+    if (err) return next(err);
+    const { version, format } = result;
+    document.file = `${name}.${format}`;
+    document.version = version;
+    next(null, document);
+  });
+}
+
+/**
+ * Delete a document from Cloudinary.
+ * @param {string} document - The sname of the document.
+ * @param {Function} next - Calls the next function.
+ */
+exports.destroyDocument = (document, next) => {
+  if (!image) return next(null);
+  
+  // e.g. public_id = "dev/sessions/2020-08-03_manchester"
+  const public_id = `public/docs/${document}`;
+
+  cloudinary.uploader.destroy(public_id, (err) => {
+    if (err) console.warn(err);
+    next(null);
+  });
 }
 
 /**

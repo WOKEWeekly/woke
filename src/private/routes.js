@@ -13,18 +13,9 @@ const { ENTITY, OPERATIONS, PAGE, ROUTES } = require('../constants/strings.js');
 
 let exigencies = {};
 
-module.exports = function(app, conn, server){
+module.exports = function(app, conn, knex, server){
 
   exigencies = { conn, server };
-  const knex = require('knex')({
-    client: 'mysql',
-    connection: {
-      host: process.env.MYSQL_HOST,
-      user: process.env.MYSQL_USER,
-      password: process.env.MYSQL_PWD,
-      database: process.env.MYSQL_NAME
-    }
-  });
 
   /** Home page */
   app.get(['/', '/home'], function(req, res){

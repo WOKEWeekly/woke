@@ -12,8 +12,8 @@ module.exports = {
     err.status = 404;
     return err;
   },
-  INVALID_PAGE_NAME: (name) => {
-    const err = new Error(`A page with name '${name}' does not exist.`);
+  INVALID_ENTITY_NAME: (entity, name) => {
+    const err = new Error(`The ${entity} with name '${name}' does not exist.`);
     err.status = 404;
     return err;
   },
