@@ -17,6 +17,7 @@
 
 .threepart {
   @media (min-width: $break-lg) { height: 32vw; }
+  overflow-x: hidden;
   .colpart {
     padding: 1em 0.5em;
     @media (max-width: $break-lg) { padding: 1em; }
@@ -60,6 +61,7 @@
 
 
 .reviewsPreview {
+  overflow-x: hidden;
   .heading {
     @include font-scaler(2);
     text-transform: uppercase;

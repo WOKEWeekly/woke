@@ -9,7 +9,7 @@ import { Title, Subtitle, Paragraph, Divider, createExcerpt } from '~/components
 import { BottomToolbar } from '~/components/toolbar.js';
 import { Partitioner, Shader, Spacer } from '~/components/layout.js';
 import { SocialMediaShareBlock } from '~/components/socialmedia.js';
-import { Fader, Slider } from '~/components/transitioner.js';
+import { Fader } from '~/components/transitioner.js';
 
 import CLEARANCES from '~/constants/clearances.js';
 import { cloudinary } from '~/constants/settings.js';
@@ -94,15 +94,15 @@ class ArticlePage extends Component {
     /** The cover image */
     const CoverImage = () => {
       return (
-        <Slider
+        <Fader
           determinant={isLoaded}
-          duration={800}
-          direction={'left'}> 
+          duration={500}
+          delay={500}> 
           <img
             src={`${cloudinary.url}/${cloudinary.lazy_wide}/${article.image}`}
             alt={article.title}
             className={css.image} />
-        </Slider>
+        </Fader>
       )
     };
 
