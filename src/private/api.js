@@ -19,9 +19,10 @@ const {
 } = require('./response.js');
 const SQL = require('./sql.js');
 
-const sessionRoutes = require('./api/routes/sessions');
-const candidateRoutes = require('./api/routes/candidates');
-const memberRoutes = require('./api/routes/members');
+const sessionsRoutes = require('./api/routes/sessions');
+const candidatesRoutes = require('./api/routes/candidates');
+const membersRoutes = require('./api/routes/members');
+const topicsRoutes = require('./api/routes/topics');
 
 const CLEARANCES = require('../constants/clearances.js');
 const {
@@ -37,119 +38,17 @@ module.exports = function (app, conn) {
   /** Log user activity on each request */
   app.use('/api', logUserActivity(conn));
 
-  // session routes
-  app.use('/api/v1/sessions', sessionRoutes);
+  // sessions routes
+  app.use('/api/v1/sessions', sessionsRoutes);
 
-  // candidate routes
-  app.use('/api/v1/candidates', candidateRoutes);
+  // candidates routes
+  app.use('/api/v1/candidates', candidatesRoutes);
 
-  // member routes
-  app.use('/api/v1/members', memberRoutes);
+  // members routes
+  app.use('/api/v1/members', membersRoutes);
 
-  /** Retrieve all topics */
-  app.get('/api/v1/topics', verifyToken(CLEARANCES.ACTIONS.VIEW_TOPICS), function (req, res) {
-    conn.query(SQL.TOPICS.READ.ALL(), function (err, topics) {
-      respondToClient(res, err, 200, topics)
-    });
-  });
-
-  /** Retrieve individual topic */
-  app.get('/api/v1/topics/:id([0-9]+)', validateReq, function (req, res) {
-    const id = req.params.id;
-    conn.query(SQL.TOPICS.READ.SINGLE(), id, function (err, [topic] = []) {
-      if (err) return respondToClient(res, err);
-      if (!topic) err = ERROR.INVALID_ENTITY_ID(ENTITY.TOPIC, id);
-      respondToClient(res, err, 200, topic);
-    });
-  });
-
-  /** Retrieve a random topic */
-  app.get('/api/v1/topics/random', validateReq, function (req, res) {
-    conn.query(SQL.TOPICS.READ.RANDOM, function (err, [topic] = []) {
-      respondToClient(res, err, 200, topic);
-    });
-  });
-
-  /** Generate Topic Bank access token */
-  app.get('/api/v1/topics/token', verifyToken(CLEARANCES.ACTIONS.GENERATE_NEW_TOKEN), function (req, res) {
-    const {
-      sql,
-      values,
-      token
-    } = SQL.TOPICS.READ.REGENERATE_TOKEN();
-    conn.query(sql, values, function (err) {
-      respondToClient(res, err, 200, {
-        token
-      });
-    });
-  });
-
-  /** Add new topic to database */
-  app.post('/api/v1/topics', verifyToken(CLEARANCES.ACTIONS.CRUD_TOPICS), function (req, res) {
-    const topic = req.body;
-    const {
-      sql,
-      values
-    } = SQL.TOPICS.CREATE(topic);
-    conn.query(sql, [values], function (err, result) {
-      respondToClient(res, err, 201, {
-        id: result.insertId
-      });
-    });
-  });
-
-  /** Update topic in database */
-  app.put('/api/v1/topics/:id', verifyToken(CLEARANCES.ACTIONS.CRUD_TOPICS), function (req, res) {
-    const id = req.params.id;
-    const topic = req.body;
-
-    const {
-      sql,
-      values
-    } = SQL.TOPICS.UPDATE.DETAILS(id, topic);
-    conn.query(sql, values, function (err, result) {
-      if (err) return respondToClient(res, err);
-      if (result.affectedRows === 0) err = ERROR.INVALID_ENTITY_ID(ENTITY.TOPIC, id);
-      respondToClient(res, err, 200);
-    });
-  });
-
-  /** Increment the vote of a topic */
-  app.put('/api/v1/topics/:id/vote/:option(yes|no)', validateReq, function (req, res) {
-    const {
-      id,
-      option
-    } = req.params;
-    async.waterfall([
-      function (callback) { // Increment vote
-        conn.query(SQL.TOPICS.UPDATE.VOTE(id, option), function (err, result) {
-          if (err) return respondToClient(res, err);
-          if (result.affectedRows === 0) err = ERROR.INVALID_ENTITY_ID(ENTITY.TOPIC, id);
-          err ? callback(err) : callback(null);
-        });
-      },
-      function (callback) { // Retrieve new topic vote counts
-        conn.query(SQL.TOPICS.READ.SINGLE('yes, no'), id, function (err, [votes] = []) {
-          err ? callback(err) : callback(null, votes);
-        });
-      },
-    ], function (err, votes) {
-      respondToClient(res, err, 200, {
-        ...votes
-      });
-    });
-  });
-
-  /** Delete an existing topic from database */
-  app.delete('/api/v1/topics/:id', verifyToken(CLEARANCES.ACTIONS.CRUD_TOPICS), function (req, res) {
-    const id = req.params.id;
-    conn.query(SQL.TOPICS.DELETE, id, function (err, result) {
-      // TODO: Slack notifications for deleted topics
-      if (err) return respondToClient(res, err);
-      if (result.affectedRows === 0) err = ERROR.INVALID_ENTITY_ID(ENTITY.TOPIC, id);
-      respondToClient(res, err, 204);
-    });
-  });
+  // topics routes
+  app.use('/api/v1/topics', topicsRoutes);
 
   /** Retrieve all reviews */
   app.get('/api/v1/reviews', validateReq, function (req, res) {
