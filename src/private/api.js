@@ -21,6 +21,7 @@ const SQL = require('./sql.js');
 
 const sessionRoutes = require('./api/routes/sessions');
 const candidateRoutes = require('./api/routes/candidates');
+const memberRoutes = require('./api/routes/members');
 
 const CLEARANCES = require('../constants/clearances.js');
 const {
@@ -42,125 +43,8 @@ module.exports = function (app, conn) {
   // candidate routes
   app.use('/api/v1/candidates', candidateRoutes);
 
-  /** Retrieve all team members */
-  app.get('/api/v1/members', verifyToken(CLEARANCES.ACTIONS.VIEW_TEAM), function (req, res) {
-    conn.query(SQL.MEMBERS.READ.ALL(), function (err, members) {
-      respondToClient(res, err, 200, members);
-    });
-  });
-
-  /** Retrieve individual member */
-  app.get('/api/v1/members/:id([0-9]+)', validateReq, function (req, res) {
-    const id = req.params.id;
-    conn.query(SQL.MEMBERS.READ.SINGLE(), id, function (err, [member] = []) {
-      if (err) return respondToClient(res, err);
-      if (!member) err = ERROR.INVALID_ENTITY_ID(ENTITY.MEMBER, id);
-      respondToClient(res, err, 200, member);
-    });
-  });
-
-  /** Retrieve a random verified member */
-  app.get('/api/v1/members/random', validateReq, function (req, res) {
-    conn.query(SQL.MEMBERS.READ.RANDOM, function (err, [member] = []) {
-      respondToClient(res, err, 200, member);
-    });
-  });
-
-  /** Retrieve only authors */
-  app.get('/api/v1/members/authors', validateReq, function (req, res) {
-    conn.query(SQL.MEMBERS.READ.AUTHORS, function (err, authors) {
-      respondToClient(res, err, 200, authors);
-    });
-  });
-
-  /** Retrieve only executive team members */
-  app.get('/api/v1/members/executives', validateReq, function (req, res) {
-    conn.query(SQL.MEMBERS.READ.EXECUTIVES, function (err, executives) {
-      respondToClient(res, err, 200, executives);
-    });
-  });
-
-  /** Add new team member to database */
-  app.post('/api/v1/members', verifyToken(CLEARANCES.ACTIONS.CRUD_TEAM), function (req, res) {
-    const member = req.body;
-
-    async.waterfall([
-      function (callback) { // Upload image to cloud
-        filer.uploadImage(member, DIRECTORY.MEMBERS, true, callback);
-      },
-      function (member, callback) { // Add member to database
-        const {
-          sql,
-          values
-        } = SQL.MEMBERS.CREATE(member);
-        conn.query(sql, [values], function (err, result) {
-          err ? callback(err) : callback(null, result.insertId);
-        });
-      }
-    ], function (err, id) {
-      respondToClient(res, err, 201, {
-        id
-      });
-    });
-  });
-
-  /** Update details of existing team member in database */
-  app.put('/api/v1/members/:id', verifyToken(CLEARANCES.ACTIONS.CRUD_TEAM), function (req, res) {
-    const id = req.params.id;
-    const {
-      member,
-      changed
-    } = req.body;
-
-    async.waterfall([
-      function (callback) { // Delete old image if changed.
-        conn.query(SQL.MEMBERS.READ.SINGLE('image'), id, function (err, [member] = []) {
-          if (err) return callback(err);
-          if (!member) return callback(ERROR.INVALID_ENTITY_ID(ENTITY.MEMBER, id));
-          if (!changed) return callback(null);
-          filer.destroyImage(member.image, callback);
-        });
-      },
-      function (callback) { // Equally, upload new image if changed
-        filer.uploadImage(member, DIRECTORY.MEMBERS, changed, callback);
-      },
-      function (member, callback) { // Update member in database
-        const {
-          sql,
-          values
-        } = SQL.MEMBERS.UPDATE(id, member, changed);
-        conn.query(sql, values, function (err) {
-          err ? callback(err) : callback(null, member.slug);
-        });
-      }
-    ], function (err, slug) {
-      respondToClient(res, err, 200, {
-        slug
-      });
-    });
-  });
-
-  /** Delete an existing team member from database */
-  app.delete('/api/v1/members/:id', verifyToken(CLEARANCES.ACTIONS.CRUD_TEAM), function (req, res) {
-    const id = req.params.id;
-
-    async.waterfall([
-      function (callback) { // Delete image from cloud
-        conn.query(SQL.MEMBERS.READ.SINGLE('image'), id, function (err, [member] = []) {
-          if (err) return callback(err);
-          if (!member) return callback(ERROR.INVALID_ENTITY_ID(ENTITY.MEMBER, id));
-          filer.destroyImage(member.image, callback);
-        });
-      },
-      function (callback) { // Delete member from database
-        conn.query(SQL.MEMBERS.DELETE, id, function (err) {
-          err ? callback(err) : callback(null);
-        });
-      }
-    ], function (err) {
-      respondToClient(res, err, 204);
-    });
-  });
+  // member routes
+  app.use('/api/v1/members', memberRoutes);
 
   /** Retrieve all topics */
   app.get('/api/v1/topics', verifyToken(CLEARANCES.ACTIONS.VIEW_TOPICS), function (req, res) {
