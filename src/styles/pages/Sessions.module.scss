@@ -6,6 +6,10 @@
   @media (max-width: $break-md) { background-position: initial; }
 }
 
+.sessionCollectionContainer {
+  overflow-x: hidden;
+}
+
 .grid {
   @include responsive-grid;
   border: .5em solid #2d203b;
@@ -42,7 +46,6 @@
 
 .list {
   @extend .responsive-container-70;
-  overflow-x: hidden;
   .item {
     @include scale-on-hover(1.04);
     background-color: $primary-dark;

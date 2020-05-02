@@ -126,7 +126,7 @@ class Sessions extends Component {
             height={200}
             className={css.cover} />
 
-          <Fader determinant={isLoaded} duration={1500}>
+          <Fader determinant={isLoaded} duration={1500} className={css.sessionCollectionContainer}>
             <SessionCollection/>
           </Fader>
 
@@ -159,7 +159,12 @@ class Session extends PureComponent {
     this.state = { isLoaded: false }
   }
 
+  componentDidMount(){
+    this.setState({ isLoaded: true })
+  }
+
   render(){
+    const { isLoaded } = this.state;
     const { item, idx, view } = this.props;
     item.description = item.description && item.description.trim().length > 0 ? item.description : 'No description.';
 
@@ -168,7 +173,7 @@ class Session extends PureComponent {
     if (view === 'grid'){
       return (
         <Zoomer
-          determinant={this.state.isLoaded}
+          determinant={isLoaded}
           duration={400}
           delay={75 * idx}
           className={css.container}>
@@ -177,8 +182,7 @@ class Session extends PureComponent {
               <img
                 src={`${cloudinary.url}/${cloudinary.lazy}/${item.image}`}
                 alt={item.title}
-                className={css.image}
-                onLoad={() => this.setState({isLoaded: true})} />
+                className={css.image} />
               <div className={css.details}>
                 <Title className={css.title}>{item.title}</Title>
                 <Subtitle className={css.date}>{zDate.formatDate(item.dateHeld, true)}</Subtitle>
@@ -190,7 +194,7 @@ class Session extends PureComponent {
     } else {
       return (
         <Slider
-          determinant={this.state.isLoaded}
+          determinant={isLoaded}
           duration={400}
           delay={75 * idx}
           direction={'left'}>
@@ -200,8 +204,7 @@ class Session extends PureComponent {
                 <img
                   src={`${cloudinary.url}/${cloudinary.lazy}/${item.image}`}
                   alt={item.title}
-                  className={css.image}
-                  onLoad={() => this.setState({isLoaded: true})} />
+                  className={css.image} />
               </Col>
               <Col md={8}>
                 <div className={css.details}>
