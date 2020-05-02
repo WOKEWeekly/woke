@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import LazyLoader from 'react-visibility-sensor';
 
-import { Title, Subtitle, Divider, Paragraph, truncateText } from '~/components/text.js';
+import { Title, Subtitle, Divider, Paragraph, VanillaLink, truncateText } from '~/components/text.js';
 import { Fader } from '~/components/transitioner.js';
 
 import { countriesToString } from '~/constants/countries.js';
@@ -65,12 +65,12 @@ class RandomCandidate extends Component {
             <Title className={css.heading}>Check out our candidate:</Title>
             <div>
               {candidate.image ?
-              <a href={link}>
+              <VanillaLink href={link}>
                 <img
                   src={`${cloudinary.url}/${candidate.image}`}
                   alt={candidate.name}
                   className={css.image} />
-              </a> : null}
+              </VanillaLink> : null}
               <div className={css.details}>
                 <Title className={css.title}>{candidate.name}</Title>
                 <Subtitle className={css.subtitle}>

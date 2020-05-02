@@ -10,7 +10,7 @@ import { SortDropdown } from '~/components/dropdown.js';
 import { Icon } from '~/components/icon.js';
 import { Cover, Shader, Spacer } from '~/components/layout.js';
 import { Loader, Empty } from '~/components/loader.js';
-import { Title, Subtitle, Divider, Paragraph, truncateText } from '~/components/text.js';
+import { Title, Subtitle, Divider, Paragraph, VanillaLink, truncateText } from '~/components/text.js';
 import {BottomToolbar} from '~/components/toolbar.js';
 import { Zoomer, Slider, Fader } from '~/components/transitioner.js';
 
@@ -172,7 +172,7 @@ class Session extends PureComponent {
           duration={400}
           delay={75 * idx}
           className={css.container}>
-          <a href={link}>
+          <VanillaLink href={link}>
             <div className={css.cell}>
               <img
                 src={`${cloudinary.url}/${cloudinary.lazy}/${item.image}`}
@@ -184,7 +184,7 @@ class Session extends PureComponent {
                 <Subtitle className={css.date}>{zDate.formatDate(item.dateHeld, true)}</Subtitle>
               </div>
             </div>
-          </a>
+          </VanillaLink>
         </Zoomer>
       );
     } else {
@@ -194,7 +194,7 @@ class Session extends PureComponent {
           duration={400}
           delay={75 * idx}
           direction={'left'}>
-          <a href={link}>
+          <VanillaLink href={link}>
             <Row className={css.item}>
               <Col md={4} className={'p-0'}>
                 <img
@@ -217,7 +217,7 @@ class Session extends PureComponent {
                 </div>
               </Col>
             </Row>
-          </a>
+          </VanillaLink>
         </Slider>
       );
     }

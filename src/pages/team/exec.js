@@ -3,7 +3,7 @@ import { Container, Col, Row } from 'react-bootstrap';
 
 import { Cover, Shader, Spacer } from '~/components/layout.js';
 import { Loader, Empty } from '~/components/loader.js';
-import { Title, Subtitle, Divider, Paragraph, truncateText } from '~/components/text.js';
+import { Title, Subtitle, Divider, Paragraph, VanillaLink, truncateText } from '~/components/text.js';
 import { Slider } from '~/components/transitioner.js';
 
 import request from '~/constants/request.js';
@@ -103,7 +103,7 @@ class Exec extends PureComponent {
         duration={750}
         delay={1000 + (500 * idx)}
         direction={isEven ? 'left' : 'right'}>
-        <a href={link}>
+        <VanillaLink href={link}>
           <div className={css.item}>
             <Row>
               <Col md={{span: 4, order: isEven ? 1 : 2}}>
@@ -127,7 +127,7 @@ class Exec extends PureComponent {
               </Col>
             </Row>
           </div>
-        </a>
+        </VanillaLink>
       </Slider>
     );
   }
