@@ -23,7 +23,7 @@ class ArticleForm extends Component {
     }
     
     if (props.user.clearance < CLEARANCES.ACTIONS.CRUD_ARTICLES){
-      return location.href = '/blog';
+      return location.href = '/';
     }
   }
 
@@ -50,7 +50,7 @@ class ArticleForm extends Component {
   render(){
 
     const { heading, confirmText, confirmFunc, cancelFunc, handlers, operation } = this.props;
-    const { handleText, handleDate, handleImage } = handlers;
+    const { handleText, handleDate, handleFile } = handlers;
     const { title, content, category, excerpt, image, authorId, status, datePublished, tags } = this.props.article;
 
     const DatePublished = () => {
@@ -137,7 +137,7 @@ class ArticleForm extends Component {
                 <FileSelector
                   image={image}
                   operation={operation}
-                  onChange={handleImage} />
+                  onChange={handleFile} />
               </Col>
             </Group>
             <Group>

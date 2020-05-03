@@ -11,11 +11,17 @@ const SQL = require('./sql.js');
 const { accounts, cloudinary, domain, forms, siteDescription } = require('../constants/settings.js');
 const { ENTITY, OPERATIONS, PAGE } = require('../constants/strings.js');
 
+const env = process.env.NODE_ENV !== 'production' ? 'dev' : 'prod';
+
 let exigencies = {};
 
-module.exports = function(app, conn, server){
+module.exports = function(app, conn, knex, server){
 
-  exigencies = { conn, server }
+  exigencies = { conn, knex, server };
+
+  const ROUTES = { PAGES: [], DOCUMENTS: [] };
+
+  // populateDynamicRoutes(ROUTES);
 
   /** Home page */
   app.get(['/', '/home'], function(req, res){
@@ -399,6 +405,31 @@ module.exports = function(app, conn, server){
     });
   });
 
+  /** Document admin page */
+  app.get('/admin/documents', function(req, res){
+    return server.render(req, res, '/documents', { 
+      title: 'Document Admin'
+     });
+  });
+
+  /** Edit document */
+  app.get('/admin/documents/edit/:name', function(req, res){
+    const { name } = req.params;
+
+    const query = knex.select().from('documents').where('name', name);
+    query.asCallback(function (err, [document] = []) {
+      if (err) return renderErrorPage(req, res, err, server);
+      if (!document) return renderErrorPage(req, res, ERROR.NONEXISTENT_ENTITY(ENTITY.DOCUMENT), server);
+
+      return server.render(req, res, '/documents/crud', {
+        title: 'Edit Document',
+        backgroundImage: 'bg-app.jpg',
+        operation: 'edit',
+        document
+      });
+    });
+  });
+
   /** User account page */
   app.get('/account', function(req, res){
     const token = req.query.verified;
@@ -493,25 +524,6 @@ module.exports = function(app, conn, server){
     res.end();
   });
 
-  /***************************************************************
-   * RESOURCES
-   **************************************************************/
-     
-  /** Constitution PDF */
-  app.get('/constitution', function(req, res){
-    request(`${cloudinary.url}/resources/Constitution.pdf`).pipe(res);
-  });
-
-  /** Sponsorship Proposal PDF */
-  app.get('/sponsorship-proposal', function(req, res){
-    request(`${cloudinary.url}/v1579300643/resources/Sponsorship_Proposal.pdf`).pipe(res);
-  });
-
-  /** #Blackexcellence Tribute Guide PDF */
-  app.get('/blackexcellence-tribute-guide', function(req, res){
-    request(`${cloudinary.url}/resources/BlackExcellence_Tribute_Guide.pdf`).pipe(res);
-  });
-
   /** Robots.txt page */
   app.get('/robots.txt', (req, res) => (
     res.status(200).sendFile(path.resolve('./robots.txt'), {
@@ -554,9 +566,9 @@ module.exports = function(app, conn, server){
         });
       },
       function(callback){
-        conn.query(`SELECT page_name FROM pages;`, function (err, result) {
+        conn.query(`SELECT name FROM pages;`, function (err, result) {
           if (err) return callback(err);
-          result.forEach(page => routes.push(`/${page.page_name}`));
+          result.forEach(page => routes.push(`/${page.name}`));
           callback(null);
         });
       }
@@ -578,83 +590,154 @@ module.exports = function(app, conn, server){
     });
   });
 
-  app.get('/about', renderPage('about', PAGE.KINDS.INFO));
-  app.get('/about/edit', renderPage('about', PAGE.KINDS.INFO, PAGE.OPERATIONS.UPDATE));
+  /** Route for all documents */
+  // ROUTES.DOCUMENTS.forEach(path => {
+  //   app.get(path, function(req, res){
+  //     const query = knex.select().from('documents').where('name', path.substring(1));
+  //     query.asCallback(function(err, [document] = []) {
+  //       if (err) return renderErrorPage(req, res, err, server);
+  //       if (!document) return renderErrorPage(req, res, ERROR.NONEXISTENT_ENTITY(ENTITY.DOCUMENT), server);
+  //       return renderDocument(res, document);
+  //     });
+  //   });
+  // });
 
-  app.get('/cookies', renderPage('cookies', PAGE.KINDS.INFO));
-  app.get('/cookies/edit', renderPage('cookies', PAGE.KINDS.INFO, PAGE.OPERATIONS.UPDATE));
+  // app.get(`/:document(${ROUTES.DOCUMENTS.join("|")})`, function(req, res){
+  //   const name = req.params.document;
+  //   const query = knex.select().from('documents').where('name', name);
+  //   query.asCallback(function(err, [document] = []) {
+  //     if (err) return renderErrorPage(req, res, err, server);
+  //     if (!document) return renderErrorPage(req, res, ERROR.NONEXISTENT_ENTITY(ENTITY.DOCUMENT), server);
+  //     return renderDocument(res, document);
+  //   });
+  // });
 
-  app.get('/donate', renderPage('donate', PAGE.KINDS.INFO));
-  app.get('/donate/edit', renderPage('donate', PAGE.KINDS.INFO, PAGE.OPERATIONS.UPDATE));
+  
+  /** Route for all pages */
+  // ROUTES.PAGES.forEach(path => {
+  //   app.get(path, function(req, res){
+  //     const base = path.match(/\/[a-z]+/)[0].substring(1);
+  //     const { READ, UPDATE } = PAGE.OPERATIONS;
+  //     const operation = req.path.includes('edit') ? UPDATE : READ;
+      
+  //     const query = knex.select().from('pages').where('name', base);
+  //     query.asCallback(function(err, [page] = []) {
+  //       if (err) return renderErrorPage(req, res, err, server);
+  //       if (!page) return renderErrorPage(req, res, ERROR.NONEXISTENT_ENTITY(ENTITY.PAGE), server);
+  //       return renderPage(req, res, page, operation);
+  //     });
+  //   });
+  // });
 
-  app.get('/faq', renderPage('faq', PAGE.KINDS.INFO));
-  app.get('/faq/edit', renderPage('faq', PAGE.KINDS.INFO, PAGE.OPERATIONS.UPDATE));
+  /** Route for all pages */
+  // app.get(`/:page(${ROUTES.PAGES.join("|")})`, function(req, res){
+  //   // e.g. /about/edit -> about
+  //   const base = req.params.document;
+  //   // const base = req.path.match(/\/[a-z]+/)[0].substring(1);
+  //   // const { READ, UPDATE } = PAGE.OPERATIONS;
+  //   // const operation = req.path.includes('edit') ? UPDATE : READ;
+  //   const operation = PAGE.OPERATIONS.READ;
+    
+  //   const query = knex.select().from('pages').where('name', base);
+  //   query.asCallback(function(err, [page] = []) {
+  //     if (err) return renderErrorPage(req, res, err, server);
+  //     if (!page) return renderErrorPage(req, res, ERROR.NONEXISTENT_ENTITY(ENTITY.PAGE), server);
+  //     return renderPage(req, res, page, operation);
+  //   });
+  // });
+  
+  async.parallel([
+    function(callback){
+      knex.select().from('pages').asCallback(function(err, pages){
+        pages.forEach(page => {
+          const { name } = page;
+          app.get(`/${name}`, function(req, res){
+            return renderPage(req, res, page, PAGE.OPERATIONS.READ);
+          });
+          app.get(`/${name}/edit`, function(req, res){
+            return renderPage(req, res, page, PAGE.OPERATIONS.UPDATE);
+          });
+        });
+        callback(err);
+      });
+    },
+    function(callback){
+      knex.select().from('documents').asCallback(function(err, documents){
+        documents.forEach(document => {
+          app.get(`/${document.name}`, function(req, res){
+            return renderDocument(res, document);
+          });
+        });
+        callback(err);
+      });
+    },
+  ], function(err){
+    if (err) console.error(err);
+  });
+}
 
-  app.get('/mentalhealth', renderPage('mentalhealth', PAGE.KINDS.VARIANTS));
-  app.get('/mentalhealth/edit', renderPage('mentalhealth', PAGE.KINDS.VARIANTS, PAGE.OPERATIONS.UPDATE));
+/**
+ * Render a document, particularly a PDF, from Cloudinary.
+ * @param {Object} res - The response context.
+ * @param {Object} document - The document object containing
+ * the file and version.
+ */
+const renderDocument = (res, document) => {
+  const { file, version } = document;
+  let url;
 
-  app.get('/privacy', renderPage('privacy', PAGE.KINDS.INFO));
-  app.get('/privacy/edit', renderPage('privacy', PAGE.KINDS.INFO, PAGE.OPERATIONS.UPDATE));
+  if (version){
+    url = `${cloudinary.url}/v${version}/${env}/documents/${file}`
+  } else {
+    url = `${cloudinary.url}/${env}/documents/${file}`
+  }
 
-  app.get('/recruitment', renderPage('recruitment', PAGE.KINDS.INFO));
-  app.get('/recruitment/edit', renderPage('recruitment', PAGE.KINDS.INFO, PAGE.OPERATIONS.UPDATE));
-
+  request(url).pipe(res); 
 }
 
 /**
  * Dynamically render a page from the database.
  * @param {string} pageName - The name of the page.
- * @param {string} kind - Either PAGE.KINDS.VARIANTS or 'information'.
  * @param {string} [operation] - Either 'READ' or 'UPDATE'. Defaults to 'READ'.
  */
-const renderPage = (
-    pageName,
-    kind,
-    operation = PAGE.OPERATIONS.READ
-  ) => {
-  const { conn, server } = exigencies;
-  return function(req, res){
-    conn.query(`SELECT * FROM pages WHERE name = '${pageName}'`, function (err, [page] = []) {
-      if (err) return renderErrorPage(req, res, err, server);
-      if (!page) return renderErrorPage(req, res, ERROR.NONEXISTENT_ENTITY(ENTITY.PAGE), server);
-  
-      const { name, title, includeDomain, text, excerpt, cardImage, bgImage,
-        coverImage, coverImageLogo, coverImageAlt, theme,
-        editTitle, editPlaceholderText } = page;
+const renderPage = (req, res, page, operation) => {
+  const { server } = exigencies;
 
-      let uri = '';
-      let information = {};
-  
-      if (operation === PAGE.OPERATIONS.READ){
-        uri = `/pages/${kind}`;
-        information = {
-          pageName: name,
-          pageText: text,
-          title: includeDomain ? `${title} | #WOKEWeekly` : title,
-          description: excerpt || createExcerpt(text),
-          ogUrl: `/${name}`,
-          cardImage: cardImage || 'public/bg/card-home.jpg',
-          backgroundImage: bgImage || 'bg-app.jpg',
-          coverImage: coverImage,
-          imageLogo: coverImageLogo,
-          imageAlt: coverImageAlt,
-          theme: theme || PAGE.THEMES.DEFAULT
-        };
-      } else {
-        uri = `/pages/edit`;
-        information = {
-          pageName: name,
-          pageText: text,
-          title: editTitle,
-          backgroundImage: bgImage || 'bg-app.jpg',
-          placeholderText: editPlaceholderText,
-          theme: theme || PAGE.THEMES.DEFAULT
-        }
-      }
+  const { name, title, kind, includeDomain, text, excerpt, cardImage, bgImage,
+    coverImage, coverImageLogo, coverImageAlt, theme,
+    editTitle, editPlaceholderText } = page;
 
-      return server.render(req, res, uri, information);
-    });
+  let uri = '';
+  let information = {};
+
+  if (operation === PAGE.OPERATIONS.READ){
+    uri = `/pages/${kind.toLowerCase()}`;
+    information = {
+      pageName: name,
+      pageText: text,
+      title: includeDomain ? `${title} | #WOKEWeekly` : title,
+      description: excerpt || createExcerpt(text),
+      ogUrl: `/${name}`,
+      cardImage: cardImage || 'public/bg/card-home.jpg',
+      backgroundImage: bgImage || 'bg-app.jpg',
+      coverImage: coverImage,
+      imageLogo: coverImageLogo,
+      imageAlt: coverImageAlt,
+      theme: theme || PAGE.THEMES.DEFAULT
+    };
+  } else if (operation === PAGE.OPERATIONS.UPDATE) {
+    uri = `/pages/edit`;
+    information = {
+      pageName: name,
+      pageText: text,
+      title: editTitle,
+      backgroundImage: bgImage || 'bg-app.jpg',
+      placeholderText: editPlaceholderText,
+      theme: theme || PAGE.THEMES.DEFAULT
+    }
   }
+
+  return server.render(req, res, uri, information);
 }
 
 /**

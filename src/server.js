@@ -18,16 +18,27 @@ const dotenv = require('dotenv').config({path: config });
 const mysql = require('mysql');
 const port = process.env.PORT || 3000;
 
-app.use(bodyParser.json({ limit: '2MB' }));
+app.use(bodyParser.json({ limit: '15MB' }));
 app.use(cookieParser());
 app.use(cors());
 
+// TODO: To be fully replaced with Knex
 // Initialise MySQL database
 const conn = mysql.createConnection({
   host: process.env.MYSQL_HOST,
   user: process.env.MYSQL_USER,
   password: process.env.MYSQL_PWD,
   database: process.env.MYSQL_NAME,
+});
+
+const knex = require('knex')({
+  client: 'mysql',
+  connection: {
+    host: process.env.MYSQL_HOST,
+    user: process.env.MYSQL_USER,
+    password: process.env.MYSQL_PWD,
+    database: process.env.MYSQL_NAME
+  }
 });
 
 // Check for loaded environment variables
@@ -40,16 +51,18 @@ if (!isStageTesting && !isDevTesting){
   startClientServer();
 }
 
+/** Start the full application server */
 function startClientServer(){
   startServer();
-  require('./private/api.js')(app, conn);
-  require('./private/routes.js')(app, conn, server);
+  require('./private/api.js')(app, conn, knex);
+  require('./private/routes.js')(app, conn, knex, server);
   require('./private/cron.js')(conn);
 }
 
+/** Start the API server for testing */
 function startTestServer(next){
   startServer(next);
-  require('./private/api.js')(app, conn);
+  require('./private/api.js')(app, conn, knex);
 }
 
 function startServer(next){
@@ -76,8 +89,8 @@ function startServer(next){
 }
 
 module.exports = {
-  startTestServer,
   config,
   dev,
-  isStageTesting
+  isStageTesting,
+  startTestServer,
 }

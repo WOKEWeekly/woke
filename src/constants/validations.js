@@ -41,7 +41,7 @@ module.exports = {
   isValidSession: (session) => {
     if (!ifExists(session.title.trim(), 'Enter the session title.')) return false;
     if (!ifExists(session.dateHeld, 'Select the date when the session will be held.')) return false;
-    if (!module.exports.isValidFile(session.image, 'session')) return false;
+    if (!isValidImage(session.image, 'session')) return false;
     return true;
   },
 
@@ -75,7 +75,7 @@ module.exports = {
       if (!ifExists(article.category, 'Select the article\'s category.')) return false;
       if (!ifExists(article.content.trim(), 'Write out the content of this article.')) return false;
       if (!ifExists(article.excerpt.trim(), 'Enter the article\'s excerpt.')) return false;
-      if (!module.exports.isValidFile(article.image, 'article')) return false;
+      if (!isValidImage(article.image, 'article')) return false;
     }
 
     return true;
@@ -94,7 +94,18 @@ module.exports = {
     if (!ifExists(candidate.birthday, 'Select the candidate\'s date of birth.')) return false;
     if (!ifExists(candidate.occupation.trim(), 'Please select an image for the session.')) return false;
     if (ifTrue(candidate.authorId === 0, 'Please select the author of this tribute.')) return false;
-    if (!module.exports.isValidFile(candidate.image, 'candidate')) return false;
+    if (!isValidImage(candidate.image, 'candidate')) return false;
+    return true;
+  },
+
+  /**
+   * Validation of document update.
+   * @param {string} document - Document information to be validated.
+   * @returns {boolean} True if valid. False with error message if invalid.
+   */
+  isValidDocument: (document) => {
+    if (!ifExists(document.title.trim(), 'Enter the document title.')) return false;
+    if (!isValidDocument(document.file)) return false;
     return true;
   },
 
@@ -166,31 +177,44 @@ module.exports = {
       if (ifTrue(oldPassword === password1, 'Your new password cannot be the same as your current password.')) return false;
     }
     return true;
-  },
-
-  /**
-   * Ensure submitted file meets requirements.
-   * @param {string} file - Base64 string of file to be uploaded.
-   * @param {string} entity - The entity this file represents.
-   * @returns {boolean} True if meets requirements. If not: false.
-   */
-  isValidFile: (file, entity) => {
-    if (!ifExists(file, `Please select an image for the ${entity}.`)) return false;
-    if (!isUnderFileSizeLimit(file)) return false;
-    return true;
   }
+}
+
+/**
+ * Ensure submitted file meets requirements.
+ * @param {string} file - Base64 string of file to be uploaded.
+ * @param {string} entity - The entity this file represents.
+ * @returns {boolean} True if meets requirements. If not: false.
+ */
+const isValidImage = (file, entity) => {
+  if (!ifExists(file, `Please select an image for the ${entity}.`)) return false;
+  if (!isUnderFileSizeLimit(file)) return false;
+  return true;
+}
+
+/**
+ * Ensure submitted document meets requirements.
+ * @param {string} document - Base64 string of document to be uploaded.
+ * @param {string} entity - The entity this file represents.
+ * @returns {boolean} True if meets requirements. If not: false.
+ */
+const isValidDocument = (file) => {
+  if (!ifExists(file, `Please select a document to upload.`)) return false;
+  if (!isUnderFileSizeLimit(file, 15)) return false;
+  return true;
 }
 
 
 /**
  * Ensure file size is within limit.
  * @param {string} file - Base64 string of file to be uploaded.
+ * @param {number} limit - The upper size limit in MB. Defaults to 2MB.
  * @returns {boolean} True if within limit. False if not.
  */
-const isUnderFileSizeLimit = (file) => {
+const isUnderFileSizeLimit = (file, limit = 2) => {
   if (!file) return true;
   const size = Buffer.from(file.substring(file.indexOf(',') + 1)).length;
-  if (ifTrue(size > 2 * 1024 * 1024, 'The image you selected is larger than 2MB. Please compress this image or use a smaller one.')) return false;
+  if (ifTrue(size > limit * 1024 * 1024,`The file you selected is larger than ${limit}MB. Please compress this file or use a smaller one.`)) return false;
   return true;
 }
 

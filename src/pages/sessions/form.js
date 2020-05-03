@@ -24,7 +24,7 @@ class SessionForm extends Component {
 
   render(){
     const { heading, confirmText, confirmFunc, cancelFunc, handlers, operation } = this.props;
-    const { handleText, handleDate, handleTime, handleImage } = handlers;
+    const { handleText, handleDate, handleTime, handleFile } = handlers;
     const { title, dateHeld, timeHeld, description, image } = this.props.session;
 
     return (
@@ -67,7 +67,7 @@ class SessionForm extends Component {
                   image={image}
                   directory={`sessions`}
                   operation={operation}
-                  onChange={handleImage} />
+                  onChange={handleFile} />
               </Col>
             </Group>
           </div>
