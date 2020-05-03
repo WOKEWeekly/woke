@@ -34,7 +34,7 @@ class MemberForm extends Component {
 
   render(){
     const { heading, confirmText, confirmFunc, cancelFunc, countries, handlers, operation } = this.props;
-    const { handleText, handleDate, handleImage, handleRadio, handleCheckboxButton, clearSelection, confirmSocials } = handlers;
+    const { handleText, handleDate, handleFile, handleRadio, handleCheckboxButton, clearSelection, confirmSocials } = handlers;
 
     const { firstname, lastname, level, sex, role, description, birthday, image, socials,
       ethnicity1, ethnicity2, ethnicity3, ethnicity4, verified, slackId, isAuthor } = this.props.member;
@@ -161,7 +161,7 @@ class MemberForm extends Component {
                   image={image}
                   operation={operation}
                   directory={`team`}
-                  onChange={handleImage} />
+                  onChange={handleFile} />
               </Col>
             </Group>
           </div>

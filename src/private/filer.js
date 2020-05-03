@@ -3,6 +3,8 @@ const { zDate, zString } = require('zavid-modules');
 const { DIRECTORY, ARTICLE_STATUS } = require('../constants/strings.js');
 const { dev } = require('../server.js');
 
+const env = dev ? 'dev' : 'prod';
+
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_NAME, 
   api_key: process.env.CLOUDINARY_API_KEY, 
@@ -26,7 +28,6 @@ exports.uploadImage = (iEntity, directory, imageHasChanged, next) => {
   if (noImageUpload) return next(null, entity);
 
   // Upload to cloudinary
-  const env = dev ? 'dev' : 'prod';
   cloudinary.uploader.upload(entity.image, {
     public_id: `${env}/${directory}/${filename}`,
     unique_filename: false
@@ -60,13 +61,17 @@ exports.destroyImage = (image, next) => {
  * @param {object} document - The document to be uploaded.
  * @param {Function} next - The next callback function in the series.
  */
-exports.uploadDocument = (document, next) => {
-  // Construct the slug and filename
-  const name = constructCleanSlug(document.title);
+exports.uploadDocument = (document, hasChanged, next) => {
+
+  // Discontinue if file has not changed
+  if (!hasChanged) return next(null, document);
+
+  // Extract a clean slug name
+  const name = zString.constructCleanSlug(document.title);
 
   // Upload to cloudinary
-  cloudinary.uploader.upload(entity.image, {
-    public_id: `public/docs/${name}`,
+  cloudinary.uploader.upload(document.file, {
+    public_id: `${env}/documents/${name}`,
     unique_filename: false
   }, (err, result) => {
     if (err) return next(err);
@@ -79,14 +84,14 @@ exports.uploadDocument = (document, next) => {
 
 /**
  * Delete a document from Cloudinary.
- * @param {string} document - The sname of the document.
+ * @param {string} document - The name of the document.
  * @param {Function} next - Calls the next function.
  */
 exports.destroyDocument = (document, next) => {
-  if (!image) return next(null);
+  if (!document) return next(null);
   
   // e.g. public_id = "dev/sessions/2020-08-03_manchester"
-  const public_id = `public/docs/${document}`;
+  const public_id = `${env}/documents/${document}`;
 
   cloudinary.uploader.destroy(public_id, (err) => {
     if (err) console.warn(err);

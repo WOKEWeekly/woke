@@ -289,7 +289,7 @@ export class _FileSelector extends Component {
     return newState;
   }
 
-  handleImageChange = () => {
+  handleFileChange = () => {
     this.previewImage();
   }
 
@@ -320,7 +320,7 @@ export class _FileSelector extends Component {
             <input
               type={'file'}
               style={{display: 'none'}}
-              onChange={this.handleImageChange}
+              onChange={this.handleFileChange}
               ref={this.file} />
           </label>
           <input

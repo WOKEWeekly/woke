@@ -49,26 +49,3 @@ exports.ARTICLE_STATUS = {
   PRIVATE: 'PRIVATE',
   PUBLISHED: 'PUBLISHED',
 };
-
-const PAGES = [
-  '/about',
-  '/cookies',
-  '/donate',
-  '/faq',
-  '/mentalhealth',
-  '/privacy',
-  '/recruitment'
-];
-
-/** List of the dynamic page and document routes */
-exports.ROUTES = {
-  DOCUMENTS: [
-    '/blackexcellence-tribute-guide',
-    '/constitution',
-    '/sponsorship-proposal'
-  ],
-  PAGES: [
-    ...PAGES,
-    ...PAGES.map(route => `${route}/edit`)
-  ],
-};

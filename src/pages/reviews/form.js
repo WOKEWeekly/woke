@@ -22,7 +22,7 @@ class ReviewForm extends Component {
 
   render(){
     const { heading, entity, confirmText, confirmFunc, cancelFunc, handlers, operation } = this.props;
-    const { handleText, handleImage, handleRatingChange } = handlers;
+    const { handleText, handleFile, handleRatingChange } = handlers;
     const { referee, position, rating, description, image } = entity;
 
     return (
@@ -74,7 +74,7 @@ class ReviewForm extends Component {
                   image={image}
                   directory={`reviews`}
                   operation={operation}
-                  onChange={handleImage} />
+                  onChange={handleFile} />
               </Col>
             </Group>
           </div>

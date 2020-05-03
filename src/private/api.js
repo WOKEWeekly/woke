@@ -951,13 +951,14 @@ module.exports = function(app, conn, knex){
   });
 
   /** Update document */
+  // TODO: Add service test for this endpoint
   app.put('/api/v1/documents/:name', verifyToken(CLEARANCES.ACTIONS.CRUD_DOCUMENTS), function(req, res){
     const { name } = req.params;
-    const document = req.body;
+    const { document, changed } = req.body;
 
     async.waterfall([
-      function(callback){ // Delete original image from cloud
-        const query = knex.select('single').from('documents').where('name', name);
+      function(callback){ // Delete original document from cloud
+        const query = knex.select().from('documents').where('name', name);
         query.asCallback(function (err, [document] = []) {
           if (err) return callback(err);
           if (!document) return callback(ERROR.INVALID_ENTITY_NAME(ENTITY.DOCUMENT, name));
@@ -966,9 +967,10 @@ module.exports = function(app, conn, knex){
         });
       },
       function(callback){ // Upload new document
-        filer.uploadDocument(document, callback);
+        filer.uploadDocument(document, changed, callback);
       },
       function(document, callback){ // Update session in database
+        document.lastModified = new Date();
         const query = knex('documents').update(document).where('name', name);
         query.asCallback(function(err) {
           callback(err);

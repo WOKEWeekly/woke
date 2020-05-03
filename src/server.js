@@ -18,7 +18,7 @@ const dotenv = require('dotenv').config({path: config });
 const mysql = require('mysql');
 const port = process.env.PORT || 3000;
 
-app.use(bodyParser.json({ limit: '2MB' }));
+app.use(bodyParser.json({ limit: '15MB' }));
 app.use(cookieParser());
 app.use(cors());
 
@@ -51,6 +51,7 @@ if (!isStageTesting && !isDevTesting){
   startClientServer();
 }
 
+/** Start the full application server */
 function startClientServer(){
   startServer();
   require('./private/api.js')(app, conn, knex);
@@ -58,6 +59,7 @@ function startClientServer(){
   require('./private/cron.js')(conn);
 }
 
+/** Start the API server for testing */
 function startTestServer(next){
   startServer(next);
   require('./private/api.js')(app, conn, knex);
@@ -87,8 +89,8 @@ function startServer(next){
 }
 
 module.exports = {
-  startTestServer,
   config,
   dev,
-  isStageTesting
+  isStageTesting,
+  startTestServer,
 }

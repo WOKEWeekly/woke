@@ -56,7 +56,7 @@ class CandidateForm extends Component {
 
   render(){
     const { heading, confirmText, confirmFunc, cancelFunc, handlers, countries, operation } = this.props;
-    const { handleText, handleDate, handleImage, clearSelection, confirmSocials, } = handlers;
+    const { handleText, handleDate, handleFile, clearSelection, confirmSocials, } = handlers;
 
     const { id, name, description, occupation, birthday, image, socials,
       ethnicity1, ethnicity2, ethnicity3, ethnicity4,
@@ -151,7 +151,7 @@ class CandidateForm extends Component {
                   image={image}
                   directory={`blackexcellence`}
                   operation={operation}
-                  onChange={handleImage} />
+                  onChange={handleFile} />
               </Col>
             </Group>
           </div>
