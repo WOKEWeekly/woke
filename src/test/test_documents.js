@@ -3,7 +3,7 @@ const { TEST_USERS } = require('./configuration/data.js');
 
 const superuser = TEST_USERS.NINE;
 
-const DOCUMENT_NAME = 'constitution';
+const DOCUMENT_NAME = 'constitutionv2';
 
 describe("Document Tests", function() {
   this.slow(10000);
