@@ -19,10 +19,6 @@ module.exports = function(app, conn, knex, server){
 
   exigencies = { conn, knex, server };
 
-  const ROUTES = { PAGES: [], DOCUMENTS: [] };
-
-  // populateDynamicRoutes(ROUTES);
-
   /** Home page */
   app.get(['/', '/home'], function(req, res){
     return server.render(req, res, '/home', { 
@@ -590,90 +586,63 @@ module.exports = function(app, conn, knex, server){
     });
   });
 
-  /** Route for all documents */
-  // ROUTES.DOCUMENTS.forEach(path => {
-  //   app.get(path, function(req, res){
-  //     const query = knex.select().from('documents').where('name', path.substring(1));
-  //     query.asCallback(function(err, [document] = []) {
-  //       if (err) return renderErrorPage(req, res, err, server);
-  //       if (!document) return renderErrorPage(req, res, ERROR.NONEXISTENT_ENTITY(ENTITY.DOCUMENT), server);
-  //       return renderDocument(res, document);
-  //     });
-  //   });
-  // });
-
-  // app.get(`/:document(${ROUTES.DOCUMENTS.join("|")})`, function(req, res){
-  //   const name = req.params.document;
-  //   const query = knex.select().from('documents').where('name', name);
-  //   query.asCallback(function(err, [document] = []) {
-  //     if (err) return renderErrorPage(req, res, err, server);
-  //     if (!document) return renderErrorPage(req, res, ERROR.NONEXISTENT_ENTITY(ENTITY.DOCUMENT), server);
-  //     return renderDocument(res, document);
-  //   });
-  // });
-
-  
-  /** Route for all pages */
-  // ROUTES.PAGES.forEach(path => {
-  //   app.get(path, function(req, res){
-  //     const base = path.match(/\/[a-z]+/)[0].substring(1);
-  //     const { READ, UPDATE } = PAGE.OPERATIONS;
-  //     const operation = req.path.includes('edit') ? UPDATE : READ;
-      
-  //     const query = knex.select().from('pages').where('name', base);
-  //     query.asCallback(function(err, [page] = []) {
-  //       if (err) return renderErrorPage(req, res, err, server);
-  //       if (!page) return renderErrorPage(req, res, ERROR.NONEXISTENT_ENTITY(ENTITY.PAGE), server);
-  //       return renderPage(req, res, page, operation);
-  //     });
-  //   });
-  // });
-
-  /** Route for all pages */
-  // app.get(`/:page(${ROUTES.PAGES.join("|")})`, function(req, res){
-  //   // e.g. /about/edit -> about
-  //   const base = req.params.document;
-  //   // const base = req.path.match(/\/[a-z]+/)[0].substring(1);
-  //   // const { READ, UPDATE } = PAGE.OPERATIONS;
-  //   // const operation = req.path.includes('edit') ? UPDATE : READ;
-  //   const operation = PAGE.OPERATIONS.READ;
-    
-  //   const query = knex.select().from('pages').where('name', base);
-  //   query.asCallback(function(err, [page] = []) {
-  //     if (err) return renderErrorPage(req, res, err, server);
-  //     if (!page) return renderErrorPage(req, res, ERROR.NONEXISTENT_ENTITY(ENTITY.PAGE), server);
-  //     return renderPage(req, res, page, operation);
-  //   });
-  // });
-  
-  async.parallel([
-    function(callback){
-      knex.select().from('pages').asCallback(function(err, pages){
-        pages.forEach(page => {
-          const { name } = page;
-          app.get(`/${name}`, function(req, res){
-            return renderPage(req, res, page, PAGE.OPERATIONS.READ);
-          });
-          app.get(`/${name}/edit`, function(req, res){
-            return renderPage(req, res, page, PAGE.OPERATIONS.UPDATE);
-          });
-        });
-        callback(err);
-      });
-    },
-    function(callback){
-      knex.select().from('documents').asCallback(function(err, documents){
-        documents.forEach(document => {
-          app.get(`/${document.name}`, function(req, res){
-            return renderDocument(res, document);
-          });
-        });
-        callback(err);
-      });
-    },
-  ], function(err){
-    if (err) console.error(err);
+  app.get('/docs/:name', function(req, res){
+    const { name } = req.params;
+    const query = knex.select().from('documents').where('name', name);
+    query.asCallback(function(err, [document] = []){
+      if (err) return renderErrorPage(req, res, err, server);
+      if (!document) return renderErrorPage(req, res, ERROR.NONEXISTENT_ENTITY(ENTITY.DOCUMENT), server);
+      return renderDocument(res, document);
+    });
   });
+
+  app.get('/:page', function(req, res, next){
+    const name = req.params.page;
+    knex.select().from('pages').asCallback(function(err, pages){
+      const page = pages.find(element => element.name === name);
+      if (!page) return next();
+      return renderPage(req, res, page, PAGE.OPERATIONS.READ);
+    });
+  });
+
+  app.get('/:page/edit', function(req, res, next){
+    const name = req.params.page;
+    knex.select().from('pages').asCallback(function(err, pages){
+      const page = pages.find(element => element.name === name);
+      if (!page) return next();
+      return renderPage(req, res, page, PAGE.OPERATIONS.UPDATE);
+    });
+  });
+  
+  // async.waterfall([
+  //   function(callback){
+  //     knex.select().from('pages').asCallback(function(err, pages){
+  //       pages.forEach(page => {
+  //         const { name } = page;
+  //         app.get(`/${name}`, function(req, res){
+  //           console.log(name);
+  //           return renderPage(req, res, page, PAGE.OPERATIONS.READ);
+  //         });
+  //         app.get(`/${name}/edit`, function(req, res){
+  //           return renderPage(req, res, page, PAGE.OPERATIONS.UPDATE);
+  //         });
+  //       });
+  //       callback(err);
+  //     });
+  //   },
+  //   function(callback){
+  //     knex.select().from('documents').asCallback(function(err, documents){
+  //       documents.forEach(document => {
+  //         app.get(`/${document.name}`, function(req, res){
+  //           return renderDocument(res, document);
+  //         });
+  //       });
+  //       callback(err);
+  //     });
+  //   },
+  // ], function(err){
+  //   if (err) console.error(err);
+  // });
 }
 
 /**
