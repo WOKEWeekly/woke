@@ -64,7 +64,7 @@ module.exports = function(app, conn, knex, server){
   app.get('/sessions/add', function(req, res){
     return server.render(req, res, '/sessions/crud', {
       title: 'Add New Session',
-      operation: 'add',
+      operation: OPERATIONS.CREATE,
       backgroundImage: 'bg-sessions.jpg'
     });
   });
@@ -81,7 +81,7 @@ module.exports = function(app, conn, knex, server){
       return server.render(req, res, '/sessions/crud', {
         title: 'Edit Session',
         backgroundImage: 'bg-sessions.jpg',
-        operation: 'edit',
+        operation: OPERATIONS.UPDATE,
         session
       });
     });
@@ -111,7 +111,7 @@ module.exports = function(app, conn, knex, server){
   app.get('/topics/add', function(req, res){
     return server.render(req, res, '/topics/crud', {
       title: 'Add New Topic',
-      operation: 'add',
+      operation: OPERATIONS.CREATE,
       backgroundImage: 'bg-topics.jpg'
     });
   });
@@ -127,7 +127,7 @@ module.exports = function(app, conn, knex, server){
 
       return server.render(req, res, '/topics/crud', {
         title: 'Edit Topic',
-        operation: 'edit',
+        operation: OPERATIONS.UPDATE,
         backgroundImage: 'bg-topics.jpg',
         topic
       });
@@ -151,7 +151,7 @@ module.exports = function(app, conn, knex, server){
     return server.render(req, res, '/blackexcellence/crud', {
       title: 'Add New Candidate',
       backgroundImage: 'bg-blackex.jpg',
-      operation: 'add',
+      operation: OPERATIONS.CREATE,
       theme: 'blackex'
     });
   });
@@ -169,7 +169,7 @@ module.exports = function(app, conn, knex, server){
         title: 'Edit Candidate',
         backgroundImage: 'bg-blackex.jpg',
         theme: 'blackex',
-        operation: 'edit',
+        operation: OPERATIONS.UPDATE,
         candidate
       });
     });
@@ -262,7 +262,7 @@ module.exports = function(app, conn, knex, server){
   app.get('/team/add', function(req, res){
     return server.render(req, res, '/team/crud', {
       title: 'Add New Member',
-      operation: 'add',
+      operation: OPERATIONS.CREATE,
       backgroundImage: 'bg-team.jpg'
     });
   });
@@ -278,7 +278,7 @@ module.exports = function(app, conn, knex, server){
 
       return server.render(req, res, '/team/crud', { 
         title: 'Edit Team Member',
-        operation: 'edit',
+        operation: OPERATIONS.UPDATE,
         backgroundImage: 'bg-team.jpg',
         member
       });
@@ -299,7 +299,7 @@ module.exports = function(app, conn, knex, server){
   app.get('/reviews/add', function(req, res){
     return server.render(req, res, '/reviews/crud', {
       title: 'Add New Review',
-      operation: 'add'
+      operation: OPERATIONS.CREATE
     });
   });
 
@@ -314,7 +314,7 @@ module.exports = function(app, conn, knex, server){
 
       server.render(req, res, '/reviews/crud', {
         title: 'Edit Review',
-        operation: 'edit',
+        operation: OPERATIONS.UPDATE,
         review
       });
     });
@@ -395,7 +395,7 @@ module.exports = function(app, conn, knex, server){
       return server.render(req, res, '/articles/crud', {
         title: 'Edit Article',
         backgroundImage: 'bg-app.jpg',
-        operation: 'edit',
+        operation: OPERATIONS.UPDATE,
         article
       });
     });
@@ -408,7 +408,16 @@ module.exports = function(app, conn, knex, server){
      });
   });
 
-  /** Edit document */
+  /** Add new document form */
+  app.get('/admin/documents/add', function(req, res){
+    return server.render(req, res, '/documents', { 
+      title: 'Add New Admin',
+      operation: OPERATIONS.CREATE,
+      backgroundImage: 'bg-app.jpg'
+     });
+  });
+
+  /** Edit document form */
   app.get('/admin/documents/edit/:name', function(req, res){
     const { name } = req.params;
 
@@ -419,8 +428,7 @@ module.exports = function(app, conn, knex, server){
 
       return server.render(req, res, '/documents/crud', {
         title: 'Edit Document',
-        backgroundImage: 'bg-app.jpg',
-        operation: 'edit',
+        operation: OPERATIONS.UPDATE,
         document
       });
     });
@@ -613,36 +621,6 @@ module.exports = function(app, conn, knex, server){
       return renderPage(req, res, page, PAGE.OPERATIONS.UPDATE);
     });
   });
-  
-  // async.waterfall([
-  //   function(callback){
-  //     knex.select().from('pages').asCallback(function(err, pages){
-  //       pages.forEach(page => {
-  //         const { name } = page;
-  //         app.get(`/${name}`, function(req, res){
-  //           console.log(name);
-  //           return renderPage(req, res, page, PAGE.OPERATIONS.READ);
-  //         });
-  //         app.get(`/${name}/edit`, function(req, res){
-  //           return renderPage(req, res, page, PAGE.OPERATIONS.UPDATE);
-  //         });
-  //       });
-  //       callback(err);
-  //     });
-  //   },
-  //   function(callback){
-  //     knex.select().from('documents').asCallback(function(err, documents){
-  //       documents.forEach(document => {
-  //         app.get(`/${document.name}`, function(req, res){
-  //           return renderDocument(res, document);
-  //         });
-  //       });
-  //       callback(err);
-  //     });
-  //   },
-  // ], function(err){
-  //   if (err) console.error(err);
-  // });
 }
 
 /**
