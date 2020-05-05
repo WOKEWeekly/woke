@@ -126,7 +126,7 @@ class IDocument extends PureComponent {
     const { item, idx } = this.props;
 
     const LinkButton = () => (
-      <button className={css.invisible_button} onClick={() => location.href = `/${item.name}`}>
+      <button className={css.invisible_button} onClick={() => location.href = `/docs/${item.name}`}>
         <Icon name={'external-link-alt'} />
       </button>
     );
