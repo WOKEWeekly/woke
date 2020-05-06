@@ -940,28 +940,47 @@ module.exports = function(app, conn, knex){
   });
 
   /** Retrieve individual document */
-  app.get('/api/v1/documents/:name', verifyToken(CLEARANCES.ACTIONS.CRUD_DOCUMENTS), function(req, res){
-    const { name } = req.params;
-    const query = knex.select().from('documents').where('name', name);
+  app.get('/api/v1/documents/:id', verifyToken(CLEARANCES.ACTIONS.CRUD_DOCUMENTS), function(req, res){
+    const { id } = req.params;
+    const query = knex.select().from('documents').where('id', id);
     query.asCallback(function (err, [document] = []) {
       if (err) return respondToClient(res, err);
-      if (!document) err = ERROR.INVALID_ENTITY_NAME(ENTITY.DOCUMENT, name);
+      if (!document) err = ERROR.INVALID_ENTITY_ID(ENTITY.DOCUMENT, id);
       respondToClient(res, err, 200, document);
     });
   });
 
+  /** Add new document to database */
+  app.post('/api/v1/documents', verifyToken(CLEARANCES.ACTIONS.CRUD_DOCUMENTS), function(req, res){
+    const document = req.body;
+
+    async.waterfall([
+      function(callback){ // Upload document to cloud
+        filer.uploadDocument(document, true, callback);
+      },
+      function(document, callback){ // Add document to database
+        const query = knex.insert(document, ['id']).into('documents');
+        query.asCallback(function (err, [id] = []) {
+          if (err && err.errno === 1062) err = ERROR.DUPLICATE_ENTITY_NAME(ENTITY.DOCUMENT, document.name);
+          callback(err, id);
+        });
+      }
+    ], function(err, id){
+      respondToClient(res, err, 201, { id });
+    });
+  });
+
   /** Update document */
-  // TODO: Add service test for this endpoint
-  app.put('/api/v1/documents/:name', verifyToken(CLEARANCES.ACTIONS.CRUD_DOCUMENTS), function(req, res){
-    const { name } = req.params;
+  app.put('/api/v1/documents/:id', verifyToken(CLEARANCES.ACTIONS.CRUD_DOCUMENTS), function(req, res){
+    const { id } = req.params;
     const { document, changed } = req.body;
 
     async.waterfall([
       function(callback){ // Delete original document from cloud
-        const query = knex.select().from('documents').where('name', name);
+        const query = knex.select().from('documents').where('id', id);
         query.asCallback(function (err, [document] = []) {
           if (err) return callback(err);
-          if (!document) return callback(ERROR.INVALID_ENTITY_NAME(ENTITY.DOCUMENT, name));
+          if (!document) return callback(ERROR.INVALID_ENTITY_ID(ENTITY.DOCUMENT, id));
           if (!changed) return callback(null);
           filer.destroyDocument(document.name, callback);
         });
@@ -970,14 +989,37 @@ module.exports = function(app, conn, knex){
         filer.uploadDocument(document, changed, callback);
       },
       function(document, callback){ // Update session in database
-        document.lastModified = new Date();
-        const query = knex('documents').update(document).where('name', name);
+        const query = knex('documents').update(document).where('id', id);
         query.asCallback(function(err) {
+          callback(err, document.name);
+        });
+      }
+    ], function(err, name){
+      respondToClient(res, err, 200, { name });
+    });
+  });
+
+  /** Delete an existing document from database */
+  app.delete('/api/v1/documents/:id', verifyToken(CLEARANCES.ACTIONS.CRUD_DOCUMENTS), function(req, res){
+    const { id } = req.params;
+
+    async.waterfall([
+      function(callback){ // Delete file from cloud
+        const query = knex.select('file').from('documents').where('id', id);
+        query.asCallback(function(err, [document] = []){
+          if (err) return callback(err);
+          if (!document) return callback(ERROR.INVALID_ENTITY_ID(ENTITY.DOCUMENT, id));
+          filer.destroyDocument(document.file, callback);
+        });
+      },
+      function(callback){ // Delete document from database
+        const query = knex('documents').where('id', id).del();
+        query.asCallback(function(err){
           callback(err);
         });
       }
     ], function(err){
-      respondToClient(res, err, 200);
+      respondToClient(res, err, 204);
     });
   });
 }

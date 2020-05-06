@@ -34,6 +34,11 @@ module.exports = {
     err.status = 409;
     return err;
   },
+  DUPLICATE_ENTITY_NAME: (entity, name) => {
+    const err = new Error(`A ${entity} with the name '${name}' already exists in the database.`);
+    err.status = 409;
+    return err;
+  },
   DUPLICATE_USERNAME: () => {
     const err = new Error("The submitted username already exists.");
     err.status = 409;
