@@ -483,6 +483,34 @@ module.exports = function(app, conn, knex, server){
     });
   });
 
+  app.get('/docs/:name', function(req, res){
+    const { name } = req.params;
+    const query = knex.select().from('documents').where('name', name);
+    query.asCallback(function(err, [document] = []){
+      if (err) return renderErrorPage(req, res, err, server);
+      if (!document) return renderErrorPage(req, res, ERROR.NONEXISTENT_ENTITY(ENTITY.DOCUMENT), server);
+      return renderDocument(res, document);
+    });
+  });
+
+  app.get('/:page', function(req, res, next){
+    const name = req.params.page;
+    knex.select().from('pages').asCallback(function(err, pages){
+      const page = pages.find(element => element.name === name);
+      if (!page) return next();
+      return renderPage(req, res, page, PAGE.OPERATIONS.READ);
+    });
+  });
+
+  app.get('/:page/edit', function(req, res, next){
+    const name = req.params.page;
+    knex.select().from('pages').asCallback(function(err, pages){
+      const page = pages.find(element => element.name === name);
+      if (!page) return next();
+      return renderPage(req, res, page, PAGE.OPERATIONS.UPDATE);
+    });
+  });
+
   /***************************************************************
   * OTHER MEDIA
   **************************************************************/
@@ -538,6 +566,16 @@ module.exports = function(app, conn, knex, server){
     res.writeHead(301, { Location: forms.clientFeedback });
     res.end();
   });
+
+  /** Membership Form */
+  app.get('/membership-form', function(req, res){
+    res.writeHead(301, { Location: forms.membership });
+    res.end();
+  });
+
+  /***************************************************************
+   * OTHER
+   **************************************************************/
 
   /** Robots.txt page */
   app.get('/robots.txt', (req, res) => (
@@ -602,34 +640,6 @@ module.exports = function(app, conn, knex, server){
         res.header('Content-Type', 'application/xml');
         res.send(xml);
       });
-    });
-  });
-
-  app.get('/docs/:name', function(req, res){
-    const { name } = req.params;
-    const query = knex.select().from('documents').where('name', name);
-    query.asCallback(function(err, [document] = []){
-      if (err) return renderErrorPage(req, res, err, server);
-      if (!document) return renderErrorPage(req, res, ERROR.NONEXISTENT_ENTITY(ENTITY.DOCUMENT), server);
-      return renderDocument(res, document);
-    });
-  });
-
-  app.get('/:page', function(req, res, next){
-    const name = req.params.page;
-    knex.select().from('pages').asCallback(function(err, pages){
-      const page = pages.find(element => element.name === name);
-      if (!page) return next();
-      return renderPage(req, res, page, PAGE.OPERATIONS.READ);
-    });
-  });
-
-  app.get('/:page/edit', function(req, res, next){
-    const name = req.params.page;
-    knex.select().from('pages').asCallback(function(err, pages){
-      const page = pages.find(element => element.name === name);
-      if (!page) return next();
-      return renderPage(req, res, page, PAGE.OPERATIONS.UPDATE);
     });
   });
 }

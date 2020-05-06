@@ -65,7 +65,8 @@ module.exports = {
   forms: {
     recruitment: 'https://forms.gle/xAf5bMPZvXNob7FC7',
     clientFeedback: 'https://forms.gle/iAEusQ8JBTmBoUCF8',
-    audienceFeedback: 'https://forms.gle/GErPZT2h2uHoFajn9'
+    audienceFeedback: 'https://forms.gle/GErPZT2h2uHoFajn9',
+    membership: 'https://forms.gle/vF3bjhdz6qeFuk6fA'
   },
 
   /** The site description */
