@@ -501,7 +501,19 @@ module.exports = function(app, conn, knex, server){
 
   /** Current zoom link */
   app.get('/zoom', function(req, res){
-    res.writeHead(307, { Location: accounts.zoom, 'Cache-Control': 'no-cache' });
+    res.writeHead(301, { Location: accounts.zoom, 'Cache-Control': 'no-cache' });
+    res.end();
+  });
+
+  /** Join Slack workspace link */
+  app.get('/slack', function(req, res){
+    res.writeHead(301, { Location: accounts.slack, 'Cache-Control': 'no-cache' });
+    res.end();
+  });
+
+  /** Join Trello team link */
+  app.get('/trello', function(req, res){
+    res.writeHead(301, { Location: accounts.trello, 'Cache-Control': 'no-cache' });
     res.end();
   });
 

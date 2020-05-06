@@ -11,7 +11,9 @@ module.exports = {
     youtube: "https://www.youtube.com/channel/UC4aZ79_Ge_4BkCW-Y3UriLw?sub_confirmation=1",
     spotify: "https://open.spotify.com/show/2IUSFVvNfsJBiTXMwruTIG",
     paypal: 'https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=BUWDQJCN66KRL&source=url',
-    zoom: 'https://us02web.zoom.us/j/86932680263'
+    zoom: 'https://us02web.zoom.us/j/86932680263',
+    slack: 'https://join.slack.com/t/wokeweekly/shared_invite/zt-cz7frr9s-XFbOGaQ0zms1MaT3T9YAug',
+    trello: 'https://trello.com/invite/wokeweekly/40a83a607c57bec9423f411dd1c3c0b2'
   },
 
   /** Cloudinary fields */
