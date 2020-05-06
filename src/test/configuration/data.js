@@ -70,7 +70,7 @@ exports.TEST_DOCUMENTS = {
     file: TEST_PDF,
   },
   UPDATED: {
-    title: 'Service Test Updated Argument',
+    title: 'Service Test Updated Document',
     file: TEST_PDF,
   },
 };

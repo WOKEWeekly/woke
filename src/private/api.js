@@ -961,8 +961,9 @@ module.exports = function(app, conn, knex){
       function(document, callback){ // Add document to database
         const query = knex.insert(document, ['id']).into('documents');
         query.asCallback(function (err, [id] = []) {
-          if (err && err.errno === 1062) err = ERROR.DUPLICATE_ENTITY_NAME(ENTITY.DOCUMENT, document.name);
-          callback(err, id);
+          if (!err) return callback(null, id);
+          if (err.errno === 1062) err = ERROR.DUPLICATE_ENTITY_NAME(ENTITY.DOCUMENT, document.name);
+          callback(err);
         });
       }
     ], function(err, id){
@@ -1005,11 +1006,11 @@ module.exports = function(app, conn, knex){
 
     async.waterfall([
       function(callback){ // Delete file from cloud
-        const query = knex.select('file').from('documents').where('id', id);
+        const query = knex.select().from('documents').where('id', id);
         query.asCallback(function(err, [document] = []){
           if (err) return callback(err);
           if (!document) return callback(ERROR.INVALID_ENTITY_ID(ENTITY.DOCUMENT, id));
-          filer.destroyDocument(document.file, callback);
+          filer.destroyDocument(document.name, callback);
         });
       },
       function(callback){ // Delete document from database
