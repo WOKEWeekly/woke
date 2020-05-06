@@ -61,6 +61,12 @@ module.exports = {
     director: "zavidegbue@gmail.com"
   },
 
+  /** Defines the size limits in MB */
+  limits: {
+    file: 20,
+    image: 2
+  },
+
   /** External Google Forms */
   forms: {
     recruitment: 'https://forms.gle/xAf5bMPZvXNob7FC7',

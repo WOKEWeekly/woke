@@ -6,6 +6,8 @@ const config = './config.env';
 const isStageTesting = process.argv.includes('--stage-testing');
 const isDevTesting = process.argv.includes('--dev-testing');
 
+const { limits } = require('./constants/settings');
+
 const next = require('next');
 const server = next({ dev, quiet: isStageTesting });
 const handle = server.getRequestHandler();
@@ -18,7 +20,7 @@ const dotenv = require('dotenv').config({path: config });
 const mysql = require('mysql');
 const port = process.env.PORT || 3000;
 
-app.use(bodyParser.json({ limit: '15MB' }));
+app.use(bodyParser.json({ limit: `${limits.file}MB` }));
 app.use(cookieParser());
 app.use(cors());
 

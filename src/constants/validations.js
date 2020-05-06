@@ -1,6 +1,7 @@
 import { alert } from '~/components/alert.js';
 import { checkCookies } from './cookies';
 import { ARTICLE_STATUS } from './strings';
+import { limits } from './settings';
 
 module.exports = {
   /**
@@ -200,7 +201,7 @@ const isValidImage = (file, entity) => {
  */
 const isValidDocument = (file) => {
   if (!ifExists(file, `Please select a document to upload.`)) return false;
-  if (!isUnderFileSizeLimit(file, 15)) return false;
+  if (!isUnderFileSizeLimit(file, limits.file)) return false;
   return true;
 }
 
@@ -211,7 +212,7 @@ const isValidDocument = (file) => {
  * @param {number} limit - The upper size limit in MB. Defaults to 2MB.
  * @returns {boolean} True if within limit. False if not.
  */
-const isUnderFileSizeLimit = (file, limit = 2) => {
+const isUnderFileSizeLimit = (file, limit = limits.image) => {
   if (!file) return true;
   const size = Buffer.from(file.substring(file.indexOf(',') + 1)).length;
   if (ifTrue(size > limit * 1024 * 1024,`The file you selected is larger than ${limit}MB. Please compress this file or use a smaller one.`)) return false;
