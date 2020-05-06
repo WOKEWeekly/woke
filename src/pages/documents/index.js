@@ -2,11 +2,15 @@ import React, { Component, PureComponent } from 'react';
 import { connect } from 'react-redux';
 import { zDate } from 'zavid-modules';
 
+import { alert } from '~/components/alert.js';
+import { AddEntityButton } from '~/components/button.js';
 import { Shader, Default, Mobile } from '~/components/layout.js';
 import { Loader, Empty } from '~/components/loader.js';
 import { Icon } from '~/components/icon.js';
+import { ConfirmModal } from '~/components/modal.js';
 import { Fader } from '~/components/transitioner.js';
 import { Title } from '~/components/text.js';
+import { BottomToolbar } from '~/components/toolbar.js';
 
 import CLEARANCES from '~/constants/clearances.js';
 import request from '~/constants/request.js';
@@ -60,7 +64,7 @@ class Documents extends Component {
       const items = [];
   
       for (const [index, item] of documents.entries()) {
-        items.push(<Document key={index} idx={index} item={item} getTeam={this.getTeam} />);
+        items.push(<Document key={index} idx={index} item={item} getDocuments={this.getDocuments} />);
       }
   
       const DocumentTable = () => {
@@ -70,6 +74,7 @@ class Documents extends Component {
             <span>Title</span>
             <span>Slug</span>
             <span>Last Modified</span>
+            <span/>
             <span/>
             <span/>
           </div>
@@ -101,6 +106,12 @@ class Documents extends Component {
         <Shader className={css.documentTabler}>
           <DocumentCollection/>
         </Shader>
+
+        <BottomToolbar>
+          <AddEntityButton
+            title={'Add Document'}
+            onClick={() => location.href = '/admin/documents/add'} />
+        </BottomToolbar>
       </React.Fragment>
     );
 	}
@@ -111,6 +122,7 @@ class IDocument extends PureComponent {
     super(props);
     this.state = {
       ...props.item,
+      deleteVisible: false,
       isLoaded: false
     }
   }
@@ -120,10 +132,29 @@ class IDocument extends PureComponent {
   }
 
   /** Go to edit document */
-  editDocument = (document) => location.href = `/admin/documents/edit/${document.name}`;
+  editDocument = (document) => location.href = `/admin/documents/edit/${document.id}`;
+
+  /** Delete document */
+  deleteDocument = () => {
+    request({
+      url: `/api/v1/documents/${this.state.id}`,
+      method: 'DELETE',
+      body: JSON.stringify(this.state),
+      headers: { 'Authorization': `Bearer ${this.props.user.token}` },
+      onSuccess: () => {
+        alert.success(`You've deleted the ${this.state.title}.`);
+        this.closeDelete();
+        this.props.getDocuments();
+      }
+    });
+  }
+
+  openDelete = () => this.setState({ deleteVisible: true});
+  closeDelete = () => this.setState({ deleteVisible: false});
 
   render(){
     const { item, idx } = this.props;
+    const { deleteVisible } = this.state;
 
     const LinkButton = () => (
       <button className={css.invisible_button} onClick={() => location.href = `/docs/${item.name}`}>
@@ -145,6 +176,7 @@ class IDocument extends PureComponent {
           <span>{zDate.formatDateTime(item.lastModified) || '-'}</span>
           <span><LinkButton /></span>
           <span><button className={css.invisible_button} onClick={() => this.editDocument(item)}><Icon name={'edit'} /></button></span>
+          <span><button className={css.invisible_button} onClick={this.openDelete}><Icon name={'trash'} /></button></span>
         </Default>
         <Mobile>
           <div>
@@ -163,8 +195,16 @@ class IDocument extends PureComponent {
           <div className={css.crud}>
             <LinkButton />
             <button className={css.invisible_button} onClick={() => this.editDocument(item)}><Icon name={'edit'} /></button>
+            <button className={css.invisible_button} onClick={this.openDelete}><Icon name={'trash'} /></button>
           </div>
         </Mobile>
+
+        <ConfirmModal
+          visible={deleteVisible}
+          message={`Are you sure you want to delete document: ${item.title}?`}
+          confirmFunc={this.deleteDocument}
+          confirmText={'Delete'}
+          close={this.closeDelete} />
         
       </Fader>
     ); 

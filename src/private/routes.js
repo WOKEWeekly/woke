@@ -410,18 +410,17 @@ module.exports = function(app, conn, knex, server){
 
   /** Add new document form */
   app.get('/admin/documents/add', function(req, res){
-    return server.render(req, res, '/documents', { 
-      title: 'Add New Admin',
+    return server.render(req, res, '/documents/crud', { 
+      title: 'Add New Document',
       operation: OPERATIONS.CREATE,
-      backgroundImage: 'bg-app.jpg'
      });
   });
 
   /** Edit document form */
-  app.get('/admin/documents/edit/:name', function(req, res){
-    const { name } = req.params;
+  app.get('/admin/documents/edit/:id', function(req, res){
+    const { id } = req.params;
 
-    const query = knex.select().from('documents').where('name', name);
+    const query = knex.select().from('documents').where('id', id);
     query.asCallback(function (err, [document] = []) {
       if (err) return renderErrorPage(req, res, err, server);
       if (!document) return renderErrorPage(req, res, ERROR.NONEXISTENT_ENTITY(ENTITY.DOCUMENT), server);

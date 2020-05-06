@@ -60,14 +60,30 @@ class DocumentCrud extends Component {
     return data;
   }
 
+  /** Submit document to server */
+  submitDocument = () => {
+    if (!isValidDocument(this.state)) return;
+    const data = this.buildRequest();
+
+    request({
+      url: `/api/v1/documents`,
+      method: 'POST',
+      body: data,
+      headers: { 'Authorization': `Bearer ${this.props.user.token}`, },
+      onSuccess: () => {
+        setAlert({ type: 'success', message: `You've successfully added the ${this.state.title} document.` });
+        location.href = '/admin/documents';
+      }
+    });
+  }
+
   /** Update document on server */
   updateDocument = () => {
     if (!isValidDocument(this.state)) return;
     const data = this.buildRequest();
-
-    /** Update document in database */
+    
     request({
-      url: `/api/v1/documents/${this.props.document.name}`,
+      url: `/api/v1/documents/${this.props.document.id}`,
       method: 'PUT',
       body: data,
       headers: { 'Authorization': `Bearer ${this.props.user.token}`, },

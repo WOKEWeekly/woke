@@ -1,7 +1,7 @@
 const cloudinary = require('cloudinary').v2;
 const { zDate, zString } = require('zavid-modules');
 const { DIRECTORY, ARTICLE_STATUS } = require('../constants/strings.js');
-const { dev } = require('../server.js');
+const { dev = 'development' } = require('../server.js');
 
 const env = dev ? 'dev' : 'prod';
 
@@ -63,11 +63,12 @@ exports.destroyImage = (image, next) => {
  */
 exports.uploadDocument = (document, hasChanged, next) => {
 
-  // Discontinue if file has not changed
-  if (!hasChanged) return next(null, document);
-
   // Extract a clean slug name
   const name = zString.constructCleanSlug(document.title);
+  document.name = name;
+
+  // Discontinue if file has not changed
+  if (!hasChanged) return next(null, document);
 
   // Upload to cloudinary
   cloudinary.uploader.upload(document.file, {
@@ -76,9 +77,12 @@ exports.uploadDocument = (document, hasChanged, next) => {
   }, (err, result) => {
     if (err) return next(err);
     const { version, format } = result;
-    document.file = `${name}.${format}`;
-    document.version = version;
-    next(null, document);
+    Object.assign(document, {
+      version,
+      file: `${name}.${format}`,
+      lastModified: new Date()
+    });
+    return next(null, document);
   });
 }
 
