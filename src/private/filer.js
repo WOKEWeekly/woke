@@ -1,9 +1,8 @@
 const cloudinary = require('cloudinary').v2;
 const { zDate, zString } = require('zavid-modules');
 const { DIRECTORY, ARTICLE_STATUS } = require('../constants/strings.js');
-const { dev = 'development' } = require('../server.js');
 
-const env = dev ? 'dev' : 'prod';
+const env = process.env.NODE_ENV !== 'production' ? 'dev' : 'prod';
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_NAME, 

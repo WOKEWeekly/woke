@@ -63,7 +63,7 @@ module.exports = {
 
   /** Defines the size limits in MB */
   limits: {
-    file: 20,
+    file: 10,
     image: 2
   },
 

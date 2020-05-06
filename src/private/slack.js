@@ -1,5 +1,5 @@
 const { WebClient } = require('@slack/web-api');
-const { dev } = require('../server.js');
+const dev = process.env.NODE_ENV !== 'production';
 const token = process.env.SLACK_TOKEN;
 
 const slack = new WebClient(token);
