@@ -56,6 +56,24 @@ describe("User Tests", function() {
         }
       });
     });
+
+    it("Attempt authentication with invalid credentials", function(done) {
+      const { username, password1: password } = TEST_USERS.CREATED;
+      request({
+        url: `/api/v1/users/login`,
+        method: 'POST',
+        body: JSON.stringify({
+          username,
+          password: password + 'wrong',
+          remember: true
+        }),
+        headers: HEADERS.KEY,
+        done,
+        onError: ({status}) => {
+          assert.equal(status, 401);
+        }
+      });
+    });
   });
 
   /** Test retrieval of users */

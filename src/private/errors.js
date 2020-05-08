@@ -52,17 +52,17 @@ module.exports = {
 
   NONEXISTENT_CREDENTIALS: () => {
     const err = new Error("Your username or password is incorrect.");
-    err.status = 404;
+    err.status = 401;
     return err;
   },
   NONEXISTENT_EMAIL_ADDRESS: () => {
     const err = new Error("The submitted email address does not exist.");
-    err.status = 404;
+    err.status = 401;
     return err;
   },
   INVALID_EMAIL_ADDRESS: () => {
     const err = new Error(`Your email address is invalid.`)
-    err.status = 400;
+    err.status = 401;
     return err;
   },
   INCORRECT_PASSWORD: () => {
@@ -72,7 +72,7 @@ module.exports = {
   },
   PASSWORD_MISMATCH: () => {
     const err = new Error(`Your passwords do not match.`)
-    err.status = 400;
+    err.status = 401;
     return err;
   },
 
