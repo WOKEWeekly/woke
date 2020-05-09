@@ -7,7 +7,7 @@ const env = process.env.NODE_ENV !== 'production' ? 'dev' : 'prod';
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_NAME,
   api_key: process.env.CLOUDINARY_API_KEY,
-  api_secret: process.env.CLOUDINARY_API_SECRET,
+  api_secret: process.env.CLOUDINARY_API_SECRET
 });
 
 /**
@@ -31,7 +31,7 @@ exports.uploadImage = (iEntity, directory, imageHasChanged, next) => {
     entity.image,
     {
       public_id: `${env}/${directory}/${filename}`,
-      unique_filename: false,
+      unique_filename: false
     },
     (err, result) => {
       if (err) return next(err);
@@ -77,7 +77,7 @@ exports.uploadDocument = (document, hasChanged, next) => {
     document.file,
     {
       public_id: `${env}/documents/${name}`,
-      unique_filename: false,
+      unique_filename: false
     },
     (err, result) => {
       if (err) return next(err);
@@ -85,7 +85,7 @@ exports.uploadDocument = (document, hasChanged, next) => {
       Object.assign(document, {
         version,
         file: `${name}.${format}`,
-        lastModified: new Date(),
+        lastModified: new Date()
       });
       return next(null, document);
     }

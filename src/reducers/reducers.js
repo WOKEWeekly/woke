@@ -10,7 +10,7 @@ const initialUser = {
   clearance: 0,
   remember: false,
   isAuthenticated: false,
-  isVerified: false,
+  isVerified: false
 };
 
 const userReducer = (state = initialUser, action) => {
@@ -28,11 +28,11 @@ const userReducer = (state = initialUser, action) => {
     case 'VERIFY_USER':
       return Object.assign({}, state, {
         clearance: 2,
-        isVerified: true,
+        isVerified: true
       });
     case 'CHANGE_USERNAME':
       return Object.assign({}, state, {
-        username: action.payload,
+        username: action.payload
       });
     default:
       return state;
@@ -42,18 +42,18 @@ const userReducer = (state = initialUser, action) => {
 /** Reducer for session settings */
 const defaultSession = {
   view: 'grid',
-  sort: '2',
+  sort: '2'
 };
 
 const sessionReducer = (state = defaultSession, action) => {
   switch (action.type) {
     case 'SAVE_SESSION_VIEW':
       return Object.assign({}, state, {
-        view: action.payload,
+        view: action.payload
       });
     case 'SAVE_SESSION_SORT':
       return Object.assign({}, state, {
-        sort: action.payload,
+        sort: action.payload
       });
     default:
       return state;
@@ -65,20 +65,20 @@ const defaultTopic = {
     categories: [],
     types: [],
     polarity: [],
-    misc: [],
+    misc: []
   },
-  sort: '3',
+  sort: '3'
 };
 
 const topicReducer = (state = defaultTopic, action) => {
   switch (action.type) {
     case 'SAVE_TOPIC_SORT':
       return Object.assign({}, state, {
-        sort: action.payload,
+        sort: action.payload
       });
     case 'SAVE_TOPIC_FILTERS':
       return Object.assign({}, state, {
-        filters: action.payload,
+        filters: action.payload
       });
     default:
       return state;
@@ -86,14 +86,14 @@ const topicReducer = (state = defaultTopic, action) => {
 };
 
 const defaultBlackEx = {
-  view: '1',
+  view: '1'
 };
 
 const blackexReducer = (state = defaultBlackEx, action) => {
   switch (action.type) {
     case 'SAVE_CANDIDATE_SORT':
       return Object.assign({}, state, {
-        sort: action.payload,
+        sort: action.payload
       });
     default:
       return state;
@@ -110,7 +110,7 @@ const countryReducer = (state = [], action) => {
 };
 
 const defaultTheme = {
-  theme: 'default',
+  theme: 'default'
 };
 
 const themeReducer = (state = defaultTheme, action) => {
@@ -128,5 +128,5 @@ export default combineReducers({
   topic: topicReducer,
   blackex: blackexReducer,
   countries: countryReducer,
-  theme: themeReducer,
+  theme: themeReducer
 });

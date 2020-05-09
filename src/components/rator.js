@@ -8,7 +8,7 @@ export default class Rator extends Component {
     this.state = {
       rating: props.rating || 0,
       isLoaded: false,
-      changeable: props.changeable,
+      changeable: props.changeable
     };
   }
 

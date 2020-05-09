@@ -1,5 +1,5 @@
 # Commas and semi-colons
-trailingComma: "es5"
+trailingComma: "none"
 semi: true
 
 # Tabs

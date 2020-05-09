@@ -37,7 +37,7 @@ module.exports = {
       username,
       password1,
       password2,
-      privacy,
+      privacy
     } = user;
 
     if (!ifExists(firstname.trim(), 'Please enter your first name.'))
@@ -283,7 +283,7 @@ module.exports = {
         return false;
     }
     return true;
-  },
+  }
 };
 
 /**

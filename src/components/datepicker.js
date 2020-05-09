@@ -17,7 +17,7 @@ export class DatePicker extends Component {
 
     this.state = {
       ...extractDates(props.date),
-      visible: false,
+      visible: false
     };
   }
 
@@ -52,7 +52,7 @@ export class DatePicker extends Component {
       placeholderText,
       minDate,
       maxDate,
-      withDayOfWeek,
+      withDayOfWeek
     } = this.props;
     const { day, month, year, visible } = this.state;
 

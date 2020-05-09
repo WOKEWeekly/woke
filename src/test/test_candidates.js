@@ -19,7 +19,7 @@ describe('Candidate Tests', function () {
         CANDIDATE_ID = id;
         TEST_CANDIDATES.CREATED.id = id;
         TEST_CANDIDATES.UPDATED.id = id;
-      },
+      }
     });
   });
 
@@ -34,7 +34,7 @@ describe('Candidate Tests', function () {
         done,
         onSuccess: ({ status }) => {
           assert.equal(status, 201);
-        },
+        }
       });
     });
 
@@ -47,7 +47,7 @@ describe('Candidate Tests', function () {
         done,
         onError: ({ status }) => {
           assert.equal(status, 409);
-        },
+        }
       });
     });
   });
@@ -63,7 +63,7 @@ describe('Candidate Tests', function () {
         onSuccess: ({ status, data }) => {
           assert.equal(status, 200);
           assert.isArray(data);
-        },
+        }
       });
     });
 
@@ -76,7 +76,7 @@ describe('Candidate Tests', function () {
         onSuccess: ({ status, data }) => {
           assert.equal(status, 200);
           assert.isObject(data);
-        },
+        }
       });
     });
 
@@ -89,7 +89,7 @@ describe('Candidate Tests', function () {
         onSuccess: ({ status, data }) => {
           assert.equal(status, 200);
           assert.isObject(data);
-        },
+        }
       });
     });
 
@@ -101,7 +101,7 @@ describe('Candidate Tests', function () {
         done,
         onError: ({ status }) => {
           assert.equal(status, 404);
-        },
+        }
       });
     });
   });
@@ -114,13 +114,13 @@ describe('Candidate Tests', function () {
         method: 'PUT',
         body: JSON.stringify({
           candidate: TEST_CANDIDATES.UPDATED,
-          changed: false,
+          changed: false
         }),
         headers: HEADERS.TOKEN(superuser),
         done,
         onSuccess: ({ status }) => {
           assert.equal(status, 200);
-        },
+        }
       });
     });
 
@@ -130,13 +130,13 @@ describe('Candidate Tests', function () {
         method: 'PUT',
         body: JSON.stringify({
           candidate: TEST_CANDIDATES.UPDATED,
-          changed: true,
+          changed: true
         }),
         headers: HEADERS.TOKEN(superuser),
         done,
         onSuccess: ({ status, data }) => {
           assert.equal(status, 200);
-        },
+        }
       });
     });
 
@@ -146,13 +146,13 @@ describe('Candidate Tests', function () {
         method: 'PUT',
         body: JSON.stringify({
           candidate: TEST_CANDIDATES.UPDATED,
-          changed: true,
+          changed: true
         }),
         headers: HEADERS.TOKEN(superuser),
         done,
         onError: ({ status }) => {
           assert.equal(status, 404);
-        },
+        }
       });
     });
   });
@@ -167,7 +167,7 @@ describe('Candidate Tests', function () {
         done,
         onSuccess: ({ status }) => {
           assert.equal(status, 204);
-        },
+        }
       });
     });
 
@@ -179,7 +179,7 @@ describe('Candidate Tests', function () {
         done,
         onError: ({ status }) => {
           assert.equal(status, 404);
-        },
+        }
       });
     });
   });

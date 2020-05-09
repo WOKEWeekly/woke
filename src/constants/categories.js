@@ -9,18 +9,18 @@ module.exports = {
     { label: 'Philosophy & Ethics', short: 'philosophy' },
     { label: 'Politics', short: 'politics' },
     { label: 'Race', short: 'race' },
-    { label: 'Society & Stereotypes', short: 'society' },
+    { label: 'Society & Stereotypes', short: 'society' }
   ],
   types: [
     { label: 'Debate', short: 'debate' },
-    { label: 'Discussion', short: 'discussion' },
+    { label: 'Discussion', short: 'discussion' }
   ],
   polarity: [
     { label: 'Polar', short: 'polar', value: 1 },
-    { label: 'Non-Polar', short: 'nonpolar', value: 0 },
+    { label: 'Non-Polar', short: 'nonpolar', value: 0 }
   ],
   misc: [
     { label: 'Validated', short: 'validated' },
-    { label: 'Sensitive', short: 'sensitivity' },
-  ],
+    { label: 'Sensitive', short: 'sensitivity' }
+  ]
 };

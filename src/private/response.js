@@ -34,5 +34,5 @@ module.exports = {
     if (err) console.error(err.toString());
     const message = err ? err.message : '';
     return server.render(req, res, '/_error', { message });
-  },
+  }
 };

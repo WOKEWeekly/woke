@@ -15,7 +15,7 @@ export class TimePicker extends Component {
 
     this.state = {
       ...extractTime(props.time),
-      visible: false,
+      visible: false
     };
   }
 

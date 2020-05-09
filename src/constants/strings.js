@@ -8,13 +8,13 @@ exports.ENTITY = {
   REVIEW: 'review',
   SESSION: 'session',
   TOPIC: 'topic',
-  USER: 'user',
+  USER: 'user'
 };
 
 /** The CRUD operations for all entities */
 exports.OPERATIONS = {
   CREATE: 'add',
-  UPDATE: 'edit',
+  UPDATE: 'edit'
 };
 
 /** The cloudinary directories for entities */
@@ -23,29 +23,29 @@ exports.DIRECTORY = {
   CANDIDATES: 'blackexcellence',
   MEMBERS: 'team',
   REVIEWS: 'reviews',
-  SESSIONS: 'sessions',
+  SESSIONS: 'sessions'
 };
 
 /** For each of the pages */
 exports.PAGE = {
   KINDS: {
     INFO: 'information',
-    VARIANTS: 'variants',
+    VARIANTS: 'variants'
   },
   OPERATIONS: {
     READ: 'READ',
-    UPDATE: 'UPDATE',
+    UPDATE: 'UPDATE'
   },
   THEMES: {
     DEFAULT: 'default',
     BLACKEX: 'blackex',
-    MENTAL: 'mental',
-  },
+    MENTAL: 'mental'
+  }
 };
 
 /** The status of the blog articles */
 exports.ARTICLE_STATUS = {
   DRAFT: 'DRAFT',
   PRIVATE: 'PRIVATE',
-  PUBLISHED: 'PUBLISHED',
+  PUBLISHED: 'PUBLISHED'
 };

@@ -16,7 +16,7 @@ class ICover extends Component {
     super();
     this.state = {
       imageLoaded: false,
-      imageSrc: '',
+      imageSrc: ''
     };
   }
 
@@ -34,7 +34,7 @@ class ICover extends Component {
       title,
       subtitle,
       imageTitle,
-      theme,
+      theme
     } = this.props;
     const { imageLoaded, imageSrc } = this.state;
 
@@ -48,7 +48,7 @@ class ICover extends Component {
           style={{
             backgroundImage: `url(${imageSrc})`,
             backgroundPosition: backgroundPosition,
-            minHeight: height,
+            minHeight: height
           }}>
           <div className={css.coverText}>
             <Fader determinant={imageLoaded} duration={500} delay={250}>
@@ -81,7 +81,7 @@ export class Shader extends Component {
         {...this.props}
         style={{
           backgroundColor: 'rgba(0, 0, 0, .5)',
-          width: '100%',
+          width: '100%'
         }}>
         {this.props.children}
       </div>
@@ -97,7 +97,7 @@ export class Spacer extends Component {
         style={{
           display: 'grid',
           height: '100%',
-          gridTemplateRows: this.props.gridrows || '1fr auto',
+          gridTemplateRows: this.props.gridrows || '1fr auto'
         }}>
         {this.props.children}
       </div>
@@ -116,11 +116,11 @@ export const zIndices = {
   topicTopToolbar: 0,
   filterMenu: 1010,
   accountMenu: 1050,
-  alerts: 1100,
+  alerts: 1100
 };
 
 const mapStateToProps = state => ({
-  theme: state.theme,
+  theme: state.theme
 });
 
 export const Cover = connect(mapStateToProps)(ICover);

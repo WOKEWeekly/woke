@@ -183,7 +183,7 @@ export class RadioButtonGroup extends Component {
 }
 
 const mapStateToProps = state => ({
-  theme: state.theme,
+  theme: state.theme
 });
 
 export const SubmitButton = connect(mapStateToProps)(_SubmitButton);

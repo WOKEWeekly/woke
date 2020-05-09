@@ -17,7 +17,7 @@ module.exports = {
   sendSessionReminder: async session => {
     const message = constructSessionReminderMessage(session);
     await postMessage(message);
-  },
+  }
 };
 
 /**
@@ -38,7 +38,7 @@ const postMessage = message => {
   return slack.chat.postMessage({
     channel,
     username: '#WOKEWeekly',
-    blocks: [{ type: 'section', text: { type: 'mrkdwn', text: message } }],
+    blocks: [{ type: 'section', text: { type: 'mrkdwn', text: message } }]
   });
 };
 
@@ -66,7 +66,7 @@ const constructBirthdayMessage = member => {
     'Stay blessed! :pray::skin-tone-5: :heart:',
     'Have an amazing day! :tada: :heart:',
     'Enjoy your day! :zany_face: :dizzy:',
-    'Live it up! :clinking_glasses: :tada:',
+    'Live it up! :clinking_glasses: :tada:'
   ];
 
   let message = `${getRandomMessage(intros)} to our ${member.role}, *${
@@ -100,7 +100,7 @@ const constructSessionReminderMessage = ({ title, timeHeld }) => {
   const firstSentences = [
     `We have the *${title}* session taking place today${timeHeld}!`,
     `We got *${title}* on today${timeHeld}!`,
-    `Another day, another sesh: *${title}*${timeHeld} today.`,
+    `Another day, another sesh: *${title}*${timeHeld} today.`
   ];
 
   const secondSentences = [
@@ -108,7 +108,7 @@ const constructSessionReminderMessage = ({ title, timeHeld }) => {
     'Do your best, team! :heart:',
     'Represent, team! :call_me_hand::skin-tone-5:',
     'Wish the team luck! :star:',
-    "Let's do it! :muscle::skin-tone-5:",
+    "Let's do it! :muscle::skin-tone-5:"
   ];
 
   return `${getRandomMessage(firstSentences)} ${getRandomMessage(

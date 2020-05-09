@@ -23,7 +23,7 @@ export default ({ url, method = 'GET', body, headers = {}, onSuccess }) => {
     url,
     method,
     data: body,
-    headers,
+    headers
   })
     .then(({ data }) => {
       onSuccess(data);

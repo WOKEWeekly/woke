@@ -20,7 +20,7 @@ class PreNavbar extends Component {
     super();
     this.state = {
       isLoaded: false,
-      modalVisible: false,
+      modalVisible: false
     };
 
     checkAlert();
@@ -50,7 +50,7 @@ class PreNavbar extends Component {
         lastname,
         clearance,
         fullname,
-        isAuthenticated,
+        isAuthenticated
       } = user;
 
       if (isAuthenticated) {
@@ -148,7 +148,7 @@ export class MainNavbar extends Component {
     super();
     this.state = {
       imageLoaded: false,
-      imageSrc: '',
+      imageSrc: ''
     };
   }
 
@@ -214,13 +214,13 @@ export class MainNavbar extends Component {
 
 const mapStateToProps = state => ({
   user: state.user,
-  theme: state.theme,
+  theme: state.theme
 });
 
 const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
-      clearUser,
+      clearUser
     },
     dispatch
   );

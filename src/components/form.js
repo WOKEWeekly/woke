@@ -264,7 +264,7 @@ export class _FileSelector extends Component {
 
     this.state = {
       image: '',
-      filename: '',
+      filename: ''
     };
 
     this.image = React.createRef();
@@ -275,7 +275,7 @@ export class _FileSelector extends Component {
   static getDerivedStateFromProps(props, state) {
     const newState = {
       image: state.image,
-      filename: state.filename,
+      filename: state.filename
     };
 
     if (props.operation === 'add') {
@@ -353,7 +353,7 @@ export class _FileSelector extends Component {
 }
 
 const mapStateToProps = state => ({
-  theme: state.theme,
+  theme: state.theme
 });
 
 export const FileSelector = connect(mapStateToProps)(_FileSelector);

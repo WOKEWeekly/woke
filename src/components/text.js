@@ -323,7 +323,7 @@ export const createExcerpt = text => {
 };
 
 const mapStateToProps = state => ({
-  theme: state.theme,
+  theme: state.theme
 });
 
 export const Paragraph = connect(mapStateToProps)(IParagraph);

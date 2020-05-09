@@ -41,7 +41,7 @@ module.exports = {
             } else {
               callback(ERROR.UNAUTHORIZED_REQUEST());
             }
-          },
+          }
         ],
         function (err) {
           err ? respondToClient(res, err) : next();
@@ -75,5 +75,5 @@ module.exports = {
         });
       }
     };
-  },
+  }
 };

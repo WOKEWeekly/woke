@@ -12,7 +12,7 @@ const filer = require('./filer.js');
 const {
   verifyToken,
   validateReq,
-  logUserActivity,
+  logUserActivity
 } = require('./middleware.js');
 const { respondToClient } = require('./response.js');
 const SQL = require('./sql.js');
@@ -70,7 +70,7 @@ module.exports = function (app, conn, knex) {
             if (!session) return callback(null);
             callback(null, { session, upcoming: false });
           });
-        },
+        }
       ],
       function (err, session) {
         respondToClient(res, err, 200, session);
@@ -97,7 +97,7 @@ module.exports = function (app, conn, knex) {
             conn.query(sql, [values], function (err, result) {
               err ? callback(err) : callback(null, result.insertId);
             });
-          },
+          }
         ],
         function (err, id) {
           respondToClient(res, err, 201, { id });
@@ -139,7 +139,7 @@ module.exports = function (app, conn, knex) {
             conn.query(sql, values, function (err) {
               err ? callback(err) : callback(null, session.slug);
             });
-          },
+          }
         ],
         function (err, slug) {
           respondToClient(res, err, 200, { slug });
@@ -174,7 +174,7 @@ module.exports = function (app, conn, knex) {
             conn.query(SQL.SESSIONS.DELETE, id, function (err) {
               err ? callback(err) : callback(null);
             });
-          },
+          }
         ],
         function (err) {
           respondToClient(res, err, 204);
@@ -242,7 +242,7 @@ module.exports = function (app, conn, knex) {
                 callback(null);
               }
             });
-          },
+          }
         ],
         function (err) {
           respondToClient(res, err, 201);
@@ -293,7 +293,7 @@ module.exports = function (app, conn, knex) {
             conn.query(sql, values, function (err) {
               err ? callback(err) : callback(null);
             });
-          },
+          }
         ],
         function (err) {
           respondToClient(res, err, 200);
@@ -328,7 +328,7 @@ module.exports = function (app, conn, knex) {
             conn.query(SQL.CANDIDATES.DELETE, id, function (err) {
               err ? callback(err) : callback(null);
             });
-          },
+          }
         ],
         function (err) {
           respondToClient(res, err, 204);
@@ -398,7 +398,7 @@ module.exports = function (app, conn, knex) {
             conn.query(sql, [values], function (err, result) {
               err ? callback(err) : callback(null, result.insertId);
             });
-          },
+          }
         ],
         function (err, id) {
           respondToClient(res, err, 201, { id });
@@ -440,7 +440,7 @@ module.exports = function (app, conn, knex) {
             conn.query(sql, values, function (err) {
               err ? callback(err) : callback(null, member.slug);
             });
-          },
+          }
         ],
         function (err, slug) {
           respondToClient(res, err, 200, { slug });
@@ -475,7 +475,7 @@ module.exports = function (app, conn, knex) {
             conn.query(SQL.MEMBERS.DELETE, id, function (err) {
               err ? callback(err) : callback(null);
             });
-          },
+          }
         ],
         function (err) {
           respondToClient(res, err, 204);
@@ -583,7 +583,7 @@ module.exports = function (app, conn, knex) {
           ) {
             err ? callback(err) : callback(null, votes);
           });
-        },
+        }
       ],
       function (err, votes) {
         respondToClient(res, err, 200, { ...votes });
@@ -651,7 +651,7 @@ module.exports = function (app, conn, knex) {
             conn.query(sql, [values], function (err, result) {
               err ? callback(err) : callback(null, result.insertId);
             });
-          },
+          }
         ],
         function (err, id) {
           respondToClient(res, err, 201, { id });
@@ -693,7 +693,7 @@ module.exports = function (app, conn, knex) {
             conn.query(sql, values, function (err) {
               err ? callback(err) : callback(null);
             });
-          },
+          }
         ],
         function (err) {
           respondToClient(res, err, 200);
@@ -728,7 +728,7 @@ module.exports = function (app, conn, knex) {
             conn.query(SQL.REVIEWS.DELETE, id, function (err) {
               err ? callback(err) : callback(null);
             });
-          },
+          }
         ],
         function (err) {
           respondToClient(res, err, 204);
@@ -790,7 +790,7 @@ module.exports = function (app, conn, knex) {
             conn.query(sql, [values], function (err, result) {
               err ? callback(err) : callback(null, result.insertId);
             });
-          },
+          }
         ],
         function (err, id) {
           respondToClient(res, err, 201, { id });
@@ -832,7 +832,7 @@ module.exports = function (app, conn, knex) {
             conn.query(sql, values, function (err) {
               err ? callback(err) : callback(null, article.slug);
             });
-          },
+          }
         ],
         function (err, slug) {
           respondToClient(res, err, 200, { slug });
@@ -867,7 +867,7 @@ module.exports = function (app, conn, knex) {
             conn.query(SQL.ARTICLES.DELETE, id, function (err) {
               err ? callback(err) : callback(null);
             });
-          },
+          }
         ],
         function (err) {
           respondToClient(res, err, 204);
@@ -914,7 +914,7 @@ module.exports = function (app, conn, knex) {
       username,
       password1,
       password2,
-      subscribe,
+      subscribe
     } = req.body;
 
     if (!validator.validate(email))
@@ -942,7 +942,7 @@ module.exports = function (app, conn, knex) {
               lastname,
               username,
               email,
-              clearance: 1,
+              clearance: 1
             };
 
             // Subscribe user to mailing list if allowed
@@ -978,11 +978,11 @@ module.exports = function (app, conn, knex) {
                 clearance: user.clearance,
                 username: user.username,
                 email: user.email,
-                token,
+                token
               });
             }
           );
-        },
+        }
       ],
       function (err, user) {
         if (err && err.code === ERROR.SQL_DUP_CODE) {
@@ -1031,7 +1031,7 @@ module.exports = function (app, conn, knex) {
               callback(null, user);
             }
           );
-        },
+        }
       ],
       function (err, user) {
         respondToClient(res, err, 200, user);
@@ -1112,7 +1112,7 @@ module.exports = function (app, conn, knex) {
             conn.query(sql, values, function (err) {
               err ? callback(err) : callback(null);
             });
-          },
+          }
         ],
         function (err) {
           respondToClient(res, err, 200);
@@ -1194,7 +1194,7 @@ module.exports = function (app, conn, knex) {
               );
             }
           );
-        },
+        }
       ],
       function (err, token) {
         respondToClient(res, err, 200, token);
@@ -1224,7 +1224,7 @@ module.exports = function (app, conn, knex) {
             user.clearance = 2;
             callback(null, user);
           });
-        },
+        }
       ],
       function (err, user) {
         respondToClient(res, err, 200, user);
@@ -1267,7 +1267,7 @@ module.exports = function (app, conn, knex) {
               );
             }
           );
-        },
+        }
       ],
       function (err, token) {
         respondToClient(res, err, 200, token);
@@ -1302,7 +1302,7 @@ module.exports = function (app, conn, knex) {
               err = ERROR.INVALID_ENTITY_ID(ENTITY.USER, id);
             err ? callback(err) : callback(null);
           });
-        },
+        }
       ],
       function (err) {
         respondToClient(res, err, 200);
@@ -1378,7 +1378,7 @@ module.exports = function (app, conn, knex) {
                 );
               callback(err);
             });
-          },
+          }
         ],
         function (err, id) {
           respondToClient(res, err, 201, { id });
@@ -1418,7 +1418,7 @@ module.exports = function (app, conn, knex) {
             query.asCallback(function (err) {
               callback(err, document.name);
             });
-          },
+          }
         ],
         function (err, name) {
           respondToClient(res, err, 200, { name });
@@ -1452,7 +1452,7 @@ module.exports = function (app, conn, knex) {
             query.asCallback(function (err) {
               callback(err);
             });
-          },
+          }
         ],
         function (err) {
           respondToClient(res, err, 204);
@@ -1470,8 +1470,8 @@ const subscribeUserToMailingList = user => {
       status: 'subscribed',
       merge_fields: {
         FNAME: user.firstname,
-        LNAME: user.lastname,
-      },
+        LNAME: user.lastname
+      }
     })
     .then(results => console.log(results))
     .catch(err => console.log(err.toString()));

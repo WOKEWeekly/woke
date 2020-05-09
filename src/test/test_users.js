@@ -16,7 +16,7 @@ describe('User Tests', function () {
       url: `/api/v1/users`,
       method: 'PURGE',
       headers: HEADERS.TOKEN(superuser),
-      done,
+      done
     });
   });
 
@@ -34,7 +34,7 @@ describe('User Tests', function () {
           assert.isObject(data);
           USER_ID = data.id;
           USER_EMAIL = data.email;
-        },
+        }
       });
     });
 
@@ -46,14 +46,14 @@ describe('User Tests', function () {
         body: JSON.stringify({
           username,
           password,
-          remember: true,
+          remember: true
         }),
         headers: HEADERS.KEY,
         done,
         onSuccess: ({ status, data }) => {
           assert.equal(status, 200);
           assert.hasAnyKeys(data, ['token']);
-        },
+        }
       });
     });
 
@@ -65,13 +65,13 @@ describe('User Tests', function () {
         body: JSON.stringify({
           username,
           password: password + 'wrong',
-          remember: true,
+          remember: true
         }),
         headers: HEADERS.KEY,
         done,
         onError: ({ status }) => {
           assert.equal(status, 401);
-        },
+        }
       });
     });
   });
@@ -87,7 +87,7 @@ describe('User Tests', function () {
         onSuccess: ({ status, data }) => {
           assert.equal(status, 200);
           assert.isArray(data);
-        },
+        }
       });
     });
 
@@ -100,7 +100,7 @@ describe('User Tests', function () {
         onSuccess: ({ status, data }) => {
           assert.equal(status, 200);
           assert.isObject(data);
-        },
+        }
       });
     });
 
@@ -112,7 +112,7 @@ describe('User Tests', function () {
         done,
         onError: ({ status }) => {
           assert.equal(status, 404);
-        },
+        }
       });
     });
   });
@@ -129,7 +129,7 @@ describe('User Tests', function () {
           assert.equal(status, 200);
           assert.hasAllKeys(data, ['token']);
           EMAIL_VERIFICATION_TOKEN = data.token;
-        },
+        }
       });
     });
 
@@ -141,7 +141,7 @@ describe('User Tests', function () {
         onSuccess: ({ status, data }) => {
           assert.equal(status, 200);
           assert.include(data, { clearance: 2 });
-        },
+        }
       });
     });
 
@@ -156,7 +156,7 @@ describe('User Tests', function () {
           assert.equal(status, 200);
           assert.hasAllKeys(data, ['token']);
           ACCOUNT_VERIFICATION_TOKEN = data.token;
-        },
+        }
       });
     });
 
@@ -166,13 +166,13 @@ describe('User Tests', function () {
         method: 'PATCH',
         body: JSON.stringify({
           password: TEST_USERS.CREATED.password1,
-          token: ACCOUNT_VERIFICATION_TOKEN,
+          token: ACCOUNT_VERIFICATION_TOKEN
         }),
         headers: HEADERS.KEY,
         done,
         onSuccess: ({ status }) => {
           assert.equal(status, 200);
-        },
+        }
       });
     });
   });
@@ -188,7 +188,7 @@ describe('User Tests', function () {
         done,
         onSuccess: ({ status }) => {
           assert.equal(status, 200);
-        },
+        }
       });
     });
 
@@ -198,13 +198,13 @@ describe('User Tests', function () {
         method: 'PUT',
         body: JSON.stringify({
           oldPassword: TEST_USERS.CREATED.password1,
-          newPassword: 'servtests',
+          newPassword: 'servtests'
         }),
         headers: HEADERS.TOKEN(superuser),
         done,
         onSuccess: ({ status }) => {
           assert.equal(status, 200);
-        },
+        }
       });
     });
 
@@ -217,7 +217,7 @@ describe('User Tests', function () {
         done,
         onSuccess: ({ status }) => {
           assert.equal(status, 200);
-        },
+        }
       });
     });
   });
@@ -232,7 +232,7 @@ describe('User Tests', function () {
         done,
         onSuccess: ({ status }) => {
           assert.equal(status, 204);
-        },
+        }
       });
     });
 
@@ -244,7 +244,7 @@ describe('User Tests', function () {
         done,
         onError: ({ status }) => {
           assert.equal(status, 404);
-        },
+        }
       });
     });
   });

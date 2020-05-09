@@ -136,7 +136,7 @@ class _SocialIcon extends Component {
 }
 
 const mapStateToProps = state => ({
-  theme: state.theme,
+  theme: state.theme
 });
 
 export const SocialsList = connect(mapStateToProps)(_SocialsList);

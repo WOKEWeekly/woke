@@ -30,7 +30,7 @@ const Meta = ({
   title = 'Page Not Found',
   ogUrl = '',
   description = '',
-  cardImage = 'public/bg/card-home.jpg',
+  cardImage = 'public/bg/card-home.jpg'
 }) => (
   <React.Fragment>
     {/* Global site tag (gtag.js) - Google Analytics */}

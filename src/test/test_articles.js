@@ -21,7 +21,7 @@ describe('Article Tests', function () {
           assert.equal(status, 201);
           assert.hasAllKeys(data, ['id']);
           ARTICLE_ID = data.id;
-        },
+        }
       });
     });
   });
@@ -37,7 +37,7 @@ describe('Article Tests', function () {
         onSuccess: ({ status, data }) => {
           assert.equal(status, 200);
           assert.isArray(data);
-        },
+        }
       });
     });
 
@@ -53,7 +53,7 @@ describe('Article Tests', function () {
           data.forEach(article => {
             assert.equal(article.status, 'PUBLISHED');
           });
-        },
+        }
       });
     });
 
@@ -66,7 +66,7 @@ describe('Article Tests', function () {
         onSuccess: ({ status, data }) => {
           assert.equal(status, 200);
           assert.isObject(data);
-        },
+        }
       });
     });
 
@@ -78,7 +78,7 @@ describe('Article Tests', function () {
         done,
         onError: ({ status }) => {
           assert.equal(status, 404);
-        },
+        }
       });
     });
   });
@@ -91,14 +91,14 @@ describe('Article Tests', function () {
         method: 'PUT',
         body: JSON.stringify({
           article: TEST_ARTICLES.UPDATED,
-          changed: false,
+          changed: false
         }),
         headers: HEADERS.TOKEN(superuser),
         done,
         onSuccess: ({ status, data }) => {
           assert.equal(status, 200);
           assert.hasAllKeys(data, ['slug']);
-        },
+        }
       });
     });
 
@@ -108,14 +108,14 @@ describe('Article Tests', function () {
         method: 'PUT',
         body: JSON.stringify({
           article: TEST_ARTICLES.UPDATED,
-          changed: true,
+          changed: true
         }),
         headers: HEADERS.TOKEN(superuser),
         done,
         onSuccess: ({ status, data }) => {
           assert.equal(status, 200);
           assert.hasAllKeys(data, ['slug']);
-        },
+        }
       });
     });
 
@@ -125,13 +125,13 @@ describe('Article Tests', function () {
         method: 'PUT',
         body: JSON.stringify({
           article: TEST_ARTICLES.UPDATED,
-          changed: true,
+          changed: true
         }),
         headers: HEADERS.TOKEN(superuser),
         done,
         onError: ({ status }) => {
           assert.equal(status, 404);
-        },
+        }
       });
     });
   });
@@ -146,7 +146,7 @@ describe('Article Tests', function () {
         done,
         onSuccess: ({ status }) => {
           assert.equal(status, 204);
-        },
+        }
       });
     });
 
@@ -158,7 +158,7 @@ describe('Article Tests', function () {
         done,
         onError: ({ status }) => {
           assert.equal(status, 404);
-        },
+        }
       });
     });
   });

@@ -21,7 +21,7 @@ describe('Topic Tests', function () {
           assert.equal(status, 201);
           assert.hasAllKeys(data, ['id']);
           TOPIC_ID = data.id;
-        },
+        }
       });
     });
   });
@@ -37,7 +37,7 @@ describe('Topic Tests', function () {
         onSuccess: ({ status, data }) => {
           assert.equal(status, 200);
           assert.isArray(data);
-        },
+        }
       });
     });
 
@@ -50,7 +50,7 @@ describe('Topic Tests', function () {
         onSuccess: ({ status, data }) => {
           assert.equal(status, 200);
           assert.isObject(data);
-        },
+        }
       });
     });
 
@@ -63,7 +63,7 @@ describe('Topic Tests', function () {
         onSuccess: ({ status, data }) => {
           assert.equal(status, 200);
           assert.isObject(data);
-        },
+        }
       });
     });
 
@@ -75,7 +75,7 @@ describe('Topic Tests', function () {
         done,
         onError: ({ status }) => {
           assert.equal(status, 404);
-        },
+        }
       });
     });
 
@@ -88,7 +88,7 @@ describe('Topic Tests', function () {
         onSuccess: ({ status, data }) => {
           assert.equal(status, 200);
           assert.hasAllKeys(data, ['token']);
-        },
+        }
       });
     });
   });
@@ -104,7 +104,7 @@ describe('Topic Tests', function () {
         done,
         onSuccess: ({ status }) => {
           assert.equal(status, 200);
-        },
+        }
       });
     });
 
@@ -117,7 +117,7 @@ describe('Topic Tests', function () {
         onSuccess: ({ status, data }) => {
           assert.equal(status, 200);
           assert.hasAllKeys(data, ['yes', 'no']);
-        },
+        }
       });
     });
 
@@ -130,7 +130,7 @@ describe('Topic Tests', function () {
         done,
         onError: ({ status }) => {
           assert.equal(status, 404);
-        },
+        }
       });
     });
   });
@@ -145,7 +145,7 @@ describe('Topic Tests', function () {
         done,
         onSuccess: ({ status }) => {
           assert.equal(status, 204);
-        },
+        }
       });
     });
 
@@ -157,7 +157,7 @@ describe('Topic Tests', function () {
         done,
         onError: ({ status }) => {
           assert.equal(status, 404);
-        },
+        }
       });
     });
   });

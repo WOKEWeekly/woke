@@ -10,7 +10,7 @@ export class Voter extends Component {
     super(props);
     this.state = {
       isLoaded: false,
-      hasVoted: props.hasVoted,
+      hasVoted: props.hasVoted
     };
   }
 

@@ -8,7 +8,7 @@ import {
   FacebookIcon,
   TwitterIcon,
   LinkedinIcon,
-  WhatsappIcon,
+  WhatsappIcon
 } from 'react-share';
 
 import css from '~/styles/components/Icon.module.scss';

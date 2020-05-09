@@ -105,5 +105,5 @@ module.exports = {
     const err = new Error(`Verification not required.`);
     err.status = 403;
     return err;
-  },
+  }
 };

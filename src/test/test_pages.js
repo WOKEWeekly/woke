@@ -16,13 +16,13 @@ describe('Page Tests', function () {
         method: 'PUT',
         body: JSON.stringify({
           page: PAGE_NAME,
-          text: 'This is an updated page through service tests.',
+          text: 'This is an updated page through service tests.'
         }),
         headers: HEADERS.TOKEN(superuser),
         done,
         onSuccess: ({ status }) => {
           assert.equal(status, 200);
-        },
+        }
       });
     });
   });

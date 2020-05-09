@@ -5,7 +5,7 @@ import css from '~/styles/components/Alert.module.scss';
 const animation = cssTransition({
   enter: css.fadeIn,
   exit: css.fadeOut,
-  duration: 500,
+  duration: 500
 });
 
 toast.configure({
@@ -15,7 +15,7 @@ toast.configure({
   draggable: false,
   hideProgressBar: true,
   position: toast.POSITION.BOTTOM_CENTER,
-  transition: animation,
+  transition: animation
 });
 
 const defaultClasses = ['alert', css.message];
@@ -29,7 +29,7 @@ export const alert = {
   },
   info: message => {
     toast(message, { className: classNames('alert-primary', defaultClasses) });
-  },
+  }
 };
 
 export const setAlert = alert => {

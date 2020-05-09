@@ -25,14 +25,14 @@ module.exports = {
     EDIT_PAGE: 8, // Edit information pages
 
     CRUD_DOCUMENTS: 8,
-    GENERATE_NEW_TOKEN: 9, // Generate new access tokens
+    GENERATE_NEW_TOKEN: 9 // Generate new access tokens
   },
   LEVELS: {
     MEMBERS: [
       { label: 'Executive' },
       { label: 'Manager' },
       { label: 'Coordinator' },
-      { label: 'Quiescent' },
+      { label: 'Quiescent' }
     ],
     USERS: [
       { label: '(1) Subscriber', value: 1, role: 'Subscriber' },
@@ -43,7 +43,7 @@ module.exports = {
       { label: '(6) Journalist', value: 6, role: 'Journalist' },
       { label: '(7) Executive', value: 7, role: 'Executive' },
       { label: '(8) Lead Executive', value: 8, role: 'Lead Executive' },
-      { label: '(9) Director', value: 9, role: 'Director' },
-    ],
-  },
+      { label: '(9) Director', value: 9, role: 'Director' }
+    ]
+  }
 };

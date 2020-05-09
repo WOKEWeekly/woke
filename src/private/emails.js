@@ -10,8 +10,8 @@ const transporter = nodemailer.createTransport({
   port: 465,
   auth: {
     user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PWD,
-  },
+    pass: process.env.EMAIL_PWD
+  }
 });
 
 /*******************************************
@@ -26,7 +26,7 @@ module.exports = (callback, params = []) => {
         from: `#WOKEWeekly Website <${emails.site}>`,
         to: to,
         subject: subject,
-        html: message,
+        html: message
       },
       function (err) {
         if (callback) {
@@ -121,7 +121,7 @@ module.exports = (callback, params = []) => {
       );
 
       sendMail(user.email, subject, message);
-    },
+    }
   };
 };
 

@@ -8,15 +8,15 @@ export class Fader extends Component {
 
     const defaultStyle = {
       transition: `opacity ${duration}ms ease ${delay || 0}ms`,
-      opacity: 0,
+      opacity: 0
     };
 
     const transitionStyles = {
       entered: {
         opacity: 1,
-        transition: `${defaultStyle.transition}, ${postTransitions}`,
+        transition: `${defaultStyle.transition}, ${postTransitions}`
       },
-      exited: defaultStyle,
+      exited: defaultStyle
     };
 
     return (
@@ -36,11 +36,11 @@ export class Zoomer extends Component {
 
     const defaultStyle = {
       transition: `transform ${duration}ms ease ${delay || 0}ms`,
-      transform: 'scale(0)',
+      transform: 'scale(0)'
     };
 
     const transitionStyles = {
-      entered: { transform: 'scale(1)' },
+      entered: { transform: 'scale(1)' }
     };
 
     return (
@@ -62,18 +62,18 @@ export class Slider extends Component {
       transition: `${direction} ${duration}ms ease ${delay || 0}ms,
         opacity ${duration}ms ease ${delay || 0}ms`,
       opacity: 0,
-      position: 'relative',
+      position: 'relative'
     };
 
     const transitionStyles = {
       entering: {
-        [direction]: '-100vw',
+        [direction]: '-100vw'
       },
       entered: {
         [direction]: '0',
         opacity: 1,
-        transition: `${defaultStyle.transition}, ${postTransitions}`,
-      },
+        transition: `${defaultStyle.transition}, ${postTransitions}`
+      }
     };
 
     return (
@@ -92,15 +92,15 @@ export class Mover extends Component {
 
     const defaultStyle = {
       transition: `all ${duration}ms ease-in-out ${delay || 0}ms`,
-      width: '50%',
+      width: '50%'
     };
 
     const transitionStyles = {
       entered: {
         padding: width === 0 ? 0 : '.5em',
-        width: `${width}%`,
+        width: `${width}%`
       },
-      exited: defaultStyle,
+      exited: defaultStyle
     };
 
     return (
@@ -122,7 +122,7 @@ class Template extends Component {
       defaultStyle,
       transitionStyles,
       style,
-      children,
+      children
     } = this.props;
     return (
       <Transition
@@ -130,13 +130,13 @@ class Template extends Component {
         timeout={{
           appear: 0,
           enter: 0,
-          exit: 0,
+          exit: 0
         }}
         {...this.props}>
         {state => {
           if (notDiv) {
             return React.cloneElement(children, {
-              style: { ...defaultStyle, ...transitionStyles[state], ...style },
+              style: { ...defaultStyle, ...transitionStyles[state], ...style }
             });
           } else {
             return (
@@ -145,7 +145,7 @@ class Template extends Component {
                 style={{
                   ...defaultStyle,
                   ...transitionStyles[state],
-                  ...style,
+                  ...style
                 }}>
                 {this.props.children}
               </div>

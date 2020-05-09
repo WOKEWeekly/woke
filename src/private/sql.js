@@ -6,7 +6,7 @@ const JOINS = {
   CANDIDATES_MEMBERS: `CONCAT(members.firstname, ' ', members.lastname) AS authorName,
     members.level AS authorLevel, members.slug AS authorSlug, members.image AS authorImage,
     members.description AS authorDescription, members.socials AS authorSocials
-    FROM candidates LEFT JOIN members ON candidates.authorId=members.id`,
+    FROM candidates LEFT JOIN members ON candidates.authorId=members.id`
 };
 
 const ARTICLES = {
@@ -29,8 +29,8 @@ const ARTICLES = {
         article.image,
         article.authorId,
         article.status,
-        article.datePublished,
-      ],
+        article.datePublished
+      ]
     ];
     return { sql, values };
   },
@@ -75,7 +75,7 @@ const ARTICLES = {
     SINGLE: (condition, fields = '*') => {
       const sql = `SELECT articles.${fields}, ${JOINS.ARTICLES_MEMBERS} WHERE articles.${condition} = ?`;
       return sql;
-    },
+    }
   },
 
   /**
@@ -99,7 +99,7 @@ const ARTICLES = {
       article.authorId,
       article.status,
       article.datePublished,
-      id,
+      id
     ];
 
     if (imageHasChanged) {
@@ -111,7 +111,7 @@ const ARTICLES = {
   },
 
   /** The SQL statement to delete an article. */
-  DELETE: 'DELETE FROM articles WHERE id = ?',
+  DELETE: 'DELETE FROM articles WHERE id = ?'
 };
 
 const SESSIONS = {
@@ -130,8 +130,8 @@ const SESSIONS = {
         session.timeHeld,
         session.image,
         session.slug,
-        session.description,
-      ],
+        session.description
+      ]
     ];
     return { sql, values };
   },
@@ -157,7 +157,7 @@ const SESSIONS = {
       'SELECT * FROM sessions WHERE dateheld > NOW() ORDER BY RAND() LIMIT 1',
 
     /** The SQL statement to return the latest session. */
-    LATEST: 'SELECT * FROM sessions ORDER BY dateHeld DESC LIMIT 1',
+    LATEST: 'SELECT * FROM sessions ORDER BY dateHeld DESC LIMIT 1'
   },
 
   /**
@@ -177,7 +177,7 @@ const SESSIONS = {
       session.timeHeld,
       session.slug,
       session.description,
-      id,
+      id
     ];
 
     if (imageHasChanged) {
@@ -189,7 +189,7 @@ const SESSIONS = {
   },
 
   /** The SQL statement to delete a session. */
-  DELETE: 'DELETE FROM sessions WHERE id = ?',
+  DELETE: 'DELETE FROM sessions WHERE id = ?'
 };
 
 const CANDIDATES = {
@@ -212,8 +212,8 @@ const CANDIDATES = {
         candidate.occupation,
         candidate.description,
         candidate.authorId,
-        candidate.dateWritten,
-      ],
+        candidate.dateWritten
+      ]
     ];
     return { sql, values };
   },
@@ -235,7 +235,7 @@ const CANDIDATES = {
     },
 
     /** The SQL statement to return the latest candidate. */
-    LATEST: 'SELECT * FROM candidates ORDER BY id DESC LIMIT 1',
+    LATEST: 'SELECT * FROM candidates ORDER BY id DESC LIMIT 1'
   },
 
   /**
@@ -258,7 +258,7 @@ const CANDIDATES = {
       candidate.description,
       candidate.authorId,
       candidate.dateWritten,
-      id,
+      id
     ];
 
     if (imageHasChanged) {
@@ -270,7 +270,7 @@ const CANDIDATES = {
   },
 
   /** The SQL statement to delete a candidate. */
-  DELETE: 'DELETE FROM candidates WHERE id = ?',
+  DELETE: 'DELETE FROM candidates WHERE id = ?'
 };
 
 const MEMBERS = {
@@ -297,8 +297,8 @@ const MEMBERS = {
         member.description,
         member.verified,
         member.slackId,
-        member.isAuthor,
-      ],
+        member.isAuthor
+      ]
     ];
     return { sql, values };
   },
@@ -334,7 +334,7 @@ const MEMBERS = {
 
     SLUG: 'SELECT * FROM members WHERE slug = ?',
     EXECUTIVES_SLUG:
-      "SELECT * FROM members WHERE slug = ? AND level = 'Executive' AND verified = 1",
+      "SELECT * FROM members WHERE slug = ? AND level = 'Executive' AND verified = 1"
   },
   /**
    * Constructs the SQL statement to update a member.
@@ -362,7 +362,7 @@ const MEMBERS = {
       member.verified,
       member.slackId,
       member.isAuthor,
-      id,
+      id
     ];
 
     if (imageHasChanged) {
@@ -374,7 +374,7 @@ const MEMBERS = {
   },
 
   /** The SQL statement to delete a member. */
-  DELETE: 'DELETE FROM members WHERE id = ?',
+  DELETE: 'DELETE FROM members WHERE id = ?'
 };
 
 const TOPICS = {
@@ -398,8 +398,8 @@ const TOPICS = {
         topic.sensitivity,
         topic.option1,
         topic.option2,
-        topic.userId,
-      ],
+        topic.userId
+      ]
     ];
     return { sql, values };
   },
@@ -437,7 +437,7 @@ const TOPICS = {
       const sql = `UPDATE tokens SET value = ?, lastUpdated = ? WHERE name = ?`;
       const values = [token, new Date(), 'topicBank'];
       return { sql, values, token };
-    },
+    }
   },
 
   UPDATE: {
@@ -460,7 +460,7 @@ const TOPICS = {
         topic.sensitivity,
         topic.option1,
         topic.option2,
-        id,
+        id
       ];
       return { sql, values };
     },
@@ -474,11 +474,11 @@ const TOPICS = {
     VOTE: (id, option) => {
       const sql = `UPDATE topics SET ${option}=${option}+1 WHERE id = ${id}`;
       return sql;
-    },
+    }
   },
 
   /** The SQL statement to delete a member. */
-  DELETE: 'DELETE FROM topics WHERE id = ?',
+  DELETE: 'DELETE FROM topics WHERE id = ?'
 };
 
 const REVIEWS = {
@@ -496,8 +496,8 @@ const REVIEWS = {
         review.position,
         review.rating,
         review.image,
-        review.description,
-      ],
+        review.description
+      ]
     ];
     return { sql, values };
   },
@@ -523,7 +523,7 @@ const REVIEWS = {
     SINGLE: (fields = '*') => {
       const sql = `SELECT ${fields} FROM reviews WHERE ID = ?`;
       return sql;
-    },
+    }
   },
 
   /**
@@ -542,7 +542,7 @@ const REVIEWS = {
       review.rating,
       review.image,
       review.description,
-      id,
+      id
     ];
 
     if (imageHasChanged) {
@@ -554,7 +554,7 @@ const REVIEWS = {
   },
 
   /** The SQL statement to delete a review. */
-  DELETE: 'DELETE FROM reviews WHERE id = ?',
+  DELETE: 'DELETE FROM reviews WHERE id = ?'
 };
 
 const USERS = {
@@ -567,7 +567,7 @@ const USERS = {
     const sql =
       'INSERT INTO users (firstname, lastname, clearance, email, username, password) VALUES ?';
     const values = [
-      [user.firstname, user.lastname, 1, user.email, user.username, hash],
+      [user.firstname, user.lastname, 1, user.email, user.username, hash]
     ];
     return { sql, values };
   },
@@ -612,7 +612,7 @@ const USERS = {
     SINGLE: (fields = '*') => {
       const sql = `SELECT ${fields} FROM users WHERE ID = ?`;
       return sql;
-    },
+    }
   },
 
   /**
@@ -630,7 +630,7 @@ const USERS = {
   /** The SQL statement to delete a user. */
   DELETE: 'DELETE FROM users WHERE id = ?',
 
-  CLEAR: 'DELETE FROM users WHERE id > 2',
+  CLEAR: 'DELETE FROM users WHERE id > 2'
 };
 
 const PAGES = {
@@ -644,20 +644,20 @@ const PAGES = {
     const sql = 'UPDATE pages SET text = ?, lastModified = ? WHERE name = ?';
     const values = [text, new Date(), page];
     return { sql, values };
-  },
+  }
 };
 
 const TOKENS = {
   READ: name => {
     return `SELECT * FROM tokens WHERE name = '${name}'`;
-  },
+  }
 };
 
 const ALL = {
   RENUMBER_IDS: table => {
     const sql = `SET @id:=0; UPDATE ${table} SET id = @id:=(@id+1); ALTER TABLE ${table} AUTO_INCREMENT = 1;`;
     return sql;
-  },
+  }
 };
 
 module.exports = {
@@ -669,7 +669,7 @@ module.exports = {
   SESSIONS,
   TOKENS,
   TOPICS,
-  USERS,
+  USERS
 };
 
 /**
@@ -685,7 +685,7 @@ const appendFieldToUpdateQuery = (field, statement) => {
     ', ',
     field,
     ' = ?',
-    statement.slice(idx),
+    statement.slice(idx)
   ].join('');
 
   return query;

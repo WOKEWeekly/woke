@@ -22,7 +22,7 @@ describe('Review Tests', function () {
           assert.equal(status, 201);
           assert.hasAllKeys(data, ['id']);
           REVIEW_ID = data.id;
-        },
+        }
       });
     });
   });
@@ -39,7 +39,7 @@ describe('Review Tests', function () {
           assert.equal(status, 200);
           assert.isArray(data);
           REVIEWS_LENGTH = data.length;
-        },
+        }
       });
     });
 
@@ -52,7 +52,7 @@ describe('Review Tests', function () {
         onSuccess: ({ status, data }) => {
           assert.equal(status, 200);
           assert.isObject(data);
-        },
+        }
       });
     });
 
@@ -70,7 +70,7 @@ describe('Review Tests', function () {
             assert.exists(review.image);
             assert.isNotEmpty(review.image);
           });
-        },
+        }
       });
     });
 
@@ -82,7 +82,7 @@ describe('Review Tests', function () {
         done,
         onError: ({ status }) => {
           assert.equal(status, 404);
-        },
+        }
       });
     });
   });
@@ -95,13 +95,13 @@ describe('Review Tests', function () {
         method: 'PUT',
         body: JSON.stringify({
           review: TEST_REVIEWS.UPDATED,
-          changed: false,
+          changed: false
         }),
         headers: HEADERS.TOKEN(superuser),
         done,
         onSuccess: ({ status }) => {
           assert.equal(status, 200);
-        },
+        }
       });
     });
 
@@ -111,13 +111,13 @@ describe('Review Tests', function () {
         method: 'PUT',
         body: JSON.stringify({
           review: TEST_REVIEWS.UPDATED,
-          changed: true,
+          changed: true
         }),
         headers: HEADERS.TOKEN(superuser),
         done,
         onSuccess: ({ status }) => {
           assert.equal(status, 200);
-        },
+        }
       });
     });
 
@@ -127,13 +127,13 @@ describe('Review Tests', function () {
         method: 'PUT',
         body: JSON.stringify({
           review: TEST_REVIEWS.UPDATED,
-          changed: true,
+          changed: true
         }),
         headers: HEADERS.TOKEN(superuser),
         done,
         onError: ({ status }) => {
           assert.equal(status, 404);
-        },
+        }
       });
     });
   });
@@ -148,7 +148,7 @@ describe('Review Tests', function () {
         done,
         onSuccess: ({ status }) => {
           assert.equal(status, 204);
-        },
+        }
       });
     });
 
@@ -160,7 +160,7 @@ describe('Review Tests', function () {
         done,
         onError: ({ status }) => {
           assert.equal(status, 404);
-        },
+        }
       });
     });
   });

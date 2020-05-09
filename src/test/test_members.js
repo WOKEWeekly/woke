@@ -21,7 +21,7 @@ describe('Member Tests', function () {
           assert.equal(status, 201);
           assert.hasAllKeys(data, ['id']);
           MEMBER_ID = data.id;
-        },
+        }
       });
     });
   });
@@ -37,7 +37,7 @@ describe('Member Tests', function () {
         onSuccess: ({ status, data }) => {
           assert.equal(status, 200);
           assert.isArray(data);
-        },
+        }
       });
     });
 
@@ -50,7 +50,7 @@ describe('Member Tests', function () {
         onSuccess: ({ status, data }) => {
           assert.equal(status, 200);
           assert.isObject(data);
-        },
+        }
       });
     });
 
@@ -66,7 +66,7 @@ describe('Member Tests', function () {
           data.forEach(member => {
             assert.equal(member.isAuthor, true);
           });
-        },
+        }
       });
     });
 
@@ -82,7 +82,7 @@ describe('Member Tests', function () {
           data.forEach(member => {
             assert.equal(member.level, 'Executive');
           });
-        },
+        }
       });
     });
 
@@ -95,7 +95,7 @@ describe('Member Tests', function () {
         onSuccess: ({ status, data }) => {
           assert.equal(status, 200);
           assert.isObject(data);
-        },
+        }
       });
     });
 
@@ -107,7 +107,7 @@ describe('Member Tests', function () {
         done,
         onError: ({ status }) => {
           assert.equal(status, 404);
-        },
+        }
       });
     });
   });
@@ -120,14 +120,14 @@ describe('Member Tests', function () {
         method: 'PUT',
         body: JSON.stringify({
           member: TEST_MEMBERS.UPDATED,
-          changed: false,
+          changed: false
         }),
         headers: HEADERS.TOKEN(superuser),
         done,
         onSuccess: ({ status, data }) => {
           assert.equal(status, 200);
           assert.hasAllKeys(data, ['slug']);
-        },
+        }
       });
     });
 
@@ -137,14 +137,14 @@ describe('Member Tests', function () {
         method: 'PUT',
         body: JSON.stringify({
           member: TEST_MEMBERS.UPDATED,
-          changed: true,
+          changed: true
         }),
         headers: HEADERS.TOKEN(superuser),
         done,
         onSuccess: ({ status, data }) => {
           assert.equal(status, 200);
           assert.hasAllKeys(data, ['slug']);
-        },
+        }
       });
     });
 
@@ -154,13 +154,13 @@ describe('Member Tests', function () {
         method: 'PUT',
         body: JSON.stringify({
           member: TEST_MEMBERS.UPDATED,
-          changed: true,
+          changed: true
         }),
         headers: HEADERS.TOKEN(superuser),
         done,
         onError: ({ status }) => {
           assert.equal(status, 404);
-        },
+        }
       });
     });
   });
@@ -175,7 +175,7 @@ describe('Member Tests', function () {
         done,
         onSuccess: ({ status }) => {
           assert.equal(status, 204);
-        },
+        }
       });
     });
 
@@ -187,7 +187,7 @@ describe('Member Tests', function () {
         done,
         onError: ({ status }) => {
           assert.equal(status, 404);
-        },
+        }
       });
     });
   });

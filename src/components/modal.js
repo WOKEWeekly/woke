@@ -6,7 +6,7 @@ import { zHandlers } from 'zavid-modules';
 import {
   SubmitButton,
   CancelButton,
-  DeleteButton,
+  DeleteButton
 } from '~/components/button.js';
 import { Group, Label, Select, UsernameInput } from '~/components/form.js';
 import { SocialIcon } from '~/components/icon.js';
@@ -139,7 +139,7 @@ class _EthnicSelect extends Component {
       onChange,
       clearSelection,
       placeholder,
-      countries,
+      countries
     } = this.props;
     return (
       <Col md={6}>
@@ -238,7 +238,7 @@ export class SocialsModal extends Component {
 }
 
 const mapStateToProps = state => ({
-  countries: state.countries,
+  countries: state.countries
 });
 
 const EthnicSelect = connect(mapStateToProps)(_EthnicSelect);

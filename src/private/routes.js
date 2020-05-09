@@ -13,7 +13,7 @@ const {
   cloudinary,
   domain,
   forms,
-  siteDescription,
+  siteDescription
 } = require('../constants/settings.js');
 const { ENTITY, OPERATIONS, PAGE } = require('../constants/strings.js');
 
@@ -30,7 +30,7 @@ module.exports = function (app, conn, knex, server) {
       title: '#WOKEWeekly - Awakening Through Conversation',
       description: siteDescription,
       ogUrl: '/',
-      backgroundImage: 'bg-app.jpg',
+      backgroundImage: 'bg-app.jpg'
     });
   });
 
@@ -41,7 +41,7 @@ module.exports = function (app, conn, knex, server) {
       description: 'Where the magic happens...',
       ogUrl: '/sessions',
       cardImage: `public/bg/card-sessions.jpg`,
-      backgroundImage: 'bg-sessions.jpg',
+      backgroundImage: 'bg-sessions.jpg'
     });
   });
 
@@ -66,7 +66,7 @@ module.exports = function (app, conn, knex, server) {
         ogUrl: `/sessions/${session.slug}`,
         cardImage: session.image,
         backgroundImage: 'bg-sessions.jpg',
-        session,
+        session
       });
     });
   });
@@ -76,7 +76,7 @@ module.exports = function (app, conn, knex, server) {
     return server.render(req, res, '/sessions/crud', {
       title: 'Add New Session',
       operation: OPERATIONS.CREATE,
-      backgroundImage: 'bg-sessions.jpg',
+      backgroundImage: 'bg-sessions.jpg'
     });
   });
 
@@ -99,7 +99,7 @@ module.exports = function (app, conn, knex, server) {
         title: 'Edit Session',
         backgroundImage: 'bg-sessions.jpg',
         operation: OPERATIONS.UPDATE,
-        session,
+        session
       });
     });
   });
@@ -119,7 +119,7 @@ module.exports = function (app, conn, knex, server) {
         ogUrl: '/topics',
         cardImage: `public/bg/card-topics.jpg`,
         backgroundImage: 'bg-topics.jpg',
-        hasAccess,
+        hasAccess
       });
     });
   });
@@ -129,7 +129,7 @@ module.exports = function (app, conn, knex, server) {
     return server.render(req, res, '/topics/crud', {
       title: 'Add New Topic',
       operation: OPERATIONS.CREATE,
-      backgroundImage: 'bg-topics.jpg',
+      backgroundImage: 'bg-topics.jpg'
     });
   });
 
@@ -152,7 +152,7 @@ module.exports = function (app, conn, knex, server) {
         title: 'Edit Topic',
         operation: OPERATIONS.UPDATE,
         backgroundImage: 'bg-topics.jpg',
-        topic,
+        topic
       });
     });
   });
@@ -166,7 +166,7 @@ module.exports = function (app, conn, knex, server) {
       ogUrl: '/blackexcellence',
       backgroundImage: 'bg-blackex.jpg',
       cardImage: `public/bg/card-blackex.jpg`,
-      theme: 'blackex',
+      theme: 'blackex'
     });
   });
 
@@ -176,7 +176,7 @@ module.exports = function (app, conn, knex, server) {
       title: 'Add New Candidate',
       backgroundImage: 'bg-blackex.jpg',
       operation: OPERATIONS.CREATE,
-      theme: 'blackex',
+      theme: 'blackex'
     });
   });
 
@@ -200,7 +200,7 @@ module.exports = function (app, conn, knex, server) {
         backgroundImage: 'bg-blackex.jpg',
         theme: 'blackex',
         operation: OPERATIONS.UPDATE,
-        candidate,
+        candidate
       });
     });
   });
@@ -229,7 +229,7 @@ module.exports = function (app, conn, knex, server) {
         alt: candidate.label,
         backgroundImage: 'bg-blackex.jpg',
         theme: 'blackex',
-        candidate,
+        candidate
       });
     });
   });
@@ -241,7 +241,7 @@ module.exports = function (app, conn, knex, server) {
       description: 'The masterminds behind the cause.',
       ogUrl: '/executives',
       cardImage: 'public/bg/card-team.jpg',
-      backgroundImage: 'bg-team.jpg',
+      backgroundImage: 'bg-team.jpg'
     });
   });
 
@@ -266,7 +266,7 @@ module.exports = function (app, conn, knex, server) {
         ogUrl: `/executives/${exec.slug}`,
         cardImage: exec.image,
         backgroundImage: 'bg-team.jpg',
-        member: exec,
+        member: exec
       });
     });
   });
@@ -275,7 +275,7 @@ module.exports = function (app, conn, knex, server) {
   app.get('/team', function (req, res) {
     return server.render(req, res, '/team', {
       title: 'Team Members | #WOKEWeekly',
-      backgroundImage: 'bg-team.jpg',
+      backgroundImage: 'bg-team.jpg'
     });
   });
 
@@ -301,7 +301,7 @@ module.exports = function (app, conn, knex, server) {
         cardImage: member.image,
         alt: `${member.firstname} ${member.lastname}`,
         backgroundImage: 'bg-team.jpg',
-        member,
+        member
       });
     });
   });
@@ -311,7 +311,7 @@ module.exports = function (app, conn, knex, server) {
     return server.render(req, res, '/team/crud', {
       title: 'Add New Member',
       operation: OPERATIONS.CREATE,
-      backgroundImage: 'bg-team.jpg',
+      backgroundImage: 'bg-team.jpg'
     });
   });
 
@@ -334,7 +334,7 @@ module.exports = function (app, conn, knex, server) {
         title: 'Edit Team Member',
         operation: OPERATIONS.UPDATE,
         backgroundImage: 'bg-team.jpg',
-        member,
+        member
       });
     });
   });
@@ -345,7 +345,7 @@ module.exports = function (app, conn, knex, server) {
       title: 'Reviews | #WOKEWeekly',
       description: 'Read what the people have to say about us.',
       ogUrl: '/reviews',
-      cardImage: `public/bg/card-reviews.jpg`,
+      cardImage: `public/bg/card-reviews.jpg`
     });
   });
 
@@ -353,7 +353,7 @@ module.exports = function (app, conn, knex, server) {
   app.get('/reviews/add', function (req, res) {
     return server.render(req, res, '/reviews/crud', {
       title: 'Add New Review',
-      operation: OPERATIONS.CREATE,
+      operation: OPERATIONS.CREATE
     });
   });
 
@@ -375,7 +375,7 @@ module.exports = function (app, conn, knex, server) {
       server.render(req, res, '/reviews/crud', {
         title: 'Edit Review',
         operation: OPERATIONS.UPDATE,
-        review,
+        review
       });
     });
   });
@@ -383,7 +383,7 @@ module.exports = function (app, conn, knex, server) {
   /** Registered users page */
   app.get('/users', function (req, res) {
     return server.render(req, res, '/users', {
-      title: 'Registered Users | #WOKEWeekly',
+      title: 'Registered Users | #WOKEWeekly'
     });
   });
 
@@ -392,7 +392,7 @@ module.exports = function (app, conn, knex, server) {
     return server.render(req, res, '/_auth/signup', {
       title: 'Sign Up | #WOKEWeekly',
       backgroundImage: 'bg-signup.jpg',
-      ogUrl: '/signup',
+      ogUrl: '/signup'
     });
   });
 
@@ -404,7 +404,7 @@ module.exports = function (app, conn, knex, server) {
         'Explore the expressions of our writers who put pen to paper over the various dimensions within our community.',
       ogUrl: '/blog',
       cardImage: `public/bg/card-sessions.jpg`, // TODO: Change while designing
-      backgroundImage: 'bg-app.jpg',
+      backgroundImage: 'bg-app.jpg'
     });
   });
 
@@ -429,7 +429,7 @@ module.exports = function (app, conn, knex, server) {
         ogUrl: `/blog/${article.slug}`,
         cardImage: article.image,
         backgroundImage: 'bg-app.jpg', // TODO: Change while designing
-        article,
+        article
       });
     });
   });
@@ -437,7 +437,7 @@ module.exports = function (app, conn, knex, server) {
   /** Blog admin page */
   app.get('/admin/articles', function (req, res) {
     return server.render(req, res, '/articles/admin', {
-      title: 'Blog Admin',
+      title: 'Blog Admin'
     });
   });
 
@@ -446,7 +446,7 @@ module.exports = function (app, conn, knex, server) {
     return server.render(req, res, '/articles/crud', {
       title: 'Add New Article',
       operation: OPERATIONS.CREATE,
-      backgroundImage: 'bg-app.jpg',
+      backgroundImage: 'bg-app.jpg'
     });
   });
 
@@ -469,7 +469,7 @@ module.exports = function (app, conn, knex, server) {
         title: 'Edit Article',
         backgroundImage: 'bg-app.jpg',
         operation: OPERATIONS.UPDATE,
-        article,
+        article
       });
     });
   });
@@ -477,7 +477,7 @@ module.exports = function (app, conn, knex, server) {
   /** Document admin page */
   app.get('/admin/documents', function (req, res) {
     return server.render(req, res, '/documents', {
-      title: 'Document Admin',
+      title: 'Document Admin'
     });
   });
 
@@ -485,7 +485,7 @@ module.exports = function (app, conn, knex, server) {
   app.get('/admin/documents/add', function (req, res) {
     return server.render(req, res, '/documents/crud', {
       title: 'Add New Document',
-      operation: OPERATIONS.CREATE,
+      operation: OPERATIONS.CREATE
     });
   });
 
@@ -507,7 +507,7 @@ module.exports = function (app, conn, knex, server) {
       return server.render(req, res, '/documents/crud', {
         title: 'Edit Document',
         operation: OPERATIONS.UPDATE,
-        document,
+        document
       });
     });
   });
@@ -525,14 +525,14 @@ module.exports = function (app, conn, knex, server) {
             if (err) return callback(null, false);
             callback(null, true, result.user);
           });
-        },
+        }
       ],
       function (err, justVerified, user = {}) {
         server.render(req, res, '/_auth/account', {
           title: 'Account | #WOKEWeekly',
           ogUrl: '/account',
           justVerified: justVerified,
-          verifiedUser: user,
+          verifiedUser: user
         });
       }
     );
@@ -542,7 +542,7 @@ module.exports = function (app, conn, knex, server) {
   app.get('/account/recovery', function (req, res) {
     return server.render(req, res, '/_auth/recovery', {
       title: 'Forgot Password | #WOKEWeekly',
-      ogUrl: '/account/recovery',
+      ogUrl: '/account/recovery'
     });
   });
 
@@ -553,7 +553,7 @@ module.exports = function (app, conn, knex, server) {
     jwt.verify(token, process.env.JWT_SECRET, err => {
       if (err) return renderErrorPage(req, res, err, server);
       return server.render(req, res, '/_auth/reset', {
-        title: 'Reset Password | #WOKEWeekly',
+        title: 'Reset Password | #WOKEWeekly'
       });
     });
   });
@@ -561,7 +561,7 @@ module.exports = function (app, conn, knex, server) {
   /** Admin page */
   app.get('/admin', function (req, res) {
     server.render(req, res, '/_auth/admin', {
-      title: 'Admin Tools | #WOKEWeekly',
+      title: 'Admin Tools | #WOKEWeekly'
     });
   });
 
@@ -625,7 +625,7 @@ module.exports = function (app, conn, knex, server) {
   app.get('/zoom', function (req, res) {
     res.writeHead(301, {
       Location: accounts.zoom,
-      'Cache-Control': 'no-cache',
+      'Cache-Control': 'no-cache'
     });
     res.end();
   });
@@ -634,7 +634,7 @@ module.exports = function (app, conn, knex, server) {
   app.get('/slack', function (req, res) {
     res.writeHead(301, {
       Location: accounts.slack,
-      'Cache-Control': 'no-cache',
+      'Cache-Control': 'no-cache'
     });
     res.end();
   });
@@ -643,7 +643,7 @@ module.exports = function (app, conn, knex, server) {
   app.get('/trello', function (req, res) {
     res.writeHead(301, {
       Location: accounts.trello,
-      'Cache-Control': 'no-cache',
+      'Cache-Control': 'no-cache'
     });
     res.end();
   });
@@ -683,7 +683,7 @@ module.exports = function (app, conn, knex, server) {
   /** Robots.txt page */
   app.get('/robots.txt', (req, res) =>
     res.status(200).sendFile(path.resolve('./robots.txt'), {
-      headers: { 'Content-Type': 'text/plain;charset=UTF-8' },
+      headers: { 'Content-Type': 'text/plain;charset=UTF-8' }
     })
   );
 
@@ -696,7 +696,7 @@ module.exports = function (app, conn, knex, server) {
       '/blackexcellence',
       '/executives',
       '/reviews',
-      '/signup',
+      '/signup'
     ];
 
     async.parallel(
@@ -745,12 +745,12 @@ module.exports = function (app, conn, knex, server) {
             result.forEach(page => routes.push(`/${page.name}`));
             callback(null);
           });
-        },
+        }
       ],
       function () {
         const sitemap = sm.createSitemap({
           hostname: domain,
-          cacheTime: 10 * 60 * 1000, // 10 minutes,
+          cacheTime: 10 * 60 * 1000 // 10 minutes,
         });
 
         routes.forEach(route => {
@@ -808,7 +808,7 @@ const renderPage = (req, res, page, operation) => {
     coverImageAlt,
     theme,
     editTitle,
-    editPlaceholderText,
+    editPlaceholderText
   } = page;
 
   let uri = '';
@@ -827,7 +827,7 @@ const renderPage = (req, res, page, operation) => {
       coverImage: coverImage,
       imageLogo: coverImageLogo,
       imageAlt: coverImageAlt,
-      theme: theme || PAGE.THEMES.DEFAULT,
+      theme: theme || PAGE.THEMES.DEFAULT
     };
   } else if (operation === PAGE.OPERATIONS.UPDATE) {
     uri = `/pages/edit`;
@@ -837,7 +837,7 @@ const renderPage = (req, res, page, operation) => {
       title: editTitle,
       backgroundImage: bgImage || 'bg-app.jpg',
       placeholderText: editPlaceholderText,
-      theme: theme || PAGE.THEMES.DEFAULT,
+      theme: theme || PAGE.THEMES.DEFAULT
     };
   }
 
