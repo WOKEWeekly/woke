@@ -11,6 +11,11 @@ const {
     ENTITY
 } = require('../../../constants/strings');
 const ERROR = require('../../errors');
+const emails = require('../../emails');
+
+const emailsOn =
+  process.env.NODE_ENV === 'production' || process.argv.includes('--emails');
+if (!emailsOn) console.warn('Emails are turned off.');
 
 /** Retrieve all users */
 exports.getAllUsers = (req, res) => {
