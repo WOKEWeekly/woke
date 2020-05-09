@@ -2,7 +2,6 @@ const { isStageTesting } = require('../server.js');
 const showVerboseLogs = process.argv.includes('--verbose');
 
 module.exports = {
-
   /**
    * Send a response to the client.
    * @param {object} res - The response context of the service.
@@ -12,12 +11,13 @@ module.exports = {
    * @param {object} [json] - The response body to be sent back to the client.
    */
   respondToClient: (res, err, expectedStatus, json) => {
-    if (err && typeof err === 'object'){ // If there is an error...
-      if (!isStageTesting){
+    if (err && typeof err === 'object') {
+      // If there is an error...
+      if (!isStageTesting) {
         const log = showVerboseLogs ? err : err.toString();
         console.error(log);
       }
-      res.status(err.status || 500).json({message: err.message});
+      res.status(err.status || 500).json({ message: err.message });
     } else {
       res.status(expectedStatus).json(json);
     }
@@ -35,4 +35,4 @@ module.exports = {
     const message = err ? err.message : '';
     return server.render(req, res, '/_error', { message });
   }
-}
+};

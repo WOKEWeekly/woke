@@ -5,8 +5,8 @@ const { DIRECTORY, ARTICLE_STATUS } = require('../constants/strings.js');
 const env = process.env.NODE_ENV !== 'production' ? 'dev' : 'prod';
 
 cloudinary.config({
-  cloud_name: process.env.CLOUDINARY_NAME, 
-  api_key: process.env.CLOUDINARY_API_KEY, 
+  cloud_name: process.env.CLOUDINARY_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
   api_secret: process.env.CLOUDINARY_API_SECRET
 });
 
@@ -27,16 +27,20 @@ exports.uploadImage = (iEntity, directory, imageHasChanged, next) => {
   if (noImageUpload) return next(null, entity);
 
   // Upload to cloudinary
-  cloudinary.uploader.upload(entity.image, {
-    public_id: `${env}/${directory}/${filename}`,
-    unique_filename: false
-  }, (err, result) => {
-    if (err) return next(err);
-    const { public_id, version, format } = result;
-    entity.image = `v${version}/${public_id}.${format}`;
-    next(null, entity);
-  });
-}
+  cloudinary.uploader.upload(
+    entity.image,
+    {
+      public_id: `${env}/${directory}/${filename}`,
+      unique_filename: false
+    },
+    (err, result) => {
+      if (err) return next(err);
+      const { public_id, version, format } = result;
+      entity.image = `v${version}/${public_id}.${format}`;
+      next(null, entity);
+    }
+  );
+};
 
 /**
  * Delete an image from Cloudinary.
@@ -45,7 +49,7 @@ exports.uploadImage = (iEntity, directory, imageHasChanged, next) => {
  */
 exports.destroyImage = (image, next) => {
   if (!image) return next(null);
-  
+
   // e.g. public_id = "dev/sessions/2020-08-03_manchester"
   const public_id = image.substring(image.indexOf('/') + 1, image.indexOf('.'));
 
@@ -53,7 +57,7 @@ exports.destroyImage = (image, next) => {
     if (err) console.warn(err);
     next(null);
   });
-}
+};
 
 /**
  * Upload document to Cloudinary.
@@ -61,7 +65,6 @@ exports.destroyImage = (image, next) => {
  * @param {Function} next - The next callback function in the series.
  */
 exports.uploadDocument = (document, hasChanged, next) => {
-
   // Extract a clean slug name
   const name = zString.constructCleanSlug(document.title);
   document.name = name;
@@ -70,20 +73,24 @@ exports.uploadDocument = (document, hasChanged, next) => {
   if (!hasChanged) return next(null, document);
 
   // Upload to cloudinary
-  cloudinary.uploader.upload(document.file, {
-    public_id: `${env}/documents/${name}`,
-    unique_filename: false
-  }, (err, result) => {
-    if (err) return next(err);
-    const { version, format } = result;
-    Object.assign(document, {
-      version,
-      file: `${name}.${format}`,
-      lastModified: new Date()
-    });
-    return next(null, document);
-  });
-}
+  cloudinary.uploader.upload(
+    document.file,
+    {
+      public_id: `${env}/documents/${name}`,
+      unique_filename: false
+    },
+    (err, result) => {
+      if (err) return next(err);
+      const { version, format } = result;
+      Object.assign(document, {
+        version,
+        file: `${name}.${format}`,
+        lastModified: new Date()
+      });
+      return next(null, document);
+    }
+  );
+};
 
 /**
  * Delete a document from Cloudinary.
@@ -92,7 +99,7 @@ exports.uploadDocument = (document, hasChanged, next) => {
  */
 exports.destroyDocument = (document, next) => {
   if (!document) return next(null);
-  
+
   // e.g. public_id = "dev/sessions/2020-08-03_manchester"
   const public_id = `${env}/documents/${document}`;
 
@@ -100,7 +107,7 @@ exports.destroyDocument = (document, next) => {
     if (err) console.warn(err);
     next(null);
   });
-}
+};
 
 /**
  * Construct slug and filenames.
@@ -111,9 +118,11 @@ exports.destroyDocument = (document, next) => {
 const generateSlugAndFilename = (entity, directory) => {
   let filename;
 
-  switch (directory){
+  switch (directory) {
     case DIRECTORY.ARTICLES:
-      entity.slug = zString.constructCleanSlug(`${entity.authorId} ${entity.title}`);
+      entity.slug = zString.constructCleanSlug(
+        `${entity.authorId} ${entity.title}`
+      );
       filename = createArticleFilename(entity.slug);
       if (entity.status === ARTICLE_STATUS.DRAFT) entity.slug = null;
       break;
@@ -122,7 +131,9 @@ const generateSlugAndFilename = (entity, directory) => {
       filename = createCandidateFilename(entity.id, entity.slug);
       break;
     case DIRECTORY.MEMBERS:
-      entity.slug = zString.constructSimpleNameSlug(`${entity.firstname} ${entity.lastname}`);
+      entity.slug = zString.constructSimpleNameSlug(
+        `${entity.firstname} ${entity.lastname}`
+      );
       filename = createMemberFilename(entity.slug);
       if (!entity.verified) entity.slug = null;
       break;
@@ -138,11 +149,12 @@ const generateSlugAndFilename = (entity, directory) => {
   }
 
   return { entity, filename };
-}
+};
 
 /** Generate filenames from entities */
 const createArticleFilename = (slug) => `${slug}`;
 const createCandidateFilename = (id, slug) => `${id}_${slug}`;
 const createMemberFilename = (slug) => slug;
 const createReviewFilename = (rating, slug) => `${rating}-${slug}`;
-const createSessionFilename = (date, title) => `${zDate.formatISODate(date)}_${title}`;
+const createSessionFilename = (date, title) =>
+  `${zDate.formatISODate(date)}_${title}`;

@@ -30,52 +30,55 @@ module.exports = {
   },
 
   DUPLICATE_CANDIDATE_ID: (id) => {
-    const err = new Error(`A candidate with ID '${id}' already exists in the database.`);
+    const err = new Error(
+      `A candidate with ID '${id}' already exists in the database.`
+    );
     err.status = 409;
     return err;
   },
   DUPLICATE_ENTITY_NAME: (entity, name) => {
-    const err = new Error(`A ${entity} with the name '${name}' already exists in the database.`);
+    const err = new Error(
+      `A ${entity} with the name '${name}' already exists in the database.`
+    );
     err.status = 409;
     return err;
   },
   DUPLICATE_USERNAME: () => {
-    const err = new Error("The submitted username already exists.");
+    const err = new Error('The submitted username already exists.');
     err.status = 409;
     return err;
   },
   DUPLICATE_EMAIL_ADDRESS: () => {
-    const err = new Error("The submitted email address already exists.");
+    const err = new Error('The submitted email address already exists.');
     err.status = 409;
     return err;
   },
 
   NONEXISTENT_CREDENTIALS: () => {
-    const err = new Error("Your username or password is incorrect.");
+    const err = new Error('Your username or password is incorrect.');
     err.status = 401;
     return err;
   },
   NONEXISTENT_EMAIL_ADDRESS: () => {
-    const err = new Error("The submitted email address does not exist.");
+    const err = new Error('The submitted email address does not exist.');
     err.status = 401;
     return err;
   },
   INVALID_EMAIL_ADDRESS: () => {
-    const err = new Error(`Your email address is invalid.`)
+    const err = new Error(`Your email address is invalid.`);
     err.status = 401;
     return err;
   },
   INCORRECT_PASSWORD: () => {
-    const err = new Error(`Your current password is incorrect.`)
+    const err = new Error(`Your current password is incorrect.`);
     err.status = 401;
     return err;
   },
   PASSWORD_MISMATCH: () => {
-    const err = new Error(`Your passwords do not match.`)
+    const err = new Error(`Your passwords do not match.`);
     err.status = 401;
     return err;
   },
-
 
   UNAUTHORIZED_REQUEST: () => {
     const err = new Error(`You are not authorized to perform this request.`);
@@ -90,7 +93,7 @@ module.exports = {
   JWT_FAILURE: (message) => {
     const err = new Error();
     err.status = 401;
-    if (message === 'jwt expired'){
+    if (message === 'jwt expired') {
       err.message = `Your access token is expired.`;
       // `Awkward. The link you followed has expired. Don't say we didn't warn ya!`
     } else {
@@ -103,4 +106,4 @@ module.exports = {
     err.status = 403;
     return err;
   }
-}
+};

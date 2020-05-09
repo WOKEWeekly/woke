@@ -5,19 +5,19 @@ const superuser = TEST_USERS.NINE;
 
 let MEMBER_ID = 0;
 
-describe("Member Tests", function() {
+describe('Member Tests', function () {
   this.slow(10000);
 
   /** Test creating a new member */
-  describe("Create", function() {
-    it("Add member", function(done) {
+  describe('Create', function () {
+    it('Add member', function (done) {
       request({
         url: `/api/v1/members`,
         method: 'POST',
         body: JSON.stringify(TEST_MEMBERS.CREATED),
         headers: HEADERS.TOKEN(superuser),
         done,
-        onSuccess: ({status, data}) => {
+        onSuccess: ({ status, data }) => {
           assert.equal(status, 201);
           assert.hasAllKeys(data, ['id']);
           MEMBER_ID = data.id;
@@ -27,95 +27,94 @@ describe("Member Tests", function() {
   });
 
   /** Test retrieval of all members */
-  describe("Read", function() {
-    it("Get all members", function(done) {
+  describe('Read', function () {
+    it('Get all members', function (done) {
       request({
         url: `/api/v1/members`,
         method: 'GET',
         headers: HEADERS.TOKEN(superuser),
         done,
-        onSuccess: ({status, data}) => {
+        onSuccess: ({ status, data }) => {
           assert.equal(status, 200);
           assert.isArray(data);
         }
       });
     });
 
-    it("Get random member", function(done) {
+    it('Get random member', function (done) {
       request({
         url: `/api/v1/members/random`,
         method: 'GET',
         headers: HEADERS.KEY,
         done,
-        onSuccess: ({status, data}) => {
+        onSuccess: ({ status, data }) => {
           assert.equal(status, 200);
           assert.isObject(data);
         }
       });
     });
 
-    it("Get only authors", function(done) {
+    it('Get only authors', function (done) {
       request({
         url: `/api/v1/members/authors`,
         method: 'GET',
         headers: HEADERS.KEY,
         done,
-        onSuccess: ({status, data}) => {
+        onSuccess: ({ status, data }) => {
           assert.equal(status, 200);
           assert.isArray(data);
-          data.forEach(member => {
+          data.forEach((member) => {
             assert.equal(member.isAuthor, true);
           });
         }
       });
     });
 
-    it("Get only executive members", function(done) {
+    it('Get only executive members', function (done) {
       request({
         url: `/api/v1/members/executives`,
         method: 'GET',
         headers: HEADERS.KEY,
         done,
-        onSuccess: ({status, data}) => {
+        onSuccess: ({ status, data }) => {
           assert.equal(status, 200);
           assert.isArray(data);
-          data.forEach(member => {
+          data.forEach((member) => {
             assert.equal(member.level, 'Executive');
           });
         }
       });
     });
 
-    it("Get single member", function(done) {
+    it('Get single member', function (done) {
       request({
         url: `/api/v1/members/${MEMBER_ID}`,
         method: 'GET',
         headers: HEADERS.KEY,
         done,
-        onSuccess: ({status, data}) => {
+        onSuccess: ({ status, data }) => {
           assert.equal(status, 200);
           assert.isObject(data);
         }
       });
     });
 
-    it("Attempt get single member with invalid ID", function(done) {
+    it('Attempt get single member with invalid ID', function (done) {
       request({
         url: `/api/v1/members/0`,
         method: 'GET',
         headers: HEADERS.KEY,
         done,
-        onError: ({status}) => {
+        onError: ({ status }) => {
           assert.equal(status, 404);
         }
       });
     });
   });
 
-
   /** Test updating the member */
-  describe("Update", function() {
-    it("Update member without image change", function(done) {
+  describe('Update', function () {
+    it('Update member without image change', function (done) {
       request({
         url: `/api/v1/members/${MEMBER_ID}`,
         method: 'PUT',
@@ -125,14 +124,14 @@ describe("Member Tests", function() {
         }),
         headers: HEADERS.TOKEN(superuser),
         done,
-        onSuccess: ({status, data}) => {
+        onSuccess: ({ status, data }) => {
           assert.equal(status, 200);
           assert.hasAllKeys(data, ['slug']);
         }
       });
     });
 
-    it("Update member with image change", function(done) {
+    it('Update member with image change', function (done) {
       request({
         url: `/api/v1/members/${MEMBER_ID}`,
         method: 'PUT',
@@ -142,14 +141,14 @@ describe("Member Tests", function() {
         }),
         headers: HEADERS.TOKEN(superuser),
         done,
-        onSuccess: ({status, data}) => {
+        onSuccess: ({ status, data }) => {
           assert.equal(status, 200);
           assert.hasAllKeys(data, ['slug']);
         }
       });
     });
 
-    it("Attempt update member with invalid ID", function(done) {
+    it('Attempt update member with invalid ID', function (done) {
       request({
         url: `/api/v1/members/0`,
         method: 'PUT',
@@ -159,7 +158,7 @@ describe("Member Tests", function() {
         }),
         headers: HEADERS.TOKEN(superuser),
         done,
-        onError: ({status}) => {
+        onError: ({ status }) => {
           assert.equal(status, 404);
         }
       });
@@ -167,26 +166,26 @@ describe("Member Tests", function() {
   });
 
   /** Test deleting the member */
-  describe("Delete", function() {
-    it("Delete member", function(done) {
+  describe('Delete', function () {
+    it('Delete member', function (done) {
       request({
         url: `/api/v1/members/${MEMBER_ID}`,
         method: 'DELETE',
         headers: HEADERS.TOKEN(superuser),
         done,
-        onSuccess: ({status}) => {
+        onSuccess: ({ status }) => {
           assert.equal(status, 204);
         }
       });
     });
 
-    it("Attempt delete member with invalid ID", function(done) {
+    it('Attempt delete member with invalid ID', function (done) {
       request({
         url: `/api/v1/members/0`,
         method: 'DELETE',
         headers: HEADERS.TOKEN(superuser),
         done,
-        onError: ({status}) => {
+        onError: ({ status }) => {
           assert.equal(status, 404);
         }
       });

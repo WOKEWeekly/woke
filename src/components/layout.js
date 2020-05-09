@@ -1,7 +1,7 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Responsive from 'react-responsive';
-import {Container} from 'react-bootstrap';
+import { Container } from 'react-bootstrap';
 import classNames from 'classnames';
 import css from '~/styles/components/Layout.module.scss';
 import { Fader } from '~/components/transitioner.js';
@@ -9,37 +9,47 @@ import { cloudinary } from '~/constants/settings.js';
 
 export const isSmallDevice = () => {
   return window.matchMedia('(max-width: 576px)').matches;
-}
-
+};
 
 class ICover extends Component {
-  constructor(){
+  constructor() {
     super();
     this.state = {
       imageLoaded: false,
       imageSrc: ''
-    }
+    };
   }
 
-  componentDidMount(){
+  componentDidMount() {
     const image = new Image();
     image.src = `${cloudinary.url}/public/bg/${this.props.image}`;
-    image.onload = () => this.setState({imageLoaded: true, imageSrc: image.src});
+    image.onload = () =>
+      this.setState({ imageLoaded: true, imageSrc: image.src });
   }
 
-	render(){
-    const { backgroundPosition, height, title, subtitle, imageTitle, theme} = this.props;
+  render() {
+    const {
+      backgroundPosition,
+      height,
+      title,
+      subtitle,
+      imageTitle,
+      theme
+    } = this.props;
     const { imageLoaded, imageSrc } = this.state;
 
     const classes = classNames(css[`cover-${theme}`], this.props.className);
 
     return (
       <Fader determinant={imageLoaded} duration={1000}>
-        <Container fluid={true} className={classes} style={{
-          backgroundImage: `url(${imageSrc})`,
-          backgroundPosition: backgroundPosition,
-          minHeight: height,
-        }}>
+        <Container
+          fluid={true}
+          className={classes}
+          style={{
+            backgroundImage: `url(${imageSrc})`,
+            backgroundPosition: backgroundPosition,
+            minHeight: height
+          }}>
           <div className={css.coverText}>
             <Fader determinant={imageLoaded} duration={500} delay={250}>
               {imageTitle || <div className={css.coverTitle}>{title}</div>}
@@ -51,12 +61,11 @@ class ICover extends Component {
         </Container>
       </Fader>
     );
-		
-	}
+  }
 }
 
 export class Partitioner extends Component {
-  render(){
+  render() {
     return (
       <Container {...this.props} className={css.partitioner}>
         {this.props.children}
@@ -66,44 +75,51 @@ export class Partitioner extends Component {
 }
 
 export class Shader extends Component {
-  render(){
+  render() {
     return (
-      <div {...this.props} style={{
-        backgroundColor: 'rgba(0, 0, 0, .5)',
-        width: '100%'
-      }}>{this.props.children}</div>
+      <div
+        {...this.props}
+        style={{
+          backgroundColor: 'rgba(0, 0, 0, .5)',
+          width: '100%'
+        }}>
+        {this.props.children}
+      </div>
     );
   }
 }
 
 export class Spacer extends Component {
-  render(){
+  render() {
     return (
       <div
-      {...this.props}
-      style={{
-        display: 'grid',
-        height: '100%',
-        gridTemplateRows: this.props.gridrows || '1fr auto'
-      }}>{this.props.children}</div>
+        {...this.props}
+        style={{
+          display: 'grid',
+          height: '100%',
+          gridTemplateRows: this.props.gridrows || '1fr auto'
+        }}>
+        {this.props.children}
+      </div>
     );
   }
 }
 
-export const Desktop = props => <Responsive {...props} minWidth={992} />;
-export const Tablet = props => <Responsive {...props} minWidth={768} maxWidth={991} />;
-export const Mobile = props => <Responsive {...props} maxWidth={767} />;
-export const Default = props => <Responsive {...props} minWidth={768} />;
-
+export const Desktop = (props) => <Responsive {...props} minWidth={992} />;
+export const Tablet = (props) => (
+  <Responsive {...props} minWidth={768} maxWidth={991} />
+);
+export const Mobile = (props) => <Responsive {...props} maxWidth={767} />;
+export const Default = (props) => <Responsive {...props} minWidth={768} />;
 
 export const zIndices = {
   topicTopToolbar: 0,
   filterMenu: 1010,
   accountMenu: 1050,
   alerts: 1100
-}
+};
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   theme: state.theme
 });
 

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {Col} from 'react-bootstrap';
+import { Col } from 'react-bootstrap';
 
 import { SubmitButton, CancelButton } from '~/components/button.js';
 import { Group, Select, TextInput } from '~/components/form.js';
@@ -10,17 +10,17 @@ import { Icon } from './icon';
 import { zDate, zHandlers } from 'zavid-modules';
 
 export class TimePicker extends Component {
-  constructor(props){
+  constructor(props) {
     super(props);
 
     this.state = {
       ...extractTime(props.time),
       visible: false
-    }
+    };
   }
 
   /** Account for changes to input */
-  static getDerivedStateFromProps({time}, state) {
+  static getDerivedStateFromProps({ time }, state) {
     if (state.visible) return state;
     return extractTime(time);
   }
@@ -35,13 +35,12 @@ export class TimePicker extends Component {
 
     this.props.onConfirm(time, this.props.name);
     this.closeTimeModal();
-  }
+  };
 
   /** Close the timepicker modal */
-  closeTimeModal = () => this.setState({ visible: false})
-  
-  render(){
+  closeTimeModal = () => this.setState({ visible: false });
 
+  render() {
     const { time } = this.props;
     const { hour, minute, visible } = this.state;
 
@@ -55,7 +54,8 @@ export class TimePicker extends Component {
             items={zDate.getAllHours()}
             value={hour}
             placeholder={'HH'}
-            onChange={handleText} />
+            onChange={handleText}
+          />
         </Col>
         <Col xs={6}>
           <Select
@@ -63,7 +63,8 @@ export class TimePicker extends Component {
             items={zDate.getAllMinutes(5)}
             value={minute}
             placeholder={'mm'}
-            onChange={handleText} />
+            onChange={handleText}
+          />
         </Col>
       </Group>
     );
@@ -78,27 +79,21 @@ export class TimePicker extends Component {
     return (
       <React.Fragment>
         <button
-          onClick={() => this.setState({ visible: true})}
+          onClick={() => this.setState({ visible: true })}
           className={css.datepicker}>
-          <Icon
-            prefix={'far'}
-            name={'clock'}
-            className={css.calendarIcon} />
+          <Icon prefix={'far'} name={'clock'} className={css.calendarIcon} />
           <TextInput
             value={time ? zDate.formatISOTime(time, false) : null}
             placeholder={'HH:mm'}
-            style={{textAlign: 'left'}}
+            style={{ textAlign: 'left' }}
             className={css.dateinput}
-            readOnly />
+            readOnly
+          />
         </button>
 
-        <Modal
-          show={visible}
-          body={body}
-          footer={footer}
-          onlyBody={true} />
+        <Modal show={visible} body={body} footer={footer} onlyBody={true} />
       </React.Fragment>
-    )
+    );
   }
 }
 
@@ -110,10 +105,9 @@ export class TimePicker extends Component {
 const extractTime = (time) => {
   let hour, minute;
 
-  if (time !== null){
-    
+  if (time !== null) {
     // Extract hour and minute from time value
-    if (typeof time === 'string'){
+    if (typeof time === 'string') {
       hour = parseInt(time.substring(0, 2));
       minute = parseInt(time.substring(3, 5));
     } else {
@@ -124,4 +118,4 @@ const extractTime = (time) => {
   }
 
   return { hour, minute };
-}
+};

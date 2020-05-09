@@ -23,7 +23,7 @@ exports.DIRECTORY = {
   CANDIDATES: 'blackexcellence',
   MEMBERS: 'team',
   REVIEWS: 'reviews',
-  SESSIONS: 'sessions',
+  SESSIONS: 'sessions'
 };
 
 /** For each of the pages */
@@ -47,5 +47,5 @@ exports.PAGE = {
 exports.ARTICLE_STATUS = {
   DRAFT: 'DRAFT',
   PRIVATE: 'PRIVATE',
-  PUBLISHED: 'PUBLISHED',
+  PUBLISHED: 'PUBLISHED'
 };

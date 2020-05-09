@@ -4,21 +4,20 @@ const { TEST_REVIEWS, TEST_USERS } = require('./configuration/data.js');
 const superuser = TEST_USERS.NINE;
 
 let REVIEW_ID = 0;
-let REVIEWS_LENGTH = 0;
 
-describe("Review Tests", function() {
+describe('Review Tests', function () {
   this.slow(10000);
 
   /** Test creating a new review */
-  describe("Create", function() {
-    it("Add review", function(done) {
+  describe('Create', function () {
+    it('Add review', function (done) {
       request({
         url: `/api/v1/reviews`,
         method: 'POST',
         body: JSON.stringify(TEST_REVIEWS.CREATED),
         headers: HEADERS.TOKEN(superuser),
         done,
-        onSuccess: ({status, data}) => {
+        onSuccess: ({ status, data }) => {
           assert.equal(status, 201);
           assert.hasAllKeys(data, ['id']);
           REVIEW_ID = data.id;
@@ -28,69 +27,67 @@ describe("Review Tests", function() {
   });
 
   /** Test retrieval of all reviews */
-  describe("Read", function() {
-    it("Get all reviews", function(done) {
+  describe('Read', function () {
+    it('Get all reviews', function (done) {
       request({
         url: `/api/v1/reviews`,
         method: 'GET',
         headers: HEADERS.KEY,
         done,
-        onSuccess: ({status, data}) => {
+        onSuccess: ({ status, data }) => {
           assert.equal(status, 200);
           assert.isArray(data);
-          REVIEWS_LENGTH = data.length;
         }
       });
     });
 
-    it("Get single review", function(done) {
+    it('Get single review', function (done) {
       request({
         url: `/api/v1/reviews/${REVIEW_ID}`,
         method: 'GET',
         headers: HEADERS.KEY,
         done,
-        onSuccess: ({status, data}) => {
+        onSuccess: ({ status, data }) => {
           assert.equal(status, 200);
           assert.isObject(data);
         }
       });
     });
 
-    it("Get featured reviews", function(done) {
+    it('Get featured reviews', function (done) {
       request({
         url: `/api/v1/reviews/featured`,
         method: 'GET',
         headers: HEADERS.KEY,
         done,
-        onSuccess: ({status, data}) => {
+        onSuccess: ({ status, data }) => {
           assert.equal(status, 200);
           assert.isAtMost(data.length, 3);
-          data.forEach(review => {
-            assert.include(review, { rating: 5});
+          data.forEach((review) => {
+            assert.include(review, { rating: 5 });
             assert.exists(review.image);
-            assert.isNotEmpty(review.image)
+            assert.isNotEmpty(review.image);
           });
         }
       });
     });
 
-    it("Attempt get single review with invalid ID", function(done) {
+    it('Attempt get single review with invalid ID', function (done) {
       request({
         url: `/api/v1/reviews/0`,
         method: 'GET',
         headers: HEADERS.KEY,
         done,
-        onError: ({status}) => {
+        onError: ({ status }) => {
           assert.equal(status, 404);
         }
       });
     });
   });
 
-
   /** Test updating the review */
-  describe("Update", function() {
-    it("Update review without image change", function(done) {
+  describe('Update', function () {
+    it('Update review without image change', function (done) {
       request({
         url: `/api/v1/reviews/${REVIEW_ID}`,
         method: 'PUT',
@@ -100,13 +97,13 @@ describe("Review Tests", function() {
         }),
         headers: HEADERS.TOKEN(superuser),
         done,
-        onSuccess: ({status}) => {
+        onSuccess: ({ status }) => {
           assert.equal(status, 200);
         }
       });
     });
 
-    it("Update review with image change", function(done) {
+    it('Update review with image change', function (done) {
       request({
         url: `/api/v1/reviews/${REVIEW_ID}`,
         method: 'PUT',
@@ -116,13 +113,13 @@ describe("Review Tests", function() {
         }),
         headers: HEADERS.TOKEN(superuser),
         done,
-        onSuccess: ({status}) => {
+        onSuccess: ({ status }) => {
           assert.equal(status, 200);
         }
       });
     });
 
-    it("Attempt update review with invalid ID", function(done) {
+    it('Attempt update review with invalid ID', function (done) {
       request({
         url: `/api/v1/reviews/0`,
         method: 'PUT',
@@ -132,7 +129,7 @@ describe("Review Tests", function() {
         }),
         headers: HEADERS.TOKEN(superuser),
         done,
-        onError: ({status}) => {
+        onError: ({ status }) => {
           assert.equal(status, 404);
         }
       });
@@ -140,26 +137,26 @@ describe("Review Tests", function() {
   });
 
   /** Test deleting the review */
-  describe("Delete", function() {
-    it("Delete review", function(done) {
+  describe('Delete', function () {
+    it('Delete review', function (done) {
       request({
         url: `/api/v1/reviews/${REVIEW_ID}`,
         method: 'DELETE',
         headers: HEADERS.TOKEN(superuser),
         done,
-        onSuccess: ({status}) => {
+        onSuccess: ({ status }) => {
           assert.equal(status, 204);
         }
       });
     });
 
-    it("Attempt delete review with invalid ID", function(done) {
+    it('Attempt delete review with invalid ID', function (done) {
       request({
         url: `/api/v1/reviews/0`,
         method: 'DELETE',
         headers: HEADERS.TOKEN(superuser),
         done,
-        onError: ({status}) => {
+        onError: ({ status }) => {
           assert.equal(status, 404);
         }
       });

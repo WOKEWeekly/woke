@@ -21,24 +21,23 @@ describe('Document Tests', function () {
           assert.equal(status, 201);
           assert.hasAllKeys(data, ['id']);
           DOCUMENT_ID = data.id;
-        },
+        }
       });
     });
 
-    it("Attempt add duplicate document name", function(done) {
+    it('Attempt add duplicate document name', function (done) {
       request({
         url: `/api/v1/documents`,
         method: 'POST',
         body: JSON.stringify(TEST_DOCUMENTS.CREATED),
         headers: HEADERS.TOKEN(superuser),
         done,
-        onError: ({status}) => {
+        onError: ({ status }) => {
           assert.equal(status, 409);
         }
       });
     });
   });
-  
 
   /** Test retrieval of all documents */
   describe('Read', function () {
@@ -51,7 +50,7 @@ describe('Document Tests', function () {
         onSuccess: ({ status, data }) => {
           assert.equal(status, 200);
           assert.isArray(data);
-        },
+        }
       });
     });
 
@@ -64,7 +63,7 @@ describe('Document Tests', function () {
         onSuccess: ({ status, data }) => {
           assert.equal(status, 200);
           assert.isObject(data);
-        },
+        }
       });
     });
 
@@ -76,7 +75,7 @@ describe('Document Tests', function () {
         done,
         onError: ({ status }) => {
           assert.equal(status, 404);
-        },
+        }
       });
     });
   });
@@ -89,14 +88,14 @@ describe('Document Tests', function () {
         method: 'PUT',
         body: JSON.stringify({
           document: TEST_DOCUMENTS.UPDATED,
-          changed: false,
+          changed: false
         }),
         headers: HEADERS.TOKEN(superuser),
         done,
         onSuccess: ({ status, data }) => {
           assert.equal(status, 200);
           assert.hasAllKeys(data, ['name']);
-        },
+        }
       });
     });
 
@@ -106,14 +105,14 @@ describe('Document Tests', function () {
         method: 'PUT',
         body: JSON.stringify({
           document: TEST_DOCUMENTS.UPDATED,
-          changed: true,
+          changed: true
         }),
         headers: HEADERS.TOKEN(superuser),
         done,
         onSuccess: ({ status, data }) => {
           assert.equal(status, 200);
           assert.hasAllKeys(data, ['name']);
-        },
+        }
       });
     });
 
@@ -123,13 +122,13 @@ describe('Document Tests', function () {
         method: 'PUT',
         body: JSON.stringify({
           document: TEST_DOCUMENTS.UPDATED,
-          changed: true,
+          changed: true
         }),
         headers: HEADERS.TOKEN(superuser),
         done,
         onError: ({ status }) => {
           assert.equal(status, 404);
-        },
+        }
       });
     });
   });
@@ -144,7 +143,7 @@ describe('Document Tests', function () {
         done,
         onSuccess: ({ status }) => {
           assert.equal(status, 204);
-        },
+        }
       });
     });
 
@@ -156,7 +155,7 @@ describe('Document Tests', function () {
         done,
         onError: ({ status }) => {
           assert.equal(status, 404);
-        },
+        }
       });
     });
   });
