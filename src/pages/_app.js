@@ -14,8 +14,8 @@ import { loadCountries } from '~/constants/countries';
 import { cloudinary } from '~/constants/settings.js';
 import { saveCountries, setTheme } from '~/reducers/actions';
 
-import { PreNavBar, MainNavBar } from "~/partials/header.js";
-import Footer from "~/partials/footer.js";
+import { PreNavBar, MainNavBar } from '~/partials/header.js';
+import Footer from '~/partials/footer.js';
 
 import '~/styles/App.scss';
 import '~/styles/Categories.scss';
@@ -26,78 +26,85 @@ library.add(fab, far, fas);
 const { store, persistor } = configureStore();
 
 export default class WOKE extends App {
-  static async getInitialProps({ Component, ctx }) {
-    let pageProps = {};
-    if (Component.getInitialProps) {
-      pageProps = await Component.getInitialProps(ctx);
-    }
-    return { pageProps };
-  }
+	static async getInitialProps({ Component, ctx }) {
+		let pageProps = {};
+		if (Component.getInitialProps) {
+			pageProps = await Component.getInitialProps(ctx);
+		}
+		return { pageProps };
+	}
 
-  state = { isLoaded: false }
-  
-  componentDidMount(){
-    const {
-      backgroundImage = 'bg-app.jpg',
-      theme = 'default'
-    } = this.props.router.query;
+	state = { isLoaded: false };
 
-    // Set the theme
-    store.dispatch(setTheme(theme));
+	componentDidMount() {
+		const {
+			backgroundImage = 'bg-app.jpg',
+			theme = 'default',
+		} = this.props.router.query;
 
-    // Fade background image into view
-    const image = new Image();
-    image.src = `${cloudinary.url}/public/bg/${backgroundImage}`;
-    image.onload = () => {
-      document.body.style.backgroundImage = `url(${image.src})`;
-      document.body.style.opacity = 1;
-    };
-    
-    // Get cookie consent value
-    this.setState({cookiesAccepted: getCookie('cookiesAccepted') === 'true'});
+		// Set the theme
+		store.dispatch(setTheme(theme));
 
-    // Loaded countries if not already loaded
-    const countries = store.getState().countries;
-    if (!countries.length){
-      this.preloadCountries();
-    } else {
-      this.setState({isLoaded: true});
-    }
-  }
+		// Fade background image into view
+		const image = new Image();
+		image.src = `${cloudinary.url}/public/bg/${backgroundImage}`;
+		image.onload = () => {
+			document.body.style.backgroundImage = `url(${image.src})`;
+			document.body.style.opacity = 1;
+		};
 
-  /** Save country list in Redux store */
-  preloadCountries = () => {
-    loadCountries().then(data => {
-      const countries = [];
-      data.forEach(country => {
-        countries.push({ label: country.name, demonym: country.demonym });
-      });
-      store.dispatch(saveCountries(countries));
-      this.setState({isLoaded: true});
-    });
-  }
+		// Get cookie consent value
+		this.setState({ cookiesAccepted: getCookie('cookiesAccepted') === 'true' });
 
-  acceptCookies = () => {
-    setCookie('cookiesAccepted', true, 365 * 24);
-    this.setState({ cookiesAccepted: true});
-  }
+		// Loaded countries if not already loaded
+		const countries = store.getState().countries;
+		if (!countries.length) {
+			this.preloadCountries();
+		} else {
+			this.setState({ isLoaded: true });
+		}
+	}
 
-  render() {
-    const { isLoaded, cookiesAccepted } = this.state;
-    const { Component, pageProps } = this.props;
-    
-    if (!isLoaded) return null;
+	/** Save country list in Redux store */
+	preloadCountries = () => {
+		loadCountries().then(data => {
+			const countries = [];
+			data.forEach(country => {
+				countries.push({ label: country.name, demonym: country.demonym });
+			});
+			store.dispatch(saveCountries(countries));
+			this.setState({ isLoaded: true });
+		});
+	};
 
-    return (
-      <Provider store={store}>
-      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossOrigin="anonymous" />
-        <PersistGate loading={null} persistor={persistor}>
-          <PreNavBar/> <MainNavBar/>
-          <Component {...pageProps} />
-          <Footer/>
-          {!cookiesAccepted ? <CookiePrompt acceptCookies={this.acceptCookies} /> :null}
-        </PersistGate>
-      </Provider> 
-    );
-  }
+	acceptCookies = () => {
+		setCookie('cookiesAccepted', true, 365 * 24);
+		this.setState({ cookiesAccepted: true });
+	};
+
+	render() {
+		const { isLoaded, cookiesAccepted } = this.state;
+		const { Component, pageProps } = this.props;
+
+		if (!isLoaded) return null;
+
+		return (
+			<Provider store={store}>
+				<link
+					rel="stylesheet"
+					href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+					integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+					crossOrigin="anonymous"
+				/>
+				<PersistGate loading={null} persistor={persistor}>
+					<PreNavBar /> <MainNavBar />
+					<Component {...pageProps} />
+					<Footer />
+					{!cookiesAccepted ? (
+						<CookiePrompt acceptCookies={this.acceptCookies} />
+					) : null}
+				</PersistGate>
+			</Provider>
+		);
+	}
 }

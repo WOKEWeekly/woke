@@ -1,11 +1,18 @@
-import React, { Component} from 'react';
+import React, { Component } from 'react';
 import { Col } from 'react-bootstrap';
 import { connect } from 'react-redux';
 
 import { SubmitButton, CancelButton } from '~/components/button.js';
 import { EventDatePicker } from '~/components/datepicker.js';
 import { TimePicker } from '~/components/timepicker.js';
-import { Heading, Group, Label, TextInput, LongTextArea, FileSelector } from '~/components/form.js';
+import {
+	Heading,
+	Group,
+	Label,
+	TextInput,
+	LongTextArea,
+	FileSelector,
+} from '~/components/form.js';
 import { Shader, Spacer } from '~/components/layout.js';
 
 import CLEARANCES from '~/constants/clearances.js';
@@ -14,80 +21,106 @@ import CLEARANCES from '~/constants/clearances.js';
 import css from '~/styles/pages/Sessions.module.scss';
 
 class SessionForm extends Component {
-  constructor(props){
-    super(props);
+	constructor(props) {
+		super(props);
 
-    if (props.user.clearance < CLEARANCES.ACTIONS.CRUD_SESSIONS){
-      return location.href = '/sessions';
-    }
-  }
+		if (props.user.clearance < CLEARANCES.ACTIONS.CRUD_SESSIONS) {
+			return (location.href = '/sessions');
+		}
+	}
 
-  render(){
-    const { heading, confirmText, confirmFunc, cancelFunc, handlers, operation } = this.props;
-    const { handleText, handleDate, handleTime, handleFile } = handlers;
-    const { title, dateHeld, timeHeld, description, image } = this.props.session;
+	render() {
+		const {
+			heading,
+			confirmText,
+			confirmFunc,
+			cancelFunc,
+			handlers,
+			operation,
+		} = this.props;
+		const { handleText, handleDate, handleTime, handleFile } = handlers;
+		const {
+			title,
+			dateHeld,
+			timeHeld,
+			description,
+			image,
+		} = this.props.session;
 
-    return (
-      <Shader>
-        <Spacer className={css.form}>
-          <div>
-            <Heading>{heading}</Heading>
+		return (
+			<Shader>
+				<Spacer className={css.form}>
+					<div>
+						<Heading>{heading}</Heading>
 
-            <Group>
-              <Col md={6}>
-                <Label>Title:</Label>
-                <TextInput
-                  name={'title'}
-                  value={title}
-                  onChange={handleText}
-                  placeholder={"Enter the title."} />
-              </Col>
-              <Col md={4}>
-                <Label>Date Held:</Label>
-                <EventDatePicker name={'dateHeld'} date={dateHeld} onConfirm={handleDate} />
-              </Col>
-              <Col md={2}>
-                <Label>Time Held:</Label>
-                <TimePicker name={'timeHeld'} time={timeHeld} onConfirm={handleTime} />
-              </Col>
-            </Group>
-            <Group>
-              <Col>
-                <Label>Description:</Label>
-                <LongTextArea
-                  name={'description'}
-                  value={description}
-                  onChange={handleText}
-                  placeholder={"Enter the description."} />
-              </Col>
-            </Group>
-            <Group>
-              <Col>
-                <FileSelector
-                  image={image}
-                  directory={`sessions`}
-                  operation={operation}
-                  onChange={handleFile} />
-              </Col>
-            </Group>
-          </div>
+						<Group>
+							<Col md={6}>
+								<Label>Title:</Label>
+								<TextInput
+									name={'title'}
+									value={title}
+									onChange={handleText}
+									placeholder={'Enter the title.'}
+								/>
+							</Col>
+							<Col md={4}>
+								<Label>Date Held:</Label>
+								<EventDatePicker
+									name={'dateHeld'}
+									date={dateHeld}
+									onConfirm={handleDate}
+								/>
+							</Col>
+							<Col md={2}>
+								<Label>Time Held:</Label>
+								<TimePicker
+									name={'timeHeld'}
+									time={timeHeld}
+									onConfirm={handleTime}
+								/>
+							</Col>
+						</Group>
+						<Group>
+							<Col>
+								<Label>Description:</Label>
+								<LongTextArea
+									name={'description'}
+									value={description}
+									onChange={handleText}
+									placeholder={'Enter the description.'}
+								/>
+							</Col>
+						</Group>
+						<Group>
+							<Col>
+								<FileSelector
+									image={image}
+									directory={`sessions`}
+									operation={operation}
+									onChange={handleFile}
+								/>
+							</Col>
+						</Group>
+					</div>
 
-          <div>
-            <Group>
-              <Col>
-                <SubmitButton onClick={confirmFunc} className={'mr-2'}>{confirmText}</SubmitButton>
-                <CancelButton onClick={cancelFunc}>Cancel</CancelButton>
-              </Col>
-            </Group>
-          </div>
-        </Spacer>
-      </Shader>
-    );
-  }
+					<div>
+						<Group>
+							<Col>
+								<SubmitButton onClick={confirmFunc} className={'mr-2'}>
+									{confirmText}
+								</SubmitButton>
+								<CancelButton onClick={cancelFunc}>Cancel</CancelButton>
+							</Col>
+						</Group>
+					</div>
+				</Spacer>
+			</Shader>
+		);
+	}
 }
 
 const mapStateToProps = state => ({
-  user: state.user
+	user: state.user,
 });
 
 export default connect(mapStateToProps)(SessionForm);
