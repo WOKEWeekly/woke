@@ -29,7 +29,7 @@ export default class Error extends React.Component {
               We seem to have run into a problem.
             </div>
             <div>
-              Try refreshing the page. If that didn't work, please bear with us
+              Try refreshing the page. If that didn&#39;t work, please bear with us
               and try again later.
             </div>
           </React.Fragment>

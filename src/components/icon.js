@@ -90,7 +90,7 @@ export class _SocialsList extends Component {
           items.push(
             <div key={idx} className={css[`socials-${theme}`]}>
               {social.name}:
-              <a href={link} target={'_blank'}>
+              <a href={link} target={'_blank'} rel={'noopener noreferrer'}>
                 {social.domain ? `@${item}` : link}
               </a>
             </div>

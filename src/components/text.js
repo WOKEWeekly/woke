@@ -220,7 +220,7 @@ const applyFormatting = (text, hyperlinkClass) => {
       return (
         <a
           target={'_blank'}
-          rel={'noreferrer'}
+          rel={'noopener noreferrer'}
           href={partText}
           key={count}
           className={hyperlinkClass}>

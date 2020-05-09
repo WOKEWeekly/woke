@@ -1,7 +1,7 @@
 const schedule = require('node-schedule');
 const slack = require('./slack.js');
 
-const testInterval = { second: 0 };
+// const testInterval = { second: 0 };
 const birthdayReminderTime = { hour: 7, minute: 0 };
 const sessionReminderTime = { hour: 10, minute: 0 };
 

@@ -4,7 +4,6 @@ const { TEST_REVIEWS, TEST_USERS } = require('./configuration/data.js');
 const superuser = TEST_USERS.NINE;
 
 let REVIEW_ID = 0;
-let REVIEWS_LENGTH = 0;
 
 describe('Review Tests', function () {
   this.slow(10000);
@@ -38,7 +37,6 @@ describe('Review Tests', function () {
         onSuccess: ({ status, data }) => {
           assert.equal(status, 200);
           assert.isArray(data);
-          REVIEWS_LENGTH = data.length;
         }
       });
     });

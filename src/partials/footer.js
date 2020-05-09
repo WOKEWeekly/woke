@@ -1,10 +1,7 @@
 import React, { Component } from 'react';
 import { Col, Row } from 'react-bootstrap';
-
-import { FooterIcon } from '~/components/icon';
 import { Divider } from '~/components/text.js';
-
-import { accounts, emails } from '~/constants/settings.js';
+import { emails } from '~/constants/settings.js';
 
 import css from '~/styles/Partials.module.scss';
 
@@ -51,25 +48,6 @@ class Links extends Component {
           Powered by #WOKEWeekly&reg;
         </Col>
       </React.Fragment>
-    );
-  }
-}
-
-/** Social media icons in footer */
-class Socials extends Component {
-  render() {
-    return (
-      <div>
-        <Row style={{ justifyContent: 'center' }}>
-          <FooterIcon icon={'facebook-f'} href={accounts.facebook} />
-          <FooterIcon icon={'twitter'} href={accounts.twitter} />
-          <FooterIcon icon={'instagram'} href={accounts.instagram} />
-        </Row>
-        <Row style={{ justifyContent: 'center' }}>
-          <FooterIcon icon={'linkedin-in'} href={accounts.linkedin} />
-          <FooterIcon icon={'youtube'} href={accounts.youtube} />
-        </Row>
-      </div>
     );
   }
 }

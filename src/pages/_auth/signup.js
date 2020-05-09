@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { saveUser } from '~/reducers/actions';
 
-import { alert, setAlert, displayErrorMessage } from '~/components/alert.js';
+import { setAlert } from '~/components/alert.js';
 import { SubmitButton } from '~/components/button.js';
 import {
 	Heading,
@@ -184,16 +184,18 @@ class Signup extends Component {
 									checked={privacy}
 									label={
 										<span>
-											I have read and I agree to this site's{' '}
+											I have read and I agree to this site&#39;s&nbsp;
 											<a
-												target={'_blank'}
+                        target={'_blank'}
+                        rel={'noopener noreferrer'}
 												className={css['link-default']}
 												href={'/privacy'}>
 												Privacy Policy
 											</a>
-											, including the{' '}
+											, including the&nbsp;
 											<a
-												target={'_blank'}
+                        target={'_blank'}
+                        rel={'noopener noreferrer'}
 												className={css['link-default']}
 												href={'/cookies'}>
 												Cookie Policy

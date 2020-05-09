@@ -1,8 +1,8 @@
 const { config } = require('../server.js');
-const dotenv = require('dotenv').config({ path: config });
 const nodemailer = require('nodemailer');
-
 let { cloudinary, domain, emails } = require('../constants/settings.js');
+
+require('dotenv').config({ path: config });
 
 /** Pass credentials to transporter */
 const transporter = nodemailer.createTransport({

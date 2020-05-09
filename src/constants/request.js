@@ -1,4 +1,4 @@
-import { alert, setAlert, displayErrorMessage } from '~/components/alert.js';
+import { alert, setAlert } from '~/components/alert.js';
 import { clearUser } from '~/reducers/actions';
 import configureStore from '~/reducers/store.js';
 const { store } = configureStore();

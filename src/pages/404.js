@@ -10,7 +10,7 @@ export default class NotFound404 extends React.Component {
         <div className={css.error}>
           <div className={css.errorText}>
             <div className={css.message}>
-              So...you're looking for a page that doesn't quite exist.
+              So...you&#39;re looking for a page that doesn&#39;t quite exist.
             </div>
             <div>
               <button onClick={() => history.back()}>

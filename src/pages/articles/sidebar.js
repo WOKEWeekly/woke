@@ -2,7 +2,7 @@ import React, { Component, PureComponent } from 'react';
 
 import { zDate } from 'zavid-modules';
 
-import { Loader } from '~/components/loader.js';
+import { Loader, Empty } from '~/components/loader.js';
 import { Title, Subtitle, Divider, VanillaLink } from '~/components/text.js';
 import { Zoomer } from '~/components/transitioner.js';
 

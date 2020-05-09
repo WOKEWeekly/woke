@@ -1,12 +1,6 @@
 import React, { Component, Suspense } from 'react';
 import { Container, Col, Row } from 'react-bootstrap';
-import LazyLoader from 'react-visibility-sensor';
-
 import { Cover, Shader } from '~/components/layout.js';
-import { Paragraph } from '~/components/text.js';
-import { Fader } from '~/components/transitioner.js';
-import { cloudinary } from '~/constants/settings.js';
-
 import css from '~/styles/pages/Home.module.scss';
 
 const ThreePart = React.lazy(() => import('./home.advertiser'));
@@ -68,47 +62,6 @@ export default class Home extends Component {
 					</Suspense>
 				</Container>
 			</Shader>
-		);
-	}
-}
-
-class ForumAdvertiser extends Component {
-	constructor() {
-		super();
-		this.state = {
-			imageLoaded: false,
-			imageSrc: '',
-			inView: false,
-		};
-	}
-
-	componentDidMount() {
-		const image = new Image();
-		image.src = `${cloudinary.url}/public/bg/bg-home-forum.jpg`;
-		image.onload = () =>
-			this.setState({ imageLoaded: true, imageSrc: image.src });
-	}
-
-	toggleVisibility = inView => this.setState({ inView });
-
-	render() {
-		const { imageLoaded, imageSrc, inView } = this.state;
-		const text = `Wouldn't it make sense if you could suggest more topics for us to cover at our sessions?\n\nFORUM COMING SOON...`;
-
-		return (
-			<Fader
-				determinant={imageLoaded && inView}
-				duration={750}
-				delay={0}
-				postTransitions={'background-color .3s'}
-				className={css.forumAdvertiser}
-				style={{ backgroundImage: `url(${imageSrc})` }}>
-				<LazyLoader onChange={this.toggleVisibility} partialVisibility={true}>
-					<div className={css.container}>
-						<Paragraph className={css.coverText}>{text}</Paragraph>
-					</div>
-				</LazyLoader>
-			</Fader>
 		);
 	}
 }

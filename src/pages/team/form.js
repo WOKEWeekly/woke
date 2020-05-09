@@ -17,7 +17,6 @@ import {
 	Select,
 	TextInput,
 	ClickInput,
-	ShortTextArea,
 	LongTextArea,
 	FileSelector,
 } from '~/components/form.js';

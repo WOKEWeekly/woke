@@ -31,7 +31,7 @@ class Toolbar extends Component {
 export class TopToolbar extends Component {
   render() {
     return (
-      <Toolbar className={css.top_toolbar} children={this.props.children} />
+      <Toolbar className={css.top_toolbar} />
     );
   }
 }
@@ -39,7 +39,7 @@ export class TopToolbar extends Component {
 export class BottomToolbar extends Component {
   render() {
     return (
-      <Toolbar className={css.bottom_toolbar} children={this.props.children} />
+      <Toolbar className={css.bottom_toolbar} />
     );
   }
 }

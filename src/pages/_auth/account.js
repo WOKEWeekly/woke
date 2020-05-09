@@ -128,7 +128,7 @@ class Account extends Component {
 								<React.Fragment>
 									<div className={css.features}>
 										<div>
-											We'll be adding more management features to your account
+											We&#39;ll be adding more management features to your account
 											as time goes on.
 										</div>
 										<div>Stay tuned.</div>

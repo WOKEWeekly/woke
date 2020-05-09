@@ -6,7 +6,6 @@
     "prod": "NODE_ENV=production node server.js",
     "test": "mocha --dev-testing --no-timeout",
     "test-ci": "mocha --no-timeout --stage-testing --reporter mocha-junit-reporter",
-
     "lint": "eslint \"**/*.js\" --ignore-path ../.gitignore ",
     "prettify": "prettier --ignore-path ../.gitignore --write **/*.js"
   },
@@ -61,6 +60,7 @@
   "devDependencies": {
     "@babel/core": "^7.9.0",
     "@babel/preset-env": "^7.9.5",
+    "babel-eslint": "^10.1.0",
     "babel-loader": "^8.1.0",
     "babel-plugin-root-import": "^6.5.0",
     "chai": "^4.2.0",

@@ -1,3 +1,4 @@
+import React from 'react';
 import Document, { Html, Head, Main, NextScript } from 'next/document';
 import { cloudinary, domain } from '~/constants/settings.js';
 import { truncateText } from '~/components/text.js';
