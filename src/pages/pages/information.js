@@ -31,7 +31,7 @@ class Info extends Component {
 
 	render() {
 		const { isLoaded } = this.state;
-		const { user, pageText, ogUrl, lastModified } = this.props;
+    const { user, pageText, ogUrl, lastModified } = this.props;
 
 		return (
 			<Fader determinant={isLoaded} duration={750}>
