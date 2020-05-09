@@ -7,19 +7,26 @@ const isStageTesting = process.argv.includes('--stage-testing');
 const isDevTesting = process.argv.includes('--dev-testing');
 
 const next = require('next');
-const server = next({ dev, quiet: isStageTesting });
+const server = next({
+  dev,
+  quiet: isStageTesting
+});
 const handle = server.getRequestHandler();
 
 const async = require('async');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
-const dotenv = require('dotenv').config({path: config });
+const dotenv = require('dotenv').config({
+  path: config
+});
 const mysql = require('mysql');
 const port = process.env.PORT || 3000;
 const setDb = require("./private/api/db").setDb;
 
-app.use(bodyParser.json({ limit: '2MB' }));
+app.use(bodyParser.json({
+  limit: '2MB'
+}));
 app.use(cookieParser());
 app.use(cors());
 
@@ -37,24 +44,24 @@ if (dotenv.error && !process.env.PORT) {
 }
 
 // Start client server
-if (!isStageTesting && !isDevTesting){
+if (!isStageTesting && !isDevTesting) {
   startClientServer();
 }
 
-function startClientServer(){
+function startClientServer() {
   startServer();
   require('./private/routes.js')(app, conn, server);
   require('./private/cron.js')(conn);
 }
 
-function startTestServer(next){
+function startTestServer(next) {
   startServer(next);
   require('./private/api.js')(app, conn);
 }
 
-function startServer(next){
+function startServer(next) {
   async.parallel([
-    function(callback){ // Start the server
+    function (callback) { // Start the server
       server.prepare().then(() => {
         app.get('*', (req, res) => handle(req, res));
         app.listen(port, (err) => {
@@ -63,17 +70,17 @@ function startServer(next){
         });
       });
     },
-    function(callback){ // Connect to MySQL database
-      conn.connect(function(err) {
+    function (callback) { // Connect to MySQL database
+      conn.connect(function (err) {
         if (!err) {
           setDb(conn);
           require("./private/api.js")(app, conn);
           console.log("Connected to database.");
-        }        
+        }
         callback(err);
       });
     }
-  ], function(err){
+  ], function (err) {
     if (err) throw err;
     if (next) next();
   });

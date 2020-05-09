@@ -1,9 +1,14 @@
-const { respondToClient } = require("../../response");
+const {
+  respondToClient
+} = require("../../response");
 const async = require("async");
 const SQL = require("../../sql");
 const conn = require("../db").getDb();
 const filer = require('../../filer');
-const { DIRECTORY, ENTITY } = require('../../../constants/strings');
+const {
+  DIRECTORY,
+  ENTITY
+} = require('../../../constants/strings');
 const ERROR = require('../../errors');
 
 
@@ -33,7 +38,10 @@ exports.getFeaturedSessions = (req, res) => {
         conn.query(SQL.SESSIONS.READ.UPCOMING, function (err, [session] = []) {
           if (err) return callback(err);
           if (!session) return callback(null);
-          callback(true, { session, upcoming: true });
+          callback(true, {
+            session,
+            upcoming: true
+          });
         });
       },
       function (callback) {
@@ -41,7 +49,10 @@ exports.getFeaturedSessions = (req, res) => {
         conn.query(SQL.SESSIONS.READ.LATEST, function (err, [session] = []) {
           if (err) return callback(err);
           if (!session) return callback(null);
-          callback(null, { session, upcoming: false });
+          callback(null, {
+            session,
+            upcoming: false
+          });
         });
       },
     ],
@@ -62,21 +73,29 @@ exports.addSession = (req, res) => {
       },
       function (session, callback) {
         // Add session to database
-        const { sql, values } = SQL.SESSIONS.CREATE(session);
+        const {
+          sql,
+          values
+        } = SQL.SESSIONS.CREATE(session);
         conn.query(sql, [values], function (err, result) {
           err ? callback(err) : callback(null, result.insertId);
         });
       },
     ],
     function (err, id) {
-      respondToClient(res, err, 201, { id });
+      respondToClient(res, err, 201, {
+        id
+      });
     }
   );
 };
 
-exports.updateSessionDetails = (req, res) => {
+exports.updateSession = (req, res) => {
   const id = req.params.id;
-  const { session, changed } = req.body;
+  const {
+    session,
+    changed
+  } = req.body;
 
   async.waterfall(
     [
@@ -99,14 +118,19 @@ exports.updateSessionDetails = (req, res) => {
       },
       function (session, callback) {
         // Update session in database
-        const { sql, values } = SQL.SESSIONS.UPDATE(id, session, changed);
+        const {
+          sql,
+          values
+        } = SQL.SESSIONS.UPDATE(id, session, changed);
         conn.query(sql, values, function (err) {
           err ? callback(err) : callback(null, session.slug);
         });
       },
     ],
     function (err, slug) {
-      respondToClient(res, err, 200, { slug });
+      respondToClient(res, err, 200, {
+        slug
+      });
     }
   );
 };
@@ -115,19 +139,19 @@ exports.deleteSession = (req, res) => {
   const id = req.params.id;
 
   async.waterfall([
-    function(callback){ // Delete image from cloud
+    function (callback) { // Delete image from cloud
       conn.query(SQL.SESSIONS.READ.SINGLE('id', 'image'), id, function (err, [session] = []) {
         if (err) return callback(err);
         if (!session) return callback(ERROR.INVALID_ENTITY_ID(ENTITY.SESSION, id));
         filer.destroyImage(session.image, callback);
       });
     },
-    function(callback){ // Delete session from database
+    function (callback) { // Delete session from database
       conn.query(SQL.SESSIONS.DELETE, id, function (err) {
         err ? callback(err) : callback(null);
       });
     }
-  ], function(err){
+  ], function (err) {
     respondToClient(res, err, 204);
   });
 };
