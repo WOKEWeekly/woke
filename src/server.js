@@ -56,7 +56,7 @@ function startClientServer() {
 
 function startTestServer(next) {
   startServer(next);
-  require('./private/api.js')(app, conn);
+  require('./private/api/api.js')(app, conn);
 }
 
 function startServer(next) {
@@ -74,7 +74,7 @@ function startServer(next) {
       conn.connect(function (err) {
         if (!err) {
           setDb(conn);
-          require("./private/api.js")(app, conn);
+          require("./private/api/api.js")(app, conn);
           console.log("Connected to database.");
         }
         callback(err);

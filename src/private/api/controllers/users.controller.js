@@ -12,9 +12,11 @@ const {
 } = require('../../../constants/strings');
 const ERROR = require('../../errors');
 const emails = require('../../emails');
+const Mailchimp = require('mailchimp-api-v3');
+const mailchimp = new Mailchimp(process.env.MAILCHIMP_API_KEY);
 
 const emailsOn =
-  process.env.NODE_ENV === 'production' || process.argv.includes('--emails');
+    process.env.NODE_ENV === 'production' || process.argv.includes('--emails');
 if (!emailsOn) console.warn('Emails are turned off.');
 
 /** Retrieve all users */
