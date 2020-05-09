@@ -21,7 +21,7 @@ const userReducer = (state = initialUser, action) => {
       user.isAuthenticated = true;
       user.fullname = `${user.firstname} ${user.lastname}`;
       user.isVerified = user.clearance > 1;
-      
+
       return user;
     case 'CLEAR_USER':
       return initialUser;
@@ -43,7 +43,7 @@ const userReducer = (state = initialUser, action) => {
 const defaultSession = {
   view: 'grid',
   sort: '2'
-}
+};
 
 const sessionReducer = (state = defaultSession, action) => {
   switch (action.type) {
@@ -55,7 +55,8 @@ const sessionReducer = (state = defaultSession, action) => {
       return Object.assign({}, state, {
         sort: action.payload
       });
-    default: return state;
+    default:
+      return state;
   }
 };
 
@@ -66,8 +67,8 @@ const defaultTopic = {
     polarity: [],
     misc: []
   },
-  sort: '3',
-}
+  sort: '3'
+};
 
 const topicReducer = (state = defaultTopic, action) => {
   switch (action.type) {
@@ -86,7 +87,7 @@ const topicReducer = (state = defaultTopic, action) => {
 
 const defaultBlackEx = {
   view: '1'
-}
+};
 
 const blackexReducer = (state = defaultBlackEx, action) => {
   switch (action.type) {
@@ -106,11 +107,11 @@ const countryReducer = (state = [], action) => {
     default:
       return state;
   }
-}
+};
 
 const defaultTheme = {
   theme: 'default'
-}
+};
 
 const themeReducer = (state = defaultTheme, action) => {
   switch (action.type) {
@@ -119,7 +120,7 @@ const themeReducer = (state = defaultTheme, action) => {
     default:
       return state;
   }
-}
+};
 
 export default combineReducers({
   user: userReducer,

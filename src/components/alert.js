@@ -30,26 +30,26 @@ export const alert = {
   info: (message) => {
     toast(message, { className: classNames('alert-primary', defaultClasses) });
   }
-}
+};
 
 export const setAlert = (alert) => {
   sessionStorage.setItem('alert', JSON.stringify(alert));
-}
+};
 
 export const checkAlert = () => {
   const notification = JSON.parse(sessionStorage.getItem('alert'));
-  if (notification){
+  if (notification) {
     const { type, message } = notification;
     alert[type](message);
     sessionStorage.clear();
   }
-}
+};
 
 export const displayErrorMessage = (err) => {
-  if (process.env.NODE_ENV !== 'production'){
+  if (process.env.NODE_ENV !== 'production') {
     alert.error(err.toString());
   } else {
     alert.error('Something went wrong. Please try again later.');
     console.error(err.toString());
   }
-}
+};

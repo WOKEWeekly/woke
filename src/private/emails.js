@@ -1,8 +1,8 @@
-const { config } = require('../server.js')
-const dotenv = require('dotenv').config({path: config});
+const { config } = require('../server.js');
 const nodemailer = require('nodemailer');
-
 let { cloudinary, domain, emails } = require('../constants/settings.js');
+
+require('dotenv').config({ path: config });
 
 /** Pass credentials to transporter */
 const transporter = nodemailer.createTransport({
@@ -10,34 +10,37 @@ const transporter = nodemailer.createTransport({
   port: 465,
   auth: {
     user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PWD,
+    pass: process.env.EMAIL_PWD
   }
 });
 
 /*******************************************
-* Email Templates
-*******************************************/
+ * Email Templates
+ *******************************************/
 
 module.exports = (callback, params = []) => {
-
   /** Construct template for emails */
   const sendMail = (to, subject, message) => {
-    transporter.sendMail({
-      from: `#WOKEWeekly Website <${emails.site}>`,
-      to: to,
-      subject: subject,
-      html: message
-    }, function(err){
-      if (callback){
-        err ? callback(err) : callback(null, ...params);
+    transporter.sendMail(
+      {
+        from: `#WOKEWeekly Website <${emails.site}>`,
+        to: to,
+        subject: subject,
+        html: message
+      },
+      function (err) {
+        if (callback) {
+          err ? callback(err) : callback(null, ...params);
+        }
       }
-    });
+    );
   };
 
   return {
     sendWelcomeEmail: (user, token) => {
-      const subject = 'Welcome to our website!'
-      const message = designMessage(`
+      const subject = 'Welcome to our website!';
+      const message = designMessage(
+        `
       Hey ${user.firstname}!
       <br><br>
       
@@ -62,14 +65,17 @@ module.exports = (callback, params = []) => {
       
       We look forward to your interaction with our site or any other enquiries you may have!
       <br><br>
-      `, true);
-      
+      `,
+        true
+      );
+
       sendMail(user.email, subject, message);
     },
 
     resendVerificationEmail: (user, token) => {
-      const subject = 'Account Verification'
-      const message = designMessage(`
+      const subject = 'Account Verification';
+      const message = designMessage(
+        `
       Hey ${user.firstname}!<br><br>
       
       You recently requested to have another verification email sent to you. To verify your account,
@@ -83,14 +89,17 @@ module.exports = (callback, params = []) => {
 
       Please note that this account verification link is only valid for the next 30 minutes.
       <br><br>
-      `, true);
-      
+      `,
+        true
+      );
+
       sendMail(user.email, subject, message);
     },
 
     sendAccountRecoveryEmail: (user, token) => {
-      const subject = 'Account Recovery'
-      const message = designMessage(`
+      const subject = 'Account Recovery';
+      const message = designMessage(
+        `
       Hey ${user.firstname}!
       <br><br>
 
@@ -107,12 +116,13 @@ module.exports = (callback, params = []) => {
       
       Please note that this password reset link is only valid for the next 30 minutes.
       <br><br>
-      `, true);
-      
-      sendMail(user.email, subject, message);
-    },
-  }
+      `,
+        true
+      );
 
+      sendMail(user.email, subject, message);
+    }
+  };
 };
 
 /** Abstraction of message design */
@@ -123,9 +133,8 @@ const designMessage = (content, withFooter) => {
 
     <hr style="margin-top: .8em">
     <img src="${cloudinary.url}/public/logos/email-signature.png" style="width:175px" alt="#WOKEWeekly">
-  `
-  return (
-    `
+  `;
+  return `
     <!DOCTYPE html>
     <html>
       <head>
@@ -143,13 +152,12 @@ const designMessage = (content, withFooter) => {
         </div>
       </div>
     </html>
-    `
-  )
-}
+    `;
+};
 
 /******************************************
-*** CSS Styling
-******************************************/
+ *** CSS Styling
+ ******************************************/
 
 const emailStyle = `
   background: #b894e2;

@@ -1,5 +1,5 @@
 const { WebClient } = require('@slack/web-api');
-const { dev } = require('../server.js');
+const dev = process.env.NODE_ENV !== 'production';
 const token = process.env.SLACK_TOKEN;
 
 const slack = new WebClient(token);
@@ -10,15 +10,15 @@ const channel = dev ? mySlackID : 'general';
 const { zDate } = require('zavid-modules');
 
 module.exports = {
-  sendBirthdayMessage: async(member) => {
+  sendBirthdayMessage: async (member) => {
     const message = constructBirthdayMessage(member);
     await postMessage(message);
   },
-  sendSessionReminder: async(session) => {
+  sendSessionReminder: async (session) => {
     const message = constructSessionReminderMessage(session);
     await postMessage(message);
   }
-}
+};
 
 /**
  * Retrieve a random message from an array of messages;
@@ -27,7 +27,7 @@ module.exports = {
  */
 const getRandomMessage = (messages) => {
   return messages[Math.floor(Math.random() * messages.length)];
-}
+};
 
 /**
  * Post a constructed message to the Slack channel.
@@ -40,7 +40,7 @@ const postMessage = (message) => {
     username: '#WOKEWeekly',
     blocks: [{ type: 'section', text: { type: 'mrkdwn', text: message } }]
   });
-}
+};
 
 /**
  * Constructs the birthday message to be sent.
@@ -50,7 +50,7 @@ const postMessage = (message) => {
 const constructBirthdayMessage = (member) => {
   let pronoun, title;
 
-  if (member.sex === 'M'){
+  if (member.sex === 'M') {
     pronoun = 'his';
     title = 'king';
   } else {
@@ -58,13 +58,8 @@ const constructBirthdayMessage = (member) => {
     title = 'queen';
   }
 
-  const intros = [
-    'Shout out',
-    'Big love',
-    'More life',
-    'Best wishes'
-  ];
-  
+  const intros = ['Shout out', 'Big love', 'More life', 'Best wishes'];
+
   const outros = [
     'Blessings! :heart:',
     'Keep being great! :muscle::skin-tone-5: :raised_hands::skin-tone-5:',
@@ -74,25 +69,30 @@ const constructBirthdayMessage = (member) => {
     'Live it up! :clinking_glasses: :tada:'
   ];
 
-  let message = `${getRandomMessage(intros)} to our ${member.role}, *${member.firstname} ${member.lastname}*, on ${pronoun} birthday! Happy Birthday to you, ${title}! ${getRandomMessage(outros)}`;
+  let message = `${getRandomMessage(intros)} to our ${member.role}, *${
+    member.firstname
+  } ${
+    member.lastname
+  }*, on ${pronoun} birthday! Happy Birthday to you, ${title}! ${getRandomMessage(
+    outros
+  )}`;
 
-  if (member.slackId !== null){
-    message += ` <@${member.slackId}>`
+  if (member.slackId !== null) {
+    message += ` <@${member.slackId}>`;
   }
 
   return message;
-}
+};
 
 /**
  * Constructs the session reminder message to be sent.
  * @param {string} session.title - The title of the session.
  * @returns The constructed message.
  */
-const constructSessionReminderMessage = ({title, timeHeld}) => {
-
+const constructSessionReminderMessage = ({ title, timeHeld }) => {
   // If there is no time set for the session, default to blank
-  if (timeHeld !== null){
-    timeHeld = ` at *${zDate.formatTime(timeHeld)}*`
+  if (timeHeld !== null) {
+    timeHeld = ` at *${zDate.formatTime(timeHeld)}*`;
   } else {
     timeHeld = '';
   }
@@ -108,8 +108,10 @@ const constructSessionReminderMessage = ({title, timeHeld}) => {
     'Do your best, team! :heart:',
     'Represent, team! :call_me_hand::skin-tone-5:',
     'Wish the team luck! :star:',
-    'Let\'s do it! :muscle::skin-tone-5:'
+    "Let's do it! :muscle::skin-tone-5:"
   ];
 
-  return `${getRandomMessage(firstSentences)} ${getRandomMessage(secondSentences)}`;
-}
+  return `${getRandomMessage(firstSentences)} ${getRandomMessage(
+    secondSentences
+  )}`;
+};

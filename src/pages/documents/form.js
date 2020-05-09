@@ -3,29 +3,29 @@ import { Col } from 'react-bootstrap';
 import { connect } from 'react-redux';
 
 import { SubmitButton, CancelButton } from '~/components/button.js';
-import { EventDatePicker } from '~/components/datepicker.js';
-import { TimePicker } from '~/components/timepicker.js';
 import {
 	Heading,
 	Group,
 	Label,
 	TextInput,
-	LongTextArea,
 	FileSelector,
 } from '~/components/form.js';
 import { Shader, Spacer } from '~/components/layout.js';
 
 import CLEARANCES from '~/constants/clearances.js';
-// import { getFilename } from '../../private/filer.js';
 
-import css from '~/styles/pages/Sessions.module.scss';
+import css from '~/styles/pages/Documents.module.scss';
 
-class SessionForm extends Component {
+class DocumentForm extends Component {
 	constructor(props) {
 		super(props);
 
-		if (props.user.clearance < CLEARANCES.ACTIONS.CRUD_SESSIONS) {
-			return (location.href = '/sessions');
+		this.state = {
+			authors: [],
+		};
+
+		if (props.user.clearance < CLEARANCES.ACTIONS.CRUD_DOCUMENTS) {
+			return (location.href = '/');
 		}
 	}
 
@@ -38,14 +38,8 @@ class SessionForm extends Component {
 			handlers,
 			operation,
 		} = this.props;
-		const { handleText, handleDate, handleTime, handleFile } = handlers;
-		const {
-			title,
-			dateHeld,
-			timeHeld,
-			description,
-			image,
-		} = this.props.session;
+		const { handleText, handleFile } = handlers;
+		const { title, file } = this.props.document;
 
 		return (
 			<Shader>
@@ -54,7 +48,7 @@ class SessionForm extends Component {
 						<Heading>{heading}</Heading>
 
 						<Group>
-							<Col md={6}>
+							<Col>
 								<Label>Title:</Label>
 								<TextInput
 									name={'title'}
@@ -63,41 +57,13 @@ class SessionForm extends Component {
 									placeholder={'Enter the title.'}
 								/>
 							</Col>
-							<Col md={4}>
-								<Label>Date Held:</Label>
-								<EventDatePicker
-									name={'dateHeld'}
-									date={dateHeld}
-									onConfirm={handleDate}
-								/>
-							</Col>
-							<Col md={2}>
-								<Label>Time Held:</Label>
-								<TimePicker
-									name={'timeHeld'}
-									time={timeHeld}
-									onConfirm={handleTime}
-								/>
-							</Col>
-						</Group>
-						<Group>
-							<Col>
-								<Label>Description:</Label>
-								<LongTextArea
-									name={'description'}
-									value={description}
-									onChange={handleText}
-									placeholder={'Enter the description.'}
-								/>
-							</Col>
 						</Group>
 						<Group>
 							<Col>
 								<FileSelector
-									image={image}
-									directory={`sessions`}
+									image={file}
 									operation={operation}
-									onChange={handleFile}
+									onChange={e => handleFile(e, 'file')}
 								/>
 							</Col>
 						</Group>
@@ -123,4 +89,4 @@ const mapStateToProps = state => ({
 	user: state.user,
 });
 
-export default connect(mapStateToProps)(SessionForm);
+export default connect(mapStateToProps)(DocumentForm);

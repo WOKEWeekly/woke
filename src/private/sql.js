@@ -6,19 +6,32 @@ const JOINS = {
   CANDIDATES_MEMBERS: `CONCAT(members.firstname, ' ', members.lastname) AS authorName,
     members.level AS authorLevel, members.slug AS authorSlug, members.image AS authorImage,
     members.description AS authorDescription, members.socials AS authorSocials
-    FROM candidates LEFT JOIN members ON candidates.authorId=members.id`,
+    FROM candidates LEFT JOIN members ON candidates.authorId=members.id`
 };
 
 const ARTICLES = {
-
   /**
    * Constructs the SQL statement to create an article.
    * @param {object} article - The object containing the article details.
    * @returns {object} The SQL statement and the values.
    */
   CREATE: (article) => {
-    const sql = "INSERT INTO articles (title, content, category, excerpt, tags, slug, image, authorId, status, datePublished) VALUES ?";
-    const values = [[article.title, article.content, article.category, article.excerpt, article.tags, article.slug, article.image, article.authorId, article.status, article.datePublished]];
+    const sql =
+      'INSERT INTO articles (title, content, category, excerpt, tags, slug, image, authorId, status, datePublished) VALUES ?';
+    const values = [
+      [
+        article.title,
+        article.content,
+        article.category,
+        article.excerpt,
+        article.tags,
+        article.slug,
+        article.image,
+        article.authorId,
+        article.status,
+        article.datePublished
+      ]
+    ];
     return { sql, values };
   },
   READ: {
@@ -28,7 +41,7 @@ const ARTICLES = {
      * @returns {string} The constructed statement.
      */
     ALL: (fields = '*') => {
-      return `SELECT articles.${fields}, ${JOINS.ARTICLES_MEMBERS};`
+      return `SELECT articles.${fields}, ${JOINS.ARTICLES_MEMBERS};`;
     },
 
     PUBLISHED: ({ fields = '*', limit, order }) => {
@@ -62,7 +75,7 @@ const ARTICLES = {
     SINGLE: (condition, fields = '*') => {
       const sql = `SELECT articles.${fields}, ${JOINS.ARTICLES_MEMBERS} WHERE articles.${condition} = ?`;
       return sql;
-    },
+    }
   },
 
   /**
@@ -74,10 +87,22 @@ const ARTICLES = {
    * @returns {object} The SQL statement and the values.
    */
   UPDATE: (id, article, imageHasChanged) => {
-    let sql = "UPDATE articles SET title = ?, content = ?, category = ?, excerpt = ?, tags = ?, slug = ?, authorId = ?, status = ?, datePublished = ? WHERE id = ?";
-    let values = [article.title, article.content, article.category, article.excerpt, article.tags, article.slug, article.authorId, article.status, article.datePublished, id];
+    let sql =
+      'UPDATE articles SET title = ?, content = ?, category = ?, excerpt = ?, tags = ?, slug = ?, authorId = ?, status = ?, datePublished = ? WHERE id = ?';
+    let values = [
+      article.title,
+      article.content,
+      article.category,
+      article.excerpt,
+      article.tags,
+      article.slug,
+      article.authorId,
+      article.status,
+      article.datePublished,
+      id
+    ];
 
-    if (imageHasChanged){
+    if (imageHasChanged) {
       sql = appendFieldToUpdateQuery('image', sql);
       values = insertFieldInValues(article.image, values);
     }
@@ -86,7 +111,7 @@ const ARTICLES = {
   },
 
   /** The SQL statement to delete an article. */
-  DELETE: "DELETE FROM articles WHERE id = ?"
+  DELETE: 'DELETE FROM articles WHERE id = ?'
 };
 
 const SESSIONS = {
@@ -96,14 +121,24 @@ const SESSIONS = {
    * @returns {object} The SQL statement and the values.
    */
   CREATE: (session) => {
-    const sql = "INSERT INTO sessions (title, dateHeld, timeHeld, image, slug, description) VALUES ?";
-    const values = [[session.title, session.dateHeld, session.timeHeld, session.image, session.slug, session.description]];
+    const sql =
+      'INSERT INTO sessions (title, dateHeld, timeHeld, image, slug, description) VALUES ?';
+    const values = [
+      [
+        session.title,
+        session.dateHeld,
+        session.timeHeld,
+        session.image,
+        session.slug,
+        session.description
+      ]
+    ];
     return { sql, values };
   },
 
   READ: {
     /** The SQL statement to return all sessions. */
-    ALL: "SELECT * FROM sessions",
+    ALL: 'SELECT * FROM sessions',
 
     /**
      * Constructs the SQL statement to return information for a single
@@ -118,10 +153,11 @@ const SESSIONS = {
     },
 
     /** The SQL statement to return a random upcoming session. */
-    UPCOMING: "SELECT * FROM sessions WHERE dateheld > NOW() ORDER BY RAND() LIMIT 1",
+    UPCOMING:
+      'SELECT * FROM sessions WHERE dateheld > NOW() ORDER BY RAND() LIMIT 1',
 
     /** The SQL statement to return the latest session. */
-    LATEST: "SELECT * FROM sessions ORDER BY dateHeld DESC LIMIT 1",
+    LATEST: 'SELECT * FROM sessions ORDER BY dateHeld DESC LIMIT 1'
   },
 
   /**
@@ -133,10 +169,18 @@ const SESSIONS = {
    * @returns {object} The SQL statement and the values.
    */
   UPDATE: (id, session, imageHasChanged) => {
-    let sql = "UPDATE sessions SET title = ?, dateHeld = ?, timeHeld = ?, slug = ?, description = ? WHERE id = ?";
-    let values = [session.title, session.dateHeld, session.timeHeld, session.slug, session.description, id];
+    let sql =
+      'UPDATE sessions SET title = ?, dateHeld = ?, timeHeld = ?, slug = ?, description = ? WHERE id = ?';
+    let values = [
+      session.title,
+      session.dateHeld,
+      session.timeHeld,
+      session.slug,
+      session.description,
+      id
+    ];
 
-    if (imageHasChanged){
+    if (imageHasChanged) {
       sql = appendFieldToUpdateQuery('image', sql);
       values = insertFieldInValues(session.image, values);
     }
@@ -145,7 +189,7 @@ const SESSIONS = {
   },
 
   /** The SQL statement to delete a session. */
-  DELETE: "DELETE FROM sessions WHERE id = ?"
+  DELETE: 'DELETE FROM sessions WHERE id = ?'
 };
 
 const CANDIDATES = {
@@ -155,17 +199,30 @@ const CANDIDATES = {
    * @returns {object} The SQL statement and the values.
    */
   CREATE: (candidate) => {
-    const sql = "INSERT INTO candidates (id, name, image, birthday, ethnicity, socials, occupation, description, authorId, dateWritten) VALUES ?";
-    const values = [[candidate.id, candidate.name, candidate.image, candidate.birthday, candidate.ethnicity, candidate.socials, candidate.occupation, candidate.description, candidate.authorId, candidate.dateWritten]];
+    const sql =
+      'INSERT INTO candidates (id, name, image, birthday, ethnicity, socials, occupation, description, authorId, dateWritten) VALUES ?';
+    const values = [
+      [
+        candidate.id,
+        candidate.name,
+        candidate.image,
+        candidate.birthday,
+        candidate.ethnicity,
+        candidate.socials,
+        candidate.occupation,
+        candidate.description,
+        candidate.authorId,
+        candidate.dateWritten
+      ]
+    ];
     return { sql, values };
   },
   READ: {
-
     /** The SQL statement to return all candidates. */
-    ALL: "SELECT * FROM candidates",
+    ALL: 'SELECT * FROM candidates',
 
     /** The SQL statement to return a random candidate. */
-    RANDOM: "SELECT * FROM candidates ORDER BY RAND() LIMIT 1",
+    RANDOM: 'SELECT * FROM candidates ORDER BY RAND() LIMIT 1',
 
     /**
      * Constructs the SQL statement to return information for a single candidate.
@@ -178,7 +235,7 @@ const CANDIDATES = {
     },
 
     /** The SQL statement to return the latest candidate. */
-    LATEST: "SELECT * FROM candidates ORDER BY id DESC LIMIT 1",
+    LATEST: 'SELECT * FROM candidates ORDER BY id DESC LIMIT 1'
   },
 
   /**
@@ -189,10 +246,22 @@ const CANDIDATES = {
    * @returns {object} The SQL statement and the values.
    */
   UPDATE: (id, candidate, imageHasChanged) => {
-    let sql = "UPDATE candidates SET id = ?, name = ?, birthday = ?, ethnicity = ?, socials = ?, occupation = ?, description = ?, authorId = ?, dateWritten = ? WHERE id = ?";
-    let values = [candidate.id, candidate.name, candidate.birthday, candidate.ethnicity, candidate.socials, candidate.occupation, candidate.description, candidate.authorId, candidate.dateWritten, id];
+    let sql =
+      'UPDATE candidates SET id = ?, name = ?, birthday = ?, ethnicity = ?, socials = ?, occupation = ?, description = ?, authorId = ?, dateWritten = ? WHERE id = ?';
+    let values = [
+      candidate.id,
+      candidate.name,
+      candidate.birthday,
+      candidate.ethnicity,
+      candidate.socials,
+      candidate.occupation,
+      candidate.description,
+      candidate.authorId,
+      candidate.dateWritten,
+      id
+    ];
 
-    if (imageHasChanged){
+    if (imageHasChanged) {
       sql = appendFieldToUpdateQuery('image', sql);
       values = insertFieldInValues(candidate.image, values);
     }
@@ -201,7 +270,7 @@ const CANDIDATES = {
   },
 
   /** The SQL statement to delete a candidate. */
-  DELETE: "DELETE FROM candidates WHERE id = ?"
+  DELETE: 'DELETE FROM candidates WHERE id = ?'
 };
 
 const MEMBERS = {
@@ -211,8 +280,26 @@ const MEMBERS = {
    * @returns {object} The SQL statement and the values.
    */
   CREATE: (member) => {
-    const sql = "INSERT INTO members (firstname, lastname, image, level, birthday, sex, role, ethnicity, socials, slug, description, verified, slackId, isAuthor) VALUES ?";
-    const values = [[member.firstname, member.lastname, member.image, member.level, member.birthday, member.sex, member.role, member.ethnicity, member.socials, member.slug, member.description, member.verified, member.slackId, member.isAuthor]];
+    const sql =
+      'INSERT INTO members (firstname, lastname, image, level, birthday, sex, role, ethnicity, socials, slug, description, verified, slackId, isAuthor) VALUES ?';
+    const values = [
+      [
+        member.firstname,
+        member.lastname,
+        member.image,
+        member.level,
+        member.birthday,
+        member.sex,
+        member.role,
+        member.ethnicity,
+        member.socials,
+        member.slug,
+        member.description,
+        member.verified,
+        member.slackId,
+        member.isAuthor
+      ]
+    ];
     return { sql, values };
   },
   READ: {
@@ -236,16 +323,18 @@ const MEMBERS = {
     },
 
     /** The SQL statement to return a random verified member. */
-    RANDOM: "SELECT * FROM members WHERE verified = 1 ORDER BY RAND() LIMIT 1",
+    RANDOM: 'SELECT * FROM members WHERE verified = 1 ORDER BY RAND() LIMIT 1',
 
     /** The SQL statement to retrieve all executive members. */
-    AUTHORS: "SELECT * FROM members WHERE isAuthor = 1",
+    AUTHORS: 'SELECT * FROM members WHERE isAuthor = 1',
 
     /** The SQL statement to retrieve all executive members. */
-    EXECUTIVES: "SELECT * FROM members WHERE level = 'Executive' AND verified = 1",
+    EXECUTIVES:
+      "SELECT * FROM members WHERE level = 'Executive' AND verified = 1",
 
-    SLUG: "SELECT * FROM members WHERE slug = ?",
-    EXECUTIVES_SLUG: "SELECT * FROM members WHERE slug = ? AND level = 'Executive' AND verified = 1"
+    SLUG: 'SELECT * FROM members WHERE slug = ?',
+    EXECUTIVES_SLUG:
+      "SELECT * FROM members WHERE slug = ? AND level = 'Executive' AND verified = 1"
   },
   /**
    * Constructs the SQL statement to update a member.
@@ -256,19 +345,36 @@ const MEMBERS = {
    * @returns {object} The SQL statement and the values.
    */
   UPDATE: (id, member, imageHasChanged) => {
-    let sql = "UPDATE members SET firstname = ?, lastname = ?, image = ?, level = ?, birthday = ?, sex = ?, role = ?, ethnicity = ?, socials = ?, slug = ?, description = ?, verified = ?, slackId = ?, isAuthor = ? WHERE id = ?";
-    let values = [member.firstname, member.lastname, member.image, member.level, member.birthday, member.sex, member.role, member.ethnicity, member.socials, member.slug, member.description, member.verified, member.slackId, member.isAuthor, id];
+    let sql =
+      'UPDATE members SET firstname = ?, lastname = ?, image = ?, level = ?, birthday = ?, sex = ?, role = ?, ethnicity = ?, socials = ?, slug = ?, description = ?, verified = ?, slackId = ?, isAuthor = ? WHERE id = ?';
+    let values = [
+      member.firstname,
+      member.lastname,
+      member.image,
+      member.level,
+      member.birthday,
+      member.sex,
+      member.role,
+      member.ethnicity,
+      member.socials,
+      member.slug,
+      member.description,
+      member.verified,
+      member.slackId,
+      member.isAuthor,
+      id
+    ];
 
-    if (imageHasChanged){
+    if (imageHasChanged) {
       sql = appendFieldToUpdateQuery('image', sql);
       values = insertFieldInValues(member.image, values);
     }
 
     return { sql, values };
   },
-  
+
   /** The SQL statement to delete a member. */
-  DELETE: "DELETE FROM members WHERE id = ?"
+  DELETE: 'DELETE FROM members WHERE id = ?'
 };
 
 const TOPICS = {
@@ -278,8 +384,23 @@ const TOPICS = {
    * @returns {object} The SQL statement and the values.
    */
   CREATE: (topic) => {
-    const sql = "INSERT INTO topics (headline, category, question, description, type, polarity, validated, sensitivity, option1, option2, userId) VALUES ?";
-    const values = [[topic.headline, topic.category, topic.question, topic.description, topic.type, topic.polarity, topic.validated, topic.sensitivity, topic.option1, topic.option2, topic.userId]];
+    const sql =
+      'INSERT INTO topics (headline, category, question, description, type, polarity, validated, sensitivity, option1, option2, userId) VALUES ?';
+    const values = [
+      [
+        topic.headline,
+        topic.category,
+        topic.question,
+        topic.description,
+        topic.type,
+        topic.polarity,
+        topic.validated,
+        topic.sensitivity,
+        topic.option1,
+        topic.option2,
+        topic.userId
+      ]
+    ];
     return { sql, values };
   },
   READ: {
@@ -303,7 +424,8 @@ const TOPICS = {
     },
 
     /** The SQL statement to return a random topic. */
-    RANDOM: "SELECT id, headline, category, question, option1, option2, yes, no FROM topics WHERE polarity = 1 AND category != 'Christian' AND category != 'Mental Health' ORDER BY RAND() LIMIT 1;",
+    RANDOM:
+      "SELECT id, headline, category, question, option1, option2, yes, no FROM topics WHERE polarity = 1 AND category != 'Christian' AND category != 'Mental Health' ORDER BY RAND() LIMIT 1;",
 
     /**
      * Constructs the SQL statement and values required to
@@ -327,7 +449,19 @@ const TOPICS = {
      */
     DETAILS: (id, topic) => {
       const sql = `UPDATE topics SET headline = ?, category = ?, question = ?, description = ?, type = ?, polarity = ?, validated = ?, sensitivity = ?, option1 = ?, option2 = ? WHERE id = ?`;
-      const values = [topic.headline, topic.category, topic.question, topic.description, topic.type, topic.polarity, topic.validated, topic.sensitivity, topic.option1, topic.option2, id];
+      const values = [
+        topic.headline,
+        topic.category,
+        topic.question,
+        topic.description,
+        topic.type,
+        topic.polarity,
+        topic.validated,
+        topic.sensitivity,
+        topic.option1,
+        topic.option2,
+        id
+      ];
       return { sql, values };
     },
 
@@ -344,7 +478,7 @@ const TOPICS = {
   },
 
   /** The SQL statement to delete a member. */
-  DELETE: "DELETE FROM topics WHERE id = ?"
+  DELETE: 'DELETE FROM topics WHERE id = ?'
 };
 
 const REVIEWS = {
@@ -354,8 +488,17 @@ const REVIEWS = {
    * @returns {object} The SQL statement and the values.
    */
   CREATE: (review) => {
-    const sql = "INSERT INTO reviews (referee, position, rating, image, description) VALUES ?";
-    const values = [[review.referee, review.position, review.rating, review.image, review.description]];
+    const sql =
+      'INSERT INTO reviews (referee, position, rating, image, description) VALUES ?';
+    const values = [
+      [
+        review.referee,
+        review.position,
+        review.rating,
+        review.image,
+        review.description
+      ]
+    ];
     return { sql, values };
   },
   READ: {
@@ -369,7 +512,8 @@ const REVIEWS = {
     },
 
     /** The SQL statement to return three 5-star reviews with images. */
-    FEATURED: "SELECT * FROM reviews WHERE (rating = 5 AND CHAR_LENGTH(image) > 0) ORDER BY RAND() LIMIT 3",
+    FEATURED:
+      'SELECT * FROM reviews WHERE (rating = 5 AND CHAR_LENGTH(image) > 0) ORDER BY RAND() LIMIT 3',
 
     /**
      * Constructs the SQL statement to return information for a single review.
@@ -379,7 +523,7 @@ const REVIEWS = {
     SINGLE: (fields = '*') => {
       const sql = `SELECT ${fields} FROM reviews WHERE ID = ?`;
       return sql;
-    },
+    }
   },
 
   /**
@@ -390,10 +534,18 @@ const REVIEWS = {
    * @returns {object} The SQL statement and the values.
    */
   UPDATE: (id, review, imageHasChanged) => {
-    let sql = "UPDATE reviews SET referee = ?, position = ?, rating = ?, image = ?, description = ? WHERE id = ?";
-    let values = [review.referee, review.position, review.rating, review.image, review.description, id];
+    let sql =
+      'UPDATE reviews SET referee = ?, position = ?, rating = ?, image = ?, description = ? WHERE id = ?';
+    let values = [
+      review.referee,
+      review.position,
+      review.rating,
+      review.image,
+      review.description,
+      id
+    ];
 
-    if (imageHasChanged){
+    if (imageHasChanged) {
       sql = appendFieldToUpdateQuery('image', sql);
       values = insertFieldInValues(review.image, values);
     }
@@ -402,7 +554,7 @@ const REVIEWS = {
   },
 
   /** The SQL statement to delete a review. */
-  DELETE: "DELETE FROM reviews WHERE id = ?"
+  DELETE: 'DELETE FROM reviews WHERE id = ?'
 };
 
 const USERS = {
@@ -412,8 +564,11 @@ const USERS = {
    * @returns {object} The SQL statement and the values.
    */
   CREATE: (user, hash) => {
-    const sql = "INSERT INTO users (firstname, lastname, clearance, email, username, password) VALUES ?";
-    const values = [[user.firstname, user.lastname, 1, user.email, user.username, hash]];
+    const sql =
+      'INSERT INTO users (firstname, lastname, clearance, email, username, password) VALUES ?';
+    const values = [
+      [user.firstname, user.lastname, 1, user.email, user.username, hash]
+    ];
     return { sql, values };
   },
 
@@ -457,7 +612,7 @@ const USERS = {
     SINGLE: (fields = '*') => {
       const sql = `SELECT ${fields} FROM users WHERE ID = ?`;
       return sql;
-    },
+    }
   },
 
   /**
@@ -473,9 +628,9 @@ const USERS = {
   },
 
   /** The SQL statement to delete a user. */
-  DELETE: "DELETE FROM users WHERE id = ?",
+  DELETE: 'DELETE FROM users WHERE id = ?',
 
-  CLEAR: "DELETE FROM users WHERE id > 2"
+  CLEAR: 'DELETE FROM users WHERE id > 2'
 };
 
 const PAGES = {
@@ -486,7 +641,7 @@ const PAGES = {
    * @returns {object} The SQL statement and the values.
    */
   UPDATE: (page, text) => {
-    const sql = "UPDATE pages SET text = ?, lastModified = ? WHERE name = ?";
+    const sql = 'UPDATE pages SET text = ?, lastModified = ? WHERE name = ?';
     const values = [text, new Date(), page];
     return { sql, values };
   }
@@ -500,9 +655,9 @@ const TOKENS = {
 
 const ALL = {
   RENUMBER_IDS: (table) => {
-    const sql = `SET @id:=0; UPDATE ${table} SET id = @id:=(@id+1); ALTER TABLE ${table} AUTO_INCREMENT = 1;`
+    const sql = `SET @id:=0; UPDATE ${table} SET id = @id:=(@id+1); ALTER TABLE ${table} AUTO_INCREMENT = 1;`;
     return sql;
-  },
+  }
 };
 
 module.exports = {
@@ -534,7 +689,7 @@ const appendFieldToUpdateQuery = (field, statement) => {
   ].join('');
 
   return query;
-}
+};
 
 /**
  * Inserts a new field value into an array of values.
@@ -545,7 +700,7 @@ const appendFieldToUpdateQuery = (field, statement) => {
 const insertFieldInValues = (value, array) => {
   array.splice(array.length - 1, 0, value);
   return array;
-}
+};
 
 /**
  * Generate a random string of alphanumeric characters.
@@ -553,7 +708,8 @@ const insertFieldInValues = (value, array) => {
  * @returns {string} The generated string.
  */
 const generateRandomString = (length) => {
-  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  const characters =
+    'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
   const charactersLength = characters.length;
 
   let result = '';
@@ -561,4 +717,4 @@ const generateRandomString = (length) => {
     result += characters.charAt(Math.floor(Math.random() * charactersLength));
   }
   return result;
-}
+};

@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import Link from 'next/link';
 import classNames from 'classnames';
 
 import { Icon } from '~/components/icon.js';
@@ -8,60 +7,54 @@ import { cloudinary } from '~/constants/settings.js';
 import css from '~/styles/components/Text.module.scss';
 
 export class Title extends Component {
-  render(){
+  render() {
     const classes = classNames(css.title, this.props.className);
     return (
-      <div
-        {...this.props}
-        className={classes}>
+      <div {...this.props} className={classes}>
         {this.props.children}
       </div>
-    )
+    );
   }
 }
 
 export class Subtitle extends Component {
-  render(){
+  render() {
     const classes = classNames(css.subtitle, this.props.className);
     return (
-      <div
-        {...this.props}
-        className={classes}>
+      <div {...this.props} className={classes}>
         {this.props.children}
       </div>
-    )
+    );
   }
 }
 
 export class IParagraph extends Component {
-  render(){
+  render() {
     let { children = '', substitutions, theme, link, moretext } = this.props;
     const classes = classNames(css.paragraph, this.props.className);
 
-	  children = applySubstitutions(children, substitutions);
+    children = applySubstitutions(children, substitutions);
     children = prefixFormatting(children, css[`link-${theme.toLowerCase()}`]);
 
     const ReadMoreLabel = () => {
       if (!moretext) return null;
       if (moretext === true) moretext = null;
       return <ReadMore link={link} text={moretext} />;
-    }
+    };
 
     return (
       <React.Fragment>
-        <pre
-          {...this.props}
-          className={classes}>
+        <pre {...this.props} className={classes}>
           {children}
         </pre>
-        <ReadMoreLabel/>
+        <ReadMoreLabel />
       </React.Fragment>
-    )
+    );
   }
 }
 
 export class QuoteWrapper extends Component {
-  render(){
+  render() {
     return (
       <div className={css.quoteWrapper}>
         {/* <div><Icon name={'quote-left'} className={css.quotes} /></div> */}
@@ -74,33 +67,48 @@ export class QuoteWrapper extends Component {
 }
 
 export class Divider extends Component {
-  render(){
+  render() {
     const classes = classNames(css.divider, this.props.className);
-    return <hr className={classes} style={this.props.style} />
+    return <hr className={classes} style={this.props.style} />;
   }
 }
 
 export class ReadMore extends Component {
-  render(){
+  render() {
     const { link, text = 'Read more' } = this.props;
     return (
-      <Link href={link}>
+      <VanillaLink href={link}>
         <div className={css.readmore}>
-          <Icon name={'external-link-alt'} className={css.linkIcon} />{text}
+          <Icon name={'external-link-alt'} className={css.linkIcon} />
+          {text}
         </div>
-      </Link>
-    )
+      </VanillaLink>
+    );
   }
 }
 
 export class ExpandText extends Component {
-  render(){
+  render() {
     const { text = 'Read more...', onClick } = this.props;
     return (
-      <button className={css.invisible_button} onClick={onClick} style={{padding: 0}}>
+      <button
+        className={css.invisible_button}
+        onClick={onClick}
+        style={{ padding: 0 }}>
         <div className={css.expandText}>{text}</div>
       </button>
-    )
+    );
+  }
+}
+
+export class VanillaLink extends Component {
+  render() {
+    const { href, children } = this.props;
+    return (
+      <a className={css.noUnderline} href={href}>
+        {children}
+      </a>
+    );
   }
 }
 
@@ -109,7 +117,7 @@ export class ExpandText extends Component {
  * Text needs this formatting first before markdown formatting is applied.
  * @param {string} text - The text to which hierarchical formatting will be applied.
  * @param {Object} hyperlinkClass - The CSS class to be passed into the next function.
- * @returns The text with formatting applied. 
+ * @returns The text with formatting applied.
  */
 const prefixFormatting = (text, hyperlinkClass) => {
   if (text === null) return '';
@@ -117,45 +125,63 @@ const prefixFormatting = (text, hyperlinkClass) => {
   return text.split('\n').map((paragraph, key) => {
     if (paragraph.length === 0) return null;
 
-    switch (paragraph.charAt(0)){
+    switch (paragraph.charAt(0)) {
       // For headings
-      case '*': return <div className={css.heading} key={key}>{paragraph.substring(1)}</div>;
+      case '*':
+        return (
+          <div className={css.heading} key={key}>
+            {paragraph.substring(1)}
+          </div>
+        );
 
       // For subheadings
-      case '>': return <div className={css.subheading} key={key}>{paragraph.substring(1)}</div>;
+      case '>':
+        return (
+          <div className={css.subheading} key={key}>
+            {paragraph.substring(1)}
+          </div>
+        );
 
       // For images
       case ';':
         const isFullImage = paragraph.charAt(1) === ';';
         const imageType = isFullImage ? 'fullImage' : 'floatImage';
         const offset = isFullImage ? 2 : 1;
-        
+
         return (
           <div className={css[imageType]} key={key}>
-            <img src={`${cloudinary.url}/public/fillers/${paragraph.substring(offset)}`} />
+            <img
+              src={`${cloudinary.url}/public/fillers/${paragraph.substring(
+                offset
+              )}`}
+            />
           </div>
         );
 
       // For dividers
-      case '_': return (
-        <Divider key={key} style={{margin: '2rem 0 1rem'}}/>
-      );
+      case '_':
+        return <Divider key={key} style={{ margin: '2rem 0 1rem' }} />;
 
       // For list items
-      case '•': return (
-        <div className={css.listitem} key={key}>
-          <span>●</span>
-          <span>{applyFormatting(paragraph.substring(1).trim())}</span>
-        </div>
-      );
+      case '•':
+        return (
+          <div className={css.listitem} key={key}>
+            <span>●</span>
+            <span>{applyFormatting(paragraph.substring(1).trim())}</span>
+          </div>
+        );
 
       // For normal paragraph text
       default:
         const finalText = applyFormatting(paragraph, hyperlinkClass);
-        return <p className={css.body} key={key}>{finalText}</p>;
+        return (
+          <p className={css.body} key={key}>
+            {finalText}
+          </p>
+        );
     }
   });
-}
+};
 
 /**
  * Apply markdown-like formatting to text.
@@ -166,18 +192,22 @@ const prefixFormatting = (text, hyperlinkClass) => {
 const applyFormatting = (text, hyperlinkClass) => {
   if (text === null) return '';
 
-  const boldRegex = new RegExp(/(\*\*.*?\*\*)/); // Regex for bold text
   const linkRegex = new RegExp(/\<\[(.*?)\]\s(.*?)\>/); // Regex for links
+  const boldRegex = new RegExp(/(\*\*.*?\*\*)/); // Regex for bold text
 
   const regexArray = [linkRegex.source, boldRegex.source];
   const combined = new RegExp(regexArray.join('|'), 'g');
 
-  const parts = text.split(combined).filter(e => e != null);
+  const parts = text.split(combined).filter((e) => e != null);
 
   const finalText = parts.map((partText, count, array) => {
     // Bold text
-    if (boldRegex.test(partText)){
-      return <strong key={count}>{partText.substring(2, partText.length - 2)}</strong>;
+    if (boldRegex.test(partText)) {
+      return (
+        <strong key={count}>
+          {partText.substring(2, partText.length - 2)}
+        </strong>
+      );
     }
 
     // Hyperlink text
@@ -185,38 +215,40 @@ const applyFormatting = (text, hyperlinkClass) => {
       partText.startsWith('/') ||
       partText.startsWith('mailto:') ||
       partText.startsWith('http')
-    ){
+    ) {
       array.splice(count, 1);
       return (
-      <a
-        target={'_blank'}
-        rel={'noreferrer'}
-        href={partText}
-        key={count}
-        className={hyperlinkClass}>{array[count]}</a>
-      )
+        <a
+          target={'_blank'}
+          rel={'noopener noreferrer'}
+          href={partText}
+          key={count}
+          className={hyperlinkClass}>
+          {array[count]}
+        </a>
+      );
     } else {
       return partText;
     }
   });
 
-  return finalText
-}
+  return finalText;
+};
 
 /**
  * Apply the variable substitutions to the text, swapping our placeholders for
- * dynamic values. 
+ * dynamic values.
  * @param {string} text - The original text containing the variables to be substituted.
  * @param {Object} substitutions - The mapping specifying the values to substitute the placeholder variables.
  * @returns The full text with variables substitutions applied.
  */
 const applySubstitutions = (text, substitutions) => {
-  if (text !== null){
+  if (text !== null) {
     const subRegex = new RegExp(/\<\$(.*?)\$\>/g); // Regex for substitutions
     text = text.replace(subRegex, (match, p1) => substitutions[p1]);
   }
-	return text;
-}
+  return text;
+};
 
 /**
  * Truncate a piece of text to a certain number of words.
@@ -227,30 +259,34 @@ const applySubstitutions = (text, substitutions) => {
 export const truncateText = (text, limit = 45) => {
   if (!text) return '';
 
-  const parts = text.split(' ').map(paragraph => {
+  const parts = text.split(' ').map((paragraph) => {
     if (paragraph.length === 0) return null;
 
-    switch (paragraph.charAt(0)){
-      case '*': return null;                    // For headings
-      case '>': return paragraph.substring(1);  // For subheadings
-      case ';': return null;                    // For images
-      case '•': return paragraph;               // For list items
+    switch (paragraph.charAt(0)) {
+      case '*':
+        return null; // For headings
+      case '>':
+        return paragraph.substring(1); // For subheadings
+      case ';':
+        return null; // For images
+      case '•':
+        return paragraph; // For list items
 
       // Normal paragraph text
       default:
-        const linkRegex = new RegExp(/\<\[(.*?)\]\s(.*?)\>/g);  // Regular expression for links
-        const subRegex = new RegExp(/\<\$(.*?)\$\>/g);          // Regular expression for substitutions
+        const linkRegex = new RegExp(/\<\[(.*?)\]\s(.*?)\>/g); // Regular expression for links
+        const subRegex = new RegExp(/\<\$(.*?)\$\>/g); // Regular expression for substitutions
         return paragraph.replace(subRegex, null).replace(linkRegex, '$1');
     }
   });
 
-  const words = parts.filter(e => e != null);
+  const words = parts.filter((e) => e != null);
   text = words.slice(0, limit).join(' ');
-  
+
   if (words.length <= limit) return text;
 
   return `${text}....`;
-}
+};
 
 /**
  * // TODO: Abstract this and other text functions into separate file.
@@ -261,28 +297,32 @@ export const truncateText = (text, limit = 45) => {
 export const createExcerpt = (text) => {
   if (!text) text = '';
 
-  const parts = text.split('\n').map(paragraph => {
+  const parts = text.split('\n').map((paragraph) => {
     if (paragraph.length === 0) return null;
 
-    switch (paragraph.charAt(0)){
-      case '*': return null;                    // For headings
-      case '>': return paragraph.substring(1);  // For subheadings
-      case ';': return null;                    // For images
-      case '•': return paragraph;               // For list items
+    switch (paragraph.charAt(0)) {
+      case '*':
+        return null; // For headings
+      case '>':
+        return paragraph.substring(1); // For subheadings
+      case ';':
+        return null; // For images
+      case '•':
+        return paragraph; // For list items
 
       // Normal paragraph text
       default:
-        const linkRegex = new RegExp(/\<\[(.*?)\]\s(.*?)\>/g);  // Regular expression for links
-        const subRegex = new RegExp(/\<\$(.*?)\$\>/g);          // Regular expression for substitutions
+        const linkRegex = new RegExp(/\<\[(.*?)\]\s(.*?)\>/g); // Regular expression for links
+        const subRegex = new RegExp(/\<\$(.*?)\$\>/g); // Regular expression for substitutions
         return paragraph.replace(subRegex, null).replace(linkRegex, '$1');
     }
   });
 
-  text = parts.filter(e => e != null);
+  text = parts.filter((e) => e != null);
   return text[0];
-}
+};
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   theme: state.theme
 });
 

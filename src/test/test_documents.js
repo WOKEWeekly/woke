@@ -1,38 +1,51 @@
 const { assert, request, HEADERS } = require('./configuration/constants.js');
-const { TEST_REVIEWS, TEST_USERS } = require('./configuration/data.js');
+const { TEST_DOCUMENTS, TEST_USERS } = require('./configuration/data.js');
 
 const superuser = TEST_USERS.NINE;
 
-let REVIEW_ID = 0;
+let DOCUMENT_ID = 0;
 
-describe('Review Tests', function () {
+describe('Document Tests', function () {
   this.slow(10000);
 
-  /** Test creating a new review */
+  /** Test creation of documents */
   describe('Create', function () {
-    it('Add review', function (done) {
+    it('Add new document', function (done) {
       request({
-        url: `/api/v1/reviews`,
+        url: `/api/v1/documents`,
         method: 'POST',
-        body: JSON.stringify(TEST_REVIEWS.CREATED),
+        body: JSON.stringify(TEST_DOCUMENTS.CREATED),
         headers: HEADERS.TOKEN(superuser),
         done,
         onSuccess: ({ status, data }) => {
           assert.equal(status, 201);
           assert.hasAllKeys(data, ['id']);
-          REVIEW_ID = data.id;
+          DOCUMENT_ID = data.id;
+        }
+      });
+    });
+
+    it('Attempt add duplicate document name', function (done) {
+      request({
+        url: `/api/v1/documents`,
+        method: 'POST',
+        body: JSON.stringify(TEST_DOCUMENTS.CREATED),
+        headers: HEADERS.TOKEN(superuser),
+        done,
+        onError: ({ status }) => {
+          assert.equal(status, 409);
         }
       });
     });
   });
 
-  /** Test retrieval of all reviews */
+  /** Test retrieval of all documents */
   describe('Read', function () {
-    it('Get all reviews', function (done) {
+    it('Get all documents', function (done) {
       request({
-        url: `/api/v1/reviews`,
+        url: `/api/v1/documents`,
         method: 'GET',
-        headers: HEADERS.KEY,
+        headers: HEADERS.TOKEN(superuser),
         done,
         onSuccess: ({ status, data }) => {
           assert.equal(status, 200);
@@ -41,11 +54,11 @@ describe('Review Tests', function () {
       });
     });
 
-    it('Get single review', function (done) {
+    it('Get single document', function (done) {
       request({
-        url: `/api/v1/reviews/${REVIEW_ID}`,
+        url: `/api/v1/documents/${DOCUMENT_ID}`,
         method: 'GET',
-        headers: HEADERS.KEY,
+        headers: HEADERS.TOKEN(superuser),
         done,
         onSuccess: ({ status, data }) => {
           assert.equal(status, 200);
@@ -54,29 +67,11 @@ describe('Review Tests', function () {
       });
     });
 
-    it('Get featured reviews', function (done) {
+    it('Attempt get single document with invalid name', function (done) {
       request({
-        url: `/api/v1/reviews/featured`,
+        url: `/api/v1/documents/0`,
         method: 'GET',
-        headers: HEADERS.KEY,
-        done,
-        onSuccess: ({ status, data }) => {
-          assert.equal(status, 200);
-          assert.isAtMost(data.length, 3);
-          data.forEach((review) => {
-            assert.include(review, { rating: 5 });
-            assert.exists(review.image);
-            assert.isNotEmpty(review.image);
-          });
-        }
-      });
-    });
-
-    it('Attempt get single review with invalid ID', function (done) {
-      request({
-        url: `/api/v1/reviews/0`,
-        method: 'GET',
-        headers: HEADERS.KEY,
+        headers: HEADERS.TOKEN(superuser),
         done,
         onError: ({ status }) => {
           assert.equal(status, 404);
@@ -85,46 +80,48 @@ describe('Review Tests', function () {
     });
   });
 
-  /** Test updating the review */
+  /** Test updating the document */
   describe('Update', function () {
-    it('Update review without image change', function (done) {
+    it('Update document without file change', function (done) {
       request({
-        url: `/api/v1/reviews/${REVIEW_ID}`,
+        url: `/api/v1/documents/${DOCUMENT_ID}`,
         method: 'PUT',
         body: JSON.stringify({
-          review: TEST_REVIEWS.UPDATED,
+          document: TEST_DOCUMENTS.UPDATED,
           changed: false
         }),
         headers: HEADERS.TOKEN(superuser),
         done,
-        onSuccess: ({ status }) => {
+        onSuccess: ({ status, data }) => {
           assert.equal(status, 200);
+          assert.hasAllKeys(data, ['name']);
         }
       });
     });
 
-    it('Update review with image change', function (done) {
+    it('Update document with file change', function (done) {
       request({
-        url: `/api/v1/reviews/${REVIEW_ID}`,
+        url: `/api/v1/documents/${DOCUMENT_ID}`,
         method: 'PUT',
         body: JSON.stringify({
-          review: TEST_REVIEWS.UPDATED,
+          document: TEST_DOCUMENTS.UPDATED,
           changed: true
         }),
         headers: HEADERS.TOKEN(superuser),
         done,
-        onSuccess: ({ status }) => {
+        onSuccess: ({ status, data }) => {
           assert.equal(status, 200);
+          assert.hasAllKeys(data, ['name']);
         }
       });
     });
 
-    it('Attempt update review with invalid ID', function (done) {
+    it('Attempt update document with invalid ID', function (done) {
       request({
-        url: `/api/v1/reviews/0`,
+        url: `/api/v1/documents/0`,
         method: 'PUT',
         body: JSON.stringify({
-          review: TEST_REVIEWS.UPDATED,
+          document: TEST_DOCUMENTS.UPDATED,
           changed: true
         }),
         headers: HEADERS.TOKEN(superuser),
@@ -136,11 +133,11 @@ describe('Review Tests', function () {
     });
   });
 
-  /** Test deleting the review */
+  /** Test deleting the document */
   describe('Delete', function () {
-    it('Delete review', function (done) {
+    it('Delete document', function (done) {
       request({
-        url: `/api/v1/reviews/${REVIEW_ID}`,
+        url: `/api/v1/documents/${DOCUMENT_ID}`,
         method: 'DELETE',
         headers: HEADERS.TOKEN(superuser),
         done,
@@ -150,9 +147,9 @@ describe('Review Tests', function () {
       });
     });
 
-    it('Attempt delete review with invalid ID', function (done) {
+    it('Attempt delete document with invalid ID', function (done) {
       request({
-        url: `/api/v1/reviews/0`,
+        url: `/api/v1/documents/0`,
         method: 'DELETE',
         headers: HEADERS.TOKEN(superuser),
         done,

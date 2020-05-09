@@ -11,55 +11,48 @@ import { Default, Mobile } from '~/components/layout.js';
  * CUSTOM BUTTONS
  ****************/
 class _SubmitButton extends Component {
-  render(){
+  render() {
     const { theme } = this.props;
     const classes = classNames(css[`submit-${theme}`], this.props.className);
     return (
-      <button
-        {...this.props}
-        className={classes}>
+      <button {...this.props} className={classes}>
         {this.props.children}
       </button>
-    )
+    );
   }
 }
 
 export class DeleteButton extends Component {
-  render(){
+  render() {
     const classes = classNames(css.delete, this.props.className);
     return (
-      <button
-        {...this.props}
-        className={classes}>
+      <button {...this.props} className={classes}>
         {this.props.children}
       </button>
-    )
+    );
   }
 }
 
 class _CancelButton extends Component {
-  render(){
+  render() {
     const { theme } = this.props;
     const classes = css[`cancel-${theme}`];
     return (
-      <button
-        {...this.props}
-        className={classes}>
+      <button {...this.props} className={classes}>
         {this.props.children}
       </button>
-    )
-    
+    );
   }
 }
 
 /*************************
- * PAGE BUTTONS 
+ * PAGE BUTTONS
  *************************/
 export class AddEntityButton extends Component {
-  render(){
+  render() {
     return (
       <Button
-      {...this.props}
+        {...this.props}
         className={css.add}
         variant={'dark'}
         onClick={this.props.onClick}>
@@ -67,66 +60,54 @@ export class AddEntityButton extends Component {
         <Default>{this.props.title}</Default>
         <Mobile>Add</Mobile>
       </Button>
-    )
+    );
   }
 }
 
 export class EditEntityButton extends Component {
-  render(){
+  render() {
     return (
-      <Button
-        {...this.props}
-        className={css.button}
-        variant={'success'}>
+      <Button {...this.props} className={css.button} variant={'success'}>
         <Icon name={'edit'} />
         <Default>{this.props.title}</Default>
         <Mobile>Edit</Mobile>
       </Button>
-    )
+    );
   }
 }
 
 export class DeleteEntityButton extends Component {
-  render(){
+  render() {
     return (
-      <Button
-        {...this.props}
-        className={css.button}
-        variant={'danger'}>
+      <Button {...this.props} className={css.button} variant={'danger'}>
         <Icon name={'trash'} />
         <Default>{this.props.title}</Default>
         <Mobile>Delete</Mobile>
       </Button>
-    )
+    );
   }
 }
 
 export class BackButton extends Component {
-  render(){
+  render() {
     return (
-      <Button
-        {...this.props}
-        className={css.button}
-        variant={'light'}>
+      <Button {...this.props} className={css.button} variant={'light'}>
         <Icon color={'#212529'} name={'chevron-left'} />
         <Default>{this.props.title}</Default>
         <Mobile>Back</Mobile>
       </Button>
-    )
+    );
   }
 }
 
 export class AdminButton extends Component {
-  render(){
+  render() {
     return (
-      <Button
-        {...this.props}
-        className={css.button}
-        variant={'light'}>
+      <Button {...this.props} className={css.button} variant={'light'}>
         <Icon color={'#212529'} name={'lock'} />
         {this.props.title}
       </Button>
-    )
+    );
   }
 }
 
@@ -135,23 +116,23 @@ export class AdminButton extends Component {
  ***********************/
 
 export class CheckboxButton extends Component {
-  constructor(props){
+  constructor(props) {
     super(props);
-    this.state = {checked: props.checked}
+    this.state = { checked: props.checked };
 
     this.checkbox = React.createRef();
   }
 
-  static getDerivedStateFromProps(props){
+  static getDerivedStateFromProps(props) {
     return { checked: props.checked };
   }
 
   check = () => {
-    this.setState({ checked: !this.state.checked});
+    this.setState({ checked: !this.state.checked });
     this.props.onChange(this.checkbox.current);
-  }
+  };
 
-  render(){
+  render() {
     return (
       <React.Fragment>
         <input
@@ -160,20 +141,28 @@ export class CheckboxButton extends Component {
           type={'checkbox'}
           checked={this.state.checked}
           onChange={this.props.onChange}
-          style={{display: 'none'}} />
-        <Button variant="dark" className={css.widgets} style={{display: 'flex'}} onClick={this.check}>
+          style={{ display: 'none' }}
+        />
+        <Button
+          variant="dark"
+          className={css.widgets}
+          style={{ display: 'flex' }}
+          onClick={this.check}>
           <div>
-            <Icon name={this.state.checked ? 'check-square' : 'square'} prefix={'far'} />
+            <Icon
+              name={this.state.checked ? 'check-square' : 'square'}
+              prefix={'far'}
+            />
             {this.props.label}
           </div>
         </Button>
       </React.Fragment>
-    )
+    );
   }
 }
 
 export class RadioButtonGroup extends Component {
-  render(){
+  render() {
     return (
       <ToggleButtonGroup
         className={css.widgets}
@@ -181,15 +170,19 @@ export class RadioButtonGroup extends Component {
         name={this.props.name}
         value={this.props.value}
         onChange={this.props.onChange}>
-          {this.props.items.map((item, index) => {
-            return <ToggleButton variant="dark" key={index} value={item.value}>{item.label}</ToggleButton>;
-          })}
+        {this.props.items.map((item, index) => {
+          return (
+            <ToggleButton variant="dark" key={index} value={item.value}>
+              {item.label}
+            </ToggleButton>
+          );
+        })}
       </ToggleButtonGroup>
-    )
+    );
   }
 }
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   theme: state.theme
 });
 

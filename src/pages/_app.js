@@ -14,8 +14,8 @@ import { loadCountries } from '~/constants/countries';
 import { cloudinary } from '~/constants/settings.js';
 import { saveCountries, setTheme } from '~/reducers/actions';
 
-import { PreNavBar, MainNavBar } from "~/partials/header.js";
-import Footer from "~/partials/footer.js";
+import { PreNavBar, MainNavBar } from '~/partials/header.js';
+import Footer from '~/partials/footer.js';
 
 import '~/styles/App.scss';
 import '~/styles/Categories.scss';
@@ -34,9 +34,9 @@ export default class WOKE extends App {
     return { pageProps };
   }
 
-  state = { isLoaded: false }
-  
-  componentDidMount(){
+  state = { isLoaded: false };
+
+  componentDidMount() {
     const {
       backgroundImage = 'bg-app.jpg',
       theme = 'default'
@@ -52,52 +52,59 @@ export default class WOKE extends App {
       document.body.style.backgroundImage = `url(${image.src})`;
       document.body.style.opacity = 1;
     };
-    
+
     // Get cookie consent value
-    this.setState({cookiesAccepted: getCookie('cookiesAccepted') === 'true'});
+    this.setState({ cookiesAccepted: getCookie('cookiesAccepted') === 'true' });
 
     // Loaded countries if not already loaded
     const countries = store.getState().countries;
-    if (!countries.length){
+    if (!countries.length) {
       this.preloadCountries();
     } else {
-      this.setState({isLoaded: true});
+      this.setState({ isLoaded: true });
     }
   }
 
   /** Save country list in Redux store */
   preloadCountries = () => {
-    loadCountries().then(data => {
+    loadCountries().then((data) => {
       const countries = [];
-      data.forEach(country => {
+      data.forEach((country) => {
         countries.push({ label: country.name, demonym: country.demonym });
       });
       store.dispatch(saveCountries(countries));
-      this.setState({isLoaded: true});
+      this.setState({ isLoaded: true });
     });
-  }
+  };
 
   acceptCookies = () => {
     setCookie('cookiesAccepted', true, 365 * 24);
-    this.setState({ cookiesAccepted: true});
-  }
+    this.setState({ cookiesAccepted: true });
+  };
 
   render() {
     const { isLoaded, cookiesAccepted } = this.state;
     const { Component, pageProps } = this.props;
-    
+
     if (!isLoaded) return null;
 
     return (
       <Provider store={store}>
-      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossOrigin="anonymous" />
+        <link
+          rel="stylesheet"
+          href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+          crossOrigin="anonymous"
+        />
         <PersistGate loading={null} persistor={persistor}>
-          <PreNavBar/> <MainNavBar/>
+          <PreNavBar /> <MainNavBar />
           <Component {...pageProps} />
-          <Footer/>
-          {!cookiesAccepted ? <CookiePrompt acceptCookies={this.acceptCookies} /> :null}
+          <Footer />
+          {!cookiesAccepted ? (
+            <CookiePrompt acceptCookies={this.acceptCookies} />
+          ) : null}
         </PersistGate>
-      </Provider> 
+      </Provider>
     );
   }
 }

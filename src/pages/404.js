@@ -9,15 +9,19 @@ export default class NotFound404 extends React.Component {
       <Shader>
         <div className={css.error}>
           <div className={css.errorText}>
-            <div className={css.message}>So...you're looking for a page that doesn't quite exist.</div>
+            <div className={css.message}>
+              So...you&#39;re looking for a page that doesn&#39;t quite exist.
+            </div>
             <div>
-              <button onClick={() => history.back()}>Go back to previous page</button>
+              <button onClick={() => history.back()}>
+                Go back to previous page
+              </button>
               <span> • </span>
-              <button onClick={() => location.href = '/'}>Go to Home</button>
+              <button onClick={() => (location.href = '/')}>Go to Home</button>
             </div>
           </div>
         </div>
       </Shader>
-    )
+    );
   }
 }
