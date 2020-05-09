@@ -1,0 +1,16 @@
+# Commas and semi-colons
+trailingComma: "es5"
+semi: true
+
+# Tabs
+useTabs: true
+tabWidth: 2
+
+# Brackets
+bracketSpacing: true
+jsxBracketSameLine: true
+arrowParens: "avoid"
+
+# Quotes
+singleQuote: true
+jsxSingleQuote: false
