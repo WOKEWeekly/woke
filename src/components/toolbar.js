@@ -17,7 +17,7 @@ class Toolbar extends Component {
 
     const { children } = this.props;
     if (children === null) return null;
-    if (children.length && children.filter(e => e !== null).length < 1)
+    if (children.length && children.filter((e) => e !== null).length < 1)
       return null;
 
     return (

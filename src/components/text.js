@@ -198,7 +198,7 @@ const applyFormatting = (text, hyperlinkClass) => {
   const regexArray = [linkRegex.source, boldRegex.source];
   const combined = new RegExp(regexArray.join('|'), 'g');
 
-  const parts = text.split(combined).filter(e => e != null);
+  const parts = text.split(combined).filter((e) => e != null);
 
   const finalText = parts.map((partText, count, array) => {
     // Bold text
@@ -259,7 +259,7 @@ const applySubstitutions = (text, substitutions) => {
 export const truncateText = (text, limit = 45) => {
   if (!text) return '';
 
-  const parts = text.split(' ').map(paragraph => {
+  const parts = text.split(' ').map((paragraph) => {
     if (paragraph.length === 0) return null;
 
     switch (paragraph.charAt(0)) {
@@ -280,7 +280,7 @@ export const truncateText = (text, limit = 45) => {
     }
   });
 
-  const words = parts.filter(e => e != null);
+  const words = parts.filter((e) => e != null);
   text = words.slice(0, limit).join(' ');
 
   if (words.length <= limit) return text;
@@ -294,10 +294,10 @@ export const truncateText = (text, limit = 45) => {
  * @param {string} text - Piece of text to be served.
  * @returns {string} The excerpt shown in previews.
  */
-export const createExcerpt = text => {
+export const createExcerpt = (text) => {
   if (!text) text = '';
 
-  const parts = text.split('\n').map(paragraph => {
+  const parts = text.split('\n').map((paragraph) => {
     if (paragraph.length === 0) return null;
 
     switch (paragraph.charAt(0)) {
@@ -318,11 +318,11 @@ export const createExcerpt = text => {
     }
   });
 
-  text = parts.filter(e => e != null);
+  text = parts.filter((e) => e != null);
   return text[0];
 };
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   theme: state.theme
 });
 

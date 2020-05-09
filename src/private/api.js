@@ -1463,7 +1463,7 @@ module.exports = function (app, conn, knex) {
 };
 
 /** Subscribe new user to Mailchimp mailing list */
-const subscribeUserToMailingList = user => {
+const subscribeUserToMailingList = (user) => {
   mailchimp
     .post(`/lists/${process.env.MAILCHIMP_LISTID}/members`, {
       email_address: user.email,
@@ -1473,6 +1473,6 @@ const subscribeUserToMailingList = user => {
         LNAME: user.lastname
       }
     })
-    .then(results => console.log(results))
-    .catch(err => console.log(err.toString()));
+    .then((results) => console.log(results))
+    .catch((err) => console.log(err.toString()));
 };

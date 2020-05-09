@@ -550,7 +550,7 @@ module.exports = function (app, conn, knex, server) {
   app.get('/account/reset/:token', function (req, res) {
     const { token } = req.params;
 
-    jwt.verify(token, process.env.JWT_SECRET, err => {
+    jwt.verify(token, process.env.JWT_SECRET, (err) => {
       if (err) return renderErrorPage(req, res, err, server);
       return server.render(req, res, '/_auth/reset', {
         title: 'Reset Password | #WOKEWeekly'
@@ -587,7 +587,7 @@ module.exports = function (app, conn, knex, server) {
       .select()
       .from('pages')
       .asCallback(function (err, pages) {
-        const page = pages.find(element => element.name === name);
+        const page = pages.find((element) => element.name === name);
         if (!page) return next();
         return renderPage(req, res, page, PAGE.OPERATIONS.READ);
       });
@@ -599,7 +599,7 @@ module.exports = function (app, conn, knex, server) {
       .select()
       .from('pages')
       .asCallback(function (err, pages) {
-        const page = pages.find(element => element.name === name);
+        const page = pages.find((element) => element.name === name);
         if (!page) return next();
         return renderPage(req, res, page, PAGE.OPERATIONS.UPDATE);
       });
@@ -704,14 +704,16 @@ module.exports = function (app, conn, knex, server) {
         function (callback) {
           conn.query('SELECT slug FROM sessions', function (err, result) {
             if (err) return callback(err);
-            result.forEach(session => routes.push(`/session/${session.slug}`));
+            result.forEach((session) =>
+              routes.push(`/session/${session.slug}`)
+            );
             callback(null);
           });
         },
         function (callback) {
           conn.query('SELECT id FROM candidates', function (err, result) {
             if (err) return callback(err);
-            result.forEach(candidate =>
+            result.forEach((candidate) =>
               routes.push(`/blackexcellence/candidate/${candidate.id}`)
             );
             callback(null);
@@ -722,7 +724,7 @@ module.exports = function (app, conn, knex, server) {
             `SELECT slug FROM members WHERE level = 'Executive'`,
             function (err, result) {
               if (err) return callback(err);
-              result.forEach(exec => routes.push(`/executives/${exec.slug}`));
+              result.forEach((exec) => routes.push(`/executives/${exec.slug}`));
               callback(null);
             }
           );
@@ -732,7 +734,7 @@ module.exports = function (app, conn, knex, server) {
             `SELECT slug FROM members WHERE level != 'Executive' AND verified = 1;`,
             function (err, result) {
               if (err) return callback(err);
-              result.forEach(member =>
+              result.forEach((member) =>
                 routes.push(`/team/member/${member.slug}`)
               );
               callback(null);
@@ -742,7 +744,7 @@ module.exports = function (app, conn, knex, server) {
         function (callback) {
           conn.query(`SELECT name FROM pages;`, function (err, result) {
             if (err) return callback(err);
-            result.forEach(page => routes.push(`/${page.name}`));
+            result.forEach((page) => routes.push(`/${page.name}`));
             callback(null);
           });
         }
@@ -753,7 +755,7 @@ module.exports = function (app, conn, knex, server) {
           cacheTime: 10 * 60 * 1000 // 10 minutes,
         });
 
-        routes.forEach(route => {
+        routes.forEach((route) => {
           sitemap.add({ url: route, changefreq: 'weekly' });
         });
 
@@ -849,10 +851,10 @@ const renderPage = (req, res, page, operation) => {
  * @param {string} text - Piece of text to be served.
  * @returns {string} The excerpt shown in previews.
  */
-const createExcerpt = text => {
+const createExcerpt = (text) => {
   if (!text) text = '';
 
-  const parts = text.split('\n').map(paragraph => {
+  const parts = text.split('\n').map((paragraph) => {
     if (paragraph.length === 0) return null;
 
     switch (paragraph.charAt(0)) {
@@ -873,6 +875,6 @@ const createExcerpt = text => {
     }
   });
 
-  text = parts.filter(e => e != null);
+  text = parts.filter((e) => e != null);
   return text[0];
 };

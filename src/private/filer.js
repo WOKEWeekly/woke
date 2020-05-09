@@ -53,7 +53,7 @@ exports.destroyImage = (image, next) => {
   // e.g. public_id = "dev/sessions/2020-08-03_manchester"
   const public_id = image.substring(image.indexOf('/') + 1, image.indexOf('.'));
 
-  cloudinary.uploader.destroy(public_id, err => {
+  cloudinary.uploader.destroy(public_id, (err) => {
     if (err) console.warn(err);
     next(null);
   });
@@ -103,7 +103,7 @@ exports.destroyDocument = (document, next) => {
   // e.g. public_id = "dev/sessions/2020-08-03_manchester"
   const public_id = `${env}/documents/${document}`;
 
-  cloudinary.uploader.destroy(public_id, err => {
+  cloudinary.uploader.destroy(public_id, (err) => {
     if (err) console.warn(err);
     next(null);
   });
@@ -152,9 +152,9 @@ const generateSlugAndFilename = (entity, directory) => {
 };
 
 /** Generate filenames from entities */
-const createArticleFilename = slug => `${slug}`;
+const createArticleFilename = (slug) => `${slug}`;
 const createCandidateFilename = (id, slug) => `${id}_${slug}`;
-const createMemberFilename = slug => slug;
+const createMemberFilename = (slug) => slug;
 const createReviewFilename = (rating, slug) => `${rating}-${slug}`;
 const createSessionFilename = (date, title) =>
   `${zDate.formatISODate(date)}_${title}`;

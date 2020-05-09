@@ -21,18 +21,18 @@ toast.configure({
 const defaultClasses = ['alert', css.message];
 
 export const alert = {
-  success: message => {
+  success: (message) => {
     toast(message, { className: classNames('alert-success', defaultClasses) });
   },
-  error: message => {
+  error: (message) => {
     toast(message, { className: classNames('alert-danger', defaultClasses) });
   },
-  info: message => {
+  info: (message) => {
     toast(message, { className: classNames('alert-primary', defaultClasses) });
   }
 };
 
-export const setAlert = alert => {
+export const setAlert = (alert) => {
   sessionStorage.setItem('alert', JSON.stringify(alert));
 };
 
@@ -45,7 +45,7 @@ export const checkAlert = () => {
   }
 };
 
-export const displayErrorMessage = err => {
+export const displayErrorMessage = (err) => {
   if (process.env.NODE_ENV !== 'production') {
     alert.error(err.toString());
   } else {

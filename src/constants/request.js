@@ -28,7 +28,7 @@ export default ({ url, method = 'GET', body, headers = {}, onSuccess }) => {
     .then(({ data }) => {
       onSuccess(data);
     })
-    .catch(error => {
+    .catch((error) => {
       if (error.message === 'jwt') {
         // If error is JWT-related
         store.dispatch(clearUser());

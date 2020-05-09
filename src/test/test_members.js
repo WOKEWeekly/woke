@@ -63,7 +63,7 @@ describe('Member Tests', function () {
         onSuccess: ({ status, data }) => {
           assert.equal(status, 200);
           assert.isArray(data);
-          data.forEach(member => {
+          data.forEach((member) => {
             assert.equal(member.isAuthor, true);
           });
         }
@@ -79,7 +79,7 @@ describe('Member Tests', function () {
         onSuccess: ({ status, data }) => {
           assert.equal(status, 200);
           assert.isArray(data);
-          data.forEach(member => {
+          data.forEach((member) => {
             assert.equal(member.level, 'Executive');
           });
         }

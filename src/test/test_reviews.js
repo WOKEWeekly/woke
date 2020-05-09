@@ -65,7 +65,7 @@ describe('Review Tests', function () {
         onSuccess: ({ status, data }) => {
           assert.equal(status, 200);
           assert.isAtMost(data.length, 3);
-          data.forEach(review => {
+          data.forEach((review) => {
             assert.include(review, { rating: 5 });
             assert.exists(review.image);
             assert.isNotEmpty(review.image);

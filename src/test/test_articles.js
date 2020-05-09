@@ -50,7 +50,7 @@ describe('Article Tests', function () {
         onSuccess: ({ status, data }) => {
           assert.equal(status, 200);
           assert.isArray(data);
-          data.forEach(article => {
+          data.forEach((article) => {
             assert.equal(article.status, 'PUBLISHED');
           });
         }

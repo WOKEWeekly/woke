@@ -105,12 +105,12 @@ export class Spacer extends Component {
   }
 }
 
-export const Desktop = props => <Responsive {...props} minWidth={992} />;
-export const Tablet = props => (
+export const Desktop = (props) => <Responsive {...props} minWidth={992} />;
+export const Tablet = (props) => (
   <Responsive {...props} minWidth={768} maxWidth={991} />
 );
-export const Mobile = props => <Responsive {...props} maxWidth={767} />;
-export const Default = props => <Responsive {...props} minWidth={768} />;
+export const Mobile = (props) => <Responsive {...props} maxWidth={767} />;
+export const Default = (props) => <Responsive {...props} minWidth={768} />;
 
 export const zIndices = {
   topicTopToolbar: 0,
@@ -119,7 +119,7 @@ export const zIndices = {
   alerts: 1100
 };
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   theme: state.theme
 });
 

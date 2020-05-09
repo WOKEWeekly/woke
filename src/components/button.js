@@ -182,7 +182,7 @@ export class RadioButtonGroup extends Component {
   }
 }
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   theme: state.theme
 });
 

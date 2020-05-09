@@ -237,7 +237,7 @@ export class SocialsModal extends Component {
   }
 }
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   countries: state.countries
 });
 

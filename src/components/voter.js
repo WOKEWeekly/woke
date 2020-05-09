@@ -23,7 +23,7 @@ export class Voter extends Component {
   }
 
   /** Submit the vote and set voter to disabled */
-  makeVote = event => {
+  makeVote = (event) => {
     if (this.state.hasVoted) return false;
     this.props.onVote(event);
     this.setState({ hasVoted: true });
@@ -49,7 +49,7 @@ export class Voter extends Component {
           notDiv>
           <button
             name={'yes'}
-            onClick={event => this.makeVote(event)}
+            onClick={(event) => this.makeVote(event)}
             className={hasVoted ? css.yesVoted : css.yes}>
             {hasVoted ? pct1 : option1}
           </button>
@@ -62,7 +62,7 @@ export class Voter extends Component {
           notDiv>
           <button
             name={'no'}
-            onClick={event => this.makeVote(event)}
+            onClick={(event) => this.makeVote(event)}
             className={hasVoted ? css.noVoted : css.no}>
             {hasVoted ? pct2 : option2}
           </button>

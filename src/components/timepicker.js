@@ -102,7 +102,7 @@ export class TimePicker extends Component {
  * @param {(string|Date}} time - The specified time.
  * @returns {object[]} The hour and minute.
  */
-const extractTime = time => {
+const extractTime = (time) => {
   let hour, minute;
 
   if (time !== null) {

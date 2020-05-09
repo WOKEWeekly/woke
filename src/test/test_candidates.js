@@ -134,7 +134,7 @@ describe('Candidate Tests', function () {
         }),
         headers: HEADERS.TOKEN(superuser),
         done,
-        onSuccess: ({ status, data }) => {
+        onSuccess: ({ status }) => {
           assert.equal(status, 200);
         }
       });

@@ -9,7 +9,7 @@ tabWidth: 2
 # Brackets
 bracketSpacing: true
 jsxBracketSameLine: true
-arrowParens: "avoid"
+arrowParens: "always"
 
 # Quotes
 singleQuote: true

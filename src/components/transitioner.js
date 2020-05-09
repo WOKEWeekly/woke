@@ -133,7 +133,7 @@ class Template extends Component {
           exit: 0
         }}
         {...this.props}>
-        {state => {
+        {(state) => {
           if (notDiv) {
             return React.cloneElement(children, {
               style: { ...defaultStyle, ...transitionStyles[state], ...style }

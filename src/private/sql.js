@@ -15,7 +15,7 @@ const ARTICLES = {
    * @param {object} article - The object containing the article details.
    * @returns {object} The SQL statement and the values.
    */
-  CREATE: article => {
+  CREATE: (article) => {
     const sql =
       'INSERT INTO articles (title, content, category, excerpt, tags, slug, image, authorId, status, datePublished) VALUES ?';
     const values = [
@@ -120,7 +120,7 @@ const SESSIONS = {
    * @param {object} session - The object containing the session details.
    * @returns {object} The SQL statement and the values.
    */
-  CREATE: session => {
+  CREATE: (session) => {
     const sql =
       'INSERT INTO sessions (title, dateHeld, timeHeld, image, slug, description) VALUES ?';
     const values = [
@@ -198,7 +198,7 @@ const CANDIDATES = {
    * @param {object} candidate - The object containing the candidate details.
    * @returns {object} The SQL statement and the values.
    */
-  CREATE: candidate => {
+  CREATE: (candidate) => {
     const sql =
       'INSERT INTO candidates (id, name, image, birthday, ethnicity, socials, occupation, description, authorId, dateWritten) VALUES ?';
     const values = [
@@ -279,7 +279,7 @@ const MEMBERS = {
    * @param {object} member - The object containing the member details.
    * @returns {object} The SQL statement and the values.
    */
-  CREATE: member => {
+  CREATE: (member) => {
     const sql =
       'INSERT INTO members (firstname, lastname, image, level, birthday, sex, role, ethnicity, socials, slug, description, verified, slackId, isAuthor) VALUES ?';
     const values = [
@@ -383,7 +383,7 @@ const TOPICS = {
    * @param {object} topic - The object containing the topic details.
    * @returns {object} The SQL statement and the values.
    */
-  CREATE: topic => {
+  CREATE: (topic) => {
     const sql =
       'INSERT INTO topics (headline, category, question, description, type, polarity, validated, sensitivity, option1, option2, userId) VALUES ?';
     const values = [
@@ -487,7 +487,7 @@ const REVIEWS = {
    * @param {object} review - The object containing the review details.
    * @returns {object} The SQL statement and the values.
    */
-  CREATE: review => {
+  CREATE: (review) => {
     const sql =
       'INSERT INTO reviews (referee, position, rating, image, description) VALUES ?';
     const values = [
@@ -588,7 +588,7 @@ const USERS = {
      * @param {string} username - The submitted username.
      * @returns {object} The SQL statement and the values.
      */
-    LOGIN: username => {
+    LOGIN: (username) => {
       const sql = `SELECT * FROM users WHERE Username = ? OR Email = ?`;
       const values = [username, username];
       return { sql, values };
@@ -648,13 +648,13 @@ const PAGES = {
 };
 
 const TOKENS = {
-  READ: name => {
+  READ: (name) => {
     return `SELECT * FROM tokens WHERE name = '${name}'`;
   }
 };
 
 const ALL = {
-  RENUMBER_IDS: table => {
+  RENUMBER_IDS: (table) => {
     const sql = `SET @id:=0; UPDATE ${table} SET id = @id:=(@id+1); ALTER TABLE ${table} AUTO_INCREMENT = 1;`;
     return sql;
   }
@@ -707,7 +707,7 @@ const insertFieldInValues = (value, array) => {
  * @param {number} length The number of characters for the token.
  * @returns {string} The generated string.
  */
-const generateRandomString = length => {
+const generateRandomString = (length) => {
   const characters =
     'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
   const charactersLength = characters.length;

@@ -21,7 +21,7 @@ export default class Rator extends Component {
   }
 
   /** Update the rating on star click */
-  changeRating = e => {
+  changeRating = (e) => {
     if (!this.state.changeable) return;
     this.props.onChange(e);
   };

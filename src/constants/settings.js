@@ -27,7 +27,7 @@ module.exports = {
      * @param {string} image - The image in question.
      * @returns {boolean} Value indicating whether it's from Cloudinary
      */
-    check: image => {
+    check: (image) => {
       if (!image) return false;
 
       const regex = new RegExp(/(v[0-9]+|dev|prod)\//);

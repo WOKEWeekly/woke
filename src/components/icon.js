@@ -77,7 +77,7 @@ export class PromoIconsBar extends Component {
 
 export class _SocialsList extends Component {
   render() {
-    const listSocials = socials => {
+    const listSocials = (socials) => {
       if (!socials) return null;
 
       const items = [];
@@ -135,7 +135,7 @@ class _SocialIcon extends Component {
   }
 }
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   theme: state.theme
 });
 

@@ -67,9 +67,9 @@ export default class WOKE extends App {
 
   /** Save country list in Redux store */
   preloadCountries = () => {
-    loadCountries().then(data => {
+    loadCountries().then((data) => {
       const countries = [];
-      data.forEach(country => {
+      data.forEach((country) => {
         countries.push({ label: country.name, demonym: country.demonym });
       });
       store.dispatch(saveCountries(countries));

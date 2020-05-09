@@ -9,7 +9,7 @@ module.exports = {
    * @param {string} user - User credentials to be validated.
    * @returns {boolean} True if valid. False with error message if invalid.
    */
-  isValidLogin: user => {
+  isValidLogin: (user) => {
     if (
       !checkCookies(
         'We cannot allow you to log in without accepting our Cookie Policy.'
@@ -29,7 +29,7 @@ module.exports = {
    * @param {string} user - User information to be validated.
    * @returns {boolean} True if valid. False with error message if invalid.
    */
-  isValidSignup: user => {
+  isValidSignup: (user) => {
     const {
       firstname,
       lastname,
@@ -58,7 +58,7 @@ module.exports = {
    * @param {string} user - Session information to be validated.
    * @returns {boolean} True if valid. False with error message if invalid.
    */
-  isValidSession: session => {
+  isValidSession: (session) => {
     if (!ifExists(session.title.trim(), 'Enter the session title.'))
       return false;
     if (
@@ -77,7 +77,7 @@ module.exports = {
    * @param {string} topic - Topic information to be validated.
    * @returns {boolean} True if valid. False with error message if invalid.
    */
-  isValidTopic: topic => {
+  isValidTopic: (topic) => {
     if (!ifExists(topic.headline.trim(), 'Enter the topic headline.'))
       return false;
     if (!ifExists(topic.category, 'Select the topic category.')) return false;
@@ -108,7 +108,7 @@ module.exports = {
    * @param {string} article - Article information to be validated.
    * @returns {boolean} True if valid. False with error message if invalid.
    */
-  isValidArticle: article => {
+  isValidArticle: (article) => {
     if (!ifExists(article.title.trim(), 'Enter the article title.'))
       return false;
     if (!ifExists(article.status.trim(), 'Select the status of the article.'))
@@ -138,7 +138,7 @@ module.exports = {
    * @param {string} candidate - Candidate information to be validated.
    * @returns {boolean} True if valid. False with error message if invalid.
    */
-  isValidCandidate: candidate => {
+  isValidCandidate: (candidate) => {
     if (!ifExists(candidate.id, 'Please enter the ID number of the candidate.'))
       return false;
     if (
@@ -176,7 +176,7 @@ module.exports = {
    * @param {string} document - Document information to be validated.
    * @returns {boolean} True if valid. False with error message if invalid.
    */
-  isValidDocument: document => {
+  isValidDocument: (document) => {
     if (!ifExists(document.title.trim(), 'Enter the document title.'))
       return false;
     if (!isValidDocument(document.file)) return false;
@@ -188,7 +188,7 @@ module.exports = {
    * @param {string} member - Team member information to be validated.
    * @returns {boolean} True if valid. False with error message if invalid.
    */
-  isValidMember: member => {
+  isValidMember: (member) => {
     if (!ifExists(member.firstname.trim(), "Enter the member's firstname."))
       return false;
     if (!ifExists(member.lastname.trim(), "Enter the member's lastname."))
@@ -207,7 +207,7 @@ module.exports = {
    * @param {string} review - Review information to be validated.
    * @returns {boolean} True if valid. False with error message if invalid.
    */
-  isValidReview: review => {
+  isValidReview: (review) => {
     if (!ifExists(review.referee.trim(), 'Enter the referee of the review.'))
       return false;
     if (!ifExists(review.position.trim(), "Enter the referee position's."))
@@ -228,7 +228,7 @@ module.exports = {
    * @param {string} email - Email address to be validated.
    * @returns {boolean} True if valid. False with error message if invalid.
    */
-  isValidEmail: email => {
+  isValidEmail: (email) => {
     const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     const valid = re.test(String(email).toLowerCase());
     if (ifTrue(!valid, 'Please enter a valid email address.')) return false;
@@ -240,7 +240,7 @@ module.exports = {
    * @param {string} username - Username to be validated.
    * @returns {boolean} True if valid. False with error message if invalid.
    */
-  isValidUsername: username => {
+  isValidUsername: (username) => {
     if (!ifExists(username.trim(), 'Please enter a username.')) return false;
     if (
       ifTrue(
@@ -305,7 +305,7 @@ const isValidImage = (file, entity) => {
  * @param {string} entity - The entity this file represents.
  * @returns {boolean} True if meets requirements. If not: false.
  */
-const isValidDocument = file => {
+const isValidDocument = (file) => {
   if (!ifExists(file, `Please select a document to upload.`)) return false;
   if (!isUnderFileSizeLimit(file, limits.file)) return false;
   return true;

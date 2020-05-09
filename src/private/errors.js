@@ -23,13 +23,13 @@ module.exports = {
    * @param {string} entity - The name of the entity.
    * @returns {Error} A 404 error object containing the message.
    */
-  NONEXISTENT_ENTITY: entity => {
+  NONEXISTENT_ENTITY: (entity) => {
     const err = new Error(`This ${entity} does not exist.`);
     err.status = 404;
     return err;
   },
 
-  DUPLICATE_CANDIDATE_ID: id => {
+  DUPLICATE_CANDIDATE_ID: (id) => {
     const err = new Error(
       `A candidate with ID '${id}' already exists in the database.`
     );
@@ -90,7 +90,7 @@ module.exports = {
     err.status = 401;
     return err;
   },
-  JWT_FAILURE: message => {
+  JWT_FAILURE: (message) => {
     const err = new Error();
     err.status = 401;
     if (message === 'jwt expired') {

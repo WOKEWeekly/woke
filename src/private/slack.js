@@ -10,11 +10,11 @@ const channel = dev ? mySlackID : 'general';
 const { zDate } = require('zavid-modules');
 
 module.exports = {
-  sendBirthdayMessage: async member => {
+  sendBirthdayMessage: async (member) => {
     const message = constructBirthdayMessage(member);
     await postMessage(message);
   },
-  sendSessionReminder: async session => {
+  sendSessionReminder: async (session) => {
     const message = constructSessionReminderMessage(session);
     await postMessage(message);
   }
@@ -25,7 +25,7 @@ module.exports = {
  * @param {string[]} messages - An array of messages.
  * @returns A random message.
  */
-const getRandomMessage = messages => {
+const getRandomMessage = (messages) => {
   return messages[Math.floor(Math.random() * messages.length)];
 };
 
@@ -34,7 +34,7 @@ const getRandomMessage = messages => {
  * @param {string} message - The message to be sent.
  * @returns The sender function.
  */
-const postMessage = message => {
+const postMessage = (message) => {
   return slack.chat.postMessage({
     channel,
     username: '#WOKEWeekly',
@@ -47,7 +47,7 @@ const postMessage = message => {
  * @param {Object} member - The details of the celebrating member.
  * @returns The constructed message.
  */
-const constructBirthdayMessage = member => {
+const constructBirthdayMessage = (member) => {
   let pronoun, title;
 
   if (member.sex === 'M') {

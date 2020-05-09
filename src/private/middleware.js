@@ -6,7 +6,7 @@ const ERROR = require('./errors.js');
 
 module.exports = {
   /** Verify access tokens */
-  verifyToken: threshold => {
+  verifyToken: (threshold) => {
     return function (req, res, next) {
       async.waterfall(
         [
@@ -61,7 +61,7 @@ module.exports = {
   },
 
   /** Log user activity on each request */
-  logUserActivity: conn => {
+  logUserActivity: (conn) => {
     return function (req, res, next) {
       const id = parseInt(req.headers['user']);
       if (isNaN(id)) {

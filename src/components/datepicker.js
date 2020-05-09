@@ -175,7 +175,7 @@ export class AuthoredDatePicker extends Component {
  * @param {Date} date - The specified date.
  * @returns {object[]} The day, month and year.
  */
-const extractDates = date => {
+const extractDates = (date) => {
   let day, month, year;
 
   if (date !== null) {
