@@ -6,6 +6,8 @@ import { Icon } from '~/components/icon.js';
 import { cloudinary } from '~/constants/settings.js';
 import css from '~/styles/components/Text.module.scss';
 
+import { zText } from 'zavid-modules';
+
 export class Title extends Component {
   render() {
     const classes = classNames(css.title, this.props.className);
@@ -167,13 +169,13 @@ const prefixFormatting = (text, hyperlinkClass) => {
         return (
           <div className={css.listitem} key={key}>
             <span>●</span>
-            <span>{applyFormatting(paragraph.substring(1).trim())}</span>
+            <span>{zText.applyFormatting(paragraph.substring(1).trim())}</span>
           </div>
         );
 
       // For normal paragraph text
       default:
-        const finalText = applyFormatting(paragraph, hyperlinkClass);
+        const finalText = zText.applyFormatting(paragraph, hyperlinkClass);
         return (
           <p className={css.body} key={key}>
             {finalText}
@@ -181,58 +183,6 @@ const prefixFormatting = (text, hyperlinkClass) => {
         );
     }
   });
-};
-
-/**
- * Apply markdown-like formatting to text.
- * @param {string} text - The text to which formatting needs to be applied.
- * @param {Object} hyperlinkClass - The CSS class for hyperlinks.
- * @returns The formatted text.
- */
-const applyFormatting = (text, hyperlinkClass) => {
-  if (text === null) return '';
-
-  const linkRegex = new RegExp(/\<\[(.*?)\]\s(.*?)\>/); // Regex for links
-  const boldRegex = new RegExp(/(\*\*.*?\*\*)/); // Regex for bold text
-
-  const regexArray = [linkRegex.source, boldRegex.source];
-  const combined = new RegExp(regexArray.join('|'), 'g');
-
-  const parts = text.split(combined).filter((e) => e != null);
-
-  const finalText = parts.map((partText, count, array) => {
-    // Bold text
-    if (boldRegex.test(partText)) {
-      return (
-        <strong key={count}>
-          {partText.substring(2, partText.length - 2)}
-        </strong>
-      );
-    }
-
-    // Hyperlink text
-    if (
-      partText.startsWith('/') ||
-      partText.startsWith('mailto:') ||
-      partText.startsWith('http')
-    ) {
-      array.splice(count, 1);
-      return (
-        <a
-          target={'_blank'}
-          rel={'noopener noreferrer'}
-          href={partText}
-          key={count}
-          className={hyperlinkClass}>
-          {array[count]}
-        </a>
-      );
-    } else {
-      return partText;
-    }
-  });
-
-  return finalText;
 };
 
 /**
