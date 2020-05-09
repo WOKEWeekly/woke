@@ -16,26 +16,26 @@ const axios = require('axios');
  * @param {Function} [request.done] - The callback to finish the test.
  */
 export default ({ url, method = 'GET', body, headers = {}, onSuccess }) => {
-	headers['User'] = store.getState().user.id;
-	headers['Content-Type'] = 'application/json';
+  headers['User'] = store.getState().user.id;
+  headers['Content-Type'] = 'application/json';
 
-	axios({
-		url,
-		method,
-		data: body,
-		headers,
-	})
-		.then(({ data }) => {
-			onSuccess(data);
-		})
-		.catch(error => {
-			if (error.message === 'jwt') {
-				// If error is JWT-related
-				store.dispatch(clearUser());
-				setAlert({ type: 'info', message: `Your session has expired.` });
-				setTimeout(() => (location.href = '/'), 500);
-			} else {
-				alert.error(error.message);
-			}
-		});
+  axios({
+    url,
+    method,
+    data: body,
+    headers,
+  })
+    .then(({ data }) => {
+      onSuccess(data);
+    })
+    .catch(error => {
+      if (error.message === 'jwt') {
+        // If error is JWT-related
+        store.dispatch(clearUser());
+        setAlert({ type: 'info', message: `Your session has expired.` });
+        setTimeout(() => (location.href = '/'), 500);
+      } else {
+        alert.error(error.message);
+      }
+    });
 };
