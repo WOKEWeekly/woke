@@ -1,40 +1,37 @@
 import React, { Component } from 'react';
-import {Col, Row } from 'react-bootstrap';
-
-import { FooterIcon } from '~/components/icon';
+import { Col, Row } from 'react-bootstrap';
 import { Divider } from '~/components/text.js';
-
-import { accounts, emails } from '~/constants/settings.js';
+import { emails } from '~/constants/settings.js';
 
 import css from '~/styles/Partials.module.scss';
 
 export default class Footer extends Component {
-  constructor(){
+  constructor() {
     super();
-    this.state = { isLoaded: false }
+    this.state = { isLoaded: false };
   }
 
-  componentDidMount(){
-    this.setState({isLoaded: true})
+  componentDidMount() {
+    this.setState({ isLoaded: true });
   }
 
-	render(){
+  render() {
     if (!this.state.isLoaded) return null;
 
     return (
       <div className={css.footer}>
         <Divider />
         <Row>
-          <Links/>
+          <Links />
         </Row>
       </div>
     );
-	}
+  }
 }
 
 /** Links for all necessary */
 class Links extends Component {
-  render(){
+  render() {
     return (
       <React.Fragment>
         <Col className={css.footerLinks} lg={9}>
@@ -51,25 +48,6 @@ class Links extends Component {
           Powered by #WOKEWeekly&reg;
         </Col>
       </React.Fragment>
-    )
-  }
-}
-
-/** Social media icons in footer */
-class Socials extends Component {
-  render(){
-    return (
-      <div>
-        <Row style={{justifyContent: 'center'}}>
-          <FooterIcon icon={"facebook-f"} href={accounts.facebook} />
-          <FooterIcon icon={"twitter"} href={accounts.twitter} />
-          <FooterIcon icon={"instagram"} href={accounts.instagram} />
-        </Row>
-        <Row style={{justifyContent: 'center'}}>
-          <FooterIcon icon={"linkedin-in"} href={accounts.linkedin} />
-          <FooterIcon icon={"youtube"} href={accounts.youtube} />
-        </Row>
-      </div>
-    )
+    );
   }
 }

@@ -17,6 +17,7 @@
 *************/
 
 .list {
+  overflow-x: hidden;
   .item {
     @include scale-on-hover(1.03);
     cursor: pointer;

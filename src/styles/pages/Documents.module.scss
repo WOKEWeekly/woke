@@ -1,0 +1,15 @@
+@import "../Variables";
+
+/************
+*** index.js
+*************/
+
+.documentTabler {
+  @include entityTabler(4% 1fr 1fr 1fr 4% 4% 4%);
+}
+
+/*************
+*** form.js
+*************/
+
+.form { @extend .responsive-form; }

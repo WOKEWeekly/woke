@@ -12,39 +12,38 @@ import { Fader } from '~/components/transitioner.js';
 import { Title } from '~/components/text.js';
 import { BottomToolbar } from '~/components/toolbar.js';
 
-import { countriesToString } from '~/constants/countries.js';
 import CLEARANCES from '~/constants/clearances.js';
 import request from '~/constants/request.js';
 
-import css from '~/styles/pages/Members.module.scss';
+import css from '~/styles/pages/Documents.module.scss';
 
-class Team extends Component {
+class Documents extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			members: [],
+			documents: [],
 			isLoaded: false,
 		};
 
-		if (props.user.clearance < CLEARANCES.ACTIONS.VIEW_TEAM) {
+		if (props.user.clearance < CLEARANCES.ACTIONS.CRUD_DOCUMENTS) {
 			return (location.href = '/');
 		}
 	}
 
-	/** Get topics on mount */
+	/** Get documents on mount */
 	componentDidMount() {
-		this.getTeam();
+		this.getDocuments();
 	}
 
-	/** Retrieve all team members */
-	getTeam = () => {
+	/** Retrieve all documents */
+	getDocuments = () => {
 		request({
-			url: '/api/v1/members',
+			url: '/api/v1/documents',
 			method: 'GET',
 			headers: { Authorization: `Bearer ${this.props.user.token}` },
-			onSuccess: members => {
+			onSuccess: documents => {
 				this.setState({
-					members: members,
+					documents: documents,
 					isLoaded: true,
 				});
 			},
@@ -52,32 +51,35 @@ class Team extends Component {
 	};
 
 	render() {
-		const { isLoaded, members } = this.state;
+		const { isLoaded, documents } = this.state;
 
-		const MemberCollection = () => {
+		const DocumentCollection = () => {
 			if (!isLoaded) {
 				return <Loader />;
-			} else if (members.length === 0) {
-				return <Empty message={'No members found.'} />;
+			} else if (documents.length === 0) {
+				return <Empty message={'No documents found.'} />;
 			}
 
 			const items = [];
 
-			for (const [index, item] of members.entries()) {
+			for (const [index, item] of documents.entries()) {
 				items.push(
-					<Member key={index} idx={index} item={item} getTeam={this.getTeam} />
+					<Document
+						key={index}
+						idx={index}
+						item={item}
+						getDocuments={this.getDocuments}
+					/>
 				);
 			}
 
-			const MemberTable = () => {
+			const DocumentTable = () => {
 				const headerRow = (
 					<div className={css.header}>
 						<span>#</span>
-						<span>Name</span>
-						<span>Level</span>
-						<span>Role</span>
-						<span>Ethnicity</span>
-						<span>Birthday</span>
+						<span>Title</span>
+						<span>Slug</span>
+						<span>Last Modified</span>
 						<span />
 						<span />
 						<span />
@@ -92,20 +94,18 @@ class Team extends Component {
 				);
 			};
 
-			const MemberList = () => {
+			const DocumentList = () => {
 				return <div className={css.list}>{items}</div>;
 			};
 
 			return (
 				<React.Fragment>
-					<Title className={css.heading}>
-						List of #WOKEWeekly Team Members
-					</Title>
+					<Title className={css.heading}>List of Documents</Title>
 					<Default>
-						<MemberTable />
+						<DocumentTable />
 					</Default>
 					<Mobile>
-						<MemberList />
+						<DocumentList />
 					</Mobile>
 				</React.Fragment>
 			);
@@ -113,14 +113,14 @@ class Team extends Component {
 
 		return (
 			<React.Fragment>
-				<Shader className={css.memberTabler}>
-					<MemberCollection />
+				<Shader className={css.documentTabler}>
+					<DocumentCollection />
 				</Shader>
 
 				<BottomToolbar>
 					<AddEntityButton
-						title={'Add Member'}
-						onClick={() => (location.href = '/team/add')}
+						title={'Add Document'}
+						onClick={() => (location.href = '/admin/documents/add')}
 					/>
 				</BottomToolbar>
 			</React.Fragment>
@@ -128,13 +128,13 @@ class Team extends Component {
 	}
 }
 
-class IMember extends PureComponent {
+class IDocument extends PureComponent {
 	constructor(props) {
 		super(props);
 		this.state = {
 			...props.item,
-			isLoaded: false,
 			deleteVisible: false,
+			isLoaded: false,
 		};
 	}
 
@@ -142,21 +142,21 @@ class IMember extends PureComponent {
 		this.setState({ isLoaded: true });
 	}
 
-	/** Go to edit member */
-	editMember = member => (location.href = `/team/edit/${member.id}`);
+	/** Go to edit document */
+	editDocument = document =>
+		(location.href = `/admin/documents/edit/${document.id}`);
 
-	/** Delete member */
-	deleteMember = () => {
-		const { firstname, lastname } = this.state;
+	/** Delete document */
+	deleteDocument = () => {
 		request({
-			url: `/api/v1/members/${this.state.id}`,
+			url: `/api/v1/documents/${this.state.id}`,
 			method: 'DELETE',
 			body: JSON.stringify(this.state),
 			headers: { Authorization: `Bearer ${this.props.user.token}` },
 			onSuccess: () => {
-				alert.success(`You've deleted member ${firstname} ${lastname}.`);
+				alert.success(`You've deleted the ${this.state.title}.`);
 				this.closeDelete();
-				this.props.getTeam();
+				this.props.getDocuments();
 			},
 		});
 	};
@@ -165,22 +165,16 @@ class IMember extends PureComponent {
 	closeDelete = () => this.setState({ deleteVisible: false });
 
 	render() {
+		const { item, idx } = this.props;
 		const { deleteVisible } = this.state;
-		const { item, idx, countries } = this.props;
-		item.demonyms = countriesToString(JSON.parse(item.ethnicity), countries);
-		item.fullname = `${item.firstname} ${item.lastname}`;
 
-		const LinkButton = () => {
-			if (!item.slug) return null;
-
-			return (
-				<button
-					className={css.invisible_button}
-					onClick={() => (location.href = `/team/member/${item.slug}`)}>
-					<Icon name={'external-link-alt'} />
-				</button>
-			);
-		};
+		const LinkButton = () => (
+			<button
+				className={css.invisible_button}
+				onClick={() => (location.href = `/docs/${item.name}`)}>
+				<Icon name={'external-link-alt'} />
+			</button>
+		);
 
 		return (
 			<Fader
@@ -191,18 +185,16 @@ class IMember extends PureComponent {
 				postTransitions={'background-color .1s ease'}>
 				<Default>
 					<span>{idx + 1}</span>
-					<span>{item.fullname}</span>
-					<span>{item.level}</span>
-					<span>{item.role}</span>
-					<span>{item.demonyms}</span>
-					<span>{zDate.formatDate(item.birthday)}</span>
+					<span>{item.title}</span>
+					<span>{item.name}</span>
+					<span>{zDate.formatDateTime(item.lastModified) || '-'}</span>
 					<span>
 						<LinkButton />
 					</span>
 					<span>
 						<button
 							className={css.invisible_button}
-							onClick={() => this.editMember(item)}>
+							onClick={() => this.editDocument(item)}>
 							<Icon name={'edit'} />
 						</button>
 					</span>
@@ -217,38 +209,26 @@ class IMember extends PureComponent {
 						<span>
 							<Icon name={'user'} />
 						</span>
-						<span className={css.name}>{item.fullname}</span>
+						<span className={css.name}>{item.title}</span>
 					</div>
 					<div>
 						<span>
 							<Icon name={'star'} />
 						</span>
-						<span>{item.level}</span>
+						<span>{item.name}</span>
 					</div>
 					<div>
 						<span>
 							<Icon name={'signature'} />
 						</span>
-						<span>{item.role}</span>
-					</div>
-					<div>
-						<span>
-							<Icon name={'globe-africa'} />
-						</span>
-						<span>{item.demonyms}</span>
-					</div>
-					<div>
-						<span>
-							<Icon name={'birthday-cake'} />
-						</span>
-						<span>{zDate.formatDate(item.birthday)}</span>
+						<span>{zDate.formatDateTime(item.lastModified)}</span>
 					</div>
 					<div className={css.index}>{idx + 1}</div>
 					<div className={css.crud}>
 						<LinkButton />
 						<button
 							className={css.invisible_button}
-							onClick={() => this.editMember(item)}>
+							onClick={() => this.editDocument(item)}>
 							<Icon name={'edit'} />
 						</button>
 						<button className={css.invisible_button} onClick={this.openDelete}>
@@ -259,8 +239,8 @@ class IMember extends PureComponent {
 
 				<ConfirmModal
 					visible={deleteVisible}
-					message={`Are you sure you want to delete member: ${item.fullname}?`}
-					confirmFunc={this.deleteMember}
+					message={`Are you sure you want to delete document: ${item.title}?`}
+					confirmFunc={this.deleteDocument}
 					confirmText={'Delete'}
 					close={this.closeDelete}
 				/>
@@ -274,5 +254,5 @@ const mapStateToProps = state => ({
 	countries: state.countries,
 });
 
-const Member = connect(mapStateToProps)(IMember);
-export default connect(mapStateToProps)(Team);
+const Document = connect(mapStateToProps)(IDocument);
+export default connect(mapStateToProps)(Documents);

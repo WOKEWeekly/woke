@@ -1,0 +1,32 @@
+# Configuration
+extends:
+  - eslint:recommended
+  - plugin:react/recommended
+env:
+  browser: true
+  node: true
+  mocha: true
+  es6: true
+parser: babel-eslint
+parserOptions:
+  sourceType: "module"
+  ecmaFeatures:
+    jsx: true
+plugins:
+  - react
+settings:
+  react:
+    version: "detect"
+
+# Rules
+rules:
+
+  # Active rules
+  no-unused-vars: 1
+  semi: [2, "always"]
+
+  # Overriden and disabled rules
+  no-case-declarations: 0
+  no-useless-escape: 0
+  react/prop-types: 0
+  quotes: 0

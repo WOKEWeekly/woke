@@ -7,7 +7,7 @@ import { Icon } from '~/components/icon.js';
 import { zIndices } from './layout';
 
 export class DropdownButton extends Component {
-  render(){
+  render() {
     return (
       <Dropdown
         className={css.widgets}
@@ -16,36 +16,46 @@ export class DropdownButton extends Component {
         <Dropdown.Toggle variant="dark">{this.props.children}</Dropdown.Toggle>
         <Dropdown.Menu className={css.dropdown_menu}>
           {React.Children.map(this.props.items, (item, index) => {
-            return <Dropdown.Item className={css.dropdown_item} eventKey={index+1}>{item}</Dropdown.Item>
+            return (
+              <Dropdown.Item className={css.dropdown_item} eventKey={index + 1}>
+                {item}
+              </Dropdown.Item>
+            );
           })}
         </Dropdown.Menu>
       </Dropdown>
-    )
+    );
   }
 }
 
 export class SortDropdown extends Component {
-  render(){
+  render() {
     return (
       <DropdownButton
         items={this.props.items}
         onSelect={this.props.onSelect}
         alignRight={true}>
-        <Icon name={'sort-amount-down'} />{this.props.title}
+        <Icon name={'sort-amount-down'} />
+        {this.props.title}
       </DropdownButton>
-    )
+    );
   }
 }
 
 export class FilterDropdown extends Component {
-  render(){
+  render() {
     return (
       <Dropdown className={css.widgets} alignRight={true}>
-        <Dropdown.Toggle variant="dark"><Icon name={'filter'} />{this.props.title}</Dropdown.Toggle>
-        <Dropdown.Menu className={css.filter_menu} style={{zIndex: zIndices.filterMenu}}>
+        <Dropdown.Toggle variant="dark">
+          <Icon name={'filter'} />
+          {this.props.title}
+        </Dropdown.Toggle>
+        <Dropdown.Menu
+          className={css.filter_menu}
+          style={{ zIndex: zIndices.filterMenu }}>
           {this.props.children}
         </Dropdown.Menu>
       </Dropdown>
-    )
+    );
   }
 }

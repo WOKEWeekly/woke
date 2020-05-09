@@ -1,4 +1,4 @@
-import React, { Component} from 'react';
+import React, { Component } from 'react';
 import classNames from 'classnames';
 import css from '~/styles/components/Voter.module.scss';
 
@@ -6,16 +6,16 @@ import { Mover } from '~/components/transitioner.js';
 
 /** For voting widgets */
 export class Voter extends Component {
-  constructor(props){
+  constructor(props) {
     super(props);
     this.state = {
       isLoaded: false,
       hasVoted: props.hasVoted
-    }
+    };
   }
 
-  componentDidMount(){
-    this.setState({ isLoaded: true})
+  componentDidMount() {
+    this.setState({ isLoaded: true });
   }
 
   static getDerivedStateFromProps(props) {
@@ -26,10 +26,10 @@ export class Voter extends Component {
   makeVote = (event) => {
     if (this.state.hasVoted) return false;
     this.props.onVote(event);
-    this.setState({ hasVoted: true })
-  }
+    this.setState({ hasVoted: true });
+  };
 
-  render(){
+  render() {
     const { isLoaded, hasVoted } = this.state;
     if (!isLoaded) return null;
 
@@ -49,7 +49,7 @@ export class Voter extends Component {
           notDiv>
           <button
             name={'yes'}
-            onClick={event => this.makeVote(event)}
+            onClick={(event) => this.makeVote(event)}
             className={hasVoted ? css.yesVoted : css.yes}>
             {hasVoted ? pct1 : option1}
           </button>
@@ -62,12 +62,12 @@ export class Voter extends Component {
           notDiv>
           <button
             name={'no'}
-            onClick={event => this.makeVote(event)}
+            onClick={(event) => this.makeVote(event)}
             className={hasVoted ? css.noVoted : css.no}>
-            {hasVoted ? pct2: option2}
+            {hasVoted ? pct2 : option2}
           </button>
         </Mover>
       </div>
-    )
+    );
   }
 }

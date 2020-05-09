@@ -1,4 +1,4 @@
-import React, { Component} from 'react';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Col } from 'react-bootstrap';
 
@@ -13,84 +13,92 @@ import { isValidPassword } from '~/constants/validations.js';
 import css from '~/styles/Auth.module.scss';
 
 class ResetPassword extends Component {
-  static async getInitialProps({ query }) {
-    return { ...query };
-  }
+	static async getInitialProps({ query }) {
+		return { ...query };
+	}
 
-  constructor(props){
-    super(props);
-    this.state = {
-      password: '',
-      password2: ''
-    }
+	constructor(props) {
+		super(props);
+		this.state = {
+			password: '',
+			password2: '',
+		};
 
-    if (props.user.isAuthenticated){
-      return location.href = '/';
-    }
-  }
+		if (props.user.isAuthenticated) {
+			return (location.href = '/');
+		}
+	}
 
-  /** Handle text changes */
-  handleText = (event) => {
-    const { name, value } = event.target;
-    this.setState({[name]: value}); }
+	/** Handle text changes */
+	handleText = event => {
+		const { name, value } = event.target;
+		this.setState({ [name]: value });
+	};
 
-  changePasswordFromReset = () => {
-    const { password, password2 } = this.state;
-    if (!isValidPassword(password, password2)) return false;
+	changePasswordFromReset = () => {
+		const { password, password2 } = this.state;
+		if (!isValidPassword(password, password2)) return false;
 
-    request({
-      url: '/api/v1/users/password/reset',
-      method: 'PATCH',
-      body: JSON.stringify(this.state),
-      headers: {  'Authorization': process.env.AUTH_KEY },
-      onSuccess: () => {
-        setAlert({ type: 'success', message: `You've successfully set your new password. Log in with your new credentials and enjoy the website!` });
-        location.href = '/';
-      }
-    });
-  }
+		request({
+			url: '/api/v1/users/password/reset',
+			method: 'PATCH',
+			body: JSON.stringify(this.state),
+			headers: { Authorization: process.env.AUTH_KEY },
+			onSuccess: () => {
+				setAlert({
+					type: 'success',
+					message: `You've successfully set your new password. Log in with your new credentials and enjoy the website!`,
+				});
+				location.href = '/';
+			},
+		});
+	};
 
-  render(){
-    const { password, password2 } = this.state;
+	render() {
+		const { password, password2 } = this.state;
 
-    return (
-      <Shader>
-        <div className={css.form}>
-          <Heading>Set New Password</Heading>
+		return (
+			<Shader>
+				<div className={css.form}>
+					<Heading>Set New Password</Heading>
 
-          <Group>
-            <Col>
-              <Label>New Password:</Label>
-              <PasswordInput
-                name={'password'}
-                value={password}
-                onChange={this.handleText}
-                placeholder={'Enter a new password'} />
-            </Col>
-          </Group>
-          <Group>
-            <Col>
-              <Label>Confirm New Password:</Label>
-              <PasswordInput
-                name={'password2'}
-                value={password2}
-                onChange={this.handleText}
-                placeholder={'Confirm your new password'} />
-            </Col>
-          </Group>
-          <Group>
-            <Col>
-              <SubmitButton onClick={this.changePasswordFromReset}>Submit</SubmitButton>
-            </Col>
-          </Group>
-        </div>
-      </Shader>
-    );
-  }
+					<Group>
+						<Col>
+							<Label>New Password:</Label>
+							<PasswordInput
+								name={'password'}
+								value={password}
+								onChange={this.handleText}
+								placeholder={'Enter a new password'}
+							/>
+						</Col>
+					</Group>
+					<Group>
+						<Col>
+							<Label>Confirm New Password:</Label>
+							<PasswordInput
+								name={'password2'}
+								value={password2}
+								onChange={this.handleText}
+								placeholder={'Confirm your new password'}
+							/>
+						</Col>
+					</Group>
+					<Group>
+						<Col>
+							<SubmitButton onClick={this.changePasswordFromReset}>
+								Submit
+							</SubmitButton>
+						</Col>
+					</Group>
+				</div>
+			</Shader>
+		);
+	}
 }
 
 const mapStateToProps = state => ({
-  user: state.user
+	user: state.user,
 });
 
 export default connect(mapStateToProps)(ResetPassword);

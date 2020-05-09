@@ -3,7 +3,11 @@ import { connect } from 'react-redux';
 import { Col, Modal as DefaultModal } from 'react-bootstrap';
 import { zHandlers } from 'zavid-modules';
 
-import { SubmitButton, CancelButton, DeleteButton } from '~/components/button.js';
+import {
+  SubmitButton,
+  CancelButton,
+  DeleteButton
+} from '~/components/button.js';
 import { Group, Label, Select, UsernameInput } from '~/components/form.js';
 import { SocialIcon } from '~/components/icon.js';
 import { Paragraph } from '~/components/text.js';
@@ -12,8 +16,7 @@ import css from '~/styles/components/Modal.module.scss';
 import { socialPlatforms } from '~/constants/settings';
 
 export class Modal extends Component {
-  render(){
-
+  render() {
     const { visible, header, body, footer, onlyBody } = this.props;
 
     const modalHeader = (
@@ -37,26 +40,23 @@ export class Modal extends Component {
     );
 
     return (
-      <DefaultModal
-        show={visible}
-        onHide={null}
-        centered
-        {...this.props}>
+      <DefaultModal show={visible} onHide={null} centered {...this.props}>
         {header ? modalHeader : null}
         {modalBody}
         {footer ? modalFooter : null}
-     </DefaultModal>
-    )
+      </DefaultModal>
+    );
   }
 }
 
 export class ConfirmModal extends Component {
-  render(){
-
+  render() {
     const { message, confirmFunc, confirmText, close, visible } = this.props;
 
     const body = (
-      <Paragraph className={css.text} style={{fontSize: '1.1em'}}>{message}</Paragraph>
+      <Paragraph className={css.text} style={{ fontSize: '1.1em' }}>
+        {message}
+      </Paragraph>
     );
 
     const footer = (
@@ -64,20 +64,14 @@ export class ConfirmModal extends Component {
         <DeleteButton onClick={confirmFunc}>{confirmText}</DeleteButton>
         <CancelButton onClick={close}>Cancel</CancelButton>
       </React.Fragment>
-    )
+    );
 
-    return (
-      <Modal
-        show={visible}
-        body={body}
-        footer={footer}
-        onlyBody={true} />
-    )
+    return <Modal show={visible} body={body} footer={footer} onlyBody={true} />;
   }
 }
 
 export class EthnicModal extends Component {
-  render(){
+  render() {
     const { close, visible, handleSelect, clearSelection, entity } = this.props;
     const { ethnicity1, ethnicity2, ethnicity3, ethnicity4 } = entity;
 
@@ -90,37 +84,39 @@ export class EthnicModal extends Component {
             value={ethnicity1}
             onChange={handleSelect}
             clearSelection={clearSelection}
-            placeholder={'Select first country...'} />
+            placeholder={'Select first country...'}
+          />
           <EthnicSelect
             label={'Second ethnicity'}
             name={'ethnicity2'}
             value={ethnicity2}
             onChange={handleSelect}
             clearSelection={clearSelection}
-            placeholder={'Select second country...'} />
+            placeholder={'Select second country...'}
+          />
         </Group>
         <Group>
-          <EthnicSelect 
+          <EthnicSelect
             label={'Third ethnicity'}
             name={'ethnicity3'}
             value={ethnicity3}
             onChange={handleSelect}
             clearSelection={clearSelection}
-            placeholder={'Select third country...'} />
+            placeholder={'Select third country...'}
+          />
           <EthnicSelect
             label={'Fourth ethnicity'}
             name={'ethnicity4'}
             value={ethnicity4}
             onChange={handleSelect}
             clearSelection={clearSelection}
-            placeholder={'Select fourth country...'} />
+            placeholder={'Select fourth country...'}
+          />
         </Group>
       </React.Fragment>
     );
 
-    const footer = (
-      <CancelButton onClick={close}>Close</CancelButton>
-    );
+    const footer = <CancelButton onClick={close}>Close</CancelButton>;
 
     return (
       <Modal
@@ -128,14 +124,23 @@ export class EthnicModal extends Component {
         scrollable
         body={body}
         footer={footer}
-        onlyBody={true} />
-    )
+        onlyBody={true}
+      />
+    );
   }
 }
 
 class _EthnicSelect extends Component {
-  render(){
-    const { label, name, value, onChange, clearSelection, placeholder, countries } = this.props;
+  render() {
+    const {
+      label,
+      name,
+      value,
+      onChange,
+      clearSelection,
+      placeholder,
+      countries
+    } = this.props;
     return (
       <Col md={6}>
         <Label>{label}:</Label>
@@ -144,30 +149,31 @@ class _EthnicSelect extends Component {
           value={value}
           items={countries}
           onChange={onChange}
-          placeholder={placeholder} />
-        <button
-          onClick={() => clearSelection(name)}
-          className={css.clear}>Clear</button>
+          placeholder={placeholder}
+        />
+        <button onClick={() => clearSelection(name)} className={css.clear}>
+          Clear
+        </button>
       </Col>
-    )
+    );
   }
 }
 
 export class SocialsModal extends Component {
-  constructor(props){
+  constructor(props) {
     super(props);
 
-    this.state = {}
+    this.state = {};
     for (const idx of Object.keys(socialPlatforms)) {
       this.state[idx] = '';
     }
   }
 
   /** Receive socials from props and populate state */
-  static getDerivedStateFromProps(props, state){
+  static getDerivedStateFromProps(props, state) {
     if (props.visible) return;
-    
-    if (props.socials){
+
+    if (props.socials) {
       for (const idx of Object.keys(socialPlatforms)) {
         let social = props.socials[idx];
         state[idx] = social ? social : state[idx];
@@ -179,18 +185,18 @@ export class SocialsModal extends Component {
   confirmSocials = () => {
     this.props.confirm(this.state);
     this.props.close();
-  }
+  };
 
-  render(){
+  render() {
     const { close, visible } = this.props;
 
     const renderFields = () => {
       const items = [];
-      
+
       for (const idx of Object.keys(socialPlatforms)) {
         let social = socialPlatforms[idx];
         items.push(
-          <Col md={6} key={idx} style={{marginBottom: '1em'}}>
+          <Col md={6} key={idx} style={{ marginBottom: '1em' }}>
             <Label>{social.name}</Label>
             <div className={css.social_fields}>
               <SocialIcon icon={social.icon} className={css.icons} />
@@ -198,18 +204,19 @@ export class SocialsModal extends Component {
                 name={idx}
                 value={this.state[idx]}
                 onChange={zHandlers(this).handleText}
-                placeholder={`${social.name} ${social.domain === '' ? 'URL' : 'username'}`} />
+                placeholder={`${social.name} ${
+                  social.domain === '' ? 'URL' : 'username'
+                }`}
+              />
             </div>
           </Col>
         );
       }
-      
-      return items;
-    }
 
-    const body = (
-      <Group>{renderFields()}</Group>
-    );
+      return items;
+    };
+
+    const body = <Group>{renderFields()}</Group>;
 
     const footer = (
       <React.Fragment>
@@ -224,12 +231,13 @@ export class SocialsModal extends Component {
         scrollable
         body={body}
         footer={footer}
-        onlyBody={true} />
-    )
+        onlyBody={true}
+      />
+    );
   }
 }
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   countries: state.countries
 });
 

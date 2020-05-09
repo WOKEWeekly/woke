@@ -35,7 +35,7 @@ pipeline {
       steps {
         timeout(time: 3, unit: 'MINUTES') {
           dir('src'){
-            sh 'npm ci'
+            sh 'npm install'
             sh 'npm run build'
           }
         }

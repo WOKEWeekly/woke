@@ -3,46 +3,43 @@ import { Container } from 'react-bootstrap';
 import css from '~/styles/components/Toolbar.module.scss';
 
 class Toolbar extends Component {
-  constructor(props){
+  constructor(props) {
     super(props);
-    this.state = { isLoaded: false }
+    this.state = { isLoaded: false };
   }
 
-  componentDidMount(){
+  componentDidMount() {
     this.setState({ isLoaded: true });
   }
 
-  render(){
+  render() {
     if (!this.state.isLoaded) return null;
-    
+
     const { children } = this.props;
     if (children === null) return null;
-    if (children.length && children.filter(e => e !== null).length < 1) return null;
+    if (children.length && children.filter((e) => e !== null).length < 1)
+      return null;
 
     return (
       <div className={this.props.className}>
-        <Container className={css.container}>
-          {this.props.children}
-        </Container>
+        <Container className={css.container}>{this.props.children}</Container>
       </div>
-    )
+    );
   }
 }
 
 export class TopToolbar extends Component {
-  render(){
+  render() {
     return (
-      <Toolbar
-        className={css.top_toolbar}
-        children={this.props.children} />
-    )
+      <Toolbar className={css.top_toolbar} />
+    );
   }
 }
 
 export class BottomToolbar extends Component {
-  render(){
+  render() {
     return (
-      <Toolbar className={css.bottom_toolbar} children={this.props.children} />
-    )
+      <Toolbar className={css.bottom_toolbar} />
+    );
   }
 }

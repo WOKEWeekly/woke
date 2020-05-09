@@ -6,6 +6,8 @@ const config = './config.env';
 const isStageTesting = process.argv.includes('--stage-testing');
 const isDevTesting = process.argv.includes('--dev-testing');
 
+const { limits } = require('./constants/settings');
+
 const next = require('next');
 const server = next({
   dev,
@@ -24,23 +26,32 @@ const mysql = require('mysql');
 const port = process.env.PORT || 3000;
 const setDb = require("./private/api/db").setDb;
 
-app.use(bodyParser.json({
-  limit: '2MB'
-}));
+app.use(bodyParser.json({ limit: `${limits.file}MB` }));
 app.use(cookieParser());
 app.use(cors());
 
+// TODO: To be fully replaced with Knex
 // Initialise MySQL database
 const conn = mysql.createConnection({
-  host: process.env.MYSQL_HOST,
-  user: process.env.MYSQL_USER,
-  password: process.env.MYSQL_PWD,
-  database: process.env.MYSQL_NAME,
+	host: process.env.MYSQL_HOST,
+	user: process.env.MYSQL_USER,
+	password: process.env.MYSQL_PWD,
+	database: process.env.MYSQL_NAME,
+});
+
+const knex = require('knex')({
+	client: 'mysql',
+	connection: {
+		host: process.env.MYSQL_HOST,
+		user: process.env.MYSQL_USER,
+		password: process.env.MYSQL_PWD,
+		database: process.env.MYSQL_NAME,
+	},
 });
 
 // Check for loaded environment variables
 if (dotenv.error && !process.env.PORT) {
-  throw new Error(`No environment variables loaded.`);
+	throw new Error(`No environment variables loaded.`);
 }
 
 // Start client server
@@ -50,13 +61,14 @@ if (!isStageTesting && !isDevTesting) {
 
 function startClientServer() {
   startServer();
-  require('./private/routes.js')(app, conn, server);
-  require('./private/cron.js')(conn);
+	require('./private/api.js')(app, conn, knex);
+	require('./private/routes.js')(app, conn, knex, server);
+	require('./private/cron.js')(conn);
 }
 
 function startTestServer(next) {
   startServer(next);
-  require('./private/api/api.js')(app, conn);
+	require('./private/api.js')(app, conn, knex);
 }
 
 function startServer(next) {
@@ -74,7 +86,7 @@ function startServer(next) {
       conn.connect(function (err) {
         if (!err) {
           setDb(conn);
-          require("./private/api/api.js")(app, conn);
+          require('./private/api.js')(app, conn, knex);
           console.log("Connected to database.");
         }
         callback(err);

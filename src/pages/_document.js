@@ -1,3 +1,4 @@
+import React from 'react';
 import Document, { Html, Head, Main, NextScript } from 'next/document';
 import { cloudinary, domain } from '~/constants/settings.js';
 import { truncateText } from '~/components/text.js';
@@ -10,11 +11,13 @@ export default class MyDocument extends Document {
 
   render() {
     const { query } = this.props.__NEXT_DATA__;
-    
+
     return (
       <Html>
-        <Head><Meta {...query}/></Head>
-        <body className={"body"}>
+        <Head>
+          <Meta {...query} />
+        </Head>
+        <body className={'body'}>
           <Main />
           <NextScript />
         </body>
@@ -57,13 +60,20 @@ const Meta = ({
     <meta property="og:image:type" content="image/jpeg" />
     <meta property="og:image:alt" content={title} />
     <meta property="og:site_name" content="#WOKEWeekly" />
-    <meta name="google-site-verification" content="Kv9Zk269oRFxqqh7W9amnHVXRsR8qREsGK4dk0a1SQk" />
+    <meta
+      name="google-site-verification"
+      content="Kv9Zk269oRFxqqh7W9amnHVXRsR8qREsGK4dk0a1SQk"
+    />
     <meta name="twitter:card" content="summary_large_image" />
 
     {/* Favicon */}
     <link rel="icon" href={`${cloudinary.url}/public/logos/favicon.jpg`} />
 
     {/* BootStrap and Google Web Fonts importation */}
-    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Raleway:400,700|Yeseva+One|Patua+One:400,700" />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="https://fonts.googleapis.com/css?family=Raleway:400,700|Yeseva+One|Patua+One:400,700"
+    />
   </React.Fragment>
-)
+);

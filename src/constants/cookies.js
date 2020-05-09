@@ -5,36 +5,43 @@ import { Fader } from '~/components/transitioner.js';
 import css from '~/styles/components/Alert.module.scss';
 
 export class CookiePrompt extends Component {
-  constructor(){
+  constructor() {
     super();
-    this.state = { isLoaded: false }
+    this.state = { isLoaded: false };
   }
 
-  componentDidMount(){
+  componentDidMount() {
     setTimeout(() => {
-      this.setState({ isLoaded: true});
+      this.setState({ isLoaded: true });
     }, 2000);
   }
 
-  render(){
+  render() {
     const { isLoaded } = this.state;
 
     return (
       <Fader determinant={isLoaded} duration={500} notDiv>
         <div className={css.cookiePrompt}>
           <div>
-            <span>This site uses cookies and similar technologies to recognise your preferences. Stay woke on cookies by viewing our <a href={'/cookies'}>Cookie Policy</a>. By closing this pop-up, you consent to our usage of cookies.</span>
-            <button onClick={this.props.acceptCookies}><Icon name={'times'} /></button>
+            <span>
+              This site uses cookies and similar technologies to recognise your
+              preferences. Stay woke on cookies by viewing our{' '}
+              <a href={'/cookies'}>Cookie Policy</a>. By closing this pop-up,
+              you consent to our usage of cookies.
+            </span>
+            <button onClick={this.props.acceptCookies}>
+              <Icon name={'times'} />
+            </button>
           </div>
         </div>
       </Fader>
-    )
+    );
   }
 }
 
 export function setCookie(name, value, hours) {
   const date = new Date();
-  date.setTime(date.getTime() + (hours * 60 * 60 * 1000));
+  date.setTime(date.getTime() + hours * 60 * 60 * 1000);
   const expires = `expires=${date.toUTCString()}`;
   document.cookie = `${name}=${value};${expires};path=/`;
 }
@@ -49,14 +56,14 @@ export function getCookie(cname) {
       return c.substring(name.length, c.length);
     }
   }
-  return "";
+  return '';
 }
 
-export function checkCookies(message){
-  if (getCookie('cookiesAccepted') === 'true'){
+export function checkCookies(message) {
+  if (getCookie('cookiesAccepted') === 'true') {
     return true;
   } else {
-    if (message){
+    if (message) {
       return alert.error(message);
     } else {
       return false;

@@ -12,135 +12,156 @@ import { isValidArticle } from '~/constants/validations.js';
 import ArticleForm from './form.js';
 
 class ArticleCrud extends Component {
-  static async getInitialProps({ query }) {
-    return { ...query };
-  }
+	static async getInitialProps({ query }) {
+		return { ...query };
+	}
 
-  constructor(){
-    super();
-    this.state = {
-      id: 0,
-      title: '',
-      content: '',
-      category: '',
-      excerpt: '',
-      image: null,
-      authorId: null,
-      status: ARTICLE_STATUS.DRAFT,
-      datePublished: new Date(),
-      tags: '',
+	constructor() {
+		super();
+		this.state = {
+			id: 0,
+			title: '',
+			content: '',
+			category: '',
+			excerpt: '',
+			image: null,
+			authorId: null,
+			status: ARTICLE_STATUS.DRAFT,
+			datePublished: new Date(),
+			tags: '',
 
-      isCreateOperation: true
-    }
-  }
+			isCreateOperation: true,
+		};
+	}
 
-  componentDidMount(){
-    const { article, operation } = this.props
-    if (article){
-      const tags = zString.convertArrayToCsv(JSON.parse(article.tags));
-      const datePublished = article.status !== ARTICLE_STATUS.PUBLISHED ? (new Date()) : article.datePublished;
-      this.setState({
-        ...article,
-        tags,
-        datePublished,
-        isCreateOperation: operation === OPERATIONS.CREATE
-      });
-    }
-  }
+	componentDidMount() {
+		const { article, operation } = this.props;
+		if (article) {
+			const tags = zString.convertArrayToCsv(JSON.parse(article.tags));
+			const datePublished =
+				article.status !== ARTICLE_STATUS.PUBLISHED
+					? new Date()
+					: article.datePublished;
+			this.setState({
+				...article,
+				tags,
+				datePublished,
+				isCreateOperation: operation === OPERATIONS.CREATE,
+			});
+		}
+	}
 
-  buildRequest = () => {
-    const { title, content, category, excerpt, tags, image, authorId, status, datePublished } = this.state;
-    const { operation } = this.props;
+	buildRequest = () => {
+		const {
+			title,
+			content,
+			category,
+			excerpt,
+			tags,
+			image,
+			authorId,
+			status,
+			datePublished,
+		} = this.state;
+		const { operation } = this.props;
 
-    // Only have published date if the status is published
-    const date = status !== ARTICLE_STATUS.PUBLISHED ? null : zDate.formatISODate(datePublished);
+		// Only have published date if the status is published
+		const date =
+			status !== ARTICLE_STATUS.PUBLISHED
+				? null
+				: zDate.formatISODate(datePublished);
 
-    const article = {
-      title: title.trim(), 
-      content: content.trim(),
-      category: category.trim(),
-      excerpt: excerpt.trim(),
-      tags: JSON.stringify(zString.convertCsvToArray(tags)),
-      image,
-      authorId,
-      status,
-      datePublished: date
-    };
+		const article = {
+			title: title.trim(),
+			content: content.trim(),
+			category: category.trim(),
+			excerpt: excerpt.trim(),
+			tags: JSON.stringify(zString.convertCsvToArray(tags)),
+			image,
+			authorId,
+			status,
+			datePublished: date,
+		};
 
-    let data;
+		let data;
 
-    if (operation === OPERATIONS.CREATE){
-      data = JSON.stringify(article);
-    } else {
-      data = JSON.stringify({
-        article,
-        changed: image !== '' && image !== null && !cloudinary.check(image)
-      });
-    }
+		if (operation === OPERATIONS.CREATE) {
+			data = JSON.stringify(article);
+		} else {
+			data = JSON.stringify({
+				article,
+				changed: image !== '' && image !== null && !cloudinary.check(image),
+			});
+		}
 
-    return data
-  }
+		return data;
+	};
 
-  submitArticle = () => {
-    if (!isValidArticle(this.state)) return;
-    const data = this.buildRequest();
+	submitArticle = () => {
+		if (!isValidArticle(this.state)) return;
+		const data = this.buildRequest();
 
-    /** Add article to database */
-    request({
-      url: '/api/v1/articles',
-      method: 'POST',
-      body: data,
-      headers: { 'Authorization': `Bearer ${this.props.user.token}` },
-      onSuccess: () => {
-        setAlert({ type: 'success', message: `You've successfully added the article titled: ${this.state.title}.` });
-        location.href = '/admin/articles';
-      }
-    });
-  }
+		/** Add article to database */
+		request({
+			url: '/api/v1/articles',
+			method: 'POST',
+			body: data,
+			headers: { Authorization: `Bearer ${this.props.user.token}` },
+			onSuccess: () => {
+				setAlert({
+					type: 'success',
+					message: `You've successfully added the article titled: ${this.state.title}.`,
+				});
+				location.href = '/admin/articles';
+			},
+		});
+	};
 
-  /** Update article on server */
-  updateArticle = () => {
-    if (!isValidArticle(this.state)) return;
-    const data = this.buildRequest();
+	/** Update article on server */
+	updateArticle = () => {
+		if (!isValidArticle(this.state)) return;
+		const data = this.buildRequest();
 
-    /** Update article in database */
-    request({
-      url: `/api/v1/articles/${this.props.article.id}`,
-      method: 'PUT',
-      body: data,
-      headers: { 'Authorization': `Bearer ${this.props.user.token}`, },
-      onSuccess: () => {
-        setAlert({ type: 'success', message: `You've successfully edited the article titled: ${this.state.title}.` });
-        location.href = '/admin/articles';
-      }
-    });
-  }
+		/** Update article in database */
+		request({
+			url: `/api/v1/articles/${this.props.article.id}`,
+			method: 'PUT',
+			body: data,
+			headers: { Authorization: `Bearer ${this.props.user.token}` },
+			onSuccess: () => {
+				setAlert({
+					type: 'success',
+					message: `You've successfully edited the article titled: ${this.state.title}.`,
+				});
+				location.href = '/admin/articles';
+			},
+		});
+	};
 
-  render(){
+	render() {
+		const { title, operation } = this.props;
+		const { isCreateOperation } = this.state;
 
-    const { title, operation } = this.props;
-    const { isCreateOperation } = this.state;
-
-    return (
-      <ArticleForm
-        heading={title}
-        article={this.state}
-        handlers={zHandlers(this)}
-
-        confirmText={isCreateOperation ? 'Submit' : 'Update'}
-        confirmFunc={isCreateOperation ? this.submitArticle : this.updateArticle}
-        cancelFunc={() => location.href = '/admin/articles'}
-
-        operation={operation}
-
-        metaTitle={title}
-        metaUrl={`/${operation}`} />
-    );
-  }
+		return (
+			<ArticleForm
+				heading={title}
+				article={this.state}
+				handlers={zHandlers(this)}
+				confirmText={isCreateOperation ? 'Submit' : 'Update'}
+				confirmFunc={
+					isCreateOperation ? this.submitArticle : this.updateArticle
+				}
+				cancelFunc={() => (location.href = '/admin/articles')}
+				operation={operation}
+				metaTitle={title}
+				metaUrl={`/${operation}`}
+			/>
+		);
+	}
 }
 
 const mapStateToProps = state => ({
-  user: state.user
+	user: state.user,
 });
 
 export default connect(mapStateToProps)(ArticleCrud);
