@@ -24,7 +24,7 @@ const dotenv = require('dotenv').config({
 });
 const mysql = require('mysql');
 const port = process.env.PORT || 3000;
-const setDb = require("./private/api/db").setDb;
+const {setDb, setKnex} = require("./private/api/db");
 
 app.use(bodyParser.json({ limit: `${limits.file}MB` }));
 app.use(cookieParser());
@@ -48,6 +48,7 @@ const knex = require('knex')({
 		database: process.env.MYSQL_NAME,
 	},
 });
+setKnex(knex);
 
 // Check for loaded environment variables
 if (dotenv.error && !process.env.PORT) {
@@ -61,14 +62,12 @@ if (!isStageTesting && !isDevTesting) {
 
 function startClientServer() {
   startServer();
-	require('./private/api.js')(app, conn, knex);
 	require('./private/routes.js')(app, conn, knex, server);
 	require('./private/cron.js')(conn);
 }
 
 function startTestServer(next) {
   startServer(next);
-	require('./private/api.js')(app, conn, knex);
 }
 
 function startServer(next) {
@@ -86,7 +85,7 @@ function startServer(next) {
       conn.connect(function (err) {
         if (!err) {
           setDb(conn);
-          require('./private/api.js')(app, conn, knex);
+          require('./private/api/api.js')(app, conn);
           console.log("Connected to database.");
         }
         callback(err);
@@ -103,4 +102,4 @@ module.exports = {
   config,
   dev,
   isStageTesting
-}
+};

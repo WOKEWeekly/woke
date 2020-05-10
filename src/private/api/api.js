@@ -1,14 +1,6 @@
-const async = require('async');
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
-const validator = require("email-validator");
-
-const emails = require('../emails.js');
 const ERROR = require('../errors.js');
-const filer = require('../filer.js');
 const {
   verifyToken,
-  validateReq,
   logUserActivity
 } = require('../middleware.js');
 const {
@@ -23,12 +15,9 @@ const topicsRoutes = require('./routes/topics');
 const reviewsRoutes = require('./routes/reviews');
 const articlesRoutes = require('./routes/articles');
 const usersRoutes = require('./routes/users');
+const documentsRoutes = require('./routes/documents');
 
 const CLEARANCES = require('../../constants/clearances.js');
-const {
-  DIRECTORY,
-  ENTITY
-} = require('../../constants/strings.js');
 
 const emailsOn = process.env.NODE_ENV === 'production' || process.argv.includes('--emails');
 if (!emailsOn) console.warn("Emails are turned off.");
@@ -59,6 +48,9 @@ module.exports = function (app, conn) {
   // users routes
   app.use('/api/v1/users', usersRoutes);
 
+  // documents routes
+  app.use('/api/v1/documents', documentsRoutes);
+
   /** Update information pages */
   app.put('/api/v1/pages', verifyToken(CLEARANCES.ACTIONS.EDIT_PAGE), function (req, res) {
     const {
@@ -76,4 +68,4 @@ module.exports = function (app, conn) {
       respondToClient(res, err, 200);
     });
   });
-}
+};
