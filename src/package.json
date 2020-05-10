@@ -7,7 +7,7 @@
     "test": "mocha --dev-testing --no-timeout",
     "test-ci": "mocha --no-timeout --stage-testing --reporter mocha-junit-reporter",
     "lint": "eslint \"**/*.js\" --ignore-path ../.gitignore ",
-    "prettify": "prettier --ignore-path ../.gitignore --write **/*.js"
+    "prettify": "prettier --ignore-path ../.gitignore --write \"**/*.js\""
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^1.2.28",
