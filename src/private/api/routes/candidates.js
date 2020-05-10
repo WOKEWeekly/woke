@@ -7,12 +7,9 @@ const CandidatesController = require('../controllers/candidates.controller');
 const CLEARANCES = require('../../../constants/clearances');
 
 // Middleware
-const {
-    verifyToken,
-    validateReq
-} = require('../../middleware');
+const { verifyToken, validateReq } = require('../../middleware');
 
-// Routes /candidates 
+// Routes /candidates
 
 // GET all candidates
 router.get('/', validateReq, CandidatesController.getAllCandidates);
@@ -23,10 +20,22 @@ router.get('/latest', validateReq, CandidatesController.getLatestCandidate);
 // GET random candidate
 router.get('/random', validateReq, CandidatesController.getRandomCandidate);
 // POST new candidate
-router.post('/', verifyToken(CLEARANCES.ACTIONS.CRUD_BLACKEX), CandidatesController.addCandidate);
+router.post(
+  '/',
+  verifyToken(CLEARANCES.ACTIONS.CRUD_BLACKEX),
+  CandidatesController.addCandidate
+);
 // PUT candidate update
-router.put('/:id', verifyToken(CLEARANCES.ACTIONS.CRUD_BLACKEX), CandidatesController.updateCandidate);
+router.put(
+  '/:id',
+  verifyToken(CLEARANCES.ACTIONS.CRUD_BLACKEX),
+  CandidatesController.updateCandidate
+);
 // DELETE candidate
-router.delete('/:id', verifyToken(CLEARANCES.ACTIONS.CRUD_BLACKEX), CandidatesController.deleteCandidate);
+router.delete(
+  '/:id',
+  verifyToken(CLEARANCES.ACTIONS.CRUD_BLACKEX),
+  CandidatesController.deleteCandidate
+);
 
 module.exports = router;

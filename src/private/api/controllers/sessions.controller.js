@@ -1,16 +1,10 @@
-const {
-  respondToClient
-} = require("../../response");
-const async = require("async");
-const SQL = require("../../sql");
-const conn = require("../db").getDb();
+const { respondToClient } = require('../../response');
+const async = require('async');
+const SQL = require('../../sql');
+const conn = require('../db').getDb();
 const filer = require('../../filer');
-const {
-  DIRECTORY,
-  ENTITY
-} = require('../../../constants/strings');
+const { DIRECTORY, ENTITY } = require('../../../constants/strings');
 const ERROR = require('../../errors');
-
 
 exports.getAllSessions = (req, res) => {
   conn.query(SQL.SESSIONS.READ.ALL, function (err, sessions) {
@@ -20,7 +14,7 @@ exports.getAllSessions = (req, res) => {
 
 exports.getSession = (req, res) => {
   const id = req.params.id;
-  conn.query(SQL.SESSIONS.READ.SINGLE("id"), id, function (
+  conn.query(SQL.SESSIONS.READ.SINGLE('id'), id, function (
     err,
     [session] = []
   ) {
@@ -54,7 +48,7 @@ exports.getFeaturedSessions = (req, res) => {
             upcoming: false
           });
         });
-      },
+      }
     ],
     function (err, session) {
       respondToClient(res, err, 200, session);
@@ -73,14 +67,11 @@ exports.addSession = (req, res) => {
       },
       function (session, callback) {
         // Add session to database
-        const {
-          sql,
-          values
-        } = SQL.SESSIONS.CREATE(session);
+        const { sql, values } = SQL.SESSIONS.CREATE(session);
         conn.query(sql, [values], function (err, result) {
           err ? callback(err) : callback(null, result.insertId);
         });
-      },
+      }
     ],
     function (err, id) {
       respondToClient(res, err, 201, {
@@ -92,16 +83,13 @@ exports.addSession = (req, res) => {
 
 exports.updateSession = (req, res) => {
   const id = req.params.id;
-  const {
-    session,
-    changed
-  } = req.body;
+  const { session, changed } = req.body;
 
   async.waterfall(
     [
       function (callback) {
         // Delete old image if changed.
-        conn.query(SQL.SESSIONS.READ.SINGLE("id", "image"), id, function (
+        conn.query(SQL.SESSIONS.READ.SINGLE('id', 'image'), id, function (
           err,
           [session] = []
         ) {
@@ -118,14 +106,11 @@ exports.updateSession = (req, res) => {
       },
       function (session, callback) {
         // Update session in database
-        const {
-          sql,
-          values
-        } = SQL.SESSIONS.UPDATE(id, session, changed);
+        const { sql, values } = SQL.SESSIONS.UPDATE(id, session, changed);
         conn.query(sql, values, function (err) {
           err ? callback(err) : callback(null, session.slug);
         });
-      },
+      }
     ],
     function (err, slug) {
       respondToClient(res, err, 200, {
@@ -138,20 +123,29 @@ exports.updateSession = (req, res) => {
 exports.deleteSession = (req, res) => {
   const id = req.params.id;
 
-  async.waterfall([
-    function (callback) { // Delete image from cloud
-      conn.query(SQL.SESSIONS.READ.SINGLE('id', 'image'), id, function (err, [session] = []) {
-        if (err) return callback(err);
-        if (!session) return callback(ERROR.INVALID_ENTITY_ID(ENTITY.SESSION, id));
-        filer.destroyImage(session.image, callback);
-      });
-    },
-    function (callback) { // Delete session from database
-      conn.query(SQL.SESSIONS.DELETE, id, function (err) {
-        err ? callback(err) : callback(null);
-      });
+  async.waterfall(
+    [
+      function (callback) {
+        // Delete image from cloud
+        conn.query(SQL.SESSIONS.READ.SINGLE('id', 'image'), id, function (
+          err,
+          [session] = []
+        ) {
+          if (err) return callback(err);
+          if (!session)
+            return callback(ERROR.INVALID_ENTITY_ID(ENTITY.SESSION, id));
+          filer.destroyImage(session.image, callback);
+        });
+      },
+      function (callback) {
+        // Delete session from database
+        conn.query(SQL.SESSIONS.DELETE, id, function (err) {
+          err ? callback(err) : callback(null);
+        });
+      }
+    ],
+    function (err) {
+      respondToClient(res, err, 204);
     }
-  ], function (err) {
-    respondToClient(res, err, 204);
-  });
+  );
 };

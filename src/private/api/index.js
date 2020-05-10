@@ -1,11 +1,6 @@
 const ERROR = require('../errors.js');
-const {
-  verifyToken,
-  logUserActivity
-} = require('../middleware.js');
-const {
-  respondToClient
-} = require('../response.js');
+const { verifyToken, logUserActivity } = require('../middleware.js');
+const { respondToClient } = require('../response.js');
 const SQL = require('../sql.js');
 
 const sessionsRoutes = require('./routes/sessions');
@@ -19,11 +14,11 @@ const documentsRoutes = require('./routes/documents');
 
 const CLEARANCES = require('../../constants/clearances.js');
 
-const emailsOn = process.env.NODE_ENV === 'production' || process.argv.includes('--emails');
-if (!emailsOn) console.warn("Emails are turned off.");
+const emailsOn =
+  process.env.NODE_ENV === 'production' || process.argv.includes('--emails');
+if (!emailsOn) console.warn('Emails are turned off.');
 
 module.exports = function (app, conn) {
-
   /** Log user activity on each request */
   app.use('/api', logUserActivity(conn));
 
@@ -52,15 +47,12 @@ module.exports = function (app, conn) {
   app.use('/api/v1/documents', documentsRoutes);
 
   /** Update information pages */
-  app.put('/api/v1/pages', verifyToken(CLEARANCES.ACTIONS.EDIT_PAGE), function (req, res) {
-    const {
-      page,
-      text
-    } = req.body;
-    const {
-      sql,
-      values
-    } = SQL.PAGES.UPDATE(page, text);
+  app.put('/api/v1/pages', verifyToken(CLEARANCES.ACTIONS.EDIT_PAGE), function (
+    req,
+    res
+  ) {
+    const { page, text } = req.body;
+    const { sql, values } = SQL.PAGES.UPDATE(page, text);
 
     conn.query(sql, values, function (err, result) {
       if (err) return respondToClient(res, err);
