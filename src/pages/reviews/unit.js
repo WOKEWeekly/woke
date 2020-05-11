@@ -12,8 +12,7 @@ import {
   Paragraph,
   QuoteWrapper,
   Divider,
-  ExpandText,
-  truncateText
+  ExpandText
 } from '~/components/text.js';
 import { Slider } from '~/components/transitioner.js';
 import Rator from '~/components/rator.js';
@@ -21,6 +20,8 @@ import Rator from '~/components/rator.js';
 import CLEARANCES from '~/constants/clearances.js';
 import request from '~/constants/request.js';
 import { cloudinary } from '~/constants/settings.js';
+
+import { zText } from 'zavid-modules';
 
 import css from '~/styles/pages/Home.module.scss';
 
@@ -164,7 +165,7 @@ class Review extends PureComponent {
                 <Paragraph className={css.paragraph}>
                   {showFullText
                     ? item.description
-                    : truncateText(item.description, limit)}
+                    : zText.truncateText(item.description, limit)}
                 </Paragraph>
                 <ReadMore />
               </div>

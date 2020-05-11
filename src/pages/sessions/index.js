@@ -15,8 +15,7 @@ import {
   Subtitle,
   Divider,
   Paragraph,
-  VanillaLink,
-  truncateText
+  VanillaLink
 } from '~/components/text.js';
 import { BottomToolbar } from '~/components/toolbar.js';
 import { Zoomer, Slider, Fader } from '~/components/transitioner.js';
@@ -24,6 +23,8 @@ import { Zoomer, Slider, Fader } from '~/components/transitioner.js';
 import CLEARANCES from '~/constants/clearances.js';
 import request from '~/constants/request.js';
 import { cloudinary } from '~/constants/settings.js';
+
+import { zText } from 'zavid-modules';
 
 import css from '~/styles/pages/Sessions.module.scss';
 
@@ -264,7 +265,7 @@ class Session extends PureComponent {
                     className={css.description}
                     link={link}
                     moretext={'Read more'}>
-                    {truncateText(item.description, 60)}
+                    {zText.truncateText(item.description, 60)}
                   </Paragraph>
                 </div>
               </Col>

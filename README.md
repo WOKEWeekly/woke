@@ -26,7 +26,7 @@ It is strongly recommended that you install the [ESLint](https://eslint.org/) pl
 
 This plugin is very useful for highlighting problems while you're writing code and ensuring the code you're writing matches standard convention.
 
-To scan the source files for linting errors or warning, run the following command:
+To scan the source files for linting errors or warnings, run the following command:
 ```
 npm run lint
 ```

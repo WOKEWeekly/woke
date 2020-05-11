@@ -8,13 +8,14 @@ import {
   Subtitle,
   Divider,
   Paragraph,
-  VanillaLink,
-  truncateText
+  VanillaLink
 } from '~/components/text.js';
 import { Slider } from '~/components/transitioner.js';
 
 import request from '~/constants/request.js';
 import { cloudinary } from '~/constants/settings.js';
+
+import { zText } from 'zavid-modules';
 
 import css from '~/styles/pages/Members.module.scss';
 
@@ -133,7 +134,7 @@ class Exec extends PureComponent {
                     className={css.paragraph}
                     link={link}
                     moretext={`More on ${item.firstname}`}>
-                    {truncateText(item.description, 60)}
+                    {zText.truncateText(item.description, 60)}
                   </Paragraph>
                 </div>
               </Col>

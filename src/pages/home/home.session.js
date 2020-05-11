@@ -6,15 +6,14 @@ import {
   Subtitle,
   Divider,
   Paragraph,
-  VanillaLink,
-  truncateText
+  VanillaLink
 } from '~/components/text.js';
 import { Fader } from '~/components/transitioner.js';
 
 import request from '~/constants/request.js';
 import { cloudinary } from '~/constants/settings.js';
 
-import { zDate } from 'zavid-modules';
+import { zDate, zText } from 'zavid-modules';
 
 import css from '~/styles/pages/Home.module.scss';
 
@@ -84,7 +83,7 @@ export default class UpcomingSession extends Component {
                   link={link}
                   moretext={'Find out more'}
                   className={css.paragraph}>
-                  {truncateText(session.description)}
+                  {zText.truncateText(session.description)}
                 </Paragraph>
               </div>
             </div>

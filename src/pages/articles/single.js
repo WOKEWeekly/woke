@@ -1,17 +1,11 @@
 import React, { Component, PureComponent } from 'react';
 import { Col, Row, Container } from 'react-bootstrap';
 import { connect } from 'react-redux';
-import { zDate } from 'zavid-modules';
+import { zDate, zText } from 'zavid-modules';
 
 import { AdminButton, BackButton } from '~/components/button.js';
 import { PromoIconsBar } from '~/components/icon.js';
-import {
-  Title,
-  Subtitle,
-  Paragraph,
-  Divider,
-  createExcerpt
-} from '~/components/text.js';
+import { Title, Subtitle, Paragraph, Divider } from '~/components/text.js';
 import { BottomToolbar } from '~/components/toolbar.js';
 import { Partitioner, Shader, Spacer } from '~/components/layout.js';
 import { SocialMediaShareBlock } from '~/components/socialmedia.js';
@@ -153,7 +147,7 @@ class ArticlePage extends Component {
           <Title className={css.name}>{authorName}</Title>
           <PromoIconsBar socials={authorSocials} />
           <Paragraph className={css.description}>
-            {createExcerpt(authorDescription)}
+            {zText.extractExcerpt(authorDescription)}
           </Paragraph>
         </Fader>
       );

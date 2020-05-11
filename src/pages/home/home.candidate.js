@@ -7,8 +7,7 @@ import {
   Subtitle,
   Divider,
   Paragraph,
-  VanillaLink,
-  truncateText
+  VanillaLink
 } from '~/components/text.js';
 import { Fader } from '~/components/transitioner.js';
 
@@ -16,7 +15,7 @@ import { countriesToString } from '~/constants/countries.js';
 import request from '~/constants/request.js';
 import { cloudinary } from '~/constants/settings.js';
 
-import { zDate } from 'zavid-modules';
+import { zDate, zText } from 'zavid-modules';
 
 import css from '~/styles/pages/Home.module.scss';
 
@@ -100,7 +99,7 @@ class RandomCandidate extends Component {
                   link={link}
                   moretext={`Discover more on ${candidate.firstname}`}
                   className={css.paragraph}>
-                  {truncateText(candidate.description)}
+                  {zText.truncateText(candidate.description)}
                 </Paragraph>
               </div>
             </div>

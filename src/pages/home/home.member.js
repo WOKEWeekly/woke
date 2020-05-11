@@ -8,13 +8,14 @@ import {
   Subtitle,
   Divider,
   Paragraph,
-  VanillaLink,
-  truncateText
+  VanillaLink
 } from '~/components/text.js';
 import { Fader } from '~/components/transitioner.js';
 
 import request from '~/constants/request.js';
 import { cloudinary } from '~/constants/settings.js';
+
+import { zText } from 'zavid-modules';
 
 import css from '~/styles/pages/Home.module.scss';
 
@@ -101,7 +102,7 @@ export default class RandomMember extends Component {
                       link={link}
                       moretext={`Read more on ${member.firstname}`}
                       className={css.paragraph}>
-                      {truncateText(member.description)}
+                      {zText.truncateText(member.description)}
                     </Paragraph>
                   </div>
                 </Col>

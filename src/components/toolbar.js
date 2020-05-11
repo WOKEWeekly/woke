@@ -15,14 +15,12 @@ class Toolbar extends Component {
   render() {
     if (!this.state.isLoaded) return null;
 
-    const { children } = this.props;
-    if (children === null) return null;
-    if (children.length && children.filter((e) => e !== null).length < 1)
-      return null;
+    const { children, className } = this.props;
+    if (!children) return null;
 
     return (
-      <div className={this.props.className}>
-        <Container className={css.container}>{this.props.children}</Container>
+      <div className={className}>
+        <Container className={css.container}>{children}</Container>
       </div>
     );
   }
