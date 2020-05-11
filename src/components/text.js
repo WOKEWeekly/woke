@@ -35,7 +35,13 @@ export class IParagraph extends Component {
     const classes = classNames(css.paragraph, this.props.className);
 
     children = zText.applySubstitutions(children, substitutions);
-    children = zText.formatText(children, css[`link-${theme.toLowerCase()}`]);
+    children = zText.formatText(children, {
+      heading: css.heading,
+      subheading: css.subheading,
+      paragraph: css.body,
+      divider: css.divider,
+      hyperlink: css[`link-${theme.toLowerCase()}`]
+    });
 
     const ReadMoreLabel = () => {
       if (!moretext) return null;
