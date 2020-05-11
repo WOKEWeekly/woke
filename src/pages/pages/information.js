@@ -15,73 +15,73 @@ import { accounts, forms } from '~/constants/settings.js';
 import css from '~/styles/pages/Information.module.scss';
 
 class Info extends Component {
-	/** Retrieve information from server */
-	static async getInitialProps({ query }) {
-		return { ...query };
-	}
+  /** Retrieve information from server */
+  static async getInitialProps({ query }) {
+    return { ...query };
+  }
 
-	constructor() {
-		super();
-		this.state = { isLoaded: false };
-	}
+  constructor() {
+    super();
+    this.state = { isLoaded: false };
+  }
 
-	componentDidMount() {
-		this.setState({ isLoaded: true });
-	}
+  componentDidMount() {
+    this.setState({ isLoaded: true });
+  }
 
-	render() {
-		const { isLoaded } = this.state;
+  render() {
+    const { isLoaded } = this.state;
     const { user, pageText, ogUrl, lastModified } = this.props;
 
-		return (
-			<Fader determinant={isLoaded} duration={750}>
-				<Spacer>
-					<Shader>
-						<div className={css.container}>
-							<Paragraph
-								className={css.text}
-								substitutions={{
-									lastModified: zDate.formatDate(lastModified),
-								}}>
-								{pageText}
-							</Paragraph>
+    return (
+      <Fader determinant={isLoaded} duration={750}>
+        <Spacer>
+          <Shader>
+            <div className={css.container}>
+              <Paragraph
+                className={css.text}
+                substitutions={{
+                  lastModified: zDate.formatDate(lastModified)
+                }}>
+                {pageText}
+              </Paragraph>
 
-							{ogUrl === '/donate' ? (
-								<button
-									className={css.infoButton}
-									onClick={() => window.open(accounts.paypal, '_blank')}>
-									<Icon name={'paypal'} prefix={'fab'} />
-									Donate with PayPal
-								</button>
-							) : null}
+              {ogUrl === '/donate' ? (
+                <button
+                  className={css.infoButton}
+                  onClick={() => window.open(accounts.paypal, '_blank')}>
+                  <Icon name={'paypal'} prefix={'fab'} />
+                  Donate with PayPal
+                </button>
+              ) : null}
 
-							{ogUrl === '/recruitment' ? (
-								<button
-									className={css.infoButton}
-									onClick={() => window.open(forms.recruitment, '_blank')}>
-									<Icon name={'user-plus'} prefix={'fas'} />
-									Join the Team
-								</button>
-							) : null}
-						</div>
-					</Shader>
+              {ogUrl === '/recruitment' ? (
+                <button
+                  className={css.infoButton}
+                  onClick={() => window.open(forms.recruitment, '_blank')}>
+                  <Icon name={'user-plus'} prefix={'fas'} />
+                  Join the Team
+                </button>
+              ) : null}
+            </div>
+          </Shader>
 
-					{user.clearance >= CLEARANCES.ACTIONS.EDIT_PAGE ? (
-						<BottomToolbar>
-							<EditEntityButton
-								title={'Edit Text'}
-								onClick={() => (location.href = `${ogUrl}/edit/`)}
-							/>
-						</BottomToolbar>
-					) : null}
-				</Spacer>
-			</Fader>
-		);
-	}
+          {user.clearance >= CLEARANCES.ACTIONS.EDIT_PAGE ? (
+            <BottomToolbar>
+              <EditEntityButton
+                title={'Edit Text'}
+                onClick={() => (location.href = `${ogUrl}/edit/`)}
+              />
+            </BottomToolbar>
+          ) : null}
+        </Spacer>
+      </Fader>
+    );
+  }
 }
 
-const mapStateToProps = state => ({
-	user: state.user,
+const mapStateToProps = (state) => ({
+  user: state.user
 });
 
 export default connect(mapStateToProps)(Info);

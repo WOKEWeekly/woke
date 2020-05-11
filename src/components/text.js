@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import classNames from 'classnames';
 
 import { Icon } from '~/components/icon.js';
-import { cloudinary } from '~/constants/settings.js';
 import css from '~/styles/components/Text.module.scss';
 
 import { zText } from 'zavid-modules';
@@ -35,8 +34,8 @@ export class IParagraph extends Component {
     let { children = '', substitutions, theme, link, moretext } = this.props;
     const classes = classNames(css.paragraph, this.props.className);
 
-    children = applySubstitutions(children, substitutions);
-    children = prefixFormatting(children, css[`link-${theme.toLowerCase()}`]);
+    children = zText.applySubstitutions(children, substitutions);
+    children = zText.formatText(children, css[`link-${theme.toLowerCase()}`]);
 
     const ReadMoreLabel = () => {
       if (!moretext) return null;
@@ -113,164 +112,6 @@ export class VanillaLink extends Component {
     );
   }
 }
-
-/**
- * Apply the prefix formatting for hierarchical or listed text.
- * Text needs this formatting first before markdown formatting is applied.
- * @param {string} text - The text to which hierarchical formatting will be applied.
- * @param {Object} hyperlinkClass - The CSS class to be passed into the next function.
- * @returns The text with formatting applied.
- */
-const prefixFormatting = (text, hyperlinkClass) => {
-  if (text === null) return '';
-
-  return text.split('\n').map((paragraph, key) => {
-    if (paragraph.length === 0) return null;
-
-    switch (paragraph.charAt(0)) {
-      // For headings
-      case '*':
-        return (
-          <div className={css.heading} key={key}>
-            {paragraph.substring(1)}
-          </div>
-        );
-
-      // For subheadings
-      case '>':
-        return (
-          <div className={css.subheading} key={key}>
-            {paragraph.substring(1)}
-          </div>
-        );
-
-      // For images
-      case ';':
-        const isFullImage = paragraph.charAt(1) === ';';
-        const imageType = isFullImage ? 'fullImage' : 'floatImage';
-        const offset = isFullImage ? 2 : 1;
-
-        return (
-          <div className={css[imageType]} key={key}>
-            <img
-              src={`${cloudinary.url}/public/fillers/${paragraph.substring(
-                offset
-              )}`}
-            />
-          </div>
-        );
-
-      // For dividers
-      case '_':
-        return <Divider key={key} style={{ margin: '2rem 0 1rem' }} />;
-
-      // For list items
-      case '•':
-        return (
-          <div className={css.listitem} key={key}>
-            <span>●</span>
-            <span>{zText.applyFormatting(paragraph.substring(1).trim())}</span>
-          </div>
-        );
-
-      // For normal paragraph text
-      default:
-        const finalText = zText.applyFormatting(paragraph, hyperlinkClass);
-        return (
-          <p className={css.body} key={key}>
-            {finalText}
-          </p>
-        );
-    }
-  });
-};
-
-/**
- * Apply the variable substitutions to the text, swapping our placeholders for
- * dynamic values.
- * @param {string} text - The original text containing the variables to be substituted.
- * @param {Object} substitutions - The mapping specifying the values to substitute the placeholder variables.
- * @returns The full text with variables substitutions applied.
- */
-const applySubstitutions = (text, substitutions) => {
-  if (text !== null) {
-    const subRegex = new RegExp(/\<\$(.*?)\$\>/g); // Regex for substitutions
-    text = text.replace(subRegex, (match, p1) => substitutions[p1]);
-  }
-  return text;
-};
-
-/**
- * Truncate a piece of text to a certain number of words.
- * @param {string} text - The text to be truncated.
- * @param {int} [limit] - The number of words to be truncated to. Default value is 45.
- * @returns The truncated text.
- */
-export const truncateText = (text, limit = 45) => {
-  if (!text) return '';
-
-  const parts = text.split(' ').map((paragraph) => {
-    if (paragraph.length === 0) return null;
-
-    switch (paragraph.charAt(0)) {
-      case '*':
-        return null; // For headings
-      case '>':
-        return paragraph.substring(1); // For subheadings
-      case ';':
-        return null; // For images
-      case '•':
-        return paragraph; // For list items
-
-      // Normal paragraph text
-      default:
-        const linkRegex = new RegExp(/\<\[(.*?)\]\s(.*?)\>/g); // Regular expression for links
-        const subRegex = new RegExp(/\<\$(.*?)\$\>/g); // Regular expression for substitutions
-        return paragraph.replace(subRegex, null).replace(linkRegex, '$1');
-    }
-  });
-
-  const words = parts.filter((e) => e != null);
-  text = words.slice(0, limit).join(' ');
-
-  if (words.length <= limit) return text;
-
-  return `${text}....`;
-};
-
-/**
- * // TODO: Abstract this and other text functions into separate file.
- * Create an excerpt from the description of a web page.
- * @param {string} text - Piece of text to be served.
- * @returns {string} The excerpt shown in previews.
- */
-export const createExcerpt = (text) => {
-  if (!text) text = '';
-
-  const parts = text.split('\n').map((paragraph) => {
-    if (paragraph.length === 0) return null;
-
-    switch (paragraph.charAt(0)) {
-      case '*':
-        return null; // For headings
-      case '>':
-        return paragraph.substring(1); // For subheadings
-      case ';':
-        return null; // For images
-      case '•':
-        return paragraph; // For list items
-
-      // Normal paragraph text
-      default:
-        const linkRegex = new RegExp(/\<\[(.*?)\]\s(.*?)\>/g); // Regular expression for links
-        const subRegex = new RegExp(/\<\$(.*?)\$\>/g); // Regular expression for substitutions
-        return paragraph.replace(subRegex, null).replace(linkRegex, '$1');
-    }
-  });
-
-  text = parts.filter((e) => e != null);
-  return text[0];
-};
 
 const mapStateToProps = (state) => ({
   theme: state.theme

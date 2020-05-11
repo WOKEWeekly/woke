@@ -12,71 +12,71 @@ import CLEARANCES from '~/constants/clearances.js';
 import css from '~/styles/pages/Information.module.scss';
 
 class Variants extends Component {
-	static async getInitialProps({ query }) {
-		return { ...query };
-	}
+  static async getInitialProps({ query }) {
+    return { ...query };
+  }
 
-	constructor() {
-		super();
-		this.state = { isLoaded: false };
-	}
+  constructor() {
+    super();
+    this.state = { isLoaded: false };
+  }
 
-	componentDidMount() {
-		this.setState({ isLoaded: true });
-	}
+  componentDidMount() {
+    this.setState({ isLoaded: true });
+  }
 
-	render() {
-		const {
-			user,
-			description,
-			ogUrl,
-			pageText,
-			coverImage,
-			imageLogo,
-			imageAlt,
-		} = this.props;
+  render() {
+    const {
+      user,
+      description,
+      ogUrl,
+      pageText,
+      coverImage,
+      imageLogo,
+      imageAlt
+    } = this.props;
 
-		const image = (
-			<img
-				src={`${cloudinary.url}/public/logos/${imageLogo}`}
-				alt={imageAlt}
-				className={css.imageLogo}
-			/>
-		);
+    const image = (
+      <img
+        src={`${cloudinary.url}/public/logos/${imageLogo}`}
+        alt={imageAlt}
+        className={css.imageLogo}
+      />
+    );
 
-		return (
-			<Shader>
-				<Spacer gridrows={'auto 1fr auto'}>
-					<Cover
-						subtitle={description}
-						image={coverImage}
-						height={350}
-						backgroundPosition={'center'}
-						imageTitle={image}
-					/>
+    return (
+      <Shader>
+        <Spacer gridrows={'auto 1fr auto'}>
+          <Cover
+            subtitle={description}
+            image={coverImage}
+            height={350}
+            backgroundPosition={'center'}
+            imageTitle={image}
+          />
 
-					<Fader determinant={this.state.isLoaded} duration={750} delay={1500}>
-						<div className={css.container}>
-							<Paragraph className={css.text}>{pageText}</Paragraph>
-						</div>
-					</Fader>
+          <Fader determinant={this.state.isLoaded} duration={750} delay={1500}>
+            <div className={css.container}>
+              <Paragraph className={css.text}>{pageText}</Paragraph>
+            </div>
+          </Fader>
 
-					{user.clearance >= CLEARANCES.ACTIONS.EDIT_PAGE ? (
-						<BottomToolbar>
-							<EditEntityButton
-								title={'Edit Page'}
-								onClick={() => (location.href = `${ogUrl}/edit/`)}
-							/>
-						</BottomToolbar>
-					) : null}
-				</Spacer>
-			</Shader>
-		);
-	}
+          {user.clearance >= CLEARANCES.ACTIONS.EDIT_PAGE ? (
+            <BottomToolbar>
+              <EditEntityButton
+                title={'Edit Page'}
+                onClick={() => (location.href = `${ogUrl}/edit/`)}
+              />
+            </BottomToolbar>
+          ) : null}
+        </Spacer>
+      </Shader>
+    );
+  }
 }
 
-const mapStateToProps = state => ({
-	user: state.user,
+const mapStateToProps = (state) => ({
+  user: state.user
 });
 
 export default connect(mapStateToProps)(Variants);

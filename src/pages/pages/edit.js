@@ -12,100 +12,100 @@ import request from '~/constants/request.js';
 import css from '~/styles/pages/Information.module.scss';
 
 class EditPage extends Component {
-	/** Retrieve informaiton from server */
-	static async getInitialProps({ query }) {
-		return { ...query };
-	}
+  /** Retrieve informaiton from server */
+  static async getInitialProps({ query }) {
+    return { ...query };
+  }
 
-	constructor(props) {
-		super(props);
-		const path = location.pathname;
-		this.state = {
-			isLoaded: false,
-			backPath: path.substring(0, path.indexOf('/', 1)),
-			pageText: props.pageText,
-		};
+  constructor(props) {
+    super(props);
+    const path = location.pathname;
+    this.state = {
+      isLoaded: false,
+      backPath: path.substring(0, path.indexOf('/', 1)),
+      pageText: props.pageText
+    };
 
-		if (props.user.clearance < CLEARANCES.ACTIONS.EDIT_PAGE) {
-			return (location.href = this.state.backPath);
-		}
-	}
+    if (props.user.clearance < CLEARANCES.ACTIONS.EDIT_PAGE) {
+      return (location.href = this.state.backPath);
+    }
+  }
 
-	componentDidMount() {
-		this.setState({ isLoaded: true });
-	}
+  componentDidMount() {
+    this.setState({ isLoaded: true });
+  }
 
-	/** Update information */
-	updateInfo = () => {
-		const { user, title, pageName } = this.props;
-		const { pageText, backPath } = this.state;
+  /** Update information */
+  updateInfo = () => {
+    const { user, title, pageName } = this.props;
+    const { pageText, backPath } = this.state;
 
-		request({
-			url: '/api/v1/pages',
-			method: 'PUT',
-			body: JSON.stringify({ page: pageName, text: pageText }),
-			headers: { Authorization: `Bearer ${user.token}` },
-			onSuccess: () => {
-				setAlert({
-					type: 'success',
-					message: `You've successfully updated the '${title.substring(5)}'.`,
-				});
-				location.href = backPath;
-			},
-		});
-	};
+    request({
+      url: '/api/v1/pages',
+      method: 'PUT',
+      body: JSON.stringify({ page: pageName, text: pageText }),
+      headers: { Authorization: `Bearer ${user.token}` },
+      onSuccess: () => {
+        setAlert({
+          type: 'success',
+          message: `You've successfully updated the '${title.substring(5)}'.`
+        });
+        location.href = backPath;
+      }
+    });
+  };
 
-	/** Handle text changes */
-	handleText = event => {
-		const { name, value } = event.target;
-		this.setState({ [name]: value });
-	};
+  /** Handle text changes */
+  handleText = (event) => {
+    const { name, value } = event.target;
+    this.setState({ [name]: value });
+  };
 
-	render() {
-		const { isLoaded, pageText, backPath } = this.state;
-		const { title, placeholderText } = this.props;
+  render() {
+    const { isLoaded, pageText, backPath } = this.state;
+    const { title, placeholderText } = this.props;
 
-		if (!isLoaded) return null;
+    if (!isLoaded) return null;
 
-		return (
-			<Shader>
-				<Spacer className={css.form}>
-					<div>
-						<Heading>{title}</Heading>
+    return (
+      <Shader>
+        <Spacer className={css.form}>
+          <div>
+            <Heading>{title}</Heading>
 
-						<Group>
-							<Col>
-								<Label>Description:</Label>
-								<LongTextArea
-									name={'pageText'}
-									value={pageText}
-									onChange={this.handleText}
-									placeholder={placeholderText}
-								/>
-							</Col>
-						</Group>
-					</div>
+            <Group>
+              <Col>
+                <Label>Description:</Label>
+                <LongTextArea
+                  name={'pageText'}
+                  value={pageText}
+                  onChange={this.handleText}
+                  placeholder={placeholderText}
+                />
+              </Col>
+            </Group>
+          </div>
 
-					<div>
-						<Group>
-							<Col>
-								<SubmitButton onClick={this.updateInfo} className={'mr-2'}>
-									Update
-								</SubmitButton>
-								<CancelButton onClick={() => (location.href = backPath)}>
-									Cancel
-								</CancelButton>
-							</Col>
-						</Group>
-					</div>
-				</Spacer>
-			</Shader>
-		);
-	}
+          <div>
+            <Group>
+              <Col>
+                <SubmitButton onClick={this.updateInfo} className={'mr-2'}>
+                  Update
+                </SubmitButton>
+                <CancelButton onClick={() => (location.href = backPath)}>
+                  Cancel
+                </CancelButton>
+              </Col>
+            </Group>
+          </div>
+        </Spacer>
+      </Shader>
+    );
+  }
 }
 
-const mapStateToProps = state => ({
-	user: state.user,
+const mapStateToProps = (state) => ({
+  user: state.user
 });
 
 export default connect(mapStateToProps)(EditPage);

@@ -1,7 +1,7 @@
 import React from 'react';
 import Document, { Html, Head, Main, NextScript } from 'next/document';
 import { cloudinary, domain } from '~/constants/settings.js';
-import { truncateText } from '~/components/text.js';
+import { zText } from 'zavid-modules';
 
 export default class MyDocument extends Document {
   static async getInitialProps(ctx) {
@@ -50,7 +50,10 @@ const Meta = ({
 
     {/* OpenGraph meta tags for search engine optimisation */}
     <meta property="og:title" content={title} />
-    <meta property="og:description" content={truncateText(description, 30)} />
+    <meta
+      property="og:description"
+      content={zText.truncateText(description, 30)}
+    />
     <meta property="og:type" content="website" />
     <meta property="og:url" content={`${domain}${ogUrl}`} />
 

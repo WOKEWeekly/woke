@@ -17,6 +17,8 @@ const {
 } = require('../constants/settings.js');
 const { ENTITY, OPERATIONS, PAGE } = require('../constants/strings.js');
 
+const { zText } = require('zavid-modules');
+
 const env = process.env.NODE_ENV !== 'production' ? 'dev' : 'prod';
 
 let exigencies = {};
@@ -62,7 +64,7 @@ module.exports = function (app, conn, knex, server) {
 
       return server.render(req, res, '/sessions/single', {
         title: `${session.title} | #WOKEWeekly`,
-        description: createExcerpt(session.description),
+        description: zText.createExcerpt(session.description),
         ogUrl: `/sessions/${session.slug}`,
         cardImage: session.image,
         backgroundImage: 'bg-sessions.jpg',
@@ -223,7 +225,7 @@ module.exports = function (app, conn, knex, server) {
       candidate.label = `#${candidate.id}: ${candidate.name}`;
       return server.render(req, res, '/blackexcellence/single', {
         title: `${candidate.label} | #WOKEWeekly`,
-        description: createExcerpt(candidate.description),
+        description: zText.createExcerpt(candidate.description),
         ogUrl: `/blackexcellence/candidate/${candidate.id}`,
         cardImage: candidate.image,
         alt: candidate.label,
@@ -262,7 +264,7 @@ module.exports = function (app, conn, knex, server) {
 
       return server.render(req, res, '/team/single', {
         title: `${exec.firstname} ${exec.lastname} | #WOKEWeekly`,
-        description: createExcerpt(exec.description),
+        description: zText.createExcerpt(exec.description),
         ogUrl: `/executives/${exec.slug}`,
         cardImage: exec.image,
         backgroundImage: 'bg-team.jpg',
@@ -296,7 +298,7 @@ module.exports = function (app, conn, knex, server) {
 
       return server.render(req, res, '/team/single', {
         title: `${member.firstname} ${member.lastname} | #WOKEWeekly`,
-        description: createExcerpt(member.description),
+        description: zText.createExcerpt(member.description),
         ogUrl: `/team/member/${member.slug}`,
         cardImage: member.image,
         alt: `${member.firstname} ${member.lastname}`,
@@ -810,7 +812,8 @@ const renderPage = (req, res, page, operation) => {
     coverImageAlt,
     theme,
     editTitle,
-    editPlaceholderText
+    editPlaceholderText,
+    lastModified
   } = page;
 
   let uri = '';
@@ -822,14 +825,15 @@ const renderPage = (req, res, page, operation) => {
       pageName: name,
       pageText: text,
       title: includeDomain ? `${title} | #WOKEWeekly` : title,
-      description: excerpt || createExcerpt(text),
+      description: excerpt || zText.createExcerpt(text),
       ogUrl: `/${name}`,
       cardImage: cardImage || 'public/bg/card-home.jpg',
       backgroundImage: bgImage || 'bg-app.jpg',
       coverImage: coverImage,
       imageLogo: coverImageLogo,
       imageAlt: coverImageAlt,
-      theme: theme || PAGE.THEMES.DEFAULT
+      theme: theme || PAGE.THEMES.DEFAULT,
+      lastModified
     };
   } else if (operation === PAGE.OPERATIONS.UPDATE) {
     uri = `/pages/edit`;
@@ -844,37 +848,4 @@ const renderPage = (req, res, page, operation) => {
   }
 
   return server.render(req, res, uri, information);
-};
-
-/**
- * Create an excerpt from the description of a web page.
- * @param {string} text - Piece of text to be served.
- * @returns {string} The excerpt shown in previews.
- */
-const createExcerpt = (text) => {
-  if (!text) text = '';
-
-  const parts = text.split('\n').map((paragraph) => {
-    if (paragraph.length === 0) return null;
-
-    switch (paragraph.charAt(0)) {
-      case '*':
-        return null; // For headings
-      case '>':
-        return paragraph.substring(1); // For subheadings
-      case ';':
-        return null; // For images
-      case '•':
-        return paragraph; // For list items
-
-      // Normal paragraph text
-      default:
-        const linkRegex = new RegExp(/\<\[(.*?)\]\s(.*?)\>/g); // Regular expression for links
-        const subRegex = new RegExp(/\<\$(.*?)\$\>/g); // Regular expression for substitutions
-        return paragraph.replace(subRegex, null).replace(linkRegex, '$1');
-    }
-  });
-
-  text = parts.filter((e) => e != null);
-  return text[0];
 };
