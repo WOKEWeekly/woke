@@ -147,7 +147,7 @@ class ArticlePage extends Component {
           <Title className={css.name}>{authorName}</Title>
           <PromoIconsBar socials={authorSocials} />
           <Paragraph className={css.description}>
-            {zText.createExcerpt(authorDescription)}
+            {zText.extractExcerpt(authorDescription)}
           </Paragraph>
         </Fader>
       );

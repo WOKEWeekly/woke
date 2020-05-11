@@ -64,7 +64,7 @@ module.exports = function (app, conn, knex, server) {
 
       return server.render(req, res, '/sessions/single', {
         title: `${session.title} | #WOKEWeekly`,
-        description: zText.createExcerpt(session.description),
+        description: zText.extractExcerpt(session.description),
         ogUrl: `/sessions/${session.slug}`,
         cardImage: session.image,
         backgroundImage: 'bg-sessions.jpg',
@@ -225,7 +225,7 @@ module.exports = function (app, conn, knex, server) {
       candidate.label = `#${candidate.id}: ${candidate.name}`;
       return server.render(req, res, '/blackexcellence/single', {
         title: `${candidate.label} | #WOKEWeekly`,
-        description: zText.createExcerpt(candidate.description),
+        description: zText.extractExcerpt(candidate.description),
         ogUrl: `/blackexcellence/candidate/${candidate.id}`,
         cardImage: candidate.image,
         alt: candidate.label,
@@ -264,7 +264,7 @@ module.exports = function (app, conn, knex, server) {
 
       return server.render(req, res, '/team/single', {
         title: `${exec.firstname} ${exec.lastname} | #WOKEWeekly`,
-        description: zText.createExcerpt(exec.description),
+        description: zText.extractExcerpt(exec.description),
         ogUrl: `/executives/${exec.slug}`,
         cardImage: exec.image,
         backgroundImage: 'bg-team.jpg',
@@ -298,7 +298,7 @@ module.exports = function (app, conn, knex, server) {
 
       return server.render(req, res, '/team/single', {
         title: `${member.firstname} ${member.lastname} | #WOKEWeekly`,
-        description: zText.createExcerpt(member.description),
+        description: zText.extractExcerpt(member.description),
         ogUrl: `/team/member/${member.slug}`,
         cardImage: member.image,
         alt: `${member.firstname} ${member.lastname}`,
@@ -825,7 +825,7 @@ const renderPage = (req, res, page, operation) => {
       pageName: name,
       pageText: text,
       title: includeDomain ? `${title} | #WOKEWeekly` : title,
-      description: excerpt || zText.createExcerpt(text),
+      description: excerpt || zText.extractExcerpt(text),
       ogUrl: `/${name}`,
       cardImage: cardImage || 'public/bg/card-home.jpg',
       backgroundImage: bgImage || 'bg-app.jpg',
