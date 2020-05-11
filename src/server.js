@@ -9,16 +9,22 @@ const isDevTesting = process.argv.includes('--dev-testing');
 const { limits } = require('./constants/settings');
 
 const next = require('next');
-const server = next({ dev, quiet: isStageTesting });
+const server = next({
+  dev,
+  quiet: isStageTesting
+});
 const handle = server.getRequestHandler();
 
 const async = require('async');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
-const dotenv = require('dotenv').config({ path: config });
+const dotenv = require('dotenv').config({
+  path: config
+});
 const mysql = require('mysql');
 const port = process.env.PORT || 3000;
+const { setDb, setKnex } = require('./private/api/db');
 
 app.use(bodyParser.json({ limit: `${limits.file}MB` }));
 app.use(cookieParser());
@@ -42,6 +48,7 @@ const knex = require('knex')({
     database: process.env.MYSQL_NAME
   }
 });
+setKnex(knex);
 
 // Check for loaded environment variables
 if (dotenv.error && !process.env.PORT) {
@@ -53,18 +60,14 @@ if (!isStageTesting && !isDevTesting) {
   startClientServer();
 }
 
-/** Start the full application server */
 function startClientServer() {
   startServer();
-  require('./private/api.js')(app, conn, knex);
   require('./private/routes.js')(app, conn, knex, server);
   require('./private/cron.js')(conn);
 }
 
-/** Start the API server for testing */
 function startTestServer(next) {
   startServer(next);
-  require('./private/api.js')(app, conn, knex);
 }
 
 function startServer(next) {
@@ -83,7 +86,11 @@ function startServer(next) {
       function (callback) {
         // Connect to MySQL database
         conn.connect(function (err) {
-          if (!err) console.log('Connected to database.');
+          if (!err) {
+            setDb(conn);
+            require('./private/api/index.js')(app, conn);
+            console.log('Connected to database.');
+          }
           callback(err);
         });
       }
@@ -96,8 +103,8 @@ function startServer(next) {
 }
 
 module.exports = {
+  startTestServer,
   config,
   dev,
-  isStageTesting,
-  startTestServer
+  isStageTesting
 };

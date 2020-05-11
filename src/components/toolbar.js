@@ -28,12 +28,12 @@ class Toolbar extends Component {
 
 export class TopToolbar extends Component {
   render() {
-    return <Toolbar className={css.top_toolbar} {...this.props} />;
+    return <Toolbar className={css.top_toolbar} />;
   }
 }
 
 export class BottomToolbar extends Component {
   render() {
-    return <Toolbar className={css.bottom_toolbar} {...this.props} />;
+    return <Toolbar className={css.bottom_toolbar} />;
   }
 }
