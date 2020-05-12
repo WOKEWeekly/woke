@@ -48,7 +48,6 @@ const knex = require('knex')({
     database: process.env.MYSQL_NAME
   }
 });
-setKnex(knex);
 
 // Check for loaded environment variables
 if (dotenv.error && !process.env.PORT) {
@@ -73,8 +72,8 @@ function startTestServer(next) {
 function startServer(next) {
   async.parallel(
     [
+      // Start the server
       function (callback) {
-        // Start the server
         server.prepare().then(() => {
           app.get('*', (req, res) => handle(req, res));
           app.listen(port, (err) => {
@@ -83,16 +82,19 @@ function startServer(next) {
           });
         });
       },
+      // Connect to MySQL database
       function (callback) {
-        // Connect to MySQL database
         conn.connect(function (err) {
-          if (!err) {
-            setDb(conn);
-            require('./private/api/index.js')(app, conn);
-            console.log('Connected to database.');
-          }
+          if (!err) console.log('Connected to database.');
           callback(err);
         });
+      },
+      // Set database instances
+      function (callback) {
+        setDb(conn);
+        setKnex(knex);
+        require('./private/api/index.js')(app, conn);
+        callback(null);
       }
     ],
     function (err) {
