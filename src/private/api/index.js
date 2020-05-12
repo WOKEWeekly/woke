@@ -14,10 +14,6 @@ const documentsRoutes = require('./routes/documents');
 
 const CLEARANCES = require('../../constants/clearances.js');
 
-const emailsOn =
-  process.env.NODE_ENV === 'production' || process.argv.includes('--emails');
-if (!emailsOn) console.warn('Emails are turned off.');
-
 module.exports = function (app, conn) {
   /** Log user activity on each request */
   app.use('/api', logUserActivity(conn));
