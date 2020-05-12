@@ -38,6 +38,10 @@ export class IParagraph extends Component {
     children = zText.formatText(children, {
       heading: css.heading,
       subheading: css.subheading,
+      image: {
+        full: css.fullImage,
+        float: css.floatImage
+      },
       paragraph: css.body,
       divider: css.divider,
       hyperlink: css[`link-${theme.toLowerCase()}`]
