@@ -3,7 +3,7 @@ const express = require('express');
 const router = express.Router();
 
 // Controllers
-const DocumentsController = require('../controllers/documents.conrtoller');
+const DocumentsController = require('../controllers/documents.controller');
 const CLEARANCES = require('../../../constants/clearances');
 // Middleware
 const { verifyToken } = require('../../middleware');
