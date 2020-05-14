@@ -59,7 +59,7 @@ router.notify(
 router.patch('/:token/verify', UsersController.verifyUser);
 // NOTIFY send user recovery email
 router.notify('/recovery', validateReq, UsersController.sendRecoveryEmail);
-//PATCH reset user's password
+// PATCH reset user's password
 router.patch('/password/reset', UsersController.resetPassword);
 
 module.exports = router;

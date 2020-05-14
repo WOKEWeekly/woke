@@ -16,7 +16,6 @@ import {
 import { Shader, Spacer } from '~/components/layout.js';
 
 import CLEARANCES from '~/constants/clearances.js';
-// import { getFilename } from '../../private/filer.js';
 
 import css from '~/styles/pages/Sessions.module.scss';
 

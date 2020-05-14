@@ -18,28 +18,28 @@ module.exports = function (app, conn) {
   /** Log user activity on each request */
   app.use('/api', logUserActivity(conn));
 
-  // sessions routes
+  // Sessions routes
   app.use('/api/v1/sessions', sessionsRoutes);
 
-  // candidates routes
+  // Candidates routes
   app.use('/api/v1/candidates', candidatesRoutes);
 
-  // members routes
+  // Members routes
   app.use('/api/v1/members', membersRoutes);
 
-  // topics routes
+  // Topics routes
   app.use('/api/v1/topics', topicsRoutes);
 
-  // reviews routes
+  // Reviews routes
   app.use('/api/v1/reviews', reviewsRoutes);
 
-  // articles routes
+  // Articles routes
   app.use('/api/v1/articles', articlesRoutes);
 
-  // users routes
+  // Users routes
   app.use('/api/v1/users', usersRoutes);
 
-  // documents routes
+  // Documents routes
   app.use('/api/v1/documents', documentsRoutes);
 
   /** Update information pages */

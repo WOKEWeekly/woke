@@ -653,13 +653,6 @@ const TOKENS = {
   }
 };
 
-const ALL = {
-  RENUMBER_IDS: (table) => {
-    const sql = `SET @id:=0; UPDATE ${table} SET id = @id:=(@id+1); ALTER TABLE ${table} AUTO_INCREMENT = 1;`;
-    return sql;
-  }
-};
-
 module.exports = {
   ARTICLES,
   CANDIDATES,

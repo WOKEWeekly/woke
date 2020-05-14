@@ -6,7 +6,7 @@
     "prod": "NODE_ENV=production node server.js",
     "test": "mocha --dev-testing --no-timeout",
     "test-ci": "mocha --no-timeout --stage-testing --reporter mocha-junit-reporter",
-    "lint": "eslint \"**/*.js\" --ignore-path ../.gitignore ",
+    "lint": "eslint --ignore-path ../.gitignore \"**/*.js\"",
     "prettify": "prettier --ignore-path ../.gitignore --write \"**/*.js\""
   },
   "dependencies": {
