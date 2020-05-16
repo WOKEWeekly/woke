@@ -9,6 +9,7 @@ import {
   Heading,
   Group,
   Label,
+  LabelInfo,
   TextInput,
   LongTextArea,
   FileSelector
@@ -81,7 +82,7 @@ class SessionForm extends Component {
             </Group>
             <Group>
               <Col>
-                <Label>Description:</Label>
+                <LabelInfo>Description:</LabelInfo>
                 <LongTextArea
                   name={'description'}
                   value={description}
