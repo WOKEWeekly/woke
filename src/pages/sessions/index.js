@@ -162,8 +162,7 @@ class Sessions extends Component {
 
           <Fader
             determinant={isLoaded}
-            duration={1500}
-            className={css.sessionCollectionContainer}>
+            duration={1500}>
             <SessionCollection />
           </Fader>
 

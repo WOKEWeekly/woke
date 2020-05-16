@@ -6,9 +6,11 @@
   @media (max-width: $break-md) { background-position: initial; }
 }
 
-.sessionCollectionContainer {
-  overflow-x: hidden;
-}
+// TODO: Remove
+// .sessionCollectionContainer {
+//   overflow-x: hidden;
+//   overflow-y: visible;
+// }
 
 .grid {
   @include responsive-grid;
