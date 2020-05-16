@@ -159,23 +159,20 @@ export class SearchBar extends Component {
  **************************/
 
 /** For inline long text inputs */
-export class ShortTextArea extends Component {
-  render() {
-    return <zForm.ShortTextArea {...this.props} className={css.textarea} />;
-  }
-}
+export const ShortTextArea = (props) => {
+  return <zForm.ShortTextArea {...props} className={css.textarea} />;
+};
 
-export class LongTextArea extends Component {
-  render() {
-    return (
-      <zForm.LongTextArea
-        {...this.props}
-        className={css.textarea}
-        wordCountClassName={css.wordcount}
-      />
-    );
-  }
-}
+/** For block paragraphing text inputs */
+export const LongTextArea = (props) => {
+  return (
+    <zForm.LongTextArea
+      {...props}
+      className={css.textarea}
+      wordCountClassName={css.wordcount}
+    />
+  );
+};
 
 export const InfoCircle = () => {
   const [show, setShow] = useState(false);
