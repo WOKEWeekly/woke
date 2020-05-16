@@ -14,6 +14,7 @@ import {
   Heading,
   Group,
   Label,
+  LabelInfo,
   Select,
   TextInput,
   ClickInput,
@@ -219,7 +220,7 @@ class MemberForm extends Component {
             </Group>
             <Group>
               <Col>
-                <Label>Description:</Label>
+                <LabelInfo>Description:</LabelInfo>
                 <LongTextArea
                   name={'description'}
                   value={description}

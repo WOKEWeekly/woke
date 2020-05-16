@@ -12,6 +12,7 @@ import {
   Heading,
   Group,
   Label,
+  LabelInfo,
   TextInput,
   Select,
   ClickInput,
@@ -185,7 +186,7 @@ class CandidateForm extends Component {
             </Group>
             <Group>
               <Col>
-                <Label>Description:</Label>
+                <LabelInfo>Description</LabelInfo>
                 <LongTextArea
                   name={'description'}
                   value={description}

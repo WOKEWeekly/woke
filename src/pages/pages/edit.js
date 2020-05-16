@@ -4,7 +4,7 @@ import { Col } from 'react-bootstrap';
 
 import { setAlert } from '~/components/alert.js';
 import { SubmitButton, CancelButton } from '~/components/button.js';
-import { Heading, Group, Label, LongTextArea } from '~/components/form.js';
+import { Heading, Group, LabelInfo, LongTextArea } from '~/components/form.js';
 import { Shader, Spacer } from '~/components/layout.js';
 
 import CLEARANCES from '~/constants/clearances.js';
@@ -75,7 +75,7 @@ class EditPage extends Component {
 
             <Group>
               <Col>
-                <Label>Description:</Label>
+                <LabelInfo>Description:</LabelInfo>
                 <LongTextArea
                   name={'pageText'}
                   value={pageText}

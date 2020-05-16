@@ -8,6 +8,7 @@ import {
   Heading,
   Group,
   Label,
+  LabelInfo,
   TextInput,
   ShortTextArea,
   LongTextArea,
@@ -127,7 +128,7 @@ class ArticleForm extends Component {
             </Group>
             <Group>
               <Col>
-                <Label>Content:</Label>
+                <LabelInfo>Content:</LabelInfo>
                 <LongTextArea
                   name={'content'}
                   value={content}
