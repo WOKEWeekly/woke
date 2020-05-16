@@ -6,7 +6,7 @@ import { alert } from '~/components/alert.js';
 import { AddEntityButton } from '~/components/button.js';
 import { Shader, Default, Mobile } from '~/components/layout.js';
 import { Loader, Empty } from '~/components/loader.js';
-import { Icon } from '~/components/icon.js';
+import { Icon, MaleSymbol, FemaleSymbol } from '~/components/icon.js';
 import { ConfirmModal } from '~/components/modal.js';
 import { Fader } from '~/components/transitioner.js';
 import { Title } from '~/components/text.js';
@@ -74,6 +74,9 @@ class Team extends Component {
           <div className={css.header}>
             <span>#</span>
             <span>Name</span>
+            <span>
+              <Icon name={'venus-mars'} />
+            </span>
             <span>Level</span>
             <span>Role</span>
             <span>Ethnicity</span>
@@ -182,6 +185,16 @@ class IMember extends PureComponent {
       );
     };
 
+    const GenderSymbol = () => {
+      if (item.sex === 'M') {
+        return <MaleSymbol />;
+      } else if (item.sex === 'F') {
+        return <FemaleSymbol />;
+      } else {
+        return null;
+      }
+    };
+
     return (
       <Fader
         key={idx}
@@ -192,6 +205,9 @@ class IMember extends PureComponent {
         <Default>
           <span>{idx + 1}</span>
           <span>{item.fullname}</span>
+          <span>
+            <GenderSymbol />
+          </span>
           <span>{item.level}</span>
           <span>{item.role}</span>
           <span>{item.demonyms}</span>
@@ -217,7 +233,7 @@ class IMember extends PureComponent {
             <span>
               <Icon name={'user'} />
             </span>
-            <span className={css.name}>{item.fullname}</span>
+            <span className={css.name}>{item.fullname} <GenderSymbol /></span>
           </div>
           <div>
             <span>
