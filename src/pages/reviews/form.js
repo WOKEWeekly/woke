@@ -92,7 +92,6 @@ class ReviewForm extends Component {
               <Col>
                 <FileSelector
                   image={image}
-                  directory={`reviews`}
                   operation={operation}
                   onChange={handleFile}
                 />

@@ -219,7 +219,6 @@ class CandidateForm extends Component {
               <Col>
                 <FileSelector
                   image={image}
-                  directory={`blackexcellence`}
                   operation={operation}
                   onChange={handleFile}
                 />

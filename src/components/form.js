@@ -331,7 +331,6 @@ export class Checkbox extends Component {
 }
 
 /** File selector */
-// TODO: Remove all directory props from FileSelectors
 export class _FileSelector extends Component {
   constructor(props) {
     super(props);

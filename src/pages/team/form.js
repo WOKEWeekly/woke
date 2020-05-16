@@ -234,7 +234,6 @@ class MemberForm extends Component {
                 <FileSelector
                   image={image}
                   operation={operation}
-                  directory={`team`}
                   onChange={handleFile}
                 />
               </Col>

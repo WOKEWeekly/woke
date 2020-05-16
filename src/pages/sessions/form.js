@@ -95,7 +95,6 @@ class SessionForm extends Component {
               <Col>
                 <FileSelector
                   image={image}
-                  directory={`sessions`}
                   operation={operation}
                   onChange={handleFile}
                 />
