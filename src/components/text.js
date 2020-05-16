@@ -36,15 +36,17 @@ export class IParagraph extends Component {
 
     children = zText.applySubstitutions(children, substitutions);
     children = zText.formatText(children, {
-      heading: css.heading,
-      subheading: css.subheading,
-      image: {
-        full: css.fullImage,
-        float: css.floatImage
-      },
-      paragraph: css.body,
-      divider: css.divider,
-      hyperlink: css[`link-${theme.toLowerCase()}`]
+      css: {
+        heading: css.heading,
+        subheading: css.subheading,
+        image: {
+          full: css.fullImage,
+          float: css.floatImage
+        },
+        paragraph: css.body,
+        divider: css.divider,
+        hyperlink: css[`link-${theme.toLowerCase()}`]
+      }
     });
 
     const ReadMoreLabel = () => {

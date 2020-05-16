@@ -23,6 +23,10 @@
     font-family: $title-font;
     font-size: 1.1em;
   }
+  .labelInfo {
+    display: flex;
+    align-items: baseline;
+  }
   .input {
     @extend .text;
     background: none;
@@ -113,6 +117,16 @@
   @media (max-width: $break-md) {
     > div { margin: .8em 0; }
   }
+}
+
+.formattingGuide {
+  .heading {
+    @include font-scaler(2);
+    padding-bottom: .4em;
+    margin-bottom: .5em;
+    border-bottom: 1px solid white;
+  }
+  .subheading { font-family: $title-font;}
 }
 
 .searchContainer {

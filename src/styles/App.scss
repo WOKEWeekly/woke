@@ -34,3 +34,12 @@
   border-radius: 15px !important;
   overflow: hidden;
 }
+
+/** Global styles for tooltips **/
+.tooltip [class$="inner"] {
+  border: 10px solid black;
+  text-align: left;
+  overflow-y: scroll;
+  max-height: 500px;
+  max-width: 500px;
+}
