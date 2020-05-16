@@ -213,11 +213,11 @@ const FormattingGuide = () => {
         '[Surround text in square brackets and URL in round brackets](https://www.wokeweekly.co.uk)'
     }).map(([key, value], count) => {
       return (
-        <p key={count}>
+        <div key={count}>
           <span className={css.subheading}>For {key} text:</span>
           <br />
           {value} --&gt; {zText.formatText(value, { inline: true })}
-        </p>
+        </div>
       );
     });
   };
@@ -231,13 +231,13 @@ const FormattingGuide = () => {
       blockquotes: '> Right chevron'
     }).map(([key, value], count) => {
       return (
-        <p key={count}>
+        <div key={count}>
           <span className={css.subheading}>For {key}:</span>
           <br />
           {value}
           <br />
           {zText.formatText(value, { inline: true })}
-        </p>
+        </div>
       );
     });
   };

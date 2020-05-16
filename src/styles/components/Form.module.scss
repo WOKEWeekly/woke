@@ -120,6 +120,7 @@
 }
 
 .formattingGuide {
+  div { margin-bottom: 1em; }
   .heading {
     @include font-scaler(2);
     padding-bottom: .4em;
