@@ -23,7 +23,7 @@ const dotenv = require('dotenv').config({
   path: config
 });
 const mysql = require('mysql');
-const port = process.env.PORT || 3000;
+const port = isStageTesting ? 3010 : (process.env.PORT || 3000);
 const { setDb, setKnex } = require('./private/api/db');
 
 app.use(bodyParser.json({ limit: `${limits.file}MB` }));
