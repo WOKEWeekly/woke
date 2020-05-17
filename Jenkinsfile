@@ -25,6 +25,7 @@ pipeline {
 
   options {
     parallelsAlwaysFailFast()
+    timeout(time: 5, unit: 'MINUTES')
   }
 
   stages {
@@ -36,23 +37,29 @@ pipeline {
       }
     }
     stage('Build & Test'){
-      parallel {
-        stage('Build') { 
+      stages {
+        stage('Install dependencies'){
           steps {
-            timeout(time: 3, unit: 'MINUTES') {
-              dir('src'){
-                sh 'npm install'
-                sh 'npm run build'
-              }
+            dir('src'){
+              sh 'npm install'
             }
           }
         }
-        stage('Test') {
-          steps {
-            timeout(time: 3, unit: 'MINUTES') {
-              dir('src'){
-                sh 'npm run test-ci'
-                junit '**/test-results.xml'
+        stage('Run next build && Mocha unit tests'){
+          parallel {
+            stage('Build') { 
+              steps {
+                dir('src'){
+                  sh 'npm run build'
+                }
+              }
+            }
+            stage('Test') {
+              steps {
+                dir('src'){
+                  sh 'npm run test-ci'
+                  junit '**/test-results.xml'
+                }
               }
             }
           }
