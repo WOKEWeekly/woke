@@ -337,7 +337,8 @@ export class _FileSelector extends Component {
 
     this.state = {
       image: '',
-      filename: ''
+      filename: '',
+      type: ''
     };
 
     this.image = React.createRef();
@@ -380,7 +381,7 @@ export class _FileSelector extends Component {
       () => {
         const source = reader.result;
         preview.src = source;
-        this.setState({ image: source, filename: file.name });
+        this.setState({ image: source, filename: file.name, type: file.type });
         this.props.onChange(source);
       },
       false
@@ -390,11 +391,13 @@ export class _FileSelector extends Component {
   };
 
   render() {
-    const { image } = this.state;
+    const { image, type } = this.state;
     const { theme } = this.props;
 
+    const display = image && type.includes('image') ? 'block' : 'none';
+
     return (
-      <React.Fragment>
+      <>
         <div className={css.file}>
           <label className={css[`file_button-${theme}`]}>
             Browse...
@@ -417,10 +420,10 @@ export class _FileSelector extends Component {
           determinant={image}
           duration={400}
           className={css.fileImage}
-          style={{ display: image ? 'block' : 'none' }}>
+          style={{ display }}>
           <img src={image} alt={'Image preview...'} ref={this.image} />
         </Zoomer>
-      </React.Fragment>
+      </>
     );
   }
 }
