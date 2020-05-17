@@ -17,7 +17,6 @@ if (!emailsOn) console.warn('Emails are turned off.');
 
 /** Retrieve all users */
 exports.getAllUsers = (req, res) => {
-  console.log('GET all users');
   const sql = SQL.USERS.READ.ALL(
     'id, firstname, lastname, clearance, username, email, createTime, lastActive'
   );
@@ -43,7 +42,6 @@ exports.getUser = (req, res) => {
 
 /** Add or register a new user */
 exports.addUser = (req, res) => {
-  console.log('Post add user');
   const {
     firstname,
     lastname,
@@ -419,7 +417,6 @@ exports.sendRecoveryEmail = (req, res) => {
 /** Change a user's password from reset */
 exports.resetPassword = (req, res) => {
   const { token, password } = req.body;
-  console.log('token', token, 'password', password);
   async.waterfall(
     [
       function (callback) {

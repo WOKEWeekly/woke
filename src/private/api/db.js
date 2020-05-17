@@ -5,7 +5,6 @@ let _knex;
 
 const setDb = (DbInstance) => {
   _db = DbInstance;
-  console.log('DB has been set');
 };
 
 const getDb = () => {
@@ -15,7 +14,6 @@ const getDb = () => {
 
 const setKnex = (KnexInstance) => {
   _knex = KnexInstance;
-  console.log('Knex has been set');
 };
 
 const getKnex = () => {
