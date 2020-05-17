@@ -11,7 +11,7 @@ const TEST_IMAGE =
 const TEST_PDF =
   'data:application/pdf;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==';
 const TOKEN = jwt.sign({ user: SUPERUSER }, process.env.JWT_SECRET, {
-  expiresIn: '1m'
+  expiresIn: '5m'
 });
 
 exports.TEST_ARTICLES = {
