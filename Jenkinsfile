@@ -23,6 +23,10 @@ pipeline {
     MAILCHIMP_LISTID = credentials('mailchimp-listid')
   }
 
+  options {
+    parallelsAlwaysFailFast()
+  }
+
   stages {
     stage('Clean') { 
       steps {
@@ -31,22 +35,24 @@ pipeline {
         }
       }
     }
-    stage('Build') { 
-      steps {
-        timeout(time: 3, unit: 'MINUTES') {
-          dir('src'){
-            sh 'npm install'
-            sh 'npm run build'
+    parallel {
+      stage('Build') { 
+        steps {
+          timeout(time: 3, unit: 'MINUTES') {
+            dir('src'){
+              sh 'npm install'
+              sh 'npm run build'
+            }
           }
         }
       }
-    }
-    stage('Test') {
-      steps {
-        timeout(time: 3, unit: 'MINUTES') {
-          dir('src'){
-            sh 'npm run test-ci'
-            junit '**/test-results.xml'
+      stage('Test') {
+        steps {
+          timeout(time: 3, unit: 'MINUTES') {
+            dir('src'){
+              sh 'npm run test-ci'
+              junit '**/test-results.xml'
+            }
           }
         }
       }
