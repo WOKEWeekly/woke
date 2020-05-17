@@ -1,6 +1,6 @@
-const { startTestServer, isStageTesting } = require('../../server.js');
+const { startTestServer, isStageTesting, port } = require('../../server.js');
 const axios = require('axios');
-axios.defaults.baseURL = 'http://localhost:3000';
+axios.defaults.baseURL = `http://localhost:${port}`;
 
 // If staging environment, start server before running tests.
 if (isStageTesting) {

@@ -108,5 +108,6 @@ module.exports = {
   startTestServer,
   config,
   dev,
+  port,
   isStageTesting
 };
