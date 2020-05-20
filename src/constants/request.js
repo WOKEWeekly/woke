@@ -29,13 +29,14 @@ export default ({ url, method = 'GET', body, headers = {}, onSuccess }) => {
       onSuccess(data);
     })
     .catch((error) => {
-      if (error.message === 'jwt') {
+      const { message } = error.response.data;
+      if (message === 'jwt') {
         // If error is JWT-related
         store.dispatch(clearUser());
         setAlert({ type: 'info', message: `Your session has expired.` });
         setTimeout(() => (location.href = '/'), 500);
       } else {
-        alert.error(error.message);
+        alert.error(message);
       }
     });
 };

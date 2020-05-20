@@ -1,6 +1,6 @@
-import { toast, cssTransition } from 'react-toastify';
-import classNames from 'classnames';
-import css from '~/styles/components/Alert.module.scss';
+const { toast, cssTransition } = require('react-toastify');
+const classNames = require('classnames');
+const css = require('~/styles/components/Alert.module.scss');
 
 const animation = cssTransition({
   enter: css.fadeIn,
@@ -20,7 +20,7 @@ toast.configure({
 
 const defaultClasses = ['alert', css.message];
 
-export const alert = {
+exports.alert = {
   success: (message) => {
     toast(message, { className: classNames('alert-success', defaultClasses) });
   },
@@ -32,24 +32,21 @@ export const alert = {
   }
 };
 
-export const setAlert = (alert) => {
-  sessionStorage.setItem('alert', JSON.stringify(alert));
+/**
+ * Set the alert to be viewed on the next page change.
+ * @param {string} alert.type - The type of the alert.
+ * @param {string} alert.message - The contents of the alert message.
+ */
+exports.setAlert = ({ type, message }) => {
+  sessionStorage.setItem('alert', JSON.stringify({ type, message }));
 };
 
-export const checkAlert = () => {
+/** Check whether an alert has been set by {@link setAlert}. */
+exports.checkAlert = () => {
   const notification = JSON.parse(sessionStorage.getItem('alert'));
   if (notification) {
     const { type, message } = notification;
-    alert[type](message);
+    this.alert[type](message);
     sessionStorage.clear();
-  }
-};
-
-export const displayErrorMessage = (err) => {
-  if (process.env.NODE_ENV !== 'production') {
-    alert.error(err.toString());
-  } else {
-    alert.error('Something went wrong. Please try again later.');
-    console.error(err.toString());
   }
 };
