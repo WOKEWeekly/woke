@@ -26,8 +26,9 @@ rules:
   semi: [2, 'always']
   spaced-comment: [1, 'always', exceptions: ['*']]
 
-  # Overriden and disabled rules
+  # Overridden and disabled rules
   no-case-declarations: 0
   no-useless-escape: 0
   react/prop-types: 0
+  react/display-name: 0
   quotes: 0

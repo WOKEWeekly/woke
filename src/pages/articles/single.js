@@ -1,4 +1,4 @@
-import React, { Component, PureComponent } from 'react';
+import React, { Component, memo } from 'react';
 import { Col, Row, Container } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { zDate, zText } from 'zavid-modules';
@@ -198,12 +198,9 @@ class ArticlePage extends Component {
   }
 }
 
-class Tag extends PureComponent {
-  render() {
-    const { word } = this.props;
-    return <span className={css.tag}>#{word.toUpperCase()}</span>;
-  }
-}
+const Tag = memo(({ word }) => {
+  return <span className={css.tag}>#{word.toUpperCase()}</span>;
+});
 
 const mapStateToProps = (state) => ({
   user: state.user

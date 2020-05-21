@@ -1,4 +1,4 @@
-import React, { Component, PureComponent } from 'react';
+import React, { Component, memo, useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 
 import { AdminButton } from '~/components/button.js';
@@ -91,41 +91,36 @@ class Blog extends Component {
   }
 }
 
-class Article extends PureComponent {
-  constructor() {
-    super();
-    this.state = { isLoaded: false };
-  }
+const Article = memo(({ item, idx }) => {
+  const [isLoaded, setLoaded] = useState(false);
+  useEffect(() => {
+    setLoaded(true);
+  }, [isLoaded]);
 
-  render() {
-    const { item, idx } = this.props;
-
-    return (
-      <Zoomer
-        determinant={this.state.isLoaded}
-        duration={400}
-        delay={75 * idx}
-        className={css.icontainer}>
-        <VanillaLink href={`/blog/${item.slug}`}>
-          <div className={css.cell}>
-            <img
-              src={`${cloudinary.url}/${cloudinary.lazy_wide}/${item.image}`}
-              alt={item.title}
-              className={css.image}
-              onLoad={() => this.setState({ isLoaded: true })}
-            />
-            <div className={css.details}>
-              <Title className={css.title}>{item.title}</Title>
-              <Subtitle className={css.date}>
-                {zDate.formatDate(item.datePublished, true)}
-              </Subtitle>
-            </div>
+  return (
+    <Zoomer
+      determinant={isLoaded}
+      duration={400}
+      delay={75 * idx}
+      className={css.icontainer}>
+      <VanillaLink href={`/blog/${item.slug}`}>
+        <div className={css.cell}>
+          <img
+            src={`${cloudinary.url}/${cloudinary.lazy_wide}/${item.image}`}
+            alt={item.title}
+            className={css.image}
+          />
+          <div className={css.details}>
+            <Title className={css.title}>{item.title}</Title>
+            <Subtitle className={css.date}>
+              {zDate.formatDate(item.datePublished, true)}
+            </Subtitle>
           </div>
-        </VanillaLink>
-      </Zoomer>
-    );
-  }
-}
+        </div>
+      </VanillaLink>
+    </Zoomer>
+  );
+});
 
 const mapStateToProps = (state) => ({
   user: state.user
