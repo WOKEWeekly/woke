@@ -111,10 +111,18 @@ const Article = memo(({ item, idx }) => {
             className={css.image}
           />
           <div className={css.details}>
-            <Title className={css.title}>{item.title}</Title>
-            <Subtitle className={css.date}>
-              {zDate.formatDate(item.datePublished, true)}
-            </Subtitle>
+            <div className={css.authorImage}>
+              <img
+                src={`${cloudinary.url}/${item.authorImage}`}
+                title={item.authorName}
+              />
+            </div>
+            <div>
+              <Title className={css.title}>{item.title}</Title>
+              <Subtitle className={css.date}>
+                {zDate.formatDate(item.datePublished, true)}
+              </Subtitle>
+            </div>
           </div>
         </div>
       </VanillaLink>

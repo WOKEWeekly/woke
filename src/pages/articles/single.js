@@ -41,6 +41,7 @@ class ArticlePage extends Component {
   }
 
   render() {
+    const { isLoaded } = this.state;
     const { article, user } = this.props;
     const {
       authorName,
@@ -55,8 +56,8 @@ class ArticlePage extends Component {
       article.content.trim().length > 0 ? article.content : 'No content.';
 
     const shareMessage = `"${article.title}" by ${authorName} on The #WOKEWeekly Blog`;
-
-    const { isLoaded } = this.state;
+    const isExecutive = authorLevel === 'Executive';
+    const link = `/${isExecutive ? 'executives' : 'team/member'}/${authorSlug}`;
 
     /** The blog title element */
     const BlogTitle = () => {
@@ -72,18 +73,12 @@ class ArticlePage extends Component {
       const date = datePublished && zDate.formatDate(datePublished, true);
       if (!authorName) return null;
 
-      let link = '';
-      if (authorLevel === 'Executive') link = `/executives/${authorSlug}`;
-      else link = `/team/member/${authorSlug}`;
-
       return (
         <Fader determinant={isLoaded} duration={500} delay={500}>
           {authorImage ? (
-            <img
-              src={`${cloudinary.url}/w_42,h_42,c_scale/${authorImage}`}
-              alt={authorName}
-              className={css.authorThumbnail}
-            />
+            <div className={css.detailsThumbnail}>
+              <img src={`${cloudinary.url}/${authorImage}`} alt={authorName} />
+            </div>
           ) : null}
           <Subtitle className={css.details}>
             Written by
@@ -138,16 +133,17 @@ class ArticlePage extends Component {
           duration={500}
           delay={1000}
           className={css.authorProfile}>
-          <img
-            src={`${cloudinary.url}/${cloudinary.thumbnail}/${authorImage}`}
-            alt={authorName}
-            className={css.authorThumbnail}
-          />
+          <div className={css.authorThumbnail}>
+            <img src={`${cloudinary.url}/${authorImage}`} alt={authorName} />
+          </div>
           <Subtitle className={css.author}>Author</Subtitle>
           <Title className={css.name}>{authorName}</Title>
           <PromoIconsBar socials={authorSocials} />
-          <Paragraph className={css.description}>
-            {zText.extractExcerpt(authorDescription)}
+          <Paragraph
+            className={css.description}
+            moretext={`Read more on ${authorName}`}
+            link={link}>
+            {zText.truncateText(authorDescription, 80)}
           </Paragraph>
         </Fader>
       );
