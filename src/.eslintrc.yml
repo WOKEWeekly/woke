@@ -41,7 +41,6 @@ rules:
   # Overridden and disabled rules
   no-case-declarations: 0
   no-useless-escape: 0
-  import/no-unresolved: 0
   import/order:
     - warn
     - 
@@ -50,11 +49,19 @@ rules:
         - builtin
         - internal
         - sibling
+      pathGroups:
+        - pattern: "@**"
+          group: internal
       newlines-between: always
       alphabetize:
         order: asc
         caseInsensitive: true
 
+
+  import/no-unresolved:
+    - 2
+    - ignore:
+      - "^@"
   react/prop-types: 0
   react/display-name: 0
   quotes: 0

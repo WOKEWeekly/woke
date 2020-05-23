@@ -1,15 +1,14 @@
 import React, { useState, useEffect } from 'react';
-
 import { zDate } from 'zavid-modules';
 
-import { Loader, Empty } from 'components/loader.js';
-import { Title, Subtitle, Divider, VanillaLink } from 'components/text.js';
-import { Zoomer } from 'components/transitioner.js';
+import { Loader, Empty } from '@components/loader.js';
+import { Title, Subtitle, Divider, VanillaLink } from '@components/text.js';
+import { Zoomer } from '@components/transitioner.js';
 
-import request from 'constants/request.js';
-import { cloudinary } from 'constants/settings.js';
+import request from '@constants/request.js';
+import { cloudinary } from '@constants/settings.js';
 
-import css from 'styles/pages/Articles.module.scss';
+import css from '@styles/pages/Articles.module.scss';
 
 const ArticleSidebar = () => {
   const [isLoaded, setLoaded] = useState(false);

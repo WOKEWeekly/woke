@@ -47,7 +47,7 @@ const mapImportsToAliases = () => {
   const aliases = {};
 
   directories.forEach((directory) => {
-    aliases[directory] = path.resolve(__dirname, directory);
+    aliases[`@${directory}`] = path.resolve(__dirname, directory);
   });
 
   return aliases;
