@@ -50,8 +50,17 @@ rules:
         - internal
         - sibling
       pathGroups:
-        - pattern: "@**"
+        - pattern: "@components/**"
           group: internal
+          position: after
+        - pattern: "@constants/**"
+          group: internal
+          position: after
+        - pattern: "@styles/**"
+          group: internal
+          position: after
+      pathGroupsExcludedImportTypes:
+        - internal
       newlines-between: always
       alphabetize:
         order: asc
