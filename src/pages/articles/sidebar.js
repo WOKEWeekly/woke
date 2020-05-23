@@ -1,18 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { zDate } from 'zavid-modules';
 
+import { CloudinaryImage } from '@components/image.js';
 import { Loader, Empty } from '@components/loader.js';
 import { Title, Subtitle, Divider, VanillaLink } from '@components/text.js';
 import { Zoomer } from '@components/transitioner.js';
 
 import request from '@constants/request.js';
-import { cloudinary } from '@constants/settings.js';
 
 import css from '@styles/pages/Articles.module.scss';
 
 const ArticleSidebar = () => {
   const [isLoaded, setLoaded] = useState(false);
-  const [articles, setArticles] = useEffect([]);
+  const [articles, setArticles] = useState([]);
 
   useEffect(() => {
     /** Get published articles */
@@ -60,14 +60,14 @@ const Article = ({ article, idx }) => {
 
   return (
     <>
-      <Zoomer determinant={this.state.isLoaded} duration={400} delay={75 * idx}>
+      <Zoomer determinant={isLoaded} duration={400} delay={75 * idx}>
         <VanillaLink href={`/blog/${article.slug}`}>
           <div className={css.item}>
-            <img
-              src={`${cloudinary.url}/${cloudinary.lazy_wide}/${article.image}`}
+            <CloudinaryImage
+              src={article.image}
               alt={article.title}
               className={css.image}
-              onLoad={() => this.setState({ isLoaded: true })}
+              lazy={'mw'}
             />
             <div>
               <Title className={css.title}>{article.title}</Title>

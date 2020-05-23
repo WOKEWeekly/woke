@@ -179,7 +179,7 @@ const IArticle = memo(({ article, idx, user, getArticles }) => {
     return (
       <CloudinaryImage
         src={article.image}
-        lazy={'small-wide'}
+        lazy={'sw'}
         alt={article.title}
         className={css.image}
       />
@@ -245,7 +245,7 @@ const IArticle = memo(({ article, idx, user, getArticles }) => {
         </div>
         <CloudinaryImage
           src={article.image}
-          lazy={'small-wide'}
+          lazy={'sw'}
           className={css.listImage}
         />
       </Mobile>

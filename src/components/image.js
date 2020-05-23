@@ -1,11 +1,17 @@
+/* eslint-disable import/order */
 import React from 'react';
-import { cloudinary } from 'constants/settings.js';
+import { cloudinary } from '@constants/settings.js';
 
+/**
+ * Constants for Cloudinary lazy transformations.
+ * Size: s = small, m = medium
+ * Shape: s = square, w = wide
+ */
 export const TRANSFORMATIONS = {
-  ['small-square']: '/w_400,h_400,c_fill',
-  ['small-wide']: '/w_1280,h_720,c_fill',
-  ['medium-square']: '/w_800,h_800,c_fill',
-  ['medium-wide']: '/w_1280,h_720,c_fill'
+  ss: '/w_400,h_400,c_fill',
+  sw: '/w_1280,h_720,c_fill',
+  ms: '/w_800,h_800,c_fill',
+  mw: '/w_1280,h_720,c_fill'
 };
 
 export const CloudinaryImage = ({ src, lazy = '', alt, title, className }) => {

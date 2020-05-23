@@ -18,7 +18,6 @@ plugins:
   - react
   - import
 settings:
-  import/resolver: webpack
   react:
     version: detect
 

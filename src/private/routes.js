@@ -1,8 +1,10 @@
 const async = require('async');
 const jwt = require('jsonwebtoken');
-const path = require('path');
 const request = require('request');
 const sm = require('sitemap');
+const { zText } = require('zavid-modules');
+
+const path = require('path');
 
 const ERROR = require('./errors.js');
 const { renderErrorPage } = require('./response.js');
@@ -16,8 +18,6 @@ const {
   siteDescription
 } = require('../constants/settings.js');
 const { ENTITY, OPERATIONS, PAGE } = require('../constants/strings.js');
-
-const { zText } = require('zavid-modules');
 
 const env = process.env.NODE_ENV !== 'production' ? 'dev' : 'prod';
 

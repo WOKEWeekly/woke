@@ -1,3 +1,4 @@
+/* eslint-disable import/order */
 const DotEnv = require('dotenv-webpack');
 const server = require('./server.js');
 const path = require('path');

@@ -108,14 +108,14 @@ const Article = memo(({ item, idx }) => {
             src={item.image}
             alt={item.title}
             className={css.image}
-            lazy={'medium-wide'}
+            lazy={'mw'}
           />
           <div className={css.details}>
             <div className={css.authorImage}>
               <CloudinaryImage
                 src={item.authorImage}
                 title={item.authorName}
-                lazy={'small-square'}
+                lazy={'ss'}
               />
             </div>
             <div>
