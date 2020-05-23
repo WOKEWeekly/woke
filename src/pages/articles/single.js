@@ -3,12 +3,12 @@ import { Col, Row, Container } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { zDate, zText } from 'zavid-modules';
 
-import { BottomToolbar } from '@components/toolbar.js';
 import { AdminButton, BackButton } from '@components/button.js';
 import { PromoIconsBar } from '@components/icon.js';
-import { Title, Subtitle, Paragraph, Divider } from '@components/text.js';
 import { Partitioner, Shader, Spacer } from '@components/layout.js';
 import { SocialMediaShareBlock } from '@components/socialmedia.js';
+import { Title, Subtitle, Paragraph, Divider } from '@components/text.js';
+import { BottomToolbar } from '@components/toolbar.js';
 import { Fader } from '@components/transitioner.js';
 
 import CLEARANCES from '@constants/clearances.js';

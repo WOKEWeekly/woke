@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { Col } from 'react-bootstrap';
 import { connect } from 'react-redux';
 
-import { SubmitButton, CancelButton } from 'components/button.js';
-import { AuthoredDatePicker } from 'components/datepicker.js';
+import { SubmitButton, CancelButton } from '@components/button.js';
+import { AuthoredDatePicker } from '@components/datepicker.js';
 import {
   Heading,
   Group,
@@ -14,15 +14,15 @@ import {
   LongTextArea,
   FileSelector,
   Select
-} from 'components/form.js';
-import { Shader, Spacer } from 'components/layout.js';
+} from '@components/form.js';
+import { Shader, Spacer } from '@components/layout.js';
 
-import { categories } from 'constants/categories.js';
-import CLEARANCES from 'constants/clearances.js';
-import request from 'constants/request.js';
-import { ARTICLE_STATUS } from 'constants/strings.js';
+import { categories } from '@constants/categories.js';
+import CLEARANCES from '@constants/clearances.js';
+import request from '@constants/request.js';
+import { ARTICLE_STATUS } from '@constants/strings.js';
 
-import css from 'styles/pages/Articles.module.scss';
+import css from '@styles/pages/Articles.module.scss';
 
 const ArticleForm = ({
   article,
