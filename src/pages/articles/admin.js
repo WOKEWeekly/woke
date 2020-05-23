@@ -1,21 +1,21 @@
 import React, { Component, memo, useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 
-import { alert } from '~/components/alert.js';
-import { AddEntityButton, BackButton } from '~/components/button.js';
-import { Icon } from '~/components/icon.js';
-import { Default, Mobile, Shader } from '~/components/layout.js';
-import { Loader, Empty } from '~/components/loader.js';
-import { ConfirmModal } from '~/components/modal.js';
-import { Title } from '~/components/text.js';
-import { BottomToolbar } from '~/components/toolbar.js';
-import { Fader } from '~/components/transitioner.js';
+import { alert } from 'components/alert.js';
+import { AddEntityButton, BackButton } from 'components/button.js';
+import { Icon } from 'components/icon.js';
+import { CloudinaryImage } from 'components/image.js';
+import { Default, Mobile, Shader } from 'components/layout.js';
+import { Loader, Empty } from 'components/loader.js';
+import { ConfirmModal } from 'components/modal.js';
+import { Title } from 'components/text.js';
+import { BottomToolbar } from 'components/toolbar.js';
+import { Fader } from 'components/transitioner.js';
 
-import CLEARANCES from '~/constants/clearances.js';
-import request from '~/constants/request.js';
-import { cloudinary } from '~/constants/settings.js';
+import CLEARANCES from 'constants/clearances.js';
+import request from 'constants/request.js';
 
-import css from '~/styles/pages/Articles.module.scss';
+import css from 'styles/pages/Articles.module.scss';
 
 class BlogAdmin extends Component {
   constructor(props) {
@@ -101,7 +101,7 @@ class BlogAdmin extends Component {
       }
 
       return (
-        <React.Fragment>
+        <>
           <Title className={css.heading}>Blog Articles</Title>
           <Default>
             <ArticleTable />
@@ -109,12 +109,12 @@ class BlogAdmin extends Component {
           <Mobile>
             <ArticleList />
           </Mobile>
-        </React.Fragment>
+        </>
       );
     };
 
     return (
-      <React.Fragment>
+      <>
         <Shader className={css.articleTabler}>
           <ArticleCollection />
         </Shader>
@@ -130,7 +130,7 @@ class BlogAdmin extends Component {
             onClick={() => (location.href = '/admin/articles/add')}
           />
         </BottomToolbar>
-      </React.Fragment>
+      </>
     );
   }
 }
@@ -177,8 +177,9 @@ const IArticle = memo(({ article, idx, user, getArticles }) => {
   const ArticleImage = () => {
     if (!article.image) return 'None';
     return (
-      <img
-        src={`${cloudinary.url}/${cloudinary.lazy_wide}/${article.image}`}
+      <CloudinaryImage
+        src={article.image}
+        lazy={'small-wide'}
         alt={article.title}
         className={css.image}
       />
@@ -227,7 +228,6 @@ const IArticle = memo(({ article, idx, user, getArticles }) => {
         />
         <MobileField icon={'user'} text={article.authorName} />
         <MobileField icon={'star'} text={article.category} />
-        <MobileField icon={'signature'} text={article.image} />
         <MobileField icon={'unlock'} text={article.status} />
         <div className={css.index}>{idx + 1}</div>
         <div className={css.crud}>
@@ -243,6 +243,11 @@ const IArticle = memo(({ article, idx, user, getArticles }) => {
             <Icon name={'trash'} />
           </button>
         </div>
+        <CloudinaryImage
+          src={article.image}
+          lazy={'small-wide'}
+          className={css.listImage}
+        />
       </Mobile>
 
       <ConfirmModal
@@ -256,6 +261,7 @@ const IArticle = memo(({ article, idx, user, getArticles }) => {
   );
 });
 
+// TODO: Abstract for all mobile-table conversions
 const MobileField = ({ icon, text, className }) => {
   return (
     <div
@@ -264,7 +270,7 @@ const MobileField = ({ icon, text, className }) => {
         gridTemplateColumns: '8% auto',
         alignItems: 'baseline'
       }}>
-      <Icon name={icon} style={{textAlign: 'right'}} />
+      <Icon name={icon} style={{ textAlign: 'right' }} />
       <span className={className}>{text}</span>
     </div>
   );

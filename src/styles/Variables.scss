@@ -3,24 +3,24 @@ $title-font: 'Patua One';
 $body-font: 'Raleway';
 
 /** Colors */
-$primary: #6C4D90;
-$primary-light: rgba(142, 116, 171, .5);
-$primary-dark: rgba(28, 8, 34, .8);
+$primary: #6c4d90;
+$primary-light: rgba(142, 116, 171, 0.5);
+$primary-dark: rgba(28, 8, 34, 0.8);
 $dark: rgb(13, 12, 14);
 
-$sidebar: rgba(8, 2, 10, .8);
+$sidebar: rgba(8, 2, 10, 0.8);
 
 $blackex: #22b2c3;
 $mental: #159e43;
 
-$faded-white: rgba(255, 255, 255, .7);
+$faded-white: rgba(255, 255, 255, 0.7);
 
 /** Borders */
 $border: 1px solid $primary;
 $secondary-border: 1px solid rgb(245, 222, 179);
 $underline: 1px solid $faded-white;
 
-$toolbar: rgba(0,0,0,.95);
+$toolbar: rgba(0, 0, 0, 0.95);
 $navbar-height: 65px;
 
 /** Media queries */
@@ -40,20 +40,28 @@ $break-xxl: 1408px; // Extra large devices (large desktops)
   cursor: pointer;
   font-family: $body-font;
   text-decoration: underline;
-  transition: all .2s;
-  -webkit-transition: all .2s;
+  transition: all 0.2s;
+  -webkit-transition: all 0.2s;
   &-default {
     @extend .link;
     color: #bc83ff;
-    &:hover { color: #9769cc; } }
+    &:hover {
+      color: #9769cc;
+    }
+  }
   &-blackex {
     @extend .link;
     color: #36deea;
-    &:hover { color: #2babb4; } }
+    &:hover {
+      color: #2babb4;
+    }
+  }
   &-mental {
     @extend .link;
     color: #36ea92;
-    &:hover { color: #29af6e; }
+    &:hover {
+      color: #29af6e;
+    }
   }
 
   &-button {
@@ -61,30 +69,49 @@ $break-xxl: 1408px; // Extra large devices (large desktops)
     border: none;
     outline: none;
     padding: 0;
-    &:hover { text-decoration: underline; }
+    &:hover {
+      text-decoration: underline;
+    }
   }
 }
 .invisible_button {
   background: none;
   border: none;
-  &:focus { outline: none; }
+  &:focus {
+    outline: none;
+  }
 }
 
 .responsive-container {
   margin: 0 auto;
   width: 60%;
-  @media (max-width: $break-xl) { width: 70%; }
-  @media (max-width: $break-lg) { width: 80%; }
-  @media (max-width: $break-sm) { width: 100%; } }
+  @media (max-width: $break-xl) {
+    width: 70%;
+  }
+  @media (max-width: $break-lg) {
+    width: 80%;
+  }
+  @media (max-width: $break-sm) {
+    width: 100%;
+  }
+}
 .responsive-container-70 {
   margin: 0 auto;
   width: 70%;
-  @media (max-width: $break-lg) { width: 80%; }
-  @media (max-width: $break-sm) { width: 100%; } }
+  @media (max-width: $break-lg) {
+    width: 80%;
+  }
+  @media (max-width: $break-sm) {
+    width: 100%;
+  }
+}
 .responsive-container-80 {
   margin: 0 auto;
   width: 80%;
-  @media (max-width: $break-sm) { width: 100%; } }
+  @media (max-width: $break-sm) {
+    width: 100%;
+  }
+}
 
 .responsive-form {
   @extend .responsive-container;
@@ -95,34 +122,61 @@ $break-xxl: 1408px; // Extra large devices (large desktops)
 ** Mixins **
 ***********/
 @mixin scale-on-hover($scale) {
-  transition: transform .2s ease-in-out;
-  -webkit-transition: transform .2s ease-in-out;
-  &:hover { transform: scale($scale); }
+  transition: transform 0.2s ease-in-out;
+  -webkit-transition: transform 0.2s ease-in-out;
+  &:hover {
+    transform: scale($scale);
+  }
 }
 
 @mixin font-scaler($size) {
   font-size: ($size) + em;
-  @media (max-width: $break-xl) { font-size: ($size * 1.2) + em; }
-  @media (max-width: $break-lg) { font-size: ($size * 1.17) + em; }
-  @media (max-width: $break-sm) { font-size: ($size * 0.85) + em; }
+
+  @media (max-width: $break-xxl) {
+    font-size: ($size * 1.2) + em;
+  }
+
+  @media (max-width: $break-xl) {
+    font-size: ($size * 1.1) + em;
+  }
+  @media (max-width: $break-lg) {
+    font-size: ($size) + em;
+  }
+  @media (max-width: $break-sm) {
+    font-size: ($size * 0.85) + em;
+  }
 }
 
-@mixin entity($float, $width){
+@mixin entity($float, $width) {
   margin: 1em 0;
   overflow-x: hidden;
   .image {
     border-radius: 8px;
     float: $float;
-    @if $float == right { margin-left: 1.5em; } @else { margin-right: 1.5em }
+    @if $float == right {
+      margin-left: 1.5em;
+    } @else {
+      margin-right: 1.5em;
+    }
     margin-bottom: 1em;
     width: $width;
-    @media (max-width: $break-xl) { width: 50%; }
-    @media (max-width: $break-sm) { width: 100%; }
+    @media (max-width: $break-xl) {
+      width: 50%;
+    }
+    @media (max-width: $break-sm) {
+      width: 100%;
+    }
   }
   .details {
-    .title { @include font-scaler(2); }
-    .subtitle { @include font-scaler(1.1); }
-    .description { @include font-scaler(1.2); }
+    .title {
+      @include font-scaler(2);
+    }
+    .subtitle {
+      @include font-scaler(1.1);
+    }
+    .description {
+      @include font-scaler(1.2);
+    }
   }
 }
 
@@ -131,47 +185,69 @@ $break-xxl: 1408px; // Extra large devices (large desktops)
   grid-template-columns: repeat($maxCol, calc(100% / #{$maxCol}));
 
   @if $maxCol > 5 {
-    @media (max-width: $break-xl) { grid-template-columns: repeat(5, 20%); }
+    @media (max-width: $break-xl) {
+      grid-template-columns: repeat(5, 20%);
+    }
   }
 
   @if $maxCol > 4 {
-    @media (max-width: $break-lg) { grid-template-columns: repeat(4, 25%); }
+    @media (max-width: $break-lg) {
+      grid-template-columns: repeat(4, 25%);
+    }
   }
 
   @if $maxCol > 3 {
-    @media (max-width: $break-md) { grid-template-columns: repeat(3, calc(100% / 3)); }
+    @media (max-width: $break-md) {
+      grid-template-columns: repeat(3, calc(100% / 3));
+    }
   }
 
-  @media (max-width: $break-sm) { grid-template-columns: repeat(2, 50%); }
+  @media (max-width: $break-sm) {
+    grid-template-columns: repeat(2, 50%);
+  }
 }
 
 @mixin entityTabler($columns...) {
   padding: 1em 2em;
-  @media (max-width: $break-md) { padding: 1em; }
+  @media (max-width: $break-md) {
+    padding: 1em;
+  }
   .heading {
     font-size: 2em;
-    margin-bottom: .5em;
-    @media (max-width: $break-md) { font-size: 1.5em; }}
+    margin-bottom: 0.5em;
+    @media (max-width: $break-md) {
+      font-size: 1.5em;
+    }
+  }
   .grid {
     display: grid;
     font-size: 1.1em;
     position: relative;
-    .header, .row {
+    .header,
+    .row {
       align-items: center;
       color: white;
       display: grid;
       grid-template-columns: $columns;
-      padding: .7em 0;
+      padding: 0.7em 0;
       span {
-        padding: 0 .5em; word-break: break-word;
-        .image { width: 100%; } } }
+        padding: 0 0.5em;
+        word-break: break-word;
+        .image {
+          width: 100%;
+        }
+      }
+    }
     .header {
-      border-bottom: 1px solid rgba(255,255,255,.6);
-      font-family: $title-font; }
+      border-bottom: 1px solid rgba(255, 255, 255, 0.6);
+      font-family: $title-font;
+    }
     .row {
       font-family: $body-font;
       border-radius: 10px;
-      &:hover { background-color: $primary-light; }
+      &:hover {
+        background-color: $primary-light;
+      }
       button {
         @extend .invisible_button;
         cursor: pointer;
@@ -188,18 +264,23 @@ $break-xxl: 1408px; // Extra large devices (large desktops)
       border-radius: 15px;
       font-family: $body-font;
       padding: 1em;
-      margin: .5em 0;
+      margin: 0.5em 0;
       position: relative;
-      div:not(.index):not(.crud) { display: grid; grid-template-columns: 2em 1fr;}
+      div:not(.index):not(.crud):not([class*='image' i]) {
+        display: grid;
+        grid-template-columns: 2em 1fr;
+      }
       .name {
         @include font-scaler(1.5);
-        font-family: $title-font; }
+        font-family: $title-font;
+      }
       .index {
         @include font-scaler(1.5);
         font-family: $title-font;
         position: absolute;
         top: 5%;
-        right: 5%; }
+        right: 5%;
+      }
       .crud {
         position: absolute;
         bottom: 5%;

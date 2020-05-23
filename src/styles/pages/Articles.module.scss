@@ -26,24 +26,23 @@
         width: 100%;
       }
       .details {
-        align-items: center;
-        display: flex;
-        flex-direction: row;
-        height: 100%;
+        display: grid;
+        grid-template-columns: 4em auto;
         justify-content: flex-start;
+        align-items: flex-start;
         padding: 0.8em 0.5em;
         text-align: left;
         .title {
           @include font-scaler(1.2);
         }
         .date {
-          @include font-scaler(0.7);
+          @include font-scaler(0.8);
         }
         .authorImage {
           border-radius: 50%;
           margin-right: 0.5em;
           overflow: hidden;
-          width: 40px;
+          width: 50px;
           img {
             width: 100%;
           }
@@ -67,6 +66,8 @@
   margin: 1em 0;
   .title {
     @include font-scaler(3);
+    line-height: 1.2;
+    margin-bottom: .2em;
   }
   .content {
     @include font-scaler(1.25);
@@ -143,6 +144,14 @@
 
 .articleTabler {
   @include entityTabler(4% 15% 15% 1fr 7% 1fr 4% 4% 4%);
+}
+
+.listImage {
+  border-radius: 10px;
+  margin: .5em 0;
+  max-width: 50%;
+  max-height: 100px;
+  overflow: hidden;
 }
 
 /*************
