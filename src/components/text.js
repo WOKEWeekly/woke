@@ -1,11 +1,11 @@
+import classNames from 'classnames';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import classNames from 'classnames';
-
-import { Icon } from '~/components/icon.js';
-import css from '~/styles/components/Text.module.scss';
-
 import { zText } from 'zavid-modules';
+
+import { Icon } from '@components/icon.js';
+
+import css from '@styles/components/Text.module.scss';
 
 export class Title extends Component {
   render() {
@@ -29,42 +29,61 @@ export class Subtitle extends Component {
   }
 }
 
-export class IParagraph extends Component {
-  render() {
-    let { children = '', substitutions, theme, link, moretext } = this.props;
-    const classes = classNames(css.paragraph, this.props.className);
+/**
+ * A paragraph component for a formatted body of text.
+ *
+ * @param {string} props - Inherited properties from the paragraph component.
+ * @param {string} props.children - The text to be formatted.
+ * @param {string} props.className - The CSS styling for paragraph component.
+ * @param {object} props.substitutions - A map of variable substitutions
+ * to be made to the text.
+ * @param {string} props.theme - The current theme from the Redux state.
+ * @param {string} props.cssOverrides - The CSS styling overrides for the emphasis and section formatting.
+ * @param {string} props.link - The hyperlink for the embedded {@link ReadMore} component.
+ * @param {string} props.moretext - The text to be formatted.
+ * @param {object} props.moreClass - The CSS styling for the embedded {@link ReadMore} component.
+ * @returns {Component} A formatted paragraph component.
+ */
+export const IParagraph = ({
+  children,
+  substitutions,
+  theme,
+  link,
+  moretext,
+  moreClass,
+  className,
+  cssOverrides
+}) => {
+  const classes = classNames(css.paragraph, className);
 
-    children = zText.applySubstitutions(children, substitutions);
-    children = zText.formatText(children, {
-      css: {
-        heading: css.heading,
-        subheading: css.subheading,
-        image: {
-          full: css.fullImage,
-          float: css.floatImage
-        },
-        paragraph: css.body,
-        divider: css.divider,
-        hyperlink: css[`link-${theme.toLowerCase()}`]
-      }
-    });
+  children = zText.applySubstitutions(children, substitutions);
+  children = zText.formatText(children, {
+    css: {
+      heading: css.heading,
+      subheading: css.subheading,
+      image: {
+        full: css.fullImage,
+        float: css.floatImage
+      },
+      paragraph: css.body,
+      divider: css.divider,
+      hyperlink: css[`link-${theme.toLowerCase()}`],
+      ...cssOverrides
+    }
+  });
 
-    const ReadMoreLabel = () => {
-      if (!moretext) return null;
-      if (moretext === true) moretext = null;
-      return <ReadMore link={link} text={moretext} />;
-    };
+  const ReadMoreLabel = () => {
+    if (!moretext || !link) return null;
+    return <ReadMore className={moreClass} link={link} text={moretext} />;
+  };
 
-    return (
-      <React.Fragment>
-        <pre {...this.props} className={classes}>
-          {children}
-        </pre>
-        <ReadMoreLabel />
-      </React.Fragment>
-    );
-  }
-}
+  return (
+    <>
+      <pre className={classes}>{children}</pre>
+      <ReadMoreLabel />
+    </>
+  );
+};
 
 export class QuoteWrapper extends Component {
   render() {
@@ -86,19 +105,17 @@ export class Divider extends Component {
   }
 }
 
-export class ReadMore extends Component {
-  render() {
-    const { link, text = 'Read more' } = this.props;
-    return (
-      <VanillaLink href={link}>
-        <div className={css.readmore}>
-          <Icon name={'external-link-alt'} className={css.linkIcon} />
-          {text}
-        </div>
-      </VanillaLink>
-    );
-  }
-}
+export const ReadMore = ({ link, text = 'Read more', className }) => {
+  const classes = classNames(css.readmore, className);
+  return (
+    <VanillaLink href={link}>
+      <div className={classes}>
+        <Icon name={'external-link-alt'} className={css.linkIcon} />
+        {text}
+      </div>
+    </VanillaLink>
+  );
+};
 
 export class ExpandText extends Component {
   render() {

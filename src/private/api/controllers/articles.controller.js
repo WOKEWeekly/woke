@@ -1,5 +1,6 @@
-const { respondToClient } = require('../../response');
 const async = require('async');
+
+const { respondToClient } = require('../../response');
 const SQL = require('../../sql');
 const conn = require('../db').getDb();
 const filer = require('../../filer');

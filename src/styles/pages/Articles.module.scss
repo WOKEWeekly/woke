@@ -80,14 +80,14 @@
   .authorProfile {
     .author {
       @include font-scaler(0.8);
-      font-style: italic;
+      // font-style: italic;
     }
     .name {
-      @include font-scaler(1.1);
+      @include font-scaler(1.15);
     }
     .description {
-      @include font-scaler(1);
-      font-style: italic;
+      @include font-scaler(.95);
+      margin-bottom: 0;
     }
   }
   .details {
@@ -117,6 +117,10 @@
 .authorThumbnail {
   @extend .authorImage;
   width: 96px;
+}
+
+.readmore {
+  @include font-scaler(.9);
 }
 
 .tagblock {
@@ -163,7 +167,7 @@
 }
 
 /*************
-*** sidebar.js
+*** single.sidebar.js
 *************/
 
 .sidebar {
@@ -195,3 +199,8 @@
     }
   }
 }
+
+/*************
+*** index.sidebar.js
+*************/
+

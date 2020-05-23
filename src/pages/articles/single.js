@@ -5,6 +5,7 @@ import { zDate, zText } from 'zavid-modules';
 
 import { AdminButton, BackButton } from '@components/button.js';
 import { PromoIconsBar } from '@components/icon.js';
+import { CloudinaryImage } from '@components/image.js';
 import { Partitioner, Shader, Spacer } from '@components/layout.js';
 import { SocialMediaShareBlock } from '@components/socialmedia.js';
 import { Title, Subtitle, Paragraph, Divider } from '@components/text.js';
@@ -12,11 +13,10 @@ import { BottomToolbar } from '@components/toolbar.js';
 import { Fader } from '@components/transitioner.js';
 
 import CLEARANCES from '@constants/clearances.js';
-import { cloudinary } from '@constants/settings.js';
 
 import css from '@styles/pages/Articles.module.scss';
 
-import ArticleSidebar from './sidebar';
+import ArticleSidebar from './single.sidebar';
 
 const ArticlePage = ({ article, user }) => {
   // TODO: Remove when finished
@@ -63,7 +63,7 @@ const ArticlePage = ({ article, user }) => {
       <Fader determinant={isLoaded} duration={500} delay={500}>
         {authorImage ? (
           <div className={css.detailsThumbnail}>
-            <img src={`${cloudinary.url}/${authorImage}`} alt={authorName} />
+            <CloudinaryImage src={authorImage} alt={authorName} lazy={'ss'} />
           </div>
         ) : null}
         <Subtitle className={css.details}>
@@ -83,8 +83,8 @@ const ArticlePage = ({ article, user }) => {
   const CoverImage = () => {
     return (
       <Fader determinant={isLoaded} duration={500} delay={500}>
-        <img
-          src={`${cloudinary.url}/${cloudinary.lazy_wide}/${article.image}`}
+        <CloudinaryImage
+          src={article.image}
           alt={article.title}
           className={css.image}
         />
@@ -119,17 +119,21 @@ const ArticlePage = ({ article, user }) => {
         duration={500}
         delay={1000}
         className={css.authorProfile}>
-        <div className={css.authorThumbnail}>
-          <img src={`${cloudinary.url}/${authorImage}`} alt={authorName} />
-        </div>
+        <CloudinaryImage
+          src={authorImage}
+          alt={authorName}
+          className={css.authorThumbnail}
+          lazy={'ss'}
+        />
         <Subtitle className={css.author}>Author</Subtitle>
         <Title className={css.name}>{authorName}</Title>
         <PromoIconsBar socials={authorSocials} />
         <Paragraph
           className={css.description}
           moretext={`Read more on ${authorName}`}
+          moreClass={css.readmore}
           link={link}>
-          {zText.truncateText(authorDescription, 80)}
+          {zText.truncateText(authorDescription, 60)}
         </Paragraph>
       </Fader>
     );

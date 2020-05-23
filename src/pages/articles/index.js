@@ -59,11 +59,9 @@ class Blog extends Component {
       } else if (articles.length === 0) {
         return <Empty message={'No articles found.'} />;
       } else {
-        const items = [];
-
-        for (const [index, item] of articles.entries()) {
-          items.push(<Article key={index} idx={index} item={item} />);
-        }
+        const items = articles.map((article, index) => {
+          return <Article key={index} idx={index} article={article} />;
+        });
 
         return <div className={css.igrid}>{items}</div>;
       }
@@ -72,9 +70,9 @@ class Blog extends Component {
     return (
       <Shader>
         <Spacer gridrows={'auto 1fr auto'}>
-          <Fader determinant={isLoaded} duration={1500}>
-            <ArticleCollection />
-          </Fader>
+            <Fader determinant={isLoaded} duration={1500}>
+              <ArticleCollection />
+            </Fader>
         </Spacer>
 
         <BottomToolbar>
@@ -90,7 +88,7 @@ class Blog extends Component {
   }
 }
 
-const Article = memo(({ item, idx }) => {
+const Article = memo(({ article, idx }) => {
   const [isLoaded, setLoaded] = useState(false);
   useEffect(() => {
     setLoaded(true);
@@ -102,26 +100,26 @@ const Article = memo(({ item, idx }) => {
       duration={400}
       delay={75 * idx}
       className={css.icontainer}>
-      <VanillaLink href={`/blog/${item.slug}`}>
+      <VanillaLink href={`/blog/${article.slug}`}>
         <div className={css.cell}>
           <CloudinaryImage
-            src={item.image}
-            alt={item.title}
+            src={article.image}
+            alt={article.title}
             className={css.image}
             lazy={'mw'}
           />
           <div className={css.details}>
             <div className={css.authorImage}>
               <CloudinaryImage
-                src={item.authorImage}
-                title={item.authorName}
+                src={article.authorImage}
+                title={article.authorName}
                 lazy={'ss'}
               />
             </div>
             <div>
-              <Title className={css.title}>{item.title}</Title>
+              <Title className={css.title}>{article.title}</Title>
               <Subtitle className={css.date}>
-                {zDate.formatDate(item.datePublished, true)}
+                {zDate.formatDate(article.datePublished, true)}
               </Subtitle>
             </div>
           </div>

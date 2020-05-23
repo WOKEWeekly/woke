@@ -9,7 +9,7 @@ import { cloudinary } from '@constants/settings.js';
 import { ARTICLE_STATUS, OPERATIONS } from '@constants/strings.js';
 import { isValidArticle } from '@constants/validations.js';
 
-import ArticleForm from './form.js';
+import ArticleForm from './crud.form.js';
 
 class ArticleCrud extends Component {
   static async getInitialProps({ query }) {
