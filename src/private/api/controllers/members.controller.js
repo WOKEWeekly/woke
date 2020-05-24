@@ -4,21 +4,24 @@ const async = require('async');
 const { respondToClient } = require('../../response');
 const SQL = require('../../sql');
 const conn = require('../db').getDb();
+const knex = require('../db').getKnex();
 const filer = require('../../filer');
 const { DIRECTORY, ENTITY } = require('../../../constants/strings');
 const ERROR = require('../../errors');
 
 /** Retrieve all team members */
 exports.getAllMembers = (req, res) => {
-  conn.query(SQL.MEMBERS.READ.ALL(), function (err, members) {
+  const query = knex.select().from('members');
+  query.asCallback(function (err, members) {
     respondToClient(res, err, 200, members);
   });
 };
 
 /** Retrieve individual member */
-exports.getMember = (req, res) => {
-  const id = req.params.id;
-  conn.query(SQL.MEMBERS.READ.SINGLE(), id, function (err, [member] = []) {
+exports.getSingleMember = (req, res) => {
+  const { id } = req.params;
+  const query = knex.select().from('members').where('id', id);
+  query.asCallback(function (err, [member] = []) {
     if (err) return respondToClient(res, err);
     if (!member) err = ERROR.INVALID_ENTITY_ID(ENTITY.MEMBER, id);
     respondToClient(res, err, 200, member);
@@ -27,21 +30,32 @@ exports.getMember = (req, res) => {
 
 /** Retrieve a random verified member */
 exports.getRandomMember = (req, res) => {
-  conn.query(SQL.MEMBERS.READ.RANDOM, function (err, [member] = []) {
+  const query = knex
+    .select()
+    .from('members')
+    .where('verified', 1)
+    .orderByRaw('RAND()')
+    .limit(1);
+  query.asCallback(function (err, [member] = []) {
     respondToClient(res, err, 200, member);
   });
 };
 
 /** Retrieve only authors */
 exports.getAuthors = (req, res) => {
-  conn.query(SQL.MEMBERS.READ.AUTHORS, function (err, authors) {
+  const query = knex.select().from('members').where('isAuthor', 1);
+  query.asCallback(function (err, authors) {
     respondToClient(res, err, 200, authors);
   });
 };
 
 /** Retrieve only executive team members */
 exports.getExecutives = (req, res) => {
-  conn.query(SQL.MEMBERS.READ.EXECUTIVES, function (err, executives) {
+  const query = knex.select().from('members').where({
+    level: 'Executive',
+    verified: 1
+  });
+  query.asCallback(function (err, executives) {
     respondToClient(res, err, 200, executives);
   });
 };
@@ -58,9 +72,9 @@ exports.addMember = (req, res) => {
       },
       function (member, callback) {
         // Add member to database
-        const { sql, values } = SQL.MEMBERS.CREATE(member);
-        conn.query(sql, [values], function (err, result) {
-          err ? callback(err) : callback(null, result.insertId);
+        const query = knex.insert(member).into('members');
+        query.asCallback(function (err, [id] = []) {
+          callback(err, id);
         });
       }
     ],
@@ -81,10 +95,8 @@ exports.updateMember = (req, res) => {
     [
       function (callback) {
         // Delete old image if changed.
-        conn.query(SQL.MEMBERS.READ.SINGLE('image'), id, function (
-          err,
-          [member] = []
-        ) {
+        const query = knex.select().from('members').where('id', id);
+        query.asCallback(function (err, [member] = []) {
           if (err) return callback(err);
           if (!member)
             return callback(ERROR.INVALID_ENTITY_ID(ENTITY.MEMBER, id));
@@ -98,9 +110,9 @@ exports.updateMember = (req, res) => {
       },
       function (member, callback) {
         // Update member in database
-        const { sql, values } = SQL.MEMBERS.UPDATE(id, member, changed);
-        conn.query(sql, values, function (err) {
-          err ? callback(err) : callback(null, member.slug);
+        const query = knex('members').update(member).where('id', id);
+        query.asCallback(function (err) {
+          callback(err, member.slug);
         });
       }
     ],
@@ -120,10 +132,8 @@ exports.deleteMember = (req, res) => {
     [
       function (callback) {
         // Delete image from cloud
-        conn.query(SQL.MEMBERS.READ.SINGLE('image'), id, function (
-          err,
-          [member] = []
-        ) {
+        const query = knex.select().from('members').where('id', id);
+        query.asCallback(function (err, [member] = []) {
           if (err) return callback(err);
           if (!member)
             return callback(ERROR.INVALID_ENTITY_ID(ENTITY.MEMBER, id));
@@ -132,7 +142,8 @@ exports.deleteMember = (req, res) => {
       },
       function (callback) {
         // Delete member from database
-        conn.query(SQL.MEMBERS.DELETE, id, function (err) {
+        const query = knex('members').where('id', id).del();
+        query.asCallback(function (err) {
           err ? callback(err) : callback(null);
         });
       }

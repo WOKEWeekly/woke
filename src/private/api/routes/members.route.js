@@ -14,7 +14,7 @@ router.get(
   MembersController.getAllMembers
 );
 /** GET single member by ID */
-router.get('/:id([0-9]+)', validateReq, MembersController.getMember);
+router.get('/:id([0-9]+)', validateReq, MembersController.getSingleMember);
 
 /** GET random member */
 router.get('/random', validateReq, MembersController.getRandomMember);
