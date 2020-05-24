@@ -11,7 +11,7 @@ const authorize = verifyToken(CLEARANCES.ACTIONS.CRUD_DOCUMENTS);
 router.get('/', authorize, DocumentsController.getAllDocuments);
 
 /** GET single document by ID */
-router.get('/:id', authorize, DocumentsController.getDocument);
+router.get('/:id', authorize, DocumentsController.getSingleDocument);
 
 /** POST new document */
 router.post('/', authorize, DocumentsController.addDocument);

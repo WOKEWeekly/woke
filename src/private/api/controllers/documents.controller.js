@@ -16,7 +16,7 @@ exports.getAllDocuments = (req, res) => {
 };
 
 /** Retrieve individual document */
-exports.getDocument = (req, res) => {
+exports.getSingleDocument = (req, res) => {
   const { id } = req.params;
   const query = knex.select().from('documents').where('id', id);
   query.asCallback(function (err, [document] = []) {
