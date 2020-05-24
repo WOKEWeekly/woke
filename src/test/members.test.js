@@ -1,38 +1,38 @@
-const { assert, request, HEADERS } = require('./configuration/constants.js');
-const { TEST_SESSIONS, TEST_USERS } = require('./configuration/data.js');
+const { assert, request, HEADERS } = require('./configuration');
+const { TEST_MEMBERS, TEST_USERS } = require('./configuration/test.data.js');
 
 const superuser = TEST_USERS.NINE;
 
-let SESSION_ID = 0;
+let MEMBER_ID = 0;
 
-describe('Session Tests', function () {
+describe('Member Tests', function () {
   this.slow(10000);
 
-  /** Test creating a new session */
+  /** Test creating a new member */
   describe('Create', function () {
-    it('Add session', function (done) {
+    it('Add member', function (done) {
       request({
-        url: `/api/v1/sessions`,
+        url: `/api/v1/members`,
         method: 'POST',
-        body: JSON.stringify(TEST_SESSIONS.CREATED),
+        body: JSON.stringify(TEST_MEMBERS.CREATED),
         headers: HEADERS.TOKEN(superuser),
         done,
         onSuccess: ({ status, data }) => {
           assert.equal(status, 201);
           assert.hasAllKeys(data, ['id']);
-          SESSION_ID = data.id;
+          MEMBER_ID = data.id;
         }
       });
     });
   });
 
-  /** Test retrieval of all sessions */
+  /** Test retrieval of all members */
   describe('Read', function () {
-    it('Get all sessions', function (done) {
+    it('Get all members', function (done) {
       request({
-        url: `/api/v1/sessions`,
+        url: `/api/v1/members`,
         method: 'GET',
-        headers: HEADERS.KEY,
+        headers: HEADERS.TOKEN(superuser),
         done,
         onSuccess: ({ status, data }) => {
           assert.equal(status, 200);
@@ -41,9 +41,9 @@ describe('Session Tests', function () {
       });
     });
 
-    it('Get single session', function (done) {
+    it('Get random member', function (done) {
       request({
-        url: `/api/v1/sessions/${SESSION_ID}`,
+        url: `/api/v1/members/random`,
         method: 'GET',
         headers: HEADERS.KEY,
         done,
@@ -54,22 +54,54 @@ describe('Session Tests', function () {
       });
     });
 
-    it('Get featured session', function (done) {
+    it('Get only authors', function (done) {
       request({
-        url: `/api/v1/sessions/featured`,
+        url: `/api/v1/members/authors`,
         method: 'GET',
         headers: HEADERS.KEY,
         done,
         onSuccess: ({ status, data }) => {
           assert.equal(status, 200);
-          assert.hasAllKeys(data, ['session', 'upcoming']);
+          assert.isArray(data);
+          data.forEach((member) => {
+            assert.equal(member.isAuthor, true);
+          });
         }
       });
     });
 
-    it('Attempt get single session with invalid ID', function (done) {
+    it('Get only executive members', function (done) {
       request({
-        url: `/api/v1/sessions/0`,
+        url: `/api/v1/members/executives`,
+        method: 'GET',
+        headers: HEADERS.KEY,
+        done,
+        onSuccess: ({ status, data }) => {
+          assert.equal(status, 200);
+          assert.isArray(data);
+          data.forEach((member) => {
+            assert.equal(member.level, 'Executive');
+          });
+        }
+      });
+    });
+
+    it('Get single member', function (done) {
+      request({
+        url: `/api/v1/members/${MEMBER_ID}`,
+        method: 'GET',
+        headers: HEADERS.KEY,
+        done,
+        onSuccess: ({ status, data }) => {
+          assert.equal(status, 200);
+          assert.isObject(data);
+        }
+      });
+    });
+
+    it('Attempt get single member with invalid ID', function (done) {
+      request({
+        url: `/api/v1/members/0`,
         method: 'GET',
         headers: HEADERS.KEY,
         done,
@@ -80,14 +112,14 @@ describe('Session Tests', function () {
     });
   });
 
-  /** Test updating the session */
+  /** Test updating the member */
   describe('Update', function () {
-    it('Update session without image change', function (done) {
+    it('Update member without image change', function (done) {
       request({
-        url: `/api/v1/sessions/${SESSION_ID}`,
+        url: `/api/v1/members/${MEMBER_ID}`,
         method: 'PUT',
         body: JSON.stringify({
-          session: TEST_SESSIONS.UPDATED,
+          member: TEST_MEMBERS.UPDATED,
           changed: false
         }),
         headers: HEADERS.TOKEN(superuser),
@@ -99,12 +131,12 @@ describe('Session Tests', function () {
       });
     });
 
-    it('Update session with image change', function (done) {
+    it('Update member with image change', function (done) {
       request({
-        url: `/api/v1/sessions/${SESSION_ID}`,
+        url: `/api/v1/members/${MEMBER_ID}`,
         method: 'PUT',
         body: JSON.stringify({
-          session: TEST_SESSIONS.UPDATED,
+          member: TEST_MEMBERS.UPDATED,
           changed: true
         }),
         headers: HEADERS.TOKEN(superuser),
@@ -116,12 +148,12 @@ describe('Session Tests', function () {
       });
     });
 
-    it('Attempt update session with invalid ID', function (done) {
+    it('Attempt update member with invalid ID', function (done) {
       request({
-        url: `/api/v1/sessions/0`,
+        url: `/api/v1/members/0`,
         method: 'PUT',
         body: JSON.stringify({
-          session: TEST_SESSIONS.UPDATED,
+          member: TEST_MEMBERS.UPDATED,
           changed: true
         }),
         headers: HEADERS.TOKEN(superuser),
@@ -133,11 +165,11 @@ describe('Session Tests', function () {
     });
   });
 
-  /** Test deleting the session */
+  /** Test deleting the member */
   describe('Delete', function () {
-    it('Delete session', function (done) {
+    it('Delete member', function (done) {
       request({
-        url: `/api/v1/sessions/${SESSION_ID}`,
+        url: `/api/v1/members/${MEMBER_ID}`,
         method: 'DELETE',
         headers: HEADERS.TOKEN(superuser),
         done,
@@ -147,9 +179,9 @@ describe('Session Tests', function () {
       });
     });
 
-    it('Attempt delete session with invalid ID', function (done) {
+    it('Attempt delete member with invalid ID', function (done) {
       request({
-        url: `/api/v1/sessions/0`,
+        url: `/api/v1/members/0`,
         method: 'DELETE',
         headers: HEADERS.TOKEN(superuser),
         done,

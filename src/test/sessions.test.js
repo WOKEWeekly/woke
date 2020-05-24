@@ -1,51 +1,38 @@
-const { assert, request, HEADERS } = require('./configuration/constants.js');
-const { TEST_DOCUMENTS, TEST_USERS } = require('./configuration/data.js');
+const { assert, request, HEADERS } = require('./configuration');
+const { TEST_SESSIONS, TEST_USERS } = require('./configuration/test.data.js');
 
 const superuser = TEST_USERS.NINE;
 
-let DOCUMENT_ID = 0;
+let SESSION_ID = 0;
 
-describe('Document Tests', function () {
+describe('Session Tests', function () {
   this.slow(10000);
 
-  /** Test creation of documents */
+  /** Test creating a new session */
   describe('Create', function () {
-    it('Add new document', function (done) {
+    it('Add session', function (done) {
       request({
-        url: `/api/v1/documents`,
+        url: `/api/v1/sessions`,
         method: 'POST',
-        body: JSON.stringify(TEST_DOCUMENTS.CREATED),
+        body: JSON.stringify(TEST_SESSIONS.CREATED),
         headers: HEADERS.TOKEN(superuser),
         done,
         onSuccess: ({ status, data }) => {
           assert.equal(status, 201);
           assert.hasAllKeys(data, ['id']);
-          DOCUMENT_ID = data.id;
-        }
-      });
-    });
-
-    it('Attempt add duplicate document name', function (done) {
-      request({
-        url: `/api/v1/documents`,
-        method: 'POST',
-        body: JSON.stringify(TEST_DOCUMENTS.CREATED),
-        headers: HEADERS.TOKEN(superuser),
-        done,
-        onError: ({ status }) => {
-          assert.equal(status, 409);
+          SESSION_ID = data.id;
         }
       });
     });
   });
 
-  /** Test retrieval of all documents */
+  /** Test retrieval of all sessions */
   describe('Read', function () {
-    it('Get all documents', function (done) {
+    it('Get all sessions', function (done) {
       request({
-        url: `/api/v1/documents`,
+        url: `/api/v1/sessions`,
         method: 'GET',
-        headers: HEADERS.TOKEN(superuser),
+        headers: HEADERS.KEY,
         done,
         onSuccess: ({ status, data }) => {
           assert.equal(status, 200);
@@ -54,11 +41,11 @@ describe('Document Tests', function () {
       });
     });
 
-    it('Get single document', function (done) {
+    it('Get single session', function (done) {
       request({
-        url: `/api/v1/documents/${DOCUMENT_ID}`,
+        url: `/api/v1/sessions/${SESSION_ID}`,
         method: 'GET',
-        headers: HEADERS.TOKEN(superuser),
+        headers: HEADERS.KEY,
         done,
         onSuccess: ({ status, data }) => {
           assert.equal(status, 200);
@@ -67,11 +54,24 @@ describe('Document Tests', function () {
       });
     });
 
-    it('Attempt get single document with invalid name', function (done) {
+    it('Get featured session', function (done) {
       request({
-        url: `/api/v1/documents/0`,
+        url: `/api/v1/sessions/featured`,
         method: 'GET',
-        headers: HEADERS.TOKEN(superuser),
+        headers: HEADERS.KEY,
+        done,
+        onSuccess: ({ status, data }) => {
+          assert.equal(status, 200);
+          assert.hasAllKeys(data, ['session', 'upcoming']);
+        }
+      });
+    });
+
+    it('Attempt get single session with invalid ID', function (done) {
+      request({
+        url: `/api/v1/sessions/0`,
+        method: 'GET',
+        headers: HEADERS.KEY,
         done,
         onError: ({ status }) => {
           assert.equal(status, 404);
@@ -80,48 +80,48 @@ describe('Document Tests', function () {
     });
   });
 
-  /** Test updating the document */
+  /** Test updating the session */
   describe('Update', function () {
-    it('Update document without file change', function (done) {
+    it('Update session without image change', function (done) {
       request({
-        url: `/api/v1/documents/${DOCUMENT_ID}`,
+        url: `/api/v1/sessions/${SESSION_ID}`,
         method: 'PUT',
         body: JSON.stringify({
-          document: TEST_DOCUMENTS.UPDATED,
+          session: TEST_SESSIONS.UPDATED,
           changed: false
         }),
         headers: HEADERS.TOKEN(superuser),
         done,
         onSuccess: ({ status, data }) => {
           assert.equal(status, 200);
-          assert.hasAllKeys(data, ['name']);
+          assert.hasAllKeys(data, ['slug']);
         }
       });
     });
 
-    it('Update document with file change', function (done) {
+    it('Update session with image change', function (done) {
       request({
-        url: `/api/v1/documents/${DOCUMENT_ID}`,
+        url: `/api/v1/sessions/${SESSION_ID}`,
         method: 'PUT',
         body: JSON.stringify({
-          document: TEST_DOCUMENTS.UPDATED,
+          session: TEST_SESSIONS.UPDATED,
           changed: true
         }),
         headers: HEADERS.TOKEN(superuser),
         done,
         onSuccess: ({ status, data }) => {
           assert.equal(status, 200);
-          assert.hasAllKeys(data, ['name']);
+          assert.hasAllKeys(data, ['slug']);
         }
       });
     });
 
-    it('Attempt update document with invalid ID', function (done) {
+    it('Attempt update session with invalid ID', function (done) {
       request({
-        url: `/api/v1/documents/0`,
+        url: `/api/v1/sessions/0`,
         method: 'PUT',
         body: JSON.stringify({
-          document: TEST_DOCUMENTS.UPDATED,
+          session: TEST_SESSIONS.UPDATED,
           changed: true
         }),
         headers: HEADERS.TOKEN(superuser),
@@ -133,11 +133,11 @@ describe('Document Tests', function () {
     });
   });
 
-  /** Test deleting the document */
+  /** Test deleting the session */
   describe('Delete', function () {
-    it('Delete document', function (done) {
+    it('Delete session', function (done) {
       request({
-        url: `/api/v1/documents/${DOCUMENT_ID}`,
+        url: `/api/v1/sessions/${SESSION_ID}`,
         method: 'DELETE',
         headers: HEADERS.TOKEN(superuser),
         done,
@@ -147,9 +147,9 @@ describe('Document Tests', function () {
       });
     });
 
-    it('Attempt delete document with invalid ID', function (done) {
+    it('Attempt delete session with invalid ID', function (done) {
       request({
-        url: `/api/v1/documents/0`,
+        url: `/api/v1/sessions/0`,
         method: 'DELETE',
         headers: HEADERS.TOKEN(superuser),
         done,

@@ -1,62 +1,36 @@
-const { assert, request, HEADERS } = require('./configuration/constants.js');
-const { TEST_CANDIDATES, TEST_USERS } = require('./configuration/data.js');
+const { assert, request, HEADERS } = require('./configuration');
+const { TEST_REVIEWS, TEST_USERS } = require('./configuration/test.data.js');
 
 const superuser = TEST_USERS.NINE;
 
-let CANDIDATE_ID = 0;
+let REVIEW_ID = 0;
 
-describe('Candidate Tests', function () {
+describe('Review Tests', function () {
   this.slow(10000);
 
-  before(function (done) {
-    request({
-      url: `/api/v1/candidates/latest`,
-      method: 'GET',
-      headers: HEADERS.KEY,
-      done,
-      onSuccess: ({ data }) => {
-        const id = data ? data.id + 1 : 1;
-        CANDIDATE_ID = id;
-        TEST_CANDIDATES.CREATED.id = id;
-        TEST_CANDIDATES.UPDATED.id = id;
-      }
-    });
-  });
-
-  /** Test creating a new candidate */
+  /** Test creating a new review */
   describe('Create', function () {
-    it('Add candidate', function (done) {
+    it('Add review', function (done) {
       request({
-        url: `/api/v1/candidates`,
+        url: `/api/v1/reviews`,
         method: 'POST',
-        body: JSON.stringify(TEST_CANDIDATES.CREATED),
+        body: JSON.stringify(TEST_REVIEWS.CREATED),
         headers: HEADERS.TOKEN(superuser),
         done,
-        onSuccess: ({ status }) => {
+        onSuccess: ({ status, data }) => {
           assert.equal(status, 201);
-        }
-      });
-    });
-
-    it('Attempt add duplicate candidate', function (done) {
-      request({
-        url: `/api/v1/candidates`,
-        method: 'POST',
-        body: JSON.stringify(TEST_CANDIDATES.CREATED),
-        headers: HEADERS.TOKEN(superuser),
-        done,
-        onError: ({ status }) => {
-          assert.equal(status, 409);
+          assert.hasAllKeys(data, ['id']);
+          REVIEW_ID = data.id;
         }
       });
     });
   });
 
-  /** Test retrieval of all candidates */
+  /** Test retrieval of all reviews */
   describe('Read', function () {
-    it('Get all candidates', function (done) {
+    it('Get all reviews', function (done) {
       request({
-        url: `/api/v1/candidates`,
+        url: `/api/v1/reviews`,
         method: 'GET',
         headers: HEADERS.KEY,
         done,
@@ -67,9 +41,9 @@ describe('Candidate Tests', function () {
       });
     });
 
-    it('Get single candidate', function (done) {
+    it('Get single review', function (done) {
       request({
-        url: `/api/v1/candidates/${CANDIDATE_ID}`,
+        url: `/api/v1/reviews/${REVIEW_ID}`,
         method: 'GET',
         headers: HEADERS.KEY,
         done,
@@ -80,22 +54,27 @@ describe('Candidate Tests', function () {
       });
     });
 
-    it('Get random candidate', function (done) {
+    it('Get featured reviews', function (done) {
       request({
-        url: `/api/v1/candidates/random`,
+        url: `/api/v1/reviews/featured`,
         method: 'GET',
         headers: HEADERS.KEY,
         done,
         onSuccess: ({ status, data }) => {
           assert.equal(status, 200);
-          assert.isObject(data);
+          assert.isAtMost(data.length, 3);
+          data.forEach((review) => {
+            assert.include(review, { rating: 5 });
+            assert.exists(review.image);
+            assert.isNotEmpty(review.image);
+          });
         }
       });
     });
 
-    it('Attempt get single candidate with invalid ID', function (done) {
+    it('Attempt get single review with invalid ID', function (done) {
       request({
-        url: `/api/v1/candidates/0`,
+        url: `/api/v1/reviews/0`,
         method: 'GET',
         headers: HEADERS.KEY,
         done,
@@ -106,14 +85,14 @@ describe('Candidate Tests', function () {
     });
   });
 
-  /** Test updating the candidate */
+  /** Test updating the review */
   describe('Update', function () {
-    it('Update candidate without image change', function (done) {
+    it('Update review without image change', function (done) {
       request({
-        url: `/api/v1/candidates/${CANDIDATE_ID}`,
+        url: `/api/v1/reviews/${REVIEW_ID}`,
         method: 'PUT',
         body: JSON.stringify({
-          candidate: TEST_CANDIDATES.UPDATED,
+          review: TEST_REVIEWS.UPDATED,
           changed: false
         }),
         headers: HEADERS.TOKEN(superuser),
@@ -124,12 +103,12 @@ describe('Candidate Tests', function () {
       });
     });
 
-    it('Update candidate with image change', function (done) {
+    it('Update review with image change', function (done) {
       request({
-        url: `/api/v1/candidates/${CANDIDATE_ID}`,
+        url: `/api/v1/reviews/${REVIEW_ID}`,
         method: 'PUT',
         body: JSON.stringify({
-          candidate: TEST_CANDIDATES.UPDATED,
+          review: TEST_REVIEWS.UPDATED,
           changed: true
         }),
         headers: HEADERS.TOKEN(superuser),
@@ -140,12 +119,12 @@ describe('Candidate Tests', function () {
       });
     });
 
-    it('Attempt update candidate with invalid ID', function (done) {
+    it('Attempt update review with invalid ID', function (done) {
       request({
-        url: `/api/v1/candidates/0`,
+        url: `/api/v1/reviews/0`,
         method: 'PUT',
         body: JSON.stringify({
-          candidate: TEST_CANDIDATES.UPDATED,
+          review: TEST_REVIEWS.UPDATED,
           changed: true
         }),
         headers: HEADERS.TOKEN(superuser),
@@ -157,11 +136,11 @@ describe('Candidate Tests', function () {
     });
   });
 
-  /** Test deleting the candidate */
+  /** Test deleting the review */
   describe('Delete', function () {
-    it('Delete candidate', function (done) {
+    it('Delete review', function (done) {
       request({
-        url: `/api/v1/candidates/${CANDIDATE_ID}`,
+        url: `/api/v1/reviews/${REVIEW_ID}`,
         method: 'DELETE',
         headers: HEADERS.TOKEN(superuser),
         done,
@@ -171,9 +150,9 @@ describe('Candidate Tests', function () {
       });
     });
 
-    it('Attempt delete candidate with invalid ID', function (done) {
+    it('Attempt delete review with invalid ID', function (done) {
       request({
-        url: `/api/v1/candidates/0`,
+        url: `/api/v1/reviews/0`,
         method: 'DELETE',
         headers: HEADERS.TOKEN(superuser),
         done,

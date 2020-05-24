@@ -1,36 +1,49 @@
 const { assert, request, HEADERS } = require('./configuration');
-const { TEST_ARTICLES, TEST_USERS } = require('./configuration/test.data.js');
+const { TEST_DOCUMENTS, TEST_USERS } = require('./configuration/test.data.js');
 
 const superuser = TEST_USERS.NINE;
 
-let ARTICLE_ID = 0;
+let DOCUMENT_ID = 0;
 
-describe('Article Tests', function () {
+describe('Document Tests', function () {
   this.slow(10000);
 
-  /** Test creating a new article */
+  /** Test creation of documents */
   describe('Create', function () {
-    it('Add article', function (done) {
+    it('Add new document', function (done) {
       request({
-        url: `/api/v1/articles`,
+        url: `/api/v1/documents`,
         method: 'POST',
-        body: JSON.stringify(TEST_ARTICLES.CREATED),
+        body: JSON.stringify(TEST_DOCUMENTS.CREATED),
         headers: HEADERS.TOKEN(superuser),
         done,
         onSuccess: ({ status, data }) => {
           assert.equal(status, 201);
           assert.hasAllKeys(data, ['id']);
-          ARTICLE_ID = data.id;
+          DOCUMENT_ID = data.id;
+        }
+      });
+    });
+
+    it('Attempt add duplicate document name', function (done) {
+      request({
+        url: `/api/v1/documents`,
+        method: 'POST',
+        body: JSON.stringify(TEST_DOCUMENTS.CREATED),
+        headers: HEADERS.TOKEN(superuser),
+        done,
+        onError: ({ status }) => {
+          assert.equal(status, 409);
         }
       });
     });
   });
 
-  /** Test retrieval of all articles */
+  /** Test retrieval of all documents */
   describe('Read', function () {
-    it('Get all articles', function (done) {
+    it('Get all documents', function (done) {
       request({
-        url: `/api/v1/articles`,
+        url: `/api/v1/documents`,
         method: 'GET',
         headers: HEADERS.TOKEN(superuser),
         done,
@@ -41,27 +54,11 @@ describe('Article Tests', function () {
       });
     });
 
-    it('Get only published articles', function (done) {
+    it('Get single document', function (done) {
       request({
-        url: `/api/v1/articles/published`,
+        url: `/api/v1/documents/${DOCUMENT_ID}`,
         method: 'GET',
-        headers: HEADERS.KEY,
-        done,
-        onSuccess: ({ status, data }) => {
-          assert.equal(status, 200);
-          assert.isArray(data);
-          data.forEach((article) => {
-            assert.equal(article.status, 'PUBLISHED');
-          });
-        }
-      });
-    });
-
-    it('Get single article', function (done) {
-      request({
-        url: `/api/v1/articles/${ARTICLE_ID}`,
-        method: 'GET',
-        headers: HEADERS.KEY,
+        headers: HEADERS.TOKEN(superuser),
         done,
         onSuccess: ({ status, data }) => {
           assert.equal(status, 200);
@@ -70,11 +67,11 @@ describe('Article Tests', function () {
       });
     });
 
-    it('Attempt get single article with invalid ID', function (done) {
+    it('Attempt get single document with invalid name', function (done) {
       request({
-        url: `/api/v1/articles/0`,
+        url: `/api/v1/documents/0`,
         method: 'GET',
-        headers: HEADERS.KEY,
+        headers: HEADERS.TOKEN(superuser),
         done,
         onError: ({ status }) => {
           assert.equal(status, 404);
@@ -83,48 +80,48 @@ describe('Article Tests', function () {
     });
   });
 
-  /** Test updating the article */
+  /** Test updating the document */
   describe('Update', function () {
-    it('Update article without image change', function (done) {
+    it('Update document without file change', function (done) {
       request({
-        url: `/api/v1/articles/${ARTICLE_ID}`,
+        url: `/api/v1/documents/${DOCUMENT_ID}`,
         method: 'PUT',
         body: JSON.stringify({
-          article: TEST_ARTICLES.UPDATED,
+          document: TEST_DOCUMENTS.UPDATED,
           changed: false
         }),
         headers: HEADERS.TOKEN(superuser),
         done,
         onSuccess: ({ status, data }) => {
           assert.equal(status, 200);
-          assert.hasAllKeys(data, ['slug']);
+          assert.hasAllKeys(data, ['name']);
         }
       });
     });
 
-    it('Update article with image change', function (done) {
+    it('Update document with file change', function (done) {
       request({
-        url: `/api/v1/articles/${ARTICLE_ID}`,
+        url: `/api/v1/documents/${DOCUMENT_ID}`,
         method: 'PUT',
         body: JSON.stringify({
-          article: TEST_ARTICLES.UPDATED,
+          document: TEST_DOCUMENTS.UPDATED,
           changed: true
         }),
         headers: HEADERS.TOKEN(superuser),
         done,
         onSuccess: ({ status, data }) => {
           assert.equal(status, 200);
-          assert.hasAllKeys(data, ['slug']);
+          assert.hasAllKeys(data, ['name']);
         }
       });
     });
 
-    it('Attempt update article with invalid ID', function (done) {
+    it('Attempt update document with invalid ID', function (done) {
       request({
-        url: `/api/v1/articles/0`,
+        url: `/api/v1/documents/0`,
         method: 'PUT',
         body: JSON.stringify({
-          article: TEST_ARTICLES.UPDATED,
+          document: TEST_DOCUMENTS.UPDATED,
           changed: true
         }),
         headers: HEADERS.TOKEN(superuser),
@@ -134,26 +131,13 @@ describe('Article Tests', function () {
         }
       });
     });
-
-    it('Clap for article', function (done) {
-      request({
-        url: `/api/v1/articles/${ARTICLE_ID}/clap`,
-        method: 'PUT',
-        headers: HEADERS.KEY,
-        done,
-        onSuccess: ({ status, data }) => {
-          assert.equal(status, 200);
-          assert.hasAllKeys(data, ['claps']);
-        }
-      });
-    });
   });
 
-  /** Test deleting the article */
+  /** Test deleting the document */
   describe('Delete', function () {
-    it('Delete article', function (done) {
+    it('Delete document', function (done) {
       request({
-        url: `/api/v1/articles/${ARTICLE_ID}`,
+        url: `/api/v1/documents/${DOCUMENT_ID}`,
         method: 'DELETE',
         headers: HEADERS.TOKEN(superuser),
         done,
@@ -163,9 +147,9 @@ describe('Article Tests', function () {
       });
     });
 
-    it('Attempt delete article with invalid ID', function (done) {
+    it('Attempt delete document with invalid ID', function (done) {
       request({
-        url: `/api/v1/articles/0`,
+        url: `/api/v1/documents/0`,
         method: 'DELETE',
         headers: HEADERS.TOKEN(superuser),
         done,
