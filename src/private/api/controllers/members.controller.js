@@ -1,5 +1,7 @@
-const { respondToClient } = require('../../response');
+/* eslint-disable jsdoc/require-param */
 const async = require('async');
+
+const { respondToClient } = require('../../response');
 const SQL = require('../../sql');
 const conn = require('../db').getDb();
 const filer = require('../../filer');
