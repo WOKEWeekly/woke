@@ -1,18 +1,17 @@
+const articlesRoutes = require('./routes/articles.route');
+const candidatesRoutes = require('./routes/candidates.route');
+const documentsRoutes = require('./routes/documents.route');
+const membersRoutes = require('./routes/members.route');
+const reviewsRoutes = require('./routes/reviews.route');
+const sessionsRoutes = require('./routes/sessions.route');
+const topicsRoutes = require('./routes/topics.route');
+const usersRoutes = require('./routes/users.route');
+
+const CLEARANCES = require('../../constants/clearances.js');
 const ERROR = require('../errors.js');
 const { verifyToken, logUserActivity } = require('../middleware.js');
 const { respondToClient } = require('../response.js');
 const SQL = require('../sql.js');
-
-const sessionsRoutes = require('./routes/sessions');
-const candidatesRoutes = require('./routes/candidates');
-const membersRoutes = require('./routes/members');
-const topicsRoutes = require('./routes/topics');
-const reviewsRoutes = require('./routes/reviews');
-const articlesRoutes = require('./routes/articles.route');
-const usersRoutes = require('./routes/users');
-const documentsRoutes = require('./routes/documents');
-
-const CLEARANCES = require('../../constants/clearances.js');
 
 module.exports = function (app, conn) {
   /** Log user activity on each request */

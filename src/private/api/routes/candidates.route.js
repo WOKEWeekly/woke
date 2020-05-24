@@ -1,37 +1,31 @@
-// Express
 const express = require('express');
 const router = express.Router();
-
-// Controllers
 const CandidatesController = require('../controllers/candidates.controller');
 const CLEARANCES = require('../../../constants/clearances');
-
-// Middleware
 const { verifyToken, validateReq } = require('../../middleware');
 
-// Routes /candidates
 
-// GET all candidates
+/** GET all candidates */
 router.get('/', validateReq, CandidatesController.getAllCandidates);
-// GET Candidate by id
+/** GET Candidate by id */
 router.get('/:id([0-9]+)', validateReq, CandidatesController.getCandidate);
-// GET latest candidate
+/** GET latest candidate */
 router.get('/latest', validateReq, CandidatesController.getLatestCandidate);
-// GET random candidate
+/** GET random candidate */
 router.get('/random', validateReq, CandidatesController.getRandomCandidate);
-// POST new candidate
+/** POST new candidate */
 router.post(
   '/',
   verifyToken(CLEARANCES.ACTIONS.CRUD_BLACKEX),
   CandidatesController.addCandidate
 );
-// PUT candidate update
+/** PUT candidate update */
 router.put(
   '/:id',
   verifyToken(CLEARANCES.ACTIONS.CRUD_BLACKEX),
   CandidatesController.updateCandidate
 );
-// DELETE candidate
+/** DELETE candidate */
 router.delete(
   '/:id',
   verifyToken(CLEARANCES.ACTIONS.CRUD_BLACKEX),
