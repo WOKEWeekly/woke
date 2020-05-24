@@ -73,6 +73,7 @@ rules:
     - allow:
       - warn
       - error
+      - info
   semi:
     - error
     - always

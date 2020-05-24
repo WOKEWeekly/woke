@@ -11,13 +11,13 @@ module.exports = function (conn) {
     const sql =
       "SELECT * FROM members WHERE DATE_FORMAT(birthday,'%m-%d') = DATE_FORMAT(CURDATE(),'%m-%d')";
     conn.query(sql, function (err, result) {
-      if (err) return console.log(err.toString());
+      if (err) return console.error(err.toString());
       if (!result.length)
-        return console.log("Birthdays: It's no one's birthday today.");
+        return console.info("Birthdays: It's no one's birthday today.");
 
       for (let member of result) {
         slack.sendBirthdayMessage(member);
-        console.log(
+        console.info(
           `Birthday message sent for ${member.firstname} ${member.lastname}.`
         );
       }
@@ -28,15 +28,15 @@ module.exports = function (conn) {
   schedule.scheduleJob(sessionReminderTime, function () {
     const sql = 'SELECT * FROM sessions WHERE dateheld = CURRENT_DATE()';
     conn.query(sql, function (err, result) {
-      if (err) return console.log(err.toString());
+      if (err) return console.error(err.toString());
       if (!result.length)
-        return console.log(
+        return console.info(
           'Session Reminders: There are no sessions taking place today.'
         );
 
       for (let session of result) {
         slack.sendSessionReminder(session);
-        console.log(`Session reminder sent for ${session.title}.`);
+        console.info(`Session reminder sent for ${session.title}.`);
       }
     });
   });

@@ -459,6 +459,6 @@ const subscribeUserToMailingList = (user) => {
         LNAME: user.lastname
       }
     })
-    .then((results) => console.log(results))
-    .catch((err) => console.log(err.toString()));
+    .then((results) => console.info(results))
+    .catch((err) => console.error(err.toString()));
 };

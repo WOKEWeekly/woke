@@ -77,7 +77,7 @@ function startServer(next) {
         server.prepare().then(() => {
           app.get('*', (req, res) => handle(req, res));
           app.listen(port, (err) => {
-            if (!err) console.log(`Server running on http://localhost:${port}`);
+            if (!err) console.info(`Server running on http://localhost:${port}`);
             callback(err);
           });
         });
@@ -85,7 +85,7 @@ function startServer(next) {
       // Connect to MySQL database
       function (callback) {
         conn.connect(function (err) {
-          if (!err) console.log('Connected to database.');
+          if (!err) console.info('Connected to database.');
           callback(err);
         });
       },
