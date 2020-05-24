@@ -5,25 +5,42 @@ const { DIRECTORY, ENTITY } = require('../../../constants/strings');
 const ERROR = require('../../errors');
 const filer = require('../../filer');
 const { respondToClient } = require('../../response');
-const SQL = require('../../sql');
-const conn = require('../db').getDb();
 const knex = require('../db').getKnex();
+
+const columns = [
+  'articles.*',
+  {
+    authorName: knex.raw("CONCAT(members.firstname, ' ', members.lastname)")
+  },
+  { authorLevel: 'members.level' },
+  { authorSlug: 'members.slug' },
+  { authorImage: 'members.image' },
+  { authorDescription: 'members.description' },
+  { authorSocials: 'members.socials' }
+];
 
 /** Retrieve all articles */
 exports.getAllArticles = (req, res) => {
-  const sql = SQL.ARTICLES.READ.ALL();
-  conn.query(sql, function (err, articles) {
+  const query = knex
+    .columns(columns)
+    .select()
+    .from('articles')
+    .leftJoin('members', 'articles.authorId', 'members.id');
+  query.asCallback(function (err, articles) {
     respondToClient(res, err, 200, articles);
   });
 };
 
 /** Retrieve individual article */
-exports.getArticle = (req, res) => {
-  const id = req.params.id;
-  conn.query(SQL.ARTICLES.READ.SINGLE('id'), id, function (
-    err,
-    [article] = []
-  ) {
+exports.getSingleArticle = (req, res) => {
+  const { id } = req.params;
+  const query = knex
+    .columns(columns)
+    .select()
+    .from('articles')
+    .leftJoin('members', 'articles.authorId', 'members.id')
+    .where('articles.id', id);
+  query.asCallback(function (err, [article] = []) {
     if (err) return respondToClient(res, err);
     if (!article) err = ERROR.INVALID_ENTITY_ID(ENTITY.ARTICLE, id);
     respondToClient(res, err, 200, article);
@@ -33,11 +50,17 @@ exports.getArticle = (req, res) => {
 /** Retrieve only published articles */
 exports.getPublishedArticles = (req, res) => {
   const { limit, order } = req.query;
-  const sql = SQL.ARTICLES.READ.PUBLISHED({
-    limit,
-    order
-  });
-  conn.query(sql, function (err, articles) {
+  let query = knex
+    .columns(columns)
+    .select()
+    .from('articles')
+    .leftJoin('members', 'articles.authorId', 'members.id')
+    .where('articles.status', 'PUBLISHED');
+
+  if (limit) query = query.limit(limit);
+  if (order) query = query.orderBy('datePublished', order);
+
+  query.asCallback(function (err, articles) {
     respondToClient(res, err, 200, articles);
   });
 };
@@ -54,9 +77,9 @@ exports.addArticle = (req, res) => {
       },
       function (article, callback) {
         // Add article to database
-        const { sql, values } = SQL.ARTICLES.CREATE(article);
-        conn.query(sql, [values], function (err, result) {
-          err ? callback(err) : callback(null, result.insertId);
+        const query = knex.insert(article).into('articles');
+        query.asCallback(function (err, [id] = []) {
+          callback(err, id);
         });
       }
     ],
@@ -77,10 +100,8 @@ exports.updateArticle = (req, res) => {
     [
       function (callback) {
         // Delete old image if changed.
-        conn.query(SQL.ARTICLES.READ.SINGLE('id', 'image'), id, function (
-          err,
-          [article] = []
-        ) {
+        const query = knex.select().from('articles').where('id', id);
+        query.asCallback(function (err, [article] = []) {
           if (err) return callback(err);
           if (!article)
             return callback(ERROR.INVALID_ENTITY_ID(ENTITY.ARTICLE, id));
@@ -93,10 +114,10 @@ exports.updateArticle = (req, res) => {
         filer.uploadImage(article, DIRECTORY.ARTICLES, changed, callback);
       },
       function (article, callback) {
-        // Update review in database
-        const { sql, values } = SQL.ARTICLES.UPDATE(id, article, changed);
-        conn.query(sql, values, function (err) {
-          err ? callback(err) : callback(null, article.slug);
+        // Update article in database
+        const query = knex('articles').update(article).where('id', id);
+        query.asCallback(function (err) {
+          callback(err, article.slug);
         });
       }
     ],
@@ -121,6 +142,7 @@ exports.clapForArticle = (req, res) => {
         });
       },
       function (callback) {
+        // Retrieve new clap count
         const query = knex.select('claps').from('articles').where('id', id);
         query.asCallback(function (err, [claps] = []) {
           callback(err, claps);
@@ -141,10 +163,8 @@ exports.deleteArticle = (req, res) => {
     [
       function (callback) {
         // Delete image from cloud
-        conn.query(SQL.ARTICLES.READ.SINGLE('id', 'image'), id, function (
-          err,
-          [article] = []
-        ) {
+        const query = knex.select().from('articles').where('id', id);
+        query.asCallback(function (err, [article] = []) {
           if (err) return callback(err);
           if (!article)
             return callback(ERROR.INVALID_ENTITY_ID(ENTITY.ARTICLE, id));
@@ -153,8 +173,9 @@ exports.deleteArticle = (req, res) => {
       },
       function (callback) {
         // Delete article from database
-        conn.query(SQL.ARTICLES.DELETE, id, function (err) {
-          err ? callback(err) : callback(null);
+        const query = knex('articles').where('id', id).del();
+        query.asCallback(function (err) {
+          callback(err);
         });
       }
     ],

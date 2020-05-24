@@ -11,7 +11,7 @@ const authorize = verifyToken(CLEARANCES.ACTIONS.CRUD_ARTICLES);
 router.get('/', authorize, ArticlesController.getAllArticles);
 
 /** GET single article by ID */
-router.get('/:id([0-9]+)', validateReq, ArticlesController.getArticle);
+router.get('/:id([0-9]+)', validateReq, ArticlesController.getSingleArticle);
 
 /** GET all articles */
 router.get('/published', validateReq, ArticlesController.getPublishedArticles);

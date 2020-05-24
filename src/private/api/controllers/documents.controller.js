@@ -38,7 +38,7 @@ exports.addDocument = (req, res) => {
       },
       function (document, callback) {
         // Add document to database
-        const query = knex.insert(document, ['id']).into('documents');
+        const query = knex.insert(document).into('documents');
         query.asCallback(function (err, [id] = []) {
           if (!err) return callback(null, id);
           if (err.errno === 1062)
