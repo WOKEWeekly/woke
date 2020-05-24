@@ -2,6 +2,10 @@
 extends:
   - eslint:recommended
   - plugin:react/recommended
+  - plugin:import/errors
+  - plugin:import/warnings
+  - plugin:jsdoc/recommended
+  - plugin:mocha/recommended
 env:
   browser: true
   node: true
@@ -9,25 +13,79 @@ env:
   es6: true
 parser: babel-eslint
 parserOptions:
-  sourceType: 'module'
+  sourceType: module
   ecmaFeatures:
     jsx: true
 plugins:
   - react
+  - import
+  - jsdoc
+  - mocha
 settings:
   react:
-    version: 'detect'
+    version: detect
 
 # Rules
 rules:
+  
   # Active rules
-  no-multiple-empty-lines: [1, max: 1]
-  no-unused-vars: 1
-  semi: [2, 'always']
-  spaced-comment: [1, 'always', exceptions: ['*']]
+  import/order:
+    - warn
+    - 
+      groups:
+        - external
+        - builtin
+        - internal
+        - sibling
+      pathGroups:
+        - pattern: "@reducers/**"
+          group: external
+          position: after
+          
+        - pattern: "@components/**"
+          group: internal
+          position: after
+        - pattern: "@constants/**"
+          group: internal
+          position: after
+        - pattern: "@styles/**"
+          group: internal
+          position: after
+      pathGroupsExcludedImportTypes:
+        - internal
+      newlines-between: always
+      alphabetize:
+        order: asc
+        caseInsensitive: true
+  import/no-unresolved:
+    - error
+    - ignore:
+      - "^@"
+  jsdoc/newline-after-description:
+    - warn
+    - never
+  no-multiple-empty-lines:
+    - warn
+    - max: 1
+  no-unused-vars: warn
+  no-console:
+    - warn
+    - allow:
+      - warn
+      - error
+  semi:
+    - error
+    - always
+  spaced-comment:
+    - warn
+    - always
+    - exceptions:
+      - '*'
 
-  # Overriden and disabled rules
-  no-case-declarations: 0
-  no-useless-escape: 0
-  react/prop-types: 0
-  quotes: 0
+  # Overridden and disabled rules
+  mocha/handle-done-callback: off
+  no-case-declarations: off
+  no-useless-escape: off
+  react/prop-types: off
+  react/display-name: off
+  quotes: off

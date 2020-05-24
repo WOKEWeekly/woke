@@ -8,7 +8,7 @@ const candidatesRoutes = require('./routes/candidates');
 const membersRoutes = require('./routes/members');
 const topicsRoutes = require('./routes/topics');
 const reviewsRoutes = require('./routes/reviews');
-const articlesRoutes = require('./routes/articles');
+const articlesRoutes = require('./routes/articles.route');
 const usersRoutes = require('./routes/users');
 const documentsRoutes = require('./routes/documents');
 

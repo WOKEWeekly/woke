@@ -1,10 +1,4 @@
-@import "../Variables";
-
-.authorThumbnail {
-  border-radius: 50%;
-  float: left;
-  margin-right: .7em;
-}
+@import '../Variables';
 
 /************
 *** index.js
@@ -13,9 +7,13 @@
 .igrid {
   @include responsive-grid(4);
   width: 100%;
-  @media (max-width: $break-md) { border: none; }
+  @media (max-width: $break-md) {
+    border: none;
+  }
   .icontainer {
-    &:hover { z-index: 1;}
+    &:hover {
+      z-index: 1;
+    }
     .cell {
       @include scale-on-hover(1.07);
       cursor: pointer;
@@ -24,16 +22,31 @@
       height: 100%;
       overflow: hidden;
       margin: 1em;
-      .image { width: 100%; }
+      .image {
+        width: 100%;
+      }
       .details {
-        display: flex;
-        flex-direction: column;
-        height: 100%;
-        justify-content: center;
+        display: grid;
+        grid-template-columns: 4em auto;
+        justify-content: flex-start;
+        align-items: flex-start;
         padding: 0.8em 0.5em;
         text-align: left;
-        .title { @include font-scaler(1.2); }
-        .date { @include font-scaler(.7); }
+        .title {
+          @include font-scaler(1.2);
+        }
+        .date {
+          @include font-scaler(0.8);
+        }
+        .authorImage {
+          border-radius: 50%;
+          margin-right: 0.5em;
+          overflow: hidden;
+          width: 50px;
+          img {
+            width: 100%;
+          }
+        }
       }
     }
   }
@@ -44,27 +57,37 @@
 *************/
 
 .columnparts {
-  @media (max-width: $break-md) { padding: 0 !important; }
+  @media (max-width: $break-md) {
+    padding: 0 !important;
+  }
 }
 
 .container {
   margin: 1em 0;
-  .title { @include font-scaler(3); }
-  .content { @include font-scaler(1.25); }
+  .title {
+    @include font-scaler(3);
+    line-height: 1.2;
+    margin-bottom: .2em;
+  }
+  .content {
+    @include font-scaler(1.25);
+  }
   .image {
     border-radius: 10px;
     margin: 1em 0;
-    width: 100%;}
+    width: 100%;
+  }
   .authorProfile {
     .author {
-      @include font-scaler(.8);
-      font-style: italic; }
+      @include font-scaler(0.8);
+      // font-style: italic;
+    }
     .name {
-      @include font-scaler(1.1);
+      @include font-scaler(1.15);
     }
     .description {
-      @include font-scaler(1);
-      font-style: italic;
+      @include font-scaler(.95);
+      margin-bottom: 0;
     }
   }
   .details {
@@ -74,19 +97,53 @@
       text-decoration: none !important;
     }
   }
+  .reactionBlock {
+    .clapCount {
+      @extend .text;
+      font-family: $title-font;
+    }
+  }
+}
+
+.authorImage {
+  border-radius: 50%;
+  float: left;
+  margin-right: 0.7em;
+  overflow: hidden;
+  img {
+    width: 100%;
+  }
+}
+
+.detailsThumbnail {
+  @extend .authorImage;
+  width: 42px;
+}
+
+.authorThumbnail {
+  @extend .authorImage;
+  width: 96px;
+}
+
+.readmore {
+  @include font-scaler(.9);
 }
 
 .tagblock {
   .tag {
     @include font-scaler(0.7);
-    background: rgb(255,255,255);
-    background: linear-gradient(180deg, rgba(255,255,255,1) 0%, rgba(230,212,255,1) 100%);
+    background: rgb(255, 255, 255);
+    background: linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 1) 0%,
+      rgba(230, 212, 255, 1) 100%
+    );
     border-radius: 30px;
     color: black;
     display: inline-block;
     line-height: 3;
     font-family: $title-font;
-    margin: .2em;
+    margin: 0.2em;
     padding: 0 1.2em;
   }
 }
@@ -99,29 +156,46 @@
   @include entityTabler(4% 15% 15% 1fr 7% 1fr 4% 4% 4%);
 }
 
+.listImage {
+  border-radius: 10px;
+  margin: .5em 0;
+  max-width: 50%;
+  max-height: 100px;
+  overflow: hidden;
+}
+
 /*************
 *** form.js
 *************/
 
-.form { @extend .responsive-form; }
+.form {
+  @extend .responsive-form;
+}
 
 /*************
-*** sidebar.js
+*** single.sidebar.js
 *************/
 
 .sidebar {
   background: $sidebar;
   padding: 1em;
-  .heading { @include font-scaler(1.7); }
+  .heading {
+    @include font-scaler(1.7);
+  }
   .item {
     @include scale-on-hover(1.03);
     cursor: pointer;
-    .title { @include font-scaler(1.2); }
-    .content { @include font-scaler(1); }
+    .title {
+      @include font-scaler(1.2);
+    }
+    .content {
+      @include font-scaler(1);
+    }
     .image {
       border-radius: 10px;
       margin: 1em 0;
-      width: 100%; }
+      width: 100%;
+    }
     .details {
       @include font-scaler(0.7);
       .author {
@@ -131,3 +205,8 @@
     }
   }
 }
+
+/*************
+*** index.sidebar.js
+*************/
+

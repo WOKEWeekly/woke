@@ -133,10 +133,10 @@ class _SocialIcon extends Component {
   render() {
     if (!this.state.isLoaded) return null;
 
-    const { theme, icon, size } = this.props;
+    const { theme, icon, size, className } = this.props;
 
     return (
-      <a target={'_blank'} {...this.props}>
+      <a target={'_blank'} className={className}>
         <FontAwesomeIcon
           icon={['fab', icon]}
           className={css[`socialIcon-${theme}`]}

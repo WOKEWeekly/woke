@@ -134,6 +134,19 @@ describe('Article Tests', function () {
         }
       });
     });
+
+    it('Clap for article', function (done) {
+      request({
+        url: `/api/v1/articles/${ARTICLE_ID}/clap`,
+        method: 'PUT',
+        headers: HEADERS.KEY,
+        done,
+        onSuccess: ({ status, data }) => {
+          assert.equal(status, 200);
+          assert.hasAllKeys(data, ['claps']);
+        }
+      });
+    });
   });
 
   /** Test deleting the article */

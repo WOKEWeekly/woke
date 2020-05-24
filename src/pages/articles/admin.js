@@ -1,20 +1,21 @@
-import React, { Component, PureComponent } from 'react';
+import React, { Component, memo, useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 
-import { AddEntityButton, BackButton } from '~/components/button.js';
-import { Icon } from '~/components/icon.js';
-import { Default, Mobile, Shader } from '~/components/layout.js';
-import { Loader, Empty } from '~/components/loader.js';
-import { ConfirmModal } from '~/components/modal.js';
-import { Title } from '~/components/text.js';
-import { BottomToolbar } from '~/components/toolbar.js';
-import { Fader } from '~/components/transitioner.js';
+import { alert } from '@components/alert.js';
+import { AddEntityButton, BackButton } from '@components/button.js';
+import { Icon } from '@components/icon.js';
+import { CloudinaryImage } from '@components/image.js';
+import { Default, Mobile, Shader } from '@components/layout.js';
+import { Loader, Empty } from '@components/loader.js';
+import { ConfirmModal } from '@components/modal.js';
+import { Title } from '@components/text.js';
+import { BottomToolbar } from '@components/toolbar.js';
+import { Fader } from '@components/transitioner.js';
 
-import CLEARANCES from '~/constants/clearances.js';
-import request from '~/constants/request.js';
-import { cloudinary } from '~/constants/settings.js';
+import CLEARANCES from '@constants/clearances.js';
+import request from '@constants/request.js';
 
-import css from '~/styles/pages/Articles.module.scss';
+import css from '@styles/pages/Articles.module.scss';
 
 class BlogAdmin extends Component {
   constructor(props) {
@@ -100,7 +101,7 @@ class BlogAdmin extends Component {
       }
 
       return (
-        <React.Fragment>
+        <>
           <Title className={css.heading}>Blog Articles</Title>
           <Default>
             <ArticleTable />
@@ -108,12 +109,12 @@ class BlogAdmin extends Component {
           <Mobile>
             <ArticleList />
           </Mobile>
-        </React.Fragment>
+        </>
       );
     };
 
     return (
-      <React.Fragment>
+      <>
         <Shader className={css.articleTabler}>
           <ArticleCollection />
         </Shader>
@@ -129,163 +130,151 @@ class BlogAdmin extends Component {
             onClick={() => (location.href = '/admin/articles/add')}
           />
         </BottomToolbar>
-      </React.Fragment>
+      </>
     );
   }
 }
 
-class IArticle extends PureComponent {
-  constructor(props) {
-    super(props);
-    this.state = {
-      ...props.article,
-      isLoaded: false,
-      deleteVisible: false
-    };
-  }
+const IArticle = memo(({ article, idx, user, getArticles }) => {
+  const [isLoaded, setLoaded] = useState(false);
+  const [isDeleteModalVisible, setVisibility] = useState(false);
 
-  componentDidMount() {
-    this.setState({ isLoaded: true });
-  }
+  useEffect(() => {
+    setLoaded(true);
+  }, [isLoaded]);
 
   /** Go to edit article */
-  editArticle = (article) =>
+  const editArticle = () =>
     (location.href = `/admin/articles/edit/${article.id}`);
 
   /** Delete article */
-  deleteArticle = () => {
-    const { title } = this.state;
+  const deleteArticle = () => {
     request({
-      url: `/api/v1/articles/${this.state.id}`,
+      url: `/api/v1/articles/${article.id}`,
       method: 'DELETE',
-      body: JSON.stringify(this.state),
-      headers: { Authorization: `Bearer ${this.props.user.token}` },
+      body: JSON.stringify(article),
+      headers: { Authorization: `Bearer ${user.token}` },
       onSuccess: () => {
-        alert.success(`You've deleted article: ${title}.`);
-        this.closeDelete();
-        this.props.getArticles();
+        alert.success(`You've deleted article: ${article.title}.`);
+        setVisibility(false);
+        getArticles();
       }
     });
   };
 
-  openDelete = () => this.setState({ deleteVisible: true });
-  closeDelete = () => this.setState({ deleteVisible: false });
-
-  render() {
-    const { deleteVisible } = this.state;
-    const { article, idx } = this.props;
-
-    const LinkButton = () => {
-      if (!article.slug) return null;
-
-      return (
-        <button
-          className={css.invisible_button}
-          onClick={() => (location.href = `/blog/${article.slug}`)}>
-          <Icon name={'external-link-alt'} />
-        </button>
-      );
-    };
-
-    const ArticleImage = () => {
-      if (!article.image) return 'None';
-      return (
-        <img
-          src={`${cloudinary.url}/${cloudinary.lazy_wide}/${article.image}`}
-          alt={article.title}
-          className={css.image}
-        />
-      );
-    };
+  const LinkButton = () => {
+    if (!article.slug) return null;
 
     return (
-      <Fader
-        key={idx}
-        determinant={this.state.isLoaded}
-        duration={500 + idx * 100}
-        className={css.row}
-        postTransitions={'background-color .1s ease'}>
-        <Default>
-          <span>{idx + 1}</span>
-          <span>{article.title}</span>
-          <span>{article.authorName}</span>
-          <span>{article.category}</span>
-          <span>
-            <ArticleImage />
-          </span>
-          <span>{article.status}</span>
-          <span>
-            <LinkButton />
-          </span>
-          <span>
-            <button
-              className={css.invisible_button}
-              onClick={() => this.editArticle(article)}>
-              <Icon name={'edit'} />
-            </button>
-          </span>
-          <span>
-            <button className={css.invisible_button} onClick={this.openDelete}>
-              <Icon name={'trash'} />
-            </button>
-          </span>
-        </Default>
-        <Mobile>
-          <div>
-            <span>
-              <Icon name={'user'} />
-            </span>
-            <span className={css.name}>{article.title}</span>
-          </div>
-          <div>
-            <span>
-              <Icon name={'star'} />
-            </span>
-            <span>{article.authorName}</span>
-          </div>
-          <div>
-            <span>
-              <Icon name={'star'} />
-            </span>
-            <span>{article.category}</span>
-          </div>
-          <div>
-            <span>
-              <Icon name={'signature'} />
-            </span>
-            <span>{article.image}</span>
-          </div>
-          <div>
-            <span>
-              <Icon name={'globe-africa'} />
-            </span>
-            <span>{article.status}</span>
-          </div>
-          <div className={css.index}>{idx + 1}</div>
-          <div className={css.crud}>
-            <LinkButton />
-            <button
-              className={css.invisible_button}
-              onClick={() => this.editArticle(article)}>
-              <Icon name={'edit'} />
-            </button>
-            <button className={css.invisible_button} onClick={this.openDelete}>
-              <Icon name={'trash'} />
-            </button>
-          </div>
-        </Mobile>
-
-        <ConfirmModal
-          visible={deleteVisible}
-          message={`Are you sure you want to delete article: ${article.title}?`}
-          confirmFunc={this.deleteArticle}
-          confirmText={'Delete'}
-          close={this.closeDelete}
-        />
-      </Fader>
+      <button
+        className={css.invisible_button}
+        onClick={() => (location.href = `/blog/${article.slug}`)}>
+        <Icon name={'external-link-alt'} />
+      </button>
     );
-  }
-}
+  };
+
+  const ArticleImage = () => {
+    if (!article.image) return 'None';
+    return (
+      <CloudinaryImage
+        src={article.image}
+        lazy={'sw'}
+        alt={article.title}
+        className={css.image}
+      />
+    );
+  };
+
+  return (
+    <Fader
+      key={idx}
+      determinant={isLoaded}
+      duration={500 + idx * 100}
+      className={css.row}
+      postTransitions={'background-color .1s ease'}>
+      <Default>
+        <span>{idx + 1}</span>
+        <span>{article.title}</span>
+        <span>{article.authorName}</span>
+        <span>{article.category}</span>
+        <span>
+          <ArticleImage />
+        </span>
+        <span>{article.status}</span>
+        <span>
+          <LinkButton />
+        </span>
+        <span>
+          <button
+            className={css.invisible_button}
+            onClick={() => editArticle()}>
+            <Icon name={'edit'} />
+          </button>
+        </span>
+        <span>
+          <button
+            className={css.invisible_button}
+            onClick={() => setVisibility(true)}>
+            <Icon name={'trash'} />
+          </button>
+        </span>
+      </Default>
+      <Mobile>
+        <MobileField
+          icon={'heading'}
+          text={article.title}
+          className={css.name}
+        />
+        <MobileField icon={'user'} text={article.authorName} />
+        <MobileField icon={'star'} text={article.category} />
+        <MobileField icon={'unlock'} text={article.status} />
+        <div className={css.index}>{idx + 1}</div>
+        <div className={css.crud}>
+          <LinkButton />
+          <button
+            className={css.invisible_button}
+            onClick={() => editArticle()}>
+            <Icon name={'edit'} />
+          </button>
+          <button
+            className={css.invisible_button}
+            onClick={() => setVisibility(true)}>
+            <Icon name={'trash'} />
+          </button>
+        </div>
+        <CloudinaryImage
+          src={article.image}
+          lazy={'sw'}
+          className={css.listImage}
+        />
+      </Mobile>
+
+      <ConfirmModal
+        visible={isDeleteModalVisible}
+        message={`Are you sure you want to delete article: ${article.title}?`}
+        confirmFunc={deleteArticle}
+        confirmText={'Delete'}
+        close={() => setVisibility(false)}
+      />
+    </Fader>
+  );
+});
+
+// TODO: Abstract for all mobile-table conversions
+const MobileField = ({ icon, text, className }) => {
+  return (
+    <div
+      style={{
+        display: 'grid',
+        gridTemplateColumns: '8% auto',
+        alignItems: 'baseline'
+      }}>
+      <Icon name={icon} style={{ textAlign: 'right' }} />
+      <span className={className}>{text}</span>
+    </div>
+  );
+};
 
 const mapStateToProps = (state) => ({
   user: state.user

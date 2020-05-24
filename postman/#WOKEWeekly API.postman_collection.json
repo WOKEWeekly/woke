@@ -260,6 +260,66 @@
 					"response": []
 				},
 				{
+					"name": "Clap For Article",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "a1e61684-5a15-446b-a13c-f9bb7cb64da0",
+								"exec": [
+									"pm.test(\"Article claps is incremented.\", () => {",
+									"    pm.expect(pm.response.code).to.equal(200);",
+									"});",
+									"",
+									"pm.test(\"Response contains new clap count.\", () => {",
+									"    pm.expect(pm.response.json()).to.have.property('claps');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "admission",
+								"type": "text",
+								"value": "true"
+							},
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/v1/articles/{{ARTICLE_ID}}/clap",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"articles",
+								"{{ARTICLE_ID}}",
+								"clap"
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "Delete Article",
 					"event": [
 						{
@@ -667,6 +727,282 @@
 			"protocolProfileBehavior": {}
 		},
 		{
+			"name": "Documents",
+			"item": [
+				{
+					"name": "Get Documents",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "e4d33d5e-d2b5-46c5-9a06-dfa4632dacd0",
+								"exec": [
+									"pm.test(\"Response is OK.\", () => {",
+									"    pm.expect(pm.response.code).to.equal(200);",
+									"});",
+									"",
+									"pm.test(\"Response is an array.\", () => {",
+									"    pm.expect(pm.response.json()).to.be.an('array');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "admission",
+								"value": "true",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/v1/documents",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"documents"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Single Document",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "18448919-2d99-46a5-8909-ad26fbd6c425",
+								"exec": [
+									"pm.test(\"Response is OK.\", () => {",
+									"    pm.expect(pm.response.code).to.equal(200);",
+									"});",
+									"",
+									"pm.test(\"Response is an object.\", () => {",
+									"    pm.expect(pm.response.json()).to.be.an('object');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "admission",
+								"type": "text",
+								"value": "true"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/api/v1/documents/{{DOCUMENT_NAME}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"documents",
+								"{{DOCUMENT_NAME}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add New Document",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "9a03bc2f-b295-4b6e-8c00-e6af4c95a588",
+								"exec": [
+									"var response = pm.response.json();",
+									"pm.globals.set(\"DOCUMENT_ID\", response.id);",
+									"",
+									"pm.test(\"Document is created.\", () => {",
+									"    pm.expect(pm.response.code).to.equal(201);",
+									"});",
+									"",
+									"pm.test(\"Response contains ID.\", () => {",
+									"    pm.expect(pm.response.json()).to.have.property('id');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "admission",
+								"value": "true",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"title\": \"Postman Created Document\",\n    \"file\": {{TEST_PDF}}\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/v1/documents",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"documents"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Document",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "f130529d-d7d4-4c4c-aaf3-a3c134a3cf29",
+								"exec": [
+									"pm.test(\"Document is updated.\", () => {",
+									"    pm.expect(pm.response.code).to.equal(200);",
+									"});",
+									"",
+									"pm.test(\"Response contains name.\", () => {",
+									"    pm.expect(pm.response.json()).to.have.property('name');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "admission",
+								"type": "text",
+								"value": "true"
+							},
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"document\": {\n\t\t\"title\": \"Postman Updated Document\",\n    \t\"file\": {{TEST_PDF}}\n\t},\n\t\"changed\": true\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/v1/documents/{{DOCUMENT_ID}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"documents",
+								"{{DOCUMENT_ID}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Document",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "1c6992a5-720b-4be4-9e12-841ac848943b",
+								"exec": [
+									"pm.test(\"Document is deleted.\", () => {",
+									"    pm.response.to.have.status(204);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "admission",
+								"type": "text",
+								"value": "true"
+							},
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/api/v1/documents/{{DOCUMENT_ID}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"documents",
+								"{{DOCUMENT_ID}}"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
 			"name": "Members",
 			"item": [
 				{
@@ -707,6 +1043,50 @@
 								"api",
 								"v1",
 								"members"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Authors Only",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "ccf00a33-bb9d-46fe-b356-541166dd19db",
+								"exec": [
+									"pm.test(\"Response is OK.\", () => {",
+									"    pm.expect(pm.response.code).to.equal(200);",
+									"});",
+									"",
+									"pm.test(\"Response is an array.\", () => {",
+									"    pm.expect(pm.response.json()).to.be.an('array');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "admission",
+								"type": "text",
+								"value": "true"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/api/v1/members/authors",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"members",
+								"authors"
 							]
 						}
 					},
@@ -884,7 +1264,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"firstname\": \"Siobhan\",\n    \"lastname\": \"Trunchnut\",\n    \"birthday\": \"1996-12-20\",\n    \"ethnicity\": \"[\\\"Tanzania\\\",\\\"Poland\\\"]\",\n    \"sex\": \"F\",\n    \"level\": \"Manager\",\n    \"role\": \"Social Media Manager\",\n    \"image\": {{image1}},\n    \"socials\": \"{\\\"twitter\\\":\\\"sallyw\\\",\\\"instagram\\\":\\\"sallyw\\\"}\",\n    \"description\": \"An added member through Postman.\",\n    \"verified\": 1,\n    \"slackID\": null\n}",
+							"raw": "{\n    \"firstname\": \"Siobhan\",\n    \"lastname\": \"Trunchnut\",\n    \"birthday\": \"1996-12-20\",\n    \"ethnicity\": \"[\\\"Tanzania\\\",\\\"Poland\\\"]\",\n    \"sex\": \"F\",\n    \"level\": \"Manager\",\n    \"role\": \"Social Media Manager\",\n    \"image\": {{image1}},\n    \"socials\": \"{\\\"twitter\\\":\\\"sallyw\\\",\\\"instagram\\\":\\\"sallyw\\\"}\",\n    \"description\": \"An added member through Postman.\",\n    \"verified\": true,\n    \"slackId\": null,\n    \"isAuthor\": true,\n    \"excerpt\": \"Siobhan has a name which is really pronounced 'Shivonne'.\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -942,7 +1322,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"member\": {\n\t\t\"firstname\": \"Buffy\",\n\t    \"lastname\": \"Scampernickle\",\n\t    \"birthday\": \"1996-12-20\",\n\t    \"ethnicity\": \"[\\\"Zambia\\\",\\\"Italy\\\"]\",\n\t    \"sex\": \"F\",\n\t    \"level\": \"Coordinator\",\n\t    \"role\": \"Researcher\",\n\t    \"image\": {{image2}},\n\t    \"socials\": \"{\\\"twitter\\\":\\\"sallyw\\\"}\",\n\t    \"description\": \"An updated member through Postman.\",\n\t    \"verified\": 1,\n\t    \"slackID\": null\n\t},\n\t\"changed\": true\n    \n}",
+							"raw": "{\n\t\"member\": {\n\t\t\"firstname\": \"Buffy\",\n\t    \"lastname\": \"Scampernickle\",\n\t    \"birthday\": \"1996-12-20\",\n\t    \"ethnicity\": \"[\\\"Zambia\\\",\\\"Italy\\\"]\",\n\t    \"sex\": \"F\",\n\t    \"level\": \"Coordinator\",\n\t    \"role\": \"Researcher\",\n\t    \"image\": {{image2}},\n\t    \"socials\": \"{\\\"twitter\\\":\\\"sallyw\\\"}\",\n\t    \"description\": \"An updated member through Postman.\",\n\t    \"verified\": 1,\n\t    \"slackId\": null,\n\t    \"isAuthor\": true,\n    \t\"excerpt\": \"Buffy's surname is funny.\"\n\t},\n\t\"changed\": true\n    \n}",
 							"options": {
 								"raw": {
 									"language": "json"

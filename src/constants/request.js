@@ -29,7 +29,7 @@ export default ({ url, method = 'GET', body, headers = {}, onSuccess }) => {
       onSuccess(data);
     })
     .catch((error) => {
-      const { message } = error.response.data;
+      const message = error.response ? error.response.data.message : error;
       if (message === 'jwt') {
         // If error is JWT-related
         store.dispatch(clearUser());

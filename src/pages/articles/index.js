@@ -1,20 +1,19 @@
-import React, { Component, PureComponent } from 'react';
+import React, { Component, memo, useState, useEffect } from 'react';
 import { connect } from 'react-redux';
-
-import { AdminButton } from '~/components/button.js';
-import { Shader, Spacer } from '~/components/layout.js';
-import { Loader, Empty } from '~/components/loader.js';
-import { Title, Subtitle, VanillaLink } from '~/components/text.js';
-import { BottomToolbar } from '~/components/toolbar.js';
-import { Zoomer, Fader } from '~/components/transitioner.js';
-
-import CLEARANCES from '~/constants/clearances.js';
-import request from '~/constants/request.js';
-import { cloudinary } from '~/constants/settings.js';
-
 import { zDate } from 'zavid-modules';
 
-import css from '~/styles/pages/Articles.module.scss';
+import { AdminButton } from '@components/button.js';
+import { CloudinaryImage } from '@components/image';
+import { Shader, Spacer } from '@components/layout.js';
+import { Loader, Empty } from '@components/loader.js';
+import { Title, Subtitle, VanillaLink } from '@components/text.js';
+import { BottomToolbar } from '@components/toolbar.js';
+import { Zoomer, Fader } from '@components/transitioner.js';
+
+import CLEARANCES from '@constants/clearances.js';
+import request from '@constants/request.js';
+
+import css from '@styles/pages/Articles.module.scss';
 
 class Blog extends Component {
   constructor(props) {
@@ -60,11 +59,9 @@ class Blog extends Component {
       } else if (articles.length === 0) {
         return <Empty message={'No articles found.'} />;
       } else {
-        const items = [];
-
-        for (const [index, item] of articles.entries()) {
-          items.push(<Article key={index} idx={index} item={item} />);
-        }
+        const items = articles.map((article, index) => {
+          return <Article key={index} idx={index} article={article} />;
+        });
 
         return <div className={css.igrid}>{items}</div>;
       }
@@ -73,9 +70,9 @@ class Blog extends Component {
     return (
       <Shader>
         <Spacer gridrows={'auto 1fr auto'}>
-          <Fader determinant={isLoaded} duration={1500}>
-            <ArticleCollection />
-          </Fader>
+            <Fader determinant={isLoaded} duration={1500}>
+              <ArticleCollection />
+            </Fader>
         </Spacer>
 
         <BottomToolbar>
@@ -91,41 +88,46 @@ class Blog extends Component {
   }
 }
 
-class Article extends PureComponent {
-  constructor() {
-    super();
-    this.state = { isLoaded: false };
-  }
+const Article = memo(({ article, idx }) => {
+  const [isLoaded, setLoaded] = useState(false);
+  useEffect(() => {
+    setLoaded(true);
+  }, [isLoaded]);
 
-  render() {
-    const { item, idx } = this.props;
-
-    return (
-      <Zoomer
-        determinant={this.state.isLoaded}
-        duration={400}
-        delay={75 * idx}
-        className={css.icontainer}>
-        <VanillaLink href={`/blog/${item.slug}`}>
-          <div className={css.cell}>
-            <img
-              src={`${cloudinary.url}/${cloudinary.lazy_wide}/${item.image}`}
-              alt={item.title}
-              className={css.image}
-              onLoad={() => this.setState({ isLoaded: true })}
-            />
-            <div className={css.details}>
-              <Title className={css.title}>{item.title}</Title>
+  return (
+    <Zoomer
+      determinant={isLoaded}
+      duration={400}
+      delay={75 * idx}
+      className={css.icontainer}>
+      <VanillaLink href={`/blog/${article.slug}`}>
+        <div className={css.cell}>
+          <CloudinaryImage
+            src={article.image}
+            alt={article.title}
+            className={css.image}
+            lazy={'mw'}
+          />
+          <div className={css.details}>
+            <div className={css.authorImage}>
+              <CloudinaryImage
+                src={article.authorImage}
+                title={article.authorName}
+                lazy={'ss'}
+              />
+            </div>
+            <div>
+              <Title className={css.title}>{article.title}</Title>
               <Subtitle className={css.date}>
-                {zDate.formatDate(item.datePublished, true)}
+                {zDate.formatDate(article.datePublished, true)}
               </Subtitle>
             </div>
           </div>
-        </VanillaLink>
-      </Zoomer>
-    );
-  }
-}
+        </div>
+      </VanillaLink>
+    </Zoomer>
+  );
+});
 
 const mapStateToProps = (state) => ({
   user: state.user
