@@ -73,7 +73,7 @@ class PreNavbar extends Component {
                 {clearance >= CLEARANCES.ACTIONS.VIEW_TEAM ? (
                   <Dropdown.Item
                     className={css.dropdown_item}
-                    onClick={() => (location.href = '/team')}>
+                    onClick={() => (location.href = '/admin/members')}>
                     Team Members
                   </Dropdown.Item>
                 ) : null}

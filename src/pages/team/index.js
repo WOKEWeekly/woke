@@ -123,7 +123,7 @@ class Team extends Component {
         <BottomToolbar>
           <AddEntityButton
             title={'Add Member'}
-            onClick={() => (location.href = '/team/add')}
+            onClick={() => (location.href = '/admin/members/add')}
           />
         </BottomToolbar>
       </React.Fragment>
@@ -146,7 +146,7 @@ class IMember extends PureComponent {
   }
 
   /** Go to edit member */
-  editMember = (member) => (location.href = `/team/edit/${member.id}`);
+  editMember = (member) => (location.href = `/admin/members/edit/${member.id}`);
 
   /** Delete member */
   deleteMember = () => {

@@ -274,7 +274,7 @@ module.exports = function (app, conn, knex, server) {
   });
 
   /** Team Members page */
-  app.get('/team', function (req, res) {
+  app.get('/admin/members', function (req, res) {
     return server.render(req, res, '/team', {
       title: 'Team Members | #WOKEWeekly',
       backgroundImage: 'bg-team.jpg'
@@ -309,7 +309,7 @@ module.exports = function (app, conn, knex, server) {
   });
 
   /** Add Team Member page */
-  app.get('/team/add', function (req, res) {
+  app.get('/admin/members/add', function (req, res) {
     return server.render(req, res, '/team/crud', {
       title: 'Add New Member',
       operation: OPERATIONS.CREATE,
@@ -318,7 +318,7 @@ module.exports = function (app, conn, knex, server) {
   });
 
   /** Edit Team Member page */
-  app.get('/team/edit/:id', function (req, res) {
+  app.get('/admin/members/edit/:id', function (req, res) {
     const id = req.params.id;
     const sql = SQL.MEMBERS.READ.SINGLE();
 

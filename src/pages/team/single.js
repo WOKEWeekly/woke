@@ -93,7 +93,7 @@ class MemberPage extends Component {
           {user.clearance >= CLEARANCES.ACTIONS.CRUD_TEAM ? (
             <EditEntityButton
               title={isExecutive ? 'Edit Executive' : 'Edit Member'}
-              onClick={() => (location.href = `/team/edit/${member.id}`)}
+              onClick={() => (location.href = `/admin/members/edit/${member.id}`)}
             />
           ) : null}
         </BottomToolbar>
