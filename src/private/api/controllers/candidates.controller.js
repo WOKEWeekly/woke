@@ -1,10 +1,12 @@
-const { respondToClient } = require('../../response');
+/* eslint-disable jsdoc/require-param */
 const async = require('async');
-const SQL = require('../../sql');
-const conn = require('../db').getDb();
-const filer = require('../../filer');
+
 const { DIRECTORY, ENTITY } = require('../../../constants/strings');
+const conn = require('../db').getDb();
 const ERROR = require('../../errors');
+const filer = require('../../filer');
+const { respondToClient } = require('../../response');
+const SQL = require('../../sql');
 
 /** Retrieve all candidates */
 exports.getAllCandidates = (req, res) => {

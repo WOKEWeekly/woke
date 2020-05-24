@@ -1,36 +1,36 @@
-const { assert, request, HEADERS } = require('./configuration/constants.js');
-const { TEST_REVIEWS, TEST_USERS } = require('./configuration/data.js');
+const { assert, request, HEADERS } = require('./configuration');
+const { TEST_SESSIONS, TEST_USERS } = require('./configuration/data.js');
 
 const superuser = TEST_USERS.NINE;
 
-let REVIEW_ID = 0;
+let SESSION_ID = 0;
 
-describe('Review Tests', function () {
+describe('Session Tests', function () {
   this.slow(10000);
 
-  /** Test creating a new review */
+  /** Test creating a new session */
   describe('Create', function () {
-    it('Add review', function (done) {
+    it('Add session', function (done) {
       request({
-        url: `/api/v1/reviews`,
+        url: `/api/v1/sessions`,
         method: 'POST',
-        body: JSON.stringify(TEST_REVIEWS.CREATED),
+        body: JSON.stringify(TEST_SESSIONS.CREATED),
         headers: HEADERS.TOKEN(superuser),
         done,
         onSuccess: ({ status, data }) => {
           assert.equal(status, 201);
           assert.hasAllKeys(data, ['id']);
-          REVIEW_ID = data.id;
+          SESSION_ID = data.id;
         }
       });
     });
   });
 
-  /** Test retrieval of all reviews */
+  /** Test retrieval of all sessions */
   describe('Read', function () {
-    it('Get all reviews', function (done) {
+    it('Get all sessions', function (done) {
       request({
-        url: `/api/v1/reviews`,
+        url: `/api/v1/sessions`,
         method: 'GET',
         headers: HEADERS.KEY,
         done,
@@ -41,9 +41,9 @@ describe('Review Tests', function () {
       });
     });
 
-    it('Get single review', function (done) {
+    it('Get single session', function (done) {
       request({
-        url: `/api/v1/reviews/${REVIEW_ID}`,
+        url: `/api/v1/sessions/${SESSION_ID}`,
         method: 'GET',
         headers: HEADERS.KEY,
         done,
@@ -54,27 +54,22 @@ describe('Review Tests', function () {
       });
     });
 
-    it('Get featured reviews', function (done) {
+    it('Get featured session', function (done) {
       request({
-        url: `/api/v1/reviews/featured`,
+        url: `/api/v1/sessions/featured`,
         method: 'GET',
         headers: HEADERS.KEY,
         done,
         onSuccess: ({ status, data }) => {
           assert.equal(status, 200);
-          assert.isAtMost(data.length, 3);
-          data.forEach((review) => {
-            assert.include(review, { rating: 5 });
-            assert.exists(review.image);
-            assert.isNotEmpty(review.image);
-          });
+          assert.hasAllKeys(data, ['session', 'upcoming']);
         }
       });
     });
 
-    it('Attempt get single review with invalid ID', function (done) {
+    it('Attempt get single session with invalid ID', function (done) {
       request({
-        url: `/api/v1/reviews/0`,
+        url: `/api/v1/sessions/0`,
         method: 'GET',
         headers: HEADERS.KEY,
         done,
@@ -85,46 +80,48 @@ describe('Review Tests', function () {
     });
   });
 
-  /** Test updating the review */
+  /** Test updating the session */
   describe('Update', function () {
-    it('Update review without image change', function (done) {
+    it('Update session without image change', function (done) {
       request({
-        url: `/api/v1/reviews/${REVIEW_ID}`,
+        url: `/api/v1/sessions/${SESSION_ID}`,
         method: 'PUT',
         body: JSON.stringify({
-          review: TEST_REVIEWS.UPDATED,
+          session: TEST_SESSIONS.UPDATED,
           changed: false
         }),
         headers: HEADERS.TOKEN(superuser),
         done,
-        onSuccess: ({ status }) => {
+        onSuccess: ({ status, data }) => {
           assert.equal(status, 200);
+          assert.hasAllKeys(data, ['slug']);
         }
       });
     });
 
-    it('Update review with image change', function (done) {
+    it('Update session with image change', function (done) {
       request({
-        url: `/api/v1/reviews/${REVIEW_ID}`,
+        url: `/api/v1/sessions/${SESSION_ID}`,
         method: 'PUT',
         body: JSON.stringify({
-          review: TEST_REVIEWS.UPDATED,
+          session: TEST_SESSIONS.UPDATED,
           changed: true
         }),
         headers: HEADERS.TOKEN(superuser),
         done,
-        onSuccess: ({ status }) => {
+        onSuccess: ({ status, data }) => {
           assert.equal(status, 200);
+          assert.hasAllKeys(data, ['slug']);
         }
       });
     });
 
-    it('Attempt update review with invalid ID', function (done) {
+    it('Attempt update session with invalid ID', function (done) {
       request({
-        url: `/api/v1/reviews/0`,
+        url: `/api/v1/sessions/0`,
         method: 'PUT',
         body: JSON.stringify({
-          review: TEST_REVIEWS.UPDATED,
+          session: TEST_SESSIONS.UPDATED,
           changed: true
         }),
         headers: HEADERS.TOKEN(superuser),
@@ -136,11 +133,11 @@ describe('Review Tests', function () {
     });
   });
 
-  /** Test deleting the review */
+  /** Test deleting the session */
   describe('Delete', function () {
-    it('Delete review', function (done) {
+    it('Delete session', function (done) {
       request({
-        url: `/api/v1/reviews/${REVIEW_ID}`,
+        url: `/api/v1/sessions/${SESSION_ID}`,
         method: 'DELETE',
         headers: HEADERS.TOKEN(superuser),
         done,
@@ -150,9 +147,9 @@ describe('Review Tests', function () {
       });
     });
 
-    it('Attempt delete review with invalid ID', function (done) {
+    it('Attempt delete session with invalid ID', function (done) {
       request({
-        url: `/api/v1/reviews/0`,
+        url: `/api/v1/sessions/0`,
         method: 'DELETE',
         headers: HEADERS.TOKEN(superuser),
         done,

@@ -5,41 +5,27 @@ const CLEARANCES = require('../../../constants/clearances');
 const { verifyToken, validateReq } = require('../../middleware');
 const ArticlesController = require('../controllers/articles.controller');
 
-// GET all articles
-router.get(
-  '/',
-  verifyToken(CLEARANCES.ACTIONS.CRUD_ARTICLES),
-  ArticlesController.getAllArticles
-);
+const authorize = verifyToken(CLEARANCES.ACTIONS.CRUD_ARTICLES);
 
-// GET single article by id
-router.get('/:id([0-9]+)', validateReq, ArticlesController.getArticle);
+/** GET all articles */
+router.get('/', authorize, ArticlesController.getAllArticles);
 
-// GET all published articles
+/** GET single article by ID */
+router.get('/:id([0-9]+)', validateReq, ArticlesController.getSingleArticle);
+
+/** GET all articles */
 router.get('/published', validateReq, ArticlesController.getPublishedArticles);
 
-// POST new article
-router.post(
-  '/',
-  verifyToken(CLEARANCES.ACTIONS.CRUD_ARTICLES),
-  ArticlesController.addArticle
-);
+/** POST new article */
+router.post('/', authorize, ArticlesController.addArticle);
 
-// PUT article details
-router.put(
-  '/:id',
-  verifyToken(CLEARANCES.ACTIONS.CRUD_ARTICLES),
-  ArticlesController.updateArticle
-);
+/** PUT; update article details */
+router.put('/:id', authorize, ArticlesController.updateArticle);
 
-// PUT article claps
+/** PUT; increment article claps */
 router.put('/:id/clap', validateReq, ArticlesController.clapForArticle);
 
-// DELETE article
-router.delete(
-  '/:id',
-  verifyToken(CLEARANCES.ACTIONS.CRUD_ARTICLES),
-  ArticlesController.deleteArticle
-);
+/** DELETE article */
+router.delete('/:id', authorize, ArticlesController.deleteArticle);
 
 module.exports = router;

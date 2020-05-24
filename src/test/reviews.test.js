@@ -1,65 +1,49 @@
 const { assert, request, HEADERS } = require('./configuration');
-const { TEST_ARTICLES, TEST_USERS } = require('./configuration/data.js');
+const { TEST_REVIEWS, TEST_USERS } = require('./configuration/data.js');
 
 const superuser = TEST_USERS.NINE;
 
-let ARTICLE_ID = 0;
+let REVIEW_ID = 0;
 
-describe('Article Tests', function () {
+describe('Review Tests', function () {
   this.slow(10000);
 
-  /** Test creating a new article */
+  /** Test creating a new review */
   describe('Create', function () {
-    it('Add article', function (done) {
+    it('Add review', function (done) {
       request({
-        url: `/api/v1/articles`,
+        url: `/api/v1/reviews`,
         method: 'POST',
-        body: JSON.stringify(TEST_ARTICLES.CREATED),
+        body: JSON.stringify(TEST_REVIEWS.CREATED),
         headers: HEADERS.TOKEN(superuser),
         done,
         onSuccess: ({ status, data }) => {
           assert.equal(status, 201);
           assert.hasAllKeys(data, ['id']);
-          ARTICLE_ID = data.id;
+          REVIEW_ID = data.id;
         }
       });
     });
   });
 
-  /** Test retrieval of all articles */
+  /** Test retrieval of all reviews */
   describe('Read', function () {
-    it('Get all articles', function (done) {
+    it('Get all reviews', function (done) {
       request({
-        url: `/api/v1/articles`,
-        method: 'GET',
-        headers: HEADERS.TOKEN(superuser),
-        done,
-        onSuccess: ({ status, data }) => {
-          assert.equal(status, 200);
-          assert.isArray(data);
-        }
-      });
-    });
-
-    it('Get only published articles', function (done) {
-      request({
-        url: `/api/v1/articles/published`,
+        url: `/api/v1/reviews`,
         method: 'GET',
         headers: HEADERS.KEY,
         done,
         onSuccess: ({ status, data }) => {
           assert.equal(status, 200);
           assert.isArray(data);
-          data.forEach((article) => {
-            assert.equal(article.status, 'PUBLISHED');
-          });
         }
       });
     });
 
-    it('Get single article', function (done) {
+    it('Get single review', function (done) {
       request({
-        url: `/api/v1/articles/${ARTICLE_ID}`,
+        url: `/api/v1/reviews/${REVIEW_ID}`,
         method: 'GET',
         headers: HEADERS.KEY,
         done,
@@ -70,9 +54,27 @@ describe('Article Tests', function () {
       });
     });
 
-    it('Attempt get single article with invalid ID', function (done) {
+    it('Get featured reviews', function (done) {
       request({
-        url: `/api/v1/articles/0`,
+        url: `/api/v1/reviews/featured`,
+        method: 'GET',
+        headers: HEADERS.KEY,
+        done,
+        onSuccess: ({ status, data }) => {
+          assert.equal(status, 200);
+          assert.isAtMost(data.length, 3);
+          data.forEach((review) => {
+            assert.include(review, { rating: 5 });
+            assert.exists(review.image);
+            assert.isNotEmpty(review.image);
+          });
+        }
+      });
+    });
+
+    it('Attempt get single review with invalid ID', function (done) {
+      request({
+        url: `/api/v1/reviews/0`,
         method: 'GET',
         headers: HEADERS.KEY,
         done,
@@ -83,48 +85,46 @@ describe('Article Tests', function () {
     });
   });
 
-  /** Test updating the article */
+  /** Test updating the review */
   describe('Update', function () {
-    it('Update article without image change', function (done) {
+    it('Update review without image change', function (done) {
       request({
-        url: `/api/v1/articles/${ARTICLE_ID}`,
+        url: `/api/v1/reviews/${REVIEW_ID}`,
         method: 'PUT',
         body: JSON.stringify({
-          article: TEST_ARTICLES.UPDATED,
+          review: TEST_REVIEWS.UPDATED,
           changed: false
         }),
         headers: HEADERS.TOKEN(superuser),
         done,
-        onSuccess: ({ status, data }) => {
+        onSuccess: ({ status }) => {
           assert.equal(status, 200);
-          assert.hasAllKeys(data, ['slug']);
         }
       });
     });
 
-    it('Update article with image change', function (done) {
+    it('Update review with image change', function (done) {
       request({
-        url: `/api/v1/articles/${ARTICLE_ID}`,
+        url: `/api/v1/reviews/${REVIEW_ID}`,
         method: 'PUT',
         body: JSON.stringify({
-          article: TEST_ARTICLES.UPDATED,
+          review: TEST_REVIEWS.UPDATED,
           changed: true
         }),
         headers: HEADERS.TOKEN(superuser),
         done,
-        onSuccess: ({ status, data }) => {
+        onSuccess: ({ status }) => {
           assert.equal(status, 200);
-          assert.hasAllKeys(data, ['slug']);
         }
       });
     });
 
-    it('Attempt update article with invalid ID', function (done) {
+    it('Attempt update review with invalid ID', function (done) {
       request({
-        url: `/api/v1/articles/0`,
+        url: `/api/v1/reviews/0`,
         method: 'PUT',
         body: JSON.stringify({
-          article: TEST_ARTICLES.UPDATED,
+          review: TEST_REVIEWS.UPDATED,
           changed: true
         }),
         headers: HEADERS.TOKEN(superuser),
@@ -134,26 +134,13 @@ describe('Article Tests', function () {
         }
       });
     });
-
-    it('Clap for article', function (done) {
-      request({
-        url: `/api/v1/articles/${ARTICLE_ID}/clap`,
-        method: 'PUT',
-        headers: HEADERS.KEY,
-        done,
-        onSuccess: ({ status, data }) => {
-          assert.equal(status, 200);
-          assert.hasAllKeys(data, ['claps']);
-        }
-      });
-    });
   });
 
-  /** Test deleting the article */
+  /** Test deleting the review */
   describe('Delete', function () {
-    it('Delete article', function (done) {
+    it('Delete review', function (done) {
       request({
-        url: `/api/v1/articles/${ARTICLE_ID}`,
+        url: `/api/v1/reviews/${REVIEW_ID}`,
         method: 'DELETE',
         headers: HEADERS.TOKEN(superuser),
         done,
@@ -163,9 +150,9 @@ describe('Article Tests', function () {
       });
     });
 
-    it('Attempt delete article with invalid ID', function (done) {
+    it('Attempt delete review with invalid ID', function (done) {
       request({
-        url: `/api/v1/articles/0`,
+        url: `/api/v1/reviews/0`,
         method: 'DELETE',
         headers: HEADERS.TOKEN(superuser),
         done,

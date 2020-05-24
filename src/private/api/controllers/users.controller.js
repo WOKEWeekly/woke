@@ -1,14 +1,18 @@
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
-const validator = require('email-validator');
-const { respondToClient } = require('../../response');
+/* eslint-disable jsdoc/require-returns */
+/* eslint-disable jsdoc/require-param */
 const async = require('async');
+const bcrypt = require('bcryptjs');
+const validator = require('email-validator');
+const jwt = require('jsonwebtoken');
+const Mailchimp = require('mailchimp-api-v3');
+
+const { ENTITY } = require('../../../constants/strings');
+const emails = require('../../emails');
+const ERROR = require('../../errors');
+const { respondToClient } = require('../../response');
 const SQL = require('../../sql');
 const conn = require('../db').getDb();
-const { ENTITY } = require('../../../constants/strings');
-const ERROR = require('../../errors');
-const emails = require('../../emails');
-const Mailchimp = require('mailchimp-api-v3');
+
 const mailchimp = new Mailchimp(process.env.MAILCHIMP_API_KEY);
 
 const emailsOn =
@@ -459,6 +463,6 @@ const subscribeUserToMailingList = (user) => {
         LNAME: user.lastname
       }
     })
-    .then((results) => console.log(results))
-    .catch((err) => console.log(err.toString()));
+    .then((results) => console.info(results))
+    .catch((err) => console.error(err.toString()));
 };

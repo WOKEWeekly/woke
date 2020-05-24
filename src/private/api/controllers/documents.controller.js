@@ -1,8 +1,10 @@
-const { respondToClient } = require('../../response');
+/* eslint-disable jsdoc/require-param */
 const async = require('async');
-const filer = require('../../filer');
+
 const { ENTITY } = require('../../../constants/strings');
 const ERROR = require('../../errors');
+const filer = require('../../filer');
+const { respondToClient } = require('../../response');
 const knex = require('../db').getKnex();
 
 /** Retrieve all documents */
@@ -36,7 +38,7 @@ exports.addDocument = (req, res) => {
       },
       function (document, callback) {
         // Add document to database
-        const query = knex.insert(document, ['id']).into('documents');
+        const query = knex.insert(document).into('documents');
         query.asCallback(function (err, [id] = []) {
           if (!err) return callback(null, id);
           if (err.errno === 1062)
@@ -91,6 +93,7 @@ exports.updateDocument = (req, res) => {
   );
 };
 
+/** Delete document */
 exports.deleteDocument = (req, res) => {
   const { id } = req.params;
 

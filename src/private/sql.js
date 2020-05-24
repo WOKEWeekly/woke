@@ -1,117 +1,8 @@
 const JOINS = {
-  ARTICLES_MEMBERS: `CONCAT(members.firstname, ' ', members.lastname) AS authorName,
-    members.level AS authorLevel, members.slug AS authorSlug, members.image AS authorImage,
-    members.description AS authorDescription, members.socials AS authorSocials
-    FROM articles LEFT JOIN members ON articles.authorId=members.id`,
   CANDIDATES_MEMBERS: `CONCAT(members.firstname, ' ', members.lastname) AS authorName,
     members.level AS authorLevel, members.slug AS authorSlug, members.image AS authorImage,
     members.description AS authorDescription, members.socials AS authorSocials
     FROM candidates LEFT JOIN members ON candidates.authorId=members.id`
-};
-
-const ARTICLES = {
-  /**
-   * Constructs the SQL statement to create an article.
-   * @param {object} article - The object containing the article details.
-   * @returns {object} The SQL statement and the values.
-   */
-  CREATE: (article) => {
-    const sql =
-      'INSERT INTO articles (title, content, category, excerpt, tags, slug, image, authorId, status, datePublished) VALUES ?';
-    const values = [
-      [
-        article.title,
-        article.content,
-        article.category,
-        article.excerpt,
-        article.tags,
-        article.slug,
-        article.image,
-        article.authorId,
-        article.status,
-        article.datePublished
-      ]
-    ];
-    return { sql, values };
-  },
-  READ: {
-    /**
-     * Constructs the SQL statement to return information for all articles.
-     * @param {string} [fields] - The fields to be queried.
-     * @returns {string} The constructed statement.
-     */
-    ALL: (fields = '*') => {
-      return `SELECT articles.${fields}, ${JOINS.ARTICLES_MEMBERS};`;
-    },
-
-    PUBLISHED: ({ fields = '*', limit, order }) => {
-      const orderQuery = order ? ` ORDER BY datePublished ${order}` : '';
-      const limitQuery = limit ? ` LIMIT ${limit}` : '';
-
-      const baseQuery = `SELECT articles.${fields}, ${JOINS.ARTICLES_MEMBERS} WHERE status = 'PUBLISHED'`;
-      const sql = `${baseQuery}${orderQuery}${limitQuery}`;
-      return sql;
-
-      // const fieldArray = fields.split[', '];
-      // fields = new String();
-
-      // fieldArray.forEach(field => {
-      //   fields += `articles.${field}, `
-      // });
-
-      // // return `SELECT ${fields} FROM articles`;
-      // return `SELECT ${fields},
-      // CONCAT(members.firstname, ' ', members.lastname) AS authorName,
-      // members.level AS authorLevel, members.slug AS authorSlug
-      // FROM articles LEFT JOIN members ON articles.authorId=members.id;`;
-    },
-
-    /**
-     * Constructs the SQL statement to return information for a single article.
-     * @param {string} condition - The condition field for the WHERE clause.
-     * @param {string} [fields] - The fields to be queried.
-     * @returns {string} The constructed statement.
-     */
-    SINGLE: (condition, fields = '*') => {
-      const sql = `SELECT articles.${fields}, ${JOINS.ARTICLES_MEMBERS} WHERE articles.${condition} = ?`;
-      return sql;
-    }
-  },
-
-  /**
-   * Constructs the SQL statement to update an article.
-   * @param {number} id - The identifier of the article.
-   * @param {object} article - The object containing the article details.
-   * @param {boolean} imageHasChanged - Indicates whether the image has
-   * changed in this request.
-   * @returns {object} The SQL statement and the values.
-   */
-  UPDATE: (id, article, imageHasChanged) => {
-    let sql =
-      'UPDATE articles SET title = ?, content = ?, category = ?, excerpt = ?, tags = ?, slug = ?, authorId = ?, status = ?, datePublished = ? WHERE id = ?';
-    let values = [
-      article.title,
-      article.content,
-      article.category,
-      article.excerpt,
-      article.tags,
-      article.slug,
-      article.authorId,
-      article.status,
-      article.datePublished,
-      id
-    ];
-
-    if (imageHasChanged) {
-      sql = appendFieldToUpdateQuery('image', sql);
-      values = insertFieldInValues(article.image, values);
-    }
-
-    return { sql, values };
-  },
-
-  /** The SQL statement to delete an article. */
-  DELETE: 'DELETE FROM articles WHERE id = ?'
 };
 
 const SESSIONS = {
@@ -654,7 +545,6 @@ const TOKENS = {
 };
 
 module.exports = {
-  ARTICLES,
   CANDIDATES,
   MEMBERS,
   PAGES,

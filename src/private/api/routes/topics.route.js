@@ -1,55 +1,46 @@
-// Express
 const express = require('express');
 const router = express.Router();
 
-// Controllers
-const TopicsController = require('../controllers/topics.controller');
 const CLEARANCES = require('../../../constants/clearances');
-
-// Middleware
 const { verifyToken, validateReq } = require('../../middleware');
+const TopicsController = require('../controllers/topics.controller');
 
-// Routes /topics
+const authorize = verifyToken(CLEARANCES.ACTIONS.CRUD_TOPICS);
 
-// GET all topics
+/** GET all topics */
 router.get(
   '/',
   verifyToken(CLEARANCES.ACTIONS.VIEW_TOPICS),
   TopicsController.getAllTopics
 );
-// GET topic by id
+
+/** GET single topic by ID */
 router.get('/:id([0-9]+)', validateReq, TopicsController.getTopic);
-// GET random topic
+
+/** GET random topic */
 router.get('/random', validateReq, TopicsController.getRandomTopic);
-// GET generated topic token
+
+/** GET; generate Topic Bank token */
 router.get(
   '/token',
   verifyToken(CLEARANCES.ACTIONS.GENERATE_NEW_TOKEN),
   TopicsController.generateTopicBankToken
 );
-// POST new topic
-router.post(
-  '/',
-  verifyToken(CLEARANCES.ACTIONS.CRUD_TOPICS),
-  TopicsController.addTopic
-);
-// PUT topic update
-router.put(
-  '/:id',
-  verifyToken(CLEARANCES.ACTIONS.CRUD_TOPICS),
-  TopicsController.updateTopic
-);
-// PUT topic vote update
+
+/** POST new topic */
+router.post('/', authorize, TopicsController.addTopic);
+
+/** PUT; update topic details */
+router.put('/:id', authorize, TopicsController.updateTopic);
+
+/** PUT; increment topic vote */
 router.put(
   '/:id/vote/:option(yes|no)',
   validateReq,
   TopicsController.updateTopicVote
 );
-// DELETE topic
-router.delete(
-  '/:id',
-  verifyToken(CLEARANCES.ACTIONS.CRUD_TOPICS),
-  TopicsController.deleteTopic
-);
+
+/** DELETE topic */
+router.delete('/:id', authorize, TopicsController.deleteTopic);
 
 module.exports = router;
