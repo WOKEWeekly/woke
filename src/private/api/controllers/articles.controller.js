@@ -1,11 +1,13 @@
+/* eslint-disable jsdoc/require-param */
 const async = require('async');
 
+const { DIRECTORY, ENTITY } = require('../../../constants/strings');
+const ERROR = require('../../errors');
+const filer = require('../../filer');
 const { respondToClient } = require('../../response');
 const SQL = require('../../sql');
 const conn = require('../db').getDb();
-const filer = require('../../filer');
-const { DIRECTORY, ENTITY } = require('../../../constants/strings');
-const ERROR = require('../../errors');
+const knex = require('../db').getKnex();
 
 /** Retrieve all articles */
 exports.getAllArticles = (req, res) => {
@@ -106,7 +108,32 @@ exports.updateArticle = (req, res) => {
   );
 };
 
-/** Delete an existing article from database */
+/** Increment number of claps for article */
+exports.clapForArticle = (req, res) => {
+  const { id } = req.params;
+  async.waterfall(
+    [
+      function (callback) {
+        // Increment claps
+        const query = knex('articles').increment({ claps: 1 }).where('id', id);
+        query.asCallback(function (err) {
+          callback(err);
+        });
+      },
+      function (callback) {
+        const query = knex.select('claps').from('articles').where('id', id);
+        query.asCallback(function (err, [claps] = []) {
+          callback(err, claps);
+        });
+      }
+    ],
+    function (err, claps) {
+      respondToClient(res, err, 200, { ...claps });
+    }
+  );
+};
+
+/** Delete the article */
 exports.deleteArticle = (req, res) => {
   const id = req.params.id;
 

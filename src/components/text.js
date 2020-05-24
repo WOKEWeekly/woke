@@ -7,34 +7,33 @@ import { Icon } from '@components/icon.js';
 
 import css from '@styles/components/Text.module.scss';
 
-export class Title extends Component {
-  render() {
-    const classes = classNames(css.title, this.props.className);
-    return (
-      <div {...this.props} className={classes}>
-        {this.props.children}
-      </div>
-    );
-  }
-}
+/**
+ * A title component for headings.
+ * @param {string} props - Inherited properties.
+ * @param {string} props.className The CSS styling.
+ * @returns {React.Component} A title component.
+ */
+export const Title = ({ children, className }) => {
+  const classes = classNames(css.title, className);
+  return <div className={classes}>{children}</div>;
+};
 
-export class Subtitle extends Component {
-  render() {
-    const classes = classNames(css.subtitle, this.props.className);
-    return (
-      <div {...this.props} className={classes}>
-        {this.props.children}
-      </div>
-    );
-  }
-}
+/**
+ * A subtitle component for subheadings.
+ * @param {string} props - Inherited properties.
+ * @param {string} props.className The CSS styling.
+ * @returns {React.Component} A subtitle component.
+ */
+export const Subtitle = ({ children, className }) => {
+  const classes = classNames(css.subtitle, className);
+  return <div className={classes}>{children}</div>;
+};
 
 /**
  * A paragraph component for a formatted body of text.
- *
  * @param {string} props - Inherited properties from the paragraph component.
  * @param {string} props.children - The text to be formatted.
- * @param {string} props.className - The CSS styling for paragraph component.
+ * @param {string} props.className - The CSS styling.
  * @param {object} props.substitutions - A map of variable substitutions
  * to be made to the text.
  * @param {string} props.theme - The current theme from the Redux state.
@@ -42,9 +41,9 @@ export class Subtitle extends Component {
  * @param {string} props.link - The hyperlink for the embedded {@link ReadMore} component.
  * @param {string} props.moretext - The text to be formatted.
  * @param {object} props.moreClass - The CSS styling for the embedded {@link ReadMore} component.
- * @returns {Component} A formatted paragraph component.
+ * @returns {React.Component} A formatted paragraph component.
  */
-export const IParagraph = ({
+const IParagraph = ({
   children,
   substitutions,
   theme,

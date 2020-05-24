@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { zDate, zText } from 'zavid-modules';
 
 import { AdminButton, BackButton } from '@components/button.js';
-import { PromoIconsBar } from '@components/icon.js';
+import { Icon, PromoIconsBar } from '@components/icon.js';
 import { CloudinaryImage } from '@components/image.js';
 import { Partitioner, Shader, Spacer } from '@components/layout.js';
 import { SocialMediaShareBlock } from '@components/socialmedia.js';
@@ -45,7 +45,10 @@ const ArticlePage = ({ article, user }) => {
   const isExecutive = authorLevel === 'Executive';
   const link = `/${isExecutive ? 'executives' : 'team/member'}/${authorSlug}`;
 
-  /** The blog title element */
+  /**
+   * The blog title element.
+   * @returns {React.Component} The component.
+   */
   const BlogTitle = () => {
     return (
       <Fader determinant={isLoaded} duration={500}>
@@ -54,7 +57,10 @@ const ArticlePage = ({ article, user }) => {
     );
   };
 
-  /** The details of the blog */
+  /**
+   * The details of the blog.
+   * @returns {React.Component} The component.
+   */
   const BlogDetails = () => {
     const date = datePublished && zDate.formatDate(datePublished, true);
     if (!authorName) return null;
@@ -79,7 +85,10 @@ const ArticlePage = ({ article, user }) => {
     );
   };
 
-  /** The cover image */
+  /**
+   * The blog's cover image.
+   * @returns {React.Component} The component.
+   */
   const CoverImage = () => {
     return (
       <Fader determinant={isLoaded} duration={500} delay={500}>
@@ -92,7 +101,10 @@ const ArticlePage = ({ article, user }) => {
     );
   };
 
-  /** The blog content */
+  /**
+   * The content of the blog article.
+   * @returns {React.Component} The component.
+   */
   const Content = () => {
     return (
       <Fader determinant={isLoaded} duration={500} delay={1000}>
@@ -101,7 +113,10 @@ const ArticlePage = ({ article, user }) => {
     );
   };
 
-  /** The block of tags */
+  /**
+   * The block containing the article's tags.
+   * @returns {React.Component} The component.
+   */
   const TagBlock = () => {
     if (!article.tags) return null;
     const tags = JSON.parse(article.tags).map((tag, key) => {
@@ -111,7 +126,19 @@ const ArticlePage = ({ article, user }) => {
     return <div className={css.tagblock}>{tags}</div>;
   };
 
-  /** The author profile */
+  const ReactionBlock = () => {
+    return (
+      <div className={css.reactionBlock}>
+        <Icon name={'sign-language'} style={{fontSize: '1.5rem'}} />
+        <span className={css.clapCount}>{article.claps} claps</span>
+      </div>
+    );
+  };
+
+  /**
+   * The author profile.
+   * @returns {React.Component} The component.
+   */
   const AuthorProfile = () => {
     return (
       <Fader
@@ -151,6 +178,7 @@ const ArticlePage = ({ article, user }) => {
                 <CoverImage />
                 <Content />
                 <TagBlock />
+                <ReactionBlock />
                 <SocialMediaShareBlock
                   message={shareMessage}
                   url={location.href}
