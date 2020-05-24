@@ -17,7 +17,7 @@ const mailchimp = new Mailchimp(process.env.MAILCHIMP_API_KEY);
 
 const emailsOn =
   process.env.NODE_ENV === 'production' || process.argv.includes('--emails');
-if (!emailsOn) console.warn('Emails are turned OFF.');
+if (!emailsOn) console.warn('Emails are turned off.');
 
 /** Retrieve all users */
 exports.getAllUsers = (req, res) => {
