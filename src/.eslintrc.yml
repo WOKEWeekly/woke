@@ -5,6 +5,7 @@ extends:
   - plugin:import/errors
   - plugin:import/warnings
   - plugin:jsdoc/recommended
+  - plugin:mocha/recommended
 env:
   browser: true
   node: true
@@ -19,29 +20,15 @@ plugins:
   - react
   - import
   - jsdoc
+  - mocha
 settings:
   react:
     version: detect
 
 # Rules
 rules:
+  
   # Active rules
-  no-multiple-empty-lines:
-    - warn
-    - max: 1
-  no-unused-vars: 1
-  semi:
-    - error
-    - always
-  spaced-comment:
-    - warn
-    - always
-    - exceptions:
-      - '*'
-
-  # Overridden and disabled rules
-  no-case-declarations: 0
-  no-useless-escape: 0
   import/order:
     - warn
     - 
@@ -70,12 +57,35 @@ rules:
       alphabetize:
         order: asc
         caseInsensitive: true
-
-
   import/no-unresolved:
-    - 2
+    - error
     - ignore:
       - "^@"
-  react/prop-types: 0
-  react/display-name: 0
-  quotes: 0
+  jsdoc/newline-after-description:
+    - warn
+    - never
+  no-multiple-empty-lines:
+    - warn
+    - max: 1
+  no-unused-vars: warn
+  no-console:
+    - warn
+    - allow:
+      - warn
+      - error
+  semi:
+    - error
+    - always
+  spaced-comment:
+    - warn
+    - always
+    - exceptions:
+      - '*'
+
+  # Overridden and disabled rules
+  mocha/handle-done-callback: off
+  no-case-declarations: off
+  no-useless-escape: off
+  react/prop-types: off
+  react/display-name: off
+  quotes: off
