@@ -1093,7 +1093,7 @@
 					"response": []
 				},
 				{
-					"name": "Get Executives Only",
+					"name": "Get Verified Members Only",
 					"event": [
 						{
 							"listen": "test",
@@ -1122,7 +1122,7 @@
 							}
 						],
 						"url": {
-							"raw": "{{host}}/api/v1/members/executives",
+							"raw": "{{host}}/api/v1/members/verified",
 							"host": [
 								"{{host}}"
 							],
@@ -1130,7 +1130,7 @@
 								"api",
 								"v1",
 								"members",
-								"executives"
+								"verified"
 							]
 						}
 					},
@@ -1264,7 +1264,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"firstname\": \"Siobhan\",\n    \"lastname\": \"Trunchnut\",\n    \"birthday\": \"1996-12-20\",\n    \"ethnicity\": \"[\\\"Tanzania\\\",\\\"Poland\\\"]\",\n    \"sex\": \"F\",\n    \"level\": \"Manager\",\n    \"role\": \"Social Media Manager\",\n    \"image\": {{image1}},\n    \"socials\": \"{\\\"twitter\\\":\\\"sallyw\\\",\\\"instagram\\\":\\\"sallyw\\\"}\",\n    \"description\": \"An added member through Postman.\",\n    \"verified\": true,\n    \"slackId\": null,\n    \"isAuthor\": true,\n    \"excerpt\": \"Siobhan has a name which is really pronounced 'Shivonne'.\"\n}",
+							"raw": "{\n    \"firstname\": \"Siobhan\",\n    \"lastname\": \"Trunchnut\",\n    \"birthday\": \"1996-12-20\",\n    \"ethnicity\": \"[\\\"Tanzania\\\",\\\"Poland\\\"]\",\n    \"sex\": \"F\",\n    \"level\": \"Manager\",\n    \"role\": \"Social Media Manager\",\n    \"image\": {{image1}},\n    \"socials\": \"{\\\"twitter\\\":\\\"sallyw\\\",\\\"instagram\\\":\\\"sallyw\\\"}\",\n    \"description\": \"An added member through Postman.\",\n    \"verified\": true,\n    \"slackId\": null,\n    \"isAuthor\": true\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1322,7 +1322,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"member\": {\n\t\t\"firstname\": \"Buffy\",\n\t    \"lastname\": \"Scampernickle\",\n\t    \"birthday\": \"1996-12-20\",\n\t    \"ethnicity\": \"[\\\"Zambia\\\",\\\"Italy\\\"]\",\n\t    \"sex\": \"F\",\n\t    \"level\": \"Coordinator\",\n\t    \"role\": \"Researcher\",\n\t    \"image\": {{image2}},\n\t    \"socials\": \"{\\\"twitter\\\":\\\"sallyw\\\"}\",\n\t    \"description\": \"An updated member through Postman.\",\n\t    \"verified\": 1,\n\t    \"slackId\": null,\n\t    \"isAuthor\": true,\n    \t\"excerpt\": \"Buffy's surname is funny.\"\n\t},\n\t\"changed\": true\n    \n}",
+							"raw": "{\n\t\"member\": {\n\t\t\"firstname\": \"Buffy\",\n\t    \"lastname\": \"Scampernickle\",\n\t    \"birthday\": \"1996-12-20\",\n\t    \"ethnicity\": \"[\\\"Zambia\\\",\\\"Italy\\\"]\",\n\t    \"sex\": \"F\",\n\t    \"level\": \"Coordinator\",\n\t    \"role\": \"Researcher\",\n\t    \"image\": {{image2}},\n\t    \"socials\": \"{\\\"twitter\\\":\\\"sallyw\\\"}\",\n\t    \"description\": \"An updated member through Postman.\",\n\t    \"verified\": 1,\n\t    \"slackId\": null,\n\t    \"isAuthor\": true\n\t},\n\t\"changed\": true\n    \n}",
 							"options": {
 								"raw": {
 									"language": "json"

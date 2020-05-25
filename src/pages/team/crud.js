@@ -156,7 +156,7 @@ class MemberCrud extends Component {
       onSuccess: ({ slug }) => {
         const { firstname, lastname } = this.state;
         const backPath =
-          slug === null ? '/admin/members' : `/team/member/${slug}`;
+          slug === null ? '/admin/members' : `/team/${slug}`;
 
         setAlert({
           type: 'success',

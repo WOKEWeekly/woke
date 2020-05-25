@@ -70,22 +70,6 @@ describe('Member Tests', function () {
       });
     });
 
-    it('Get only executive members', function (done) {
-      request({
-        url: `/api/v1/members/executives`,
-        method: 'GET',
-        headers: HEADERS.KEY,
-        done,
-        onSuccess: ({ status, data }) => {
-          assert.equal(status, 200);
-          assert.isArray(data);
-          data.forEach((member) => {
-            assert.equal(member.level, 'Executive');
-          });
-        }
-      });
-    });
-
     it('Get only verified members', function (done) {
       request({
         url: `/api/v1/members/verified`,

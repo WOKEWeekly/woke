@@ -60,17 +60,6 @@ exports.getAuthors = (req, res) => {
   });
 };
 
-/** Retrieve only executive team members */
-exports.getExecutives = (req, res) => {
-  const query = knex.select().from('members').where({
-    level: 'Executive',
-    verified: 1
-  });
-  query.asCallback(function (err, executives) {
-    respondToClient(res, err, 200, executives);
-  });
-};
-
 /** Add new team member to database */
 exports.addMember = (req, res) => {
   const member = req.body;

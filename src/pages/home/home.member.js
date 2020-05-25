@@ -62,7 +62,7 @@ export default class RandomMember extends Component {
 
     const isExecutive = member.level === 'Executive';
 
-    const link = `/team/member/${member.slug}`;
+    const link = `/team/${member.slug}`;
     const heading = `Have you met our ${isExecutive ? 'executive' : 'member'}?`;
 
     return (

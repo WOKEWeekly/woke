@@ -248,7 +248,7 @@ module.exports = function (app, conn, knex, server) {
   });
 
   /** Individual team member page */
-  app.get('/team/member/:slug', function (req, res) {
+  app.get('/team/:slug', function (req, res) {
     const { slug } = req.params;
 
     const query = knex.select().from('members').where({
@@ -268,7 +268,7 @@ module.exports = function (app, conn, knex, server) {
       return server.render(req, res, '/team/single', {
         title: `${member.firstname} ${member.lastname} | #WOKEWeekly`,
         description: zText.extractExcerpt(member.description),
-        ogUrl: `/team/member/${member.slug}`,
+        ogUrl: `/team/${member.slug}`,
         cardImage: member.image,
         alt: `${member.firstname} ${member.lastname}`,
         backgroundImage: 'bg-team.jpg',
@@ -706,7 +706,7 @@ module.exports = function (app, conn, knex, server) {
       '/home',
       '/sessions',
       '/blackexcellence',
-      '/executives',
+      '/team',
       '/reviews',
       '/signup'
     ];
@@ -733,21 +733,11 @@ module.exports = function (app, conn, knex, server) {
         },
         function (callback) {
           conn.query(
-            `SELECT slug FROM members WHERE level = 'Executive'`,
-            function (err, result) {
-              if (err) return callback(err);
-              result.forEach((exec) => routes.push(`/executives/${exec.slug}`));
-              callback(null);
-            }
-          );
-        },
-        function (callback) {
-          conn.query(
-            `SELECT slug FROM members WHERE level != 'Executive' AND verified = 1;`,
+            `SELECT slug FROM members WHERE verified = 1;`,
             function (err, result) {
               if (err) return callback(err);
               result.forEach((member) =>
-                routes.push(`/team/member/${member.slug}`)
+                routes.push(`/team/${member.slug}`)
               );
               callback(null);
             }

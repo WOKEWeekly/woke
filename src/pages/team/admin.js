@@ -179,7 +179,7 @@ class IMember extends PureComponent {
       return (
         <button
           className={css.invisible_button}
-          onClick={() => (location.href = `/team/member/${item.slug}`)}>
+          onClick={() => (location.href = `/team/${item.slug}`)}>
           <Icon name={'external-link-alt'} />
         </button>
       );

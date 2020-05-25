@@ -84,7 +84,7 @@ class CandidatePage extends Component {
     const { isLoaded, imageLoaded } = this.state;
 
     const CandidateDetails = () => {
-      const { authorName, authorLevel, authorSlug, dateWritten } = candidate;
+      const { authorName, authorSlug, dateWritten } = candidate;
       const date = zDate.formatDate(dateWritten);
 
       let text = '';
@@ -93,9 +93,7 @@ class CandidatePage extends Component {
       } else if (!authorSlug) {
         text = `Written by ${authorName}, ${date}`;
       } else {
-        let link = '';
-        if (authorLevel === 'Executive') link = `/executives/${authorSlug}`;
-        else link = `/team/member/${authorSlug}`;
+        const link = `/team/${authorSlug}`;
 
         text = (
           <React.Fragment>

@@ -94,7 +94,6 @@ const Member = memo(({ member, index }) => {
     setLoaded(true);
   }, [isLoaded]);
 
-
   const isExecutive = member.level === 'Executive';
   const className = isExecutive ? css.executiveCell : css.memberCell;
 
@@ -104,7 +103,7 @@ const Member = memo(({ member, index }) => {
       duration={750}
       delay={750 + 200 * index}
       className={className}>
-      <VanillaLink href={`/team/member/${member.slug}`}>
+      <VanillaLink href={`/team/${member.slug}`}>
         <div className={css.memberDetails}>
           <CloudinaryImage
             src={member.image}

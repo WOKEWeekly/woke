@@ -41,7 +41,7 @@ const ArticlePage = ({ article, user }) => {
   article.content = article.content.trim() || 'No content.';
 
   const shareMessage = `"${article.title}" by ${authorName} on The #WOKEWeekly Blog`;
-  const link = `team/member/${authorSlug}`;
+  const link = `team/${authorSlug}`;
 
   /**
    * The blog title element.
