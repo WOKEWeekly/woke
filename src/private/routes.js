@@ -236,6 +236,28 @@ module.exports = function (app, conn, knex, server) {
     });
   });
 
+  /** Team page */
+  app.get('/team', function (req, res) {
+    return server.render(req, res, '/team', {
+      title: 'The Team | #WOKEWeekly',
+      description: 'The masterminds behind the cause.',
+      ogUrl: '/team',
+      cardImage: 'public/bg/card-team.jpg',
+      backgroundImage: 'bg-team.jpg'
+    });
+  });
+
+  /** Executives page */
+  app.get('/executives', function (req, res) {
+    return server.render(req, res, '/team/exec', {
+      title: 'Meet The Executives | #WOKEWeekly',
+      description: 'The masterminds behind the cause.',
+      ogUrl: '/executives',
+      cardImage: 'public/bg/card-team.jpg',
+      backgroundImage: 'bg-team.jpg'
+    });
+  });
+
   /** Executives page */
   app.get('/executives', function (req, res) {
     return server.render(req, res, '/team/exec', {
@@ -279,7 +301,7 @@ module.exports = function (app, conn, knex, server) {
 
   /** Team Members page */
   app.get('/admin/members', function (req, res) {
-    return server.render(req, res, '/team', {
+    return server.render(req, res, '/team/admin', {
       title: 'Team Members | #WOKEWeekly',
       backgroundImage: 'bg-team.jpg'
     });
@@ -419,9 +441,26 @@ module.exports = function (app, conn, knex, server) {
   /** Individual blog post */
   app.get('/blog/:slug', function (req, res) {
     const slug = req.params.slug;
-    const sql = SQL.ARTICLES.READ.SINGLE('slug');
 
-    conn.query(sql, [slug], function (err, [article] = []) {
+    const query = knex
+      .columns([
+        'articles.*',
+        {
+          authorName: knex.raw(
+            "CONCAT(members.firstname, ' ', members.lastname)"
+          )
+        },
+        { authorLevel: 'members.level' },
+        { authorSlug: 'members.slug' },
+        { authorImage: 'members.image' },
+        { authorDescription: 'members.description' },
+        { authorSocials: 'members.socials' }
+      ])
+      .select()
+      .from('articles')
+      .where('articles.slug', slug)
+      .leftJoin('members', 'articles.authorId', 'members.id');
+    query.asCallback(function (err, [article] = []) {
       if (err) return renderErrorPage(req, res, err, server);
       if (!article)
         return renderErrorPage(
@@ -460,10 +499,27 @@ module.exports = function (app, conn, knex, server) {
 
   /** Edit article */
   app.get('/admin/articles/edit/:id', function (req, res) {
-    const id = req.params.id;
-    const sql = SQL.ARTICLES.READ.SINGLE('id');
+    const { id } = req.params;
 
-    conn.query(sql, id, function (err, [article] = []) {
+    const query = knex
+      .columns([
+        'articles.*',
+        {
+          authorName: knex.raw(
+            "CONCAT(members.firstname, ' ', members.lastname)"
+          )
+        },
+        { authorLevel: 'members.level' },
+        { authorSlug: 'members.slug' },
+        { authorImage: 'members.image' },
+        { authorDescription: 'members.description' },
+        { authorSocials: 'members.socials' }
+      ])
+      .select()
+      .from('articles')
+      .where('articles.id', id)
+      .leftJoin('members', 'articles.authorId', 'members.id');
+    query.asCallback(function (err, [article] = []) {
       if (err) return renderErrorPage(req, res, err, server);
       if (!article)
         return renderErrorPage(

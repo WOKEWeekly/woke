@@ -2,8 +2,6 @@
 const async = require('async');
 
 const { respondToClient } = require('../../response');
-const SQL = require('../../sql');
-const conn = require('../db').getDb();
 const knex = require('../db').getKnex();
 const filer = require('../../filer');
 const { DIRECTORY, ENTITY } = require('../../../constants/strings');
@@ -11,7 +9,9 @@ const ERROR = require('../../errors');
 
 /** Retrieve all team members */
 exports.getAllMembers = (req, res) => {
-  const query = knex.select().from('members');
+  const { verified } = req.query;
+  let query = knex.select().from('members');
+  if (verified) query = query.where('verified', 1);
   query.asCallback(function (err, members) {
     respondToClient(res, err, 200, members);
   });
@@ -38,6 +38,17 @@ exports.getRandomMember = (req, res) => {
     .limit(1);
   query.asCallback(function (err, [member] = []) {
     respondToClient(res, err, 200, member);
+  });
+};
+
+/** Get only verified members */
+exports.getVerifiedMembers = (req, res) => {
+  const query = knex
+    .select()
+    .from('members')
+    .where('verified', 1);
+  query.asCallback(function (err, members) {
+    respondToClient(res, err, 200, members);
   });
 };
 

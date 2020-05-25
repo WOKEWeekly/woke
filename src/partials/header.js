@@ -2,17 +2,19 @@ import React, { Component } from 'react';
 import { Container, Col, Row, Dropdown, Nav, Navbar } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { clearUser } from '~/reducers/actions';
 
-import { setAlert, checkAlert } from '~/components/alert.js';
-import { Icon, HeaderIcon } from '~/components/icon';
-import { Default, Mobile, zIndices } from '~/components/layout';
+import { clearUser } from '@reducers/actions';
 
-import CLEARANCES from '~/constants/clearances.js';
-import { accounts, cloudinary } from '~/constants/settings.js';
+import { setAlert, checkAlert } from '@components/alert.js';
+import { Icon, HeaderIcon } from '@components/icon';
+import { Default, Mobile, zIndices } from '@components/layout';
 
-import Login from '~/pages/_auth/login';
-import css from '~/styles/Partials.module.scss';
+import CLEARANCES from '@constants/clearances.js';
+import { accounts, cloudinary } from '@constants/settings.js';
+
+import Login from '@pages/_auth/login';
+
+import css from '@styles/Partials.module.scss';
 
 /** Little top bar for social media icons and account details */
 class PreNavbar extends Component {
@@ -187,24 +189,24 @@ export class MainNavbar extends Component {
             <Nav.Link href="/about" className={classes}>
               About Us
             </Nav.Link>
+            <Nav.Link href="/team" className={classes}>
+              The Team
+            </Nav.Link>
             <Nav.Link href="/sessions" className={classes}>
               Sessions
             </Nav.Link>
             <Nav.Link href="/reviews" className={classes}>
               Reviews
             </Nav.Link>
+            <Nav.Link href="/blackexcellence" className={classes}>
+              #BlackExcellence
+            </Nav.Link>
             {user.clearance >= CLEARANCES.ACTIONS.VIEW_TOPICS ? (
               <Nav.Link href="/topics" className={classes}>
                 Topic Bank
               </Nav.Link>
             ) : null}
-            <Nav.Link href="/blackexcellence" className={classes}>
-              #BlackExcellence
-            </Nav.Link>
             {/* <Nav.Link href="/mentalhealth" className={classes}>Mental Health</Nav.Link> */}
-            <Nav.Link href="/executives" className={classes}>
-              The Executives
-            </Nav.Link>
           </Nav>
         </Navbar.Collapse>
       </Navbar>

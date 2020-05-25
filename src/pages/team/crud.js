@@ -60,12 +60,7 @@ class MemberCrud extends Component {
       const ethnicityArr = JSON.parse(ethnicity);
       const isExecutive = level === 'Executive';
 
-      /** If in /add, or user if not verified, return to admin console */
-      if (verified) {
-        backPath = isExecutive ? `/executives/${slug}` : `/team/member/${slug}`;
-      } else {
-        backPath = '/admin/members';
-      }
+      backPath = '/admin/members';
 
       /** Populate ethnicity array */
       const ethnicities = {};

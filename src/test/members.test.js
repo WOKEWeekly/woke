@@ -86,6 +86,22 @@ describe('Member Tests', function () {
       });
     });
 
+    it('Get only verified members', function (done) {
+      request({
+        url: `/api/v1/members/verified`,
+        method: 'GET',
+        headers: HEADERS.KEY,
+        done,
+        onSuccess: ({ status, data }) => {
+          assert.equal(status, 200);
+          assert.isArray(data);
+          data.forEach((member) => {
+            assert.equal(member.verified, true);
+          });
+        }
+      });
+    });
+
     it('Get single member', function (done) {
       request({
         url: `/api/v1/members/${MEMBER_ID}`,

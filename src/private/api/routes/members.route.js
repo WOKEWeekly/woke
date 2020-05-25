@@ -25,6 +25,9 @@ router.get('/authors', validateReq, MembersController.getAuthors);
 /** GET only executive members */
 router.get('/executives', validateReq, MembersController.getExecutives);
 
+/** GET only verified members */
+router.get('/verified', validateReq, MembersController.getVerifiedMembers);
+
 /** POST new member */
 router.post('/', authorize, MembersController.addMember);
 

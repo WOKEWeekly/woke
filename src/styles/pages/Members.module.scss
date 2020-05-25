@@ -1,11 +1,60 @@
-@import "../Variables";
+@import '../Variables';
 
 /************
 *** index.js
 *************/
 
+.heading {
+  @include font-scaler(1.5);
+  border-bottom: 1px solid #ccc;
+  border-top: 1px solid #ccc;
+  margin: 0.5em 0;
+  padding: 0.5em 0;
+  text-align: center;
+  // text-transform: uppercase;
+}
+
+.memberBlock {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  text-align: center;
+
+  .memberCell {
+    padding: 1em;
+    width: calc(100% / 3);
+    @media (max-width: $break-md) {
+      width: 50%;
+    }
+  
+    .memberDetails {
+      @include scale-on-hover(1.1);
+      .memberImage {
+        border-radius: 50%;
+        overflow: hidden;
+        width: 100%;
+        margin-bottom: .5em;
+      }
+  
+      .memberName {
+        @include font-scaler(1.2);
+      }
+  
+      .memberRole {
+        @include font-scaler(1);
+      }
+    }
+    
+  }
+}
+
+/************
+*** admin.js
+*************/
+
 .memberTabler {
-  @include entityTabler(4% 15% 4% .6fr 1.3fr 1fr .8fr 4% 4% 4%);
+  @include entityTabler(4% 15% 4% 0.6fr minmax(150px, 0) 1fr 0.8fr 4% 4% 4%);
 }
 
 .userTabler {
@@ -18,30 +67,49 @@
 
 .list {
   overflow-x: hidden;
+
   .item {
     @include scale-on-hover(1.03);
     cursor: pointer;
     margin: 0.8em 0;
     overflow: hidden;
+
     .image {
-      border: .1em inset rgb(235, 235, 235);
-      border-radius: 45%; 
+      border: 0.1em inset rgb(235, 235, 235);
+      border-radius: 45%;
       width: 100%;
       @media (max-width: $break-md) {
         border: none;
-        border-radius: 10%; } }
+        border-radius: 10%;
+      }
+    }
+
     .details {
       padding: 1em;
-      @media (max-width: $break-md) { padding: 1em 0; }
+      @media (max-width: $break-md) {
+        padding: 1em 0;
+      }
+
       .title {
         font-size: 1.6em;
-        @media (max-width: $break-md) { font-size: 1.4em; }}
+        @media (max-width: $break-md) {
+          font-size: 1.4em;
+        }
+      }
+
       .subtitle {
         font-size: 1.2em;
-        @media (max-width: $break-md) { font-size: 1em; }}
+        @media (max-width: $break-md) {
+          font-size: 1em;
+        }
+      }
+
       .paragraph {
         font-size: 1.2em;
-        @media (max-width: $break-md) { font-size: 1em; }}
+        @media (max-width: $break-md) {
+          font-size: 1em;
+        }
+      }
     }
   }
 }
@@ -50,10 +118,14 @@
 *** single.js
 *************/
 
-.entity { @include entity(left, 55vh); }
+.entity {
+  @include entity(left, 55vh);
+}
 
 /*************
 *** form.js
 *************/
 
-.form { @extend .responsive-form; }
+.form {
+  @extend .responsive-form;
+}

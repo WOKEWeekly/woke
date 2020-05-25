@@ -48,6 +48,9 @@ rules:
         - pattern: "@constants/**"
           group: internal
           position: after
+        - pattern: "@pages/**"
+          group: internal
+          position: after
         - pattern: "@styles/**"
           group: internal
           position: after

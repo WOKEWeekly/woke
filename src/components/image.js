@@ -1,6 +1,6 @@
 /* eslint-disable import/order */
 import React from 'react';
-import { cloudinary } from '@constants/settings.js';
+import { Image, CloudinaryContext, Transformation } from 'cloudinary-react';
 
 /**
  * Constants for Cloudinary lazy transformations.
@@ -8,23 +8,27 @@ import { cloudinary } from '@constants/settings.js';
  * Shape: s = square, w = wide
  */
 export const TRANSFORMATIONS = {
-  ss: '/w_400,h_400,c_fill',
-  sw: '/w_1280,h_720,c_fill',
-  ms: '/w_800,h_800,c_fill',
-  mw: '/w_1280,h_720,c_fill'
+  ss: { width: 400, height: 400 },
+  sw: { width: 640, height: 360 },
+  ms: { width: 800, height: 800 },
+  mw: { width: 1280, height: 720 },
 };
 
 export const CloudinaryImage = ({ src, lazy = '', alt, title, className }) => {
   if (!src) return null;
-  const params = lazy ? TRANSFORMATIONS[lazy] : '';
+  const { width, height } = lazy ? TRANSFORMATIONS[lazy] : {};
   return (
     <div className={className}>
-      <img
-        src={`${cloudinary.url}${params}/${src}`}
-        alt={alt}
-        title={title}
-        style={{ width: '100%' }}
-      />
+      <CloudinaryContext cloudName={'wokeweekly'}>
+        <Image
+          publicId={src}
+          alt={alt}
+          title={title}
+          width={'100%'}
+          >
+          <Transformation width={width} height={height} crop={'scale'} />
+        </Image>
+      </CloudinaryContext>
     </div>
   );
 };
