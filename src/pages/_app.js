@@ -42,9 +42,6 @@ export default class WOKE extends App {
       theme = 'default'
     } = this.props.router.query;
 
-    // Set the theme
-    store.dispatch(setTheme(theme));
-
     // Fade background image into view
     const image = new Image();
     image.src = `${cloudinary.url}/public/bg/${backgroundImage}`;
@@ -59,23 +56,18 @@ export default class WOKE extends App {
     // Loaded countries if not already loaded
     const countries = store.getState().countries;
     if (!countries.length) {
-      this.preloadCountries();
+      loadCountries().then((data) => {
+        const countries = [];
+        data.forEach((country) => {
+          countries.push({ label: country.name, demonym: country.demonym });
+        });
+        store.dispatch(saveCountries(countries));
+        this.setState({ isLoaded: true }, () => store.dispatch(setTheme(theme)));
+      });
     } else {
-      this.setState({ isLoaded: true });
+      this.setState({ isLoaded: true }, () => store.dispatch(setTheme(theme)));
     }
   }
-
-  /** Save country list in Redux store */
-  preloadCountries = () => {
-    loadCountries().then((data) => {
-      const countries = [];
-      data.forEach((country) => {
-        countries.push({ label: country.name, demonym: country.demonym });
-      });
-      store.dispatch(saveCountries(countries));
-      this.setState({ isLoaded: true });
-    });
-  };
 
   acceptCookies = () => {
     setCookie('cookiesAccepted', true, 365 * 24);

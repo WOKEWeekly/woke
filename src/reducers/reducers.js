@@ -109,11 +109,7 @@ const countryReducer = (state = [], action) => {
   }
 };
 
-const defaultTheme = {
-  theme: 'default'
-};
-
-const themeReducer = (state = defaultTheme, action) => {
+const themeReducer = (state = 'default', action) => {
   switch (action.type) {
     case 'SET_THEME':
       return action.payload;
