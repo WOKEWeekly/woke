@@ -240,69 +240,9 @@ module.exports = function (app, conn, knex, server) {
   app.get('/team', function (req, res) {
     return server.render(req, res, '/team', {
       title: 'The Team | #WOKEWeekly',
-      description: 'The masterminds behind the cause.',
+      description: 'Explore the profiles of the very members who make #WOKE what it is today.',
       ogUrl: '/team',
       cardImage: 'public/bg/card-team.jpg',
-      backgroundImage: 'bg-team.jpg'
-    });
-  });
-
-  /** Executives page */
-  app.get('/executives', function (req, res) {
-    return server.render(req, res, '/team/exec', {
-      title: 'Meet The Executives | #WOKEWeekly',
-      description: 'The masterminds behind the cause.',
-      ogUrl: '/executives',
-      cardImage: 'public/bg/card-team.jpg',
-      backgroundImage: 'bg-team.jpg'
-    });
-  });
-
-  /** Executives page */
-  app.get('/executives', function (req, res) {
-    return server.render(req, res, '/team/exec', {
-      title: 'Meet The Executives | #WOKEWeekly',
-      description: 'The masterminds behind the cause.',
-      ogUrl: '/executives',
-      cardImage: 'public/bg/card-team.jpg',
-      backgroundImage: 'bg-team.jpg'
-    });
-  });
-
-  /** Individual executive page */
-  app.get('/executives/:slug', function (req, res) {
-    const { slug } = req.params;
-
-    const query = knex.select().from('members').where({
-      slug: slug,
-      level: 'Executive',
-      verified: 1
-    });
-    query.asCallback(function (err, [executive] = []) {
-      if (err) return renderErrorPage(req, res, err, server);
-      if (!executive)
-        return renderErrorPage(
-          req,
-          res,
-          ERROR.NONEXISTENT_ENTITY(ENTITY.MEMBER),
-          server
-        );
-
-      return server.render(req, res, '/team/single', {
-        title: `${executive.firstname} ${executive.lastname} | #WOKEWeekly`,
-        description: zText.extractExcerpt(executive.description),
-        ogUrl: `/executives/${executive.slug}`,
-        cardImage: executive.image,
-        backgroundImage: 'bg-team.jpg',
-        member: executive
-      });
-    });
-  });
-
-  /** Team Members page */
-  app.get('/admin/members', function (req, res) {
-    return server.render(req, res, '/team/admin', {
-      title: 'Team Members | #WOKEWeekly',
       backgroundImage: 'bg-team.jpg'
     });
   });
@@ -334,6 +274,14 @@ module.exports = function (app, conn, knex, server) {
         backgroundImage: 'bg-team.jpg',
         member
       });
+    });
+  });
+
+  /** Team Members page */
+  app.get('/admin/members', function (req, res) {
+    return server.render(req, res, '/team/admin', {
+      title: 'Team Members | #WOKEWeekly',
+      backgroundImage: 'bg-team.jpg'
     });
   });
 

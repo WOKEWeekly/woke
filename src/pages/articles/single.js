@@ -33,7 +33,6 @@ const ArticlePage = ({ article, user }) => {
   const {
     authorName,
     authorImage,
-    authorLevel,
     authorSlug,
     authorDescription,
     authorSocials,
@@ -42,8 +41,7 @@ const ArticlePage = ({ article, user }) => {
   article.content = article.content.trim() || 'No content.';
 
   const shareMessage = `"${article.title}" by ${authorName} on The #WOKEWeekly Blog`;
-  const isExecutive = authorLevel === 'Executive';
-  const link = `/${isExecutive ? 'executives' : 'team/member'}/${authorSlug}`;
+  const link = `team/member/${authorSlug}`;
 
   /**
    * The blog title element.

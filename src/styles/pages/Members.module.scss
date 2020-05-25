@@ -11,41 +11,48 @@
   margin: 0.5em 0;
   padding: 0.5em 0;
   text-align: center;
-  // text-transform: uppercase;
 }
 
 .memberBlock {
-  align-items: center;
+  align-items: baseline;
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
   text-align: center;
 
-  .memberCell {
+  .executiveCell {
     padding: 1em;
-    width: calc(100% / 3);
+    width: 30%;
     @media (max-width: $break-md) {
       width: 50%;
     }
-  
-    .memberDetails {
-      @include scale-on-hover(1.1);
-      .memberImage {
-        border-radius: 50%;
-        overflow: hidden;
-        width: 100%;
-        margin-bottom: .5em;
-      }
-  
-      .memberName {
-        @include font-scaler(1.2);
-      }
-  
-      .memberRole {
-        @include font-scaler(1);
-      }
+  }
+
+  .memberCell {
+    padding: 1em;
+    width: 25%;
+    @media (max-width: $break-md) {
+      width: 50%;
     }
-    
+  }
+
+  .memberDetails {
+    @include scale-on-hover(1.1);
+
+    .memberImage {
+      border-radius: 50%;
+      margin-bottom: 0.5em;
+      overflow: hidden;
+      width: 100%;
+    }
+
+    .memberName {
+      @include font-scaler(1.2);
+    }
+
+    .memberRole {
+      @include font-scaler(1);
+    }
   }
 }
 
