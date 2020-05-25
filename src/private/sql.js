@@ -164,110 +164,6 @@ const CANDIDATES = {
   DELETE: 'DELETE FROM candidates WHERE id = ?'
 };
 
-const MEMBERS = {
-  /**
-   * Constructs the SQL statement to create a member.
-   * @param {object} member - The object containing the member details.
-   * @returns {object} The SQL statement and the values.
-   */
-  CREATE: (member) => {
-    const sql =
-      'INSERT INTO members (firstname, lastname, image, level, birthday, sex, role, ethnicity, socials, slug, description, verified, slackId, isAuthor) VALUES ?';
-    const values = [
-      [
-        member.firstname,
-        member.lastname,
-        member.image,
-        member.level,
-        member.birthday,
-        member.sex,
-        member.role,
-        member.ethnicity,
-        member.socials,
-        member.slug,
-        member.description,
-        member.verified,
-        member.slackId,
-        member.isAuthor
-      ]
-    ];
-    return { sql, values };
-  },
-  READ: {
-    /**
-     * Constructs the SQL statement to return information for all members.
-     * @param {string} [fields] - The fields to be queried.
-     * @returns {string} The constructed statement.
-     */
-    ALL: (fields = '*') => {
-      return `SELECT ${fields} FROM members`;
-    },
-
-    /**
-     * Constructs the SQL statement to return information for a single candidate.
-     * @param {string} [fields] - The fields to be queried.
-     * @returns {string} The constructed statement.
-     */
-    SINGLE: (fields = '*') => {
-      const sql = `SELECT ${fields} FROM members WHERE ID = ?`;
-      return sql;
-    },
-
-    /** The SQL statement to return a random verified member. */
-    RANDOM: 'SELECT * FROM members WHERE verified = 1 ORDER BY RAND() LIMIT 1',
-
-    /** The SQL statement to retrieve all executive members. */
-    AUTHORS: 'SELECT * FROM members WHERE isAuthor = 1',
-
-    /** The SQL statement to retrieve all executive members. */
-    EXECUTIVES:
-      "SELECT * FROM members WHERE level = 'Executive' AND verified = 1",
-
-    SLUG: 'SELECT * FROM members WHERE slug = ?',
-    EXECUTIVES_SLUG:
-      "SELECT * FROM members WHERE slug = ? AND level = 'Executive' AND verified = 1"
-  },
-  /**
-   * Constructs the SQL statement to update a member.
-   * @param {number} id - The identifier of the member.
-   * @param {object} member - The object containing the member details.
-   * @param {boolean} imageHasChanged - Indicates whether the image has
-   * changed in this request.
-   * @returns {object} The SQL statement and the values.
-   */
-  UPDATE: (id, member, imageHasChanged) => {
-    let sql =
-      'UPDATE members SET firstname = ?, lastname = ?, image = ?, level = ?, birthday = ?, sex = ?, role = ?, ethnicity = ?, socials = ?, slug = ?, description = ?, verified = ?, slackId = ?, isAuthor = ? WHERE id = ?';
-    let values = [
-      member.firstname,
-      member.lastname,
-      member.image,
-      member.level,
-      member.birthday,
-      member.sex,
-      member.role,
-      member.ethnicity,
-      member.socials,
-      member.slug,
-      member.description,
-      member.verified,
-      member.slackId,
-      member.isAuthor,
-      id
-    ];
-
-    if (imageHasChanged) {
-      sql = appendFieldToUpdateQuery('image', sql);
-      values = insertFieldInValues(member.image, values);
-    }
-
-    return { sql, values };
-  },
-
-  /** The SQL statement to delete a member. */
-  DELETE: 'DELETE FROM members WHERE id = ?'
-};
-
 const TOPICS = {
   /**
    * Constructs the SQL statement to create a topic.
@@ -546,7 +442,6 @@ const TOKENS = {
 
 module.exports = {
   CANDIDATES,
-  MEMBERS,
   PAGES,
   REVIEWS,
   SESSIONS,

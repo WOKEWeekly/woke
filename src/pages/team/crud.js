@@ -45,7 +45,7 @@ class MemberCrud extends Component {
     if (operation === 'add') {
       this.setState({
         ...this.props.member,
-        backPath: '/team'
+        backPath: '/admin/members'
       });
     } else {
       const {
@@ -60,12 +60,7 @@ class MemberCrud extends Component {
       const ethnicityArr = JSON.parse(ethnicity);
       const isExecutive = level === 'Executive';
 
-      /** If in /add, or user if not verified, return to /team */
-      if (verified) {
-        backPath = isExecutive ? `/executives/${slug}` : `/team/member/${slug}`;
-      } else {
-        backPath = '/team';
-      }
+      backPath = '/admin/members';
 
       /** Populate ethnicity array */
       const ethnicities = {};
@@ -100,7 +95,7 @@ class MemberCrud extends Component {
     } = this.state;
     const { operation } = this.props;
 
-    if (!verified) this.setState({ backPath: '/team' });
+    if (!verified) this.setState({ backPath: '/admin/members' });
 
     /** Add ethncities to array */
     const ethnicities = [];
@@ -175,7 +170,7 @@ class MemberCrud extends Component {
         const isExecutive = level === 'Executive';
         const backPath =
           slug === null
-            ? '/team'
+            ? '/admin/members'
             : isExecutive
             ? `/executives/${slug}`
             : `/team/member/${slug}`;

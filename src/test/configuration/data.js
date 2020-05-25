@@ -91,8 +91,7 @@ exports.TEST_MEMBERS = {
     description: 'An added member through service tests.',
     verified: true,
     slackId: null,
-    isAuthor: true,
-    excerpt: 'Sally is an amazing woman.'
+    isAuthor: true
   },
   UPDATED: {
     firstname: 'Lolly',
@@ -110,8 +109,7 @@ exports.TEST_MEMBERS = {
     description: 'An updated member through service tests.',
     verified: true,
     slackId: null,
-    isAuthor: true,
-    excerpt: 'Lolly is an adorable woman.'
+    isAuthor: true
   }
 };
 

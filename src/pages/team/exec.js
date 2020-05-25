@@ -1,23 +1,22 @@
 import React, { Component, PureComponent } from 'react';
 import { Container, Col, Row } from 'react-bootstrap';
+import { zText } from 'zavid-modules';
 
-import { Cover, Shader, Spacer } from '~/components/layout.js';
-import { Loader, Empty } from '~/components/loader.js';
+import { Cover, Shader, Spacer } from '@components/layout.js';
+import { Loader, Empty } from '@components/loader.js';
 import {
   Title,
   Subtitle,
   Divider,
   Paragraph,
   VanillaLink
-} from '~/components/text.js';
-import { Slider } from '~/components/transitioner.js';
+} from '@components/text.js';
+import { Slider } from '@components/transitioner.js';
 
-import request from '~/constants/request.js';
-import { cloudinary } from '~/constants/settings.js';
+import request from '@constants/request.js';
+import { cloudinary } from '@constants/settings.js';
 
-import { zText } from 'zavid-modules';
-
-import css from '~/styles/pages/Members.module.scss';
+import css from '@styles/pages/Members.module.scss';
 
 export default class Executives extends Component {
   constructor() {

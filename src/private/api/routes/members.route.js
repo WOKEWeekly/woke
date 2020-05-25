@@ -14,7 +14,7 @@ router.get(
   MembersController.getAllMembers
 );
 /** GET single member by ID */
-router.get('/:id([0-9]+)', validateReq, MembersController.getMember);
+router.get('/:id([0-9]+)', validateReq, MembersController.getSingleMember);
 
 /** GET random member */
 router.get('/random', validateReq, MembersController.getRandomMember);
@@ -24,6 +24,9 @@ router.get('/authors', validateReq, MembersController.getAuthors);
 
 /** GET only executive members */
 router.get('/executives', validateReq, MembersController.getExecutives);
+
+/** GET only verified members */
+router.get('/verified', validateReq, MembersController.getVerifiedMembers);
 
 /** POST new member */
 router.post('/', authorize, MembersController.addMember);
