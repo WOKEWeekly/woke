@@ -240,7 +240,7 @@ module.exports = function (app, conn, knex, server) {
   app.get('/team', function (req, res) {
     return server.render(req, res, '/team', {
       title: 'The Team | #WOKEWeekly',
-      description: 'The masterminds behind the cause.',
+      description: 'Explore the profiles of the very members who make #WOKE what it is today.',
       ogUrl: '/team',
       cardImage: 'public/bg/card-team.jpg',
       backgroundImage: 'bg-team.jpg'

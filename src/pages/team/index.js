@@ -12,7 +12,8 @@ import request from '@constants/request.js';
 import css from '@styles/pages/Members.module.scss';
 
 const heading = 'Meet The Team';
-const description = 'The masterminds behind the cause.';
+const description =
+  'Explore the profiles of the very members who make #WOKE what it is today.';
 
 export const Team = () => {
   const [isLoaded, setLoaded] = useState(false);
@@ -93,20 +94,24 @@ const Member = memo(({ member, index }) => {
     setLoaded(true);
   }, [isLoaded]);
 
+
+  const isExecutive = member.level === 'Executive';
+  const className = isExecutive ? css.executiveCell : css.memberCell;
+
   return (
     <Fader
       determinant={isLoaded}
       duration={750}
       delay={750 + 200 * index}
-      className={css.memberCell}>
+      className={className}>
       <VanillaLink href={`/team/member/${member.slug}`}>
         <div className={css.memberDetails}>
-        <CloudinaryImage
-          src={member.image}
-          alt={member.firstname}
-          lazy={'ms'}
-          className={css.memberImage}
-        />
+          <CloudinaryImage
+            src={member.image}
+            alt={member.firstname}
+            lazy={'ms'}
+            className={css.memberImage}
+          />
           <Title className={css.memberName}>
             {member.firstname} {member.lastname}
           </Title>
