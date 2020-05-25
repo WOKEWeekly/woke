@@ -4,6 +4,8 @@ const jwt = require('jsonwebtoken');
 const { respondToClient } = require('./response.js');
 const ERROR = require('./errors.js');
 
+const isDev = process.env.NODE_ENV !== 'production';
+
 module.exports = {
   /** Verify access tokens */
   verifyToken: (threshold) => {
@@ -13,7 +15,7 @@ module.exports = {
           function (callback) {
             // Retrieve token from request
             const { admission, authorization } = req.headers;
-            if (admission === 'true') return next();
+            if (admission === 'true' && isDev) return next();
 
             if (typeof authorization !== 'undefined') {
               const token = authorization.split(' ')[1];
