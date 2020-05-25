@@ -40,27 +40,17 @@ class MemberCrud extends Component {
 
   componentDidMount() {
     const { operation } = this.props;
-    let backPath = '';
+    const backPath = '/admin/members';
 
     if (operation === 'add') {
       this.setState({
         ...this.props.member,
-        backPath: '/admin/members'
+        backPath
       });
     } else {
-      const {
-        level,
-        birthday,
-        ethnicity,
-        socials,
-        slug,
-        verified
-      } = this.props.member;
+      const { birthday, ethnicity, socials } = this.props.member;
 
       const ethnicityArr = JSON.parse(ethnicity);
-      const isExecutive = level === 'Executive';
-
-      backPath = '/admin/members';
 
       /** Populate ethnicity array */
       const ethnicities = {};
@@ -94,8 +84,6 @@ class MemberCrud extends Component {
       isAuthor
     } = this.state;
     const { operation } = this.props;
-
-    if (!verified) this.setState({ backPath: '/admin/members' });
 
     /** Add ethncities to array */
     const ethnicities = [];
@@ -166,14 +154,9 @@ class MemberCrud extends Component {
       body: data,
       headers: { Authorization: `Bearer ${this.props.user.token}` },
       onSuccess: ({ slug }) => {
-        const { firstname, lastname, level } = this.state;
-        const isExecutive = level === 'Executive';
+        const { firstname, lastname } = this.state;
         const backPath =
-          slug === null
-            ? '/admin/members'
-            : isExecutive
-            ? `/executives/${slug}`
-            : `/team/member/${slug}`;
+          slug === null ? '/admin/members' : `/team/member/${slug}`;
 
         setAlert({
           type: 'success',

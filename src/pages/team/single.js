@@ -3,20 +3,20 @@ import { Container } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { zDate } from 'zavid-modules';
 
-import { EditEntityButton, BackButton } from '~/components/button.js';
-import { PromoIconsBar } from '~/components/icon.js';
-import { Title, Subtitle, Paragraph, Divider } from '~/components/text.js';
-import { BottomToolbar } from '~/components/toolbar.js';
-import { Shader, Spacer } from '~/components/layout.js';
-import { Fader, Slider } from '~/components/transitioner.js';
+import { EditEntityButton, BackButton } from '@components/button.js';
+import { PromoIconsBar } from '@components/icon.js';
+import { Shader, Spacer } from '@components/layout.js';
+import { Title, Subtitle, Paragraph, Divider } from '@components/text.js';
+import { BottomToolbar } from '@components/toolbar.js';
+import { Fader, Slider } from '@components/transitioner.js';
 
-import CLEARANCES from '~/constants/clearances.js';
-import { countriesToString } from '~/constants/countries.js';
-import { cloudinary } from '~/constants/settings.js';
-import css from '~/styles/pages/Members.module.scss';
+import CLEARANCES from '@constants/clearances.js';
+import { countriesToString } from '@constants/countries.js';
+import { cloudinary } from '@constants/settings.js';
+
+import css from '@styles/pages/Members.module.scss';
 
 class MemberPage extends Component {
-  /** Retrieve member from server */
   static async getInitialProps({ query }) {
     return { member: query.member };
   }
@@ -39,7 +39,7 @@ class MemberPage extends Component {
     const { member, user, countries } = this.props;
     member.fullname = `${member.firstname} ${member.lastname}`;
     member.description =
-      member.description && member.description.trim().length > 0
+      member.description && member.description.trim().length
         ? member.description
         : 'No description.';
     member.age = zDate.calculateAge(member.birthday);
@@ -47,8 +47,6 @@ class MemberPage extends Component {
       JSON.parse(member.ethnicity),
       countries
     );
-
-    const isExecutive = member.level === 'Executive';
 
     return (
       <Spacer>
@@ -83,16 +81,14 @@ class MemberPage extends Component {
         </Shader>
 
         <BottomToolbar>
-          {isExecutive ? (
-            <BackButton
-              title={'Back to Executives'}
-              onClick={() => (location.href = '/executives')}
-            />
-          ) : null}
+          <BackButton
+            title={'Back to Team'}
+            onClick={() => (location.href = '/team')}
+          />
 
           {user.clearance >= CLEARANCES.ACTIONS.CRUD_TEAM ? (
             <EditEntityButton
-              title={isExecutive ? 'Edit Executive' : 'Edit Member'}
+              title={'Edit Member'}
               onClick={() => (location.href = `/admin/members/edit/${member.id}`)}
             />
           ) : null}
