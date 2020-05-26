@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import classNames from 'classnames';
-import css from '~/styles/components/Voter.module.scss';
+import css from '@styles/components/Voter.module.scss';
 
-import { Mover } from '~/components/transitioner.js';
+import { Mover } from '@components/transitioner.js';
 
 /** For voting widgets */
 export class Voter extends Component {

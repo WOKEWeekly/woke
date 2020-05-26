@@ -11,7 +11,7 @@ import {
   WhatsappIcon
 } from 'react-share';
 
-import css from '~/styles/components/Icon.module.scss';
+import css from '@styles/components/Icon.module.scss';
 
 export class SocialMediaShareBlock extends Component {
   render() {

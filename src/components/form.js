@@ -3,12 +3,12 @@ import { connect } from 'react-redux';
 import { Form, Row, Overlay, Tooltip } from 'react-bootstrap';
 import classNames from 'classnames';
 
-import { Icon } from '~/components/icon.js';
-import { Title } from '~/components/text.js';
-import { Fader, Zoomer } from '~/components/transitioner.js';
-import { cloudinary } from '~/constants/settings.js';
+import { Icon } from '@components/icon.js';
+import { Title } from '@components/text.js';
+import { Fader, Zoomer } from '@components/transitioner.js';
+import { cloudinary } from '@constants/settings.js';
 
-import css from '~/styles/components/Form.module.scss';
+import css from '@styles/components/Form.module.scss';
 import { zForm, zText } from 'zavid-modules';
 
 /** For the form heading */

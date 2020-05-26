@@ -1,15 +1,15 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-import { alert } from '~/components/alert.js';
-import { SubmitButton } from '~/components/button.js';
-import { Icon } from '~/components/icon';
-import { Shader } from '~/components/layout.js';
-import { ConfirmModal } from '~/components/modal.js';
+import { alert } from '@components/alert.js';
+import { SubmitButton } from '@components/button.js';
+import { Icon } from '@components/icon';
+import { Shader } from '@components/layout.js';
+import { ConfirmModal } from '@components/modal.js';
 
-import { domain } from '~/constants/settings.js';
-import request from '~/constants/request.js';
-import css from '~/styles/Auth.module.scss';
+import { domain } from '@constants/settings.js';
+import request from '@constants/request.js';
+import css from '@styles/Auth.module.scss';
 
 class Admin extends Component {
   constructor(props) {

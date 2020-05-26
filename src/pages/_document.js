@@ -1,6 +1,6 @@
 import React from 'react';
 import Document, { Html, Head, Main, NextScript } from 'next/document';
-import { cloudinary, domain } from '~/constants/settings.js';
+import { cloudinary, domain } from '@constants/settings.js';
 import { zText } from 'zavid-modules';
 
 export default class MyDocument extends Document {

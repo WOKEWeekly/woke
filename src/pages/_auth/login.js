@@ -1,23 +1,23 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { saveUser } from '~/reducers/actions';
+import { saveUser } from '@reducers/actions';
 
-import { setAlert } from '~/components/alert.js';
-import { SubmitButton, CancelButton } from '~/components/button.js';
+import { setAlert } from '@components/alert.js';
+import { SubmitButton, CancelButton } from '@components/button.js';
 import {
   Group,
   Label,
   UsernameInput,
   PasswordInput,
   Checkbox
-} from '~/components/form.js';
-import { Modal } from '~/components/modal.js';
+} from '@components/form.js';
+import { Modal } from '@components/modal.js';
 
-import { setCookie, getCookie } from '~/constants/cookies';
-import request from '~/constants/request.js';
-import { isValidLogin } from '~/constants/validations.js';
-import css from '~/styles/Auth.module.scss';
+import { setCookie, getCookie } from '@constants/cookies';
+import request from '@constants/request.js';
+import { isValidLogin } from '@constants/validations.js';
+import css from '@styles/Auth.module.scss';
 
 class LoginModal extends Component {
   constructor(props) {
