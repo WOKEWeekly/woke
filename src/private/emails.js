@@ -1,6 +1,7 @@
-const { config } = require('../server.js');
 const nodemailer = require('nodemailer');
+
 let { cloudinary, domain, emails } = require('../constants/settings.js');
+const { config } = require('../server.js');
 
 require('dotenv').config({ path: config });
 

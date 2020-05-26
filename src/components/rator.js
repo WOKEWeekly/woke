@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
+
+import css from '@styles/components/Form.module.scss';
+
 import { Icon } from './icon.js';
-import css from '~/styles/components/Form.module.scss';
 
 export default class Rator extends Component {
   constructor(props) {

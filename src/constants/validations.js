@@ -1,7 +1,8 @@
-import { alert } from '~/components/alert.js';
+import { alert } from '@components/alert.js';
+
 import { checkCookies } from './cookies';
-import { ARTICLE_STATUS } from './strings';
 import { limits } from './settings';
+import { ARTICLE_STATUS } from './strings';
 
 module.exports = {
   /**

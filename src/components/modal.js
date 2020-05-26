@@ -1,19 +1,20 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
 import { Col, Modal as DefaultModal } from 'react-bootstrap';
+import { connect } from 'react-redux';
 import { zHandlers } from 'zavid-modules';
 
 import {
   SubmitButton,
   CancelButton,
   DeleteButton
-} from '~/components/button.js';
-import { Group, Label, Select, UsernameInput } from '~/components/form.js';
-import { SocialIcon } from '~/components/icon.js';
-import { Paragraph } from '~/components/text.js';
-import css from '~/styles/components/Modal.module.scss';
+} from '@components/button.js';
+import { Group, Label, Select, UsernameInput } from '@components/form.js';
+import { SocialIcon } from '@components/icon.js';
+import { Paragraph } from '@components/text.js';
 
-import { socialPlatforms } from '~/constants/settings';
+import { socialPlatforms } from '@constants/settings';
+
+import css from '@styles/components/Modal.module.scss';
 
 export class Modal extends Component {
   render() {

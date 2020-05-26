@@ -1,8 +1,8 @@
 const async = require('async');
 const jwt = require('jsonwebtoken');
 
-const { respondToClient } = require('./response.js');
 const ERROR = require('./errors.js');
+const { respondToClient } = require('./response.js');
 
 const isDev = process.env.NODE_ENV !== 'production';
 

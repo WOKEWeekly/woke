@@ -1,5 +1,6 @@
-const { startTestServer, isStageTesting, port } = require('../../server.js');
 const axios = require('axios');
+
+const { startTestServer, isStageTesting, port } = require('../../server.js');
 axios.defaults.baseURL = `http://localhost:${port}`;
 
 // If staging environment, start server before running tests.
@@ -23,8 +24,8 @@ module.exports = {
    * Abstract function for HTTP requests.
    * @param {string} request.url - The url to make the request to.
    * @param {string} [request.method] - The method of the request. Defaults to GET.
-   * @param {Object} [request.body] - The payload for the request.
-   * @param {Object} [request.headers] - The headers to accompany the request.
+   * @param {object} [request.body] - The payload for the request.
+   * @param {object} [request.headers] - The headers to accompany the request.
    * @param {Function} [request.onSuccess] - Function triggered on successful request.
    * @param {Function} [request.onError] - Function triggered on successful request.
    * @param {Function} [request.done] - The callback to finish the test.

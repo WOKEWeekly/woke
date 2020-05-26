@@ -1,9 +1,10 @@
-import React, { Component } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-import css from '~/styles/components/Icon.module.scss';
-import { socialPlatforms } from '~/constants/settings.js';
+import { socialPlatforms } from '@constants/settings.js';
+
+import css from '@styles/components/Icon.module.scss';
 
 export class Icon extends Component {
   render() {

@@ -773,8 +773,8 @@ module.exports = function (app, conn, knex, server) {
 
 /**
  * Render a document, particularly a PDF, from Cloudinary.
- * @param {Object} res - The response context.
- * @param {Object} document - The document object containing
+ * @param {object} res - The response context.
+ * @param {object} document - The document object containing
  * the file and version.
  */
 const renderDocument = (res, document) => {

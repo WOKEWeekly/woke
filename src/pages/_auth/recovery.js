@@ -1,15 +1,15 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
 import { Col } from 'react-bootstrap';
+import { connect } from 'react-redux';
 
-import { SubmitButton } from '~/components/button.js';
-import { Heading, Group, Label, TextInput } from '~/components/form.js';
-import { Shader } from '~/components/layout.js';
+import { SubmitButton } from '@components/button.js';
+import { Heading, Group, Label, TextInput } from '@components/form.js';
+import { Shader } from '@components/layout.js';
 
-import request from '~/constants/request.js';
-import { isValidEmail } from '~/constants/validations.js';
+import request from '@constants/request.js';
+import { isValidEmail } from '@constants/validations.js';
 
-import css from '~/styles/Auth.module.scss';
+import css from '@styles/Auth.module.scss';
 
 class Recovery extends Component {
   constructor(props) {

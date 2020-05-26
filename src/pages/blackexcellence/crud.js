@@ -1,14 +1,12 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { zHandlers } from 'zavid-modules';
+import { zHandlers , zDate } from 'zavid-modules';
 
-import { setAlert } from '~/components/alert.js';
+import { setAlert } from '@components/alert.js';
 
-import request from '~/constants/request.js';
-import { cloudinary } from '~/constants/settings.js';
-import { isValidCandidate } from '~/constants/validations.js';
-
-import { zDate } from 'zavid-modules';
+import request from '@constants/request.js';
+import { cloudinary } from '@constants/settings.js';
+import { isValidCandidate } from '@constants/validations.js';
 
 import CandidateForm from './form.js';
 
@@ -75,7 +73,7 @@ class CandidateAdd extends Component {
 
   /**
    * Build candidate(s) object from state and props.
-   * @returns {Object} Payload to be submitted to server.
+   * @returns {object} Payload to be submitted to server.
    */
   buildRequest = () => {
     const {

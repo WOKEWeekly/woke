@@ -6,8 +6,8 @@ import {
   SubmitButton,
   CancelButton,
   AddEntityButton
-} from '~/components/button.js';
-import { AuthoredDatePicker, BirthdayPicker } from '~/components/datepicker.js';
+} from '@components/button.js';
+import { AuthoredDatePicker, BirthdayPicker } from '@components/datepicker.js';
 import {
   Heading,
   Group,
@@ -19,16 +19,16 @@ import {
   NumberPicker,
   LongTextArea,
   FileSelector
-} from '~/components/form.js';
-import { SocialsList } from '~/components/icon.js';
-import { Shader, Spacer } from '~/components/layout.js';
-import { EthnicModal, SocialsModal } from '~/components/modal.js';
+} from '@components/form.js';
+import { SocialsList } from '@components/icon.js';
+import { Shader, Spacer } from '@components/layout.js';
+import { EthnicModal, SocialsModal } from '@components/modal.js';
 
-import { countriesToString } from '~/constants/countries.js';
-import CLEARANCES from '~/constants/clearances.js';
-import request from '~/constants/request.js';
+import CLEARANCES from '@constants/clearances.js';
+import { countriesToString } from '@constants/countries.js';
+import request from '@constants/request.js';
 
-import css from '~/styles/pages/Candidates.module.scss';
+import css from '@styles/pages/Candidates.module.scss';
 
 class CandidateForm extends Component {
   constructor(props) {

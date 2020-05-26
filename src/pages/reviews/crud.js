@@ -2,11 +2,11 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { zHandlers } from 'zavid-modules';
 
-import { setAlert } from '~/components/alert.js';
+import { setAlert } from '@components/alert.js';
 
-import request from '~/constants/request.js';
-import { cloudinary } from '~/constants/settings.js';
-import { isValidReview } from '~/constants/validations.js';
+import request from '@constants/request.js';
+import { cloudinary } from '@constants/settings.js';
+import { isValidReview } from '@constants/validations.js';
 
 import ReviewForm from './form.js';
 

@@ -1,28 +1,27 @@
 import React, { Component } from 'react';
 import { Container } from 'react-bootstrap';
 import { connect } from 'react-redux';
+import { zDate } from 'zavid-modules';
 
-import { setAlert } from '~/components/alert.js';
+import { setAlert } from '@components/alert.js';
 import {
   EditEntityButton,
   DeleteEntityButton,
   BackButton
-} from '~/components/button.js';
-import { ConfirmModal } from '~/components/modal.js';
-import { PromoIconsBar } from '~/components/icon.js';
-import { Title, Subtitle, Paragraph, Divider } from '~/components/text.js';
-import { BottomToolbar } from '~/components/toolbar.js';
-import { Shader, Spacer } from '~/components/layout.js';
-import { Fader, Slider } from '~/components/transitioner.js';
+} from '@components/button.js';
+import { PromoIconsBar } from '@components/icon.js';
+import { Shader, Spacer } from '@components/layout.js';
+import { ConfirmModal } from '@components/modal.js';
+import { Title, Subtitle, Paragraph, Divider } from '@components/text.js';
+import { BottomToolbar } from '@components/toolbar.js';
+import { Fader, Slider } from '@components/transitioner.js';
 
-import CLEARANCES from '~/constants/clearances.js';
-import { countriesToString } from '~/constants/countries.js';
-import request from '~/constants/request.js';
-import { cloudinary } from '~/constants/settings.js';
+import CLEARANCES from '@constants/clearances.js';
+import { countriesToString } from '@constants/countries.js';
+import request from '@constants/request.js';
+import { cloudinary } from '@constants/settings.js';
 
-import css from '~/styles/pages/Candidates.module.scss';
-
-import { zDate } from 'zavid-modules';
+import css from '@styles/pages/Candidates.module.scss';
 
 class CandidatePage extends Component {
   constructor() {
