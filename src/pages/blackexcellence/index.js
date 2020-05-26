@@ -1,6 +1,7 @@
 import React, { Component, PureComponent } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+
 import { saveCandidateSort } from '@reducers/actions';
 
 import { AddEntityButton } from '@components/button.js';

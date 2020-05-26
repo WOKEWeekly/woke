@@ -1,9 +1,10 @@
+import classNames from 'classnames';
 import React, { Component, PureComponent, Suspense } from 'react';
 import { Button, ButtonGroup, Dropdown } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+
 import { saveTopicSort, saveTopicFilters } from '@reducers/actions';
-import classNames from 'classnames';
 
 import { alert, setAlert } from '@components/alert.js';
 import { AddEntityButton } from '@components/button.js';

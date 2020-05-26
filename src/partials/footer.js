@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { Col, Row } from 'react-bootstrap';
+
 import { Divider } from '@components/text.js';
+
 import { emails } from '@constants/settings.js';
 
 import css from '@styles/Partials.module.scss';

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Container } from 'react-bootstrap';
+
 import css from '@styles/components/Toolbar.module.scss';
 
 class Toolbar extends Component {

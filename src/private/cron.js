@@ -1,4 +1,5 @@
 const schedule = require('node-schedule');
+
 const slack = require('./slack.js');
 
 // const testInterval = { second: 0 };

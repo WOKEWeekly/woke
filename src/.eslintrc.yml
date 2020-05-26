@@ -67,6 +67,13 @@ rules:
   jsdoc/newline-after-description:
     - warn
     - never
+  jsdoc/require-jsdoc:
+    - warn
+    - require:
+        FunctionDeclaration: false
+  jsdoc/require-param:
+    - warn
+    - enableFixer: false
   no-multiple-empty-lines:
     - warn
     - max: 1

@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { zFile, zHandlers } from 'zavid-modules';
 
 import { setAlert } from '@components/alert.js';
 
-import { zFile, zHandlers } from 'zavid-modules';
 import request from '@constants/request.js';
 import { OPERATIONS } from '@constants/strings.js';
 import { isValidDocument } from '@constants/validations.js';

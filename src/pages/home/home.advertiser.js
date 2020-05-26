@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import { Col, Row } from 'react-bootstrap';
-import { Slider } from '@components/transitioner.js';
 import LazyLoader from 'react-visibility-sensor';
+
+import { Slider } from '@components/transitioner.js';
+
 import { cloudinary } from '@constants/settings.js';
 
 import css from '@styles/pages/Home.module.scss';

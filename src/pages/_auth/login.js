@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+
 import { saveUser } from '@reducers/actions';
 
 import { setAlert } from '@components/alert.js';
@@ -17,6 +18,7 @@ import { Modal } from '@components/modal.js';
 import { setCookie, getCookie } from '@constants/cookies';
 import request from '@constants/request.js';
 import { isValidLogin } from '@constants/validations.js';
+
 import css from '@styles/Auth.module.scss';
 
 class LoginModal extends Component {

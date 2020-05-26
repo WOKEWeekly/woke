@@ -2,10 +2,12 @@ import React, { PureComponent } from 'react';
 import { Col, Row, Button, ButtonGroup } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import LazyLoader from 'react-visibility-sensor';
+import { zText } from 'zavid-modules';
 
 import { setAlert } from '@components/alert.js';
 import { isSmallDevice, Default } from '@components/layout.js';
 import { ConfirmModal } from '@components/modal.js';
+import Rator from '@components/rator.js';
 import {
   Title,
   Subtitle,
@@ -15,13 +17,10 @@ import {
   ExpandText
 } from '@components/text.js';
 import { Slider } from '@components/transitioner.js';
-import Rator from '@components/rator.js';
 
 import CLEARANCES from '@constants/clearances.js';
 import request from '@constants/request.js';
 import { cloudinary } from '@constants/settings.js';
-
-import { zText } from 'zavid-modules';
 
 import css from '@styles/pages/Home.module.scss';
 

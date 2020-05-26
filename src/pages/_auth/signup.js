@@ -1,7 +1,9 @@
+import { TEST_USERS } from '@test/configuration/data';
 import React, { Component } from 'react';
 import { Col } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+
 import { saveUser } from '@reducers/actions';
 
 import { setAlert } from '@components/alert.js';
@@ -18,7 +20,6 @@ import { Shader, Spacer } from '@components/layout.js';
 
 import request from '@constants/request.js';
 import { isValidSignup } from '@constants/validations';
-import { TEST_USERS } from '@test/configuration/data';
 
 import css from '@styles/Auth.module.scss';
 

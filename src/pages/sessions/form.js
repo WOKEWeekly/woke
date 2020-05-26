@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 
 import { SubmitButton, CancelButton } from '@components/button.js';
 import { EventDatePicker } from '@components/datepicker.js';
-import { TimePicker } from '@components/timepicker.js';
 import {
   Heading,
   Group,
@@ -15,6 +14,7 @@ import {
   FileSelector
 } from '@components/form.js';
 import { Shader, Spacer } from '@components/layout.js';
+import { TimePicker } from '@components/timepicker.js';
 
 import CLEARANCES from '@constants/clearances.js';
 

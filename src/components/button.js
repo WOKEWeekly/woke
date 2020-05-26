@@ -1,11 +1,12 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { Button, ToggleButton, ToggleButtonGroup } from 'react-bootstrap';
 import classNames from 'classnames';
+import React, { Component } from 'react';
+import { Button, ToggleButton, ToggleButtonGroup } from 'react-bootstrap';
+import { connect } from 'react-redux';
 
-import css from '@styles/components/Button.module.scss';
 import { Icon } from '@components/icon.js';
 import { Default, Mobile } from '@components/layout.js';
+
+import css from '@styles/components/Button.module.scss';
 
 /*****************
  * CUSTOM BUTTONS

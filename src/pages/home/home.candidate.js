@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import LazyLoader from 'react-visibility-sensor';
+import { zDate, zText } from 'zavid-modules';
 
 import {
   Title,
@@ -14,8 +15,6 @@ import { Fader } from '@components/transitioner.js';
 import { countriesToString } from '@constants/countries.js';
 import request from '@constants/request.js';
 import { cloudinary } from '@constants/settings.js';
-
-import { zDate, zText } from 'zavid-modules';
 
 import css from '@styles/pages/Home.module.scss';
 

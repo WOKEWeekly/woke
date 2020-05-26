@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
+import { Col } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+
 import { changeUsername, clearUser, verifyUser } from '@reducers/actions';
-import { Col } from 'react-bootstrap';
 
 import { alert, setAlert } from '@components/alert.js';
 import { SubmitButton, CancelButton } from '@components/button.js';
@@ -12,8 +13,9 @@ import { Shader } from '@components/layout.js';
 import { Modal, ConfirmModal } from '@components/modal.js';
 
 import CLEARANCES from '@constants/clearances.js';
-import { isValidUsername, isValidPassword } from '@constants/validations';
 import request from '@constants/request.js';
+import { isValidUsername, isValidPassword } from '@constants/validations';
+
 import css from '@styles/Auth.module.scss';
 
 class Account extends Component {

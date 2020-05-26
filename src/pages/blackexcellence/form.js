@@ -24,8 +24,8 @@ import { SocialsList } from '@components/icon.js';
 import { Shader, Spacer } from '@components/layout.js';
 import { EthnicModal, SocialsModal } from '@components/modal.js';
 
-import { countriesToString } from '@constants/countries.js';
 import CLEARANCES from '@constants/clearances.js';
+import { countriesToString } from '@constants/countries.js';
 import request from '@constants/request.js';
 
 import css from '@styles/pages/Candidates.module.scss';

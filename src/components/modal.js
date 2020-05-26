@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
 import { Col, Modal as DefaultModal } from 'react-bootstrap';
+import { connect } from 'react-redux';
 import { zHandlers } from 'zavid-modules';
 
 import {
@@ -11,9 +11,10 @@ import {
 import { Group, Label, Select, UsernameInput } from '@components/form.js';
 import { SocialIcon } from '@components/icon.js';
 import { Paragraph } from '@components/text.js';
-import css from '@styles/components/Modal.module.scss';
 
 import { socialPlatforms } from '@constants/settings';
+
+import css from '@styles/components/Modal.module.scss';
 
 export class Modal extends Component {
   render() {

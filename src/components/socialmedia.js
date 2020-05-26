@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { Title } from './text';
 import {
   FacebookShareButton,
   TwitterShareButton,
@@ -12,6 +11,8 @@ import {
 } from 'react-share';
 
 import css from '@styles/components/Icon.module.scss';
+
+import { Title } from './text';
 
 export class SocialMediaShareBlock extends Component {
   render() {

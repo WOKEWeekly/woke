@@ -2,8 +2,9 @@ import React, { Component, PureComponent } from 'react';
 import { Col, Row } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import { zDate , zText } from 'zavid-modules';
+
 import { saveSessionSort, saveSessionView } from '@reducers/actions';
-import { zDate } from 'zavid-modules';
 
 import { AddEntityButton, RadioButtonGroup } from '@components/button.js';
 import { SortDropdown } from '@components/dropdown.js';
@@ -23,8 +24,6 @@ import { Zoomer, Slider, Fader } from '@components/transitioner.js';
 import CLEARANCES from '@constants/clearances.js';
 import request from '@constants/request.js';
 import { cloudinary } from '@constants/settings.js';
-
-import { zText } from 'zavid-modules';
 
 import css from '@styles/pages/Sessions.module.scss';
 

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
 import { Col } from 'react-bootstrap';
+import { connect } from 'react-redux';
 
 import { setAlert } from '@components/alert.js';
 import { SubmitButton } from '@components/button.js';

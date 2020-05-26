@@ -1,17 +1,17 @@
 import React, { Component, PureComponent } from 'react';
-import { connect } from 'react-redux';
 import { Col } from 'react-bootstrap';
+import { connect } from 'react-redux';
 import { zDate } from 'zavid-modules';
 
 import { alert } from '@components/alert.js';
 import { SubmitButton, CancelButton } from '@components/button.js';
 import { Group, Label, Select } from '@components/form.js';
+import { Icon } from '@components/icon.js';
 import { Shader, Default, Mobile } from '@components/layout.js';
 import { Loader, Empty } from '@components/loader.js';
 import { Modal, ConfirmModal } from '@components/modal.js';
-import { Icon } from '@components/icon.js';
-import { Fader } from '@components/transitioner.js';
 import { Title } from '@components/text.js';
+import { Fader } from '@components/transitioner.js';
 
 import CLEARANCES from '@constants/clearances.js';
 import request from '@constants/request.js';

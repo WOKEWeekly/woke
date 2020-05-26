@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Col, Row } from 'react-bootstrap';
 import LazyLoader from 'react-visibility-sensor';
+import { zText } from 'zavid-modules';
 
 import { Default, Mobile } from '@components/layout.js';
 import {
@@ -14,8 +15,6 @@ import { Fader } from '@components/transitioner.js';
 
 import request from '@constants/request.js';
 import { cloudinary } from '@constants/settings.js';
-
-import { zText } from 'zavid-modules';
 
 import css from '@styles/pages/Home.module.scss';
 

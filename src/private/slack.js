@@ -44,7 +44,7 @@ const postMessage = (message) => {
 
 /**
  * Constructs the birthday message to be sent.
- * @param {Object} member - The details of the celebrating member.
+ * @param {object} member - The details of the celebrating member.
  * @returns The constructed message.
  */
 const constructBirthdayMessage = (member) => {

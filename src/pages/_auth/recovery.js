@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
 import { Col } from 'react-bootstrap';
+import { connect } from 'react-redux';
 
 import { SubmitButton } from '@components/button.js';
 import { Heading, Group, Label, TextInput } from '@components/form.js';
