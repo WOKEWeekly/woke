@@ -377,9 +377,9 @@ module.exports = function (app, conn, knex, server) {
   /** Edit Review page */
   app.get('/reviews/edit/:id', function (req, res) {
     const id = req.params.id;
-    const sql = 'SELECT * FROM reviews WHERE id = ?';
 
-    conn.query(sql, id, function (err, [review] = []) {
+    const query = knex.select().from('reviews').where('id', id);
+    query.asCallback(function (err, [review] = []) {
       if (err) return renderErrorPage(req, res, err, server);
       if (!review)
         return renderErrorPage(
