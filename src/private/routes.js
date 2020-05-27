@@ -49,10 +49,9 @@ module.exports = function (app, conn, knex, server) {
 
   /** Individual session page */
   app.get('/session/:slug', function (req, res) {
-    const slug = req.params.slug;
-    const sql = SQL.SESSIONS.READ.SINGLE('slug');
-
-    conn.query(sql, [slug], function (err, [session] = []) {
+    const { slug } = req.params;
+    const query = knex.select().from('sessions').where('slug', slug);
+    query.asCallback(function (err, [session] = []) {
       if (err) return renderErrorPage(req, res, err, server);
       if (!session)
         return renderErrorPage(
@@ -84,10 +83,9 @@ module.exports = function (app, conn, knex, server) {
 
   /** Edit Session page */
   app.get('/sessions/edit/:id', function (req, res) {
-    const id = req.params.id;
-    const sql = SQL.SESSIONS.READ.SINGLE('id');
-
-    conn.query(sql, id, function (err, [session] = []) {
+    const { id } = req.params;
+    const query = knex.select().from('sessions').where('id', id);
+    query.asCallback(function (err, [session] = []) {
       if (err) return renderErrorPage(req, res, err, server);
       if (!session)
         return renderErrorPage(

@@ -2,24 +2,22 @@
 const async = require('async');
 
 const { respondToClient } = require('../../response');
-const SQL = require('../../sql');
-const conn = require('../db').getDb();
+const knex = require('../db').getKnex();
 const filer = require('../../filer');
 const { DIRECTORY, ENTITY } = require('../../../constants/strings');
 const ERROR = require('../../errors');
 
 exports.getAllSessions = (req, res) => {
-  conn.query(SQL.SESSIONS.READ.ALL, function (err, sessions) {
+  const query = knex.select().from('sessions');
+  query.asCallback(function (err, sessions) {
     respondToClient(res, err, 200, sessions);
   });
 };
 
-exports.getSession = (req, res) => {
+exports.getSingleSession = (req, res) => {
   const id = req.params.id;
-  conn.query(SQL.SESSIONS.READ.SINGLE('id'), id, function (
-    err,
-    [session] = []
-  ) {
+  const query = knex.select().from('sessions').where('id', id);
+  query.asCallback(function (err, [session] = []) {
     if (err) return respondToClient(res, err);
     if (!session) err = ERROR.INVALID_ENTITY_ID(ENTITY.SESSION, id);
     respondToClient(res, err, 200, session);
@@ -31,7 +29,13 @@ exports.getFeaturedSessions = (req, res) => {
     [
       function (callback) {
         // Get a random upcoming session
-        conn.query(SQL.SESSIONS.READ.UPCOMING, function (err, [session] = []) {
+        const query = knex
+          .select()
+          .from('sessions')
+          .whereRaw('dateHeld > NOW()')
+          .orderByRaw('RAND()')
+          .limit(1);
+        query.asCallback(function (err, [session] = []) {
           if (err) return callback(err);
           if (!session) return callback(null);
           callback(true, {
@@ -42,7 +46,12 @@ exports.getFeaturedSessions = (req, res) => {
       },
       function (callback) {
         // If not, get latest session
-        conn.query(SQL.SESSIONS.READ.LATEST, function (err, [session] = []) {
+        const query = knex
+          .select()
+          .from('sessions')
+          .orderBy('dateHeld', 'DESC')
+          .limit(1);
+        query.asCallback(function (err, [session] = []) {
           if (err) return callback(err);
           if (!session) return callback(null);
           callback(null, {
@@ -69,9 +78,9 @@ exports.addSession = (req, res) => {
       },
       function (session, callback) {
         // Add session to database
-        const { sql, values } = SQL.SESSIONS.CREATE(session);
-        conn.query(sql, [values], function (err, result) {
-          err ? callback(err) : callback(null, result.insertId);
+        const query = knex.insert(session).into('sessions');
+        query.asCallback(function (err, [id] = []) {
+          callback(err, id);
         });
       }
     ],
@@ -91,10 +100,8 @@ exports.updateSession = (req, res) => {
     [
       function (callback) {
         // Delete old image if changed.
-        conn.query(SQL.SESSIONS.READ.SINGLE('id', 'image'), id, function (
-          err,
-          [session] = []
-        ) {
+        const query = knex.select().from('sessions').where('id', id);
+        query.asCallback(function (err, [session] = []) {
           if (err) return callback(err);
           if (!session)
             return callback(ERROR.INVALID_ENTITY_ID(ENTITY.SESSION, id));
@@ -108,8 +115,8 @@ exports.updateSession = (req, res) => {
       },
       function (session, callback) {
         // Update session in database
-        const { sql, values } = SQL.SESSIONS.UPDATE(id, session, changed);
-        conn.query(sql, values, function (err) {
+        const query = knex('sessions').update(session).where('id', id);
+        query.asCallback(function (err) {
           err ? callback(err) : callback(null, session.slug);
         });
       }
@@ -129,10 +136,8 @@ exports.deleteSession = (req, res) => {
     [
       function (callback) {
         // Delete image from cloud
-        conn.query(SQL.SESSIONS.READ.SINGLE('id', 'image'), id, function (
-          err,
-          [session] = []
-        ) {
+        const query = knex.select().from('sessions').where('id', id);
+        query.asCallback(function (err, [session] = []) {
           if (err) return callback(err);
           if (!session)
             return callback(ERROR.INVALID_ENTITY_ID(ENTITY.SESSION, id));
@@ -141,8 +146,9 @@ exports.deleteSession = (req, res) => {
       },
       function (callback) {
         // Delete session from database
-        conn.query(SQL.SESSIONS.DELETE, id, function (err) {
-          err ? callback(err) : callback(null);
+        const query = knex('sessions').where('id', id).del();
+        query.asCallback(function (err) {
+          callback(err);
         });
       }
     ],
