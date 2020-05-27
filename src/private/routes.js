@@ -185,9 +185,28 @@ module.exports = function (app, conn, knex, server) {
   /** Edit #BlackExcellence Candidate page */
   app.get('/blackexcellence/edit/:id', function (req, res) {
     const id = req.params.id;
-    const sql = SQL.CANDIDATES.READ.SINGLE();
 
-    conn.query(sql, id, function (err, [candidate] = []) {
+    const query = knex
+      .columns([
+        [
+          'candidates.*',
+          {
+            authorName: knex.raw(
+              "CONCAT(members.firstname, ' ', members.lastname)"
+            )
+          },
+          { authorLevel: 'members.level' },
+          { authorSlug: 'members.slug' },
+          { authorImage: 'members.image' },
+          { authorDescription: 'members.description' },
+          { authorSocials: 'members.socials' }
+        ]
+      ])
+      .select()
+      .from('candidates')
+      .leftJoin('members', 'candidates.authorId', 'members.id')
+      .where('candidates.id', id);
+    query.asCallback(function (err, [candidate] = []) {
       if (err) return renderErrorPage(req, res, err, server);
       if (!candidate)
         return renderErrorPage(
@@ -210,9 +229,28 @@ module.exports = function (app, conn, knex, server) {
   /** Individual #BlackExcellence Candidate page */
   app.get('/blackexcellence/candidate/:id', function (req, res) {
     const id = req.params.id;
-    const sql = SQL.CANDIDATES.READ.SINGLE();
 
-    conn.query(sql, id, function (err, [candidate] = []) {
+    const query = knex
+      .columns([
+        [
+          'candidates.*',
+          {
+            authorName: knex.raw(
+              "CONCAT(members.firstname, ' ', members.lastname)"
+            )
+          },
+          { authorLevel: 'members.level' },
+          { authorSlug: 'members.slug' },
+          { authorImage: 'members.image' },
+          { authorDescription: 'members.description' },
+          { authorSocials: 'members.socials' }
+        ]
+      ])
+      .select()
+      .from('candidates')
+      .leftJoin('members', 'candidates.authorId', 'members.id')
+      .where('candidates.id', id);
+    query.asCallback(function (err, [candidate] = []) {
       if (err) return renderErrorPage(req, res, err, server);
       if (!candidate)
         return renderErrorPage(
@@ -240,7 +278,8 @@ module.exports = function (app, conn, knex, server) {
   app.get('/team', function (req, res) {
     return server.render(req, res, '/team', {
       title: 'The Team | #WOKEWeekly',
-      description: 'Explore the profiles of the very members who make #WOKE what it is today.',
+      description:
+        'Explore the profiles of the very members who make #WOKE what it is today.',
       ogUrl: '/team',
       cardImage: 'public/bg/card-team.jpg',
       backgroundImage: 'bg-team.jpg'
@@ -732,16 +771,14 @@ module.exports = function (app, conn, knex, server) {
           });
         },
         function (callback) {
-          conn.query(
-            `SELECT slug FROM members WHERE verified = 1;`,
-            function (err, result) {
-              if (err) return callback(err);
-              result.forEach((member) =>
-                routes.push(`/team/${member.slug}`)
-              );
-              callback(null);
-            }
-          );
+          conn.query(`SELECT slug FROM members WHERE verified = 1;`, function (
+            err,
+            result
+          ) {
+            if (err) return callback(err);
+            result.forEach((member) => routes.push(`/team/${member.slug}`));
+            callback(null);
+          });
         },
         function (callback) {
           conn.query(`SELECT name FROM pages;`, function (err, result) {
