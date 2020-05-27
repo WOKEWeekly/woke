@@ -32,7 +32,8 @@ exports.getFeaturedReviews = (req, res) => {
     .select()
     .from('reviews')
     .where('rating', 5)
-    .whereNot(knex.raw('CHAR_LENGTH(image)'), 0);
+    .whereNot(knex.raw('CHAR_LENGTH(image)'), 0)
+    .limit(3);
   query.asCallback(function (err, reviews) {
     respondToClient(res, err, 200, reviews);
   });
