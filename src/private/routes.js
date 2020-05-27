@@ -107,21 +107,23 @@ module.exports = function (app, conn, knex, server) {
   /** Topic Bank page */
   app.get('/topics', function (req, res) {
     const accessToken = req.query.access;
-    const sql = SQL.TOKENS.READ('topicBank');
+    knex
+      .select()
+      .from('tokens')
+      .where('name', 'topicBank')
+      .asCallback(function (err, [token] = []) {
+        if (err) return renderErrorPage(req, res, err, server);
+        const hasAccess = token && token.value === accessToken;
 
-    conn.query(sql, function (err, [token] = []) {
-      if (err) return renderErrorPage(req, res, err, server);
-      const hasAccess = token && token.value === accessToken;
-
-      return server.render(req, res, '/topics', {
-        title: 'Topic Bank | #WOKEWeekly',
-        description: 'The currency of the franchise.',
-        ogUrl: '/topics',
-        cardImage: `public/bg/card-topics.jpg`,
-        backgroundImage: 'bg-topics.jpg',
-        hasAccess
+        return server.render(req, res, '/topics', {
+          title: 'Topic Bank | #WOKEWeekly',
+          description: 'The currency of the franchise.',
+          ogUrl: '/topics',
+          cardImage: `public/bg/card-topics.jpg`,
+          backgroundImage: 'bg-topics.jpg',
+          hasAccess
+        });
       });
-    });
   });
 
   /** Add Topic page */
@@ -136,9 +138,8 @@ module.exports = function (app, conn, knex, server) {
   /** Edit Topic page */
   app.get('/topics/edit/:id', function (req, res) {
     const id = req.params.id;
-    const sql = SQL.TOPICS.READ.SINGLE();
-
-    conn.query(sql, id, function (err, [topic]) {
+    const query = knex.select().from('topics').where('id', id);
+    query.asCallback(function (err, [topic] = []) {
       if (err) return renderErrorPage(req, res, err, server);
       if (!topic)
         return renderErrorPage(

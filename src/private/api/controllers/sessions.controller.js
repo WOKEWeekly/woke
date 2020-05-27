@@ -32,7 +32,7 @@ exports.getFeaturedSessions = (req, res) => {
         const query = knex
           .select()
           .from('sessions')
-          .whereRaw('dateHeld > NOW()')
+          .where('dateHeld', '>', 'NOW()')
           .orderByRaw('RAND()')
           .limit(1);
         query.asCallback(function (err, [session] = []) {
