@@ -23,23 +23,14 @@ const cors = require('cors');
 const dotenv = require('dotenv').config({
   path: config
 });
-const mysql = require('mysql');
 const port = isStageTesting ? 3010 : (process.env.PORT || 3000);
-const { setDb, setKnex } = require('./private/api/db');
+const { setKnex } = require('./private/api/db');
 
 app.use(bodyParser.json({ limit: `${limits.file}MB` }));
 app.use(cookieParser());
 app.use(cors());
 
-// TODO: To be fully replaced with Knex
 // Initialise MySQL database
-const conn = mysql.createConnection({
-  host: process.env.MYSQL_HOST,
-  user: process.env.MYSQL_USER,
-  password: process.env.MYSQL_PWD,
-  database: process.env.MYSQL_NAME
-});
-
 const knex = require('knex')({
   client: 'mysql',
   connection: {
@@ -62,8 +53,8 @@ if (!isStageTesting && !isDevTesting) {
 
 function startClientServer() {
   startServer();
-  require('./private/routes.js')(app, conn, knex, server);
-  require('./private/cron.js')(conn);
+  require('./private/routes.js')(app, knex, server);
+  require('./private/cron.js')();
 }
 
 function startTestServer(next) {
@@ -84,17 +75,16 @@ function startServer(next) {
         });
       },
       // Connect to MySQL database
-      function (callback) {
-        conn.connect(function (err) {
-          if (!err) console.info('Connected to database.');
-          callback(err);
-        });
-      },
+      // function (callback) {
+      //   conn.connect(function (err) {
+      //     if (!err) console.info('Connected to database.');
+      //     callback(err);
+      //   });
+      // },
       // Set database instances
       function (callback) {
-        setDb(conn);
         setKnex(knex);
-        require('./private/api/index.js')(app, conn);
+        require('./private/api/index.js')(app);
         callback(null);
       }
     ],

@@ -42,6 +42,7 @@ describe('Article Tests', function () {
     });
 
     it('Get only published articles', function (done) {
+      console.log('starting');
       request({
         url: `/api/v1/articles/published`,
         method: 'GET',

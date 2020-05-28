@@ -8,7 +8,6 @@ const path = require('path');
 
 const ERROR = require('./errors.js');
 const { renderErrorPage } = require('./response.js');
-const SQL = require('./sql.js');
 
 const {
   accounts,
@@ -23,8 +22,8 @@ const env = process.env.NODE_ENV !== 'production' ? 'dev' : 'prod';
 
 let exigencies = {};
 
-module.exports = function (app, conn, knex, server) {
-  exigencies = { conn, knex, server };
+module.exports = function (app, knex, server) {
+  exigencies = { knex, server };
 
   /** Home page */
   app.get(['/', '/home'], function (req, res) {

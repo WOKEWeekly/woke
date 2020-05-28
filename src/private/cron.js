@@ -1,17 +1,19 @@
 const schedule = require('node-schedule');
-
+const knex = require('./api/db').getKnex();
 const slack = require('./slack.js');
 
 // const testInterval = { second: 0 };
 const birthdayReminderTime = { hour: 7, minute: 0 };
 const sessionReminderTime = { hour: 10, minute: 0 };
 
-module.exports = function (conn) {
+module.exports = function () {
   /** Notify General Slack channel of team member birthdays at 7:00am */
   schedule.scheduleJob(birthdayReminderTime, function () {
-    const sql =
-      "SELECT * FROM members WHERE DATE_FORMAT(birthday,'%m-%d') = DATE_FORMAT(CURDATE(),'%m-%d')";
-    conn.query(sql, function (err, result) {
+    const query = knex
+      .select()
+      .from('members')
+      .where("DATE_FORMAT(birthday,'%m-%d')", "DATE_FORMAT(CURDATE(),'%m-%d')");
+    query.asCallback(function (err, result) {
       if (err) return console.error(err.toString());
       if (!result.length)
         return console.info("Birthdays: It's no one's birthday today.");
@@ -27,8 +29,11 @@ module.exports = function (conn) {
 
   /** Notify General Slack channel of sessions occurring on the current day at 10:00am */
   schedule.scheduleJob(sessionReminderTime, function () {
-    const sql = 'SELECT * FROM sessions WHERE dateheld = CURRENT_DATE()';
-    conn.query(sql, function (err, result) {
+    const query = knex
+      .select()
+      .from('sessions')
+      .where('dateHeld', 'CURRENT_DATE()');
+    query.asCallback(function (err, result) {
       if (err) return console.error(err.toString());
       if (!result.length)
         return console.info(
