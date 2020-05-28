@@ -12,7 +12,7 @@ module.exports = function () {
     const query = knex
       .select()
       .from('members')
-      .where("DATE_FORMAT(birthday,'%m-%d')", "DATE_FORMAT(CURDATE(),'%m-%d')");
+      .whereRaw("DATE_FORMAT(birthday,'%m-%d') = DATE_FORMAT(CURDATE(),'%m-%d')");
     query.asCallback(function (err, result) {
       if (err) return console.error(err.toString());
       if (!result.length)
