@@ -11,7 +11,7 @@ const authorize = verifyToken(CLEARANCES.ACTIONS.CRUD_REVIEWS);
 router.get('/', validateReq, ReviewsController.getAllReviews);
 
 /** GET single review by ID */
-router.get('/:id([0-9]+)', validateReq, ReviewsController.getReview);
+router.get('/:id([0-9]+)', validateReq, ReviewsController.getSingleReview);
 
 /** GET featured review */
 router.get('/featured', validateReq, ReviewsController.getFeaturedReviews);

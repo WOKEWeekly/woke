@@ -752,7 +752,8 @@ module.exports = function (app, conn, knex, server) {
     async.parallel(
       [
         function (callback) {
-          conn.query('SELECT slug FROM sessions', function (err, result) {
+          const query = knex.select('slug').from('sessions');
+          query.asCallback(function (err, result) {
             if (err) return callback(err);
             result.forEach((session) =>
               routes.push(`/session/${session.slug}`)
@@ -761,7 +762,8 @@ module.exports = function (app, conn, knex, server) {
           });
         },
         function (callback) {
-          conn.query('SELECT id FROM candidates', function (err, result) {
+          const query = knex.select('id').from('candidates');
+          query.asCallback(function (err, result) {
             if (err) return callback(err);
             result.forEach((candidate) =>
               routes.push(`/blackexcellence/candidate/${candidate.id}`)
@@ -770,17 +772,19 @@ module.exports = function (app, conn, knex, server) {
           });
         },
         function (callback) {
-          conn.query(`SELECT slug FROM members WHERE verified = 1;`, function (
-            err,
-            result
-          ) {
+          const query = knex
+            .select('slug')
+            .from('members')
+            .where('verified', 1);
+          query.asCallback(function (err, result) {
             if (err) return callback(err);
             result.forEach((member) => routes.push(`/team/${member.slug}`));
             callback(null);
           });
         },
         function (callback) {
-          conn.query(`SELECT name FROM pages;`, function (err, result) {
+          const query = knex.select('name').from('pages');
+          query.asCallback(function (err, result) {
             if (err) return callback(err);
             result.forEach((page) => routes.push(`/${page.name}`));
             callback(null);

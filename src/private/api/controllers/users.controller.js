@@ -4,40 +4,49 @@ const async = require('async');
 const bcrypt = require('bcryptjs');
 const validator = require('email-validator');
 const jwt = require('jsonwebtoken');
-const Mailchimp = require('mailchimp-api-v3');
 
 const { ENTITY } = require('../../../constants/strings');
 const emails = require('../../emails');
 const ERROR = require('../../errors');
 const { respondToClient } = require('../../response');
-const SQL = require('../../sql');
-const conn = require('../db').getDb();
+const knex = require('../db').getKnex();
 
-const mailchimp = new Mailchimp(process.env.MAILCHIMP_API_KEY);
+let mailchimp;
 
 const emailsOn =
   process.env.NODE_ENV === 'production' || process.argv.includes('--emails');
-if (!emailsOn) console.warn('Emails are turned off.');
+if (emailsOn) {
+  const Mailchimp = require('mailchimp-api-v3');
+  mailchimp = new Mailchimp(process.env.MAILCHIMP_API_KEY);
+} else {
+  console.warn('Emails are turned off.');
+}
+
+const safeFields = [
+  'id',
+  'firstname',
+  'lastname',
+  'clearance',
+  'username',
+  'email',
+  'createTime',
+  'lastActive'
+];
 
 /** Retrieve all users */
 exports.getAllUsers = (req, res) => {
-  const sql = SQL.USERS.READ.ALL(
-    'id, firstname, lastname, clearance, username, email, createTime, lastActive'
-  );
-  conn.query(sql, function (err, users) {
+  const query = knex.columns(safeFields).select().from('users');
+  query.asCallback(function (err, users) {
     respondToClient(res, err, 200, users);
   });
 };
 
 /** Retrieve individual user */
-exports.getUser = (req, res) => {
+exports.getSingleUser = (req, res) => {
   // TODO: Differentiate between self-reading and admin-reading.
   const id = req.params.id;
-  const sql = SQL.USERS.READ.SINGLE(
-    'id, firstname, lastname, clearance, username, email, createTime, lastActive'
-  );
-
-  conn.query(sql, id, function (err, [user] = []) {
+  const query = knex.columns(safeFields).select().from('users').where('id', id);
+  query.asCallback(function (err, [user] = []) {
     if (err) return respondToClient(res, err);
     if (!user) err = ERROR.INVALID_ENTITY_ID(ENTITY.USER, id);
     respondToClient(res, err, 200, user);
@@ -66,17 +75,26 @@ exports.addUser = (req, res) => {
       function (callback) {
         /** Hash entered password */
         bcrypt.hash(password1, 8, function (err, hash) {
-          err ? callback(err) : callback(null, hash);
+          callback(err, hash);
         });
       },
       function (hash, callback) {
         /** Insert new user into database */
-        const { sql, values } = SQL.USERS.CREATE(req.body, hash);
-        conn.query(sql, [values], function (err, result) {
+        const query = knex
+          .insert({
+            firstname,
+            lastname,
+            clearance: 1,
+            email,
+            username,
+            password: hash
+          })
+          .into('users');
+        query.asCallback(function (err, [id] = []) {
           if (err) return callback(err);
 
           const user = {
-            id: result.insertId,
+            id,
             firstname,
             lastname,
             username,
@@ -117,16 +135,7 @@ exports.addUser = (req, res) => {
             expiresIn: '2h'
           },
           (err, token) => {
-            if (err) return callback(err);
-            callback(null, {
-              id: user.id,
-              firstname: user.firstname,
-              lastname: user.lastname,
-              clearance: user.clearance,
-              username: user.username,
-              email: user.email,
-              token
-            });
+            callback(err, { ...user, token });
           }
         );
       }
@@ -152,8 +161,12 @@ exports.loginUser = (req, res) => {
     [
       function (callback) {
         // Attempt to retrieve user
-        const { sql, values } = SQL.USERS.READ.LOGIN(username);
-        conn.query(sql, values, function (err, [user] = []) {
+        const query = knex
+          .select()
+          .from('users')
+          .where('username', username)
+          .orWhere('email', username);
+        query.asCallback(function (err, [user] = []) {
           if (err) return callback(err);
           if (!user) return callback(ERROR.NONEXISTENT_CREDENTIALS());
 
@@ -195,8 +208,8 @@ exports.changeUsername = (req, res) => {
   const { id } = req.params;
   const { username } = req.body;
 
-  const { sql, values } = SQL.USERS.UPDATE('username', id, username);
-  conn.query(sql, values, function (err, result) {
+  const query = knex('users').update({username}).where('id', id);
+  query.asCallback(function (err, result) {
     if (err) {
       const duplicateUsername =
         err.code === ERROR.SQL_DUP_CODE && err.sqlMessage.includes('username');
@@ -220,7 +233,8 @@ exports.changePassword = (req, res) => {
     [
       function (callback) {
         // Get current password of user
-        conn.query(SQL.USERS.READ.SINGLE(), id, function (err, [user] = []) {
+        const query = knex.select().from('users').where('id', id);
+        query.asCallback(function (err, [user] = []) {
           if (err) return callback(err);
           if (!user) return callback(ERROR.INVALID_ENTITY_ID(ENTITY.USER, id));
           callback(null, user.password);
@@ -228,28 +242,22 @@ exports.changePassword = (req, res) => {
       },
       function (password, callback) {
         // Verify that current password is valid
-        if (
-          !(
-            bcrypt.compareSync(oldPassword, password) ||
-            oldPassword === password
-          )
-        ) {
-          callback(ERROR.INCORRECT_PASSWORD());
-        } else {
-          callback(null);
-        }
+        const passwordIsValid = !(
+          bcrypt.compareSync(oldPassword, password) || oldPassword === password
+        );
+        callback(passwordIsValid ? ERROR.INCORRECT_PASSWORD() : null);
       },
       function (callback) {
         // Hash new password
         bcrypt.hash(newPassword, 8, function (err, hash) {
-          err ? callback(err) : callback(null, hash);
+          callback(err, hash);
         });
       },
       function (hash, callback) {
         // Store new hashed password
-        const { sql, values } = SQL.USERS.UPDATE('password', id, hash);
-        conn.query(sql, values, function (err) {
-          err ? callback(err) : callback(null);
+        const query = knex('users').update({ password: hash }).where('id', id);
+        query.asCallback(function (err) {
+          callback(err);
         });
       }
     ],
@@ -262,8 +270,8 @@ exports.changePassword = (req, res) => {
 /** Change user's clearance */
 exports.changeClearance = (req, res) => {
   const { id, value } = req.params;
-  const { sql, values } = SQL.USERS.UPDATE('clearance', id, value);
-  conn.query(sql, values, function (err) {
+  const query = knex('users').update({ clearance: value }).where('id', id);
+  query.asCallback(function (err) {
     respondToClient(res, err, 200);
   });
 };
@@ -272,7 +280,8 @@ exports.changeClearance = (req, res) => {
 exports.deleteUser = (req, res) => {
   // TODO: Differentiate between self-deletion and admin-deletion.
   const id = req.params.id;
-  conn.query(SQL.USERS.DELETE, id, function (err, result) {
+  const query = knex('users').where('id', id).del();
+  query.asCallback(function (err, result) {
     if (err) return respondToClient(res, err);
     if (result.affectedRows === 0)
       err = ERROR.INVALID_ENTITY_ID(ENTITY.USER, id);
@@ -284,7 +293,8 @@ exports.deleteUser = (req, res) => {
 exports.purgeUsers = (req, res) => {
   if (process.env.NODE_ENV === 'production')
     return respondToClient(res, ERROR.UNAUTHORIZED_REQUEST());
-  conn.query(SQL.USERS.CLEAR, function (err) {
+  const query = knex('users').where('id', '>', '2').del();
+  query.asCallback(function (err) {
     respondToClient(res, err, 204);
   });
 };
@@ -297,10 +307,12 @@ exports.sendVerificationEmail = (req, res) => {
     [
       function (callback) {
         // Retrieve user from database
-        const sql = SQL.USERS.READ.SINGLE(
-          'id, firstname, lastname, clearance, username, email'
-        );
-        conn.query(sql, id, function (err, [user] = []) {
+        const query = knex
+          .columns(safeFields)
+          .select()
+          .from('users')
+          .where('id', id);
+        query.asCallback(function (err, [user] = []) {
           if (err) return callback(err);
           if (!user) return callback(ERROR.INVALID_ENTITY_ID());
           callback(null, user);
@@ -309,24 +321,13 @@ exports.sendVerificationEmail = (req, res) => {
       function (user, callback) {
         // Generate verification token to send via email
         jwt.sign(
-          {
-            user
-          },
+          { user },
           process.env.JWT_SECRET,
-          {
-            expiresIn: '30m'
-          },
+          { expiresIn: '30m' },
           (err, token) => {
             if (err) return callback(err);
-            if (!emailsOn)
-              return callback(null, {
-                token
-              });
-            emails(callback, [
-              {
-                token
-              }
-            ]).resendVerificationEmail(user, token);
+            if (!emailsOn) return callback(null, { token });
+            emails(callback, [{ token }]).resendVerificationEmail(user, token);
           }
         );
       }
@@ -346,15 +347,18 @@ exports.verifyUser = (req, res) => {
       function (callback) {
         // Verify the given token
         jwt.verify(token, process.env.JWT_SECRET, (err, { user } = {}) => {
-          err ? callback(err) : callback(null, user);
+          callback(err, user);
         });
       },
       function (user, callback) {
         // Change user's clearance to indicate verification
-        if (user.clearance > 1)
+        if (user.clearance > 1) {
           return callback(ERROR.VERIFICATION_NOT_REQUIRED());
-        const { sql, values } = SQL.USERS.UPDATE('clearance', user.id, 2);
-        conn.query(sql, values, function (err) {
+        }
+        const query = knex('users')
+          .update({ clearance: 2 })
+          .where('id', user.id);
+        query.asCallback(function (err) {
           if (err) return callback(err);
           user.clearance = 2;
           callback(null, user);
@@ -378,10 +382,12 @@ exports.sendRecoveryEmail = (req, res) => {
     [
       function (callback) {
         // Retrieve user using email address
-        const sql = SQL.USERS.READ.RECOVERY(
-          'id, firstname, lastname, clearance, email, username'
-        );
-        conn.query(sql, email, function (err, [user] = []) {
+        const query = knex
+          .columns(safeFields)
+          .select()
+          .from('users')
+          .where('email', email);
+        query.asCallback(function (err, [user] = []) {
           if (err) return callback(err);
           if (!user) return callback(ERROR.NONEXISTENT_EMAIL_ADDRESS());
           callback(null, user);
@@ -390,24 +396,13 @@ exports.sendRecoveryEmail = (req, res) => {
       function (user, callback) {
         // Generate recovery token to be sent via email
         jwt.sign(
-          {
-            user
-          },
+          { user },
           process.env.JWT_SECRET,
-          {
-            expiresIn: '30m'
-          },
+          { expiresIn: '30m' },
           (err, token) => {
             if (err) return callback(err);
-            if (!emailsOn)
-              return callback(null, {
-                token
-              });
-            emails(callback, [
-              {
-                token
-              }
-            ]).sendAccountRecoveryEmail(user, token);
+            if (!emailsOn) return callback(null, { token });
+            emails(callback, [{ token }]).sendAccountRecoveryEmail(user, token);
           }
         );
       }
@@ -426,23 +421,23 @@ exports.resetPassword = (req, res) => {
       function (callback) {
         // Verify the given token
         jwt.verify(token, process.env.JWT_SECRET, (err, { user }) => {
-          err ? callback(err) : callback(null, user);
+          callback(err, user);
         });
       },
       function (user, callback) {
         // Hash new password
         bcrypt.hash(password, 8, function (err, hash) {
-          err ? callback(err) : callback(null, user.id, hash);
+          callback(err, user.id, hash);
         });
       },
       function (id, hash, callback) {
         // Update user's password in database
-        const { sql, values } = SQL.USERS.UPDATE('password', id, hash);
-        conn.query(sql, values, function (err, result) {
+        const query = knex('users').update({ password: hash }).where('id', id);
+        query.asCallback(function (err, result) {
           if (err) return callback(err);
           if (result.affectedRows === 0)
             err = ERROR.INVALID_ENTITY_ID(ENTITY.USER, id);
-          err ? callback(err) : callback(null);
+          callback(err);
         });
       }
     ],

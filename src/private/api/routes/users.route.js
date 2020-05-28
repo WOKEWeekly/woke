@@ -13,7 +13,7 @@ router.get(
 );
 
 /** GET single user by ID */
-router.get('/:id', validateReq, UsersController.getUser);
+router.get('/:id', validateReq, UsersController.getSingleUser);
 
 /** POST new user */
 router.post('/', validateReq, UsersController.addUser);
