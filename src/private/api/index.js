@@ -10,9 +10,9 @@ const usersRoutes = require('./routes/users.route');
 
 const { logUserActivity } = require('../middleware.js');
 
-module.exports = function (app) {
+module.exports = function (app, knex) {
   /** Log user activity on each request */
-  app.use('/api', logUserActivity);
+  app.use('/api', logUserActivity(knex));
 
   // Articles routes
   app.use('/api/v1/articles', articlesRoutes);

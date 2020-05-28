@@ -1,5 +1,5 @@
 const schedule = require('node-schedule');
-const knex = require('./api/db').getKnex();
+const knex = require('./api/knex');
 const slack = require('./slack.js');
 
 // const testInterval = { second: 0 };
@@ -12,7 +12,9 @@ module.exports = function () {
     const query = knex
       .select()
       .from('members')
-      .whereRaw("DATE_FORMAT(birthday,'%m-%d') = DATE_FORMAT(CURDATE(),'%m-%d')");
+      .whereRaw(
+        "DATE_FORMAT(birthday,'%m-%d') = DATE_FORMAT(CURDATE(),'%m-%d')"
+      );
     query.asCallback(function (err, result) {
       if (err) return console.error(err.toString());
       if (!result.length)

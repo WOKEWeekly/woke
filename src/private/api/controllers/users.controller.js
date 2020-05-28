@@ -9,7 +9,7 @@ const { ENTITY } = require('../../../constants/strings');
 const emails = require('../../emails');
 const ERROR = require('../../errors');
 const { respondToClient } = require('../../response');
-const knex = require('../db').getKnex();
+const knex = require('../knex').getKnex();
 
 let mailchimp;
 

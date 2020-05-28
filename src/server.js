@@ -24,7 +24,7 @@ const dotenv = require('dotenv').config({
   path: config
 });
 const port = isStageTesting ? 3010 : (process.env.PORT || 3000);
-const { setKnex } = require('./private/api/db');
+const { setKnex } = require('./private/api/knex');
 
 app.use(bodyParser.json({ limit: `${limits.file}MB` }));
 app.use(cookieParser());
@@ -74,17 +74,10 @@ function startServer(next) {
           });
         });
       },
-      // Connect to MySQL database
-      // function (callback) {
-      //   conn.connect(function (err) {
-      //     if (!err) console.info('Connected to database.');
-      //     callback(err);
-      //   });
-      // },
       // Set database instances
       function (callback) {
         setKnex(knex);
-        require('./private/api/index.js')(app);
+        require('./private/api/index.js')(app, knex);
         callback(null);
       }
     ],
