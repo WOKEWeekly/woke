@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import { Col } from 'react-bootstrap';
+
+import React, { Component } from 'react';import { Col } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
@@ -21,6 +21,8 @@ import request from '@constants/request.js';
 import { isValidSignup } from '@constants/validations';
 
 import css from '@styles/Auth.module.scss';
+
+import { TEST_USERS } from '@test/configuration/data';
 
 class Signup extends Component {
   constructor(props) {

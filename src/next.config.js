@@ -44,7 +44,15 @@ module.exports = {
 
 /** Maps aliases to be resolved for absolute imports */
 const mapImportsToAliases = () => {
-  const directories = ['components', 'constants', 'partials', 'pages', 'reducers', 'styles'];
+  const directories = [
+    'components',
+    'constants',
+    'partials',
+    'pages',
+    'reducers',
+    'styles',
+    'test'
+  ];
   const aliases = {};
 
   directories.forEach((directory) => {
