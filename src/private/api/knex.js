@@ -1,19 +1,10 @@
 const assert = require('assert');
 
-let _db;
 let _knex;
-
-const setDb = (DbInstance) => {
-  _db = DbInstance;
-};
-
-const getDb = () => {
-  assert.ok(_db, 'Db has not been initialized.');
-  return _db;
-};
 
 const setKnex = (KnexInstance) => {
   _knex = KnexInstance;
+  console.info('Connected to database.');
 };
 
 const getKnex = () => {
@@ -22,8 +13,6 @@ const getKnex = () => {
 };
 
 module.exports = {
-  setDb: setDb,
-  getDb: getDb,
   setKnex: setKnex,
   getKnex: getKnex
 };

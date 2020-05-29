@@ -2,23 +2,24 @@
 const async = require('async');
 
 const { respondToClient } = require('../../response');
-const SQL = require('../../sql');
-const conn = require('../db').getDb();
+const knex = require('../knex').getKnex();
 const filer = require('../../filer');
 const { DIRECTORY, ENTITY } = require('../../../constants/strings');
 const ERROR = require('../../errors');
 
 /** Retrieve all reviews */
 exports.getAllReviews = (req, res) => {
-  conn.query(SQL.REVIEWS.READ.ALL(), function (err, reviews) {
+  const query = knex.select().from('reviews');
+  query.asCallback(function (err, reviews) {
     respondToClient(res, err, 200, reviews);
   });
 };
 
 /** Retrieve individual review */
-exports.getReview = (req, res) => {
+exports.getSingleReview = (req, res) => {
   const id = req.params.id;
-  conn.query(SQL.REVIEWS.READ.SINGLE(), id, function (err, [review] = []) {
+  const query = knex.select().from('reviews').where('id', id);
+  query.asCallback(function (err, [review] = []) {
     if (err) return respondToClient(res, err);
     if (!review) err = ERROR.INVALID_ENTITY_ID(ENTITY.REVIEW, id);
     respondToClient(res, err, 200, review);
@@ -27,7 +28,13 @@ exports.getReview = (req, res) => {
 
 /** Retrieve 3 5-star reviews with images */
 exports.getFeaturedReviews = (req, res) => {
-  conn.query(SQL.REVIEWS.READ.FEATURED, function (err, reviews) {
+  const query = knex
+    .select()
+    .from('reviews')
+    .where('rating', 5)
+    .whereNot(knex.raw('CHAR_LENGTH(image)'), 0)
+    .limit(3);
+  query.asCallback(function (err, reviews) {
     respondToClient(res, err, 200, reviews);
   });
 };
@@ -44,9 +51,9 @@ exports.addReview = (req, res) => {
       },
       function (review, callback) {
         // Add review to database
-        const { sql, values } = SQL.REVIEWS.CREATE(review);
-        conn.query(sql, [values], function (err, result) {
-          err ? callback(err) : callback(null, result.insertId);
+        const query = knex.insert(review).into('reviews');
+        query.asCallback(function (err, [id] = []) {
+          callback(err, id);
         });
       }
     ],
@@ -67,10 +74,8 @@ exports.updateReview = (req, res) => {
     [
       function (callback) {
         // Delete old image if changed.
-        conn.query(SQL.REVIEWS.READ.SINGLE('image'), id, function (
-          err,
-          [review] = []
-        ) {
+        const query = knex.select().from('reviews').where('id', id);
+        query.asCallback(function (err, [review] = []) {
           if (err) return callback(err);
           if (!review)
             return callback(ERROR.INVALID_ENTITY_ID(ENTITY.REVIEW, id));
@@ -84,9 +89,9 @@ exports.updateReview = (req, res) => {
       },
       function (review, callback) {
         // Update review in database
-        const { sql, values } = SQL.REVIEWS.UPDATE(id, review, changed);
-        conn.query(sql, values, function (err) {
-          err ? callback(err) : callback(null);
+        const query = knex('reviews').update(review).where('id', id);
+        query.asCallback(function (err) {
+          callback(err);
         });
       }
     ],
@@ -104,10 +109,8 @@ exports.deleteReview = (req, res) => {
     [
       function (callback) {
         // Delete image from cloud
-        conn.query(SQL.REVIEWS.READ.SINGLE('image'), id, function (
-          err,
-          [review] = []
-        ) {
+        const query = knex.select().from('reviews').where('id', id);
+        query.asCallback(function (err, [review] = []) {
           if (err) return callback(err);
           if (!review)
             return callback(ERROR.INVALID_ENTITY_ID(ENTITY.REVIEW, id));
@@ -116,8 +119,9 @@ exports.deleteReview = (req, res) => {
       },
       function (callback) {
         // Delete review from database
-        conn.query(SQL.REVIEWS.DELETE, id, function (err) {
-          err ? callback(err) : callback(null);
+        const query = knex('reviews').where('id', id).del();
+        query.asCallback(function (err) {
+          callback(err);
         });
       }
     ],

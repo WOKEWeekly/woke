@@ -11,7 +11,7 @@ const authorize = verifyToken(CLEARANCES.ACTIONS.CRUD_SESSIONS);
 router.get('/', validateReq, SessionsController.getAllSessions);
 
 /** GET single session by ID */
-router.get('/:id([0-9]+)', validateReq, SessionsController.getSession);
+router.get('/:id([0-9]+)', validateReq, SessionsController.getSingleSession);
 
 /** GET featured session */
 router.get('/featured', validateReq, SessionsController.getFeaturedSessions);

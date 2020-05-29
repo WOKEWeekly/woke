@@ -128,8 +128,8 @@ const generateSlugAndFilename = (entity, directory) => {
       if (entity.status === ARTICLE_STATUS.DRAFT) entity.slug = null;
       break;
     case DIRECTORY.CANDIDATES:
-      entity.slug = zString.constructCleanSlug(entity.name);
-      filename = createCandidateFilename(entity.id, entity.slug);
+      const slug = zString.constructCleanSlug(entity.name);
+      filename = createCandidateFilename(entity.id, slug);
       break;
     case DIRECTORY.MEMBERS:
       entity.slug = zString.constructSimpleNameSlug(

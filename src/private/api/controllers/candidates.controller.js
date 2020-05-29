@@ -2,26 +2,45 @@
 const async = require('async');
 
 const { DIRECTORY, ENTITY } = require('../../../constants/strings');
-const conn = require('../db').getDb();
 const ERROR = require('../../errors');
 const filer = require('../../filer');
 const { respondToClient } = require('../../response');
-const SQL = require('../../sql');
+const knex = require('../knex').getKnex();
+
+const columns = [
+  'candidates.*',
+  {
+    authorName: knex.raw("CONCAT(members.firstname, ' ', members.lastname)")
+  },
+  { authorLevel: 'members.level' },
+  { authorSlug: 'members.slug' },
+  { authorImage: 'members.image' },
+  { authorDescription: 'members.description' },
+  { authorSocials: 'members.socials' }
+];
 
 /** Retrieve all candidates */
 exports.getAllCandidates = (req, res) => {
-  conn.query(SQL.CANDIDATES.READ.ALL, function (err, candidates) {
+  const query = knex
+    .columns(columns)
+    .select()
+    .from('candidates')
+    .leftJoin('members', 'candidates.authorId', 'members.id');
+  query.asCallback(function (err, candidates) {
     respondToClient(res, err, 200, candidates);
   });
 };
 
 /** Retrieve individual candidate */
-exports.getCandidate = (req, res) => {
-  const id = req.params.id;
-  conn.query(SQL.CANDIDATES.READ.SINGLE(), id, function (
-    err,
-    [candidate] = []
-  ) {
+exports.getSingleCandidate = (req, res) => {
+  const { id } = req.params;
+  const query = knex
+    .columns(columns)
+    .select()
+    .from('candidates')
+    .leftJoin('members', 'candidates.authorId', 'members.id')
+    .where('candidates.id', id);
+  query.asCallback(function (err, [candidate] = []) {
     if (err) return respondToClient(res, err);
     if (!candidate) err = ERROR.INVALID_ENTITY_ID(ENTITY.CANDIDATE, id);
     respondToClient(res, err, 200, candidate);
@@ -30,14 +49,28 @@ exports.getCandidate = (req, res) => {
 
 /** Retrieve the details of the latest candidate  */
 exports.getLatestCandidate = (req, res) => {
-  conn.query(SQL.CANDIDATES.READ.LATEST, function (err, [candidate] = []) {
+  const query = knex
+    .columns(columns)
+    .select()
+    .from('candidates')
+    .leftJoin('members', 'candidates.authorId', 'members.id')
+    .orderBy('candidates.id', 'DESC')
+    .limit(1);
+  query.asCallback(function (err, [candidate] = []) {
     respondToClient(res, err, 200, candidate);
   });
 };
 
 /** Get random candidate */
 exports.getRandomCandidate = (req, res) => {
-  conn.query(SQL.CANDIDATES.READ.RANDOM, function (err, [candidate] = []) {
+  const query = knex
+    .columns(columns)
+    .select()
+    .from('candidates')
+    .leftJoin('members', 'candidates.authorId', 'members.id')
+    .orderByRaw('RAND()')
+    .limit(1);
+  query.asCallback(function (err, [candidate] = []) {
     respondToClient(res, err, 200, candidate);
   });
 };
@@ -54,8 +87,8 @@ exports.addCandidate = (req, res) => {
       },
       function (candidate, callback) {
         // Add candidate to database
-        const { sql, values } = SQL.CANDIDATES.CREATE(candidate);
-        conn.query(sql, [values], function (err) {
+        const query = knex.insert(candidate).into('candidates');
+        query.asCallback(function (err) {
           if (err) {
             if (err.errno === 1062)
               err = ERROR.DUPLICATE_CANDIDATE_ID(candidate.id);
@@ -81,10 +114,8 @@ exports.updateCandidate = (req, res) => {
     [
       function (callback) {
         // Delete original image from cloud
-        conn.query(SQL.CANDIDATES.READ.SINGLE('image'), id, function (
-          err,
-          [candidate] = []
-        ) {
+        const query = knex.select().from('candidates').where('id', id);
+        query.asCallback(function (err, [candidate] = []) {
           if (err) return callback(err);
           if (!candidate)
             return callback(ERROR.INVALID_ENTITY_ID(ENTITY.CANDIDATE, id));
@@ -98,9 +129,9 @@ exports.updateCandidate = (req, res) => {
       },
       function (candidate, callback) {
         // Update candidate in database
-        const { sql, values } = SQL.CANDIDATES.UPDATE(id, candidate, changed);
-        conn.query(sql, values, function (err) {
-          err ? callback(err) : callback(null);
+        const query = knex('candidates').update(candidate).where('id', id);
+        query.asCallback(function (err) {
+          callback(err);
         });
       }
     ],
@@ -118,10 +149,8 @@ exports.deleteCandidate = (req, res) => {
     [
       function (callback) {
         // Delete image from cloud
-        conn.query(SQL.CANDIDATES.READ.SINGLE('image'), id, function (
-          err,
-          [candidate] = []
-        ) {
+        const query = knex.select().from('candidates').where('id', id);
+        query.asCallback(function (err, [candidate] = []) {
           if (err) return callback(err);
           if (!candidate)
             return callback(ERROR.INVALID_ENTITY_ID(ENTITY.CANDIDATE, id));
@@ -130,7 +159,8 @@ exports.deleteCandidate = (req, res) => {
       },
       function (callback) {
         // Delete candidate from database
-        conn.query(SQL.CANDIDATES.DELETE, id, function (err) {
+        const query = knex('candidates').where('id', id).del();
+        query.asCallback(function (err) {
           err ? callback(err) : callback(null);
         });
       }

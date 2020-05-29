@@ -15,7 +15,7 @@ router.get(
 );
 
 /** GET single topic by ID */
-router.get('/:id([0-9]+)', validateReq, TopicsController.getTopic);
+router.get('/:id([0-9]+)', validateReq, TopicsController.getSingleTopic);
 
 /** GET random topic */
 router.get('/random', validateReq, TopicsController.getRandomTopic);

@@ -8,7 +8,6 @@ const path = require('path');
 
 const ERROR = require('./errors.js');
 const { renderErrorPage } = require('./response.js');
-const SQL = require('./sql.js');
 
 const {
   accounts,
@@ -23,8 +22,8 @@ const env = process.env.NODE_ENV !== 'production' ? 'dev' : 'prod';
 
 let exigencies = {};
 
-module.exports = function (app, conn, knex, server) {
-  exigencies = { conn, knex, server };
+module.exports = function (app, knex, server) {
+  exigencies = { knex, server };
 
   /** Home page */
   app.get(['/', '/home'], function (req, res) {
@@ -49,10 +48,9 @@ module.exports = function (app, conn, knex, server) {
 
   /** Individual session page */
   app.get('/session/:slug', function (req, res) {
-    const slug = req.params.slug;
-    const sql = SQL.SESSIONS.READ.SINGLE('slug');
-
-    conn.query(sql, [slug], function (err, [session] = []) {
+    const { slug } = req.params;
+    const query = knex.select().from('sessions').where('slug', slug);
+    query.asCallback(function (err, [session] = []) {
       if (err) return renderErrorPage(req, res, err, server);
       if (!session)
         return renderErrorPage(
@@ -84,10 +82,9 @@ module.exports = function (app, conn, knex, server) {
 
   /** Edit Session page */
   app.get('/sessions/edit/:id', function (req, res) {
-    const id = req.params.id;
-    const sql = SQL.SESSIONS.READ.SINGLE('id');
-
-    conn.query(sql, id, function (err, [session] = []) {
+    const { id } = req.params;
+    const query = knex.select().from('sessions').where('id', id);
+    query.asCallback(function (err, [session] = []) {
       if (err) return renderErrorPage(req, res, err, server);
       if (!session)
         return renderErrorPage(
@@ -109,21 +106,23 @@ module.exports = function (app, conn, knex, server) {
   /** Topic Bank page */
   app.get('/topics', function (req, res) {
     const accessToken = req.query.access;
-    const sql = SQL.TOKENS.READ('topicBank');
+    knex
+      .select()
+      .from('tokens')
+      .where('name', 'topicBank')
+      .asCallback(function (err, [token] = []) {
+        if (err) return renderErrorPage(req, res, err, server);
+        const hasAccess = token && token.value === accessToken;
 
-    conn.query(sql, function (err, [token] = []) {
-      if (err) return renderErrorPage(req, res, err, server);
-      const hasAccess = token && token.value === accessToken;
-
-      return server.render(req, res, '/topics', {
-        title: 'Topic Bank | #WOKEWeekly',
-        description: 'The currency of the franchise.',
-        ogUrl: '/topics',
-        cardImage: `public/bg/card-topics.jpg`,
-        backgroundImage: 'bg-topics.jpg',
-        hasAccess
+        return server.render(req, res, '/topics', {
+          title: 'Topic Bank | #WOKEWeekly',
+          description: 'The currency of the franchise.',
+          ogUrl: '/topics',
+          cardImage: `public/bg/card-topics.jpg`,
+          backgroundImage: 'bg-topics.jpg',
+          hasAccess
+        });
       });
-    });
   });
 
   /** Add Topic page */
@@ -138,9 +137,8 @@ module.exports = function (app, conn, knex, server) {
   /** Edit Topic page */
   app.get('/topics/edit/:id', function (req, res) {
     const id = req.params.id;
-    const sql = SQL.TOPICS.READ.SINGLE();
-
-    conn.query(sql, id, function (err, [topic]) {
+    const query = knex.select().from('topics').where('id', id);
+    query.asCallback(function (err, [topic] = []) {
       if (err) return renderErrorPage(req, res, err, server);
       if (!topic)
         return renderErrorPage(
@@ -185,9 +183,28 @@ module.exports = function (app, conn, knex, server) {
   /** Edit #BlackExcellence Candidate page */
   app.get('/blackexcellence/edit/:id', function (req, res) {
     const id = req.params.id;
-    const sql = SQL.CANDIDATES.READ.SINGLE();
 
-    conn.query(sql, id, function (err, [candidate] = []) {
+    const query = knex
+      .columns([
+        [
+          'candidates.*',
+          {
+            authorName: knex.raw(
+              "CONCAT(members.firstname, ' ', members.lastname)"
+            )
+          },
+          { authorLevel: 'members.level' },
+          { authorSlug: 'members.slug' },
+          { authorImage: 'members.image' },
+          { authorDescription: 'members.description' },
+          { authorSocials: 'members.socials' }
+        ]
+      ])
+      .select()
+      .from('candidates')
+      .leftJoin('members', 'candidates.authorId', 'members.id')
+      .where('candidates.id', id);
+    query.asCallback(function (err, [candidate] = []) {
       if (err) return renderErrorPage(req, res, err, server);
       if (!candidate)
         return renderErrorPage(
@@ -210,9 +227,28 @@ module.exports = function (app, conn, knex, server) {
   /** Individual #BlackExcellence Candidate page */
   app.get('/blackexcellence/candidate/:id', function (req, res) {
     const id = req.params.id;
-    const sql = SQL.CANDIDATES.READ.SINGLE();
 
-    conn.query(sql, id, function (err, [candidate] = []) {
+    const query = knex
+      .columns([
+        [
+          'candidates.*',
+          {
+            authorName: knex.raw(
+              "CONCAT(members.firstname, ' ', members.lastname)"
+            )
+          },
+          { authorLevel: 'members.level' },
+          { authorSlug: 'members.slug' },
+          { authorImage: 'members.image' },
+          { authorDescription: 'members.description' },
+          { authorSocials: 'members.socials' }
+        ]
+      ])
+      .select()
+      .from('candidates')
+      .leftJoin('members', 'candidates.authorId', 'members.id')
+      .where('candidates.id', id);
+    query.asCallback(function (err, [candidate] = []) {
       if (err) return renderErrorPage(req, res, err, server);
       if (!candidate)
         return renderErrorPage(
@@ -240,7 +276,8 @@ module.exports = function (app, conn, knex, server) {
   app.get('/team', function (req, res) {
     return server.render(req, res, '/team', {
       title: 'The Team | #WOKEWeekly',
-      description: 'Explore the profiles of the very members who make #WOKE what it is today.',
+      description:
+        'Explore the profiles of the very members who make #WOKE what it is today.',
       ogUrl: '/team',
       cardImage: 'public/bg/card-team.jpg',
       backgroundImage: 'bg-team.jpg'
@@ -338,9 +375,9 @@ module.exports = function (app, conn, knex, server) {
   /** Edit Review page */
   app.get('/reviews/edit/:id', function (req, res) {
     const id = req.params.id;
-    const sql = 'SELECT * FROM reviews WHERE id = ?';
 
-    conn.query(sql, id, function (err, [review] = []) {
+    const query = knex.select().from('reviews').where('id', id);
+    query.asCallback(function (err, [review] = []) {
       if (err) return renderErrorPage(req, res, err, server);
       if (!review)
         return renderErrorPage(
@@ -714,7 +751,8 @@ module.exports = function (app, conn, knex, server) {
     async.parallel(
       [
         function (callback) {
-          conn.query('SELECT slug FROM sessions', function (err, result) {
+          const query = knex.select('slug').from('sessions');
+          query.asCallback(function (err, result) {
             if (err) return callback(err);
             result.forEach((session) =>
               routes.push(`/session/${session.slug}`)
@@ -723,7 +761,8 @@ module.exports = function (app, conn, knex, server) {
           });
         },
         function (callback) {
-          conn.query('SELECT id FROM candidates', function (err, result) {
+          const query = knex.select('id').from('candidates');
+          query.asCallback(function (err, result) {
             if (err) return callback(err);
             result.forEach((candidate) =>
               routes.push(`/blackexcellence/candidate/${candidate.id}`)
@@ -732,19 +771,19 @@ module.exports = function (app, conn, knex, server) {
           });
         },
         function (callback) {
-          conn.query(
-            `SELECT slug FROM members WHERE verified = 1;`,
-            function (err, result) {
-              if (err) return callback(err);
-              result.forEach((member) =>
-                routes.push(`/team/${member.slug}`)
-              );
-              callback(null);
-            }
-          );
+          const query = knex
+            .select('slug')
+            .from('members')
+            .where('verified', 1);
+          query.asCallback(function (err, result) {
+            if (err) return callback(err);
+            result.forEach((member) => routes.push(`/team/${member.slug}`));
+            callback(null);
+          });
         },
         function (callback) {
-          conn.query(`SELECT name FROM pages;`, function (err, result) {
+          const query = knex.select('name').from('pages');
+          query.asCallback(function (err, result) {
             if (err) return callback(err);
             result.forEach((page) => routes.push(`/${page.name}`));
             callback(null);
