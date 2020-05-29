@@ -1,4 +1,3 @@
-import { TEST_USERS } from '@test/configuration/data';
 import React, { Component } from 'react';
 import { Col } from 'react-bootstrap';
 import { connect } from 'react-redux';
