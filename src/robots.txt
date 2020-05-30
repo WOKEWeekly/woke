@@ -1,12 +1,10 @@
 User-agent: *
 Disallow:
 
-#Disallow: /sessions/*
-#Disallow: /blackexcellence/*
+#Disallow: /admin/*
+#Disallow: /docs/*
 #Disallow: /topics
-#Disallow: /team
 #Disallow: /account
-#Disallow: /admin
 #Disallow: /about/*
 #Disallow: /cookies/*
 #Disallow: /donate/*
@@ -15,7 +13,5 @@ Disallow:
 #Disallow: /mentalhealth/*
 #Disallow: /constitution
 #Disallow: /admin/*
-
-#Allow: /blackexcellence/candidate/*
 
 Sitemap: https://www.wokeweekly.co.uk/sitemap.xml
