@@ -44,11 +44,13 @@
     "react": "^16.13.1",
     "react-bootstrap": "^1.0.1",
     "react-dom": "^16.13.1",
+    "react-instagram-embed": "^1.5.0",
     "react-redux": "^7.2.0",
     "react-responsive": "^7.0.0",
     "react-share": "^4.1.0",
     "react-toastify": "^5.5.0",
     "react-transition-group": "^4.1.1",
+    "react-twitter-embed": "^3.0.3",
     "react-visibility-sensor": "^5.1.1",
     "redux": "^4.0.5",
     "redux-persist": "^5.10.0",
@@ -56,7 +58,7 @@
     "request": "^2.88.0",
     "sass": "^1.26.3",
     "sitemap": "^3.2.2",
-    "zavid-modules": "^2.5.3"
+    "zavid-modules": "^2.5.4"
   },
   "devDependencies": {
     "@babel/core": "^7.9.0",
