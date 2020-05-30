@@ -171,7 +171,7 @@ module.exports = function (app, knex, server) {
   });
 
   /** Add #BlackExcellence Candidate page */
-  app.get('/blackexcellence/add', function (req, res) {
+  app.get('/admin/candidates/add', function (req, res) {
     return server.render(req, res, '/blackexcellence/crud', {
       title: 'Add New Candidate',
       backgroundImage: 'bg-blackex.jpg',
@@ -181,24 +181,22 @@ module.exports = function (app, knex, server) {
   });
 
   /** Edit #BlackExcellence Candidate page */
-  app.get('/blackexcellence/edit/:id', function (req, res) {
+  app.get('/admin/candidates/edit/:id', function (req, res) {
     const id = req.params.id;
 
     const query = knex
       .columns([
-        [
-          'candidates.*',
-          {
-            authorName: knex.raw(
-              "CONCAT(members.firstname, ' ', members.lastname)"
-            )
-          },
-          { authorLevel: 'members.level' },
-          { authorSlug: 'members.slug' },
-          { authorImage: 'members.image' },
-          { authorDescription: 'members.description' },
-          { authorSocials: 'members.socials' }
-        ]
+        'candidates.*',
+        {
+          authorName: knex.raw(
+            "CONCAT(members.firstname, ' ', members.lastname)"
+          )
+        },
+        { authorLevel: 'members.level' },
+        { authorSlug: 'members.slug' },
+        { authorImage: 'members.image' },
+        { authorDescription: 'members.description' },
+        { authorSocials: 'members.socials' }
       ])
       .select()
       .from('candidates')
@@ -225,24 +223,22 @@ module.exports = function (app, knex, server) {
   });
 
   /** Individual #BlackExcellence Candidate page */
-  app.get('/blackexcellence/candidate/:id', function (req, res) {
+  app.get('/blackexcellence/:id', function (req, res) {
     const id = req.params.id;
 
     const query = knex
       .columns([
-        [
-          'candidates.*',
-          {
-            authorName: knex.raw(
-              "CONCAT(members.firstname, ' ', members.lastname)"
-            )
-          },
-          { authorLevel: 'members.level' },
-          { authorSlug: 'members.slug' },
-          { authorImage: 'members.image' },
-          { authorDescription: 'members.description' },
-          { authorSocials: 'members.socials' }
-        ]
+        'candidates.*',
+        {
+          authorName: knex.raw(
+            "CONCAT(members.firstname, ' ', members.lastname)"
+          )
+        },
+        { authorLevel: 'members.level' },
+        { authorSlug: 'members.slug' },
+        { authorImage: 'members.image' },
+        { authorDescription: 'members.description' },
+        { authorSocials: 'members.socials' }
       ])
       .select()
       .from('candidates')
@@ -262,7 +258,7 @@ module.exports = function (app, knex, server) {
       return server.render(req, res, '/blackexcellence/single', {
         title: `${candidate.label} | #WOKEWeekly`,
         description: zText.extractExcerpt(candidate.description),
-        ogUrl: `/blackexcellence/candidate/${candidate.id}`,
+        ogUrl: `/blackexcellence/${candidate.id}`,
         cardImage: candidate.image,
         alt: candidate.label,
         backgroundImage: 'bg-blackex.jpg',
@@ -766,7 +762,7 @@ module.exports = function (app, knex, server) {
           query.asCallback(function (err, result) {
             if (err) return callback(err);
             result.forEach((candidate) =>
-              routes.push(`/blackexcellence/candidate/${candidate.id}`)
+              routes.push(`/blackexcellence/${candidate.id}`)
             );
             callback(null);
           });

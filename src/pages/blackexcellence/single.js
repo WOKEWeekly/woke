@@ -95,14 +95,13 @@ class CandidatePage extends Component {
         const link = `/team/${authorSlug}`;
 
         text = (
-          <React.Fragment>
-            Written by
+          <>
+            Written by{' '}
             <a className={css.author} href={link}>
-              {' '}
               {authorName}
             </a>
             , {date}
-          </React.Fragment>
+          </>
         );
       }
 
@@ -154,7 +153,7 @@ class CandidatePage extends Component {
               <EditEntityButton
                 title={'Edit Candidate'}
                 onClick={() =>
-                  (location.href = `/blackexcellence/edit/${candidate.id}`)
+                  (location.href = `/admin/candidates/edit/${candidate.id}`)
                 }
               />
               <DeleteEntityButton

@@ -159,7 +159,7 @@ class CandidateAdd extends Component {
           type: 'success',
           message: `You've successfully edited the details of ${name}.`
         });
-        location.href = `/blackexcellence/candidate/${id}`;
+        location.href = `/blackexcellence/${id}`;
       }
     });
   };
@@ -169,7 +169,7 @@ class CandidateAdd extends Component {
     const backPath =
       operation === 'add'
         ? '/blackexcellence'
-        : `/blackexcellence/candidate/${this.state.id}`;
+        : `/blackexcellence/${this.state.id}`;
     return (
       <CandidateForm
         heading={title}

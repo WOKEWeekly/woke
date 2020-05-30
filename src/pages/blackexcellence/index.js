@@ -166,7 +166,7 @@ class BlackExcellence extends Component {
             {user.clearance >= CLEARANCES.ACTIONS.CRUD_BLACKEX ? (
               <AddEntityButton
                 title={'Add Candidate'}
-                onClick={() => (location.href = '/blackexcellence/add')}
+                onClick={() => (location.href = '/admin/candidates/add')}
               />
             ) : null}
 
@@ -202,7 +202,7 @@ class Candidate extends PureComponent {
         determinant={this.state.isLoaded}
         duration={500}
         delay={75 * idx}>
-        <VanillaLink href={`/blackexcellence/candidate/${item.id}`}>
+        <VanillaLink href={`/blackexcellence/${item.id}`}>
           <div className={css.cell}>
             <img
               src={`${cloudinary.url}/${cloudinary.lazy}/${item.image}`}

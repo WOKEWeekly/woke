@@ -67,7 +67,7 @@ class RandomCandidate extends Component {
       );
     }
 
-    const link = `/blackexcellence/candidate/${candidate.id}`;
+    const link = `/blackexcellence/${candidate.id}`;
 
     return (
       <div className={css.randomCandidate}>
