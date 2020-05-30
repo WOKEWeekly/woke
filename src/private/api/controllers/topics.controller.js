@@ -6,6 +6,8 @@ const knex = require('../knex').getKnex();
 const { ENTITY } = require('../../../constants/strings');
 const ERROR = require('../../errors');
 
+const { zString } = require('zavid-modules');
+
 /** Retrieve all topics */
 exports.getAllTopics = (req, res) => {
   const query = knex.select().from('topics');
@@ -41,7 +43,7 @@ exports.getRandomTopic = (req, res) => {
 
 /** Generate Topic Bank access token */
 exports.generateTopicBankToken = (req, res) => {
-  const token = 'hi'; // TODO: zText random string generation
+  const token = zString.generateRandomString(12);
   const query = knex('tokens')
     .update({
       value: token,
