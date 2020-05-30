@@ -577,6 +577,7 @@ module.exports = function (app, knex, server) {
         }
       ],
       function (err, justVerified, user = {}) {
+        if (err) return res.redirect('/');
         server.render(req, res, '/_auth/account', {
           title: 'Account | #WOKEWeekly',
           ogUrl: '/account',
