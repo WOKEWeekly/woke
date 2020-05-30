@@ -1,6 +1,8 @@
 import classNames from 'classnames';
 import React, { Component } from 'react';
+import InstagramEmbed from 'react-instagram-embed';
 import { connect } from 'react-redux';
+import { TwitterTweetEmbed } from 'react-twitter-embed';
 import { zText } from 'zavid-modules';
 
 import { Icon } from '@components/icon.js';
@@ -37,7 +39,8 @@ export const Subtitle = ({ children, className }) => {
  * @param {object} props.substitutions - A map of variable substitutions
  * to be made to the text.
  * @param {string} props.theme - The current theme from the Redux state.
- * @param {string} props.cssOverrides - The CSS styling overrides for the emphasis and section formatting.
+ * @param {string} props.cssOverrides - The CSS styling overrides for the emphasis
+ * and section formatting.
  * @param {string} props.link - The hyperlink for the embedded {@link ReadMore} component.
  * @param {string} props.moretext - The text to be formatted.
  * @param {object} props.moreClass - The CSS styling for the embedded {@link ReadMore} component.
@@ -68,6 +71,10 @@ const IParagraph = ({
       divider: css.divider,
       hyperlink: css[`link-${theme.toLowerCase()}`],
       ...cssOverrides
+    },
+    socialWrappers: {
+      Tweet: EmbeddedTweet,
+      InstagramPost: EmbeddedInsta
     }
   });
 
@@ -140,6 +147,27 @@ export class VanillaLink extends Component {
     );
   }
 }
+
+/**
+ * Component for embedding tweets into articles.
+ * @param {object} props - The properties.
+ * @param {object} props.id - The ID of the tweet
+ * @returns {React.Component} The component.
+ */
+const EmbeddedTweet = ({ id }) => {
+  return <TwitterTweetEmbed tweetId={id} />;
+};
+
+/**
+ * Component for embedding Instagram posts into articles.
+ * @param {object} props - The properties.
+ * @param {object} props.url - The url of the Instagram post.
+ * @param {object} props.hideCaption - The option to hide the post's caption.
+ * @returns {React.Component} The component.
+ */
+const EmbeddedInsta = ({ url, hideCaption = false }) => {
+  return <InstagramEmbed url={url} maxWidth={500} hideCaption={hideCaption} />;
+};
 
 const mapStateToProps = (state) => ({
   theme: state.theme

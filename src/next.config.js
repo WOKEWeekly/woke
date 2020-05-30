@@ -32,10 +32,10 @@ module.exports = {
       })
     ];
 
-    // TODO: Change to all absolute imports
     config.resolve.alias = {
       ...config.resolve.alias,
-      ...mapImportsToAliases()
+      ...mapImportsToAliases(),
+      react: path.resolve(__dirname, 'node_modules/react')
     };
 
     return config;
