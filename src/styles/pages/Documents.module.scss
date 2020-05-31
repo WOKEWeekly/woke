@@ -5,7 +5,7 @@
 *************/
 
 .documentTabler {
-  @include entityTabler(4% 1fr 1fr 1fr 4% 4% 4%);
+  @include entity-tabler(4% 1fr 1fr 1fr 4% 4% 4%);
 }
 
 /*************

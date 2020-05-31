@@ -95,10 +95,11 @@ class RandomCandidate extends Component {
                 </Subtitle>
                 <Divider />
                 <Paragraph
-                  link={link}
+                  truncate={45}
+                  morelink={link}
                   moretext={`Discover more on ${candidate.firstname}`}
                   className={css.paragraph}>
-                  {zText.truncateText(candidate.description)}
+                  {candidate.description}
                 </Paragraph>
               </div>
             </div>

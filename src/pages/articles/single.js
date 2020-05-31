@@ -127,7 +127,7 @@ const ArticlePage = ({ article, user }) => {
   const ReactionBlock = () => {
     return (
       <div className={css.reactionBlock}>
-        <Icon name={'sign-language'} style={{fontSize: '1.5rem'}} />
+        <Icon name={'sign-language'} style={{ fontSize: '1.5rem' }} />
         <span className={css.clapCount}>{article.claps} claps</span>
       </div>
     );
@@ -155,10 +155,11 @@ const ArticlePage = ({ article, user }) => {
         <PromoIconsBar socials={authorSocials} />
         <Paragraph
           className={css.description}
+          truncate={60}
           moretext={`Read more on ${authorName}`}
-          moreClass={css.readmore}
-          link={link}>
-          {zText.truncateText(authorDescription, 60)}
+          moreclass={css.readmore}
+          morelink={link}>
+          {authorDescription}
         </Paragraph>
       </Fader>
     );

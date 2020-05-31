@@ -1,4 +1,5 @@
 import React, { Component, memo, useState, useEffect } from 'react';
+import { Col } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { zDate } from 'zavid-modules';
 
@@ -6,7 +7,7 @@ import { AdminButton } from '@components/button.js';
 import { CloudinaryImage } from '@components/image';
 import { Shader, Spacer } from '@components/layout.js';
 import { Loader, Empty } from '@components/loader.js';
-import { Title, Subtitle, VanillaLink } from '@components/text.js';
+import { Title, Subtitle, Paragraph, VanillaLink } from '@components/text.js';
 import { BottomToolbar } from '@components/toolbar.js';
 import { Zoomer, Fader } from '@components/transitioner.js';
 
@@ -70,9 +71,9 @@ class Blog extends Component {
     return (
       <Shader>
         <Spacer gridrows={'auto 1fr auto'}>
-            <Fader determinant={isLoaded} duration={1500}>
-              <ArticleCollection />
-            </Fader>
+          <Fader determinant={isLoaded} duration={1500}>
+            <ArticleCollection />
+          </Fader>
         </Spacer>
 
         <BottomToolbar>
@@ -95,34 +96,46 @@ const Article = memo(({ article, idx }) => {
   }, [isLoaded]);
 
   return (
-    <Zoomer
-      determinant={isLoaded}
-      duration={400}
-      delay={75 * idx}
-      className={css.icontainer}>
+    <Zoomer determinant={isLoaded} duration={400} delay={75 * idx}>
       <VanillaLink href={`/blog/${article.slug}`}>
         <div className={css.cell}>
-          <CloudinaryImage
-            src={article.image}
-            alt={article.title}
-            className={css.image}
-            lazy={'mw'}
-          />
-          <div className={css.details}>
-            <div className={css.authorImage}>
-              <CloudinaryImage
-                src={article.authorImage}
-                title={article.authorName}
-                lazy={'ss'}
-              />
+          <Col xs={{ span: 'auto', order: 6 }} md={{ span: 'auto', order: 1 }}>
+            <CloudinaryImage
+              src={article.image}
+              alt={article.title}
+              className={css.image}
+              lazy={'mw'}
+            />
+          </Col>
+          <Col xs={{ span: 'auto', order: 1 }} md={{ span: 'auto', order: 6 }}>
+            <div className={css.details}>
+              <div className={css.authorImage}>
+                <CloudinaryImage
+                  src={article.authorImage}
+                  title={article.authorName}
+                  lazy={'ss'}
+                />
+              </div>
+              <div>
+                <Title className={css.title}>{article.title}</Title>
+                <Subtitle className={css.date}>
+                {article.authorName} • {zDate.formatDate(article.datePublished, true)}
+                </Subtitle>
+              </div>
             </div>
-            <div>
-              <Title className={css.title}>{article.title}</Title>
-              <Subtitle className={css.date}>
-                {zDate.formatDate(article.datePublished, true)}
-              </Subtitle>
-            </div>
-          </div>
+          </Col>
+          <Col xs={{ span: 'auto', order: 12 }}>
+            <Paragraph
+              truncate={45}
+              morelink={article.slug}
+              moretext={'Read the full article'}
+              moreclass={css.more}
+              cssOverrides={{
+                paragraph: css.previewText
+              }}>
+              {article.content}
+            </Paragraph>
+          </Col>
         </div>
       </VanillaLink>
     </Zoomer>

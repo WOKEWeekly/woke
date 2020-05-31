@@ -40,25 +40,31 @@ $break-xxl: 1408px; // Extra large devices (large desktops)
   cursor: pointer;
   font-family: $body-font;
   text-decoration: underline;
-  transition: all 0.2s;
   -webkit-transition: all 0.2s;
+  transition: all 0.2s;
+
   &-default {
     @extend .link;
     color: #bc83ff;
+
     &:hover {
       color: #9769cc;
     }
   }
+
   &-blackex {
     @extend .link;
     color: #36deea;
+
     &:hover {
       color: #2babb4;
     }
   }
+
   &-mental {
     @extend .link;
     color: #36ea92;
+
     &:hover {
       color: #29af6e;
     }
@@ -69,14 +75,17 @@ $break-xxl: 1408px; // Extra large devices (large desktops)
     border: none;
     outline: none;
     padding: 0;
+
     &:hover {
       text-decoration: underline;
     }
   }
 }
+
 .invisible_button {
   background: none;
   border: none;
+
   &:focus {
     outline: none;
   }
@@ -95,6 +104,7 @@ $break-xxl: 1408px; // Extra large devices (large desktops)
     width: 100%;
   }
 }
+
 .responsive-container-70 {
   margin: 0 auto;
   width: 70%;
@@ -105,6 +115,7 @@ $break-xxl: 1408px; // Extra large devices (large desktops)
     width: 100%;
   }
 }
+
 .responsive-container-80 {
   margin: 0 auto;
   width: 80%;
@@ -122,8 +133,9 @@ $break-xxl: 1408px; // Extra large devices (large desktops)
 ** Mixins **
 ***********/
 @mixin scale-on-hover($scale) {
-  transition: transform 0.2s ease-in-out;
   -webkit-transition: transform 0.2s ease-in-out;
+  transition: transform 0.2s ease-in-out;
+
   &:hover {
     transform: scale($scale);
   }
@@ -150,16 +162,17 @@ $break-xxl: 1408px; // Extra large devices (large desktops)
 @mixin entity($float, $width) {
   margin: 1em 0;
   overflow-x: hidden;
+
   .image {
     border-radius: 8px;
     float: $float;
+    margin-bottom: 1em;
+    width: $width;
     @if $float == right {
       margin-left: 1.5em;
     } @else {
       margin-right: 1.5em;
     }
-    margin-bottom: 1em;
-    width: $width;
     @media (max-width: $break-xl) {
       width: 50%;
     }
@@ -167,13 +180,16 @@ $break-xxl: 1408px; // Extra large devices (large desktops)
       width: 100%;
     }
   }
+
   .details {
     .title {
       @include font-scaler(2);
     }
+
     .subtitle {
       @include font-scaler(1.1);
     }
+
     .description {
       @include font-scaler(1.2);
     }
@@ -207,11 +223,30 @@ $break-xxl: 1408px; // Extra large devices (large desktops)
   }
 }
 
-@mixin entityTabler($columns...) {
-  padding: 1em 2em;
-  @media (max-width: $break-md) {
-    padding: 1em;
+@mixin responsive-grid-2($maxCol: 4) {
+  display: grid;
+  grid-template-columns: repeat($maxCol, calc(100% / #{$maxCol}));
+
+  @if $maxCol > 3 {
+    @media (max-width: $break-xl) {
+      grid-template-columns: repeat(3, calc(100% / 3));
+    }
   }
+
+  @if $maxCol > 2 {
+    @media (max-width: $break-lg) {
+      grid-template-columns: repeat(2, 50%);
+    }
+  }
+  
+  @media (max-width: $break-md) {
+    grid-template-columns: 100%;
+  }
+}
+
+@mixin entity-tabler($columns...) {
+  padding: 1em 2em;
+
   .heading {
     font-size: 2em;
     margin-bottom: 0.5em;
@@ -219,10 +254,12 @@ $break-xxl: 1408px; // Extra large devices (large desktops)
       font-size: 1.5em;
     }
   }
+
   .grid {
     display: grid;
     font-size: 1.1em;
     position: relative;
+
     .header,
     .row {
       align-items: center;
@@ -230,62 +267,77 @@ $break-xxl: 1408px; // Extra large devices (large desktops)
       display: grid;
       grid-template-columns: $columns;
       padding: 0.7em 0;
+
       span {
         padding: 0 0.5em;
         word-break: break-word;
+
         .image {
           width: 100%;
         }
       }
     }
+
     .header {
       border-bottom: 1px solid rgba(255, 255, 255, 0.6);
       font-family: $title-font;
     }
+
     .row {
-      font-family: $body-font;
       border-radius: 10px;
+      font-family: $body-font;
+
       &:hover {
         background-color: $primary-light;
       }
+
       button {
         @extend .invisible_button;
         cursor: pointer;
       }
     }
   }
+
   .list {
+    @include font-scaler(1);
     color: white;
     display: grid;
-    @include font-scaler(1);
+
     .row {
       background: $primary-dark;
       border: 1px solid white;
       border-radius: 15px;
       font-family: $body-font;
-      padding: 1em;
       margin: 0.5em 0;
+      padding: 1em;
       position: relative;
+
       div:not(.index):not(.crud):not([class*='image' i]) {
         display: grid;
         grid-template-columns: 2em 1fr;
       }
+
       .name {
         @include font-scaler(1.5);
         font-family: $title-font;
       }
+
       .index {
         @include font-scaler(1.5);
         font-family: $title-font;
         position: absolute;
-        top: 5%;
         right: 5%;
+        top: 5%;
       }
+
       .crud {
-        position: absolute;
         bottom: 5%;
+        position: absolute;
         right: 0;
       }
     }
+  }
+  @media (max-width: $break-md) {
+    padding: 1em;
   }
 }

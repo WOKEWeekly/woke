@@ -79,10 +79,11 @@ export default class UpcomingSession extends Component {
                 </Subtitle>
                 <Divider />
                 <Paragraph
-                  link={link}
+                  truncate={45}
+                  morelink={link}
                   moretext={'Find out more'}
                   className={css.paragraph}>
-                  {zText.truncateText(session.description)}
+                  {session.description}
                 </Paragraph>
               </div>
             </div>

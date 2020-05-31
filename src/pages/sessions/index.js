@@ -261,9 +261,10 @@ class Session extends PureComponent {
                   <Divider />
                   <Paragraph
                     className={css.description}
-                    link={link}
+                    truncate={60}
+                    morelink={link}
                     moretext={'Read more'}>
-                    {zText.truncateText(item.description, 60)}
+                    {item.description}
                   </Paragraph>
                 </div>
               </Col>
