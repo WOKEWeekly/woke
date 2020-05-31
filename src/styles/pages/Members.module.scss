@@ -86,7 +86,7 @@
       border-radius: 45%;
       width: 100%;
       @media (max-width: $break-md) {
-        border: none;
+        border-style: none;
         border-radius: 10%;
       }
     }

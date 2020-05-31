@@ -72,7 +72,7 @@ $break-xxl: 1408px; // Extra large devices (large desktops)
 
   &-button {
     background: none;
-    border: none;
+    border-style: none;
     outline: none;
     padding: 0;
 
@@ -84,7 +84,7 @@ $break-xxl: 1408px; // Extra large devices (large desktops)
 
 .invisible_button {
   background: none;
-  border: none;
+  border-style: none;
 
   &:focus {
     outline: none;
