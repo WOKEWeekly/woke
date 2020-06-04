@@ -4,54 +4,76 @@
 *** index.js
 *************/
 
-.igrid {
+.article-grid {
   @include responsive-grid-2(3);
   width: 100%;
-  @media (max-width: $break-md) {
-    border: none;
-  }
 
-  .cell {
-    @include scale-on-hover(1.05);
-    cursor: pointer;
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-    margin: 1em;
+  .article-cell {
+    border-radius: 15px;
     overflow: hidden;
 
-    @media (max-width: $break-md) {
-      border-bottom: 1px solid white;
-      margin: 0 1em;
-      padding: .5em 0;
+    @media (min-width: $break-md) {
+      margin: 0.5em;
+      padding: 0.5em;
+      &:hover {
+        background-color: $primary-light-fade;
+      }
     }
 
-    .image {
-      width: 100%;
+    .article-cell-contents {
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      margin: 0.5em;
+      overflow: hidden;
+      padding: 1.5em 0.5em;
+
+      @media (min-width: $break-md) {
+        @include scale-on-hover(1.03);
+      }
+
       @media (max-width: $break-md) {
+        padding: 1em 0.8em !important;
+      }
+
+      .article-image {
         border-radius: 8px;
         overflow: hidden;
+        width: 100%;
       }
-    }
 
-    .details {
-      align-items: flex-start;
-      display: grid;
-      grid-template-columns: 4em auto;
-      justify-content: flex-start;
-      padding: 0.8em 0.5em;
-      text-align: left;
+      .article-details {
+        align-items: flex-start;
+        display: grid;
+        grid-template-columns: 4em auto;
+        justify-content: flex-start;
+        padding: 0.8em 0.5em;
+        text-align: left;
+      }
 
-      .title {
+      .article-title {
         @include font-scaler(1.3);
+        line-height: 1.3;
+        @media (max-width: $break-md) {
+          @include font-scaler(1.65);
+          padding: 0.6em 0;
+        }
       }
 
-      .date {
+      .article-metadata {
         @include font-scaler(0.8);
+        margin-top: 0.2em;
       }
 
-      .authorImage {
-        border-radius: 50%;
+      .article-metadata-md {
+        @include font-scaler(0.85);
+        align-items: center;
+        display: flex;
+        margin: 1em 0;
+      }
+
+      .author-image {
+        border-radius: 15px;
         margin-right: 0.5em;
         overflow: hidden;
         width: 50px;
@@ -60,19 +82,44 @@
           width: 100%;
         }
       }
-    }
 
-    .previewText {
-      @include font-scaler(1.2);
-      margin-bottom: 1em;
+      .author-image-md {
+        @extend .author-image;
+        border-radius: 50%;
+        width: 40px;
+      }
+
+      .article-paragraph {
+        padding: 0 0.2em;
+
+        @media (max-width: $break-md) {
+          margin-bottom: 0 !important;
+        }
+
+        .article-content {
+          @include font-scaler(1.2);
+          margin-bottom: 1em;
+        }
+
+        .article-content-md {
+          @include font-scaler(1.5);
+          margin-bottom: 1em;
+        }
+      }
+
+      .article-more {
+        @include font-scaler(1);
+      }
+
       @media (max-width: $break-md) {
-        padding-top: 1em;
+        border-bottom: 1px solid white;
+        margin: 0 1em;
+        padding: 0.5em 0;
       }
     }
-
-    .more {
-      @include font-scaler(1);
-    }
+  }
+  @media (max-width: $break-md) {
+    border-style: none;
   }
 }
 
@@ -80,65 +127,7 @@
 *** single.js
 *************/
 
-.columnparts {
-  @media (max-width: $break-md) {
-    padding: 0 !important;
-  }
-}
-
-.container {
-  margin: 1em 0;
-
-  .title {
-    @include font-scaler(3);
-    line-height: 1.2;
-    margin-bottom: 0.2em;
-  }
-
-  .content {
-    @include font-scaler(1.25);
-  }
-
-  .image {
-    border-radius: 10px;
-    margin: 1em 0;
-    width: 100%;
-  }
-
-  .authorProfile {
-    .author {
-      @include font-scaler(0.8);
-      // font-style: italic;
-    }
-
-    .name {
-      @include font-scaler(1.15);
-    }
-
-    .description {
-      @include font-scaler(0.95);
-      margin-bottom: 0;
-    }
-  }
-
-  .details {
-    @include font-scaler(0.8);
-
-    .author {
-      @extend .link-default;
-      text-decoration: none !important;
-    }
-  }
-
-  .reactionBlock {
-    .clapCount {
-      @extend .text;
-      font-family: $title-font;
-    }
-  }
-}
-
-.authorImage {
+%image {
   border-radius: 50%;
   float: left;
   margin-right: 0.7em;
@@ -149,21 +138,118 @@
   }
 }
 
-.detailsThumbnail {
-  @extend .authorImage;
-  width: 42px;
+.column-article {
+  @media (max-width: $break-md) {
+    padding: 0 !important;
+  }
 }
 
-.authorThumbnail {
-  @extend .authorImage;
-  width: 96px;
+.column-sidebar {
+  @extend .column-article;
+  padding-right: 0 !important;
+}
+
+.article-container {
+  margin: 1em 0;
+
+  .article-title {
+    @include font-scaler(3);
+    line-height: 1.2;
+    padding: 0.2em 0 0.3em;
+  }
+
+  .article-content {
+    @include font-scaler(1.25);
+  }
+
+  .article-image {
+    border-radius: 10px;
+    margin: 1em 0;
+    overflow: hidden;
+    width: 100%;
+  }
+
+  .article-author-profile {
+    .author-label {
+      @include font-scaler(0.8);
+    }
+
+    .author-profile-name {
+      @include font-scaler(1.15);
+    }
+
+    .author-profile-description {
+      @include font-scaler(1);
+    }
+
+    .author-profile-thumbnail {
+      @extend %image;
+      width: 100px;
+    }
+
+    .override-body {
+      margin-bottom: 1em;
+    }
+  }
+
+  .article-metadata {
+    @include font-scaler(0.8);
+
+    .metadata-author-name {
+      @extend .link-default;
+      text-decoration: none !important;
+    }
+
+    .metadata-author-thumbnail {
+      @extend %image;
+      width: 42px;
+    }
+  }
+
+  .reaction-heading {
+    margin-bottom: 1em;
+  }
+
+  .reaction-block {
+    align-items: center;
+    display: flex;
+    justify-content: space-between;
+
+    .clap-button {
+      display: flex;
+      justify-content: center;
+      padding: 1.5em 0;
+
+      .clap-button-text {
+        @extend %text;
+        @include font-scaler(1.1);
+      }
+    }
+
+    .clap-count-block {
+      align-items: center;
+      background: $primary-light-fade;
+      border: 1px solid white;
+      border-radius: 5px;
+      display: flex;
+      padding: 0.5em 1em;
+
+      .clap-count {
+        @extend %text;
+        @include font-scaler(1.2);
+        font-family: $title-font;
+      }
+    }
+  }
 }
 
 .readmore {
   @include font-scaler(0.9);
 }
 
-.tagblock {
+.article-tag-block {
+  margin-bottom: 1.5em;
+
   .tag {
     @include font-scaler(0.7);
     background: rgb(255, 255, 255);
@@ -212,7 +298,7 @@
 
 .sidebar {
   background: $sidebar;
-  padding: 1em;
+  padding: 1em 1.5em;
 
   .heading {
     @include font-scaler(1.7);

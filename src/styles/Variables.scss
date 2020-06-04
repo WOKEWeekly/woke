@@ -5,6 +5,7 @@ $body-font: 'Raleway';
 /** Colors */
 $primary: #6c4d90;
 $primary-light: rgba(142, 116, 171, 0.5);
+$primary-light-fade: rgba(107, 77, 144, 0.5);
 $primary-dark: rgba(28, 8, 34, 0.8);
 $dark: rgb(13, 12, 14);
 
@@ -31,7 +32,8 @@ $break-xl: 1200px; // Extra large devices (large desktops)
 $break-xxl: 1408px; // Extra large devices (large desktops)
 
 /** Global template styles */
-.text {
+.text,
+%text {
   color: white;
   font-family: $body-font;
 }
@@ -82,7 +84,8 @@ $break-xxl: 1408px; // Extra large devices (large desktops)
   }
 }
 
-.invisible_button {
+.invisible_button,
+%invisible-button {
   background: none;
   border-style: none;
 

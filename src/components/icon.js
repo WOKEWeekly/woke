@@ -8,13 +8,15 @@ import css from '@styles/components/Icon.module.scss';
 
 export class Icon extends Component {
   render() {
-    const { prefix, name, color, style, className } = this.props;
+    const { prefix, name, color, style, className, width, height } = this.props;
     return (
       <FontAwesomeIcon
         icon={[prefix || 'fas', name]}
         color={color || 'white'}
         style={{ marginRight: '0.4em', ...style }}
         className={className}
+        width={width}
+        height={height}
       />
     );
   }

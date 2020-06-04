@@ -1,16 +1,25 @@
-@import "../Variables";
+@import '../Variables';
 
 .socialIcon {
-  &-default { color: $primary; }
-  &-blackex { color: $blackex; }
-  &-mental { color: $mental; }
+  &-default {
+    color: $primary;
+  }
+
+  &-blackex {
+    color: $blackex;
+  }
+
+  &-mental {
+    color: $mental;
+  }
 }
 
 .header_socials {
   font-size: 1.5em;
-  margin: 0 .1em;
+  margin: 0 0.1em;
   @media (max-width: $break-md) {
-    font-size: 1.3em; }
+    font-size: 1.3em;
+  }
 }
 
 .footer_socials {
@@ -26,29 +35,76 @@
 .promo_bar {
   .promo_socials {
     font-size: 1.2em;
-    margin: .2em;
+    margin: 0.2em;
   }
 }
 
 .socials {
-  color: #8E8E8E;
+  color: #8e8e8e;
   font-family: $title-font;
   word-break: break-all;
+
   a {
     font-family: $body-font;
     font-weight: bold;
-    margin-left: .5em;
+    margin-left: 0.5em;
   }
 
-  &-default { @extend .socials; a { @extend .link-default; } }
-  &-blackex { @extend .socials; a { @extend .link-blackex; } }
-  &-mental { @extend .socials; a { @extend .link-mental; } }
+  &-default {
+    @extend .socials;
+
+    a {
+      @extend .link-default;
+    }
+  }
+
+  &-blackex {
+    @extend .socials;
+
+    a {
+      @extend .link-blackex;
+    }
+  }
+
+  &-mental {
+    @extend .socials;
+
+    a {
+      @extend .link-mental;
+    }
+  }
 }
 
 /** Social Media Share Block **/
-.smshareblock {
+.social-media-share-block {
   margin: 1.5em 0;
-  button {
-    margin-right: .2em;
+
+  .social-media-share-buttons {
+    align-items: baseline;
+    display: flex;
+    margin-top: 0.5em;
+
+    button:not(.copy-link-button) {
+      margin-right: 0.2em;
+    }
+  }
+
+  .copy-link-button {
+    @extend .invisible_button;
+    align-items: center;
+    background: #828282;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    height: 50px;
+    justify-content: center;
+    overflow: hidden;
+    padding: 0;
+    width: 50px;
+  }
+
+  .copy-link-icon {
+    font-size: 20px;
+    margin-right: 0 !important;
   }
 }

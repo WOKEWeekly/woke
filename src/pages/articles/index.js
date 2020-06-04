@@ -5,7 +5,7 @@ import { zDate } from 'zavid-modules';
 
 import { AdminButton } from '@components/button.js';
 import { CloudinaryImage } from '@components/image';
-import { Shader, Spacer } from '@components/layout.js';
+import { Shader, Spacer, Default, Mobile } from '@components/layout.js';
 import { Loader, Empty } from '@components/loader.js';
 import { Title, Subtitle, Paragraph, VanillaLink } from '@components/text.js';
 import { BottomToolbar } from '@components/toolbar.js';
@@ -64,7 +64,7 @@ class Blog extends Component {
           return <Article key={index} idx={index} article={article} />;
         });
 
-        return <div className={css.igrid}>{items}</div>;
+        return <div className={css['article-grid']}>{items}</div>;
       }
     };
 
@@ -95,21 +95,26 @@ const Article = memo(({ article, idx }) => {
     setLoaded(true);
   }, [isLoaded]);
 
+  const hyperlink = `/blog/${article.slug}`;
+
   return (
-    <Zoomer determinant={isLoaded} duration={400} delay={75 * idx}>
-      <VanillaLink href={`/blog/${article.slug}`}>
-        <div className={css.cell}>
-          <Col xs={{ span: 'auto', order: 6 }} md={{ span: 'auto', order: 1 }}>
+    <Zoomer
+      determinant={isLoaded}
+      duration={400}
+      delay={75 * idx}
+      className={css['article-cell']}
+      postTransitions={'background-color .3s ease'}>
+      <Default>
+        <VanillaLink href={hyperlink}>
+          <div className={css['article-cell-contents']}>
             <CloudinaryImage
               src={article.image}
               alt={article.title}
-              className={css.image}
+              className={css['article-image']}
               lazy={'mw'}
             />
-          </Col>
-          <Col xs={{ span: 'auto', order: 1 }} md={{ span: 'auto', order: 6 }}>
-            <div className={css.details}>
-              <div className={css.authorImage}>
+            <div className={css['article-details']}>
+              <div className={css['author-image']}>
                 <CloudinaryImage
                   src={article.authorImage}
                   title={article.authorName}
@@ -117,27 +122,70 @@ const Article = memo(({ article, idx }) => {
                 />
               </div>
               <div>
-                <Title className={css.title}>{article.title}</Title>
-                <Subtitle className={css.date}>
-                {article.authorName} • {zDate.formatDate(article.datePublished, true)}
+                <Title className={css['article-title']}>{article.title}</Title>
+                <Subtitle className={css['article-metadata']}>
+                  Written by {article.authorName}
+                </Subtitle>
+                <Subtitle className={css['article-metadata']}>
+                  {article.category} •{' '}
+                  {zDate.formatDate(article.datePublished, true)}
                 </Subtitle>
               </div>
             </div>
-          </Col>
-          <Col xs={{ span: 'auto', order: 12 }}>
             <Paragraph
+              className={css['article-paragraph']}
               truncate={45}
-              morelink={article.slug}
+              morelink={hyperlink}
               moretext={'Read the full article'}
-              moreclass={css.more}
+              moreclass={css['article-readmore']}
               cssOverrides={{
-                paragraph: css.previewText
+                paragraph: css['article-content']
               }}>
               {article.content}
             </Paragraph>
-          </Col>
+          </div>
+        </VanillaLink>
+      </Default>
+      <Mobile>
+        <div className={css['article-cell-contents']}>
+          <Title className={css['article-title']}>{article.title}</Title>
+          <VanillaLink href={hyperlink}>
+            <CloudinaryImage
+              src={article.image}
+              alt={article.title}
+              className={css['article-image']}
+              lazy={'mw'}
+            />
+          </VanillaLink>
+          <div className={css['article-metadata-md']}>
+            <CloudinaryImage
+              src={article.authorImage}
+              title={article.authorName}
+              className={css['author-image-md']}
+              lazy={'ss'}
+            />
+            <div>
+              <Subtitle>
+                {article.authorName} • {article.category}
+              </Subtitle>
+              <Subtitle>
+                {zDate.formatDate(article.datePublished, true)}
+              </Subtitle>
+            </div>
+          </div>
+          <Paragraph
+            className={css['article-paragraph']}
+            truncate={45}
+            morelink={hyperlink}
+            moretext={'Read the full article'}
+            moreclass={css['article-readmore']}
+            cssOverrides={{
+              paragraph: css['article-content']
+            }}>
+            {article.content}
+          </Paragraph>
         </div>
-      </VanillaLink>
+      </Mobile>
     </Zoomer>
   );
 });
