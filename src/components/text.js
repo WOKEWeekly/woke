@@ -82,7 +82,7 @@ const IParagraph = ({
   });
 
   const ReadMoreLabel = () => {
-    if (children.length <= truncate) return null;
+    if (children && children.length <= truncate) return null;
     if (!moretext || !morelink) return null;
     return <ReadMore className={moreclass} link={morelink} text={moretext} />;
   };
