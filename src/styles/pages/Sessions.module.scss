@@ -16,7 +16,7 @@
   @include responsive-grid;
   border: .5em solid #2d203b;
   width: 100%;
-  @media (max-width: $break-md) { border: none; }
+  @media (max-width: $break-md) { border-style: none; }
   .container {
     &:hover { z-index: 1;
       .details { background-color: #16051b !important;}}

@@ -16,6 +16,7 @@ import { socialPlatforms } from '@constants/settings';
 
 import css from '@styles/components/Modal.module.scss';
 
+// TODO: Clean up modals
 export class Modal extends Component {
   render() {
     const { visible, header, body, footer, onlyBody } = this.props;

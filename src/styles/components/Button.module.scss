@@ -17,7 +17,7 @@
   @extend .button;
   border: 1px solid white;
   border-radius: 15px;
-  min-width: 200px;
+  min-width: 175px;
   padding: 1em;
   @media (max-width: $break-md) {
     min-width: initial;
@@ -73,6 +73,17 @@
 .add {
   @extend .button;
   @media (max-width: $break-md) { font-size: 80%; }
+}
+
+.back-button {
+  @extend %invisible-button;
+
+  .back-button-text {
+    @extend %text;
+    &:hover {
+      text-decoration: underline;
+    }
+  }
 }
 
 .widgets { font-family: $body-font; }

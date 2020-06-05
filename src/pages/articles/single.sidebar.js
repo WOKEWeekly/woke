@@ -10,14 +10,14 @@ import request from '@constants/request.js';
 
 import css from '@styles/pages/Articles.module.scss';
 
-const ArticleSidebar = () => {
+const ArticleSidebar = ({ currentArticleId: id }) => {
   const [isLoaded, setLoaded] = useState(false);
   const [articles, setArticles] = useState([]);
 
   useEffect(() => {
     /** Get published articles */
     request({
-      url: '/api/v1/articles/published?limit=3&order=DESC',
+      url: `/api/v1/articles/published?limit=3&order=DESC&exception=${id}`,
       method: 'GET',
       headers: { Authorization: process.env.AUTH_KEY },
       onSuccess: (articles) => {
@@ -44,9 +44,8 @@ const ArticleSidebar = () => {
   };
 
   return (
-    <div className={css.sidebar}>
-      <Title className={css.heading}>Recent Posts</Title>
-      {/* <Divider /> */}
+    <div className={css['recent-posts-sidebar']}>
+      <Title className={css['heading']}>Recent Posts</Title>
       <ArticleList />
     </div>
   );
@@ -58,28 +57,39 @@ const Article = ({ article, idx }) => {
     setLoaded(true);
   }, [isLoaded]);
 
+  const link = `/blog/${article.slug}`;
+
   return (
-    <>
-      <Zoomer determinant={isLoaded} duration={400} delay={75 * idx}>
-        <VanillaLink href={`/blog/${article.slug}`}>
-          <div className={css.item}>
-            <CloudinaryImage
-              src={article.image}
-              alt={article.title}
-              className={css.image}
-              lazy={'mw'}
-            />
-            <div>
-              <Title className={css.title}>{article.title}</Title>
-              <Subtitle className={css.details}>
-                {zDate.formatDate(article.datePublished, true)}
-              </Subtitle>
-            </div>
-          </div>
+    <Zoomer determinant={isLoaded} duration={400} delay={75 * idx}>
+      <div className={css['article-cell']}>
+        <VanillaLink href={link}>
+          <CloudinaryImage
+            src={article.image}
+            alt={article.title}
+            className={css['article-image']}
+            lazy={'mw'}
+          />
         </VanillaLink>
-      </Zoomer>
-      <Divider />
-    </>
+        <Title className={css['article-title']}>{article.title}</Title>
+        <div className={css['article-metadata']}>
+          <CloudinaryImage
+            src={article.authorImage}
+            alt={article.authorName}
+            className={css['author-image']}
+            lazy={'ss'}
+          />
+          <div>
+            <Subtitle className={css['article-details']}>
+              Written by {article.authorName}
+            </Subtitle>
+            <Subtitle className={css['article-details']}>
+              {article.category} •{' '}
+              {zDate.formatDate(article.datePublished, true)}
+            </Subtitle>
+          </div>
+        </div>
+      </div>
+    </Zoomer>
   );
 };
 

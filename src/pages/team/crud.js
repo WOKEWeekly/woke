@@ -61,7 +61,7 @@ class MemberCrud extends Component {
       this.setState({
         ...this.props.member,
         socials: JSON.parse(socials),
-        birthday: new Date(birthday),
+        birthday: birthday ? new Date(birthday) : null,
         ...ethnicities,
         backPath
       });

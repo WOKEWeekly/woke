@@ -35,31 +35,34 @@ export const Subtitle = ({ children, className }) => {
  * A paragraph component for a formatted body of text.
  * @param {string} props - Inherited properties from the paragraph component.
  * @param {string} props.children - The text to be formatted.
- * @param {string} props.className - The CSS styling.
- * @param {object} props.substitutions - A map of variable substitutions
+ * @param {string} [props.className] - The CSS styling.
+ * @param {object} [props.substitutions] - A map of variable substitutions
  * to be made to the text.
- * @param {string} props.theme - The current theme from the Redux state.
- * @param {string} props.cssOverrides - The CSS styling overrides for the emphasis
+ * @param {string} [props.theme] - The current theme from the Redux state.
+ * @param {string} [props.cssOverrides] - The CSS styling overrides for the emphasis
  * and section formatting.
- * @param {string} props.link - The hyperlink for the embedded {@link ReadMore} component.
- * @param {string} props.moretext - The text to be formatted.
- * @param {object} props.moreClass - The CSS styling for the embedded {@link ReadMore} component.
+ * @param {string} [props.morelink] - The hyperlink for the embedded {@link ReadMore} component.
+ * @param {string} [props.moretext] - The text to be formatted.
+ * @param {object} [props.moreclass] - The CSS styling for the embedded {@link ReadMore} component.
+ * @param {number} [truncate] - Truncate the text to a certain number of characters.
  * @returns {React.Component} A formatted paragraph component.
  */
 const IParagraph = ({
   children,
   substitutions,
   theme,
-  link,
+  morelink,
   moretext,
-  moreClass,
+  moreclass,
   className,
-  cssOverrides
+  cssOverrides,
+  truncate
 }) => {
   const classes = classNames(css.paragraph, className);
 
-  children = zText.applySubstitutions(children, substitutions);
-  children = zText.formatText(children, {
+  let text = truncate ? zText.truncateText(children, truncate) : children;
+  text = zText.applySubstitutions(text, substitutions);
+  text = zText.formatText(text, {
     css: {
       heading: css.heading,
       subheading: css.subheading,
@@ -79,13 +82,14 @@ const IParagraph = ({
   });
 
   const ReadMoreLabel = () => {
-    if (!moretext || !link) return null;
-    return <ReadMore className={moreClass} link={link} text={moretext} />;
+    if (children && children.length <= truncate) return null;
+    if (!moretext || !morelink) return null;
+    return <ReadMore className={moreclass} link={morelink} text={moretext} />;
   };
 
   return (
     <>
-      <pre className={classes}>{children}</pre>
+      <pre className={classes}>{text}</pre>
       <ReadMoreLabel />
     </>
   );

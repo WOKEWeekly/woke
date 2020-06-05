@@ -12,6 +12,8 @@ import {
 
 import css from '@styles/components/Icon.module.scss';
 
+import { alert } from './alert';
+import { Icon } from './icon';
 import { Title } from './text';
 
 export class SocialMediaShareBlock extends Component {
@@ -19,13 +21,14 @@ export class SocialMediaShareBlock extends Component {
     const { message, url } = this.props;
 
     return (
-      <div className={css.smshareblock}>
+      <div className={css['social-media-share-block']}>
         <Title>Share This Post:</Title>
-        <div className={'mt-2'}>
+        <div className={css['social-media-share-buttons']}>
           <ShareFacebook message={message} url={url} />
           <ShareTwitter message={message} url={url} />
           <ShareLinkedin message={message} url={url} />
           <ShareWhatsapp message={message} url={url} />
+          <ShareLink url={url} />
         </div>
       </div>
     );
@@ -76,3 +79,23 @@ class ShareLinkedin extends Component {
     );
   }
 }
+
+const ShareLink = ({ url }) => {
+  const copyLink = () => {
+    navigator.permissions.query({ name: 'clipboard-write' }).then((result) => {
+      if (result.state == 'granted' || result.state == 'prompt') {
+        navigator.clipboard.writeText(url).then(
+          () => alert.success('Copied this article\'s link to clipboard!'),
+          () => alert.error('Failed to copy this link.')
+        );
+      }
+    });
+  };
+  return (
+    <button className={css['copy-link-button']} onClick={copyLink}>
+      <div>
+        <Icon name={'link'} className={css['copy-link-icon']} />
+      </div>
+    </button>
+  );
+};

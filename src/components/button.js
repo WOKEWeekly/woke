@@ -89,17 +89,17 @@ export class DeleteEntityButton extends Component {
   }
 }
 
-export class BackButton extends Component {
-  render() {
-    return (
-      <Button {...this.props} className={css.button} variant={'light'}>
-        <Icon color={'#212529'} name={'chevron-left'} />
-        <Default>{this.props.title}</Default>
+export const BackButton = ({ title, onClick }) => {
+  return (
+    <button className={css['back-button']} onClick={onClick}>
+      <Icon name={'chevron-left'} />
+      <span className={css['back-button-text']}>
+        <Default>{title}</Default>
         <Mobile>Back</Mobile>
-      </Button>
-    );
-  }
-}
+      </span>
+    </button>
+  );
+};
 
 export class AdminButton extends Component {
   render() {

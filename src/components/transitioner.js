@@ -32,7 +32,7 @@ export class Fader extends Component {
 /** Zoom transition */
 export class Zoomer extends Component {
   render() {
-    const { duration, delay } = this.props;
+    const { duration, delay, postTransitions } = this.props;
 
     const defaultStyle = {
       transition: `transform ${duration}ms ease ${delay || 0}ms`,
@@ -40,7 +40,11 @@ export class Zoomer extends Component {
     };
 
     const transitionStyles = {
-      entered: { transform: 'scale(1)' }
+      entered: {
+        transform: 'scale(1)',
+        transition: `${defaultStyle.transition}, ${postTransitions}`
+      },
+      exited: defaultStyle
     };
 
     return (

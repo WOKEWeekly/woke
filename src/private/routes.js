@@ -287,7 +287,7 @@ module.exports = function (app, knex, server) {
     const query = knex.select().from('members').where({
       slug: slug,
       verified: 1
-    });
+    }).whereNot('level', 'Guest');
     query.asCallback(function (err, [member] = []) {
       if (err) return renderErrorPage(req, res, err, server);
       if (!member)
@@ -302,6 +302,36 @@ module.exports = function (app, knex, server) {
         title: `${member.firstname} ${member.lastname} | #WOKEWeekly`,
         description: zText.extractExcerpt(member.description),
         ogUrl: `/team/${member.slug}`,
+        cardImage: member.image,
+        alt: `${member.firstname} ${member.lastname}`,
+        backgroundImage: 'bg-team.jpg',
+        member
+      });
+    });
+  });
+
+  app.get('/author/:slug', function (req, res) {
+    const { slug } = req.params;
+
+    const query = knex.select().from('members').where({
+      level: 'Guest',
+      slug: slug,
+      verified: 1
+    });
+    query.asCallback(function (err, [member] = []) {
+      if (err) return renderErrorPage(req, res, err, server);
+      if (!member)
+        return renderErrorPage(
+          req,
+          res,
+          ERROR.NONEXISTENT_ENTITY(ENTITY.MEMBER),
+          server
+        );
+
+      return server.render(req, res, '/team/single', {
+        title: `${member.firstname} ${member.lastname} | #WOKEWeekly`,
+        description: zText.extractExcerpt(member.description),
+        ogUrl: `/author/${member.slug}`,
         cardImage: member.image,
         alt: `${member.firstname} ${member.lastname}`,
         backgroundImage: 'bg-team.jpg',
@@ -414,8 +444,8 @@ module.exports = function (app, knex, server) {
       description:
         'Explore the expressions of our writers who put pen to paper over the various dimensions within our community.',
       ogUrl: '/blog',
-      cardImage: `public/bg/card-sessions.jpg`, // TODO: Change while designing
-      backgroundImage: 'bg-app.jpg'
+      cardImage: `public/bg/card-blog.jpg`,
+      backgroundImage: 'bg-blog.jpg'
     });
   });
 
@@ -456,7 +486,7 @@ module.exports = function (app, knex, server) {
         description: article.excerpt,
         ogUrl: `/blog/${article.slug}`,
         cardImage: article.image,
-        backgroundImage: 'bg-app.jpg', // TODO: Change while designing
+        backgroundImage: 'bg-blog.jpg',
         article
       });
     });
@@ -465,7 +495,8 @@ module.exports = function (app, knex, server) {
   /** Blog admin page */
   app.get('/admin/articles', function (req, res) {
     return server.render(req, res, '/articles/admin', {
-      title: 'Blog Admin'
+      title: 'Blog Admin',
+      backgroundImage: 'bg-blog.jpg',
     });
   });
 
@@ -474,7 +505,7 @@ module.exports = function (app, knex, server) {
     return server.render(req, res, '/articles/crud', {
       title: 'Add New Article',
       operation: OPERATIONS.CREATE,
-      backgroundImage: 'bg-app.jpg'
+      backgroundImage: 'bg-blog.jpg'
     });
   });
 
@@ -512,7 +543,7 @@ module.exports = function (app, knex, server) {
 
       return server.render(req, res, '/articles/crud', {
         title: 'Edit Article',
-        backgroundImage: 'bg-app.jpg',
+        backgroundImage: 'bg-blog.jpg',
         operation: OPERATIONS.UPDATE,
         article
       });

@@ -61,11 +61,11 @@
 *************/
 
 .memberTabler {
-  @include entityTabler(4% 15% 4% 0.6fr 1.3fr 1fr 0.8fr 4% 4% 4%);
+  @include entity-tabler(4% 15% 4% 0.6fr 1.3fr 1fr 0.8fr 4% 4% 4%);
 }
 
 .userTabler {
-  @include entityTabler(4% 15% 4% 1fr 13% 1fr 15% 4% 4%);
+  @include entity-tabler(4% 15% 4% 1fr 13% 1fr 15% 4% 4%);
 }
 
 /************
@@ -86,7 +86,7 @@
       border-radius: 45%;
       width: 100%;
       @media (max-width: $break-md) {
-        border: none;
+        border-style: none;
         border-radius: 10%;
       }
     }

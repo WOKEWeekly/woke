@@ -96,10 +96,11 @@ export default class RandomMember extends Component {
                     <Subtitle className={css.subtitle}>{member.role}</Subtitle>
                     <Divider />
                     <Paragraph
-                      link={link}
+                      truncate={45}
+                      morelink={link}
                       moretext={`Read more on ${member.firstname}`}
                       className={css.paragraph}>
-                      {zText.truncateText(member.description)}
+                      {member.description}
                     </Paragraph>
                   </div>
                 </Col>
