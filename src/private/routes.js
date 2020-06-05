@@ -444,8 +444,8 @@ module.exports = function (app, knex, server) {
       description:
         'Explore the expressions of our writers who put pen to paper over the various dimensions within our community.',
       ogUrl: '/blog',
-      cardImage: `public/bg/card-sessions.jpg`, // TODO: Change while designing
-      backgroundImage: 'bg-app.jpg'
+      cardImage: `public/bg/card-blog.jpg`, // TODO: Change while designing
+      backgroundImage: 'bg-blog.jpg'
     });
   });
 
@@ -486,7 +486,7 @@ module.exports = function (app, knex, server) {
         description: article.excerpt,
         ogUrl: `/blog/${article.slug}`,
         cardImage: article.image,
-        backgroundImage: 'bg-app.jpg', // TODO: Change while designing
+        backgroundImage: 'bg-blog.jpg', // TODO: Change while designing
         article
       });
     });
@@ -495,7 +495,8 @@ module.exports = function (app, knex, server) {
   /** Blog admin page */
   app.get('/admin/articles', function (req, res) {
     return server.render(req, res, '/articles/admin', {
-      title: 'Blog Admin'
+      title: 'Blog Admin',
+      backgroundImage: 'bg-blog.jpg',
     });
   });
 
@@ -504,7 +505,7 @@ module.exports = function (app, knex, server) {
     return server.render(req, res, '/articles/crud', {
       title: 'Add New Article',
       operation: OPERATIONS.CREATE,
-      backgroundImage: 'bg-app.jpg'
+      backgroundImage: 'bg-blog.jpg'
     });
   });
 
@@ -542,7 +543,7 @@ module.exports = function (app, knex, server) {
 
       return server.render(req, res, '/articles/crud', {
         title: 'Edit Article',
-        backgroundImage: 'bg-app.jpg',
+        backgroundImage: 'bg-blog.jpg',
         operation: OPERATIONS.UPDATE,
         article
       });
