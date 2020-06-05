@@ -48,6 +48,24 @@ class MemberPage extends Component {
       countries
     );
 
+    const ReturnButton = () => {
+      if (member.level === 'Guest') {
+        return (
+          <BackButton
+            title={'Back to Blog'}
+            onClick={() => (location.href = '/blog')}
+          />
+        );
+      } else {
+        return (
+          <BackButton
+            title={'Back to Team'}
+            onClick={() => (location.href = '/team')}
+          />
+        );
+      }
+    };
+
     return (
       <Spacer>
         <Shader>
@@ -81,15 +99,14 @@ class MemberPage extends Component {
         </Shader>
 
         <BottomToolbar>
-          <BackButton
-            title={'Back to Team'}
-            onClick={() => (location.href = '/team')}
-          />
+          <ReturnButton />
 
           {user.clearance >= CLEARANCES.ACTIONS.CRUD_TEAM ? (
             <EditEntityButton
               title={'Edit Member'}
-              onClick={() => (location.href = `/admin/members/edit/${member.id}`)}
+              onClick={() =>
+                (location.href = `/admin/members/edit/${member.id}`)
+              }
             />
           ) : null}
         </BottomToolbar>

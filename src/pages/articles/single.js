@@ -65,7 +65,7 @@ const ArticlePage = ({ article, user }) => {
 
   const shareMessage = `"${article.title}" by ${authorName} on The #WOKEWeekly Blog`;
   const isGuest = authorLevel === 'Guest';
-  const link = `/team/${authorSlug}`;
+  const link = isGuest ? `/author/${authorSlug}` : `/team/${authorSlug}`;
 
   /**
    * The blog title element.
@@ -198,12 +198,14 @@ const ArticlePage = ({ article, user }) => {
           className={css['author-profile-thumbnail']}
           lazy={'ss'}
         />
-        <Subtitle className={css['author-label']}>Author</Subtitle>
+        <Subtitle className={css['author-label']}>
+          Author • {isGuest ? 'Guest' : 'Member'}
+        </Subtitle>
         <Title className={css['author-profile-name']}>{authorName}</Title>
         <PromoIconsBar socials={authorSocials} />
         <Paragraph
           className={css['author-profile-description']}
-          truncate={!isGuest ? 60 : null}
+          truncate={60}
           moretext={`Read more on ${authorName}`}
           moreclass={css['readmore']}
           morelink={link}
