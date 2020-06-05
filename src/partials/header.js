@@ -189,14 +189,20 @@ export class MainNavbar extends Component {
             <Nav.Link href="/about" className={classes}>
               About Us
             </Nav.Link>
-            <Nav.Link href="/team" className={classes}>
-              The Team
-            </Nav.Link>
             <Nav.Link href="/sessions" className={classes}>
               Sessions
             </Nav.Link>
+            {// TODO: Remove condition
+            user.clearance >= CLEARANCES.ACTIONS.CRUD_ARTICLES ? (
+              <Nav.Link href="/blog" className={classes}>
+                Blog
+              </Nav.Link>
+            ) : null}
             <Nav.Link href="/reviews" className={classes}>
               Reviews
+            </Nav.Link>
+            <Nav.Link href="/team" className={classes}>
+              The Team
             </Nav.Link>
             <Nav.Link href="/blackexcellence" className={classes}>
               #BlackExcellence
