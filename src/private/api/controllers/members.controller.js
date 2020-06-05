@@ -34,6 +34,7 @@ exports.getRandomMember = (req, res) => {
     .select()
     .from('members')
     .where('verified', 1)
+    .whereNot('level', 'Guest')
     .orderByRaw('RAND()')
     .limit(1);
   query.asCallback(function (err, [member] = []) {
@@ -46,7 +47,8 @@ exports.getVerifiedMembers = (req, res) => {
   const query = knex
     .select()
     .from('members')
-    .where('verified', 1);
+    .where('verified', 1)
+    .whereNot('level', 'Guest');
   query.asCallback(function (err, members) {
     respondToClient(res, err, 200, members);
   });

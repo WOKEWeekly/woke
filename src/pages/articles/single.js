@@ -54,6 +54,7 @@ const ArticlePage = ({ article, user }) => {
 
   const {
     authorName,
+    authorLevel,
     authorImage,
     authorSlug,
     authorDescription,
@@ -63,6 +64,7 @@ const ArticlePage = ({ article, user }) => {
   article.content = article.content.trim() || 'No content.';
 
   const shareMessage = `"${article.title}" by ${authorName} on The #WOKEWeekly Blog`;
+  const isGuest = authorLevel === 'Guest';
   const link = `/team/${authorSlug}`;
 
   /**
@@ -201,7 +203,7 @@ const ArticlePage = ({ article, user }) => {
         <PromoIconsBar socials={authorSocials} />
         <Paragraph
           className={css['author-profile-description']}
-          truncate={60}
+          truncate={!isGuest ? 60 : null}
           moretext={`Read more on ${authorName}`}
           moreclass={css['readmore']}
           morelink={link}

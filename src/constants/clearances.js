@@ -32,6 +32,7 @@ module.exports = {
       { label: 'Executive' },
       { label: 'Manager' },
       { label: 'Coordinator' },
+      { label: 'Guest' },
       { label: 'Quiescent' }
     ],
     USERS: [

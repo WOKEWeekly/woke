@@ -153,26 +153,34 @@
 /** datepicker ****************/
 /******************************/
 
-.datepicker {
-  all: initial;
-  width: 100%;
+.datepicker-field {
   display: flex;
   align-items: center;
   border-bottom: $underline;
-  padding: .2em 0;
-  .calendarIcon {
-    margin: 0 .2em 0 .4em !important;
-    @media (max-width: $break-md) { margin-right: .5em !important; }
-  }
-  .dateinput {
-    border-style: none !important;
-    cursor: pointer;
+
+  .datepicker {
+    all: initial;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    padding: .2em 0;
+
+    .calendar-icon {
+      margin: 0 .2em 0 .4em !important;
+      @media (max-width: $break-md) { margin-right: .5em !important; }
+    }
+
+    .datepicker-text-input {
+      border-style: none !important;
+      cursor: pointer;
+    }
   }
 }
 
-.dateModal {
+.datepicker-modal {
   justify-content: space-evenly;
   padding: 2em;
+  
   select {
     font-size: 1.4em !important;
     @media (max-width: $break-md) { font-size: 1.2em !important; }}
