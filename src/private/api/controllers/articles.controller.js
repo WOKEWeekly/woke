@@ -49,7 +49,7 @@ exports.getSingleArticle = (req, res) => {
 
 /** Retrieve only published articles */
 exports.getPublishedArticles = (req, res) => {
-  const { limit, order } = req.query;
+  const { exception, limit, order } = req.query;
   let query = knex
     .columns(columns)
     .select()
@@ -57,6 +57,7 @@ exports.getPublishedArticles = (req, res) => {
     .leftJoin('members', 'articles.authorId', 'members.id')
     .where('articles.status', 'PUBLISHED');
 
+  if (exception) query.whereNot('articles.id', exception);
   if (limit) query = query.limit(limit);
   if (order) query = query.orderBy('datePublished', order);
 

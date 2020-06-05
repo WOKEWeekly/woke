@@ -296,38 +296,51 @@
 *** single.sidebar.js
 *************/
 
-.sidebar {
+.recent-posts-sidebar {
   background: $sidebar;
   padding: 1em 1.5em;
 
   .heading {
     @include font-scaler(1.7);
+    padding-bottom: 0.5em;
   }
 
-  .item {
-    @include scale-on-hover(1.03);
-    cursor: pointer;
+  .article-cell {
+    border-top: 1px solid white;
+    margin-bottom: 1em;
 
-    .title {
+    .article-title {
       @include font-scaler(1.2);
     }
 
-    .content {
-      @include font-scaler(1);
-    }
-
-    .image {
+    .article-image {
       border-radius: 10px;
+      cursor: pointer;
       margin: 1em 0;
       width: 100%;
     }
 
-    .details {
-      @include font-scaler(0.7);
+    .article-metadata {
+      align-items: flex-start;
+      display: flex;
 
-      .author {
-        @extend .link-default;
-        text-decoration: none !important;
+      .author-image {
+        border-radius: 50%;
+        margin-right: .4em;
+        width: 25px;
+
+        img {
+          width: 100%;
+        }
+      }
+
+      .article-details {
+        @include font-scaler(0.7);
+
+        .author {
+          @extend .link-default;
+          text-decoration: none !important;
+        }
       }
     }
   }

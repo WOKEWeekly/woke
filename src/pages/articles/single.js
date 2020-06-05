@@ -63,7 +63,7 @@ const ArticlePage = ({ article, user }) => {
   article.content = article.content.trim() || 'No content.';
 
   const shareMessage = `"${article.title}" by ${authorName} on The #WOKEWeekly Blog`;
-  const link = `team/${authorSlug}`;
+  const link = `/team/${authorSlug}`;
 
   /**
    * The blog title element.
@@ -236,7 +236,7 @@ const ArticlePage = ({ article, user }) => {
               </Container>
             </Col>
             <Col md={4} className={css['column-sidebar']}>
-              <ArticleSidebar />
+              <ArticleSidebar currentArticleId={article.id} />
             </Col>
           </Row>
         </Partitioner>
