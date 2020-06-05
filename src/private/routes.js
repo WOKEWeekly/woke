@@ -444,7 +444,7 @@ module.exports = function (app, knex, server) {
       description:
         'Explore the expressions of our writers who put pen to paper over the various dimensions within our community.',
       ogUrl: '/blog',
-      cardImage: `public/bg/card-blog.jpg`, // TODO: Change while designing
+      cardImage: `public/bg/card-blog.jpg`,
       backgroundImage: 'bg-blog.jpg'
     });
   });
@@ -486,7 +486,7 @@ module.exports = function (app, knex, server) {
         description: article.excerpt,
         ogUrl: `/blog/${article.slug}`,
         cardImage: article.image,
-        backgroundImage: 'bg-blog.jpg', // TODO: Change while designing
+        backgroundImage: 'bg-blog.jpg',
         article
       });
     });
