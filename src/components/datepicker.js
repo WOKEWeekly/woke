@@ -6,7 +6,7 @@ import { zDate } from 'zavid-modules';
 import { alert } from '@components/alert.js';
 import { SubmitButton, CancelButton } from '@components/button.js';
 import { Group, Select, TextInput } from '@components/form.js';
-import { Modal } from '@components/modal.js';
+import { Modal, ConfirmModal } from '@components/modal.js';
 
 import { creationDate } from '@constants/settings.js';
 
@@ -31,13 +31,14 @@ export const DatePicker = ({
   const [stateDay, setDay] = useState(initialDay);
   const [stateMonth, setMonth] = useState(initialMonth);
   const [stateYear, setYear] = useState(initialYear);
-  const [visible, setModalVisibility] = useState(false);
+  const [datePickerVisible, setDatePickerVisibility] = useState(false);
+  const [clearDateModalVisible, setClearDateModalVisibility] = useState(false);
 
   useEffect(() => {
     setDay(initialDay);
     setMonth(initialMonth);
     setYear(initialYear);
-  }, [visible]);
+  }, [datePickerVisible]);
 
   /** Update component dates on confirmation */
   const confirmDateSelection = () => {
@@ -54,18 +55,19 @@ export const DatePicker = ({
 
     const date = new Date(year, month, day);
     onConfirm(date, name);
-    setModalVisibility(false);
+    setDatePickerVisibility(false);
   };
 
   /** Clear the date */
   const clearDate = () => {
     onConfirm(null, name);
+    setClearDateModalVisibility(false);
   };
 
   const startYear = minDate && minDate.getFullYear();
   const endYear = maxDate && maxDate.getFullYear();
 
-  const body = (
+  const DatePickerBody = (
     <Group className={css['datepicker-modal']}>
       <Col xs={3}>
         <Select
@@ -97,20 +99,31 @@ export const DatePicker = ({
     </Group>
   );
 
-  const footer = (
+  const DatePickerFooter = (
     <>
       <SubmitButton onClick={confirmDateSelection}>Confirm</SubmitButton>
-      <CancelButton onClick={() => setModalVisibility(false)}>
+      <CancelButton onClick={() => setDatePickerVisibility(false)}>
         Close
       </CancelButton>
     </>
   );
 
+  const ClearDateButton = () => {
+    if (date === null) return null;
+    return (
+      <button
+        onClick={() => setClearDateModalVisibility(true)}
+        className={css['invisible_button']}>
+        <Icon name={'times'} />
+      </button>
+    );
+  };
+
   return (
     <>
       <div className={css['datepicker-field']}>
         <button
-          onClick={() => setModalVisibility(true)}
+          onClick={() => setDatePickerVisibility(true)}
           className={css['datepicker']}>
           <Icon
             prefix={'far'}
@@ -125,12 +138,23 @@ export const DatePicker = ({
             readOnly
           />
         </button>
-        <button onClick={clearDate} className={css['invisible_button']}>
-          <Icon name={'times'} />
-        </button>
+        <ClearDateButton />
       </div>
 
-      <Modal show={visible} body={body} footer={footer} onlyBody={true} />
+      <Modal
+        show={datePickerVisible}
+        body={DatePickerBody}
+        footer={DatePickerFooter}
+        onlyBody={true}
+      />
+
+      <ConfirmModal
+        visible={clearDateModalVisible}
+        message={`Clear this date?`}
+        confirmFunc={clearDate}
+        confirmText={'Clear'}
+        close={() => setClearDateModalVisibility(false)}
+      />
     </>
   );
 };
