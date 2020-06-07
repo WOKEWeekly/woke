@@ -5,7 +5,7 @@ const { config } = require('../server.js');
 
 require('dotenv').config({ path: config });
 
-/** Pass credentials to transporter */
+/** Initialise the mail transporter */
 const transporter = nodemailer.createTransport({
   host: 'mail.privateemail.com',
   port: 465,
@@ -15,115 +15,115 @@ const transporter = nodemailer.createTransport({
   }
 });
 
-/*******************************************
- * Email Templates
- *******************************************/
-
-module.exports = (callback, params = []) => {
-  /** Construct template for emails */
-  const sendMail = (to, subject, message) => {
-    transporter.sendMail(
-      {
-        from: `#WOKEWeekly Website <${emails.site}>`,
-        to: to,
-        subject: subject,
-        html: message
-      },
-      function (err) {
-        if (callback) {
-          err ? callback(err) : callback(null, ...params);
-        }
+/**
+ * Send transport email.
+ * @param {string} to - The recipient of the email.
+ * @param {string} subject - The subject of the email.
+ * @param {string} message - The content of the message.
+ * @param {Function} callback - The callback function.
+ * @param {string} token - The user token.
+ */
+const sendMail = (to, subject, message, callback, token) => {
+  transporter.sendMail(
+    {
+      from: `#WOKEWeekly Website <${emails.site}>`,
+      to: to,
+      subject: subject,
+      html: message
+    },
+    function (err) {
+      console.info(`Emails: ${subject} email sent to ${to}.`);
+      if (callback) {
+        callback(err, { token });
       }
-    );
-  };
-
-  return {
-    sendWelcomeEmail: (user, token) => {
-      const subject = 'Welcome to our website!';
-      const message = designMessage(
-        `
-      Hey ${user.firstname}!
-      <br><br>
-      
-      Thank you for joining the #WOKEWeekly website. We're very honoured to have your support!
-      <br><br>
-      
-      Remember, your username is <strong>${user.username}</strong>.
-      You can use your username, as well as this email address, to log in to the website from here on out.
-      You are free to change your username at any point in time by clicking the "Change Username" option on the account pane.
-      <br><br>
-      
-      There are new features bound to arrive soon such as our Topic Suggestion forum. But in order to have access to these features, you'll need to verify your account. So you may as well get ahead of the crowd before they're released.
-      <br><br>
-      
-      Verify your account by clicking the button below:
-
-      <div style="${buttonContainerStyle}">
-        <a href="${domain}/verifyAccount/${token}" style="${buttonStyle}">
-          Verify Your Account
-        </a>
-      </div>
-      
-      We look forward to your interaction with our site or any other enquiries you may have!
-      <br><br>
-      `,
-        true
-      );
-
-      sendMail(user.email, subject, message);
-    },
-
-    resendVerificationEmail: (user, token) => {
-      const subject = 'Account Verification';
-      const message = designMessage(
-        `
-      Hey ${user.firstname}!<br><br>
-      
-      You recently requested to have another verification email sent to you. To verify your account,
-      click on the button below:
-
-      <div style="${buttonContainerStyle}">
-        <a href="${domain}/verifyAccount/${token}" style="${buttonStyle}">
-          Verify Your Account
-        </a>
-      </div>
-
-      Please note that this account verification link is only valid for the next 30 minutes.
-      <br><br>
-      `,
-        true
-      );
-
-      sendMail(user.email, subject, message);
-    },
-
-    sendAccountRecoveryEmail: (user, token) => {
-      const subject = 'Account Recovery';
-      const message = designMessage(
-        `
-      Hey ${user.firstname}!
-      <br><br>
-
-      You're receiving this email because you've requested to reset your password as you may have forgotten it. Click the button below to reset it.
-      
-      <div style="${buttonContainerStyle}">
-        <a href="${domain}/account/reset/${token}" style="${buttonStyle}">
-          Reset Your Password
-        </a>
-      </div>
-
-      If you didn't request to reset your password, please ignore this email or respond to let us know there has
-      been an error.<br><br>
-      
-      Please note that this password reset link is only valid for the next 30 minutes.
-      <br><br>
-      `,
-        true
-      );
-
-      sendMail(user.email, subject, message);
     }
-  };
+  );
+};
+
+exports.sendWelcomeEmail = (user, token, callback) => {
+  const subject = 'Welcome to our website!';
+  const message = designMessage(
+    `
+  Hey ${user.firstname}!
+  <br><br>
+  
+  Thank you for joining the #WOKEWeekly website. We're very honoured to have your support!
+  <br><br>
+  
+  Remember, your username is <strong>${user.username}</strong>.
+  You can use your username, as well as this email address, to log in to the website from here on out.
+  You are free to change your username at any point in time by clicking the "Change Username" option on the account pane.
+  <br><br>
+  
+  There are new features bound to arrive soon such as our Topic Suggestion forum. But in order to have access to these features, you'll need to verify your account. So you may as well get ahead of the crowd before they're released.
+  <br><br>
+  
+  Verify your account by clicking the button below:
+
+  <div style="${buttonContainerStyle}">
+    <a href="${domain}/account?verify=${token}" style="${buttonStyle}">
+      Verify Your Account
+    </a>
+  </div>
+  
+  We look forward to your interaction with our site or any other enquiries you may have!
+  <br><br>
+  `,
+    true
+  );
+
+  sendMail(user.email, subject, message, callback, token);
+};
+
+exports.resendVerificationEmail = (user, token, callback) => {
+  const subject = 'Account Verification';
+  const message = designMessage(
+    `
+  Hey ${user.firstname}!<br><br>
+  
+  You recently requested to have another verification email sent to you. To verify your account,
+  click on the button below:
+
+  <div style="${buttonContainerStyle}">
+    <a href="${domain}/account?verify=${token}" style="${buttonStyle}">
+      Verify Your Account
+    </a>
+  </div>
+
+  Please note that this account verification link is only valid for the next 30 minutes.
+  <br><br>
+  `,
+    true
+  );
+
+  sendMail(user.email, subject, message, callback, token);
+};
+
+exports.sendAccountRecoveryEmail = (user, token, callback) => {
+  const subject = 'Account Recovery';
+  const message = designMessage(
+    `
+  Hey ${user.firstname}!
+  <br><br>
+
+  You're receiving this email because you've requested to reset your password as you may have forgotten it. Click the button below to reset it.
+  
+  <div style="${buttonContainerStyle}">
+    <a href="${domain}/account/reset/${token}" style="${buttonStyle}">
+      Reset Your Password
+    </a>
+  </div>
+
+  If you didn't request to reset your password, please ignore this email or respond to let us know there has
+  been an error.<br><br>
+  
+  Please note that this password reset link is only valid for the next 30 minutes.
+  <br><br>
+  `,
+    true
+  );
+
+  sendMail(user.email, subject, message, callback, token);
 };
 
 /** Abstraction of message design */

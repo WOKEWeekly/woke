@@ -46,6 +46,10 @@ class Account extends Component {
 
     if (justVerified && user.id === verifiedUser.id) {
       this.props.verifyUser();
+      setAlert({
+        type: 'info',
+        message: `You\'ve successfully verified your account.`
+      });
       setTimeout(() => (location.href = '/account'), 1000);
     }
   }

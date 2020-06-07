@@ -13,9 +13,7 @@ const knex = require('../knex').getKnex();
 
 const emailsOn =
   process.env.NODE_ENV === 'production' || process.argv.includes('--emails');
-if (!emailsOn) {
-  console.warn('Emails are turned off.');
-}
+console.warn(`Emails are turned ${emailsOn ? 'on' : 'off'}.`);
 
 const safeFields = [
   'id',
@@ -124,7 +122,7 @@ exports.addUser = (req, res) => {
           { expiresIn: '24h' },
           (err, token) => {
             if (err) return callback(err);
-            if (emailsOn) emails().sendWelcomeEmail(user, token);
+            if (emailsOn) emails.sendWelcomeEmail(user, token);
             callback(null, user);
           }
         );
@@ -324,7 +322,7 @@ exports.sendVerificationEmail = (req, res) => {
           (err, token) => {
             if (err) return callback(err);
             if (!emailsOn) return callback(null, { token });
-            emails(callback, [{ token }]).resendVerificationEmail(user, token);
+            emails.resendVerificationEmail(user, token, callback);
           }
         );
       }
@@ -364,9 +362,6 @@ exports.verifyUser = (req, res) => {
     ],
     function (err, user) {
       respondToClient(res, err, 200, user);
-
-      // TODO: Review when doing routes
-      // err ? renderErrorPage(req, res, err, server) : res.redirect(`/account?verified=${token}`);
     }
   );
 };
@@ -399,7 +394,7 @@ exports.sendRecoveryEmail = (req, res) => {
           (err, token) => {
             if (err) return callback(err);
             if (!emailsOn) return callback(null, { token });
-            emails(callback, [{ token }]).sendAccountRecoveryEmail(user, token);
+            emails.sendAccountRecoveryEmail(user, token, callback);
           }
         );
       }
