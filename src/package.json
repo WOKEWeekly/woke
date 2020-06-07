@@ -34,7 +34,6 @@
     "express": "^4.17.0",
     "jsonwebtoken": "^8.5.1",
     "knex": "^0.21.1",
-    "mailchimp-api-v3": "^1.13.1",
     "mysql": "^2.18.1",
     "next": "^9.3.5",
     "node-sass": "^4.13.1",

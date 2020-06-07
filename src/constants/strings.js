@@ -7,6 +7,7 @@ exports.ENTITY = {
   PAGE: 'page',
   REVIEW: 'review',
   SESSION: 'session',
+  SUBSCRIBER: 'subscriber',
   TOPIC: 'topic',
   USER: 'user'
 };

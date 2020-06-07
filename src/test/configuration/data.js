@@ -40,11 +40,11 @@ exports.TEST_ARTICLES = {
 exports.TEST_CANDIDATES = {
   CREATED: {
     id: 0,
-    name: 'Jon Snow',
+    name: 'Ahmaud Arbery',
     occupation: 'Mentor',
     birthday: '1990-02-02',
     ethnicity: JSON.stringify(['Nigeria', 'Togo']),
-    socials: JSON.stringify({ instagram: 'madting' }),
+    socials: JSON.stringify({ instagram: 'aarbery' }),
     description: 'An added candidate through service tests.',
     authorId: 1,
     dateWritten: '1990-02-02',
@@ -52,11 +52,11 @@ exports.TEST_CANDIDATES = {
   },
   UPDATED: {
     id: 0,
-    name: 'Jon Snow',
+    name: 'Tamir Rice',
     occupation: 'Teacher',
     birthday: '1990-02-02',
     ethnicity: JSON.stringify(['Ghana', 'France']),
-    socials: JSON.stringify({ twitter: 'madting', instagram: 'madting' }),
+    socials: JSON.stringify({ twitter: 'trice', instagram: 'trice' }),
     description: 'An updated candidate through service tests.',
     authorId: 1,
     dateWritten: '2020-02-02',
@@ -77,8 +77,8 @@ exports.TEST_DOCUMENTS = {
 
 exports.TEST_MEMBERS = {
   CREATED: {
-    firstname: 'Sally',
-    lastname: 'Wenderson',
+    firstname: 'Breonna',
+    lastname: 'Taylor',
     birthday: '1996-12-20',
     ethnicity: JSON.stringify(['South Africa', 'Poland']),
     sex: 'F',
@@ -86,7 +86,7 @@ exports.TEST_MEMBERS = {
     role: 'Researcher',
     image: TEST_IMAGE,
     socials: JSON.stringify({
-      instagram: 'sallyw'
+      instagram: 'btaylor'
     }),
     description: 'An added member through service tests.',
     verified: true,
@@ -94,8 +94,8 @@ exports.TEST_MEMBERS = {
     isAuthor: true
   },
   UPDATED: {
-    firstname: 'Lolly',
-    lastname: 'Bepop',
+    firstname: 'Sandra',
+    lastname: 'Bland',
     birthday: '1996-12-20',
     ethnicity: JSON.stringify(['Tanzania', 'Poland']),
     sex: 'F',
@@ -103,8 +103,8 @@ exports.TEST_MEMBERS = {
     role: 'Social Media Manager',
     image: TEST_IMAGE,
     socials: JSON.stringify({
-      twitter: 'sallyw',
-      instagram: 'sallyw'
+      twitter: 'sbland',
+      instagram: 'sbland'
     }),
     description: 'An updated member through service tests.',
     verified: true,
@@ -115,15 +115,15 @@ exports.TEST_MEMBERS = {
 
 exports.TEST_REVIEWS = {
   CREATED: {
-    referee: 'Tom McDowell',
-    position: 'Founder of McDowell Ministries',
+    referee: 'Eric Garner',
+    position: 'Founder of Garner Ministries',
     rating: 2,
     description: 'This is an added review via service tests.',
     image: TEST_IMAGE
   },
   UPDATED: {
-    referee: 'Nonso Chukwuemeka',
-    position: 'Director of Emeka Tanks',
+    referee: 'Philando Castile',
+    position: 'Director of Castile Tanks',
     rating: 5,
     description: 'This is an updated review via service tests.',
     image: TEST_IMAGE
@@ -144,6 +144,25 @@ exports.TEST_SESSIONS = {
     timeHeld: '11:00',
     description: 'An updated session from service tests.',
     image: TEST_IMAGE
+  }
+};
+
+exports.TEST_SUBSCRIBERS = {
+  CREATED: {
+    firstname: 'George',
+    lastname: 'Floyd',
+    email: 'wokeweeklyuk@gmail.com',
+    subscriptions: JSON.stringify({
+      articles: true
+    })
+  },
+  UPDATED: {
+    firstname: 'George',
+    lastname: 'Floyd',
+    email: 'wokeweeklyuk@gmail.com',
+    subscriptions: JSON.stringify({
+      articles: false
+    })
   }
 };
 
