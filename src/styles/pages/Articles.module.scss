@@ -98,7 +98,7 @@
 
         .article-content {
           @include font-scaler(1.2);
-          margin-bottom: 1em;
+          margin-bottom: 0;
         }
 
         .article-content-md {
@@ -107,7 +107,7 @@
         }
       }
 
-      .article-more {
+      .article-readmore {
         @include font-scaler(1);
       }
 
@@ -159,7 +159,7 @@
   }
 
   .article-content {
-    @include font-scaler(1.25);
+    @include font-scaler(1.2);
   }
 
   .article-image {
@@ -232,7 +232,9 @@
       border: 1px solid white;
       border-radius: 5px;
       display: flex;
-      padding: 0.5em 1em;
+      justify-content: center;
+      padding: 0.5em;
+      width: 130px;
 
       .clap-count {
         @extend %text;
@@ -311,6 +313,10 @@
 
     .article-title {
       @include font-scaler(1.2);
+      margin-bottom: 0.2em;
+      @media (max-width: $break-md) {
+        @include font-scaler(1.5);
+      }
     }
 
     .article-image {
@@ -326,18 +332,25 @@
 
       .author-image {
         border-radius: 50%;
-        margin-right: .4em;
+        margin-right: 0.4em;
         width: 25px;
 
         img {
           width: 100%;
         }
+
+        @media (max-width: $break-md) {
+          width: 40px;
+        }
       }
 
       .article-details {
         @include font-scaler(0.7);
+        @media (max-width: $break-md) {
+          @include font-scaler(0.9);
+        }
 
-        .author {
+        .article-author-name {
           @extend .link-default;
           text-decoration: none !important;
         }

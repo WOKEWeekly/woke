@@ -1,16 +1,16 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, memo } from 'react';
 import { zDate } from 'zavid-modules';
 
 import { CloudinaryImage } from '@components/image.js';
 import { Loader, Empty } from '@components/loader.js';
-import { Title, Subtitle, Divider, VanillaLink } from '@components/text.js';
+import { Title, Subtitle, VanillaLink } from '@components/text.js';
 import { Zoomer } from '@components/transitioner.js';
 
 import request from '@constants/request.js';
 
 import css from '@styles/pages/Articles.module.scss';
 
-const ArticleSidebar = ({ currentArticleId: id }) => {
+const ArticleSidebar = memo(({ currentArticleId: id }) => {
   const [isLoaded, setLoaded] = useState(false);
   const [articles, setArticles] = useState([]);
 
@@ -49,20 +49,24 @@ const ArticleSidebar = ({ currentArticleId: id }) => {
       <ArticleList />
     </div>
   );
-};
+});
 
-const Article = ({ article, idx }) => {
+const Article = memo(({ article, idx }) => {
   const [isLoaded, setLoaded] = useState(false);
   useEffect(() => {
     setLoaded(true);
   }, [isLoaded]);
 
-  const link = `/blog/${article.slug}`;
+  const articleHyperlink = `/blog/${article.slug}`;
+  const isGuest = article.authorLevel === 'Guest';
+  const authorHyperlink = isGuest
+    ? `/author/${article.authorSlug}`
+    : `/team/${article.authorSlug}`;
 
   return (
     <Zoomer determinant={isLoaded} duration={400} delay={75 * idx}>
       <div className={css['article-cell']}>
-        <VanillaLink href={link}>
+        <VanillaLink href={articleHyperlink}>
           <CloudinaryImage
             src={article.image}
             alt={article.title}
@@ -80,7 +84,10 @@ const Article = ({ article, idx }) => {
           />
           <div>
             <Subtitle className={css['article-details']}>
-              Written by {article.authorName}
+              Written by{' '}
+              <a className={css['article-author-name']} href={authorHyperlink}>
+                {article.authorName}
+              </a>
             </Subtitle>
             <Subtitle className={css['article-details']}>
               {article.category} •{' '}
@@ -91,6 +98,6 @@ const Article = ({ article, idx }) => {
       </div>
     </Zoomer>
   );
-};
+});
 
 export default ArticleSidebar;
