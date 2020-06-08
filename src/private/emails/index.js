@@ -1,8 +1,8 @@
 const ejs = require('ejs');
 const nodemailer = require('nodemailer');
 
-let { cloudinary, domain, emails } = require('../constants/settings.js');
-const { config } = require('../server.js');
+let { cloudinary, domain, emails } = require('../../constants/settings.js');
+const { config } = require('../../server.js');
 
 require('dotenv').config({ path: config });
 
@@ -18,23 +18,35 @@ const transporter = nodemailer.createTransport({
 
 exports.sendWelcomeEmail = (user, token, callback) => {
   const subject = 'Welcome To Our Website!';
-  ejs.renderFile(__dirname + "/emails/welcome.ejs", { user, token, domain, cloudinary }, function (err, data) {
-    sendMail(user.email, subject, data, callback, token);
-  });
+  ejs.renderFile(
+    __dirname + '/templates/welcome.ejs',
+    { user, token, domain, cloudinary },
+    function (err, data) {
+      sendMail(user.email, subject, data, callback, token);
+    }
+  );
 };
 
 exports.resendVerificationEmail = (user, token, callback) => {
   const subject = 'Verify Your Account';
-  ejs.renderFile(__dirname + "/emails/verification.ejs", { user, token, domain, cloudinary }, function (err, data) {
-    sendMail(user.email, subject, data, callback, token);
-  });
+  ejs.renderFile(
+    __dirname + '/templates/verification.ejs',
+    { user, token, domain, cloudinary },
+    function (err, data) {
+      sendMail(user.email, subject, data, callback, token);
+    }
+  );
 };
 
 exports.sendAccountRecoveryEmail = (user, token, callback) => {
   const subject = 'Account Recovery';
-  ejs.renderFile(__dirname + "/emails/recovery.ejs", { user, token, domain, cloudinary }, function (err, data) {
-    sendMail(user.email, subject, data, callback, token);
-  });
+  ejs.renderFile(
+    __dirname + '/templates/recovery.ejs',
+    { user, token, domain, cloudinary },
+    function (err, data) {
+      sendMail(user.email, subject, data, callback, token);
+    }
+  );
 };
 
 /**
@@ -46,7 +58,6 @@ exports.sendAccountRecoveryEmail = (user, token, callback) => {
  * @param {string} token - The user token.
  */
 const sendMail = (to, subject, message, callback, token) => {
-  
   transporter.sendMail(
     {
       from: `#WOKEWeekly <${emails.site}>`,
