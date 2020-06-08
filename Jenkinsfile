@@ -26,11 +26,6 @@ pipeline {
   }
 
   stages {
-    // stage('Clean') { 
-    //   steps {
-    //     cleanWs()
-    //   }
-    // }
     stage('Build & Test'){
       stages {
         stage('Install dependencies'){
@@ -65,7 +60,6 @@ pipeline {
 
   post {
     always {
-      cleanWs()
       dir('src'){
         sh 'rm -rf node_modules'
       }
