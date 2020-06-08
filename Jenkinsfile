@@ -25,48 +25,25 @@ pipeline {
   }
 
   stages {
-    stage('Build & Test') {
-      stages {
-        stage('Install dependencies') {
-          steps {
-            dir('src') {
-              sh 'npm install'
-            }
-          }
+    stage('Install dependencies') {
+      steps {
+        dir('src') {
+          sh 'npm install'
         }
-        // stage('Run next build && Mocha unit tests'){
-        //   parallel {
-        //     stage('Build') {
-        //       steps {
-        //         dir('src'){
-        //           sh 'npm run build'
-        //         }
-        //       }
-        //     }
-        //     stage('Test') {
-        //       steps {
-        //         dir('src'){
-        //           sh 'npm run test-ci'
-        //           junit '**/test-results.xml'
-        //         }
-        //       }
-        //     }
-        //   }
-        // }
-        stage('Build') {
-          steps {
-            dir('src') {
-              sh 'npm run build'
-            }
-          }
+      }
+    }
+    stage('Build') {
+      steps {
+        dir('src') {
+          sh 'npm run build'
         }
-        stage('Test') {
-          steps {
-            dir('src') {
-              sh 'npm run test-ci'
-              junit '**/test-results.xml'
-            }
-          }
+      }
+    }
+    stage('Test') {
+      steps {
+        dir('src') {
+          sh 'npm run test-ci'
+          junit '**/test-results.xml'
         }
       }
     }
