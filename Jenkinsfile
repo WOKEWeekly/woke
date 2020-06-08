@@ -25,19 +25,23 @@ pipeline {
   }
 
   stages {
-    dir('src') {
-      stage('Install dependencies') {
-        steps {
+    stage('Install dependencies') {
+      steps {
+        dir('src') {
           sh 'npm install'
         }
       }
-      stage('Build') {
-        steps {
+    }
+    stage('Build') {
+      steps {
+        dir('src') {
           sh 'npm run build'
         }
       }
-      stage('Test') {
-        steps {
+    }
+    stage('Test') {
+      steps {
+        dir('src') {
           sh 'npm run test-ci'
           junit '**/test-results.xml'
         }
