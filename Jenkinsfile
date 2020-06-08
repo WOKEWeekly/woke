@@ -24,39 +24,38 @@ pipeline {
     timeout(time: 5, unit: 'MINUTES')
   }
 
-    stages {
-      dir('src') {
-        stage('Install dependencies') {
-          steps {
-            sh 'npm install'
-          }
+  stages {
+    dir('src') {
+      stage('Install dependencies') {
+        steps {
+          sh 'npm install'
         }
-        stage('Build') {
-          steps {
-            sh 'npm run build'
-          }
+      }
+      stage('Build') {
+        steps {
+          sh 'npm run build'
         }
-        stage('Test') {
-          steps {
-            sh 'npm run test-ci'
-            junit '**/test-results.xml'
-          }
+      }
+      stage('Test') {
+        steps {
+          sh 'npm run test-ci'
+          junit '**/test-results.xml'
         }
       }
     }
+  }
 
-    post {
-      always {
-        dir('src') {
-          sh 'rm -rf node_modules'
-        }
-      }
-      success {
-        slackSend (color: 'good', message: "Build ${env.BUILD_NUMBER} successful.")
-      }
-      failure {
-        slackSend (color: 'danger', message: "Build ${env.BUILD_NUMBER} failed.")
+  post {
+    always {
+      dir('src') {
+        sh 'rm -rf node_modules'
       }
     }
-}
+    success {
+      slackSend (color: 'good', message: "Build ${env.BUILD_NUMBER} successful.")
+    }
+    failure {
+      slackSend (color: 'danger', message: "Build ${env.BUILD_NUMBER} failed.")
+    }
+  }
 }
