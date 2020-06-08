@@ -28,7 +28,7 @@ pipeline {
   stages {
     stage('Clean') { 
       steps {
-        deleteDir()
+        cleanWs()
       }
     }
     stage('Build & Test'){
