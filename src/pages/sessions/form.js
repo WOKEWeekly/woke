@@ -54,7 +54,7 @@ class SessionForm extends Component {
             <Heading>{heading}</Heading>
 
             <Group>
-              <Col md={6}>
+              <Col>
                 <Label>Title:</Label>
                 <TextInput
                   name={'title'}
@@ -63,7 +63,9 @@ class SessionForm extends Component {
                   placeholder={'Enter the title.'}
                 />
               </Col>
-              <Col md={4}>
+            </Group>
+            <Group>
+            <Col md={6}>
                 <Label>Date Held:</Label>
                 <EventDatePicker
                   name={'dateHeld'}
@@ -71,7 +73,7 @@ class SessionForm extends Component {
                   onConfirm={handleDate}
                 />
               </Col>
-              <Col md={2}>
+              <Col md={3}>
                 <Label>Time Held:</Label>
                 <TimePicker
                   name={'timeHeld'}
