@@ -28,9 +28,7 @@ pipeline {
   stages {
     stage('Clean') { 
       steps {
-        dir('src'){
-          deleteDir()
-        }
+        deleteDir()
       }
     }
     stage('Build & Test'){
