@@ -1,6 +1,5 @@
 pipeline {
-
-  agent { 
+  agent {
     dockerfile true
   }
 
@@ -26,31 +25,46 @@ pipeline {
   }
 
   stages {
-    stage('Build & Test'){
+    stage('Build & Test') {
       stages {
-        stage('Install dependencies'){
+        stage('Install dependencies') {
           steps {
-            dir('src'){
+            dir('src') {
               sh 'npm install'
             }
           }
         }
-        stage('Run next build && Mocha unit tests'){
-          parallel {
-            stage('Build') { 
-              steps {
-                dir('src'){
-                  sh 'npm run build'
-                }
-              }
+        // stage('Run next build && Mocha unit tests'){
+        //   parallel {
+        //     stage('Build') {
+        //       steps {
+        //         dir('src'){
+        //           sh 'npm run build'
+        //         }
+        //       }
+        //     }
+        //     stage('Test') {
+        //       steps {
+        //         dir('src'){
+        //           sh 'npm run test-ci'
+        //           junit '**/test-results.xml'
+        //         }
+        //       }
+        //     }
+        //   }
+        // }
+        stage('Build') {
+          steps {
+            dir('src') {
+              sh 'npm run build'
             }
-            stage('Test') {
-              steps {
-                dir('src'){
-                  sh 'npm run test-ci'
-                  junit '**/test-results.xml'
-                }
-              }
+          }
+        }
+        stage('Test') {
+          steps {
+            dir('src') {
+              sh 'npm run test-ci'
+              junit '**/test-results.xml'
             }
           }
         }
@@ -60,7 +74,7 @@ pipeline {
 
   post {
     always {
-      dir('src'){
+      dir('src') {
         sh 'rm -rf node_modules'
       }
     }
