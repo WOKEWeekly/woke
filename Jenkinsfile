@@ -26,11 +26,11 @@ pipeline {
   }
 
   stages {
-    stage('Clean') { 
-      steps {
-        cleanWs()
-      }
-    }
+    // stage('Clean') { 
+    //   steps {
+    //     cleanWs()
+    //   }
+    // }
     stage('Build & Test'){
       stages {
         stage('Install dependencies'){
