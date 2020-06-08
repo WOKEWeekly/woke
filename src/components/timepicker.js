@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Col } from 'react-bootstrap';
 import { zDate } from 'zavid-modules';
 
+import { alert } from '@components/alert.js';
 import { SubmitButton, CancelButton } from '@components/button.js';
 import { Group, Select, TextInput } from '@components/form';
 import { Modal, ConfirmModal } from '@components/modal.js';
@@ -24,6 +25,9 @@ export const TimePicker = ({ time, name, onConfirm }) => {
 
   /** Apply change to selected time value */
   const confirmTimeSelectiom = () => {
+    if (!stateHour) return alert.error('Please set the hour.');
+    if (!stateMinute) return alert.error('Please set the minute.');
+
     const time = new Date();
     time.setHours(stateHour);
     time.setMinutes(stateMinute);
