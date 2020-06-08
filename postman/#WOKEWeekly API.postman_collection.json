@@ -1993,6 +1993,282 @@
 			"protocolProfileBehavior": {}
 		},
 		{
+			"name": "Subscribers",
+			"item": [
+				{
+					"name": "Get Subscribers",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "51303a43-7575-41a9-8ab3-121130f2b1d0",
+								"exec": [
+									"pm.test(\"Response is OK.\", () => {",
+									"    pm.expect(pm.response.code).to.equal(200);",
+									"});",
+									"",
+									"pm.test(\"Response is an array.\", () => {",
+									"    pm.expect(pm.response.json()).to.be.an('array');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "admission",
+								"type": "text",
+								"value": "true"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/api/v1/subscribers",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"subscribers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Single Subscriber",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "d81ce060-ab4c-4fad-a7eb-4d87bbac0dc8",
+								"exec": [
+									"pm.test(\"Response is OK.\", () => {",
+									"    pm.expect(pm.response.code).to.equal(200);",
+									"});",
+									"",
+									"pm.test(\"Response is an object.\", () => {",
+									"    pm.expect(pm.response.json()).to.be.an('object');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "admission",
+								"type": "text",
+								"value": "true"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/api/v1/subscriber/{{SUBSCRIBER_ID}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"subscriber",
+								"{{SUBSCRIBER_ID}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add New Subscriber",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "e9f4295f-6a86-4df7-abaa-46837184e073",
+								"exec": [
+									"var response = pm.response.json();",
+									"pm.globals.set(\"SUBSCRIBER_ID\", response.id);",
+									"",
+									"pm.test(\"Subscriber is created.\", () => {",
+									"    pm.expect(pm.response.code).to.equal(201);",
+									"});",
+									"",
+									"pm.test(\"Response contains ID.\", () => {",
+									"    pm.expect(pm.response.json()).to.have.property('id');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "admission",
+								"value": "true",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"firstname\": \"George\",\n    \"lastname\": \"Floyd\",\n    \"email\": \"wokeweeklyuk@gmail.com\",\n    \"subscriptions\": \"{\\\"articles\\\": true}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/v1/subscribers",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"subscribers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Subscriber",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "3a08a411-e84c-46f0-9208-a0928fd89432",
+								"exec": [
+									"pm.test(\"Subscriber is updated.\", () => {",
+									"    pm.expect(pm.response.code).to.equal(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "admission",
+								"type": "text",
+								"value": "true"
+							},
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"firstname\": \"George\",\n    \"lastname\": \"Floyd\",\n    \"email\": \"wokeweeklyuk@gmail.com\",\n    \"subscriptions\": \"{\\\"articles\\\": false}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/v1/subscribers/{{SUBSCRIBER_ID}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"subscribers",
+								"{{SUBSCRIBER_ID}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Topic",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "0d84e30f-7819-4e51-8e6a-470795cd7a99",
+								"exec": [
+									"pm.test(\"Subscriber is deleted.\", () => {",
+									"    pm.response.to.have.status(204);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "admission",
+								"value": "true",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/api/v1/subscribers/{{SUBSCRIBER_ID}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"subscribers",
+								"{{SUBSCRIBER_ID}}"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "a0b945ce-bcb3-4e32-9283-f4fe061629a9",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "271f3471-61ef-47ce-8a87-18baa41ccc81",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
 			"name": "Topics",
 			"item": [
 				{
