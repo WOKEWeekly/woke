@@ -18,9 +18,6 @@ pipeline {
     SLACK_TOKEN = credentials('slack-token')
     EMAIL_USER = credentials('email-user')
     EMAIL_PWD = credentials('email-pwd')
-    MAILCHIMP_INSTANCE = credentials('mailchimp-instance')
-    MAILCHIMP_API_KEY = credentials('mailchimp-api-key')
-    MAILCHIMP_LISTID = credentials('mailchimp-listid')
   }
 
   options {
