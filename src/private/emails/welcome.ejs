@@ -1,0 +1,38 @@
+<%- include("partials/header.ejs") %>
+
+<body class="container-fluid email">
+  <div class="container header">
+    <img
+      src="<%= cloudinary.url %>/w_768,c_lfill/public/fillers/about1.jpg"
+      alt="#WOKEWeekly"
+      class="header-image"
+    />
+  </div>
+  <div class="container email-content">
+    Hey <%= user.firstname %>! <br /><br />
+
+    Thank you for joining the #WOKEWeekly website. We're very honoured to have
+    your support!
+    <br /><br />
+
+    Remember, your username is <strong><%= user.username %></strong>. You can
+    use your username, as well as this email address, to log in to the website
+    from here on out. You are free to change your username at any point in time
+    by going on your account page. <br /><br />
+
+    You'll need to verify your account, which can be done simply by clicking the
+    button below:
+
+    <div class="button-container">
+      <a href="<%= domain %>/account?verify=<%= token %>" class="button">
+        Verify Your Account
+      </a>
+    </div>
+
+    We look forward to your interaction with our site or any other enquiries you
+    may have!
+    <br /><br />
+
+    <%- include("partials/signature.ejs") %>
+  </div>
+</body>

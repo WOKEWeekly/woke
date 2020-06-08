@@ -1,0 +1,29 @@
+<%- include("partials/header.ejs") %>
+
+<body class="container-fluid email">
+  <div class="container header">
+    <img
+      src="<%= cloudinary.url %>/w_768,c_lfill/public/fillers/about1.jpg"
+      alt="#WOKEWeekly"
+      class="header-image"
+    />
+  </div>
+  <div class="container email-content">
+    Hey <%= user.firstname %>!<br /><br />
+
+    You recently requested to have another verification email sent to you. To
+    verify your account, simply click the button below:
+
+    <div class="button-container">
+      <a href="<%= domain %>/account?verify=<%= token %>" class="button">
+        Verify Your Account
+      </a>
+    </div>
+
+    Please note that this account verification link is only valid for the next
+    30 minutes.
+    <br /><br />
+
+    <%- include("partials/signature.ejs") %>
+  </div>
+</body>
