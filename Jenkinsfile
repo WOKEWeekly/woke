@@ -29,7 +29,7 @@ pipeline {
     stage('Clean') { 
       steps {
         dir('src'){
-          sh 'rm -rf node_modules .next'
+          deleteDir()
         }
       }
     }
@@ -67,6 +67,7 @@ pipeline {
 
   post {
     always {
+      cleanWs()
       dir('src'){
         sh 'rm -rf node_modules'
       }
