@@ -7,7 +7,7 @@ import { changeUsername, clearUser, verifyUser } from '@reducers/actions';
 
 import { alert, setAlert } from '@components/alert.js';
 import { SubmitButton, CancelButton } from '@components/button.js';
-import { Group, UsernameInput, PasswordInput } from '@components/form.js';
+import { Group, UsernameInput, PasswordInput } from '@components/form';
 import { Icon } from '@components/icon.js';
 import { Shader } from '@components/layout.js';
 import { Modal, ConfirmModal } from '@components/modal.js';

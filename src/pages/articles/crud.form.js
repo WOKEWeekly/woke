@@ -14,7 +14,7 @@ import {
   LongTextArea,
   FileSelector,
   Select
-} from '@components/form.js';
+} from '@components/form';
 import { Shader, Spacer } from '@components/layout.js';
 
 import { categories } from '@constants/categories.js';

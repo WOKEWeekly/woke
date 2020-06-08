@@ -14,7 +14,7 @@ import {
   TextInput,
   PasswordInput,
   Checkbox
-} from '@components/form.js';
+} from '@components/form';
 import { Shader, Spacer } from '@components/layout.js';
 
 import request from '@constants/request.js';

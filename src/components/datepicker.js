@@ -5,7 +5,7 @@ import { zDate } from 'zavid-modules';
 
 import { alert } from '@components/alert.js';
 import { SubmitButton, CancelButton } from '@components/button.js';
-import { Group, Select, TextInput } from '@components/form.js';
+import { Group, Select, TextInput } from '@components/form';
 import { Modal, ConfirmModal } from '@components/modal.js';
 
 import { creationDate } from '@constants/settings.js';

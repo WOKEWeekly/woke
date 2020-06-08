@@ -9,7 +9,7 @@ import {
   Label,
   TextInput,
   FileSelector
-} from '@components/form.js';
+} from '@components/form';
 import { Shader, Spacer } from '@components/layout.js';
 
 import CLEARANCES from '@constants/clearances.js';

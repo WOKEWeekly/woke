@@ -12,7 +12,7 @@ import {
   UsernameInput,
   PasswordInput,
   Checkbox
-} from '@components/form.js';
+} from '@components/form';
 import { Modal } from '@components/modal.js';
 
 import { setCookie, getCookie } from '@constants/cookies';

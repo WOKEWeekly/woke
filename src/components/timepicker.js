@@ -3,7 +3,7 @@ import { Col } from 'react-bootstrap';
 import { zDate } from 'zavid-modules';
 
 import { SubmitButton, CancelButton } from '@components/button.js';
-import { Group, Select, TextInput } from '@components/form.js';
+import { Group, Select, TextInput } from '@components/form';
 import { Modal, ConfirmModal } from '@components/modal.js';
 
 import css from '@styles/components/Form.module.scss';

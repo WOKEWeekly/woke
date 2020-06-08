@@ -12,7 +12,7 @@ import {
   TextInput,
   LongTextArea,
   FileSelector
-} from '@components/form.js';
+} from '@components/form';
 import { Shader, Spacer } from '@components/layout.js';
 import { TimePicker } from '@components/timepicker.js';
 

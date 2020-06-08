@@ -19,7 +19,7 @@ import {
   NumberPicker,
   LongTextArea,
   FileSelector
-} from '@components/form.js';
+} from '@components/form';
 import { SocialsList } from '@components/icon.js';
 import { Shader, Spacer } from '@components/layout.js';
 import { EthnicModal, SocialsModal } from '@components/modal.js';
