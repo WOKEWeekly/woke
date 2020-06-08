@@ -12,7 +12,7 @@ module.exports = {
     spotify: 'https://open.spotify.com/show/2IUSFVvNfsJBiTXMwruTIG',
     paypal:
       'https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=BUWDQJCN66KRL&source=url',
-    zoom: 'https://us02web.zoom.us/j/89349332908',
+    zoom: 'https://us02web.zoom.us/j/87581396122',
     slack:
       'https://join.slack.com/t/wokeweekly/shared_invite/zt-cz7frr9s-XFbOGaQ0zms1MaT3T9YAug',
     trello:
