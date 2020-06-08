@@ -11,16 +11,9 @@ const ERROR = require('../../errors');
 const { respondToClient } = require('../../response');
 const knex = require('../knex').getKnex();
 
-let mailchimp;
-
 const emailsOn =
   process.env.NODE_ENV === 'production' || process.argv.includes('--emails');
-if (emailsOn) {
-  const Mailchimp = require('mailchimp-api-v3');
-  mailchimp = new Mailchimp(process.env.MAILCHIMP_API_KEY);
-} else {
-  console.warn('Emails are turned off.');
-}
+console.warn(`Emails are turned ${emailsOn ? 'on' : 'off'}.`);
 
 const safeFields = [
   'id',
@@ -72,14 +65,14 @@ exports.addUser = (req, res) => {
 
   async.waterfall(
     [
+      // Hash entered password
       function (callback) {
-        /** Hash entered password */
         bcrypt.hash(password1, 8, function (err, hash) {
           callback(err, hash);
         });
       },
+      // Insert new user into database
       function (hash, callback) {
-        /** Insert new user into database */
         const query = knex
           .insert({
             firstname,
@@ -91,49 +84,55 @@ exports.addUser = (req, res) => {
           })
           .into('users');
         query.asCallback(function (err, [id] = []) {
-          if (err) return callback(err);
-
-          const user = {
+          callback(err, {
             id,
             firstname,
             lastname,
             username,
             email,
             clearance: 1
-          };
-
-          // Subscribe user to mailing list if allowed
-          if (subscribe) subscribeUserToMailingList(user);
-          callback(null, user);
+          });
         });
       },
+      // Subscribe user to mailing list if allowed
       function (user, callback) {
-        // Generate verification token to be sent via email
+        if (subscribe) {
+          const { firstname, lastname, email } = user;
+          const query = knex
+            .insert({
+              firstname,
+              lastname,
+              email,
+              subscriptions: {
+                articles: true
+              }
+            })
+            .into('subscribers');
+          query.asCallback(function (err) {
+            if (err) console.error(err);
+          });
+        }
+        callback(null, user);
+      },
+      // Generate verification token to be sent via email
+      function (user, callback) {
         jwt.sign(
-          {
-            user
-          },
+          { user },
           process.env.JWT_SECRET,
-          {
-            expiresIn: '24h'
-          },
+          { expiresIn: '24h' },
           (err, token) => {
             if (err) return callback(err);
-            if (emailsOn) emails().sendWelcomeEmail(user, token);
+            if (emailsOn) emails.sendWelcomeEmail(user, token);
             callback(null, user);
           }
         );
       },
+      // Pass authenticated user information to client with access token
       function (user, callback) {
-        // Pass authenticated user information to client with access token
         jwt.sign(
-          {
-            user
-          },
+          { user },
           process.env.JWT_SECRET,
-          {
-            expiresIn: '2h'
-          },
+          { expiresIn: '2h' },
           (err, token) => {
             callback(err, { ...user, token });
           }
@@ -182,13 +181,9 @@ exports.loginUser = (req, res) => {
       function (user, callback) {
         // Assign access token to user
         jwt.sign(
-          {
-            user
-          },
+          { user },
           process.env.JWT_SECRET,
-          {
-            expiresIn: remember ? '30d' : '2h'
-          },
+          { expiresIn: remember ? '30d' : '2h' },
           (err, token) => {
             if (err) return callback(err);
             user.token = token;
@@ -208,7 +203,7 @@ exports.changeUsername = (req, res) => {
   const { id } = req.params;
   const { username } = req.body;
 
-  const query = knex('users').update({username}).where('id', id);
+  const query = knex('users').update({ username }).where('id', id);
   query.asCallback(function (err, result) {
     if (err) {
       const duplicateUsername =
@@ -327,7 +322,7 @@ exports.sendVerificationEmail = (req, res) => {
           (err, token) => {
             if (err) return callback(err);
             if (!emailsOn) return callback(null, { token });
-            emails(callback, [{ token }]).resendVerificationEmail(user, token);
+            emails.resendVerificationEmail(user, token, callback);
           }
         );
       }
@@ -367,9 +362,6 @@ exports.verifyUser = (req, res) => {
     ],
     function (err, user) {
       respondToClient(res, err, 200, user);
-
-      // TODO: Review when doing routes
-      // err ? renderErrorPage(req, res, err, server) : res.redirect(`/account?verified=${token}`);
     }
   );
 };
@@ -402,7 +394,7 @@ exports.sendRecoveryEmail = (req, res) => {
           (err, token) => {
             if (err) return callback(err);
             if (!emailsOn) return callback(null, { token });
-            emails(callback, [{ token }]).sendAccountRecoveryEmail(user, token);
+            emails.sendAccountRecoveryEmail(user, token, callback);
           }
         );
       }
@@ -445,19 +437,4 @@ exports.resetPassword = (req, res) => {
       respondToClient(res, err, 200);
     }
   );
-};
-
-/** Subscribe new user to Mailchimp mailing list */
-const subscribeUserToMailingList = (user) => {
-  mailchimp
-    .post(`/lists/${process.env.MAILCHIMP_LISTID}/members`, {
-      email_address: user.email,
-      status: 'subscribed',
-      merge_fields: {
-        FNAME: user.firstname,
-        LNAME: user.lastname
-      }
-    })
-    .then((results) => console.info(results))
-    .catch((err) => console.error(err.toString()));
 };

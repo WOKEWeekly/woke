@@ -84,10 +84,8 @@ const ShareLink = ({ url }) => {
   const copyLink = () => {
     navigator.permissions.query({ name: 'clipboard-write' }).then((result) => {
       if (result.state == 'granted' || result.state == 'prompt') {
-        navigator.clipboard.writeText(url).then(
-          () => alert.success('Copied this article\'s link to clipboard!'),
-          () => alert.error('Failed to copy this link.')
-        );
+        navigator.clipboard.writeText(url);
+        alert.success('Copied this article\'s link to clipboard!');
       }
     });
   };

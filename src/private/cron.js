@@ -1,14 +1,17 @@
 const schedule = require('node-schedule');
-const knex = require('./api/knex');
+
+const knex = require('./api/knex').getKnex();
 const slack = require('./slack.js');
 
-// const testInterval = { second: 0 };
+const testing = false;
+
+const testInterval = { second: 0 };
 const birthdayReminderTime = { hour: 7, minute: 0 };
 const sessionReminderTime = { hour: 10, minute: 0 };
 
 module.exports = function () {
   /** Notify General Slack channel of team member birthdays at 7:00am */
-  schedule.scheduleJob(birthdayReminderTime, function () {
+  schedule.scheduleJob(testing ? testInterval : birthdayReminderTime, function () {
     const query = knex
       .select()
       .from('members')
@@ -30,7 +33,7 @@ module.exports = function () {
   });
 
   /** Notify General Slack channel of sessions occurring on the current day at 10:00am */
-  schedule.scheduleJob(sessionReminderTime, function () {
+  schedule.scheduleJob(testing ? testInterval : sessionReminderTime, function () {
     const query = knex
       .select()
       .from('sessions')

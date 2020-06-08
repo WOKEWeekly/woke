@@ -1,5 +1,4 @@
 import React, { Component, memo, useState, useEffect } from 'react';
-import { Col } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { zDate } from 'zavid-modules';
 
@@ -134,7 +133,7 @@ const Article = memo(({ article, idx }) => {
             </div>
             <Paragraph
               className={css['article-paragraph']}
-              truncate={45}
+              truncate={35}
               morelink={hyperlink}
               moretext={'Read the full article'}
               moreclass={css['article-readmore']}
@@ -175,7 +174,7 @@ const Article = memo(({ article, idx }) => {
           </div>
           <Paragraph
             className={css['article-paragraph']}
-            truncate={45}
+            truncate={30}
             morelink={hyperlink}
             moretext={'Read the full article'}
             moreclass={css['article-readmore']}

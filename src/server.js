@@ -23,7 +23,7 @@ const cors = require('cors');
 const dotenv = require('dotenv').config({
   path: config
 });
-const port = isStageTesting ? 3010 : (process.env.PORT || 3000);
+const port = isStageTesting ? 3010 : process.env.PORT || 3000;
 const { setKnex } = require('./private/api/knex');
 
 app.use(bodyParser.json({ limit: `${limits.file}MB` }));
@@ -69,7 +69,8 @@ function startServer(next) {
         server.prepare().then(() => {
           app.get('*', (req, res) => handle(req, res));
           app.listen(port, (err) => {
-            if (!err) console.info(`Server running on http://localhost:${port}`);
+            if (!err)
+              console.info(`Server running on http://localhost:${port}`);
             callback(err);
           });
         });

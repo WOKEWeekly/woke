@@ -284,10 +284,14 @@ module.exports = function (app, knex, server) {
   app.get('/team/:slug', function (req, res) {
     const { slug } = req.params;
 
-    const query = knex.select().from('members').where({
-      slug: slug,
-      verified: 1
-    }).whereNot('level', 'Guest');
+    const query = knex
+      .select()
+      .from('members')
+      .where({
+        slug: slug,
+        verified: 1
+      })
+      .whereNot('level', 'Guest');
     query.asCallback(function (err, [member] = []) {
       if (err) return renderErrorPage(req, res, err, server);
       if (!member)
@@ -496,7 +500,7 @@ module.exports = function (app, knex, server) {
   app.get('/admin/articles', function (req, res) {
     return server.render(req, res, '/articles/admin', {
       title: 'Blog Admin',
-      backgroundImage: 'bg-blog.jpg',
+      backgroundImage: 'bg-blog.jpg'
     });
   });
 
@@ -590,25 +594,41 @@ module.exports = function (app, knex, server) {
 
   /** User account page */
   app.get('/account', function (req, res) {
-    const token = req.query.verified;
+    const token = req.query.verify;
 
     async.waterfall(
       [
+        // Checks if attempt at verifying account.
+        function(callback) {
+          callback(token ? null : true);
+        },
+        // Verify the given token.
         function (callback) {
-          if (!token) return callback(null, false);
-          // TODO: Sort this out
-          jwt.verify(token, process.env.JWT_SECRET, (err, result) => {
-            if (err) return callback(null, false);
-            callback(null, true, result.user);
+          jwt.verify(token, process.env.JWT_SECRET, (err, { user } = {}) => {
+            callback(err, user);
+          });
+        },
+        // Change user's clearance to indicate verification.
+        function (user, callback) {
+          if (user.clearance > 1) {
+            return callback(null, false);
+          }
+          const query = knex('users')
+            .update({ clearance: 2 })
+            .where('id', user.id);
+          query.asCallback(function (err) {
+            if (err) return callback(err);
+            user.clearance = 2;
+            callback(null, true, user);
           });
         }
       ],
       function (err, justVerified, user = {}) {
-        if (err) return res.redirect('/');
+        if (err && typeof err === 'object') return res.redirect('/');
         server.render(req, res, '/_auth/account', {
           title: 'Account | #WOKEWeekly',
           ogUrl: '/account',
-          justVerified: justVerified,
+          justVerified,
           verifiedUser: user
         });
       }

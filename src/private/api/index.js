@@ -5,6 +5,7 @@ const membersRoutes = require('./routes/members.route');
 const pagesRoutes = require('./routes/pages.route');
 const reviewsRoutes = require('./routes/reviews.route');
 const sessionsRoutes = require('./routes/sessions.route');
+const subscribersRoutes = require('./routes/subscribers.route');
 const topicsRoutes = require('./routes/topics.route');
 const usersRoutes = require('./routes/users.route');
 
@@ -34,6 +35,9 @@ module.exports = function (app, knex) {
 
   // Sessions routes
   app.use('/api/v1/sessions', sessionsRoutes);
+
+  // Subscribers routes
+  app.use('/api/v1/subscribers', subscribersRoutes);
 
   // Topics routes
   app.use('/api/v1/topics', topicsRoutes);
