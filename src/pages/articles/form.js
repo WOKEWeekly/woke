@@ -175,7 +175,7 @@ const ArticleForm = ({
                 name={'tags'}
                 value={tags}
                 onChange={handleText}
-                placeholder={'e.g. woke, society, black women'}
+                placeholder={'Add a comma-separated list of tags (e.g. woke, society, black women)'}
               />
             </Col>
           </Group>
