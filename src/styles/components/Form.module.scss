@@ -39,6 +39,11 @@
     width: 100%;
     @media (max-width: $break-md) { font-size: 1em; padding: .4em 0}
   }
+  .click-input {
+    @extend .invisible_button;
+    padding: 0;
+    width: 100%;
+  }
   .textarea {
     @extend .text;
     border-bottom: $underline !important;
@@ -224,4 +229,17 @@
   padding: 0.8em 0 0;
   button { padding: 0; }
   .starIcon { font-size: 1.6em; }
+}
+
+/****************/
+/** subscribe *******/
+/****************/
+
+.subscribe-input {
+ font-size: 1.1em !important;
+ margin-bottom: 1em;
+}
+
+.subscribe-button {
+
 }

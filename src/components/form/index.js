@@ -12,6 +12,9 @@ import { cloudinary } from '@constants/settings.js';
 
 import css from '@styles/components/Form.module.scss';
 
+export * from './input';
+export * from './subscribe';
+
 /** For the form heading */
 export class Heading extends Component {
   constructor() {
@@ -71,89 +74,6 @@ export const LabelInfo = (props) => {
     </div>
   );
 };
-
-/***************************
- * INPUTS
- **************************/
-
-/** Template for inputs */
-class Input extends Component {
-  render() {
-    const classes = classNames(css.input, this.props.className);
-    return (
-      <input
-        {...this.props}
-        type={this.props.type}
-        name={this.props.name}
-        placeholder={this.props.placeholder}
-        className={classes}
-        autoComplete={'off'}
-        value={this.props.value || ''}
-        ref={this.props.ref}
-        onChange={this.props.onChange}
-      />
-    );
-  }
-}
-
-/** For inline text inputs */
-export class TextInput extends Component {
-  render() {
-    return <Input {...this.props} type={'text'} />;
-  }
-}
-
-/** For username inputs */
-export class UsernameInput extends Component {
-  render() {
-    return <Input {...this.props} autoCapitalize={'off'} />;
-  }
-}
-
-/** For password inputs */
-export class PasswordInput extends Component {
-  render() {
-    return <Input {...this.props} type={'password'} />;
-  }
-}
-
-export class ClickInput extends Component {
-  render() {
-    return (
-      <button
-        onClick={this.props.onClick}
-        className={css.invisible_button}
-        style={{ width: '100%', padding: '0' }}>
-        <Input {...this.props} readOnly />
-      </button>
-    );
-  }
-}
-
-/** For number selections */
-export class NumberPicker extends Component {
-  render() {
-    return <Input {...this.props} type={'number'} min={1} />;
-  }
-}
-
-export class SearchBar extends Component {
-  render() {
-    return (
-      <div className={css.searchContainer}>
-        <Icon name={'search'} color={'grey'} />
-        <input
-          type={'text'}
-          className={css.searchBar}
-          onChange={this.props.onChange}
-          placeholder={this.props.placeholder}
-          value={this.props.value}
-          style={{ width: this.props.width }}
-        />
-      </div>
-    );
-  }
-}
 
 /***************************
  * TEXTAREAS

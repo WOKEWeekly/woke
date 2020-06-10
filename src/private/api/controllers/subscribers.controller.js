@@ -28,6 +28,9 @@ exports.addSubscriber = (req, res) => {
   const subscriber = req.body;
   const query = knex.insert(subscriber).into('subscribers');
   query.asCallback(function (err, [id] = []) {
+    if (err && err.code === ERROR.SQL_DUP_CODE) {
+      err = ERROR.DUPLICATE_EMAIL_ADDRESS();
+    }
     respondToClient(res, err, 201, {
       id
     });
@@ -41,9 +44,15 @@ exports.updateSubscriber = (req, res) => {
 
   const query = knex('subscribers').update(subscriber).where('id', id);
   query.asCallback(function (err, result) {
-    if (err) return respondToClient(res, err);
-    if (result.affectedRows === 0)
+    if (err) {
+      if (err.code === ERROR.SQL_DUP_CODE) {
+        err = ERROR.DUPLICATE_EMAIL_ADDRESS();
+      }
+      return respondToClient(res, err);
+    }
+    if (result.affectedRows === 0) {
       err = ERROR.INVALID_ENTITY_ID(ENTITY.SUBSCRIBER, id);
+    }
     respondToClient(res, err, 200);
   });
 };
