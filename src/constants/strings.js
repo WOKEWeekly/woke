@@ -44,6 +44,10 @@ exports.PAGE = {
   }
 };
 
+exports.SUBSCRIPTIONS = {
+  ARTICLES: 'articles'
+};
+
 /** The status of the blog articles */
 exports.ARTICLE_STATUS = {
   DRAFT: 'DRAFT',

@@ -14,7 +14,10 @@ describe('Article Tests', function () {
       request({
         url: `/api/v1/articles`,
         method: 'POST',
-        body: JSON.stringify(TEST_ARTICLES.CREATED),
+        body: JSON.stringify({
+          article: TEST_ARTICLES.CREATED,
+          isPublish: true
+        }),
         headers: HEADERS.TOKEN(superuser),
         done,
         onSuccess: ({ status, data }) => {
@@ -91,7 +94,8 @@ describe('Article Tests', function () {
         method: 'PUT',
         body: JSON.stringify({
           article: TEST_ARTICLES.UPDATED,
-          changed: false
+          changed: false,
+          isPublish: false
         }),
         headers: HEADERS.TOKEN(superuser),
         done,
@@ -108,7 +112,8 @@ describe('Article Tests', function () {
         method: 'PUT',
         body: JSON.stringify({
           article: TEST_ARTICLES.UPDATED,
-          changed: true
+          changed: true,
+          isPublish: true
         }),
         headers: HEADERS.TOKEN(superuser),
         done,
