@@ -3,48 +3,46 @@ import React, { Component } from 'react';
 import { Button, ToggleButton, ToggleButtonGroup } from 'react-bootstrap';
 import { connect } from 'react-redux';
 
+import { alert } from '@components/alert.js';
 import { Icon } from '@components/icon.js';
 import { Default, Mobile } from '@components/layout.js';
 
+import request from '@constants/request.js';
+
 import css from '@styles/components/Button.module.scss';
 
-/*****************
- * CUSTOM BUTTONS
- ****************/
-class _SubmitButton extends Component {
-  render() {
-    const { theme } = this.props;
-    const classes = classNames(css[`submit-${theme}`], this.props.className);
-    return (
-      <button {...this.props} className={classes}>
-        {this.props.children}
-      </button>
-    );
-  }
-}
+const mapStateToProps = (state) => ({
+  theme: state.theme
+});
 
-export class DeleteButton extends Component {
-  render() {
-    const classes = classNames(css.delete, this.props.className);
-    return (
-      <button {...this.props} className={classes}>
-        {this.props.children}
-      </button>
-    );
-  }
-}
+export const SubmitButton = connect(mapStateToProps)((props) => {
+  const { theme, children, className } = props;
+  const classes = classNames(css[`submit-${theme}`], className);
+  return (
+    <button {...props} className={classes}>
+      {children}
+    </button>
+  );
+});
 
-class _CancelButton extends Component {
-  render() {
-    const { theme } = this.props;
-    const classes = css[`cancel-${theme}`];
-    return (
-      <button {...this.props} className={classes}>
-        {this.props.children}
-      </button>
-    );
-  }
-}
+export const DeleteButton = (props) => {
+  const { className, children } = props;
+  const classes = classNames(css.delete, className);
+  return (
+    <button {...props} className={classes}>
+      {children}
+    </button>
+  );
+};
+
+export const CancelButton = connect(mapStateToProps)((props) => {
+  const { children, theme } = props;
+  return (
+    <button {...props} className={css[`cancel-${theme}`]}>
+      {children}
+    </button>
+  );
+});
 
 /*************************
  * PAGE BUTTONS
@@ -182,10 +180,3 @@ export class RadioButtonGroup extends Component {
     );
   }
 }
-
-const mapStateToProps = (state) => ({
-  theme: state.theme
-});
-
-export const SubmitButton = connect(mapStateToProps)(_SubmitButton);
-export const CancelButton = connect(mapStateToProps)(_CancelButton);

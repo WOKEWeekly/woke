@@ -9,7 +9,7 @@ import { saveTopicSort, saveTopicFilters } from '@reducers/actions';
 import { alert, setAlert } from '@components/alert.js';
 import { AddEntityButton } from '@components/button.js';
 import { SortDropdown, FilterDropdown } from '@components/dropdown.js';
-import { Checkbox, SearchBar } from '@components/form.js';
+import { Checkbox, SearchBar } from '@components/form';
 import { Icon } from '@components/icon.js';
 import { Cover, Shader, Spacer } from '@components/layout.js';
 import { Loader, Empty } from '@components/loader.js';

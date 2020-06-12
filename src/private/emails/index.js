@@ -2,7 +2,9 @@ const ejs = require('ejs');
 const nodemailer = require('nodemailer');
 
 let { cloudinary, domain, emails } = require('../../constants/settings.js');
+let { SUBSCRIPTIONS } = require('../../constants/strings.js');
 const { config } = require('../../server.js');
+const knex = require('../api/knex').getKnex();
 
 require('dotenv').config({ path: config });
 
@@ -50,6 +52,24 @@ exports.sendAccountRecoveryEmail = (user, token, callback) => {
 };
 
 /**
+ * Send an email to all subscribers to new article.
+ * @param {object} article - The article details
+ * @param {object} options - The callback options for this function.
+ * @param {Function} [options.callback] - The callback function called on completion.
+ * @param {object} [options.params] - The parameters sent via the callback.
+ */
+exports.notifyNewArticle = (article, options) => {
+  const subject = `Blog: "${article.title}" by ${article.authorName}`;
+  ejs.renderFile(
+    __dirname + '/templates/article.ejs',
+    { article, domain, cloudinary },
+    function (err, data) {
+      sendMailToAllSubscribers(SUBSCRIPTIONS.ARTICLES, subject, data, options);
+    }
+  );
+};
+
+/**
  * Send transport email.
  * @param {string} to - The recipient of the email.
  * @param {string} subject - The subject of the email.
@@ -61,8 +81,8 @@ const sendMail = (to, subject, message, callback, token) => {
   transporter.sendMail(
     {
       from: `#WOKEWeekly <${emails.site}>`,
-      to: to,
-      subject: subject,
+      to,
+      subject,
       html: message
     },
     function (err) {
@@ -72,4 +92,42 @@ const sendMail = (to, subject, message, callback, token) => {
       }
     }
   );
+};
+
+/**
+ * Send email to all subscribers.
+ * @param {string} type - The type of subscription.
+ * @param {string} subject - The subject of the email.
+ * @param {string} message - The content of the message.
+ * @param {object} [options] - The callback options for this function.
+ * @param {Function} [options.callback] - The callback function called on completion.
+ * @param {object} [options.params] - The parameters sent via the callback.
+ */
+const sendMailToAllSubscribers = (type, subject, message, options = {}) => {
+  const { callback, params } = options;
+
+  const query = knex.select().from('subscribers');
+  query.asCallback(function (err, results) {
+
+    // Retrieve list of subscribers to corresponding type
+    const mailList = results.map((subscriber) => {
+      const subscriptions = JSON.parse(subscriber.subscriptions);
+      const isSubscribed = subscriptions[type];
+      if (isSubscribed) return subscriber.email;
+    });
+
+    // Send email to shortlisted subscribers on mailing list
+    transporter.sendMail(
+      {
+        from: `#WOKEWeekly <${emails.site}>`,
+        to: mailList,
+        subject,
+        html: message
+      },
+      function (err) {
+        console.info(`Emails: "${subject}" email sent to all ${type} subscribers.`);
+        if (callback) callback(err, params);
+      }
+    );
+  });
 };

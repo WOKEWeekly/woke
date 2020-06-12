@@ -5,7 +5,7 @@ import { zDate } from 'zavid-modules';
 
 import { alert } from '@components/alert.js';
 import { SubmitButton, CancelButton } from '@components/button.js';
-import { Group, Label, Select } from '@components/form.js';
+import { Group, Label, Select } from '@components/form';
 import { Icon } from '@components/icon.js';
 import { Shader, Default, Mobile } from '@components/layout.js';
 import { Loader, Empty } from '@components/loader.js';

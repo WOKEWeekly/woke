@@ -2,10 +2,14 @@
 const async = require('async');
 
 const { DIRECTORY, ENTITY } = require('../../../constants/strings');
+const emails = require('../../emails');
 const ERROR = require('../../errors');
 const filer = require('../../filer');
 const { respondToClient } = require('../../response');
 const knex = require('../knex').getKnex();
+
+const emailsOn =
+  process.env.NODE_ENV === 'production' || process.argv.includes('--emails');
 
 const columns = [
   'articles.*',
@@ -68,19 +72,34 @@ exports.getPublishedArticles = (req, res) => {
 
 /** Add new article to database */
 exports.addArticle = (req, res) => {
-  const article = req.body;
+  const { article, isPublish } = req.body;
 
   async.waterfall(
     [
+      // Upload image to cloud
       function (callback) {
-        // Upload image to cloud
         filer.uploadImage(article, DIRECTORY.ARTICLES, true, callback);
       },
+      // Add article to database
       function (article, callback) {
-        // Add article to database
         const query = knex.insert(article).into('articles');
         query.asCallback(function (err, [id] = []) {
-          callback(err, id);
+          article.id = id;
+          callback(err, article);
+        });
+      },
+      // Send emails to all subscribers if publish
+      function (article, callback) {
+        if (!isPublish || !emailsOn) return callback(null, article.id);
+        const query = knex
+          .columns(columns)
+          .select('')
+          .from('articles')
+          .leftJoin('members', 'articles.authorId', 'members.id')
+          .where('articles.id', article.id);
+        query.asCallback(function (err, [article] = []) {
+          emails.notifyNewArticle(article);
+          callback(err, article.id);
         });
       }
     ],
@@ -95,12 +114,12 @@ exports.addArticle = (req, res) => {
 /** Update details of existing articles in database */
 exports.updateArticle = (req, res) => {
   const id = req.params.id;
-  const { article, changed } = req.body;
+  const { article, changed, isPublish } = req.body;
 
   async.waterfall(
     [
+      // Delete old image if changed.
       function (callback) {
-        // Delete old image if changed.
         const query = knex.select().from('articles').where('id', id);
         query.asCallback(function (err, [article] = []) {
           if (err) return callback(err);
@@ -110,14 +129,28 @@ exports.updateArticle = (req, res) => {
           filer.destroyImage(article.image, callback);
         });
       },
+      // Equally, upload new image if changed
       function (callback) {
-        // Equally, upload new image if changed
         filer.uploadImage(article, DIRECTORY.ARTICLES, changed, callback);
       },
+      // Update article in database
       function (article, callback) {
-        // Update article in database
         const query = knex('articles').update(article).where('id', id);
         query.asCallback(function (err) {
+          callback(err, article);
+        });
+      },
+      // Send emails to all subscribers if publish
+      function (article, callback) {
+        if (!isPublish || !emailsOn) return callback(null, article.slug);
+        const query = knex
+          .columns(columns)
+          .select('')
+          .from('articles')
+          .leftJoin('members', 'articles.authorId', 'members.id')
+          .where('articles.id', id);
+        query.asCallback(function (err, [article] = []) {
+          emails.notifyNewArticle(article);
           callback(err, article.slug);
         });
       }

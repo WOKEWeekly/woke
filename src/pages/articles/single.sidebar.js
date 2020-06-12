@@ -1,9 +1,10 @@
 import React, { useState, useEffect, memo } from 'react';
 import { zDate } from 'zavid-modules';
 
+import { SubscribeField } from '@components/form';
 import { CloudinaryImage } from '@components/image.js';
 import { Loader, Empty } from '@components/loader.js';
-import { Title, Subtitle, VanillaLink } from '@components/text.js';
+import { Title, Subtitle, Divider, VanillaLink } from '@components/text.js';
 import { Zoomer } from '@components/transitioner.js';
 
 import request from '@constants/request.js';
@@ -15,7 +16,7 @@ const ArticleSidebar = memo(({ currentArticleId: id }) => {
   const [articles, setArticles] = useState([]);
 
   useEffect(() => {
-    /** Get published articles */
+    /** Get 3 most recent published articles */
     request({
       url: `/api/v1/articles/published?limit=3&order=DESC&exception=${id}`,
       method: 'GET',
@@ -47,6 +48,8 @@ const ArticleSidebar = memo(({ currentArticleId: id }) => {
     <div className={css['recent-posts-sidebar']}>
       <Title className={css['heading']}>Recent Posts</Title>
       <ArticleList />
+      <Divider />
+      <SubscribeField />
     </div>
   );
 });

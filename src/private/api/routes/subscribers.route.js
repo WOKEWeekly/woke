@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 const CLEARANCES = require('../../../constants/clearances');
-const { verifyToken } = require('../../middleware');
+const { verifyToken, validateReq } = require('../../middleware');
 const SubscribersController = require('../controllers/subscribers.controller');
 
 const authorizeView = verifyToken(CLEARANCES.ACTIONS.SUBSCRIBERS.MODIFY);
@@ -19,7 +19,7 @@ router.get(
 );
 
 /** POST new subscriber */
-router.post('/', authorizeModify, SubscribersController.addSubscriber);
+router.post('/', validateReq, SubscribersController.addSubscriber);
 
 /** PUT; update subscriber details */
 router.put('/:id', authorizeModify, SubscribersController.updateSubscriber);

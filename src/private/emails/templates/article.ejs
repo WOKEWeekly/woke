@@ -1,0 +1,23 @@
+<%- include("partials/header.ejs") %>
+
+<body class="container-fluid email">
+  <div class="container header">
+    <img
+      src="<%= cloudinary.url %>/w_768,c_lfill/<%= article.image %>"
+      alt="<%= article.title %>""
+      class="header-image"
+    />
+  </div>
+  <div class="container email-content">
+    
+    <%= article.content %>
+
+    <div class="button-container">
+      <a href="<%= domain %>/"<%= article.slug %>" class="button">
+        Read Full Article
+      </a>
+    </div>
+
+    <%- include("partials/footer.ejs") %>
+  </div>
+</body>

@@ -94,7 +94,7 @@ exports.addUser = (req, res) => {
           });
         });
       },
-      // Subscribe user to mailing list if allowed
+      // Add user to subscribers if opted in
       function (user, callback) {
         if (subscribe) {
           const { firstname, lastname, email } = user;

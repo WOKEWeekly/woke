@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 
 import { setAlert } from '@components/alert.js';
 import { SubmitButton, CancelButton } from '@components/button.js';
-import { Heading, Group, LabelInfo, LongTextArea } from '@components/form.js';
+import { Heading, Group, LabelInfo, LongTextArea } from '@components/form';
 import { Shader, Spacer } from '@components/layout.js';
 
 import CLEARANCES from '@constants/clearances.js';

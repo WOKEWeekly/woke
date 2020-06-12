@@ -1,106 +1,133 @@
-import React, { Component } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Col } from 'react-bootstrap';
-import { zDate, zHandlers } from 'zavid-modules';
+import { zDate } from 'zavid-modules';
 
+import { alert } from '@components/alert.js';
 import { SubmitButton, CancelButton } from '@components/button.js';
-import { Group, Select, TextInput } from '@components/form.js';
-import { Modal } from '@components/modal.js';
+import { Group, Select, TextInput } from '@components/form';
+import { Modal, ConfirmModal } from '@components/modal.js';
 
 import css from '@styles/components/Form.module.scss';
 
 import { Icon } from './icon';
 
-export class TimePicker extends Component {
-  constructor(props) {
-    super(props);
+export const TimePicker = ({ time, name, onConfirm }) => {
+  const { hour: initialHour, minute: initialMinute } = extractTime(time);
+  const [stateHour, setHour] = useState(initialHour);
+  const [stateMinute, setMinute] = useState(initialMinute);
+  const [timePickerVisible, setTimePickerVisibility] = useState(false);
+  const [clearTimeModalVisible, setClearTimeModalVisibility] = useState(false);
 
-    this.state = {
-      ...extractTime(props.time),
-      visible: false
-    };
-  }
-
-  /** Account for changes to input */
-  static getDerivedStateFromProps({ time }, state) {
-    if (state.visible) return state;
-    return extractTime(time);
-  }
+  useEffect(() => {
+    setHour(initialHour);
+    setMinute(initialMinute);
+  }, [timePickerVisible]);
 
   /** Apply change to selected time value */
-  confirmTimeSelectiom = () => {
-    let { hour, minute } = this.state;
+  const confirmTimeSelectiom = () => {
+    if (!stateHour) return alert.error('Please set the hour.');
+    if (!stateMinute) return alert.error('Please set the minute.');
 
     const time = new Date();
-    time.setHours(hour);
-    time.setMinutes(minute);
+    time.setHours(stateHour);
+    time.setMinutes(stateMinute);
 
-    this.props.onConfirm(time, this.props.name);
-    this.closeTimeModal();
+    onConfirm(time, name);
+    setTimePickerVisibility(false);
   };
 
-  /** Close the timepicker modal */
-  closeTimeModal = () => this.setState({ visible: false });
+  /** Clear the date */
+  const clearTime = () => {
+    onConfirm(null, name);
+    setClearTimeModalVisibility(false);
+  };
 
-  render() {
-    const { time } = this.props;
-    const { hour, minute, visible } = this.state;
+  const TimePickerBody = (
+    <Group className={css['datepicker-modal']}>
+      <Col xs={6}>
+        <Select
+          name={'hour'}
+          items={zDate.getAllHours()}
+          value={stateHour}
+          placeholder={'HH'}
+          onChange={(event) => setHour(event.target.value)}
+        />
+      </Col>
+      <Col xs={6}>
+        <Select
+          name={'minute'}
+          items={zDate.getAllMinutes(5)}
+          value={stateMinute}
+          placeholder={'mm'}
+          onChange={(event) => setMinute(event.target.value)}
+        />
+      </Col>
+    </Group>
+  );
 
-    const { handleText } = zHandlers(this);
+  const TimePickerFooter = (
+    <>
+      <SubmitButton onClick={confirmTimeSelectiom}>Confirm</SubmitButton>
+      <CancelButton onClick={() => setTimePickerVisibility(false)}>
+        Close
+      </CancelButton>
+    </>
+  );
 
-    const body = (
-      <Group className={css.dateModal}>
-        <Col xs={6}>
-          <Select
-            name={'hour'}
-            items={zDate.getAllHours()}
-            value={hour}
-            placeholder={'HH'}
-            onChange={handleText}
-          />
-        </Col>
-        <Col xs={6}>
-          <Select
-            name={'minute'}
-            items={zDate.getAllMinutes(5)}
-            value={minute}
-            placeholder={'mm'}
-            onChange={handleText}
-          />
-        </Col>
-      </Group>
-    );
-
-    const footer = (
-      <React.Fragment>
-        <SubmitButton onClick={this.confirmTimeSelectiom}>Confirm</SubmitButton>
-        <CancelButton onClick={this.closeTimeModal}>Close</CancelButton>
-      </React.Fragment>
-    );
-
+  const ClearTimeButton = () => {
+    if (time === null) return null;
     return (
-      <React.Fragment>
+      <button
+        onClick={() => setClearTimeModalVisibility(true)}
+        className={css['invisible_button']}>
+        <Icon name={'times'} />
+      </button>
+    );
+  };
+
+  return (
+    <>
+      <div className={css['datepicker-field']}>
         <button
-          onClick={() => this.setState({ visible: true })}
-          className={css.datepicker}>
-          <Icon prefix={'far'} name={'clock'} className={css.calendarIcon} />
+          onClick={() => setTimePickerVisibility(true)}
+          className={css['datepicker']}>
+          <Icon
+            prefix={'far'}
+            name={'clock'}
+            className={css['calendar-icon']}
+          />
           <TextInput
             value={time ? zDate.formatISOTime(time, false) : null}
             placeholder={'HH:mm'}
             style={{ textAlign: 'left' }}
-            className={css.dateinput}
+            className={css['datepicker-text-input']}
             readOnly
           />
         </button>
+        <ClearTimeButton />
+      </div>
 
-        <Modal show={visible} body={body} footer={footer} onlyBody={true} />
-      </React.Fragment>
-    );
-  }
-}
+      <Modal
+        show={timePickerVisible}
+        body={TimePickerBody}
+        footer={TimePickerFooter}
+        onlyBody={true}
+      />
+
+      <ConfirmModal
+        visible={clearTimeModalVisible}
+        message={`Clear this time?`}
+        confirmFunc={clearTime}
+        confirmText={'Clear'}
+        close={() => setClearTimeModalVisibility(false)}
+      />
+    </>
+  );
+};
 
 /**
  * Extract the hour and minute from a specified time.
- * @param {(string|Date}} time - The specified time.
+ * @param {(string|Date)} time - The specified time.
  * @returns {object[]} The hour and minute.
  */
 const extractTime = (time) => {

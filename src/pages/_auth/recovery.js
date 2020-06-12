@@ -3,7 +3,7 @@ import { Col } from 'react-bootstrap';
 import { connect } from 'react-redux';
 
 import { SubmitButton } from '@components/button.js';
-import { Heading, Group, Label, TextInput } from '@components/form.js';
+import { Heading, Group, Label, TextInput } from '@components/form';
 import { Shader } from '@components/layout.js';
 
 import request from '@constants/request.js';

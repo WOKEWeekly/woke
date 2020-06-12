@@ -8,7 +8,7 @@ import {
   CancelButton,
   DeleteButton
 } from '@components/button.js';
-import { Group, Label, Select, UsernameInput } from '@components/form.js';
+import { Group, Label, Select, UsernameInput } from '@components/form';
 import { SocialIcon } from '@components/icon.js';
 import { Paragraph } from '@components/text.js';
 
