@@ -15,7 +15,7 @@ describe('Subscriber Tests', function () {
         url: `/api/v1/subscribers`,
         method: 'POST',
         body: JSON.stringify(TEST_SUBSCRIBERS.CREATED),
-        headers: HEADERS.TOKEN(superuser),
+        headers: HEADERS.KEY,
         done,
         onSuccess: ({ status, data }) => {
           assert.equal(status, 201);
