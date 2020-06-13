@@ -1,10 +1,11 @@
 import React, { useEffect, useState, memo } from 'react';
 import { Container } from 'react-bootstrap';
 import { connect } from 'react-redux';
+import { zDate } from 'zavid-modules';
 
 import { CountryFlags } from '@components/emoji.js';
 import { CloudinaryImage } from '@components/image.js';
-import { Cover, Shader, Spacer, Mobile } from '@components/layout.js';
+import { Cover, Shader, Spacer, Default, Mobile } from '@components/layout.js';
 import { Title, Subtitle, Paragraph, VanillaLink } from '@components/text.js';
 import { Fader } from '@components/transitioner.js';
 
@@ -100,6 +101,8 @@ const Member = memo(({ member, index }) => {
   const isExecutive = member.level === 'Executive';
   const className = css[isExecutive ? 'executive-cell' : 'member-cell'];
 
+  member.age = zDate.calculateAge(member.birthday);
+
   return (
     <Fader
       determinant={isLoaded}
@@ -117,18 +120,29 @@ const Member = memo(({ member, index }) => {
           <div className={css['member-details']}>
             <Title className={css['member-name']}>
               {member.firstname} {member.lastname}{' '}
-              <CountryFlags
-                ethnicities={member.ethnicity}
-                size={22}
-                className={css['member-flags']}
-              />
+              <Default>
+                <CountryFlags
+                  ethnicities={member.ethnicity}
+                  size={25}
+                  className={css['member-flags']}
+                />
+              </Default>
+              <Mobile>
+                <CountryFlags
+                  ethnicities={member.ethnicity}
+                  size={20}
+                  className={css['member-flags']}
+                />
+              </Mobile>
             </Title>
-            <Subtitle className={css['member-role']}>{member.role}</Subtitle>
+            <Subtitle className={css['member-role']}>
+              {member.role} • {member.age}
+            </Subtitle>
             <Mobile>
               <Paragraph
                 truncate={15}
                 className={css['member-excerpt']}
-                moretext={`Read about ${member.firstname}`}
+                moretext={`Read about ${member.firstname.split(' ')[0]}`}
                 morelink={`/team/${member.slug}`}
                 moreclass={css['member-readmore']}>
                 {member.description}
