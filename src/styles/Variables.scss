@@ -136,11 +136,13 @@ $break-xxl: 1408px; // Extra large devices (large desktops)
 ** Mixins **
 ***********/
 @mixin scale-on-hover($scale) {
-  -webkit-transition: transform 0.2s ease-in-out;
-  transition: transform 0.2s ease-in-out;
-
-  &:hover {
-    transform: scale($scale);
+  @media (min-width: $break-lg) {
+    -webkit-transition: transform 0.2s ease-in-out;
+    transition: transform 0.2s ease-in-out;
+  
+    &:hover {
+      transform: scale($scale);
+    }
   }
 }
 
