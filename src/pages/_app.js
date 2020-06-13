@@ -57,12 +57,17 @@ export default class WOKE extends App {
     const countries = store.getState().countries;
     if (!countries.length) {
       loadCountries().then((data) => {
-        const countries = [];
-        data.forEach((country) => {
-          countries.push({ label: country.name, demonym: country.demonym });
+        const countries = data.map((country) => {
+          return {
+            label: country.name,
+            demonym: country.demonym,
+            iso: country.alpha2Code
+          };
         });
         store.dispatch(saveCountries(countries));
-        this.setState({ isLoaded: true }, () => store.dispatch(setTheme(theme)));
+        this.setState({ isLoaded: true }, () =>
+          store.dispatch(setTheme(theme))
+        );
       });
     } else {
       this.setState({ isLoaded: true }, () => store.dispatch(setTheme(theme)));

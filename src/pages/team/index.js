@@ -2,9 +2,10 @@ import React, { useEffect, useState, memo } from 'react';
 import { Container } from 'react-bootstrap';
 import { connect } from 'react-redux';
 
+import { CountryFlags } from '@components/emoji.js';
 import { CloudinaryImage } from '@components/image.js';
-import { Cover, Shader, Spacer } from '@components/layout.js';
-import { Title, Subtitle, VanillaLink } from '@components/text.js';
+import { Cover, Shader, Spacer, Mobile } from '@components/layout.js';
+import { Title, Subtitle, Paragraph, VanillaLink } from '@components/text.js';
 import { Fader } from '@components/transitioner.js';
 
 import request from '@constants/request.js';
@@ -48,8 +49,8 @@ export const Team = () => {
     });
     return (
       <>
-        <Title className={css.heading}>The Executives</Title>
-        <div className={css.memberBlock}>{items}</div>
+        <Title className={css['heading']}>The Executives</Title>
+        <div className={css['member-block']}>{items}</div>
       </>
     );
   };
@@ -60,8 +61,10 @@ export const Team = () => {
     });
     return (
       <>
-        <Title className={css.heading}>The Managers &amp; Coordinators</Title>
-        <div className={css.memberBlock}>{items}</div>
+        <Title className={css['heading']}>
+          The Managers &amp; Coordinators
+        </Title>
+        <div className={css['member-block']}>{items}</div>
       </>
     );
   };
@@ -95,7 +98,7 @@ const Member = memo(({ member, index }) => {
   }, [isLoaded]);
 
   const isExecutive = member.level === 'Executive';
-  const className = isExecutive ? css.executiveCell : css.memberCell;
+  const className = css[isExecutive ? 'executive-cell' : 'member-cell'];
 
   return (
     <Fader
@@ -104,17 +107,34 @@ const Member = memo(({ member, index }) => {
       delay={750 + 200 * index}
       className={className}>
       <VanillaLink href={`/team/${member.slug}`}>
-        <div className={css.memberDetails}>
+        <div className={css['member-flex']}>
           <CloudinaryImage
             src={member.image}
             alt={member.firstname}
             lazy={'ms'}
-            className={css.memberImage}
+            className={css['member-image']}
           />
-          <Title className={css.memberName}>
-            {member.firstname} {member.lastname}
-          </Title>
-          <Subtitle className={css.memberRole}>{member.role}</Subtitle>
+          <div className={css['member-details']}>
+            <Title className={css['member-name']}>
+              {member.firstname} {member.lastname}{' '}
+              <CountryFlags
+                ethnicities={member.ethnicity}
+                size={22}
+                className={css['member-flags']}
+              />
+            </Title>
+            <Subtitle className={css['member-role']}>{member.role}</Subtitle>
+            <Mobile>
+              <Paragraph
+                truncate={20}
+                className={css['member-excerpt']}
+                moretext={`Read about ${member.firstname}`}
+                morelink={`/team/${member.slug}`}
+                moreclass={css['member-readmore']}>
+                {member.description}
+              </Paragraph>
+            </Mobile>
+          </div>
         </div>
       </VanillaLink>
     </Fader>

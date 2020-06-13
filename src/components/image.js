@@ -18,13 +18,8 @@ export const CloudinaryImage = ({ src, lazy = '', alt, title, className }) => {
   if (!src) return null;
   const { width, height } = lazy ? TRANSFORMATIONS[lazy] : {};
   return (
-    <CloudinaryContext cloudName={'wokeweekly'}>
-      <Image
-        publicId={src}
-        alt={alt}
-        title={title}
-        width={'100%'}
-        className={className}>
+    <CloudinaryContext cloudName={'wokeweekly'} className={className}>
+      <Image publicId={src} alt={alt} title={title} width={'100%'}>
         <Transformation width={width} height={height} crop={'scale'} />
       </Image>
     </CloudinaryContext>
