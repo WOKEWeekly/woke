@@ -123,7 +123,7 @@ const Member = memo(({ member, index }) => {
               <Default>
                 <CountryFlags
                   ethnicities={member.ethnicity}
-                  size={25}
+                  size={23}
                   className={css['member-flags']}
                 />
               </Default>
