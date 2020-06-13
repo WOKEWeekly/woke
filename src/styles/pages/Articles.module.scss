@@ -323,6 +323,7 @@
       border-radius: 10px;
       cursor: pointer;
       margin: 1em 0;
+      overflow: hidden;
       width: 100%;
     }
 
@@ -331,11 +332,11 @@
       display: flex;
 
       .author-image {
-        border-radius: 50%;
         margin-right: 0.4em;
         width: 25px;
 
         img {
+          border-radius: 50%;
           width: 100%;
         }
 

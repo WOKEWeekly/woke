@@ -11,7 +11,7 @@ import { Partitioner, Shader, Spacer } from '@components/layout.js';
 import { SocialMediaShareBlock } from '@components/socialmedia.js';
 import { Title, Subtitle, Paragraph, Divider } from '@components/text.js';
 import { BottomToolbar } from '@components/toolbar.js';
-import { Fader } from '@components/transitioner.js';
+import { Fader, Colorizer } from '@components/transitioner.js';
 
 import CLEARANCES from '@constants/clearances.js';
 import request from '@constants/request.js';
@@ -31,6 +31,7 @@ const ArticlePage = ({ article, user }) => {
   const [isLoaded, setLoaded] = useState(false);
   const [clapCount, setClapCount] = useState(article.claps);
   const [repeatClaps, setRepeatClaps] = useState(0);
+  const [clapCountAnimating, runClapCountAnimation] = useState(false);
 
   useEffect(() => {
     setLoaded(true);
@@ -46,6 +47,7 @@ const ArticlePage = ({ article, user }) => {
       method: 'PUT',
       headers: { Authorization: process.env.AUTH_KEY },
       onSuccess: ({ claps }) => {
+        runClapCountAnimation(true);
         setClapCount(claps);
         setRepeatClaps(repeatClaps + 1);
       }
@@ -170,12 +172,17 @@ const ArticlePage = ({ article, user }) => {
             <Icon name={'sign-language'} style={{ fontSize: '1.5rem' }} />
             <span className={css['clap-button-text']}>Clap</span>
           </SubmitButton>
-          <div className={css['clap-count-block']}>
+          <Colorizer
+            color={'rgba(243, 10, 63, 0.5)'}
+            determinant={clapCountAnimating}
+            duration={500}
+            className={css['clap-count-block']}
+            >
             <Icon name={'heart'} style={{ color: 'red', fontSize: '1.2rem' }} />
             <span className={css['clap-count']}>
               {clapCount} clap{clapCount !== 1 && 's'}
             </span>
-          </div>
+          </Colorizer>
         </div>
       </>
     );
