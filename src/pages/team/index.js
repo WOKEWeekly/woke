@@ -126,7 +126,7 @@ const Member = memo(({ member, index }) => {
             <Subtitle className={css['member-role']}>{member.role}</Subtitle>
             <Mobile>
               <Paragraph
-                truncate={20}
+                truncate={15}
                 className={css['member-excerpt']}
                 moretext={`Read about ${member.firstname}`}
                 morelink={`/team/${member.slug}`}
