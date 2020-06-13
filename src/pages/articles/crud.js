@@ -150,6 +150,7 @@ const ArticleCrud = ({ article: currentArticle, operation, title, user }) => {
       confirmFunc={isCreateOperation ? submitArticle : updateArticle}
       cancelFunc={() => (location.href = '/admin/articles')}
       operation={operation}
+      isPublish={isPublish}
       metaTitle={title}
       metaUrl={`/${operation}`}
     />

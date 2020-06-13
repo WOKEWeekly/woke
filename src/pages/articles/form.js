@@ -16,6 +16,7 @@ import {
   Select
 } from '@components/form';
 import { Shader, Spacer } from '@components/layout.js';
+import { ConfirmModal } from '@components/modal.js';
 
 import { categories } from '@constants/categories.js';
 import CLEARANCES from '@constants/clearances.js';
@@ -32,6 +33,7 @@ const ArticleForm = ({
   cancelFunc,
   handlers,
   operation,
+  isPublish,
   user
 }) => {
   if (user.clearance < CLEARANCES.ACTIONS.CRUD_ARTICLES) {
@@ -41,19 +43,9 @@ const ArticleForm = ({
   const [isLoaded, setLoaded] = useState(false);
   const [authors, setAuthors] = useState([]);
   const [isDateFieldVisible, setVisibility] = useState(false);
+  const [isPublishModalVisible, setPublishModalVisibility] = useState(false);
 
   const { handleText, handleDate, handleFile } = handlers;
-  const {
-    title,
-    content,
-    category,
-    excerpt,
-    image,
-    authorId,
-    status,
-    datePublished,
-    tags
-  } = article;
 
   useEffect(() => {
     request({
@@ -80,7 +72,7 @@ const ArticleForm = ({
   }, [isLoaded]);
 
   useEffect(() => {
-    setVisibility(status === ARTICLE_STATUS.PUBLISHED);
+    setVisibility(article.status === ARTICLE_STATUS.PUBLISHED);
   });
 
   return (
@@ -94,7 +86,7 @@ const ArticleForm = ({
               <Label>Title:</Label>
               <TextInput
                 name={'title'}
-                value={title}
+                value={article.title}
                 onChange={handleText}
                 placeholder={'Enter the title.'}
               />
@@ -103,7 +95,7 @@ const ArticleForm = ({
               <Label>Category:</Label>
               <Select
                 name={'category'}
-                value={category}
+                value={article.category}
                 placeholder={'Select a category.'}
                 items={categories}
                 onChange={handleText}
@@ -115,7 +107,7 @@ const ArticleForm = ({
               <LabelInfo>Content:</LabelInfo>
               <LongTextArea
                 name={'content'}
-                value={content}
+                value={article.content}
                 onChange={handleText}
                 placeholder={'Write your thoughts. Express yourself.'}
               />
@@ -126,7 +118,7 @@ const ArticleForm = ({
               <Label>Excerpt:</Label>
               <ShortTextArea
                 name={'excerpt'}
-                value={excerpt}
+                value={article.excerpt}
                 onChange={handleText}
                 placeholder={"Enter this article's excerpt."}
               />
@@ -137,7 +129,7 @@ const ArticleForm = ({
               <Label>Author:</Label>
               <Select
                 name={'authorId'}
-                value={authorId}
+                value={article.authorId}
                 placeholder={'Select the author.'}
                 items={authors}
                 onChange={handleText}
@@ -147,7 +139,7 @@ const ArticleForm = ({
               <Label>Status:</Label>
               <Select
                 name={'status'}
-                value={status}
+                value={article.status}
                 placeholder={'Select a status.'}
                 items={Object.keys(ARTICLE_STATUS).map((key) => key)}
                 onChange={handleText}
@@ -156,13 +148,13 @@ const ArticleForm = ({
           </Group>
           <DatePublished
             isDateFieldVisible={isDateFieldVisible}
-            datePublished={datePublished}
+            datePublished={article.datePublished}
             handleDate={handleDate}
           />
           <Group>
             <Col>
               <FileSelector
-                image={image}
+                image={article.image}
                 operation={operation}
                 onChange={handleFile}
               />
@@ -173,9 +165,11 @@ const ArticleForm = ({
               <Label>Tags:</Label>
               <ShortTextArea
                 name={'tags'}
-                value={tags}
+                value={article.tags}
                 onChange={handleText}
-                placeholder={'Add a comma-separated list of tags (e.g. woke, society, black women)'}
+                placeholder={
+                  'Add a comma-separated list of tags (e.g. woke, society, black women)'
+                }
               />
             </Col>
           </Group>
@@ -184,13 +178,29 @@ const ArticleForm = ({
         <div>
           <Group>
             <Col>
-              <SubmitButton onClick={confirmFunc} className={'mr-2'}>
+              <SubmitButton
+                onClick={
+                  isPublish
+                    ? () => setPublishModalVisibility(true)
+                    : confirmFunc
+                }
+                className={'mr-2'}>
                 {confirmText}
               </SubmitButton>
               <CancelButton onClick={cancelFunc}>Cancel</CancelButton>
             </Col>
           </Group>
         </div>
+
+        <ConfirmModal
+          visible={isPublishModalVisible}
+          message={
+            "By publishing this article, you'll be notifying all subscribers of this new release. Please confirm that you want to publish."
+          }
+          confirmFunc={confirmFunc}
+          confirmText={'Confirm'}
+          close={() => setPublishModalVisibility(false)}
+        />
       </Spacer>
     </Shader>
   );
