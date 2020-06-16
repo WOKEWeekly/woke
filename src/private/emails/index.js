@@ -1,8 +1,9 @@
 const ejs = require('ejs');
 const nodemailer = require('nodemailer');
+const { zDate, zText } = require('zavid-modules');
 
-let { cloudinary, domain, emails } = require('../../constants/settings.js');
-let { SUBSCRIPTIONS } = require('../../constants/strings.js');
+const { cloudinary, domain, emails } = require('../../constants/settings.js');
+const { SUBSCRIPTIONS } = require('../../constants/strings.js');
 const { config } = require('../../server.js');
 const knex = require('../api/knex').getKnex();
 
@@ -60,9 +61,14 @@ exports.sendAccountRecoveryEmail = (user, token, callback) => {
  */
 exports.notifyNewArticle = (article, options) => {
   const subject = `Blog: "${article.title}" by ${article.authorName}`;
+  article.content = zText.truncateText(article.content);
+  article.slug = `${domain}/blog/${article.slug}`;
+  article.datePublished = zDate.formatDate(article.datePublished, true);
+  article.image = `${cloudinary.url}/w_768,c_lfill/${article.image}`;
+  article.authorImage = `${cloudinary.url}/w_400,c_lfill/${article.authorImage}`;
   ejs.renderFile(
     __dirname + '/templates/article.ejs',
-    { article, domain, cloudinary },
+    { article, domain },
     function (err, data) {
       sendMailToAllSubscribers(SUBSCRIPTIONS.ARTICLES, subject, data, options);
     }
@@ -108,7 +114,6 @@ const sendMailToAllSubscribers = (type, subject, message, options = {}) => {
 
   const query = knex.select().from('subscribers');
   query.asCallback(function (err, results) {
-
     // Retrieve list of subscribers to corresponding type
     const mailList = results.map((subscriber) => {
       const subscriptions = JSON.parse(subscriber.subscriptions);
@@ -125,7 +130,9 @@ const sendMailToAllSubscribers = (type, subject, message, options = {}) => {
         html: message
       },
       function (err) {
-        console.info(`Emails: "${subject}" email sent to all ${type} subscribers.`);
+        console.info(
+          `Emails: "${subject}" email sent to all ${type} subscribers.`
+        );
         if (callback) callback(err, params);
       }
     );
