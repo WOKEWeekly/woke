@@ -1,3 +1,5 @@
+def slackMessage = "Build ${env.BUILD_NUMBER}"
+
 pipeline {
   agent {
     dockerfile true
@@ -57,11 +59,11 @@ pipeline {
     }
 
     success {
-      slackSend (color: 'good', message: "Build ${env.BUILD_NUMBER} successful.")
+      slackSend (color: 'good', message: "${slackMessage} successful.")
     }
     
     failure {
-      slackSend (color: 'danger', message: "Build ${env.BUILD_NUMBER} failed.")
+      slackSend (color: 'danger', message: "${slackMessage} failed.")
     }
   }
 }
