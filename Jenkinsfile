@@ -1,4 +1,4 @@
-def slackMessage = "Build ${env.BUILD_NUMBER}: \"${env.CHANGE_TITLE}\""
+def slackMessage = "Build ${env.BUILD_NUMBER}"
 
 pipeline {
   agent {
