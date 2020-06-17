@@ -30,4 +30,7 @@ router.delete('/:id([0-9]+)', authorizeModify, SubscribersController.deleteSubsc
 /** DELETE subscriber by email */
 router.delete('/email', validateReq, SubscribersController.deleteSubscriberByEmail);
 
+/** PURGE subscribers */
+router.purge('/', authorizeModify, SubscribersController.purgeSubscribers);
+
 module.exports = router;

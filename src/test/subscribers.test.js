@@ -8,6 +8,15 @@ let SUBSCRIBER_ID = 0;
 describe('Subscriber Tests', function () {
   this.slow(10000);
 
+  before(function (done) {
+    request({
+      url: `/api/v1/subscribers`,
+      method: 'PURGE',
+      headers: HEADERS.TOKEN(superuser),
+      done
+    });
+  });
+
   /** Test creating a new subscriber */
   describe('Create', function () {
     it('Add subscriber', function (done) {
