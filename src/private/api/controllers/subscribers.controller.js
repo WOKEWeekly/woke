@@ -50,7 +50,7 @@ exports.updateSubscriber = (req, res) => {
       }
       return respondToClient(res, err);
     }
-    if (result.affectedRows === 0) {
+    if (result === 0) {
       err = ERROR.INVALID_ENTITY_ID(ENTITY.SUBSCRIBER, id);
     }
     respondToClient(res, err, 200);

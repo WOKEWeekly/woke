@@ -212,7 +212,7 @@ exports.changeUsername = (req, res) => {
         return respondToClient(res, ERROR.DUPLICATE_USERNAME());
       return respondToClient(res, err);
     }
-    if (result.affectedRows === 0)
+    if (result === 0)
       return respondToClient(res, ERROR.INVALID_ENTITY_ID(ENTITY.USER, id));
 
     respondToClient(res, err, 200);
@@ -278,7 +278,7 @@ exports.deleteUser = (req, res) => {
   const query = knex('users').where('id', id).del();
   query.asCallback(function (err, result) {
     if (err) return respondToClient(res, err);
-    if (result.affectedRows === 0)
+    if (result === 0)
       err = ERROR.INVALID_ENTITY_ID(ENTITY.USER, id);
     respondToClient(res, err, 204);
   });
@@ -427,7 +427,7 @@ exports.resetPassword = (req, res) => {
         const query = knex('users').update({ password: hash }).where('id', id);
         query.asCallback(function (err, result) {
           if (err) return callback(err);
-          if (result.affectedRows === 0)
+          if (result === 0)
             err = ERROR.INVALID_ENTITY_ID(ENTITY.USER, id);
           callback(err);
         });
