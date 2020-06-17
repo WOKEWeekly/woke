@@ -61,14 +61,19 @@ exports.sendAccountRecoveryEmail = (user, token, callback) => {
  */
 exports.notifyNewArticle = (article, options) => {
   const subject = `Blog: "${article.title}" by ${article.authorName}`;
-  article.content = zText.truncateText(article.content);
-  article.slug = `${domain}/blog/${article.slug}`;
-  article.datePublished = zDate.formatDate(article.datePublished, true);
-  article.image = `${cloudinary.url}/w_768,c_lfill/${article.image}`;
-  article.authorImage = `${cloudinary.url}/w_400,c_lfill/${article.authorImage}`;
+
   ejs.renderFile(
     __dirname + '/templates/article.ejs',
-    { article, domain },
+    {
+      article: Object.assign({}, article, {
+        content: zText.truncateText(article.content),
+        slug: `${domain}/blog/${article.slug}`,
+        datePublished: zDate.formatDate(article.datePublished, true),
+        image: `${cloudinary.url}/w_768,c_lfill/${article.image}`,
+        authorImage: `${cloudinary.url}/w_400,c_lfill/${article.authorImage}`
+      }),
+      domain
+    },
     function (err, data) {
       sendMailToAllSubscribers(SUBSCRIPTIONS.ARTICLES, subject, data, options);
     }

@@ -60,8 +60,8 @@ module.exports = {
     return err;
   },
   NONEXISTENT_EMAIL_ADDRESS: () => {
-    const err = new Error('The submitted email address does not exist.');
-    err.status = 401;
+    const err = new Error('This email address does not exist in our records.');
+    err.status = 404;
     return err;
   },
   INVALID_EMAIL_ADDRESS: () => {
