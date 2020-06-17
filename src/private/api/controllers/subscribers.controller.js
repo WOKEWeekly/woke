@@ -83,7 +83,7 @@ exports.deleteSubscriberByEmail = (req, res) => {
 exports.purgeSubscribers = (req, res) => {
   if (process.env.NODE_ENV === 'production')
     return respondToClient(res, ERROR.UNAUTHORIZED_REQUEST());
-  const query = knex('subscribers').truncate();
+  const query = knex('subscribers').del();
   query.asCallback(function (err) {
     respondToClient(res, err, 204);
   });
