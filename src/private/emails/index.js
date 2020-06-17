@@ -60,17 +60,31 @@ exports.sendAccountRecoveryEmail = (user, token, callback) => {
  * @param {object} [options.params] - The parameters sent via the callback.
  */
 exports.notifyNewArticle = (article, options) => {
-  const subject = `Blog: "${article.title}" by ${article.authorName}`;
+  const {
+    title,
+    content,
+    datePublished,
+    image,
+    slug,
+    authorName,
+    authorLevel,
+    authorImage,
+    authorSlug
+  } = article;
+
+  const subject = `Blog: "${title}" by ${authorName}`;
+  const isGuest = authorLevel === 'Guest';
 
   ejs.renderFile(
     __dirname + '/templates/article.ejs',
     {
       article: Object.assign({}, article, {
-        content: zText.truncateText(article.content),
-        slug: `${domain}/blog/${article.slug}`,
-        datePublished: zDate.formatDate(article.datePublished, true),
-        image: `${cloudinary.url}/w_768,c_lfill/${article.image}`,
-        authorImage: `${cloudinary.url}/w_400,c_lfill/${article.authorImage}`
+        content: zText.truncateText(content),
+        slug: `${domain}/blog/${slug}`,
+        datePublished: zDate.formatDate(datePublished, true),
+        image: `${cloudinary.url}/w_768,c_lfill/${image}`,
+        authorImage: `${cloudinary.url}/w_400,c_lfill/${authorImage}`,
+        authorSlug: `${domain}/${isGuest ? 'author' : 'team'}/${authorSlug}`
       }),
       domain
     },

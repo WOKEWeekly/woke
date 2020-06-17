@@ -8,16 +8,19 @@
     <h1 class="article-title"><%= article.title %></h1>
 
     <div class="article-metadata">
-      <div class="author-thumbnail-container">
-        <img
-          src="<%= article.authorImage %>"
-          alt="<%= article.authorName %>"
-          class="author-thumbnail"
-        />
-      </div>
+      <img
+        src="<%= article.authorImage %>"
+        alt="<%= article.authorName %>"
+        class="author-thumbnail"
+      />
       <div class="article-details">
         <!-- TODO: Add link to author profile -->
-        <div>Written by <%= article.authorName %></div>
+        <div>
+          Written by
+          <a href="<%= article.authorSlug %>" class="author-link"
+            ><%= article.authorName %></a
+          >
+        </div>
         <div><%= article.datePublished %></div>
       </div>
     </div>

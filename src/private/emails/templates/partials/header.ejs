@@ -102,14 +102,19 @@
       margin-left: 0.6em;
     }
 
-    .author-thumbnail-container {
-      width: 40px;
+    .author-link {
+      color: rgb(122, 10, 153);
+      font-weight: bold;
+    }
+
+    .author-link:hover {
+      color: rgb(180, 13, 226);
     }
 
     .author-thumbnail {
       border-radius: 50%;
       user-select: none;
-      width: 100%;
+      width: 40px;
     }
 
     /* Media queries for mobile */
@@ -125,12 +130,16 @@
 
       .header-image {
         margin: 0;
-        max-height: initial;
+        max-height: 200px;
         padding: 0;
       }
 
       .article-details {
         font-size: 0.8em;
+      }
+
+      .author-thumbnail {
+        margin: 0;
       }
     }
   </style>
