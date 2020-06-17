@@ -1,8 +1,9 @@
 const ejs = require('ejs');
 const nodemailer = require('nodemailer');
+const { zDate, zText } = require('zavid-modules');
 
-let { cloudinary, domain, emails } = require('../../constants/settings.js');
-let { SUBSCRIPTIONS } = require('../../constants/strings.js');
+const { cloudinary, domain, emails } = require('../../constants/settings.js');
+const { SUBSCRIPTIONS } = require('../../constants/strings.js');
 const { config } = require('../../server.js');
 const knex = require('../api/knex').getKnex();
 
@@ -59,10 +60,34 @@ exports.sendAccountRecoveryEmail = (user, token, callback) => {
  * @param {object} [options.params] - The parameters sent via the callback.
  */
 exports.notifyNewArticle = (article, options) => {
-  const subject = `Blog: "${article.title}" by ${article.authorName}`;
+  const {
+    title,
+    content,
+    datePublished,
+    image,
+    slug,
+    authorName,
+    authorLevel,
+    authorImage,
+    authorSlug
+  } = article;
+
+  const subject = `Blog: "${title}" by ${authorName}`;
+  const isGuest = authorLevel === 'Guest';
+
   ejs.renderFile(
     __dirname + '/templates/article.ejs',
-    { article, domain, cloudinary },
+    {
+      article: Object.assign({}, article, {
+        content: zText.truncateText(content),
+        slug: `${domain}/blog/${slug}`,
+        datePublished: zDate.formatDate(datePublished, true),
+        image: `${cloudinary.url}/w_768,c_lfill/${image}`,
+        authorImage: `${cloudinary.url}/w_400,c_lfill/${authorImage}`,
+        authorSlug: `${domain}/${isGuest ? 'author' : 'team'}/${authorSlug}`
+      }),
+      domain
+    },
     function (err, data) {
       sendMailToAllSubscribers(SUBSCRIPTIONS.ARTICLES, subject, data, options);
     }
@@ -108,7 +133,6 @@ const sendMailToAllSubscribers = (type, subject, message, options = {}) => {
 
   const query = knex.select().from('subscribers');
   query.asCallback(function (err, results) {
-
     // Retrieve list of subscribers to corresponding type
     const mailList = results.map((subscriber) => {
       const subscriptions = JSON.parse(subscriber.subscriptions);
@@ -125,7 +149,9 @@ const sendMailToAllSubscribers = (type, subject, message, options = {}) => {
         html: message
       },
       function (err) {
-        console.info(`Emails: "${subject}" email sent to all ${type} subscribers.`);
+        console.info(
+          `Emails: "${subject}" email sent to all ${type} subscribers.`
+        );
         if (callback) callback(err, params);
       }
     );

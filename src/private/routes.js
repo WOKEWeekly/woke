@@ -599,7 +599,7 @@ module.exports = function (app, knex, server) {
     async.waterfall(
       [
         // Checks if attempt at verifying account.
-        function(callback) {
+        function (callback) {
           callback(token ? null : true);
         },
         // Verify the given token.
@@ -652,6 +652,13 @@ module.exports = function (app, knex, server) {
       return server.render(req, res, '/_auth/reset', {
         title: 'Reset Password | #WOKEWeekly'
       });
+    });
+  });
+
+  /** Unsubscribe page */
+  app.get('/unsubscribe', function (req, res) {
+    server.render(req, res, '/_auth/unsubscribe', {
+      title: 'Unsubscribe | #WOKEWeekly'
     });
   });
 

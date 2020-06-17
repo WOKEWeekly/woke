@@ -50,7 +50,7 @@ exports.updateSubscriber = (req, res) => {
       }
       return respondToClient(res, err);
     }
-    if (result.affectedRows === 0) {
+    if (result === 0) {
       err = ERROR.INVALID_ENTITY_ID(ENTITY.SUBSCRIBER, id);
     }
     respondToClient(res, err, 200);
@@ -63,8 +63,19 @@ exports.deleteSubscriber = (req, res) => {
   const query = knex('subscribers').where('id', id).del();
   query.asCallback(function (err, result) {
     if (err) return respondToClient(res, err);
-    if (result.affectedRows === 0)
+    if (result === 0)
       err = ERROR.INVALID_ENTITY_ID(ENTITY.SUBSCRIBER, id);
+    respondToClient(res, err, 204);
+  });
+};
+
+/** Delete an existing subscriber from database */
+exports.deleteSubscriberByEmail = (req, res) => {
+  const { email } = req.body;
+  const query = knex('subscribers').where('email', email).del();
+  query.asCallback(function (err, result) {
+    if (err) return respondToClient(res, err);
+    if (result === 0) err = ERROR.NONEXISTENT_EMAIL_ADDRESS();
     respondToClient(res, err, 204);
   });
 };

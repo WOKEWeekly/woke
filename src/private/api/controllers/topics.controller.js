@@ -76,7 +76,7 @@ exports.updateTopic = (req, res) => {
   const query = knex('topics').update(topic).where('id', id);
   query.asCallback(function (err, result) {
     if (err) return respondToClient(res, err);
-    if (result.affectedRows === 0)
+    if (result === 0)
       err = ERROR.INVALID_ENTITY_ID(ENTITY.TOPIC, id);
     respondToClient(res, err, 200);
   });
@@ -94,7 +94,7 @@ exports.updateTopicVote = (req, res) => {
           .where('id', id);
         query.asCallback(function (err, result) {
           if (err) return respondToClient(res, err);
-          if (result.affectedRows === 0)
+          if (result === 0)
             err = ERROR.INVALID_ENTITY_ID(ENTITY.TOPIC, id);
           err ? callback(err) : callback(null);
         });
@@ -122,7 +122,7 @@ exports.deleteTopic = (req, res) => {
   query.asCallback(function (err, result) {
     // TODO: Slack notifications for deleted topics
     if (err) return respondToClient(res, err);
-    if (result.affectedRows === 0)
+    if (result === 0)
       err = ERROR.INVALID_ENTITY_ID(ENTITY.TOPIC, id);
     respondToClient(res, err, 204);
   });

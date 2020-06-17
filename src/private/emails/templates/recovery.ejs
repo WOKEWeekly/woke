@@ -1,9 +1,9 @@
 <%- include("partials/header.ejs") %>
 
 <body class="container-fluid email">
-  <div class="container header">
+  <div class="container header-image-container">
     <img
-      src="<%= cloudinary.url %>/w_768,c_lfill/public/fillers/about1.jpg"
+      src="<%= cloudinary.url %>/w_768,c_lfill/public/bg/emails-recovery.jpg"
       alt="#WOKEWeekly"
       class="header-image"
     />
@@ -12,7 +12,8 @@
     Hey <%= user.firstname %>!
     <br /><br />
 
-    You're receiving this email because you've requested to reset your password. Simply click the button below to reset it.
+    You're receiving this email because you've requested to reset your password.
+    Simply click the button below to reset it.
 
     <div class="button-container">
       <a href="<%= domain %>/account?verify=<%= token %>" class="button">

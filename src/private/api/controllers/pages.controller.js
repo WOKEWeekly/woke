@@ -15,7 +15,7 @@ exports.updatePage = (req, res) => {
     .where('name', page);
   query.asCallback(function (err, result) {
     if (err) return respondToClient(res, err);
-    if (result.affectedRows === 0) err = ERROR.INVALID_PAGE_NAME(page);
+    if (result === 0) err = ERROR.INVALID_PAGE_NAME(page);
     respondToClient(res, err, 200);
   });
 };
