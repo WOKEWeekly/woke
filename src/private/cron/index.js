@@ -6,9 +6,13 @@ const slack = require('./slack.js');
 const knex = require('../api/knex').getKnex();
 
 const isDev = process.env.NODE_ENV !== 'production';
-const isTest = isDev && false;
 
 const testInterval = '*/5 * * * * *';
+
+const isBirthdayTest = isDev && false;
+const isSessionTest = isDev && true;
+const isTrelloTaskTest = isDev && false;
+const isUncaptionedCardTest = isDev && false;
 
 const INTERVALS = {
   BIRTHDAYS: { hour: 9, minute: 0 },
@@ -19,18 +23,18 @@ const INTERVALS = {
 
 module.exports = () => {
   schedule.scheduleJob(
-    isTest ? testInterval : INTERVALS.BIRTHDAYS,
+    isBirthdayTest ? testInterval : INTERVALS.BIRTHDAYS,
     notifyMemberBirthday
   );
 
   schedule.scheduleJob(
-    isTest ? testInterval : INTERVALS.SESSIONS,
+    isSessionTest ? testInterval : INTERVALS.SESSIONS,
     notifySessionToday
   );
 
   /** Notify General Slack channel of to accelerate Trello tasks */
   // schedule.scheduleJob(
-  //   isTest ? testInterval : trelloWeeklyReminderTime,
+  //   isTrelloTaskTest ? testInterval : trelloWeeklyReminderTime,
   //   function () {
   //     slack.sendTrelloReminder();
   //     console.info(`Trello weekly reminder sent.`);
@@ -39,7 +43,7 @@ module.exports = () => {
 
   /** Notify General Slack channel of to accelerate Trello tasks */
   schedule.scheduleJob(
-    isTest ? testInterval : INTERVALS.UNCAPTIONED_CARDS,
+    isUncaptionedCardTest ? testInterval : INTERVALS.UNCAPTIONED_CARDS,
     notifyUncaptionedCards
   );
 };
@@ -69,7 +73,7 @@ const notifySessionToday = () => {
   const query = knex
     .select()
     .from('sessions')
-    .where('dateHeld', 'CURRENT_DATE()');
+    .whereRaw('dateHeld = CURRENT_DATE()');
   query.asCallback(function (err, result) {
     if (err) return console.error(err.toString());
     if (!result.length)
