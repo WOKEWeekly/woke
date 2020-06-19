@@ -107,7 +107,10 @@ const notifyUncaptionedCards = () => {
           }
         })
         .filter((e) => e);
-      slack.sendSocialMediaUncaptionedCards(uncaptionedCards);
+
+      if (uncaptionedCards.length) {
+        slack.sendSocialMediaUncaptionedCards(uncaptionedCards);
+      }
     })
     .catch((err) => console.error(err));
 };
