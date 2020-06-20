@@ -1,16 +1,15 @@
 import classNames from 'classnames';
 import React, { Component, useState, useRef } from 'react';
 import { Form, Row, Overlay, Tooltip } from 'react-bootstrap';
-import { connect } from 'react-redux';
 import { zForm, zText } from 'zavid-modules';
 
 import { Icon } from 'components/icon.js';
 import { Title } from 'components/text.js';
-import { Fader, Zoomer } from 'components/transitioner.js';
-import { cloudinary } from 'constants/settings.js';
+import { Fader } from 'components/transitioner.js';
 import css from 'styles/components/Form.module.scss';
 
 export * from './input';
+export * from './file-selector';
 export * from './subscribe';
 
 /** For the form heading */
@@ -248,107 +247,3 @@ export class Checkbox extends Component {
     );
   }
 }
-
-/** File selector */
-export class _FileSelector extends Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      image: '',
-      filename: '',
-      type: ''
-    };
-
-    this.image = React.createRef();
-    this.file = React.createRef();
-  }
-
-  /** Attaches CDN base url to preview cloudinary images */
-  static getDerivedStateFromProps(props, state) {
-    const newState = {
-      image: state.image,
-      filename: state.filename
-    };
-
-    if (props.operation === 'add') {
-      return newState;
-    } else {
-      if (state.image) return newState;
-    }
-
-    if (cloudinary.check(props.image)) {
-      const cloudPath = `${cloudinary.url}/${props.image}`;
-      newState.image = cloudPath;
-      newState.filename = cloudPath.substring(cloudPath.lastIndexOf('/') + 1);
-    }
-
-    return newState;
-  }
-
-  handleFileChange = () => {
-    this.previewImage();
-  };
-
-  previewImage = () => {
-    const preview = this.image.current;
-    const file = this.file.current.files[0];
-    const reader = new FileReader();
-
-    reader.addEventListener(
-      'load',
-      () => {
-        const source = reader.result;
-        preview.src = source;
-        this.setState({ image: source, filename: file.name, type: file.type });
-        this.props.onChange(source);
-      },
-      false
-    );
-
-    if (file) reader.readAsDataURL(file);
-  };
-
-  render() {
-    const { image, type } = this.state;
-    const { theme } = this.props;
-
-    const display = image && type.includes('image') ? 'block' : 'none';
-
-    return (
-      <>
-        <div className={css.file}>
-          <label className={css[`file_button-${theme}`]}>
-            Browse...
-            <input
-              type={'file'}
-              style={{ display: 'none' }}
-              onChange={this.handleFileChange}
-              ref={this.file}
-            />
-          </label>
-          <input
-            type={'text'}
-            disabled
-            value={this.state.filename}
-            placeholder={'Choose a file'}
-            className={css.file_input}
-          />
-        </div>
-        <Zoomer
-          determinant={image}
-          duration={400}
-          className={css.fileImage}
-          style={{ display }}>
-          <img src={image} alt={'Image preview...'} ref={this.image} />
-        </Zoomer>
-      </>
-    );
-  }
-}
-
-const mapStateToProps = (state) => ({
-  theme: state.theme
-});
-
-export const FileSelector = connect(mapStateToProps)(_FileSelector);
