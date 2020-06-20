@@ -2,19 +2,17 @@ import React, { Component } from 'react';
 import { Col } from 'react-bootstrap';
 import { connect } from 'react-redux';
 
-import { SubmitButton, CancelButton } from '@components/button.js';
+import { SubmitButton, CancelButton } from 'components/button.js';
 import {
   Heading,
   Group,
   Label,
   TextInput,
   FileSelector
-} from '@components/form';
-import { Shader, Spacer } from '@components/layout.js';
-
-import CLEARANCES from '@constants/clearances.js';
-
-import css from '@styles/pages/Documents.module.scss';
+} from 'components/form';
+import { Shader, Spacer } from 'components/layout.js';
+import CLEARANCES from 'constants/clearances.js';
+import css from 'styles/pages/Documents.module.scss';
 
 class DocumentForm extends Component {
   constructor(props) {

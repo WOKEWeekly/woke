@@ -1,15 +1,13 @@
 import React, { useState } from 'react';
 import { Col } from 'react-bootstrap';
 
-import { setAlert } from '@components/alert.js';
-import { DeleteButton } from '@components/button.js';
-import { Heading, Group, Label, TextInput } from '@components/form';
-import { Shader, Spacer } from '@components/layout.js';
-
-import request from '@constants/request.js';
-import { isValidEmail } from '@constants/validations';
-
-import css from '@styles/Auth.module.scss';
+import { setAlert } from 'components/alert.js';
+import { DeleteButton } from 'components/button.js';
+import { Heading, Group, Label, TextInput } from 'components/form';
+import { Shader, Spacer } from 'components/layout.js';
+import request from 'constants/request.js';
+import { isValidEmail } from 'constants/validations';
+import css from 'styles/Auth.module.scss';
 
 const Unsubscribe = () => {
   const [email, setEmail] = useState('');

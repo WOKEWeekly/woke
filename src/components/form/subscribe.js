@@ -1,14 +1,11 @@
-import classNames from 'classnames';
 import React, { useState } from 'react';
 import { Col } from 'react-bootstrap';
 
-import { alert } from '@components/alert';
-import { SubmitButton } from '@components/button';
-
-import request from '@constants/request';
-import { isValidEmail } from '@constants/validations';
-
-import css from '@styles/components/Form.module.scss';
+import { alert } from 'components/alert';
+import { SubmitButton } from 'components/button';
+import request from 'constants/request';
+import { isValidEmail } from 'constants/validations';
+import css from 'styles/components/Form.module.scss';
 
 import { Group, Label, TextInput } from './index';
 

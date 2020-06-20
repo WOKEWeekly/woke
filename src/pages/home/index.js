@@ -1,9 +1,8 @@
 import React, { Component, Suspense } from 'react';
 import { Container, Col, Row } from 'react-bootstrap';
 
-import { Cover, Shader } from '@components/layout.js';
-
-import css from '@styles/pages/Home.module.scss';
+import { Cover, Shader } from 'components/layout.js';
+import css from 'styles/pages/Home.module.scss';
 
 const ThreePart = React.lazy(() => import('./home.advertiser'));
 const ReviewsPreview = React.lazy(() => import('./home.reviews'));

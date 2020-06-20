@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Spinner } from 'react-bootstrap';
 
-import css from '@styles/components/Layout.module.scss';
+import css from 'styles/components/Layout.module.scss';
 
 export class Loader extends Component {
   render() {

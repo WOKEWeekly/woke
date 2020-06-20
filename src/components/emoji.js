@@ -2,7 +2,7 @@ import { Emoji } from 'emoji-mart';
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { getISOCode } from '@constants/countries.js';
+import { getISOCode } from 'constants/countries.js';
 
 const mapStateToProps = (state) => ({
   countries: state.countries

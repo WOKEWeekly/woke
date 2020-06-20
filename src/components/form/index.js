@@ -4,13 +4,11 @@ import { Form, Row, Overlay, Tooltip } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { zForm, zText } from 'zavid-modules';
 
-import { Icon } from '@components/icon.js';
-import { Title } from '@components/text.js';
-import { Fader, Zoomer } from '@components/transitioner.js';
-
-import { cloudinary } from '@constants/settings.js';
-
-import css from '@styles/components/Form.module.scss';
+import { Icon } from 'components/icon.js';
+import { Title } from 'components/text.js';
+import { Fader, Zoomer } from 'components/transitioner.js';
+import { cloudinary } from 'constants/settings.js';
+import css from 'styles/components/Form.module.scss';
 
 export * from './input';
 export * from './subscribe';

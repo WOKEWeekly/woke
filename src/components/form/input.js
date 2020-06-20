@@ -1,9 +1,8 @@
 import classNames from 'classnames';
 import React from 'react';
 
-import { Icon } from '@components/icon.js';
-
-import css from '@styles/components/Form.module.scss';
+import { Icon } from 'components/icon.js';
+import css from 'styles/components/Form.module.scss';
 
 const Input = (props) => {
   const { className, name, onChange, placeholder, type, value = '' } = props;

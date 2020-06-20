@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Col } from 'react-bootstrap';
 import { connect } from 'react-redux';
 
-import { SubmitButton, CancelButton } from '@components/button.js';
+import { SubmitButton, CancelButton } from 'components/button.js';
 import {
   Heading,
   Group,
@@ -11,13 +11,11 @@ import {
   TextInput,
   LongTextArea,
   FileSelector
-} from '@components/form';
-import { Shader, Spacer } from '@components/layout.js';
-import Rator from '@components/rator.js';
-
-import CLEARANCES from '@constants/clearances.js';
-
-import css from '@styles/pages/Members.module.scss';
+} from 'components/form';
+import { Shader, Spacer } from 'components/layout.js';
+import Rator from 'components/rator.js';
+import CLEARANCES from 'constants/clearances.js';
+import css from 'styles/pages/Members.module.scss';
 
 class ReviewForm extends Component {
   constructor(props) {

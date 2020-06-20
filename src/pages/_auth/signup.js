@@ -1,12 +1,11 @@
 
+import { TEST_USERS } from '@test/configuration/data';
 import React, { Component } from 'react';import { Col } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
-import { saveUser } from '@reducers/actions';
-
-import { setAlert } from '@components/alert.js';
-import { SubmitButton } from '@components/button.js';
+import { setAlert } from 'components/alert.js';
+import { SubmitButton } from 'components/button.js';
 import {
   Heading,
   Group,
@@ -14,15 +13,12 @@ import {
   TextInput,
   PasswordInput,
   Checkbox
-} from '@components/form';
-import { Shader, Spacer } from '@components/layout.js';
-
-import request from '@constants/request.js';
-import { isValidSignup } from '@constants/validations';
-
-import css from '@styles/Auth.module.scss';
-
-import { TEST_USERS } from '@test/configuration/data';
+} from 'components/form';
+import { Shader, Spacer } from 'components/layout.js';
+import request from 'constants/request.js';
+import { isValidSignup } from 'constants/validations';
+import { saveUser } from 'reducers/actions';
+import css from 'styles/Auth.module.scss';
 
 class Signup extends Component {
   constructor(props) {

@@ -1,4 +1,4 @@
-const { alert } = require('@components/alert.js');
+const { alert } = require('components/alert.js');
 
 const { checkCookies } = require('./cookies');
 const { limits } = require('./settings');

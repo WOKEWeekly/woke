@@ -2,15 +2,13 @@ import React, { Component } from 'react';
 import { Col } from 'react-bootstrap';
 import { connect } from 'react-redux';
 
-import { setAlert } from '@components/alert.js';
-import { SubmitButton, CancelButton } from '@components/button.js';
-import { Heading, Group, LabelInfo, LongTextArea } from '@components/form';
-import { Shader, Spacer } from '@components/layout.js';
-
-import CLEARANCES from '@constants/clearances.js';
-import request from '@constants/request.js';
-
-import css from '@styles/pages/Information.module.scss';
+import { setAlert } from 'components/alert.js';
+import { SubmitButton, CancelButton } from 'components/button.js';
+import { Heading, Group, LabelInfo, LongTextArea } from 'components/form';
+import { Shader, Spacer } from 'components/layout.js';
+import CLEARANCES from 'constants/clearances.js';
+import request from 'constants/request.js';
+import css from 'styles/pages/Information.module.scss';
 
 class EditPage extends Component {
   /** Retrieve informaiton from server */

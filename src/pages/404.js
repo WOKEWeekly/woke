@@ -1,8 +1,7 @@
 import React from 'react';
 
-import { Shader } from '@components/layout';
-
-import css from '@styles/Partials.module.scss';
+import { Shader } from 'components/layout';
+import css from 'styles/Partials.module.scss';
 
 export default class NotFound404 extends React.Component {
   render() {

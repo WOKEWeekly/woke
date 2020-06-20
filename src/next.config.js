@@ -1,7 +1,6 @@
 /* eslint-disable import/order */
 const DotEnv = require('dotenv-webpack');
 const server = require('./server.js');
-const path = require('path');
 
 module.exports = {
   useFileSystemPublicRoutes: false,
@@ -32,32 +31,6 @@ module.exports = {
       })
     ];
 
-    config.resolve.alias = {
-      ...config.resolve.alias,
-      ...mapImportsToAliases(),
-      react: path.resolve(__dirname, 'node_modules/react')
-    };
-
     return config;
   }
-};
-
-/** Maps aliases to be resolved for absolute imports */
-const mapImportsToAliases = () => {
-  const directories = [
-    'components',
-    'constants',
-    'partials',
-    'pages',
-    'reducers',
-    'styles',
-    'test'
-  ];
-  const aliases = {};
-
-  directories.forEach((directory) => {
-    aliases[`@${directory}`] = path.resolve(__dirname, directory);
-  });
-
-  return aliases;
 };

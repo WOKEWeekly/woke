@@ -8,8 +8,8 @@ import {
   CheckboxButton,
   AddEntityButton,
   RadioButtonGroup
-} from '@components/button.js';
-import { BirthdayPicker } from '@components/datepicker.js';
+} from 'components/button.js';
+import { BirthdayPicker } from 'components/datepicker.js';
 import {
   Heading,
   Group,
@@ -20,15 +20,13 @@ import {
   ClickInput,
   LongTextArea,
   FileSelector
-} from '@components/form';
-import { SocialsList } from '@components/icon.js';
-import { Shader, Spacer } from '@components/layout.js';
-import { EthnicModal, SocialsModal } from '@components/modal.js';
-
-import CLEARANCES from '@constants/clearances.js';
-import { countriesToString } from '@constants/countries.js';
-
-import css from '@styles/pages/Members.module.scss';
+} from 'components/form';
+import { SocialsList } from 'components/icon.js';
+import { Shader, Spacer } from 'components/layout.js';
+import { EthnicModal, SocialsModal } from 'components/modal.js';
+import CLEARANCES from 'constants/clearances.js';
+import { countriesToString } from 'constants/countries.js';
+import css from 'styles/pages/Members.module.scss';
 
 class MemberForm extends Component {
   constructor(props) {

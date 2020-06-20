@@ -1,24 +1,23 @@
-import React from 'react';
-import { Provider } from 'react-redux';
-import { PersistGate } from 'redux-persist/integration/react';
-import configureStore from '@reducers/store.js';
-import App from 'next/app';
 
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { fab } from '@fortawesome/free-brands-svg-icons';
 import { far } from '@fortawesome/free-regular-svg-icons';
 import { fas } from '@fortawesome/free-solid-svg-icons';
+import App from 'next/app';
+import React from 'react';
+import { Provider } from 'react-redux';
+import { PersistGate } from 'redux-persist/integration/react';
 
-import { CookiePrompt, setCookie, getCookie } from '@constants/cookies';
-import { loadCountries } from '@constants/countries';
-import { cloudinary } from '@constants/settings.js';
-import { saveCountries, setTheme } from '@reducers/actions';
+import { CookiePrompt, setCookie, getCookie } from 'constants/cookies';
+import { loadCountries } from 'constants/countries';
+import { cloudinary } from 'constants/settings.js';
+import Footer from 'partials/footer.js';
+import { PreNavBar, MainNavBar } from 'partials/header.js';
+import { saveCountries, setTheme } from 'reducers/actions';
+import configureStore from 'reducers/store.js';
 
-import { PreNavBar, MainNavBar } from '@partials/header.js';
-import Footer from '@partials/footer.js';
-
-import '@styles/App.scss';
-import '@styles/Categories.scss';
+import 'styles/App.scss';
+import 'styles/Categories.scss';
 import 'react-toastify/dist/ReactToastify.min.css';
 
 library.add(fab, far, fas);

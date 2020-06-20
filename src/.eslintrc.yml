@@ -22,36 +22,41 @@ plugins:
   - jsdoc
   - mocha
 settings:
+  import/resolver:
+    node:
+      moduleDirectory:
+        - 'node_modules'
+        - '.'
   react:
     version: detect
 
 # Rules
 rules:
-  
   # Active rules
+  import/no-unresolved:
+    - error
   import/order:
     - warn
-    - 
-      groups:
-        - external
-        - builtin
-        - internal
-        - sibling
+    - groups:
+      - external
+      - builtin
+      - internal
+      - sibling
       pathGroups:
-        - pattern: "@reducers/**"
+        - pattern: 'reducers/**'
           group: external
-          position: after
-          
-        - pattern: "@components/**"
+          position: before
+
+        - pattern: 'components/**'
           group: internal
           position: after
-        - pattern: "@constants/**"
+        - pattern: 'constants/**'
           group: internal
           position: after
-        - pattern: "@pages/**"
+        - pattern: 'pages/**'
           group: internal
           position: after
-        - pattern: "@styles/**"
+        - pattern: 'styles/**'
           group: internal
           position: after
       pathGroupsExcludedImportTypes:
@@ -60,10 +65,6 @@ rules:
       alphabetize:
         order: asc
         caseInsensitive: true
-  import/no-unresolved:
-    - error
-    - ignore:
-      - "^@"
   jsdoc/newline-after-description:
     - warn
     - never
@@ -81,9 +82,9 @@ rules:
   no-console:
     - warn
     - allow:
-      - warn
-      - error
-      - info
+        - warn
+        - error
+        - info
   semi:
     - error
     - always
@@ -97,6 +98,6 @@ rules:
   mocha/handle-done-callback: off
   no-case-declarations: off
   no-useless-escape: off
-  react/prop-types: off
-  react/display-name: off
   quotes: off
+  react/display-name: off
+  react/prop-types: off

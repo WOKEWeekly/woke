@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Col } from 'react-bootstrap';
 
-import css from '@styles/pages/Articles.module.scss';
+import css from 'styles/pages/Articles.module.scss';
 
 // TODO: Complete
 const MainArticleSidebar = () => {

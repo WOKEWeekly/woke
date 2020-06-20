@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import css from '@styles/components/Form.module.scss';
+import css from 'styles/components/Form.module.scss';
 
 import { Icon } from './icon.js';
 

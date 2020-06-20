@@ -2,18 +2,16 @@ import React, { Component, memo, useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { zDate } from 'zavid-modules';
 
-import { AdminButton } from '@components/button.js';
-import { CloudinaryImage } from '@components/image';
-import { Shader, Spacer, Default, Mobile } from '@components/layout.js';
-import { Loader, Empty } from '@components/loader.js';
-import { Title, Subtitle, Paragraph, VanillaLink } from '@components/text.js';
-import { BottomToolbar } from '@components/toolbar.js';
-import { Zoomer, Fader } from '@components/transitioner.js';
-
-import CLEARANCES from '@constants/clearances.js';
-import request from '@constants/request.js';
-
-import css from '@styles/pages/Articles.module.scss';
+import { AdminButton } from 'components/button.js';
+import { CloudinaryImage } from 'components/image';
+import { Shader, Spacer, Default, Mobile } from 'components/layout.js';
+import { Loader, Empty } from 'components/loader.js';
+import { Title, Subtitle, Paragraph, VanillaLink } from 'components/text.js';
+import { BottomToolbar } from 'components/toolbar.js';
+import { Zoomer, Fader } from 'components/transitioner.js';
+import CLEARANCES from 'constants/clearances.js';
+import request from 'constants/request.js';
+import css from 'styles/pages/Articles.module.scss';
 
 class Blog extends Component {
   constructor(props) {

@@ -9,14 +9,12 @@ import {
   Divider,
   Paragraph,
   VanillaLink
-} from '@components/text.js';
-import { Fader } from '@components/transitioner.js';
-
-import { countriesToString } from '@constants/countries.js';
-import request from '@constants/request.js';
-import { cloudinary } from '@constants/settings.js';
-
-import css from '@styles/pages/Home.module.scss';
+} from 'components/text.js';
+import { Fader } from 'components/transitioner.js';
+import { countriesToString } from 'constants/countries.js';
+import request from 'constants/request.js';
+import { cloudinary } from 'constants/settings.js';
+import css from 'styles/pages/Home.module.scss';
 
 class RandomCandidate extends Component {
   constructor() {
