@@ -8,6 +8,7 @@ const axios = require('axios');
 
 /**
  * Abstract function for HTTP requests.
+ * @param {object} request - The request details.
  * @param {string} request.url - The url to make the request to.
  * @param {string} [request.method] - The method of the request. Defaults to GET.
  * @param {object} [request.body] - The payload for the request.
