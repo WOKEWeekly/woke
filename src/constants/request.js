@@ -31,8 +31,7 @@ export default ({ url, method = 'GET', body, headers = {}, onSuccess }) => {
     })
     .catch((error) => {
       const message = error.response ? error.response.data.message : error;
-      if (message === 'jwt') {
-        // If error is JWT-related
+      if (message === 'Your access token is expired.') {
         store.dispatch(clearUser());
         setAlert({ type: 'info', message: `Your session has expired.` });
         setTimeout(() => (location.href = '/'), 500);
