@@ -10,15 +10,22 @@ const isDev = process.env.NODE_ENV !== 'production';
 const testInterval = '*/5 * * * * *';
 
 const isBirthdayTest = isDev && false;
-const isSessionTest = isDev && true;
+const isSessionTest = isDev && false;
 const isTrelloTaskTest = isDev && false;
 const isUncaptionedCardTest = isDev && false;
 
 const INTERVALS = {
-  BIRTHDAYS: { hour: 9, minute: 0 },
-  SESSIONS: { hour: 10, minute: 0 },
-  TRELLO_TASKS: { dayOfWeek: 1, hour: 7, minute: 0 },
-  UNCAPTIONED_CARDS: { hour: 9, minute: 0 }
+  // Everyday at 9:00am
+  BIRTHDAYS: '0 9 * * *',
+
+  // Everyday at 10:00am
+  SESSIONS: '0 10 * * *',
+
+  // Every Monday at 7:00am
+  TRELLO_TASKS: '0 7 * * 1',
+
+  // Every weekday at 9:00am
+  UNCAPTIONED_CARDS: '0 9 * * 1-5'
 };
 
 module.exports = () => {
