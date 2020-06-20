@@ -2,21 +2,21 @@ import React, { Component, PureComponent } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
-import { saveCandidateSort } from '@reducers/actions';
+import { saveCandidateSort } from 'reducers/actions';
 
-import { AddEntityButton } from '@components/button.js';
-import { SortDropdown } from '@components/dropdown.js';
-import { Cover, Shader, Spacer } from '@components/layout.js';
-import { Loader, Empty } from '@components/loader.js';
-import { VanillaLink } from '@components/text.js';
-import { BottomToolbar } from '@components/toolbar.js';
-import { Fader } from '@components/transitioner.js';
+import { AddEntityButton } from 'components/button.js';
+import { SortDropdown } from 'components/dropdown.js';
+import { Cover, Shader, Spacer } from 'components/layout.js';
+import { Loader, Empty } from 'components/loader.js';
+import { VanillaLink } from 'components/text.js';
+import { BottomToolbar } from 'components/toolbar.js';
+import { Fader } from 'components/transitioner.js';
 
-import CLEARANCES from '@constants/clearances.js';
-import request from '@constants/request.js';
-import { cloudinary } from '@constants/settings.js';
+import CLEARANCES from 'constants/clearances.js';
+import request from 'constants/request.js';
+import { cloudinary } from 'constants/settings.js';
 
-import css from '@styles/pages/Candidates.module.scss';
+import css from 'styles/pages/Candidates.module.scss';
 
 class BlackExcellence extends Component {
   /** Retrieve information from server */

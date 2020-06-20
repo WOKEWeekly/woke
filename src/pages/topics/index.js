@@ -4,25 +4,25 @@ import { Button, ButtonGroup, Dropdown } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
-import { saveTopicSort, saveTopicFilters } from '@reducers/actions';
+import { saveTopicSort, saveTopicFilters } from 'reducers/actions';
 
-import { alert, setAlert } from '@components/alert.js';
-import { AddEntityButton } from '@components/button.js';
-import { SortDropdown, FilterDropdown } from '@components/dropdown.js';
-import { Checkbox, SearchBar } from '@components/form';
-import { Icon } from '@components/icon.js';
-import { Cover, Shader, Spacer } from '@components/layout.js';
-import { Loader, Empty } from '@components/loader.js';
-import { ConfirmModal } from '@components/modal.js';
-import { Title, Subtitle } from '@components/text.js';
-import { TopToolbar, BottomToolbar } from '@components/toolbar.js';
-import { Fader } from '@components/transitioner.js';
+import { alert, setAlert } from 'components/alert.js';
+import { AddEntityButton } from 'components/button.js';
+import { SortDropdown, FilterDropdown } from 'components/dropdown.js';
+import { Checkbox, SearchBar } from 'components/form';
+import { Icon } from 'components/icon.js';
+import { Cover, Shader, Spacer } from 'components/layout.js';
+import { Loader, Empty } from 'components/loader.js';
+import { ConfirmModal } from 'components/modal.js';
+import { Title, Subtitle } from 'components/text.js';
+import { TopToolbar, BottomToolbar } from 'components/toolbar.js';
+import { Fader } from 'components/transitioner.js';
 
-import CATEGORIES from '@constants/categories.js';
-import CLEARANCES from '@constants/clearances.js';
-import request from '@constants/request.js';
+import CATEGORIES from 'constants/categories.js';
+import CLEARANCES from 'constants/clearances.js';
+import request from 'constants/request.js';
 
-import css from '@styles/pages/Topics.module.scss';
+import css from 'styles/pages/Topics.module.scss';
 
 const { categories, types, polarity, misc } = CATEGORIES;
 

@@ -3,18 +3,14 @@ import { Container, Col, Row, Dropdown, Nav, Navbar } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
-import { clearUser } from '@reducers/actions';
-
-import { setAlert, checkAlert } from '@components/alert.js';
-import { Icon, HeaderIcon } from '@components/icon';
-import { Default, Mobile, zIndices } from '@components/layout';
-
-import CLEARANCES from '@constants/clearances.js';
-import { accounts, cloudinary } from '@constants/settings.js';
-
-import Login from '@pages/_auth/login';
-
-import css from '@styles/Partials.module.scss';
+import { setAlert, checkAlert } from 'components/alert.js';
+import { Icon, HeaderIcon } from 'components/icon';
+import { Default, Mobile, zIndices } from 'components/layout';
+import CLEARANCES from 'constants/clearances.js';
+import { accounts, cloudinary } from 'constants/settings.js';
+import Login from 'pages/_auth/login';
+import { clearUser } from 'reducers/actions';
+import css from 'styles/Partials.module.scss';
 
 /** Little top bar for social media icons and account details */
 class PreNavbar extends Component {

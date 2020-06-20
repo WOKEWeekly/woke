@@ -3,23 +3,23 @@ import { Container } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { zDate } from 'zavid-modules';
 
-import { setAlert } from '@components/alert.js';
+import { setAlert } from 'components/alert.js';
 import {
   EditEntityButton,
   DeleteEntityButton,
   BackButton
-} from '@components/button.js';
-import { Shader, Spacer } from '@components/layout.js';
-import { ConfirmModal } from '@components/modal.js';
-import { Title, Subtitle, Paragraph, Divider } from '@components/text.js';
-import { BottomToolbar } from '@components/toolbar.js';
-import { Fader, Slider } from '@components/transitioner.js';
+} from 'components/button.js';
+import { Shader, Spacer } from 'components/layout.js';
+import { ConfirmModal } from 'components/modal.js';
+import { Title, Subtitle, Paragraph, Divider } from 'components/text.js';
+import { BottomToolbar } from 'components/toolbar.js';
+import { Fader, Slider } from 'components/transitioner.js';
 
-import CLEARANCES from '@constants/clearances.js';
-import request from '@constants/request.js';
-import { cloudinary } from '@constants/settings.js';
+import CLEARANCES from 'constants/clearances.js';
+import request from 'constants/request.js';
+import { cloudinary } from 'constants/settings.js';
 
-import css from '@styles/pages/Sessions.module.scss';
+import css from 'styles/pages/Sessions.module.scss';
 
 class SessionPage extends Component {
   constructor() {

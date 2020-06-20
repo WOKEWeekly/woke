@@ -7,14 +7,14 @@ import {
   SubmitButton,
   CancelButton,
   DeleteButton
-} from '@components/button.js';
-import { Group, Label, Select, UsernameInput } from '@components/form';
-import { SocialIcon } from '@components/icon.js';
-import { Paragraph } from '@components/text.js';
+} from 'components/button.js';
+import { Group, Label, Select, UsernameInput } from 'components/form';
+import { SocialIcon } from 'components/icon.js';
+import { Paragraph } from 'components/text.js';
 
-import { socialPlatforms } from '@constants/settings';
+import { socialPlatforms } from 'constants/settings';
 
-import css from '@styles/components/Modal.module.scss';
+import css from 'styles/components/Modal.module.scss';
 
 // TODO: Clean up modals
 export class Modal extends Component {

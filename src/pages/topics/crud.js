@@ -2,10 +2,10 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { zHandlers } from 'zavid-modules';
 
-import { setAlert } from '@components/alert.js';
+import { setAlert } from 'components/alert.js';
 
-import request from '@constants/request.js';
-import { isValidTopic } from '@constants/validations.js';
+import request from 'constants/request.js';
+import { isValidTopic } from 'constants/validations.js';
 
 import TopicForm from './form.js';
 

@@ -1,7 +1,7 @@
 const classNames = require('classnames');
 const { toast, cssTransition } = require('react-toastify');
 
-const css = require('@styles/components/Alert.module.scss');
+const css = require('styles/components/Alert.module.scss');
 
 const animation = cssTransition({
   enter: css.fadeIn,

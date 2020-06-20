@@ -3,18 +3,18 @@ import { Container } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { zDate } from 'zavid-modules';
 
-import { EditEntityButton, BackButton } from '@components/button.js';
-import { PromoIconsBar } from '@components/icon.js';
-import { Shader, Spacer } from '@components/layout.js';
-import { Title, Subtitle, Paragraph, Divider } from '@components/text.js';
-import { BottomToolbar } from '@components/toolbar.js';
-import { Fader, Slider } from '@components/transitioner.js';
+import { EditEntityButton, BackButton } from 'components/button.js';
+import { PromoIconsBar } from 'components/icon.js';
+import { Shader, Spacer } from 'components/layout.js';
+import { Title, Subtitle, Paragraph, Divider } from 'components/text.js';
+import { BottomToolbar } from 'components/toolbar.js';
+import { Fader, Slider } from 'components/transitioner.js';
 
-import CLEARANCES from '@constants/clearances.js';
-import { countriesToString } from '@constants/countries.js';
-import { cloudinary } from '@constants/settings.js';
+import CLEARANCES from 'constants/clearances.js';
+import { countriesToString } from 'constants/countries.js';
+import { cloudinary } from 'constants/settings.js';
 
-import css from '@styles/pages/Members.module.scss';
+import css from 'styles/pages/Members.module.scss';
 
 class MemberPage extends Component {
   static async getInitialProps({ query }) {

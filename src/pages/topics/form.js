@@ -7,7 +7,7 @@ import {
   CancelButton,
   CheckboxButton,
   RadioButtonGroup
-} from '@components/button.js';
+} from 'components/button.js';
 import {
   Heading,
   Group,
@@ -17,13 +17,13 @@ import {
   LongTextArea,
   ShortTextArea,
   Select
-} from '@components/form';
-import { Shader, Spacer } from '@components/layout.js';
+} from 'components/form';
+import { Shader, Spacer } from 'components/layout.js';
 
-import { categories } from '@constants/categories.js';
-import CLEARANCES from '@constants/clearances.js';
+import { categories } from 'constants/categories.js';
+import CLEARANCES from 'constants/clearances.js';
 
-import css from '@styles/pages/Topics.module.scss';
+import css from 'styles/pages/Topics.module.scss';
 
 class TopicForm extends Component {
   constructor(props) {

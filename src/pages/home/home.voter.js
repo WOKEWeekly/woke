@@ -2,13 +2,13 @@ import React, { Component } from 'react';
 import { Container } from 'react-bootstrap';
 import LazyLoader from 'react-visibility-sensor';
 
-import { Title, Subtitle } from '@components/text.js';
-import { Fader } from '@components/transitioner.js';
-import { Voter } from '@components/voter.js';
+import { Title, Subtitle } from 'components/text.js';
+import { Fader } from 'components/transitioner.js';
+import { Voter } from 'components/voter.js';
 
-import request from '@constants/request.js';
+import request from 'constants/request.js';
 
-import css from '@styles/pages/Home.module.scss';
+import css from 'styles/pages/Home.module.scss';
 
 export default class TopicVoter extends Component {
   constructor() {

@@ -2,17 +2,17 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { zDate } from 'zavid-modules';
 
-import { EditEntityButton } from '@components/button.js';
-import { Icon } from '@components/icon.js';
-import { Shader, Spacer } from '@components/layout.js';
-import { Paragraph } from '@components/text.js';
-import { BottomToolbar } from '@components/toolbar.js';
-import { Fader } from '@components/transitioner.js';
+import { EditEntityButton } from 'components/button.js';
+import { Icon } from 'components/icon.js';
+import { Shader, Spacer } from 'components/layout.js';
+import { Paragraph } from 'components/text.js';
+import { BottomToolbar } from 'components/toolbar.js';
+import { Fader } from 'components/transitioner.js';
 
-import CLEARANCES from '@constants/clearances.js';
-import { accounts, forms } from '@constants/settings.js';
+import CLEARANCES from 'constants/clearances.js';
+import { accounts, forms } from 'constants/settings.js';
 
-import css from '@styles/pages/Information.module.scss';
+import css from 'styles/pages/Information.module.scss';
 
 class Info extends Component {
   /** Retrieve information from server */

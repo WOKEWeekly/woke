@@ -1,17 +1,17 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-import { AddEntityButton } from '@components/button.js';
-import { Cover, Shader, Spacer } from '@components/layout.js';
-import { Loader, Empty } from '@components/loader.js';
-import { BottomToolbar } from '@components/toolbar.js';
+import { AddEntityButton } from 'components/button.js';
+import { Cover, Shader, Spacer } from 'components/layout.js';
+import { Loader, Empty } from 'components/loader.js';
+import { BottomToolbar } from 'components/toolbar.js';
 
-import CLEARANCES from '@constants/clearances.js';
-import request from '@constants/request.js';
+import CLEARANCES from 'constants/clearances.js';
+import request from 'constants/request.js';
 
-import Review from '@pages/reviews/unit.js';
+import Review from 'pages/reviews/unit.js';
 
-import css from '@styles/pages/Home.module.scss';
+import css from 'styles/pages/Home.module.scss';
 
 class ReviewsList extends Component {
   constructor(props) {

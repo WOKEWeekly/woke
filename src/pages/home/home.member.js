@@ -3,20 +3,20 @@ import { Col, Row } from 'react-bootstrap';
 import LazyLoader from 'react-visibility-sensor';
 import { zText } from 'zavid-modules';
 
-import { Default, Mobile } from '@components/layout.js';
+import { Default, Mobile } from 'components/layout.js';
 import {
   Title,
   Subtitle,
   Divider,
   Paragraph,
   VanillaLink
-} from '@components/text.js';
-import { Fader } from '@components/transitioner.js';
+} from 'components/text.js';
+import { Fader } from 'components/transitioner.js';
 
-import request from '@constants/request.js';
-import { cloudinary } from '@constants/settings.js';
+import request from 'constants/request.js';
+import { cloudinary } from 'constants/settings.js';
 
-import css from '@styles/pages/Home.module.scss';
+import css from 'styles/pages/Home.module.scss';
 
 export default class RandomMember extends Component {
   constructor() {

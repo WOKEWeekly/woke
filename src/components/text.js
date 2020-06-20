@@ -5,9 +5,9 @@ import { connect } from 'react-redux';
 import { TwitterTweetEmbed } from 'react-twitter-embed';
 import { zText } from 'zavid-modules';
 
-import { Icon } from '@components/icon.js';
+import { Icon } from 'components/icon.js';
 
-import css from '@styles/components/Text.module.scss';
+import css from 'styles/components/Text.module.scss';
 
 /**
  * A title component for headings.

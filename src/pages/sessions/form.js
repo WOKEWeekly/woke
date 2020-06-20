@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import { Col } from 'react-bootstrap';
 import { connect } from 'react-redux';
 
-import { SubmitButton, CancelButton } from '@components/button.js';
-import { EventDatePicker } from '@components/datepicker.js';
+import { SubmitButton, CancelButton } from 'components/button.js';
+import { EventDatePicker } from 'components/datepicker.js';
 import {
   Heading,
   Group,
@@ -12,13 +12,13 @@ import {
   TextInput,
   LongTextArea,
   FileSelector
-} from '@components/form';
-import { Shader, Spacer } from '@components/layout.js';
-import { TimePicker } from '@components/timepicker.js';
+} from 'components/form';
+import { Shader, Spacer } from 'components/layout.js';
+import { TimePicker } from 'components/timepicker.js';
 
-import CLEARANCES from '@constants/clearances.js';
+import CLEARANCES from 'constants/clearances.js';
 
-import css from '@styles/pages/Sessions.module.scss';
+import css from 'styles/pages/Sessions.module.scss';
 
 class SessionForm extends Component {
   constructor(props) {

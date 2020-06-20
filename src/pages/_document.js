@@ -2,7 +2,7 @@ import Document, { Html, Head, Main, NextScript } from 'next/document';
 import React from 'react';
 import { zText } from 'zavid-modules';
 
-import { cloudinary, domain } from '@constants/settings.js';
+import { cloudinary, domain } from 'constants/settings.js';
 
 export default class MyDocument extends Document {
   static async getInitialProps(ctx) {

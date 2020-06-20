@@ -2,21 +2,21 @@ import React, { Component, PureComponent } from 'react';
 import { connect } from 'react-redux';
 import { zDate } from 'zavid-modules';
 
-import { alert } from '@components/alert.js';
-import { AddEntityButton } from '@components/button.js';
-import { Icon, MaleSymbol, FemaleSymbol } from '@components/icon.js';
-import { Shader, Default, Mobile } from '@components/layout.js';
-import { Loader, Empty } from '@components/loader.js';
-import { ConfirmModal } from '@components/modal.js';
-import { Title } from '@components/text.js';
-import { BottomToolbar } from '@components/toolbar.js';
-import { Fader } from '@components/transitioner.js';
+import { alert } from 'components/alert.js';
+import { AddEntityButton } from 'components/button.js';
+import { Icon, MaleSymbol, FemaleSymbol } from 'components/icon.js';
+import { Shader, Default, Mobile } from 'components/layout.js';
+import { Loader, Empty } from 'components/loader.js';
+import { ConfirmModal } from 'components/modal.js';
+import { Title } from 'components/text.js';
+import { BottomToolbar } from 'components/toolbar.js';
+import { Fader } from 'components/transitioner.js';
 
-import CLEARANCES from '@constants/clearances.js';
-import { countriesToString } from '@constants/countries.js';
-import request from '@constants/request.js';
+import CLEARANCES from 'constants/clearances.js';
+import { countriesToString } from 'constants/countries.js';
+import request from 'constants/request.js';
 
-import css from '@styles/pages/Members.module.scss';
+import css from 'styles/pages/Members.module.scss';
 
 class Team extends Component {
   constructor(props) {

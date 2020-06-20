@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 
-import { Title } from '@components/text.js';
-import { Fader } from '@components/transitioner.js';
+import { Title } from 'components/text.js';
+import { Fader } from 'components/transitioner.js';
 
-import request from '@constants/request.js';
+import request from 'constants/request.js';
 
-import Review from '@pages/reviews/unit.js';
+import Review from 'pages/reviews/unit.js';
 
-import css from '@styles/pages/Home.module.scss';
+import css from 'styles/pages/Home.module.scss';
 
 import { ReadMore } from '../../components/text';
 

@@ -3,13 +3,13 @@ import React, { Component } from 'react';
 import { Button, ToggleButton, ToggleButtonGroup } from 'react-bootstrap';
 import { connect } from 'react-redux';
 
-import { alert } from '@components/alert.js';
-import { Icon } from '@components/icon.js';
-import { Default, Mobile } from '@components/layout.js';
+import { alert } from 'components/alert.js';
+import { Icon } from 'components/icon.js';
+import { Default, Mobile } from 'components/layout.js';
 
-import request from '@constants/request.js';
+import request from 'constants/request.js';
 
-import css from '@styles/components/Button.module.scss';
+import css from 'styles/components/Button.module.scss';
 
 const mapStateToProps = (state) => ({
   theme: state.theme

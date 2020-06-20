@@ -3,15 +3,15 @@ import { Container } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { zDate } from 'zavid-modules';
 
-import { CountryFlags } from '@components/emoji.js';
-import { CloudinaryImage } from '@components/image.js';
-import { Cover, Shader, Spacer, Default, Mobile } from '@components/layout.js';
-import { Title, Subtitle, Paragraph, VanillaLink } from '@components/text.js';
-import { Fader } from '@components/transitioner.js';
+import { CountryFlags } from 'components/emoji.js';
+import { CloudinaryImage } from 'components/image.js';
+import { Cover, Shader, Spacer, Default, Mobile } from 'components/layout.js';
+import { Title, Subtitle, Paragraph, VanillaLink } from 'components/text.js';
+import { Fader } from 'components/transitioner.js';
 
-import request from '@constants/request.js';
+import request from 'constants/request.js';
 
-import css from '@styles/pages/Members.module.scss';
+import css from 'styles/pages/Members.module.scss';
 
 const heading = 'Meet The Team';
 const description =

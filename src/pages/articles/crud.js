@@ -2,13 +2,13 @@ import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { zDate, zString } from 'zavid-modules';
 
-import { setAlert } from '@components/alert.js';
+import { setAlert } from 'components/alert.js';
 
-import handlers from '@constants/handlers.js';
-import request from '@constants/request.js';
-import { cloudinary } from '@constants/settings.js';
-import { ARTICLE_STATUS, OPERATIONS } from '@constants/strings.js';
-import { isValidArticle } from '@constants/validations.js';
+import handlers from 'constants/handlers.js';
+import request from 'constants/request.js';
+import { cloudinary } from 'constants/settings.js';
+import { ARTICLE_STATUS, OPERATIONS } from 'constants/strings.js';
+import { isValidArticle } from 'constants/validations.js';
 
 import ArticleForm from './form.js';
 
