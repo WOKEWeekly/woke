@@ -3,7 +3,6 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
 import { socialPlatforms } from 'constants/settings.js';
-
 import css from 'styles/components/Icon.module.scss';
 
 export class Icon extends Component {

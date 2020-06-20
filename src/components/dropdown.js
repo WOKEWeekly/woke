@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { Dropdown } from 'react-bootstrap';
 
 import { Icon } from 'components/icon.js';
-
 import css from 'styles/components/Form.module.scss';
 
 import { zIndices } from './layout';

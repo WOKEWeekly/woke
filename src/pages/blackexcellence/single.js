@@ -15,12 +15,10 @@ import { ConfirmModal } from 'components/modal.js';
 import { Title, Subtitle, Paragraph, Divider } from 'components/text.js';
 import { BottomToolbar } from 'components/toolbar.js';
 import { Fader, Slider } from 'components/transitioner.js';
-
 import CLEARANCES from 'constants/clearances.js';
 import { countriesToString } from 'constants/countries.js';
 import request from 'constants/request.js';
 import { cloudinary } from 'constants/settings.js';
-
 import css from 'styles/pages/Candidates.module.scss';
 
 class CandidatePage extends Component {

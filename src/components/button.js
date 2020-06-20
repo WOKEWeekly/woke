@@ -6,9 +6,7 @@ import { connect } from 'react-redux';
 import { alert } from 'components/alert.js';
 import { Icon } from 'components/icon.js';
 import { Default, Mobile } from 'components/layout.js';
-
 import request from 'constants/request.js';
-
 import css from 'styles/components/Button.module.scss';
 
 const mapStateToProps = (state) => ({

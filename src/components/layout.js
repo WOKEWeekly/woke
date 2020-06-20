@@ -5,9 +5,7 @@ import { connect } from 'react-redux';
 import Responsive from 'react-responsive';
 
 import { Fader } from 'components/transitioner.js';
-
 import { cloudinary } from 'constants/settings.js';
-
 import css from 'styles/components/Layout.module.scss';
 
 export const isSmallDevice = () => {

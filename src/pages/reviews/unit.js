@@ -17,11 +17,9 @@ import {
   ExpandText
 } from 'components/text.js';
 import { Slider } from 'components/transitioner.js';
-
 import CLEARANCES from 'constants/clearances.js';
 import request from 'constants/request.js';
 import { cloudinary } from 'constants/settings.js';
-
 import css from 'styles/pages/Home.module.scss';
 
 class Review extends PureComponent {

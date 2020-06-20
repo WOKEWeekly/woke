@@ -12,10 +12,8 @@ import { SocialMediaShareBlock } from 'components/socialmedia.js';
 import { Title, Subtitle, Paragraph, Divider } from 'components/text.js';
 import { BottomToolbar } from 'components/toolbar.js';
 import { Fader, Colorizer } from 'components/transitioner.js';
-
 import CLEARANCES from 'constants/clearances.js';
 import request from 'constants/request.js';
-
 import css from 'styles/pages/Articles.module.scss';
 
 import ArticleSidebar from './single.sidebar';

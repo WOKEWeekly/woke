@@ -1,7 +1,7 @@
+import { alert, setAlert } from 'components/alert.js';
 import { clearUser } from 'reducers/actions';
 import configureStore from 'reducers/store.js';
 
-import { alert, setAlert } from 'components/alert.js';
 const { store } = configureStore();
 
 const axios = require('axios');

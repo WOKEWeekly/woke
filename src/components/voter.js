@@ -2,7 +2,6 @@ import classNames from 'classnames';
 import React, { Component } from 'react';
 
 import { Mover } from 'components/transitioner.js';
-
 import css from 'styles/components/Voter.module.scss';
 
 /** For voting widgets */

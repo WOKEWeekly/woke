@@ -19,10 +19,8 @@ import {
   Select
 } from 'components/form';
 import { Shader, Spacer } from 'components/layout.js';
-
 import { categories } from 'constants/categories.js';
 import CLEARANCES from 'constants/clearances.js';
-
 import css from 'styles/pages/Topics.module.scss';
 
 class TopicForm extends Component {

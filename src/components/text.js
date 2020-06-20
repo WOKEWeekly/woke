@@ -6,7 +6,6 @@ import { TwitterTweetEmbed } from 'react-twitter-embed';
 import { zText } from 'zavid-modules';
 
 import { Icon } from 'components/icon.js';
-
 import css from 'styles/components/Text.module.scss';
 
 /**

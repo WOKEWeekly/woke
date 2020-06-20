@@ -5,10 +5,8 @@ import { connect } from 'react-redux';
 import { SubmitButton } from 'components/button.js';
 import { Heading, Group, Label, TextInput } from 'components/form';
 import { Shader } from 'components/layout.js';
-
 import request from 'constants/request.js';
 import { isValidEmail } from 'constants/validations.js';
-
 import css from 'styles/Auth.module.scss';
 
 class Recovery extends Component {

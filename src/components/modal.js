@@ -11,9 +11,7 @@ import {
 import { Group, Label, Select, UsernameInput } from 'components/form';
 import { SocialIcon } from 'components/icon.js';
 import { Paragraph } from 'components/text.js';
-
 import { socialPlatforms } from 'constants/settings';
-
 import css from 'styles/components/Modal.module.scss';
 
 // TODO: Clean up modals

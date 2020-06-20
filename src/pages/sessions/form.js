@@ -15,9 +15,7 @@ import {
 } from 'components/form';
 import { Shader, Spacer } from 'components/layout.js';
 import { TimePicker } from 'components/timepicker.js';
-
 import CLEARANCES from 'constants/clearances.js';
-
 import css from 'styles/pages/Sessions.module.scss';
 
 class SessionForm extends Component {

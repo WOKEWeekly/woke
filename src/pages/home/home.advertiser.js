@@ -3,9 +3,7 @@ import { Col, Row } from 'react-bootstrap';
 import LazyLoader from 'react-visibility-sensor';
 
 import { Slider } from 'components/transitioner.js';
-
 import { cloudinary } from 'constants/settings.js';
-
 import css from 'styles/pages/Home.module.scss';
 
 export default class ThreePart extends Component {

@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import { zHandlers , zDate } from 'zavid-modules';
 
 import { setAlert } from 'components/alert.js';
-
 import request from 'constants/request.js';
 import { cloudinary } from 'constants/settings.js';
 import { isValidCandidate } from 'constants/validations.js';

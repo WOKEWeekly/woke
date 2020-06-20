@@ -6,10 +6,8 @@ import { setAlert } from 'components/alert.js';
 import { SubmitButton } from 'components/button.js';
 import { Heading, Group, Label, PasswordInput } from 'components/form';
 import { Shader } from 'components/layout.js';
-
 import request from 'constants/request.js';
 import { isValidPassword } from 'constants/validations.js';
-
 import css from 'styles/Auth.module.scss';
 
 class ResetPassword extends Component {

@@ -8,9 +8,7 @@ import { CloudinaryImage } from 'components/image.js';
 import { Cover, Shader, Spacer, Default, Mobile } from 'components/layout.js';
 import { Title, Subtitle, Paragraph, VanillaLink } from 'components/text.js';
 import { Fader } from 'components/transitioner.js';
-
 import request from 'constants/request.js';
-
 import css from 'styles/pages/Members.module.scss';
 
 const heading = 'Meet The Team';

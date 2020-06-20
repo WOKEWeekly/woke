@@ -6,9 +6,7 @@ import { CloudinaryImage } from 'components/image.js';
 import { Loader, Empty } from 'components/loader.js';
 import { Title, Subtitle, Divider, VanillaLink } from 'components/text.js';
 import { Zoomer } from 'components/transitioner.js';
-
 import request from 'constants/request.js';
-
 import css from 'styles/pages/Articles.module.scss';
 
 const ArticleSidebar = memo(({ currentArticleId: id }) => {

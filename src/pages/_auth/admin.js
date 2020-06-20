@@ -6,10 +6,8 @@ import { SubmitButton } from 'components/button.js';
 import { Icon } from 'components/icon';
 import { Shader } from 'components/layout.js';
 import { ConfirmModal } from 'components/modal.js';
-
 import request from 'constants/request.js';
 import { domain } from 'constants/settings.js';
-
 import css from 'styles/Auth.module.scss';
 
 class Admin extends Component {

@@ -12,10 +12,8 @@ import { Loader, Empty } from 'components/loader.js';
 import { Modal, ConfirmModal } from 'components/modal.js';
 import { Title } from 'components/text.js';
 import { Fader } from 'components/transitioner.js';
-
 import CLEARANCES from 'constants/clearances.js';
 import request from 'constants/request.js';
-
 import css from 'styles/pages/Members.module.scss';
 
 class Users extends Component {

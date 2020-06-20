@@ -14,9 +14,7 @@ import {
 } from 'components/form';
 import { Shader, Spacer } from 'components/layout.js';
 import Rator from 'components/rator.js';
-
 import CLEARANCES from 'constants/clearances.js';
-
 import css from 'styles/pages/Members.module.scss';
 
 class ReviewForm extends Component {

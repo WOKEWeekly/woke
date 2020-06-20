@@ -1,7 +1,6 @@
 import React from 'react';
 
 import { Shader } from 'components/layout';
-
 import css from 'styles/Partials.module.scss';
 
 export default class Error extends React.Component {
