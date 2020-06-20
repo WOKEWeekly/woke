@@ -13,7 +13,10 @@ export const CountryFlags = connect(mapStateToProps)(
     ethnicities = JSON.parse(ethnicities);
     const CountryEmojis = () => {
       return ethnicities.map((ethnicity, key) => {
-        const iso = getISOCode(ethnicity, countries).toLowerCase();
+        const iso =
+          getISOCode(ethnicity, countries) != undefined
+            ? getISOCode(ethnicity, countries).toLowerCase()
+            : '';
         return <Emoji key={key} emoji={`flag-${iso}`} size={size} />;
       });
     };
