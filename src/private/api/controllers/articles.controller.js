@@ -6,7 +6,7 @@ const emails = require('../../emails');
 const ERROR = require('../../errors');
 const filer = require('../../filer');
 const { respondToClient } = require('../../response');
-const knex = require('../knex').getKnex();
+const knex = require('../../setKnex').getKnex();
 
 const emailsOn =
   process.env.NODE_ENV === 'production' || process.argv.includes('--emails');

@@ -5,7 +5,7 @@ const { zDate, zText } = require('zavid-modules');
 const { cloudinary, domain, emails } = require('../../constants/settings.js');
 const { SUBSCRIPTIONS } = require('../../constants/strings.js');
 const { config } = require('../../server.js');
-const knex = require('../api/knex').getKnex();
+const knex = require('../setKnex').getKnex();
 
 require('dotenv').config({ path: config });
 

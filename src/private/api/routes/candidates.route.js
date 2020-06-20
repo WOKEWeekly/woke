@@ -11,7 +11,11 @@ const authorize = verifyToken(CLEARANCES.ACTIONS.CRUD_BLACKEX);
 router.get('/', validateReq, CandidatesController.getAllCandidates);
 
 /** GET single candidate by ID */
-router.get('/:id([0-9]+)', validateReq, CandidatesController.getSingleCandidate);
+router.get(
+  '/:id([0-9]+)',
+  validateReq,
+  CandidatesController.getSingleCandidate
+);
 
 /** GET latest candidate */
 router.get('/latest', validateReq, CandidatesController.getLatestCandidate);

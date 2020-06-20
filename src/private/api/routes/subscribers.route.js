@@ -25,10 +25,18 @@ router.post('/', validateReq, SubscribersController.addSubscriber);
 router.put('/:id', authorizeModify, SubscribersController.updateSubscriber);
 
 /** DELETE subscriber */
-router.delete('/:id([0-9]+)', authorizeModify, SubscribersController.deleteSubscriber);
+router.delete(
+  '/:id([0-9]+)',
+  authorizeModify,
+  SubscribersController.deleteSubscriber
+);
 
 /** DELETE subscriber by email */
-router.delete('/email', validateReq, SubscribersController.deleteSubscriberByEmail);
+router.delete(
+  '/email',
+  validateReq,
+  SubscribersController.deleteSubscriberByEmail
+);
 
 /** PURGE subscribers */
 router.purge('/', authorizeModify, SubscribersController.purgeSubscribers);

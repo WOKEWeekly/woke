@@ -5,7 +5,7 @@ const { DIRECTORY, ENTITY } = require('../../../constants/strings');
 const ERROR = require('../../errors');
 const filer = require('../../filer');
 const { respondToClient } = require('../../response');
-const knex = require('../knex').getKnex();
+const knex = require('../../setKnex').getKnex();
 
 const columns = [
   'candidates.*',
