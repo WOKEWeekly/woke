@@ -1,18 +1,21 @@
 const assert = require('assert');
 
-let _knex;
+let IKnex;
 
-const setKnex = (KnexInstance) => {
-  _knex = KnexInstance;
+/**
+ * Set the instance of the Knex database controller.
+ * @param {object} instance - The Knex instance.
+ */
+exports.setKnex = (instance) => {
+  IKnex = instance;
   console.info('Connected to database.');
 };
 
-const getKnex = () => {
-  assert.ok(_knex, 'Knex has not been initialized.');
-  return _knex;
-};
-
-module.exports = {
-  setKnex: setKnex,
-  getKnex: getKnex
+/**
+ * Retrieve the Knex singleton instance.
+ * @returns {object} The Knex instance.
+ */
+exports.getKnex = () => {
+  assert.ok(IKnex, 'Knex has not been initialized.');
+  return IKnex;
 };
