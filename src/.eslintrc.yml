@@ -18,6 +18,7 @@ parserOptions:
     jsx: true
 plugins:
   - react
+  - filenames
   - import
   - jsdoc
   - mocha
@@ -33,15 +34,19 @@ settings:
 # Rules
 rules:
   # Active rules
+  filenames/match-regex:
+    - error
+    - '^[a-z-]+$'
+    - true
   import/no-unresolved:
     - error
   import/order:
     - warn
     - groups:
-      - external
-      - builtin
-      - internal
-      - sibling
+        - external
+        - builtin
+        - internal
+        - sibling
       pathGroups:
         - pattern: 'reducers/**'
           group: external
@@ -92,7 +97,7 @@ rules:
     - warn
     - always
     - exceptions:
-      - '*'
+        - '*'
 
   # Overridden and disabled rules
   mocha/handle-done-callback: off
