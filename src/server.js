@@ -55,7 +55,7 @@ if (!isStageTesting && !isDevTesting) {
 function startClientServer() {
   startServer();
   setServer(server);
-  require('./private/routes/index.js')(app);
+  require('./private/routes')(app);
   require('./private/cron')();
 }
 
@@ -80,7 +80,7 @@ function startServer(next) {
       // Set database instances
       function (callback) {
         setKnex(knex);
-        require('./private/api/index.js')(app, knex);
+        require('./private/api')(app);
         callback(null);
       }
     ],

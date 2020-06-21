@@ -11,9 +11,9 @@ const usersEndpoints = require('./endpoints/users.endpoint');
 
 const { logUserActivity } = require('../middleware.js');
 
-module.exports = function (app, knex) {
+module.exports = function (app) {
   /** Log user activity on each request */
-  app.use('/api', logUserActivity(knex));
+  app.use('/api', logUserActivity);
 
   // Articles routes
   app.use('/api/v1/articles', articlesEndpoints);
