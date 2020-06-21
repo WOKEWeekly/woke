@@ -1,13 +1,13 @@
-const articlesRoutes = require('./routes/articles.route');
-const candidatesRoutes = require('./routes/candidates.route');
-const documentsRoutes = require('./routes/documents.route');
-const membersRoutes = require('./routes/members.route');
-const pagesRoutes = require('./routes/pages.route');
-const reviewsRoutes = require('./routes/reviews.route');
-const sessionsRoutes = require('./routes/sessions.route');
-const subscribersRoutes = require('./routes/subscribers.route');
-const topicsRoutes = require('./routes/topics.route');
-const usersRoutes = require('./routes/users.route');
+const articlesRoutes = require('./endpoints/articles.endpoint');
+const candidatesRoutes = require('./endpoints/candidates.endpoint');
+const documentsRoutes = require('./endpoints/documents.endpoint');
+const membersRoutes = require('./endpoints/members.endpoint');
+const pagesRoutes = require('./endpoints/pages.endpoint');
+const reviewsRoutes = require('./endpoints/reviews.endpoint');
+const sessionsRoutes = require('./endpoints/sessions.endpoint');
+const subscribersRoutes = require('./endpoints/subscribers.endpoint');
+const topicsRoutes = require('./endpoints/topics.endpoint');
+const usersRoutes = require('./endpoints/users.endpoint');
 
 const { logUserActivity } = require('../middleware.js');
 
