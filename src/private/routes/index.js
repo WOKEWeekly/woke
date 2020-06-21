@@ -1,5 +1,4 @@
 const async = require('async');
-const request = require('request');
 const sm = require('sitemap');
 const { zText } = require('zavid-modules');
 
@@ -9,14 +8,14 @@ const accountRoutes = require('./account.routes');
 const adminRoutes = require('./admin.routes/admin.routes');
 const articlesRoutes = require('./articles.routes');
 const candidateRoutes = require('./candidates.routes');
+const documentsRoutes = require('./documents.routes');
+const membersRoutes = require('./members.routes');
 const reviewsRoutes = require('./reviews.routes');
 const sessionsRoutes = require('./sessions.routes');
-const teamRoutes = require('./team.routes');
 const topicsRoutes = require('./topics.routes');
 
 const {
   accounts,
-  cloudinary,
   domain,
   forms,
   siteDescription
@@ -27,11 +26,15 @@ const { renderErrorPage } = require('../response.js');
 const knex = require('../singleton/knex').getKnex();
 const server = require('../singleton/server').getServer();
 
-const env = process.env.NODE_ENV !== 'production' ? 'dev' : 'prod';
-
 module.exports = function (app) {
   // Account Routes
-  app.use('/', [accountRoutes, articlesRoutes, candidateRoutes]);
+  app.use('/', [
+    accountRoutes,
+    articlesRoutes,
+    candidateRoutes,
+    documentsRoutes,
+    membersRoutes
+  ]);
 
   // Admin Routes
   app.use('/admin', adminRoutes);
@@ -41,9 +44,6 @@ module.exports = function (app) {
 
   // Sessions Routes
   app.use('/sessions', sessionsRoutes);
-
-  // Team Routes
-  app.use('/team', teamRoutes);
 
   // Topics Routes
   app.use('/topics', topicsRoutes);
@@ -133,22 +133,6 @@ module.exports = function (app) {
   app.get('/unsubscribe', function (req, res) {
     server.render(req, res, '/_auth/unsubscribe', {
       title: 'Unsubscribe | #WOKEWeekly'
-    });
-  });
-
-  app.get('/docs/:name', function (req, res) {
-    const { name } = req.params;
-    const query = knex.select().from('documents').where('name', name);
-    query.asCallback(function (err, [document] = []) {
-      if (err) return renderErrorPage(req, res, err, server);
-      if (!document)
-        return renderErrorPage(
-          req,
-          res,
-          ERROR.NONEXISTENT_ENTITY(ENTITY.DOCUMENT),
-          server
-        );
-      return renderDocument(res, document);
     });
   });
 
@@ -350,32 +334,11 @@ module.exports = function (app) {
 };
 
 /**
- * Render a document, particularly a PDF, from Cloudinary.
- * @param {object} res - The response context.
- * @param {object} document - The document object containing
- * the file and version.
- */
-const renderDocument = (res, document) => {
-  const { file, version } = document;
-  let url;
-
-  if (version) {
-    url = `${cloudinary.url}/v${version}/${env}/documents/${file}`;
-  } else {
-    url = `${cloudinary.url}/${env}/documents/${file}`;
-  }
-
-  request(url).pipe(res);
-};
-
-/**
  * Dynamically render a page from the database.
  * @param {string} pageName - The name of the page.
  * @param {string} [operation] - Either 'READ' or 'UPDATE'. Defaults to 'READ'.
  */
 const renderPage = (req, res, page, operation) => {
-  const { server } = exigencies;
-
   const {
     name,
     title,
