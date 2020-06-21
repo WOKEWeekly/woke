@@ -24,8 +24,8 @@ const dotenv = require('dotenv').config({
   path: config
 });
 const port = isStageTesting ? 3010 : process.env.PORT || 3000;
-const { setKnex } = require('./private/setKnex');
-const { setServer } = require('./private/setServer');
+const { setKnex } = require('./private/singleton/knex');
+const { setServer } = require('./private/singleton/server');
 
 app.use(bodyParser.json({ limit: `${limits.file}MB` }));
 app.use(cookieParser());

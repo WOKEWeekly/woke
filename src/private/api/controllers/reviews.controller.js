@@ -2,7 +2,7 @@
 const async = require('async');
 
 const { respondToClient } = require('../../response');
-const knex = require('../../setKnex').getKnex();
+const knex = require('../../singleton/knex').getKnex();
 const filer = require('../../filer');
 const { DIRECTORY, ENTITY } = require('../../../constants/strings');
 const ERROR = require('../../errors');

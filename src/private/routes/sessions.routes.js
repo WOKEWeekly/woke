@@ -3,10 +3,10 @@ const router = express.Router();
 const { zText } = require('zavid-modules');
 
 const { ENTITY, OPERATIONS } = require('../../constants/strings');
-const knex = require('../setKnex').getKnex();
+const knex = require('../singleton/knex').getKnex();
 const ERROR = require('../errors');
 const { renderErrorPage } = require('../response');
-const server = require('../setServer').getServer();
+const server = require('../singleton/server').getServer();
 
 /** Sessions page */
 router.get('/', (req, res) => {

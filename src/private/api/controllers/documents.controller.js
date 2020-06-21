@@ -5,7 +5,7 @@ const { ENTITY } = require('../../../constants/strings');
 const ERROR = require('../../errors');
 const filer = require('../../filer');
 const { respondToClient } = require('../../response');
-const knex = require('../../setKnex').getKnex();
+const knex = require('../../singleton/knex').getKnex();
 
 /** Retrieve all documents */
 exports.getAllDocuments = (req, res) => {

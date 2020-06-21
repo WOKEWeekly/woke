@@ -6,7 +6,7 @@ const candidatesRoutes = require('./candidates.routes');
 const documentsRoutes = require('./documents.routes');
 const membersRoutes = require('./member.routes');
 
-const server = require('../../setServer').getServer();
+const server = require('../../singleton/server').getServer();
 
 router.use('/articles', articlesRoutes);
 router.use('/candidates', candidatesRoutes);

@@ -9,7 +9,7 @@ const { ENTITY } = require('../../../constants/strings');
 const emails = require('../../emails');
 const ERROR = require('../../errors');
 const { respondToClient } = require('../../response');
-const knex = require('../../setKnex').getKnex();
+const knex = require('../../singleton/knex').getKnex();
 
 const emailsOn =
   process.env.NODE_ENV === 'production' || process.argv.includes('--emails');
