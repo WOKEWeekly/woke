@@ -1,13 +1,13 @@
-const articlesRoutes = require('./endpoints/articles.endpoint');
-const candidatesRoutes = require('./endpoints/candidates.endpoint');
-const documentsRoutes = require('./endpoints/documents.endpoint');
-const membersRoutes = require('./endpoints/members.endpoint');
-const pagesRoutes = require('./endpoints/pages.endpoint');
-const reviewsRoutes = require('./endpoints/reviews.endpoint');
-const sessionsRoutes = require('./endpoints/sessions.endpoint');
-const subscribersRoutes = require('./endpoints/subscribers.endpoint');
-const topicsRoutes = require('./endpoints/topics.endpoint');
-const usersRoutes = require('./endpoints/users.endpoint');
+const articlesEndpoints = require('./endpoints/articles.endpoint');
+const candidatesEndpoints = require('./endpoints/candidates.endpoint');
+const documentsEndpoints = require('./endpoints/documents.endpoint');
+const membersEndpoints = require('./endpoints/members.endpoint');
+const pagesEndpoints = require('./endpoints/pages.endpoint');
+const reviewsEndpoints = require('./endpoints/reviews.endpoint');
+const sessionsEndpoints = require('./endpoints/sessions.endpoint');
+const subscribersEndpoints = require('./endpoints/subscribers.endpoint');
+const topicsEndpoints = require('./endpoints/topics.endpoint');
+const usersEndpoints = require('./endpoints/users.endpoint');
 
 const { logUserActivity } = require('../middleware.js');
 
@@ -16,32 +16,32 @@ module.exports = function (app, knex) {
   app.use('/api', logUserActivity(knex));
 
   // Articles routes
-  app.use('/api/v1/articles', articlesRoutes);
+  app.use('/api/v1/articles', articlesEndpoints);
 
   // Candidates routes
-  app.use('/api/v1/candidates', candidatesRoutes);
+  app.use('/api/v1/candidates', candidatesEndpoints);
 
   // Documents routes
-  app.use('/api/v1/documents', documentsRoutes);
+  app.use('/api/v1/documents', documentsEndpoints);
 
   // Members routes
-  app.use('/api/v1/members', membersRoutes);
+  app.use('/api/v1/members', membersEndpoints);
 
   // Pages routes
-  app.use('/api/v1/pages', pagesRoutes);
+  app.use('/api/v1/pages', pagesEndpoints);
 
   // Reviews routes
-  app.use('/api/v1/reviews', reviewsRoutes);
+  app.use('/api/v1/reviews', reviewsEndpoints);
 
   // Sessions routes
-  app.use('/api/v1/sessions', sessionsRoutes);
+  app.use('/api/v1/sessions', sessionsEndpoints);
 
   // Subscribers routes
-  app.use('/api/v1/subscribers', subscribersRoutes);
+  app.use('/api/v1/subscribers', subscribersEndpoints);
 
   // Topics routes
-  app.use('/api/v1/topics', topicsRoutes);
+  app.use('/api/v1/topics', topicsEndpoints);
 
   // Users routes
-  app.use('/api/v1/users', usersRoutes);
+  app.use('/api/v1/users', usersEndpoints);
 };
