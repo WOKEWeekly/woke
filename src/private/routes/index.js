@@ -7,8 +7,8 @@ const path = require('path');
 
 const accountRoutes = require('./account.routes');
 const adminRoutes = require('./admin.routes/admin.routes');
-const blackExcellenceRoutes = require('./blackExcellence.routes');
-const blogRoutes = require('./blog.routes');
+const articlesRoutes = require('./articles.routes');
+const candidateRoutes = require('./candidates.routes');
 const reviewsRoutes = require('./reviews.routes');
 const sessionsRoutes = require('./sessions.routes');
 const teamRoutes = require('./team.routes');
@@ -24,28 +24,17 @@ const {
 const { ENTITY, PAGE } = require('../../constants/strings.js');
 const ERROR = require('../errors.js');
 const { renderErrorPage } = require('../response.js');
+const knex = require('../singleton/knex').getKnex();
+const server = require('../singleton/server').getServer();
 
 const env = process.env.NODE_ENV !== 'production' ? 'dev' : 'prod';
 
-let exigencies = {};
-
-module.exports = function (app, knex, server) {
-  exigencies = {
-    knex,
-    server
-  };
-
+module.exports = function (app) {
   // Account Routes
-  app.use('/account', accountRoutes);
+  app.use('/', [accountRoutes, articlesRoutes, candidateRoutes]);
 
   // Admin Routes
   app.use('/admin', adminRoutes);
-
-  // BlackExcellence Routes
-  app.use('/blackexcellence', blackExcellenceRoutes);
-
-  // Blog Routes
-  app.use('/blog', blogRoutes);
 
   // Reviews Routes
   app.use('/reviews', reviewsRoutes);

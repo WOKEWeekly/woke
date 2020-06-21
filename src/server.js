@@ -55,7 +55,7 @@ if (!isStageTesting && !isDevTesting) {
 function startClientServer() {
   startServer();
   setServer(server);
-  require('./private/routes/index.js')(app, knex, server);
+  require('./private/routes/index.js')(app);
   require('./private/cron')();
 }
 

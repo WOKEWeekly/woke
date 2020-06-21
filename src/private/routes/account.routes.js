@@ -8,7 +8,7 @@ const { renderErrorPage } = require('../response');
 const server = require('../singleton/server').getServer();
 
 /** User account page */
-router.get('/', (req, res) => {
+router.get('/account', (req, res) => {
   const token = req.query.verify;
 
   async.waterfall(
@@ -53,7 +53,7 @@ router.get('/', (req, res) => {
 });
 
 /** 'Forgot Password' page */
-router.get('/recovery', (req, res) => {
+router.get('/account/recovery', (req, res) => {
   return server.render(req, res, '/_auth/recovery', {
     title: 'Forgot Password | #WOKEWeekly',
     ogUrl: '/account/recovery'
@@ -61,7 +61,7 @@ router.get('/recovery', (req, res) => {
 });
 
 /** Reset Password page */
-router.get('/reset/:token', (req, res) => {
+router.get('/account/reset/:token', (req, res) => {
   const { token } = req.params;
 
   jwt.verify(token, process.env.JWT_SECRET, (err) => {
