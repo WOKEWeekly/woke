@@ -82,12 +82,8 @@ class ShareLinkedin extends Component {
 
 const ShareLink = ({ url }) => {
   const copyLink = () => {
-    navigator.permissions.query({ name: 'clipboard-write' }).then((result) => {
-      if (result.state == 'granted' || result.state == 'prompt') {
-        navigator.clipboard.writeText(url);
-        alert.success('Copied this article\'s link to clipboard!');
-      }
-    });
+    navigator.clipboard.writeText(url);
+    alert.success("Copied this article's link to clipboard!");
   };
   return (
     <button className={css['copy-link-button']} onClick={copyLink}>

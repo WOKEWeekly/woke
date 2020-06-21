@@ -50,18 +50,14 @@ class Admin extends Component {
 
   /** Copy access link to clipboard */
   copyAccessLink = () => {
-    navigator.permissions.query({ name: 'clipboard-write' }).then((result) => {
-      if (result.state == 'granted' || result.state == 'prompt') {
-        navigator.clipboard.writeText(this.state.accessLink).then(
-          () => {
-            alert.success('Access link copied!');
-          },
-          () => {
-            alert.error('Could not copy access link.');
-          }
-        );
+    navigator.clipboard.writeText(this.state.accessLink).then(
+      () => {
+        alert.success('Access link copied!');
+      },
+      () => {
+        alert.error('Could not copy access link.');
       }
-    });
+    );
   };
 
   showGenerateTokenModal = () => {
