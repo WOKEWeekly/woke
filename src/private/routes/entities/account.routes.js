@@ -3,9 +3,25 @@ const express = require('express');
 const jwt = require('jsonwebtoken');
 const router = express.Router();
 
-const knex = require('../../singleton/knex').getKnex();
 const { renderErrorPage } = require('../../response');
+const knex = require('../../singleton/knex').getKnex();
 const server = require('../../singleton/server').getServer();
+
+/** Registration page */
+router.get('/signup', function (req, res) {
+  return server.render(req, res, '/_auth/signup', {
+    title: 'Sign Up | #WOKEWeekly',
+    backgroundImage: 'bg-signup.jpg',
+    ogUrl: '/signup'
+  });
+});
+
+/** Unsubscribe page */
+router.get('/unsubscribe', function (req, res) {
+  server.render(req, res, '/_auth/unsubscribe', {
+    title: 'Unsubscribe | #WOKEWeekly'
+  });
+});
 
 /** User account page */
 router.get('/account', (req, res) => {

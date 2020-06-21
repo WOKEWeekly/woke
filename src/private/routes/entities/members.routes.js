@@ -3,9 +3,9 @@ const router = express.Router();
 const { zText } = require('zavid-modules');
 
 const { ENTITY, OPERATIONS } = require('../../../constants/strings');
-const knex = require('../../singleton/knex').getKnex();
 const ERROR = require('../../errors');
 const { renderErrorPage } = require('../../response');
+const knex = require('../../singleton/knex').getKnex();
 const server = require('../../singleton/server').getServer();
 
 /** Team page */

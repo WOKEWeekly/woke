@@ -37,7 +37,7 @@ class Links extends Component {
         <Col className={css.footerLinks} lg={9}>
           <a href={'/about'}>About Us</a>
           <a href={'/recruitment'}>Recruitment</a>
-          <a href={'/podcast'}>The #WOKEWeekly Podcast</a>
+          <a href={'/spotify'}>The #WOKEWeekly Podcast</a>
           <a href={'/privacy'}>Privacy Policy</a>
           <a href={'/cookies'}>Cookies</a>
           <a href={'/faq'}>FAQs</a>
