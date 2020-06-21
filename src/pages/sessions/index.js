@@ -166,7 +166,7 @@ class Sessions extends Component {
             {user.clearance >= CLEARANCES.ACTIONS.CRUD_TOPICS ? (
               <AddEntityButton
                 title={'Add Session'}
-                onClick={() => (location.href = '/sessions/add')}
+                onClick={() => (location.href = '/admin/sessions/add')}
               />
             ) : null}
 
@@ -207,7 +207,7 @@ class Session extends PureComponent {
         ? item.description
         : 'No description.';
 
-    const link = `/session/${item.slug}`;
+    const link = `/sessions/${item.slug}`;
 
     if (view === 'grid') {
       return (

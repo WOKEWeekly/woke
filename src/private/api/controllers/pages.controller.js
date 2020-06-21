@@ -1,6 +1,6 @@
 /* eslint-disable jsdoc/require-param */
 const { respondToClient } = require('../../response');
-const knex = require('../knex').getKnex();
+const knex = require('../../singleton/knex').getKnex();
 const ERROR = require('../../errors');
 
 /** Update page */

@@ -3,7 +3,7 @@ const schedule = require('node-schedule');
 
 const slack = require('./slack.js');
 
-const knex = require('../api/knex').getKnex();
+const knex = require('../singleton/knex').getKnex();
 
 const isDev = process.env.NODE_ENV !== 'production';
 

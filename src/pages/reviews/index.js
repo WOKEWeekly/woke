@@ -84,7 +84,7 @@ class ReviewsList extends Component {
             {user.clearance >= CLEARANCES.ACTIONS.CRUD_REVIEWS ? (
               <AddEntityButton
                 title={'Add Review'}
-                onClick={() => (location.href = '/reviews/add')}
+                onClick={() => (location.href = '/admin/reviews/add')}
               />
             ) : null}
           </BottomToolbar>

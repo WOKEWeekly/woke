@@ -24,7 +24,8 @@ const dotenv = require('dotenv').config({
   path: config
 });
 const port = isStageTesting ? 3010 : process.env.PORT || 3000;
-const { setKnex } = require('./private/api/knex');
+const { setKnex } = require('./private/singleton/knex');
+const { setServer } = require('./private/singleton/server');
 
 app.use(bodyParser.json({ limit: `${limits.file}MB` }));
 app.use(cookieParser());
@@ -53,7 +54,8 @@ if (!isStageTesting && !isDevTesting) {
 
 function startClientServer() {
   startServer();
-  require('./private/routes.js')(app, knex, server);
+  setServer(server);
+  require('./private/routes')(app);
   require('./private/cron')();
 }
 
@@ -78,7 +80,7 @@ function startServer(next) {
       // Set database instances
       function (callback) {
         setKnex(knex);
-        require('./private/api/index.js')(app, knex);
+        require('./private/api')(app);
         callback(null);
       }
     ],

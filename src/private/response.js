@@ -9,7 +9,7 @@ const showVerboseLogs = process.argv.includes('--verbose');
  * Defaults to 400.
  * @param {object} [json] - The response body to be sent back to the client.
  */
-exports.respondToClient = (res, err, expectedStatus, json) => {
+(exports.respondToClient = (res, err, expectedStatus, json) => {
   if (err && typeof err === 'object') {
     // If there is an error...
     if (!isStageTesting) {
@@ -20,17 +20,16 @@ exports.respondToClient = (res, err, expectedStatus, json) => {
   } else {
     res.status(expectedStatus).json(json);
   }
-},
-
-/**
- * Display an error page on the web client with a description of the error.
- * @param {object} req - The request information from the client.
- * @param {object} res - The response context of the service
- * @param {Error} err - The object containing information about the error.
- * @param {object} server - The server object.
- */
-exports.renderErrorPage = (req, res, err, server) => {
-  if (err) console.error(err.toString());
-  const message = err ? err.message : '';
-  server.render(req, res, '/_error', { message });
-};
+}),
+  /**
+   * Display an error page on the web client with a description of the error.
+   * @param {object} req - The request information from the client.
+   * @param {object} res - The response context of the service
+   * @param {Error} err - The object containing information about the error.
+   * @param {object} server - The server object.
+   */
+  (exports.renderErrorPage = (req, res, err, server) => {
+    if (err) console.error(err.toString());
+    const message = err ? err.message : '';
+    server.render(req, res, '/_error', { message });
+  });

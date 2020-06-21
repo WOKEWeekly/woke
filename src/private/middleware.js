@@ -5,6 +5,7 @@ const jwt = require('jsonwebtoken');
 
 const ERROR = require('./errors.js');
 const { respondToClient } = require('./response.js');
+const knex = require('./singleton/knex').getKnex();
 
 const isDev = process.env.NODE_ENV !== 'production';
 
@@ -59,17 +60,13 @@ exports.validateReq = (req, res, next) => {
 };
 
 /** Log user activity on each request */
-exports.logUserActivity = (knex) => {
-  return function (req, res, next) {
-    const id = parseInt(req.headers.user);
-    if (isNaN(id)) return next();
+exports.logUserActivity = (req, res, next) => {
+  const id = parseInt(req.headers.user);
+  if (isNaN(id)) return next();
 
-    const query = knex('users')
-      .update('lastActive', new Date())
-      .where('id', id);
-    query.asCallback(function (err) {
-      if (err) console.warn('Could not log user activity.');
-      next();
-    });
-  };
+  const query = knex('users').update('lastActive', new Date()).where('id', id);
+  query.asCallback(function (err) {
+    if (err) console.warn('Could not log user activity.');
+    next();
+  });
 };

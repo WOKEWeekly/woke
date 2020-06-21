@@ -113,7 +113,7 @@ class Review extends PureComponent {
         <ButtonGroup className={css.buttons} style={style()}>
           <Button
             variant={'success'}
-            onClick={() => (location.href = `/reviews/edit/${item.id}`)}>
+            onClick={() => (location.href = `/admin/reviews/edit/${item.id}`)}>
             Edit
           </Button>
           <Button variant={'danger'} onClick={this.showModal}>

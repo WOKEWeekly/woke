@@ -1,6 +1,6 @@
 /* eslint-disable jsdoc/require-param */
 const { respondToClient } = require('../../response');
-const knex = require('../knex').getKnex();
+const knex = require('../../singleton/knex').getKnex();
 const { ENTITY } = require('../../../constants/strings');
 const ERROR = require('../../errors');
 
@@ -63,8 +63,7 @@ exports.deleteSubscriber = (req, res) => {
   const query = knex('subscribers').where('id', id).del();
   query.asCallback(function (err, result) {
     if (err) return respondToClient(res, err);
-    if (result === 0)
-      err = ERROR.INVALID_ENTITY_ID(ENTITY.SUBSCRIBER, id);
+    if (result === 0) err = ERROR.INVALID_ENTITY_ID(ENTITY.SUBSCRIBER, id);
     respondToClient(res, err, 204);
   });
 };

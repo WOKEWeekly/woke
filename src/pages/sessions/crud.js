@@ -86,7 +86,7 @@ class SessionCrud extends Component {
           type: 'success',
           message: `You've successfully edited the details of ${title}.`
         });
-        location.href = `/session/${slug}`;
+        location.href = `/sessions/${slug}`;
       }
     });
   };

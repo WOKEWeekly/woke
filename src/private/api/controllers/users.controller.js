@@ -9,7 +9,7 @@ const { ENTITY } = require('../../../constants/strings');
 const emails = require('../../emails');
 const ERROR = require('../../errors');
 const { respondToClient } = require('../../response');
-const knex = require('../knex').getKnex();
+const knex = require('../../singleton/knex').getKnex();
 
 const emailsOn =
   process.env.NODE_ENV === 'production' || process.argv.includes('--emails');
@@ -278,8 +278,7 @@ exports.deleteUser = (req, res) => {
   const query = knex('users').where('id', id).del();
   query.asCallback(function (err, result) {
     if (err) return respondToClient(res, err);
-    if (result === 0)
-      err = ERROR.INVALID_ENTITY_ID(ENTITY.USER, id);
+    if (result === 0) err = ERROR.INVALID_ENTITY_ID(ENTITY.USER, id);
     respondToClient(res, err, 204);
   });
 };
@@ -427,8 +426,7 @@ exports.resetPassword = (req, res) => {
         const query = knex('users').update({ password: hash }).where('id', id);
         query.asCallback(function (err, result) {
           if (err) return callback(err);
-          if (result === 0)
-            err = ERROR.INVALID_ENTITY_ID(ENTITY.USER, id);
+          if (result === 0) err = ERROR.INVALID_ENTITY_ID(ENTITY.USER, id);
           callback(err);
         });
       }
