@@ -2,13 +2,13 @@ const express = require('express');
 const router = express.Router();
 
 const { ENTITY, OPERATIONS } = require('../../constants/strings');
-const knex = require('../singleton/knex').getKnex();
 const ERROR = require('../errors');
 const { renderErrorPage } = require('../response');
+const knex = require('../singleton/knex').getKnex();
 const server = require('../singleton/server').getServer();
 
 /** Topic Bank page */
-router.get('/', (req, res) => {
+router.get('/topics', (req, res) => {
   const accessToken = req.query.access;
   knex
     .select()
@@ -30,7 +30,7 @@ router.get('/', (req, res) => {
 });
 
 /** Add Topic page */
-router.get('/add', (req, res) => {
+router.get('/admin/topics/add', (req, res) => {
   return server.render(req, res, '/topics/crud', {
     title: 'Add New Topic',
     operation: OPERATIONS.CREATE,
@@ -39,7 +39,7 @@ router.get('/add', (req, res) => {
 });
 
 /** Edit Topic page */
-router.get('/edit/:id', (req, res) => {
+router.get('/admin/topics/edit/:id', (req, res) => {
   const id = req.params.id;
   const query = knex.select().from('topics').where('id', id);
   query.asCallback(function (err, [topic] = []) {

@@ -3,13 +3,13 @@ const router = express.Router();
 const { zText } = require('zavid-modules');
 
 const { ENTITY, OPERATIONS } = require('../../constants/strings');
-const knex = require('../singleton/knex').getKnex();
 const ERROR = require('../errors');
 const { renderErrorPage } = require('../response');
+const knex = require('../singleton/knex').getKnex();
 const server = require('../singleton/server').getServer();
 
 /** Sessions page */
-router.get('/', (req, res) => {
+router.get('/sessions', (req, res) => {
   return server.render(req, res, '/sessions', {
     title: 'Sessions | #WOKEWeekly',
     description: 'Where the magic happens...',
@@ -20,32 +20,32 @@ router.get('/', (req, res) => {
 });
 
 /** Individual session page */
-// router.get('/:slug)', (req, res)=>{
-//   const { slug } = req.params;
-//   const query = knex.select().from('sessions').where('slug', slug);
-//   query.asCallback(function (err, [session] = []) {
-//     if (err) return renderErrorPage(req, res, err, server);
-//     if (!session)
-//       return renderErrorPage(
-//         req,
-//         res,
-//         ERROR.NONEXISTENT_ENTITY(ENTITY.SESSION),
-//         server
-//       );
+router.get('/sessions/:slug', (req, res)=>{
+  const { slug } = req.params;
+  const query = knex.select().from('sessions').where('slug', slug);
+  query.asCallback(function (err, [session] = []) {
+    if (err) return renderErrorPage(req, res, err, server);
+    if (!session)
+      return renderErrorPage(
+        req,
+        res,
+        ERROR.NONEXISTENT_ENTITY(ENTITY.SESSION),
+        server
+      );
 
-//     return server.render(req, res, '/sessions/single', {
-//       title: `${session.title} | #WOKEWeekly`,
-//       description: zText.extractExcerpt(session.description),
-//       ogUrl: `/sessions/${session.slug}`,
-//       cardImage: session.image,
-//       backgroundImage: 'bg-sessions.jpg',
-//       session
-//     });
-//   });
-// });
+    return server.render(req, res, '/sessions/single', {
+      title: `${session.title} | #WOKEWeekly`,
+      description: zText.extractExcerpt(session.description),
+      ogUrl: `/sessions/${session.slug}`,
+      cardImage: session.image,
+      backgroundImage: 'bg-sessions.jpg',
+      session
+    });
+  });
+});
 
 /** Add Session page */
-router.get('/add', (req, res) => {
+router.get('/admin/sessions/add', (req, res) => {
   return server.render(req, res, '/sessions/crud', {
     title: 'Add New Session',
     operation: OPERATIONS.CREATE,
@@ -54,7 +54,7 @@ router.get('/add', (req, res) => {
 });
 
 /** Edit Session page */
-router.get('/edit/:id', (req, res) => {
+router.get('/admin/sessions/edit/:id', (req, res) => {
   const { id } = req.params;
   const query = knex.select().from('sessions').where('id', id);
   query.asCallback(function (err, [session] = []) {

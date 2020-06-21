@@ -116,7 +116,7 @@ class SessionPage extends Component {
             <React.Fragment>
               <EditEntityButton
                 title={'Edit Session'}
-                onClick={() => (location.href = `/sessions/edit/${session.id}`)}
+                onClick={() => (location.href = `/admin/sessions/edit/${session.id}`)}
               />
 
               <DeleteEntityButton

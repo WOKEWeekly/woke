@@ -51,7 +51,7 @@ export default class UpcomingSession extends Component {
     const heading = session.upcoming
       ? 'Most Upcoming Session'
       : 'Latest Session';
-    const link = `/session/${session.slug}` || '/';
+    const link = `/sessions/${session.slug}` || '/';
     return (
       <div className={css.upcomingSession}>
         <LazyLoader

@@ -316,7 +316,7 @@ class TopicBank extends Component {
             {hasPrivileges ? (
               <AddEntityButton
                 title={'Add Topic'}
-                onClick={() => (location.href = '/topics/add')}
+                onClick={() => (location.href = '/admin/topics/add')}
               />
             ) : null}
 
@@ -385,7 +385,7 @@ class _Topic extends PureComponent {
         <ButtonGroup className={css.buttons}>
           <Button
             variant={'success'}
-            onClick={() => (location.href = `/topics/edit/${item.id}`)}>
+            onClick={() => (location.href = `/admin/topics/edit/${item.id}`)}>
             Edit
           </Button>
           <Button variant={'danger'} onClick={this.showModal}>

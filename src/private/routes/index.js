@@ -5,7 +5,6 @@ const { zText } = require('zavid-modules');
 const path = require('path');
 
 const accountRoutes = require('./account.routes');
-const adminRoutes = require('./admin.routes/admin.routes');
 const articlesRoutes = require('./articles.routes');
 const candidateRoutes = require('./candidates.routes');
 const documentsRoutes = require('./documents.routes');
@@ -33,20 +32,11 @@ module.exports = function (app) {
     articlesRoutes,
     candidateRoutes,
     documentsRoutes,
-    membersRoutes
+    membersRoutes,
+    reviewsRoutes,
+    sessionsRoutes,
+    topicsRoutes
   ]);
-
-  // Admin Routes
-  app.use('/admin', adminRoutes);
-
-  // Reviews Routes
-  app.use('/reviews', reviewsRoutes);
-
-  // Sessions Routes
-  app.use('/sessions', sessionsRoutes);
-
-  // Topics Routes
-  app.use('/topics', topicsRoutes);
 
   /** Home page */
   app.get(['/', '/home'], function (req, res) {
@@ -58,28 +48,9 @@ module.exports = function (app) {
     });
   });
 
-  // /** Individual session page */
-  app.get('/session/:slug', function (req, res) {
-    const { slug } = req.params;
-    const query = knex.select().from('sessions').where('slug', slug);
-    query.asCallback(function (err, [session] = []) {
-      if (err) return renderErrorPage(req, res, err, server);
-      if (!session)
-        return renderErrorPage(
-          req,
-          res,
-          ERROR.NONEXISTENT_ENTITY(ENTITY.SESSION),
-          server
-        );
-
-      return server.render(req, res, '/sessions/single', {
-        title: `${session.title} | #WOKEWeekly`,
-        description: zText.extractExcerpt(session.description),
-        ogUrl: `/sessions/${session.slug}`,
-        cardImage: session.image,
-        backgroundImage: 'bg-sessions.jpg',
-        session
-      });
+  app.get('/admin', (req, res) => {
+    server.render(req, res, '/_auth/admin', {
+      title: 'Admin Tools | #WOKEWeekly'
     });
   });
 
@@ -275,7 +246,7 @@ module.exports = function (app) {
           query.asCallback(function (err, result) {
             if (err) return callback(err);
             result.forEach((session) =>
-              routes.push(`/session/${session.slug}`)
+              routes.push(`/sessions/${session.slug}`)
             );
             callback(null);
           });
