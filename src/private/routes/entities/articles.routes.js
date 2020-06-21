@@ -1,11 +1,11 @@
 const express = require('express');
 const router = express.Router();
 
-const { ENTITY, OPERATIONS } = require('../../constants/strings');
-const knex = require('../singleton/knex').getKnex();
-const ERROR = require('../errors');
-const { renderErrorPage } = require('../response');
-const server = require('../singleton/server').getServer();
+const { ENTITY, OPERATIONS } = require('../../../constants/strings');
+const knex = require('../../singleton/knex').getKnex();
+const ERROR = require('../../errors');
+const { renderErrorPage } = require('../../response');
+const server = require('../../singleton/server').getServer();
 
 const columns = [
   'articles.*',

@@ -2,12 +2,12 @@ const express = require('express');
 const request = require('request');
 const router = express.Router();
 
-const { cloudinary } = require('../../constants/settings.js');
-const { ENTITY, OPERATIONS } = require('../../constants/strings');
-const ERROR = require('../errors');
-const { renderErrorPage } = require('../response');
-const knex = require('../singleton/knex').getKnex();
-const server = require('../singleton/server').getServer();
+const { cloudinary } = require('../../../constants/settings.js');
+const { ENTITY, OPERATIONS } = require('../../../constants/strings');
+const ERROR = require('../../errors');
+const { renderErrorPage } = require('../../response');
+const knex = require('../../singleton/knex').getKnex();
+const server = require('../../singleton/server').getServer();
 
 const env = process.env.NODE_ENV !== 'production' ? 'dev' : 'prod';
 

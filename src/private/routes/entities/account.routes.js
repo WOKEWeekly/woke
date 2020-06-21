@@ -3,9 +3,9 @@ const express = require('express');
 const jwt = require('jsonwebtoken');
 const router = express.Router();
 
-const knex = require('../singleton/knex').getKnex();
-const { renderErrorPage } = require('../response');
-const server = require('../singleton/server').getServer();
+const knex = require('../../singleton/knex').getKnex();
+const { renderErrorPage } = require('../../response');
+const server = require('../../singleton/server').getServer();
 
 /** User account page */
 router.get('/account', (req, res) => {

@@ -2,11 +2,11 @@ const express = require('express');
 const router = express.Router();
 const { zText } = require('zavid-modules');
 
-const { ENTITY, OPERATIONS } = require('../../constants/strings');
-const ERROR = require('../errors');
-const { renderErrorPage } = require('../response');
-const knex = require('../singleton/knex').getKnex();
-const server = require('../singleton/server').getServer();
+const { ENTITY, OPERATIONS } = require('../../../constants/strings');
+const ERROR = require('../../errors');
+const { renderErrorPage } = require('../../response');
+const knex = require('../../singleton/knex').getKnex();
+const server = require('../../singleton/server').getServer();
 
 /** Sessions page */
 router.get('/sessions', (req, res) => {

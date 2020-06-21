@@ -1,17 +1,17 @@
 const async = require('async');
 const sm = require('sitemap');
-const { zText } = require('zavid-modules');
 
 const path = require('path');
 
-const accountRoutes = require('./account.routes');
-const articlesRoutes = require('./articles.routes');
-const candidateRoutes = require('./candidates.routes');
-const documentsRoutes = require('./documents.routes');
-const membersRoutes = require('./members.routes');
-const reviewsRoutes = require('./reviews.routes');
-const sessionsRoutes = require('./sessions.routes');
-const topicsRoutes = require('./topics.routes');
+const accountRoutes = require('./entities/account.routes');
+const articlesRoutes = require('./entities/articles.routes');
+const candidateRoutes = require('./entities/candidates.routes');
+const documentsRoutes = require('./entities/documents.routes');
+const membersRoutes = require('./entities/members.routes');
+const pagesRoutes = require('./entities/pages.routes');
+const reviewsRoutes = require('./entities/reviews.routes');
+const sessionsRoutes = require('./entities/sessions.routes');
+const topicsRoutes = require('./entities/topics.routes');
 
 const {
   accounts,
@@ -19,20 +19,18 @@ const {
   forms,
   siteDescription
 } = require('../../constants/settings.js');
-const { ENTITY, PAGE } = require('../../constants/strings.js');
-const ERROR = require('../errors.js');
-const { renderErrorPage } = require('../response.js');
 const knex = require('../singleton/knex').getKnex();
 const server = require('../singleton/server').getServer();
 
 module.exports = function (app) {
-  // Account Routes
+  
   app.use('/', [
     accountRoutes,
     articlesRoutes,
     candidateRoutes,
     documentsRoutes,
     membersRoutes,
+    pagesRoutes,
     reviewsRoutes,
     sessionsRoutes,
     topicsRoutes
@@ -51,36 +49,6 @@ module.exports = function (app) {
   app.get('/admin', (req, res) => {
     server.render(req, res, '/_auth/admin', {
       title: 'Admin Tools | #WOKEWeekly'
-    });
-  });
-
-  app.get('/author/:slug', function (req, res) {
-    const { slug } = req.params;
-
-    const query = knex.select().from('members').where({
-      level: 'Guest',
-      slug: slug,
-      verified: 1
-    });
-    query.asCallback(function (err, [member] = []) {
-      if (err) return renderErrorPage(req, res, err, server);
-      if (!member)
-        return renderErrorPage(
-          req,
-          res,
-          ERROR.NONEXISTENT_ENTITY(ENTITY.MEMBER),
-          server
-        );
-
-      return server.render(req, res, '/team/single', {
-        title: `${member.firstname} ${member.lastname} | #WOKEWeekly`,
-        description: zText.extractExcerpt(member.description),
-        ogUrl: `/author/${member.slug}`,
-        cardImage: member.image,
-        alt: `${member.firstname} ${member.lastname}`,
-        backgroundImage: 'bg-team.jpg',
-        member
-      });
     });
   });
 
@@ -105,30 +73,6 @@ module.exports = function (app) {
     server.render(req, res, '/_auth/unsubscribe', {
       title: 'Unsubscribe | #WOKEWeekly'
     });
-  });
-
-  app.get('/:page', function (req, res, next) {
-    const name = req.params.page;
-    knex
-      .select()
-      .from('pages')
-      .asCallback(function (err, pages) {
-        const page = pages.find((element) => element.name === name);
-        if (!page) return next();
-        return renderPage(req, res, page, PAGE.OPERATIONS.READ);
-      });
-  });
-
-  app.get('/:page/edit', function (req, res, next) {
-    const name = req.params.page;
-    knex
-      .select()
-      .from('pages')
-      .asCallback(function (err, pages) {
-        const page = pages.find((element) => element.name === name);
-        if (!page) return next();
-        return renderPage(req, res, page, PAGE.OPERATIONS.UPDATE);
-      });
   });
 
   /***************************************************************
@@ -302,62 +246,4 @@ module.exports = function (app) {
       }
     );
   });
-};
-
-/**
- * Dynamically render a page from the database.
- * @param {string} pageName - The name of the page.
- * @param {string} [operation] - Either 'READ' or 'UPDATE'. Defaults to 'READ'.
- */
-const renderPage = (req, res, page, operation) => {
-  const {
-    name,
-    title,
-    kind,
-    includeDomain,
-    text,
-    excerpt,
-    cardImage,
-    bgImage,
-    coverImage,
-    coverImageLogo,
-    coverImageAlt,
-    theme,
-    editTitle,
-    editPlaceholderText,
-    lastModified
-  } = page;
-
-  let uri = '';
-  let information = {};
-
-  if (operation === PAGE.OPERATIONS.READ) {
-    uri = `/pages/${kind.toLowerCase()}`;
-    information = {
-      pageName: name,
-      pageText: text,
-      title: includeDomain ? `${title} | #WOKEWeekly` : title,
-      description: excerpt || zText.extractExcerpt(text),
-      ogUrl: `/${name}`,
-      cardImage: cardImage || 'public/bg/card-home.jpg',
-      backgroundImage: bgImage || 'bg-app.jpg',
-      coverImage: coverImage,
-      imageLogo: coverImageLogo,
-      imageAlt: coverImageAlt,
-      theme: theme || PAGE.THEMES.DEFAULT,
-      lastModified
-    };
-  } else if (operation === PAGE.OPERATIONS.UPDATE) {
-    uri = `/pages/edit`;
-    information = {
-      pageName: name,
-      pageText: text,
-      title: editTitle,
-      backgroundImage: bgImage || 'bg-app.jpg',
-      placeholderText: editPlaceholderText,
-      theme: theme || PAGE.THEMES.DEFAULT
-    };
-  }
-
-  return server.render(req, res, uri, information);
 };
