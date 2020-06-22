@@ -1,11 +1,11 @@
 /* eslint-disable jsdoc/require-param */
 const async = require('async');
 
-const { respondToClient } = require('../../response');
-const knex = require('../../singleton/knex').getKnex();
-const filer = require('../../filer');
 const { DIRECTORY, ENTITY } = require('../../../constants/strings');
 const ERROR = require('../../errors');
+const filer = require('../../filer');
+const { respondToClient } = require('../../response');
+const knex = require('../../singleton/knex').getKnex();
 
 /** Retrieve all reviews */
 exports.getAllReviews = (req, res) => {
@@ -33,6 +33,7 @@ exports.getFeaturedReviews = (req, res) => {
     .from('reviews')
     .where('rating', 5)
     .whereNot(knex.raw('CHAR_LENGTH(image)'), 0)
+    .orderByRaw('RAND()')
     .limit(3);
   query.asCallback(function (err, reviews) {
     respondToClient(res, err, 200, reviews);

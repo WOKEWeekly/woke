@@ -1,39 +1,32 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
 
-import { Title , ReadMore } from 'components/text.js';
+import { Title, ReadMore } from 'components/text.js';
 import { Fader } from 'components/transitioner.js';
 import request from 'constants/request.js';
 import Review from 'pages/reviews/unit.js';
 import css from 'styles/pages/Home.module.scss';
 
-export default class ReviewsPreview extends Component {
-  constructor() {
-    super();
-    this.state = {
-      reviews: [],
-      limit: 3
-    };
-  }
+const limit = 3;
 
-  componentDidMount() {
-    this.getReviews();
-  }
+export default () => {
+  const [reviews, setReviews] = useState([]);
+  const [isLoaded, setLoaded] = useState(false);
 
-  getReviews = () => {
+  useEffect(() => {
     request({
       url: `/api/v1/reviews/featured`,
       method: 'GET',
       headers: { Authorization: process.env.AUTH_KEY },
       onSuccess: (reviews) => {
-        this.setState({ reviews });
+        setReviews(reviews);
+        setLoaded(true);
       }
     });
-  };
+  }, [isLoaded]);
 
-  render() {
-    const { reviews, limit } = this.state;
-    if (reviews.length === 0) return null;
+  if (!reviews.length) return null;
 
+  const ReviewsList = () => {
     const items = [];
 
     for (const [index, item] of reviews.entries()) {
@@ -48,47 +41,39 @@ export default class ReviewsPreview extends Component {
       );
     }
 
-    const SeeMoreReviews = () => {
-      if (reviews.length < limit) return null;
+    return <div className={css.reviewsList}>{items}</div>;
+  };
 
-      return (
-        <div className={css.moreReviews}>
-          <ReadMore text={'See more reviews'} link={'/reviews'} />
-        </div>
-      );
-    };
+  const SeeMoreReviews = () => {
+    if (reviews.length < limit) return null;
 
     return (
-      <div className={css.reviewsPreview}>
-        <ReviewsHeading />
-        <div className={css.reviewsList}>{items}</div>
-        <SeeMoreReviews />
+      <div className={css.moreReviews}>
+        <ReadMore text={'See more reviews'} link={'/reviews'} />
       </div>
     );
-  }
-}
+  };
 
-class ReviewsHeading extends Component {
-  constructor() {
-    super();
-    this.state = { isLoaded: false };
-  }
+  return (
+    <div className={css.reviewsPreview}>
+      <ReviewsHeading />
+      <ReviewsList />
+      <SeeMoreReviews />
+    </div>
+  );
+};
 
-  componentDidMount() {
-    this.setState({ isLoaded: true });
-  }
+const ReviewsHeading = () => {
+  const [isLoaded, setLoaded] = useState(false);
+  useEffect(() => setLoaded(true), [isLoaded]);
 
-  render() {
-    const { isLoaded } = this.state;
-
-    return (
-      <Fader
-        determinant={isLoaded}
-        duration={1500}
-        delay={1000}
-        className={css.reviewsPreview}>
-        <Title className={css.heading}>What are people saying about us?</Title>
-      </Fader>
-    );
-  }
-}
+  return (
+    <Fader
+      determinant={isLoaded}
+      duration={1500}
+      delay={1000}
+      className={css.reviewsPreview}>
+      <Title className={css.heading}>What are people saying about us?</Title>
+    </Fader>
+  );
+};
