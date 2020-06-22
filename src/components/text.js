@@ -94,18 +94,15 @@ const IParagraph = ({
   );
 };
 
-export class QuoteWrapper extends Component {
-  render() {
-    return (
-      <div className={css.quoteWrapper}>
-        {/* <div><Icon name={'quote-left'} className={css.quotes} /></div> */}
-        <div className={css.quoteLeft}>“</div>
-        {this.props.children}
-        <div className={css.quoteRight}>”</div>
-      </div>
-    );
-  }
-}
+export const QuoteWrapper = ({children}) => {
+  return (
+    <div className={css['quote-wrapper']}>
+      <span className={css['quote-left']}>“</span>
+      <span className={css['quote-text']}>{children}</span>
+      <span className={css['quote-right']}>”</span>
+    </div>
+  );
+};
 
 export class Divider extends Component {
   render() {

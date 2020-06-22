@@ -1,4 +1,4 @@
-@import "../Variables";
+@import '../Variables';
 
 .title {
   color: white;
@@ -16,20 +16,23 @@
   .heading {
     font-family: $title-font;
     font-size: 1.8em;
-    padding: .4em 0;}
+    padding: 0.4em 0;
+  }
   .subheading {
     font-family: $title-font;
     font-size: 1.2em;
-    padding: .2em 0;}
+    padding: 0.2em 0;
+  }
   .body {
     line-height: 1.7;
-    margin-bottom: 2rem; }
+    margin-bottom: 2rem;
+  }
   .floatImage {
     margin: 1.5em 0;
     width: 100%;
     img {
       border-radius: 50%;
-      border: 2px inset rgba(255,255,255,.8);
+      border: 2px inset rgba(255, 255, 255, 0.8);
       width: 50%;
       float: right;
       margin: 0 0 1em 1em;
@@ -37,7 +40,8 @@
       @media (max-width: $break-md) {
         all: initial;
         border-radius: 30px;
-        width: 100%; }
+        width: 100%;
+      }
     }
   }
   .fullImage {
@@ -52,35 +56,43 @@
   background-color: white;
   overflow: hidden;
 }
-.quoteWrapper {
-  display: grid;
-  grid-template-columns: auto 1fr auto;
+
+.quote-wrapper {
   margin-top: 1em;
-  .quotes {
+  position: relative;
+
+  %quotes {
     @include font-scaler(6);
     color: white;
+    display: inline-block;
     font-family: 'Yeseva One', cursive;
-    line-height: 0; }
-  .quoteLeft {
-    @extend .quotes;
-    align-self: flex-start;
-    padding-top: .5em;
-    padding-right: 8px; }
-  .quoteRight {
-    @extend .quotes;
-    align-self: end;
-    padding-left: 8px;
-    @media (max-width: $break-md) { padding-bottom: .35em; }
+    line-height: 0;
+  }
+
+  .quote-left {
+    @extend %quotes;
+    float: left;
+    margin-top: 0.45em;
+    padding-right: 0.1em;
+  }
+
+  .quote-right {
+    @extend %quotes;
+    float: right;
+    padding-left: 0.1em;
   }
 }
+
 .readmore {
   @include font-scaler(1.1);
   color: skyblue;
   cursor: pointer;
   display: block;
   font-family: $body-font;
-  margin-top: .5em;
-  &:hover { text-decoration: underline; }
+  margin-top: 0.5em;
+  &:hover {
+    text-decoration: underline;
+  }
   .linkIcon {
     @include font-scaler(1.1);
     color: skyblue;
@@ -92,9 +104,13 @@
   cursor: pointer;
   display: block;
   font-family: $body-font;
-  &:hover { text-decoration: underline; }
+  &:hover {
+    text-decoration: underline;
+  }
 }
 
 .noUnderline {
-  &:hover { text-decoration: none;}
+  &:hover {
+    text-decoration: none;
+  }
 }

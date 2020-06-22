@@ -158,14 +158,12 @@ class Review extends PureComponent {
             <Subtitle className={css.subtitle}>{item.position}</Subtitle>
             <Rator rating={item.rating} changeable={false} style={ratorStyle} />
             <QuoteWrapper>
-              <div>
                 <Paragraph className={css.paragraph}>
                   {showFullText
                     ? item.description
                     : zText.truncateText(item.description, limit)}
                 </Paragraph>
                 <ReadMore />
-              </div>
             </QuoteWrapper>
           </div>
           <AdminControls />
