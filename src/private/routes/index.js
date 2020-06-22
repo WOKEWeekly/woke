@@ -7,9 +7,9 @@ const pagesRoutes = require('./entities/pages.routes');
 const reviewsRoutes = require('./entities/reviews.routes');
 const sessionsRoutes = require('./entities/sessions.routes');
 const topicsRoutes = require('./entities/topics.routes');
-const externalLinks = require('./externals');
-const externalForms = require('./forms');
-const seoResources = require('./seo');
+const externalForms = require('./misc/forms');
+const externalLinks = require('./misc/links');
+const seoResources = require('./misc/seo');
 
 const { siteDescription } = require('../../constants/settings.js');
 const server = require('../singleton/server').getServer();

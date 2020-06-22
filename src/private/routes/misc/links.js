@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-const { accounts } = require('../../constants/settings.js');
+const { accounts } = require('../../../constants/settings.js');
 
 /** Link to Spotify */
 router.get('/spotify', function (req, res) {

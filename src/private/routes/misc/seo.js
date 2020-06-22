@@ -5,8 +5,8 @@ const sm = require('sitemap');
 
 const path = require('path');
 
-const { domain } = require('../../constants/settings.js');
-const knex = require('../singleton/knex').getKnex();
+const { domain } = require('../../../constants/settings.js');
+const knex = require('../../singleton/knex').getKnex();
 
 /** Robots.txt page */
 router.get('/robots.txt', (req, res) =>
