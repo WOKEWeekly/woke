@@ -34,7 +34,7 @@ class Links extends Component {
   render() {
     return (
       <React.Fragment>
-        <Col className={css.footerLinks} lg={9}>
+        <Col className={css.footerLinks} md={6} lg={9}>
           <a href={'/about'}>About Us</a>
           <a href={'/recruitment'}>Recruitment</a>
           <a href={'/spotify'}>The #WOKEWeekly Podcast</a>
@@ -44,8 +44,8 @@ class Links extends Component {
           <a href={'/donate'}>Donate</a>
           <a href={`mailto: ${emails.enquiries}`}>Contact Us</a>
         </Col>
-        <Col className={css.author} lg={3}>
-          Powered by #WOKEWeekly&reg;
+        <Col className={css.author} md={6} lg={3}>
+          &copy; 2020 #WOKEWeekly. All rights reserved.
         </Col>
       </React.Fragment>
     );

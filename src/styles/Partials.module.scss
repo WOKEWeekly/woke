@@ -137,7 +137,7 @@
     display: flex;
     width: 100%;
     font-size: 1em;
-    @media (max-width: $break-sm) { display: grid; }
+    @media (max-width: $break-lg) { display: grid; }
     a {
       color: white;
       margin: 0 .5em; }
