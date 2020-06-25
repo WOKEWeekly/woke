@@ -1,0 +1,28 @@
+@import '../Variables';
+
+.heading {
+  @include font-scaler(1.5);
+  border-bottom: 1px solid #ccc;
+  border-top: 1px solid #ccc;
+  margin: 0.5em 0;
+  padding: 0.5em 0;
+  text-align: center;
+}
+
+.admin-rator {
+  @include font-scaler(0.75);
+  flex-wrap: wrap;
+  line-height: 2;
+  @media (max-width: $break-sm) {
+    font-size: 0.8em;
+  }
+}
+
+.review-image-mobile {
+  @media (max-width: $break-md) {
+    border-radius: 15px;
+    margin-bottom: 1em;
+    overflow: hidden;
+    width: 50%;
+  }
+}

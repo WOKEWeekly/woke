@@ -17,6 +17,13 @@ router.get('/reviews', (req, res) => {
   });
 });
 
+/** Reviews Page */
+router.get('/admin/reviews', (req, res) => {
+  return server.render(req, res, '/reviews/admin', {
+    title: 'Reviews Admin'
+  });
+});
+
 /** Add Review page */
 router.get('/admin/reviews/add', (req, res) => {
   return server.render(req, res, '/reviews/crud', {

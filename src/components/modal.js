@@ -1,13 +1,9 @@
-import React, { Component } from 'react';
+import React, { Component, useEffect, useState } from 'react';
 import { Col, Modal as DefaultModal } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { zHandlers } from 'zavid-modules';
 
-import {
-  SubmitButton,
-  CancelButton,
-  DeleteButton
-} from 'components/button.js';
+import { SubmitButton, CancelButton, DeleteButton } from 'components/button.js';
 import { Group, Label, Select, UsernameInput } from 'components/form';
 import { SocialIcon } from 'components/icon.js';
 import { Paragraph } from 'components/text.js';
@@ -15,39 +11,60 @@ import { socialPlatforms } from 'constants/settings';
 import css from 'styles/components/Modal.module.scss';
 
 // TODO: Clean up modals
-export class Modal extends Component {
-  render() {
-    const { visible, header, body, footer, onlyBody } = this.props;
+export const Modal = (props) => {
+  const { visible, header, body, footer, onlyBody} = props;
 
-    const modalHeader = (
+  const Header = () => {
+    if (!header) return null;
+
+    return (
       <DefaultModal.Header className={css.modal_header}>
         {header}
       </DefaultModal.Header>
     );
+  };
 
-    const modalBody = (
+  const Body = () => {
+    return (
       <DefaultModal.Body
         className={css.modal_body}
         style={{ padding: onlyBody ? '1rem' : '0 1rem' }}>
         {body}
       </DefaultModal.Body>
     );
+  };
 
-    const modalFooter = (
+  const Footer = () => {
+    if (!footer) return null;
+
+    return (
       <DefaultModal.Footer className={css.modal_footer}>
         {footer}
       </DefaultModal.Footer>
     );
+  };
 
-    return (
-      <DefaultModal show={visible} onHide={null} centered {...this.props}>
-        {header ? modalHeader : null}
-        {modalBody}
-        {footer ? modalFooter : null}
-      </DefaultModal>
-    );
-  }
-}
+  return (
+    <DefaultModal show={visible} onHide={null} centered {...props}>
+      <Header />
+      <Body />
+      <Footer />
+    </DefaultModal>
+  );
+};
+
+export const useModal = () => {
+  const [isVisible, setVisibility] = useState(false);
+
+  const toggle = () => {
+    setVisibility(!isVisible);
+  };
+
+  return {
+    isVisible,
+    toggle
+  };
+};
 
 export class ConfirmModal extends Component {
   render() {

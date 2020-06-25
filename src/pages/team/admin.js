@@ -4,10 +4,10 @@ import { zDate } from 'zavid-modules';
 
 import { alert } from 'components/alert.js';
 import { AddEntityButton } from 'components/button.js';
-import { Icon, MaleSymbol, FemaleSymbol } from 'components/icon.js';
-import { Shader, Default, Mobile } from 'components/layout.js';
-import { Loader, Empty } from 'components/loader.js';
+import { FemaleSymbol, Icon, MaleSymbol } from 'components/icon.js';
+import { Default, Mobile, Shader } from 'components/layout.js';
 import { ConfirmModal } from 'components/modal.js';
+import Tabler from 'components/tabler';
 import { Title } from 'components/text.js';
 import { BottomToolbar } from 'components/toolbar.js';
 import { Fader } from 'components/transitioner.js';
@@ -16,7 +16,7 @@ import { countriesToString } from 'constants/countries.js';
 import request from 'constants/request.js';
 import css from 'styles/pages/Members.module.scss';
 
-class Team extends Component {
+class MemberAdmin extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -50,14 +50,9 @@ class Team extends Component {
   };
 
   render() {
-    const { isLoaded, members } = this.state;
+    const { members } = this.state;
 
     const MemberCollection = () => {
-      if (!isLoaded) {
-        return <Loader />;
-      } else if (members.length === 0) {
-        return <Empty message={'No members found.'} />;
-      }
 
       const items = [];
 
@@ -67,47 +62,27 @@ class Team extends Component {
         );
       }
 
-      const MemberTable = () => {
-        const headerRow = (
-          <div className={css.header}>
-            <span>#</span>
-            <span>Name</span>
-            <span>
-              <Icon name={'venus-mars'} />
-            </span>
-            <span>Level</span>
-            <span>Role</span>
-            <span>Ethnicity</span>
-            <span>Birthday</span>
-            <span />
-            <span />
-            <span />
-          </div>
-        );
-
-        return (
-          <div className={css.grid}>
-            {headerRow}
-            {items}
-          </div>
-        );
-      };
-
-      const MemberList = () => {
-        return <div className={css.list}>{items}</div>;
-      };
-
       return (
         <React.Fragment>
           <Title className={css.heading}>
             List of #WOKEWeekly Team Members
           </Title>
-          <Default>
-            <MemberTable />
-          </Default>
-          <Mobile>
-            <MemberList />
-          </Mobile>
+          <Tabler
+            columns={[
+              '#',
+              'Name',
+              // eslint-disable-next-line react/jsx-key
+              <Icon name={'venus-mars'} />,
+              'Level',
+              'Role',
+              'Ethnicity',
+              'Birthday'
+            ]}
+            emptyMessage={'No members found.'}
+            items={items}
+            tableCss={css.grid}
+            listCss={css.list}
+          />
         </React.Fragment>
       );
     };
@@ -231,7 +206,9 @@ class IMember extends PureComponent {
             <span>
               <Icon name={'user'} />
             </span>
-            <span className={css.name}>{item.fullname} <GenderSymbol /></span>
+            <span className={css.name}>
+              {item.fullname} <GenderSymbol />
+            </span>
           </div>
           <div>
             <span>
@@ -289,4 +266,4 @@ const mapStateToProps = (state) => ({
 });
 
 const Member = connect(mapStateToProps)(IMember);
-export default connect(mapStateToProps)(Team);
+export default connect(mapStateToProps)(MemberAdmin);
