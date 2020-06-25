@@ -151,7 +151,7 @@ const Template = ({
   transitionStyles
 }) => {
   return (
-    <Transition in={determinant}>
+    <Transition in={determinant} timeout={{}}>
       {(state) => {
         if (notDiv) {
           return React.cloneElement(children, {
