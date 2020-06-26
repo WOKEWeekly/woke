@@ -100,7 +100,7 @@ const ReviewsAdmin = ({ user }) => {
   const ReviewCollection = () => {
     return (
       <>
-        <Title className={css.heading}>List of Reviews</Title>
+        <Title className={css['review-table-heading']}>List of Reviews</Title>
         <Tabler
           itemsLoaded={isLoaded}
           emptyMessage={'No reviews found.'}

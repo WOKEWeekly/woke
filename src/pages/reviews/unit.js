@@ -5,6 +5,7 @@ import LazyLoader from 'react-visibility-sensor';
 import { zText } from 'zavid-modules';
 
 import { setAlert } from 'components/alert.js';
+import { CloudinaryImage } from 'components/image.js';
 import { isSmallDevice, Default } from 'components/layout.js';
 import { ConfirmModal } from 'components/modal.js';
 import Rator from 'components/rator.js';
@@ -18,8 +19,7 @@ import {
 } from 'components/text.js';
 import { Slider } from 'components/transitioner.js';
 import request from 'constants/request.js';
-import { cloudinary } from 'constants/settings.js';
-import css from 'styles/pages/Home.module.scss';
+import css from 'styles/pages/Reviews.module.scss';
 
 const Review = memo(({ fullText, item: review, user, idx }) => {
   const [isLoaded, setLoaded] = useState(false);
@@ -54,7 +54,7 @@ const Review = memo(({ fullText, item: review, user, idx }) => {
   };
 
   review.description =
-    review.description && review.description.trim().length > 0
+    review.description && review.description.trim().length
       ? review.description
       : 'No description.';
 
@@ -62,18 +62,58 @@ const Review = memo(({ fullText, item: review, user, idx }) => {
   const beyondLimit = review.description.split(' ').length > limit;
 
   const isEven = idx % 2 == 0;
+  const shouldLeftAlign = isEven || !review.image;
+
+  const detailsStyle = !isSmallDevice()
+    ? { textAlign: shouldLeftAlign ? 'left' : 'right' }
+    : null;
+  const ratorStyle = !isSmallDevice()
+    ? { justifyContent: shouldLeftAlign ? 'flex-start' : 'flex-end' }
+    : null;
+  const imageStyle = shouldLeftAlign
+    ? {
+        float: 'left',
+        marginRight: '1.5em'
+      }
+    : {
+        float: 'right',
+        marginLeft: '1.5em'
+      };
 
   /** Image of reviewer */
   const ReviewerImage = () => {
     if (!review.image) return null;
+
     return (
-      <Col md={{ span: 3, order: isEven ? 1 : 2 }}>
-        <img
-          src={`${cloudinary.url}/${review.image}`}
+      <div className={css['review-image-container']} style={imageStyle}>
+        <CloudinaryImage
+          src={review.image}
           alt={review.fullname}
-          className={css.image}
+          className={css['review-image']}
         />
-      </Col>
+      </div>
+    );
+  };
+
+  /** Details of the review */
+  const ReviewDetails = () => {
+    return (
+      <>
+        <Default>
+          <Divider style={{ marginTop: 0 }} />
+        </Default>
+        <Title className={css['review-referee']}>{review.referee}</Title>
+        <Subtitle className={css['review-roles']}>{review.position}</Subtitle>
+        <Rator rating={review.rating} changeable={false} style={ratorStyle} />
+        <QuoteWrapper>
+          <Paragraph className={css['review-paragraph']}>
+            {showFullText
+              ? review.description
+              : zText.truncateText(review.description, limit)}
+          </Paragraph>
+          <ReadMore className={css['review-readmore']} />
+        </QuoteWrapper>
+      </>
     );
   };
 
@@ -88,42 +128,6 @@ const Review = memo(({ fullText, item: review, user, idx }) => {
     );
   };
 
-  /** Details of the review */
-  const ReviewDetails = () => {
-    const colStyle = !isSmallDevice()
-      ? { display: 'flex', flexDirection: 'column' }
-      : null;
-    const detailsStyle = !isSmallDevice()
-      ? { textAlign: isEven ? 'left' : 'right' }
-      : null;
-    const ratorStyle = !isSmallDevice()
-      ? { justifyContent: isEven ? 'flex-start' : 'flex-end' }
-      : null;
-
-    return (
-      <Col
-        md={{ span: review.image ? 9 : 12, order: isEven ? 2 : 1 }}
-        style={colStyle}>
-        <div className={css.details} style={detailsStyle}>
-          <Default>
-            <Divider style={{ marginTop: 0 }} />
-          </Default>
-          <Title className={css.title}>{review.referee}</Title>
-          <Subtitle className={css.subtitle}>{review.position}</Subtitle>
-          <Rator rating={review.rating} changeable={false} style={ratorStyle} />
-          <QuoteWrapper>
-            <Paragraph className={css.paragraph}>
-              {showFullText
-                ? review.description
-                : zText.truncateText(review.description, limit)}
-            </Paragraph>
-            <ReadMore />
-          </QuoteWrapper>
-        </div>
-      </Col>
-    );
-  };
-
   return (
     <>
       <LazyLoader
@@ -134,12 +138,10 @@ const Review = memo(({ fullText, item: review, user, idx }) => {
           key={idx}
           determinant={isInViewport}
           duration={750}
-          direction={isEven ? 'left' : 'right'}>
-          <div className={css.item}>
-            <Row>
-              <ReviewerImage />
-              <ReviewDetails />
-            </Row>
+          direction={shouldLeftAlign ? 'left' : 'right'}>
+          <div className={css['review-list-item']} style={detailsStyle}>
+            <ReviewerImage />
+            <ReviewDetails />
           </div>
         </Slider>
       </LazyLoader>

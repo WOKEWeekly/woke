@@ -3,12 +3,12 @@ import { connect } from 'react-redux';
 
 import { AdminButton } from 'components/button.js';
 import { Cover, Shader, Spacer } from 'components/layout.js';
-import { Loader, Empty } from 'components/loader.js';
+import { Empty, Loader } from 'components/loader.js';
 import { BottomToolbar } from 'components/toolbar.js';
 import CLEARANCES from 'constants/clearances.js';
 import request from 'constants/request.js';
 import Review from 'pages/reviews/unit.js';
-import css from 'styles/pages/Home.module.scss';
+import css from 'styles/pages/Reviews.module.scss';
 
 class ReviewsList extends Component {
   constructor(props) {
@@ -47,23 +47,17 @@ class ReviewsList extends Component {
       } else if (reviews.length === 0) {
         return <Empty message={'There are no reviews.'} />;
       } else {
-        const items = [];
-        for (const [index, item] of reviews.entries()) {
-          items.push(
+        const items = reviews.map((item, index) => {
+          return (
             <Review
               key={index}
               idx={index}
               item={item}
               showFullText={true}
-              showAdminControls={true}
             />
           );
-        }
-        return (
-          <div className={css.reviewsPreview}>
-            <div className={css.reviewsList}>{items}</div>
-          </div>
-        );
+        });
+        return <div className={css['reviews-list']}>{items}</div>;
       }
     };
 
@@ -74,7 +68,7 @@ class ReviewsList extends Component {
             title={heading}
             subtitle={description}
             image={'header-reviews.jpg'}
-            height={250}
+            height={200}
             backgroundPosition={'center'}
           />
 

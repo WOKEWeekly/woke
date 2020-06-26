@@ -82,6 +82,7 @@ export class Shader extends Component {
         {...this.props}
         style={{
           backgroundColor: 'rgba(0, 0, 0, .5)',
+          overflowX: 'hidden',
           width: '100%'
         }}>
         {this.props.children}

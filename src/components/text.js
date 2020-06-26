@@ -94,7 +94,7 @@ const IParagraph = ({
   );
 };
 
-export const QuoteWrapper = ({children}) => {
+export const QuoteWrapper = ({ children }) => {
   return (
     <div className={css['quote-wrapper']}>
       <span className={css['quote-left']}>“</span>
@@ -123,19 +123,14 @@ export const ReadMore = ({ link, text = 'Read more', className }) => {
   );
 };
 
-export class ExpandText extends Component {
-  render() {
-    const { text = 'Read more...', onClick } = this.props;
-    return (
-      <button
-        className={css.invisible_button}
-        onClick={onClick}
-        style={{ padding: 0 }}>
-        <div className={css.expandText}>{text}</div>
-      </button>
-    );
-  }
-}
+export const ExpandText = ({ text = 'Read more...', onClick, className }) => {
+  const classes = classNames(css.invisible_button, className);
+  return (
+    <button className={classes} onClick={onClick} style={{ padding: 0 }}>
+      <div className={css.expandText}>{text}</div>
+    </button>
+  );
+};
 
 export class VanillaLink extends Component {
   render() {
