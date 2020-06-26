@@ -44,20 +44,19 @@ class ReviewsList extends Component {
     const ReviewsList = () => {
       if (!isLoaded) {
         return <Loader />;
-      } else if (reviews.length === 0) {
+      } else if (!reviews.length) {
         return <Empty message={'There are no reviews.'} />;
       } else {
         const items = reviews.map((item, index) => {
           return (
-            <Review
-              key={index}
-              idx={index}
-              item={item}
-              showFullText={true}
-            />
+            <Review key={index} idx={index} item={item} showFullText={true} />
           );
         });
-        return <div className={css['reviews-list']}>{items}</div>;
+        return (
+          <div className={css['review-index-container']}>
+            <div className={css['reviews-list']}>{items}</div>
+          </div>
+        );
       }
     };
 

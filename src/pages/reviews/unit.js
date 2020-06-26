@@ -1,5 +1,4 @@
 import React, { memo, useEffect, useState } from 'react';
-import { Col, Row } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import LazyLoader from 'react-visibility-sensor';
 import { zText } from 'zavid-modules';
