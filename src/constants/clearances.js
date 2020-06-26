@@ -24,6 +24,7 @@ module.exports = {
       MODIFY: 8
     },
     CRUD_USERS: 8, // Change the clearances of other users
+    VIEW_ADMIN_REVIEWS: 8, // Add, edit and delete team member profiles
     CRUD_REVIEWS: 8, // Add, edit and delete team member profiles
     SEND_NOTIFICATIONS: 8, // Send notifications to all users
     EDIT_PAGE: 8, // Edit information pages

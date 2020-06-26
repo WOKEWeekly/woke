@@ -1,0 +1,91 @@
+@import '../Variables';
+
+.tabler-container {
+  padding: 1em 2em;
+  @media (max-width: $break-md) {
+    padding: 0 1em;
+  }
+}
+
+%row {
+  align-items: center;
+  color: white;
+  display: grid;
+  padding: 0.7em 0;
+
+  span {
+    padding: 0 0.5em;
+    word-break: break-word;
+
+    .image {
+      width: 100%;
+    }
+  }
+}
+
+.tabler-header-row {
+  @extend %row;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.6);
+  font-family: $title-font;
+}
+
+.tabler-grid {
+  display: grid;
+  font-size: 1.1em;
+  position: relative;
+
+  .tabler-item-row {
+    @extend %row;
+    border-radius: 10px;
+    font-family: $body-font;
+  
+    &:hover {
+      background-color: $primary-light;
+    }
+  
+    button {
+      @extend %invisible-button;
+      cursor: pointer;
+    }
+  }
+}
+
+.tabler-list {
+  @include font-scaler(1);
+  color: white;
+  display: grid;
+
+  .tabler-item-row {
+    background: $primary-dark;
+    border: 1px solid white;
+    border-radius: 15px;
+    font-family: $body-font;
+    margin: 0.5em 0;
+    padding: 1em;
+    position: relative;
+
+    .tabler-field-mobile {
+      display: grid;
+      grid-template-columns: 2em 1fr;
+    }
+
+    .tabler-item-name {
+      @include font-scaler(1.5);
+      font-family: $title-font;
+    }
+
+    .tabler-item-index {
+      @include font-scaler(1.5);
+      font-family: $title-font;
+      position: absolute;
+      right: 5%;
+      top: 5%;
+    }
+
+    .tabler-item-buttons {
+      bottom: 5%;
+      position: absolute;
+      right: 0;
+    }
+  }
+}

@@ -71,7 +71,7 @@ class ReviewCrud extends Component {
           type: 'success',
           message: `You've successfully added the review by ${this.state.referee}.`
         });
-        location.href = '/reviews';
+        location.href = '/admin/reviews';
       }
     });
   };
@@ -92,7 +92,7 @@ class ReviewCrud extends Component {
           type: 'success',
           message: `You've successfully edited ${this.state.referee}'s review.`
         });
-        location.href = `/reviews`;
+        location.href = `/admin/reviews`;
       }
     });
   };
@@ -109,7 +109,7 @@ class ReviewCrud extends Component {
         confirmFunc={
           operation === 'add' ? this.submitReview : this.updateReview
         }
-        cancelFunc={() => (location.href = '/reviews')}
+        cancelFunc={() => (location.href = '/admin/reviews')}
         operation={operation}
         metaTitle={title}
         metaUrl={`/${operation}`}

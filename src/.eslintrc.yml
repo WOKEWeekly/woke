@@ -6,6 +6,7 @@ extends:
   - plugin:import/warnings
   - plugin:jsdoc/recommended
   - plugin:mocha/recommended
+  - plugin:react-hooks/recommended
 env:
   browser: true
   node: true

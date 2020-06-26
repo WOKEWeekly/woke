@@ -75,6 +75,7 @@
     "eslint-plugin-jsdoc": "^25.4.2",
     "eslint-plugin-mocha": "^7.0.0",
     "eslint-plugin-react": "^7.19.0",
+    "eslint-plugin-react-hooks": "^4.0.4",
     "minimist": ">=1.2.3",
     "mocha": "^6.2.3",
     "mocha-junit-reporter": "^1.23.3",

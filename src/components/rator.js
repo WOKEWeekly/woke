@@ -1,3 +1,4 @@
+import classnames from 'classnames';
 import React, { Component } from 'react';
 
 import css from 'styles/components/Form.module.scss';
@@ -60,7 +61,9 @@ export default class Rator extends Component {
     };
 
     return (
-      <div className={css.starBar} style={{ ...this.props.style }}>
+      <div
+        className={classnames(css.starBar, this.props.className)}
+        style={{ ...this.props.style }}>
         <Stars />
       </div>
     );

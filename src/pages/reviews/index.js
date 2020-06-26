@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-import { AddEntityButton } from 'components/button.js';
+import { AdminButton } from 'components/button.js';
 import { Cover, Shader, Spacer } from 'components/layout.js';
-import { Loader, Empty } from 'components/loader.js';
+import { Empty, Loader } from 'components/loader.js';
 import { BottomToolbar } from 'components/toolbar.js';
 import CLEARANCES from 'constants/clearances.js';
 import request from 'constants/request.js';
 import Review from 'pages/reviews/unit.js';
-import css from 'styles/pages/Home.module.scss';
+import css from 'styles/pages/Reviews.module.scss';
 
 class ReviewsList extends Component {
   constructor(props) {
@@ -44,24 +44,17 @@ class ReviewsList extends Component {
     const ReviewsList = () => {
       if (!isLoaded) {
         return <Loader />;
-      } else if (reviews.length === 0) {
+      } else if (!reviews.length) {
         return <Empty message={'There are no reviews.'} />;
       } else {
-        const items = [];
-        for (const [index, item] of reviews.entries()) {
-          items.push(
-            <Review
-              key={index}
-              idx={index}
-              item={item}
-              showFullText={true}
-              showAdminControls={true}
-            />
+        const items = reviews.map((item, index) => {
+          return (
+            <Review key={index} idx={index} item={item} showFullText={true} />
           );
-        }
+        });
         return (
-          <div className={css.reviewsPreview}>
-            <div className={css.reviewsList}>{items}</div>
+          <div className={css['review-index-container']}>
+            <div className={css['reviews-list']}>{items}</div>
           </div>
         );
       }
@@ -74,7 +67,7 @@ class ReviewsList extends Component {
             title={heading}
             subtitle={description}
             image={'header-reviews.jpg'}
-            height={250}
+            height={200}
             backgroundPosition={'center'}
           />
 
@@ -82,9 +75,9 @@ class ReviewsList extends Component {
 
           <BottomToolbar>
             {user.clearance >= CLEARANCES.ACTIONS.CRUD_REVIEWS ? (
-              <AddEntityButton
-                title={'Add Review'}
-                onClick={() => (location.href = '/admin/reviews/add')}
+              <AdminButton
+                title={'Reviews Admin'}
+                onClick={() => (location.href = '/admin/reviews')}
               />
             ) : null}
           </BottomToolbar>
