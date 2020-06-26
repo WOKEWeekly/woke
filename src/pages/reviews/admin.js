@@ -1,4 +1,4 @@
-import React, { memo, useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { zText } from 'zavid-modules';
 
@@ -7,7 +7,7 @@ import { AddEntityButton } from 'components/button.js';
 import { Icon } from 'components/icon.js';
 import { CloudinaryImage } from 'components/image.js';
 import { Shader } from 'components/layout.js';
-import { ConfirmModal } from 'components/modal.js';
+import { ConfirmModal, useModal } from 'components/modal.js';
 import Rator from 'components/rator.js';
 import Tabler from 'components/tabler';
 import { Title } from 'components/text';
@@ -17,18 +17,19 @@ import request from 'constants/request.js';
 import css from 'styles/pages/Reviews.module.scss';
 
 const ReviewsAdmin = ({ user }) => {
-  if (user.clearance < CLEARANCES.ACTIONS.VIEW_TEAM) {
-    return (location.href = '/');
-  }
-
   const [reviews, setReviews] = useState([]);
   const [selectedReview, setSelectedReview] = useState({});
   const [isLoaded, setLoaded] = useState(false);
-  const [deleteModalVisible, setDeleteModalVisibility] = useState(false);
+  
+  const [deleteModalVisible, setDeleteModalVisibility] = useModal(false);
 
   useEffect(() => {
     getReviews();
   }, [isLoaded]);
+
+  if (user.clearance < CLEARANCES.ACTIONS.VIEW_ADMIN_REVIEWS) {
+    return (location.href = '/');
+  }
 
   /** Retrieve a list of all reviews */
   const getReviews = () => {

@@ -13,9 +13,6 @@ const Tabler = ({
   distribution,
   itemsLoaded
 }) => {
-  const [isLoaded, setLoaded] = useState(false);
-  useEffect(() => setLoaded(true), [isLoaded]);
-
   const gridDistribution = { gridTemplateColumns: distribution };
 
   const HeaderRow = () => {

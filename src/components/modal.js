@@ -1,5 +1,5 @@
-import React, { Component, useEffect, useState } from 'react';
-import { Col, Modal as DefaultModal } from 'react-bootstrap';
+import React, { Component, useState, useEffect } from 'react';
+import { Col, Modal as IModal } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { zHandlers } from 'zavid-modules';
 
@@ -10,82 +10,86 @@ import { Paragraph } from 'components/text.js';
 import { socialPlatforms } from 'constants/settings';
 import css from 'styles/components/Modal.module.scss';
 
+/**
+ * Custom hook for controlling modal visibility
+ * @param {boolean} initial - The modal's initial visibility.
+ * @returns {any[]} The hook.
+ */
+export const useModal = (initial = false) => {
+  const [isVisible, setVisibility] = useState(initial);
+  return [isVisible, setVisibility];
+};
+
 // TODO: Clean up modals
 export const Modal = (props) => {
-  const { visible, header, body, footer, onlyBody} = props;
+  const { visible, header, body, footer, onlyBody, onHide } = props;
 
   const Header = () => {
     if (!header) return null;
 
-    return (
-      <DefaultModal.Header className={css.modal_header}>
-        {header}
-      </DefaultModal.Header>
-    );
+    return <IModal.Header className={css.modal_header}>{header}</IModal.Header>;
   };
 
   const Body = () => {
     return (
-      <DefaultModal.Body
+      <IModal.Body
         className={css.modal_body}
         style={{ padding: onlyBody ? '1rem' : '0 1rem' }}>
         {body}
-      </DefaultModal.Body>
+      </IModal.Body>
     );
   };
 
   const Footer = () => {
     if (!footer) return null;
 
-    return (
-      <DefaultModal.Footer className={css.modal_footer}>
-        {footer}
-      </DefaultModal.Footer>
-    );
+    return <IModal.Footer className={css.modal_footer}>{footer}</IModal.Footer>;
   };
 
   return (
-    <DefaultModal show={visible} onHide={null} centered {...props}>
+    <IModal show={visible} onHide={onHide} centered {...props}>
       <Header />
       <Body />
       <Footer />
-    </DefaultModal>
+    </IModal>
   );
 };
 
-export const useModal = () => {
-  const [isVisible, setVisibility] = useState(false);
+export const ConfirmModal = ({
+  message,
+  confirmFunc,
+  confirmText,
+  close,
+  visible
+}) => {
+  const [isLoaded, setLoaded] = useState(visible);
+  useEffect(() => {
+    setLoaded(true);
+  }, [isLoaded]);
 
-  const toggle = () => {
-    setVisibility(!isVisible);
-  };
+  const Body = (
+    <Paragraph className={css.text} style={{ fontSize: '1.1em' }}>
+      {message}
+    </Paragraph>
+  );
 
-  return {
-    isVisible,
-    toggle
-  };
+  const Footer = (
+    <>
+      <DeleteButton onClick={confirmFunc}>{confirmText}</DeleteButton>
+      <CancelButton onClick={close}>Cancel</CancelButton>
+    </>
+  );
+
+  return (
+    <Modal
+      show={visible && isLoaded}
+      body={Body}
+      footer={Footer}
+      onlyBody={true}
+      onHide={close}
+    />
+  );
 };
-
-export class ConfirmModal extends Component {
-  render() {
-    const { message, confirmFunc, confirmText, close, visible } = this.props;
-
-    const body = (
-      <Paragraph className={css.text} style={{ fontSize: '1.1em' }}>
-        {message}
-      </Paragraph>
-    );
-
-    const footer = (
-      <React.Fragment>
-        <DeleteButton onClick={confirmFunc}>{confirmText}</DeleteButton>
-        <CancelButton onClick={close}>Cancel</CancelButton>
-      </React.Fragment>
-    );
-
-    return <Modal show={visible} body={body} footer={footer} onlyBody={true} />;
-  }
-}
 
 export class EthnicModal extends Component {
   render() {
