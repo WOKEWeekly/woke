@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-import { AddEntityButton } from 'components/button.js';
+import { AdminButton } from 'components/button.js';
 import { Cover, Shader, Spacer } from 'components/layout.js';
 import { Loader, Empty } from 'components/loader.js';
 import { BottomToolbar } from 'components/toolbar.js';
@@ -82,9 +82,9 @@ class ReviewsList extends Component {
 
           <BottomToolbar>
             {user.clearance >= CLEARANCES.ACTIONS.CRUD_REVIEWS ? (
-              <AddEntityButton
-                title={'Add Review'}
-                onClick={() => (location.href = '/admin/reviews/add')}
+              <AdminButton
+                title={'Reviews Admin'}
+                onClick={() => (location.href = '/admin/reviews')}
               />
             ) : null}
           </BottomToolbar>
