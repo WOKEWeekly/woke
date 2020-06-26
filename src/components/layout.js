@@ -9,6 +9,7 @@ import { cloudinary } from 'constants/settings.js';
 import css from 'styles/components/Layout.module.scss';
 
 export const isSmallDevice = () => {
+  if (!window) return false;
   return window.matchMedia('(max-width: 576px)').matches;
 };
 
