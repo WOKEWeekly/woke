@@ -7,11 +7,11 @@ import request from 'constants/request.js';
 import Review from 'pages/reviews/unit.js';
 import css from 'styles/pages/Reviews.module.scss';
 
-const limit = isSmallDevice() ? 1 : 3;
-
 export default () => {
   const [reviews, setReviews] = useState([]);
   const [isLoaded, setLoaded] = useState(false);
+
+  const limit = isSmallDevice() ? 1 : 3;
 
   useEffect(() => {
     request({
