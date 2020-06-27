@@ -53,7 +53,7 @@ pipeline {
   post {
     always {
       dir('src') {
-        sh 'rm -rf node_modules'
+        sh 'rm -rf node_modules .next'
       }
     }
 
