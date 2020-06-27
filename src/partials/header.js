@@ -209,6 +209,5 @@ export const PreNavBar = connect(
   mapDispatchToProps
 )(IPreNavbar);
 export const MainNavBar = connect(
-  mapStateToProps,
-  mapDispatchToProps
+  mapStateToProps
 )(IMainNavbar);

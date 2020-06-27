@@ -11,7 +11,7 @@ import {
   PasswordInput,
   Checkbox
 } from 'components/form';
-import { Modal } from 'components/modal.js';
+import { Modal, useModal } from 'components/modal.js';
 import { setCookie, getCookie } from 'constants/cookies';
 import request from 'constants/request.js';
 import { isValidLogin } from 'constants/validations.js';
@@ -29,16 +29,17 @@ import css from 'styles/Auth.module.scss';
  */
 const Login = ({ close, saveUser, theme, visible }) => {
   const [isLoaded, setLoaded] = useState(false);
-
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [shouldRemember, setShouldRemember] = useState(
+  const [shouldRemember, setShouldRemember] = useModal(
     getCookie('remember') === 'true'
   );
 
+  console.log('re-rendering');
+
   useEffect(() => {
     setLoaded(true);
-  }, [isLoaded]);
+  }, []);
 
   /**
    * Log in once the 'Enter' key is pressed.
@@ -51,7 +52,7 @@ const Login = ({ close, saveUser, theme, visible }) => {
 
   /** Log in as a registered user */
   const logIn = () => {
-    const credentials = { username, password, shouldRemember };
+    const credentials = { username, password, remember: shouldRemember };
     if (!isValidLogin(credentials)) return;
 
     request({
@@ -72,7 +73,7 @@ const Login = ({ close, saveUser, theme, visible }) => {
   const Header = <h2 className={css['text']}>Log In</h2>;
   const Body = (
     <div className={css['loginForm']}>
-      <Group className={css['group']}>
+      <Group>
         <Label>Username / Email Address:</Label>
         <UsernameInput
           value={username}
@@ -80,7 +81,7 @@ const Login = ({ close, saveUser, theme, visible }) => {
           placeholder={'Enter your username'}
         />
       </Group>
-      <Group className={css['group']}>
+      <Group>
         <Label>Password:</Label>
         <PasswordInput
           value={password}
@@ -88,14 +89,14 @@ const Login = ({ close, saveUser, theme, visible }) => {
           placeholder={'Enter your password'}
         />
       </Group>
-      <Group className={css['group']}>
+      <Group>
         <Checkbox
           checked={shouldRemember}
           label={'Stay signed in'}
           onChange={(event) => setShouldRemember(event.target.checked)}
         />
       </Group>
-      <Group className={css['group']}>
+      <Group>
         <a href={'/account/recovery'} className={css[`link-${theme}`]}>
           Forgotten your password?
         </a>
@@ -116,6 +117,7 @@ const Login = ({ close, saveUser, theme, visible }) => {
       body={Body}
       footer={Footer}
       onKeyPress={handleKeyPress}
+      onHide={close}
     />
   );
 };
