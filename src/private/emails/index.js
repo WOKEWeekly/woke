@@ -2,12 +2,29 @@ const ejs = require('ejs');
 const nodemailer = require('nodemailer');
 const { zDate, zText } = require('zavid-modules');
 
-const { cloudinary, domain, emails } = require('../../constants/settings.js');
+const {
+  accounts,
+  cloudinary,
+  copyright,
+  domain,
+  emails
+} = require('../../constants/settings.js');
 const { SUBSCRIPTIONS } = require('../../constants/strings.js');
 const { config } = require('../../server.js');
 const knex = require('../singleton/knex').getKnex();
 
 require('dotenv').config({ path: config });
+
+const testRecipient = process.env.ETHEREAL_EMAIL;
+
+const common = {
+  accounts,
+  cloudinary,
+  copyright,
+  domain
+};
+
+const isDev = process.env.NODE_ENV !== 'production';
 
 /** Initialise the mail transporter */
 const transporter = nodemailer.createTransport({
@@ -23,7 +40,7 @@ exports.sendWelcomeEmail = (user, token, callback) => {
   const subject = 'Welcome To Our Website!';
   ejs.renderFile(
     __dirname + '/templates/welcome.ejs',
-    { user, token, domain, cloudinary },
+    { user, token, ...common },
     function (err, data) {
       sendMail(user.email, subject, data, callback, token);
     }
@@ -34,7 +51,7 @@ exports.resendVerificationEmail = (user, token, callback) => {
   const subject = 'Verify Your Account';
   ejs.renderFile(
     __dirname + '/templates/verification.ejs',
-    { user, token, domain, cloudinary },
+    { user, token, ...common },
     function (err, data) {
       sendMail(user.email, subject, data, callback, token);
     }
@@ -45,7 +62,7 @@ exports.sendAccountRecoveryEmail = (user, token, callback) => {
   const subject = 'Account Recovery';
   ejs.renderFile(
     __dirname + '/templates/recovery.ejs',
-    { user, token, domain, cloudinary },
+    { user, token, ...common },
     function (err, data) {
       sendMail(user.email, subject, data, callback, token);
     }
@@ -86,7 +103,7 @@ exports.notifyNewArticle = (article, options) => {
         authorImage: `${cloudinary.url}/w_400,c_lfill/${authorImage}`,
         authorSlug: `${domain}/${isGuest ? 'author' : 'team'}/${authorSlug}`
       }),
-      domain
+      ...common
     },
     function (err, data) {
       sendMailToAllSubscribers(SUBSCRIPTIONS.ARTICLES, subject, data, options);
@@ -106,7 +123,7 @@ const sendMail = (to, subject, message, callback, token) => {
   transporter.sendMail(
     {
       from: `#WOKEWeekly <${emails.site}>`,
-      to,
+      to: isDev ? testRecipient : to,
       subject,
       html: message
     },
@@ -144,7 +161,7 @@ const sendMailToAllSubscribers = (type, subject, message, options = {}) => {
     transporter.sendMail(
       {
         from: `#WOKEWeekly <${emails.site}>`,
-        to: mailList,
+        to: isDev ? testRecipient : mailList,
         subject,
         html: message
       },

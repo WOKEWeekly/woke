@@ -20,7 +20,7 @@
     .email {
       background: rgb(57, 17, 68);
       margin: 0 auto;
-      max-width: 768px;
+      max-width: 576px;
       padding: 1.5em 0;
     }
 
@@ -87,8 +87,43 @@
       text-decoration: none;
     }
 
+    footer {
+      align-items: center;
+      display: flex;
+      flex-direction: column;
+      text-align: center;
+    }
+
+    .footer-content {
+      width: 75%;
+    }
+
+    .footer-social-container,
     .signature {
       width: 175px;
+    }
+
+    .footer-social-container {
+      display: flex;
+      justify-content: space-evenly;
+      margin: 0.4em 0;
+    }
+
+    .footer-social-links {
+      width: 17%;
+    }
+
+    .footer-social-links img {
+      border-radius: 5px;
+      width: 100%;
+    }
+
+    .tagline {
+      margin: 0.5em 0;
+    }
+
+    .copyright {
+      margin-top: 1em;
     }
 
     /* Article specific */
@@ -122,6 +157,10 @@
     @media (max-width: 576px) {
       .email {
         padding: 0;
+      }
+
+      footer {
+        font-size: 0.7em;
       }
 
       .header-image-container {
