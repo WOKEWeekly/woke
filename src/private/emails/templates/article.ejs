@@ -1,4 +1,4 @@
-<%- include("partials/header.ejs") %>
+<%- include("partials/head.ejs") %>
 
 <body class="container-fluid email">
   <header class="container header">
@@ -14,7 +14,6 @@
         class="author-thumbnail"
       />
       <div class="article-details">
-        <!-- TODO: Add link to author profile -->
         <div>
           Written by
           <a href="<%= article.authorSlug %>" class="author-link"
@@ -39,7 +38,7 @@
       </a>
     </div>
   </div>
-  <%- include("partials/footer.ejs", { url: article.slug }) %>
+  <%- include("partials/footer-subscribed.ejs", { url: article.slug }) %>
 </body>
 
 <!-- TODO: Add tags -->

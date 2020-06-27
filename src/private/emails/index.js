@@ -1,13 +1,42 @@
 const ejs = require('ejs');
+const htmlToText = require('html-to-text');
 const nodemailer = require('nodemailer');
 const { zDate, zText } = require('zavid-modules');
 
-const { cloudinary, domain, emails } = require('../../constants/settings.js');
+const {
+  accounts,
+  cloudinary,
+  copyright,
+  domain,
+  emails
+} = require('../../constants/settings.js');
 const { SUBSCRIPTIONS } = require('../../constants/strings.js');
 const { config } = require('../../server.js');
 const knex = require('../singleton/knex').getKnex();
 
 require('dotenv').config({ path: config });
+const isDev = process.env.NODE_ENV !== 'production';
+
+/** A map of variables used in all EJS emails */
+const ejsLocals = {
+  accounts,
+  cloudinary,
+  copyright,
+  domain
+};
+
+/** The common HTML-to-text options for all emails. */
+const htmlToTextOptions = {
+  hideLinkHrefIfSameAsText: true,
+  ignoreImage: true,
+  noLinkBrackets: true,
+  preserveNewlines: true,
+  uppercaseHeadings: false,
+  wordwrap: 80
+};
+
+/** The email address of the recipient in development. */
+const testRecipient = process.env.ETHEREAL_EMAIL;
 
 /** Initialise the mail transporter */
 const transporter = nodemailer.createTransport({
@@ -19,35 +48,65 @@ const transporter = nodemailer.createTransport({
   }
 });
 
+/**
+ * Send the account recovery email to a user.
+ * @param {object} user - The recipient user.
+ * @param {string} token - The user token.
+ * @param {Function} callback - The callback function called on completion.
+ */
 exports.sendWelcomeEmail = (user, token, callback) => {
   const subject = 'Welcome To Our Website!';
   ejs.renderFile(
     __dirname + '/templates/welcome.ejs',
-    { user, token, domain, cloudinary },
+    { user, token, ...ejsLocals },
     function (err, data) {
-      sendMail(user.email, subject, data, callback, token);
+      sendMail(user.email, subject, data, {
+        callback,
+        token,
+        emailText: { baseElement: 'div.email-content' }
+      });
     }
   );
 };
 
+/**
+ * Resend the email address verification email to a user.
+ * @param {object} user - The recipient user.
+ * @param {string} token - The user token.
+ * @param {Function} callback - The callback function called on completion.
+ */
 exports.resendVerificationEmail = (user, token, callback) => {
   const subject = 'Verify Your Account';
   ejs.renderFile(
     __dirname + '/templates/verification.ejs',
-    { user, token, domain, cloudinary },
+    { user, token, ...ejsLocals },
     function (err, data) {
-      sendMail(user.email, subject, data, callback, token);
+      sendMail(user.email, subject, data, {
+        callback,
+        token,
+        emailText: { baseElement: 'div.email-content' }
+      });
     }
   );
 };
 
+/**
+ * Send the account recovery email to a user.
+ * @param {object} user - The recipient user.
+ * @param {string} token - The user token.
+ * @param {Function} callback - The callback function called on completion.
+ */
 exports.sendAccountRecoveryEmail = (user, token, callback) => {
   const subject = 'Account Recovery';
   ejs.renderFile(
     __dirname + '/templates/recovery.ejs',
-    { user, token, domain, cloudinary },
+    { user, token, ...ejsLocals },
     function (err, data) {
-      sendMail(user.email, subject, data, callback, token);
+      sendMail(user.email, subject, data, {
+        callback,
+        token,
+        emailText: { baseElement: 'div.email-content' }
+      });
     }
   );
 };
@@ -86,7 +145,7 @@ exports.notifyNewArticle = (article, options) => {
         authorImage: `${cloudinary.url}/w_400,c_lfill/${authorImage}`,
         authorSlug: `${domain}/${isGuest ? 'author' : 'team'}/${authorSlug}`
       }),
-      domain
+      ...ejsLocals
     },
     function (err, data) {
       sendMailToAllSubscribers(SUBSCRIPTIONS.ARTICLES, subject, data, options);
@@ -99,16 +158,22 @@ exports.notifyNewArticle = (article, options) => {
  * @param {string} to - The recipient of the email.
  * @param {string} subject - The subject of the email.
  * @param {string} message - The content of the message.
- * @param {Function} callback - The callback function.
- * @param {string} token - The user token.
+ * @param {object} [options] - Additional options.
+ * @param {Function} [options.callback] - The callback function.
+ * @param {string} [options.token] - The user token.
  */
-const sendMail = (to, subject, message, callback, token) => {
+const sendMail = (to, subject, message, options = {}) => {
+  const { callback, emailText, token } = options;
   transporter.sendMail(
     {
       from: `#WOKEWeekly <${emails.site}>`,
-      to,
+      to: isDev ? testRecipient : to,
       subject,
-      html: message
+      html: message,
+      text: htmlToText.fromString(
+        message,
+        Object.assign({}, htmlToTextOptions, emailText)
+      )
     },
     function (err) {
       console.info(`Emails: "${subject}" email sent to ${to}.`);
@@ -129,7 +194,7 @@ const sendMail = (to, subject, message, callback, token) => {
  * @param {object} [options.params] - The parameters sent via the callback.
  */
 const sendMailToAllSubscribers = (type, subject, message, options = {}) => {
-  const { callback, params } = options;
+  const { callback, emailText, params } = options;
 
   const query = knex.select().from('subscribers');
   query.asCallback(function (err, results) {
@@ -144,9 +209,13 @@ const sendMailToAllSubscribers = (type, subject, message, options = {}) => {
     transporter.sendMail(
       {
         from: `#WOKEWeekly <${emails.site}>`,
-        to: mailList,
+        to: isDev ? testRecipient : mailList,
         subject,
-        html: message
+        html: message,
+        text: htmlToText.fromString(
+          message,
+          Object.assign({}, htmlToTextOptions, emailText)
+        )
       },
       function (err) {
         console.info(

@@ -1,15 +1,37 @@
 <footer class="container footer">
-  <div>
-    You are receiving this email because you opted into the #WOKEWeekly's
-    mailing list. If you no longer wish to receive such emails,
-    <a href="<%= domain %>/unsubscribe" class="hyperlink"
-      >unsubscribe here</a
-    >.
+  <div class="footer-social-container">
+    <a href="<%= accounts.facebook %>" class="footer-social-links">
+      <img
+        src="<%= cloudinary.url %>/public/logos/facebook-icon.png"
+        alt="FB"
+      />
+    </a>
+    <a href="<%= accounts.twitter %>" class="footer-social-links">
+      <img src="<%= cloudinary.url %>/public/logos/twitter-icon.png" alt="TW" />
+    </a>
+    <a href="<%= accounts.instagram %>" class="footer-social-links">
+      <img
+        src="<%= cloudinary.url %>/public/logos/instagram-icon.png"
+        alt="IG"
+      />
+    </a>
+    <a href="<%= accounts.linkedin %>" class="footer-social-links">
+      <img
+        src="<%= cloudinary.url %>/public/logos/linkedin-icon.png"
+        alt="LI"
+      />
+    </a>
+    <a href="<%= accounts.youtube %>" class="footer-social-links">
+      <img src="<%= cloudinary.url %>/public/logos/youtube-icon.png" alt="YT" />
+    </a>
   </div>
-  <br />
-  <div>
-    Got an issue with the link? Copy and paste this URL into your browser:
-    <br />
-    <a href="<%= url %>" class="hyperlink"><%= url %></a>
+  <div class="tagline">Awakening Through Conversation.</div>
+  <img
+    src="<%= cloudinary.url %>/public/logos/wokeweekly-logo.png"
+    class="signature"
+    alt="#WOKEWeekly"
+  />
+  <div class="copyright">
+    <%= copyright %>
   </div>
 </footer>

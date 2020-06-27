@@ -47,6 +47,8 @@ module.exports = {
     url: 'https://res.cloudinary.com/wokeweekly/image/upload'
   },
 
+  copyright: `\u00A9 2020 #WOKEWeekly`,
+
   /** The date #WOKEWeekly was established */
   creationDate: new Date(2017, 2, 2),
 
