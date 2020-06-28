@@ -23,8 +23,9 @@ class ICover extends Component {
   }
 
   componentDidMount() {
+    const version = this.props.imageVersion ? `/v${this.props.imageVersion}` : '';
     const image = new Image();
-    image.src = `${cloudinary.url}/public/bg/${this.props.image}`;
+    image.src = `${cloudinary.url}${version}/public/bg/${this.props.image}`;
     image.onload = () =>
       this.setState({ imageLoaded: true, imageSrc: image.src });
   }

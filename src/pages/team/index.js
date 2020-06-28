@@ -75,6 +75,7 @@ export const Team = () => {
           title={heading}
           subtitle={description}
           image={'header-team.jpg'}
+          imageVersion={1593373507}
           height={200}
           backgroundPosition={'center'}
         />

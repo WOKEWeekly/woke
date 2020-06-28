@@ -152,7 +152,9 @@ class Sessions extends Component {
             title={'Sessions'}
             subtitle={'Where the magic happens...'}
             image={'header-sessions.jpg'}
+            imageVersion={1593013330}
             height={200}
+            backgroundPosition={'center'}
             className={css.cover}
           />
 
