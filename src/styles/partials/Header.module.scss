@@ -9,9 +9,11 @@
   background-color: #000;
   display: flex;
   justify-content: space-evenly;
+  overflow-anchor: auto;
   padding: 0.2em 0 !important;
   @media (max-width: $break-sm) {
-    justify-content: space-around;
+    display: grid;
+    grid-template-columns: auto 1fr;
     padding: 3px 0.5em !important;
     width: 100% !important;
   }
