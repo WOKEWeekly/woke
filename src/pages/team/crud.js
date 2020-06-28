@@ -9,6 +9,8 @@ import { isValidMember } from 'constants/validations.js';
 
 import MemberForm from './form.js';
 
+// TODO: Handle resulting hyperlink after editing member
+
 class MemberCrud extends Component {
   static async getInitialProps({ query }) {
     return { ...query };
