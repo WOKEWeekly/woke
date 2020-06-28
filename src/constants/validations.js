@@ -16,9 +16,9 @@ exports.isValidLogin = (user) => {
     )
   )
     return false;
-  if (!ifExists(user.username.trim(), 'Enter your username or email address.'))
+  if (!ifExists(user.username, 'Enter your username or email address.'))
     return false;
-  if (!ifExists(user.password.trim(), 'Enter your password.')) return false;
+  if (!ifExists(user.password, 'Enter your password.')) return false;
   return true;
 };
 
@@ -28,23 +28,15 @@ exports.isValidLogin = (user) => {
  * @returns {boolean} True if valid. False with error message if invalid.
  */
 exports.isValidSignup = (user) => {
-  const {
-    firstname,
-    lastname,
-    email,
-    username,
-    password1,
-    password2,
-    privacy
-  } = user;
-
-  if (!ifExists(firstname.trim(), 'Please enter your first name.'))
+  if (!ifExists(user.firstname, 'Please enter your first name.')) return false;
+  if (!ifExists(user.lastname, 'Please enter your last name.')) return false;
+  if (!module.exports.isValidEmail(user.email)) return false;
+  if (!module.exports.isValidUsername(user.username)) return false;
+  if (!module.exports.isValidPassword(user.password1, user.password2))
     return false;
-  if (!ifExists(lastname.trim(), 'Please enter your last name.')) return false;
-  if (!module.exports.isValidEmail(email)) return false;
-  if (!module.exports.isValidUsername(username)) return false;
-  if (!module.exports.isValidPassword(password1, password2)) return false;
-  if (ifTrue(!privacy, 'You have not read or agreed to the Privacy Policy.'))
+  if (
+    ifTrue(!user.privacy, 'You have not read or agreed to the Privacy Policy.')
+  )
     return false;
 
   return true;
@@ -52,11 +44,11 @@ exports.isValidSignup = (user) => {
 
 /**
  * Validation of session submission or update.
- * @param {string} user - Session information to be validated.
+ * @param {string} session - Session information to be validated.
  * @returns {boolean} True if valid. False with error message if invalid.
  */
 exports.isValidSession = (session) => {
-  if (!ifExists(session.title.trim(), 'Enter the session title.')) return false;
+  if (!ifExists(session.title, 'Enter the session title.')) return false;
   if (
     !ifExists(
       session.dateHeld,
@@ -74,23 +66,15 @@ exports.isValidSession = (session) => {
  * @returns {boolean} True if valid. False with error message if invalid.
  */
 exports.isValidTopic = (topic) => {
-  if (!ifExists(topic.headline.trim(), 'Enter the topic headline.'))
-    return false;
+  if (!ifExists(topic.headline, 'Enter the topic headline.')) return false;
   if (!ifExists(topic.category, 'Select the topic category.')) return false;
-  if (!ifExists(topic.question.trim(), 'Enter the topic question.'))
-    return false;
+  if (!ifExists(topic.question, 'Enter the topic question.')) return false;
   if (!ifExists(topic.type, 'Select the topic type.')) return false;
+
   if (topic.polarity === true) {
-    if (
-      !ifExists(topic.option1.trim(), 'Enter the first option to the question.')
-    )
+    if (!ifExists(topic.option1, 'Enter the first option to the question.'))
       return false;
-    if (
-      !ifExists(
-        topic.option2.trim(),
-        'Enter the second option to the question.'
-      )
-    )
+    if (!ifExists(topic.option2, 'Enter the second option to the question.'))
       return false;
   }
   return true;
@@ -102,22 +86,18 @@ exports.isValidTopic = (topic) => {
  * @returns {boolean} True if valid. False with error message if invalid.
  */
 exports.isValidArticle = (article) => {
-  if (!ifExists(article.title.trim(), 'Enter the article title.')) return false;
-  if (!ifExists(article.status.trim(), 'Select the status of the article.'))
+  if (!ifExists(article.title, 'Enter the article title.')) return false;
+  if (!ifExists(article.status, 'Select the status of the article.'))
     return false;
   if (ifTrue(article.authorId === 0, 'Select the author of this article.'))
     return false;
+
   if (article.status === ARTICLE_STATUS.PUBLISHED) {
     if (!ifExists(article.category, "Select the article's category."))
       return false;
-    if (
-      !ifExists(
-        article.content.trim(),
-        'Write out the content of this article.'
-      )
-    )
+    if (!ifExists(article.content, 'Write out the content of this article.'))
       return false;
-    if (!ifExists(article.excerpt.trim(), "Enter the article's excerpt."))
+    if (!ifExists(article.excerpt, "Enter the article's excerpt."))
       return false;
     if (!isValidImage(article.image, 'article')) return false;
   }
@@ -141,15 +121,11 @@ exports.isValidCandidate = (candidate) => {
   )
     return false;
 
-  if (!ifExists(candidate.name.trim(), "Enter the candidate's name."))
-    return false;
+  if (!ifExists(candidate.name, "Enter the candidate's name.")) return false;
   if (!ifExists(candidate.birthday, "Select the candidate's date of birth."))
     return false;
   if (
-    !ifExists(
-      candidate.occupation.trim(),
-      'Please select an image for the session.'
-    )
+    !ifExists(candidate.occupation, 'Please select an image for the session.')
   )
     return false;
   if (
@@ -169,8 +145,7 @@ exports.isValidCandidate = (candidate) => {
  * @returns {boolean} True if valid. False with error message if invalid.
  */
 exports.isValidDocument = (document) => {
-  if (!ifExists(document.title.trim(), 'Enter the document title.'))
-    return false;
+  if (!ifExists(document.title, 'Enter the document title.')) return false;
   if (!isValidDocument(document.file)) return false;
   return true;
 };
@@ -181,13 +156,11 @@ exports.isValidDocument = (document) => {
  * @returns {boolean} True if valid. False with error message if invalid.
  */
 exports.isValidMember = (member) => {
-  if (!ifExists(member.firstname.trim(), "Enter the member's firstname."))
+  if (!ifExists(member.firstname, "Enter the member's first name."))
     return false;
-  if (!ifExists(member.lastname.trim(), "Enter the member's lastname."))
-    return false;
+  if (!ifExists(member.lastname, "Enter the member's last name.")) return false;
   if (!ifExists(member.level, "Select the member's level.")) return false;
-  if (!ifExists(member.role.trim(), "Enter the candidate's role."))
-    return false;
+  if (!ifExists(member.role, "Enter the candidate's role.")) return false;
   if (
     member.level !== 'Guest' &&
     !ifExists(member.birthday, "Select the candidate's date of birth.")
@@ -203,14 +176,13 @@ exports.isValidMember = (member) => {
  * @returns {boolean} True if valid. False with error message if invalid.
  */
 exports.isValidReview = (review) => {
-  if (!ifExists(review.referee.trim(), 'Enter the referee of the review.'))
+  if (!ifExists(review.referee, 'Enter the referee of the review.'))
     return false;
-  if (!ifExists(review.position.trim(), "Enter the referee position's."))
-    return false;
+  if (!ifExists(review.position, "Enter the referee's position.")) return false;
   if (ifTrue(review.rating < 1, 'Specify the review rating.')) return false;
   if (
     !ifExists(
-      review.description.trim(),
+      review.description,
       'Enter the description provided by the referee.'
     )
   )
@@ -236,7 +208,7 @@ exports.isValidEmail = (email) => {
  * @returns {boolean} True if valid. False with error message if invalid.
  */
 exports.isValidUsername = (username) => {
-  if (!ifExists(username.trim(), 'Please enter a username.')) return false;
+  if (!ifExists(username, 'Please enter a username.')) return false;
   if (
     ifTrue(
       username.trim().length < 3,
@@ -255,9 +227,8 @@ exports.isValidUsername = (username) => {
  * @returns {boolean} True if meets requirements. If not, false.
  */
 exports.isValidPassword = (password1, password2, oldPassword) => {
-  if (!ifExists(password1.trim(), 'Please enter a password.')) return false;
-  if (!ifExists(password2.trim(), 'Please confirm your password.'))
-    return false;
+  if (!ifExists(password1, 'Please enter a password.')) return false;
+  if (!ifExists(password2, 'Please confirm your password.')) return false;
   if (
     ifTrue(
       password1.trim().length < 5,
@@ -295,8 +266,7 @@ const isValidImage = (file, entity) => {
 
 /**
  * Ensure submitted document meets requirements.
- * @param {string} document - Base64 string of document to be uploaded.
- * @param {string} entity - The entity this file represents.
+ * @param {string} file - Base64 string of document to be uploaded.
  * @returns {boolean} True if meets requirements. If not, false.
  */
 const isValidDocument = (file) => {
@@ -331,7 +301,11 @@ const isUnderFileSizeLimit = (file, limit = limits.image) => {
  * @returns {boolean} True if value exists. False if not.
  */
 const ifExists = (value, message) => {
-  if (!value || value.length == 0) {
+  if (typeof value === 'string') {
+    value = value.trim();
+  }
+
+  if (!value || !value.length) {
     alert.error(message);
     return false;
   } else {
