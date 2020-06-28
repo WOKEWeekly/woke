@@ -11,8 +11,8 @@
   justify-content: space-evenly;
   padding: 0.2em 0 !important;
   @media (max-width: $break-sm) {
-    justify-content: space-between;
-    padding: 3px 1em !important;
+    justify-content: space-around;
+    padding: 3px 0 !important;
     width: 100% !important;
   }
 }
