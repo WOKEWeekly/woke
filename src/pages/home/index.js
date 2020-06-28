@@ -40,9 +40,7 @@ export default class Home extends Component {
           <Suspense fallback={null}>
             <ThreePart />
 
-            <Row>
-              <ReviewsPreview />
-            </Row>
+            <ReviewsPreview />
 
             <Row>
               <Col md={6} className={'p-0'}>
@@ -59,7 +57,6 @@ export default class Home extends Component {
             <Row>
               <RandomMember />
             </Row>
-            {/* <Row><ForumAdvertiser/></Row> */}
           </Suspense>
         </Container>
       </Shader>

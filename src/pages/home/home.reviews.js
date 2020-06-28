@@ -28,6 +28,22 @@ export default () => {
 
   if (!reviews.length) return null;
 
+  const ReviewsHeading = () => {
+    const [isLoaded, setLoaded] = useState(false);
+    useEffect(() => setLoaded(true), [isLoaded]);
+  
+    return (
+      <Fader
+        determinant={isLoaded}
+        duration={1500}
+        delay={1000}>
+        <Title className={css['reviews-heading']}>
+          What are people saying about us?
+        </Title>
+      </Fader>
+    );
+  };
+
   const ReviewsList = () => {
     const items = reviews.map((item, index) => {
       return (
@@ -54,27 +70,10 @@ export default () => {
   };
 
   return (
-    <div className={css.reviewsPreview}>
+    <>
       <ReviewsHeading />
       <ReviewsList />
       <SeeMoreReviews />
-    </div>
-  );
-};
-
-const ReviewsHeading = () => {
-  const [isLoaded, setLoaded] = useState(false);
-  useEffect(() => setLoaded(true), [isLoaded]);
-
-  return (
-    <Fader
-      determinant={isLoaded}
-      duration={1500}
-      delay={1000}
-      className={css.reviewsPreview}>
-      <Title className={css['reviews-heading']}>
-        What are people saying about us?
-      </Title>
-    </Fader>
+    </>
   );
 };
