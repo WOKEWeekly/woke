@@ -76,7 +76,7 @@ const IPreNavbar = ({ user, theme, clearUser }) => {
       return (
         <div className={css['prenav-authorized']}>
           <Dropdown style={{ zIndex: zIndices.accountMenu }} alignRight>
-            <Dropdown.Toggle variant="dark">
+            <Dropdown.Toggle variant={"dark"}>
               <Icon name={'user'} />
               <Default>{fullname}</Default>
               <Mobile>
