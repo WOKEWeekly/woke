@@ -6,6 +6,7 @@ module.exports = {
     CHANGE_ACCOUNT: 2, // Change username and password
 
     VIEW_TOPICS: 3, // View Topic Bank
+    VIEW_DOCUMENTS: 3, // View Documents
 
     CRUD_BLACKEX: 6, // Add, edit and delete #BlackExcellence candidates
     CRUD_SESSIONS: 6, // Add, edit and delete sessions

@@ -23,9 +23,7 @@ const ReviewsAdmin = ({ user }) => {
   
   const [deleteModalVisible, setDeleteModalVisibility] = useModal(false);
 
-  useEffect(() => {
-    getReviews();
-  }, [isLoaded]);
+  useEffect(() => getReviews(), [isLoaded]);
 
   if (user.clearance < CLEARANCES.ACTIONS.VIEW_ADMIN_REVIEWS) {
     return (location.href = '/');
@@ -132,8 +130,8 @@ const ReviewsAdmin = ({ user }) => {
                 zText.truncateText(review.description, 30),
                 { hideOnMobile: true }
               ],
-              [<EditButton id={review.id} />, { type: 'button' }],
-              [<DeleteButton review={review} />, { type: 'button' }]
+              [<EditButton id={review.id} key={key} />, { type: 'button' }],
+              [<DeleteButton review={review} key={key} />, { type: 'button' }]
             ];
           })}
           distribution={'4% 10% 15% 20% 15% 1fr 4% 4%'}

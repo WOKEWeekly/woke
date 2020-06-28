@@ -48,7 +48,7 @@ module.exports = (app) => {
   });
 
   /** Registered users page */
-  app.get('/users', function (req, res) {
+  app.get('/admin/users', function (req, res) {
     return server.render(req, res, '/users', {
       title: 'Registered Users | #WOKEWeekly'
     });

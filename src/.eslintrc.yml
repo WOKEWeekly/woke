@@ -36,7 +36,7 @@ rules:
   # Active rules
   filenames/match-regex:
     - error
-    - '^([a-z]+[-|\.]?)+$'
+    - '^([a-z0-9]+[-|\.]?)+$'
     - true
   import/no-unresolved:
     - error
@@ -83,6 +83,7 @@ rules:
   no-multiple-empty-lines:
     - warn
     - max: 1
+  no-unreachable: warn
   no-unused-vars: warn
   no-console:
     - warn

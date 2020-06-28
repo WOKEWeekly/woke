@@ -1,157 +1,80 @@
+@import 'Variables';
 
-@import "Variables";
+// TODO: Separate out this file accordingly
 
 .error {
   @extend .text;
-  background: {  
+  align-items: center;
+  display: flex;
+  height: 80vh;
+  justify-content: center;
+  text-align: center;
+  background: {
     attachment: fixed;
     image: url('https://res.cloudinary.com/wokeweekly/image/upload/public/bg/bg-404.jpg');
     position: top;
     repeat: no-repeat;
     size: cover;
   }
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 80vh;
-  text-align: center;
+
   .errorText {
     @extend .responsive-container;
     padding: 1.5em;
+
     .message {
       font-size: 1.6em;
       margin-bottom: 1em;
-      @media (max-width: $break-md) { font-size: 1.3em; }}
+      @media (max-width: $break-md) {
+        font-size: 1.3em;
+      }
+    }
+
     button {
       @extend .link-button;
-      color: white; }
-  } 
-}
-
-/***************************************************************
-* header.js
-**************************************************************/
-
-.prenav {
-  background-color: black;
-  padding: .2em 0 !important;
-  @media (max-width: $break-md) {
-    padding: 3px 0 !important;
-    width: 100% !important; }
-  .auth {
-    font-size: 1.1em;
-    font-family: $body-font;
-    text-align: right;
-    .dropdown_menu {
-      background-color: $dark;
-      border-radius: 10px;
-      overflow: hidden;
-      padding: 0;
-      .dropdown_item {
-        color: white;
-        padding: .7em .8em;
-        &:focus { background: inherit; }
-        &:hover { background: white; color: black;}
-        &:active { background: #007bff; color: white; } }
-      .divider { margin: 0; }
+      color: white;
     }
   }
-  .no_auth {
-    font-size: 1.1em;
-    font-family: $body-font;
-    text-align: right;
-    @media (max-width: $break-md) { font-size: 1em; }
-    .authLink {
-      color: inherit;
-      font-weight: 900;
-      vertical-align: middle; }
-    .divider { 
-      font-weight: 900;
-      padding: 0 .3em; }
-    button { @extend .link-button; }
-
-    &-default { @extend .no_auth; color: $primary; }
-    &-blackex { @extend .no_auth; color: $blackex; }
-    &-mental { @extend .no_auth; color: $mental; }
-  }
 }
 
-.nav {
-  background-size: cover;
-  height: $navbar-height;
-  transition: height 0.3s ease-in-out;
-  -webkit-transition: height 0.3s ease-in-out;
-  @media (max-width: $break-lg) { height: initial; }
-  .brand { @include scale-on-hover(1.08); }
-  a:not(.brand) {
-    font-family: $body-font;
-    font-weight: 700;
-    position: relative;
-    &:before {
-      bottom: 0;
-      content: "";
-      height: 2px;
-      left: 0;
-      position: absolute;
-      transform: scaleX(0);
-      transition: all 0.3s ease-in-out 0s;
-      visibility: hidden;
-      width: 100%;
-      -webkit-transform: scaleX(0);
-      -webkit-transition: all 0.3s ease-in-out 0s;}
-    &:hover:before {
-      -webkit-transform: scaleX(1);
-      transform: scaleX(1);
-      visibility: visible; }
-  }
-
-  &-default { @extend .nav;
-    border-top: 1px solid $primary;
-    border-bottom: 1px solid $primary;
-    a:not(.brand) { color: #d5bde0 !important;
-      &:before { background-color: #D383FF; } } }
-  &-blackex { @extend .nav;
-    border-top: 1px solid $blackex;
-    border-bottom: 1px solid $blackex;
-    a:not(.brand) { color: #d9f7ff !important;
-      &:before { background-color: $blackex; } } }
-  &-mental { @extend .nav;
-    border-top: 1px solid $mental;
-    border-bottom: 1px solid $mental;
-    a:not(.brand) { color: #d9ffeb !important;
-      &:before { background-color: #83ffac; } } }
-}
 
 /***************************************************************
 * footer.js
 **************************************************************/
 
 .footer {
-  background-color: rgba(11, 10, 12, .95);
+  background-color: rgba(11, 10, 12, 0.95);
   bottom: 0%;
   clear: both;
   padding: 1.6em;
   width: 100%;
+
   .footerLinks {
     @extend .text;
     display: flex;
-    width: 100%;
     font-size: 1em;
-    @media (max-width: $break-lg) { display: grid; }
+    width: 100%;
+
     a {
       color: white;
-      margin: 0 .5em; }
+      margin: 0 0.5em;
+    }
+    @media (max-width: $break-lg) {
+      display: grid;
+    }
   }
+
   .author {
     color: #ccc;
     font-family: $body-font;
-    font-size: .9em;
+    font-size: 0.9em;
     text-align: right;
     @media (max-width: $break-lg) {
-      padding-top: 1em; }
+      padding-top: 1em;
+    }
     @media (max-width: $break-sm) {
-      font-size: .8em;
-      margin: 0 .5em;
-      text-align: left; }
+      font-size: 0.8em;
+      margin: 0 0.5em;
+      text-align: left;
+    }
   }
 }
