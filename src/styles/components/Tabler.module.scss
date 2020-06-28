@@ -1,9 +1,9 @@
 @import '../Variables';
 
 .tabler-container {
-  padding: 1em 2em;
+  padding: 1em 0;
   @media (max-width: $break-md) {
-    padding: 0 1em;
+    padding: 0 0.5em;
   }
 }
 
@@ -38,11 +38,11 @@
     @extend %row;
     border-radius: 10px;
     font-family: $body-font;
-  
+
     &:hover {
       background-color: $primary-light;
     }
-  
+
     button {
       @extend %invisible-button;
       cursor: pointer;

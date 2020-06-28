@@ -1,4 +1,4 @@
-import React, { memo, useState, useEffect } from 'react';
+import React, { memo, useEffect, useState } from 'react';
 
 import { Icon } from 'components/icon.js';
 import { Default, Mobile } from 'components/layout.js';
@@ -44,17 +44,14 @@ const Tabler = ({
    * @returns {React.Component[]} The list of row components.
    */
   const ItemRows = () => {
-    return items.map((fields, itemKey) => {
+    return items.map((fields, key) => {
       return (
-        <Fader
-          key={itemKey}
-          determinant={itemsLoaded}
-          duration={500 + itemKey * 100}
-          className={css['tabler-item-row']}
-          postTransitions={'background-color .1s ease'}
-          style={gridDistribution}>
-          <Item fields={fields} />
-        </Fader>
+        <Item
+          fields={fields}
+          distribution={gridDistribution}
+          key={key}
+          index={key}
+        />
       );
     });
   };
@@ -86,54 +83,58 @@ const Tabler = ({
  * Each row in the {@see Tabler} component.
  * @param {object} props - The component props.
  * @param {any[]} props.fields - Each field in the row.
+ * @param {any[]} props.distribution - The CSS grid-template-columns value.
+ * @param {any[]} props.index - The row's index.
  * @returns {React.Component} - The component.
  */
-const Item = memo(({ fields }) => {
+const Item = memo(({ fields, distribution, index }) => {
   const [isLoaded, setLoaded] = useState(false);
-  useEffect(() => {
-    setLoaded(true);
-  }, [isLoaded]);
+  useEffect(() => setLoaded(true), []);
 
-  if (!isLoaded) return null;
-
-  return fields.map((field, key) => {
-    const [value] = field;
-    return (
-      <React.Fragment key={key}>
-        <Default>
-          <span>{value}</span>
-        </Default>
-        <Mobile>
-          <MobileView field={field} key={key} />
-          <CrudButtons fields={fields} />
-        </Mobile>
-      </React.Fragment>
-    );
-  });
+  return (
+    <Fader
+      key={index}
+      determinant={isLoaded}
+      duration={500 + index * 100}
+      delay={index * 30}
+      className={css['tabler-item-row']}
+      postTransitions={'background-color .1s ease'}
+      style={distribution}>
+      {fields.map((field, key) => {
+        const [value] = field;
+        return (
+          <React.Fragment key={key}>
+            <Default>
+              <span>{value}</span>
+            </Default>
+            <Mobile>
+              <MobileView field={field} key={key} />
+              <CrudButtons fields={fields} />
+            </Mobile>
+          </React.Fragment>
+        );
+      })}
+    </Fader>
+  );
 });
 
 /**
  * The mobile view for each {@see Item}.
  * @param {object} props - The component props.
  * @param {any[]} props.field - Each field in the row.
- * @param {any[]} props.key - The key for each row.
  * @returns {React.Component} - The component.
  */
-const MobileView = ({ field, key }) => {
+const MobileView = ({ field }) => {
   const [value, { icon, type, hideOnMobile = false } = {}] = field;
   if (hideOnMobile || type === 'button') return null;
 
   if (type === 'image') {
     return value;
   } else if (type === 'index') {
-    return (
-      <div className={css['tabler-item-index']} key={key}>
-        {value}
-      </div>
-    );
+    return <div className={css['tabler-item-index']}>{value}</div>;
   } else {
     return (
-      <div className={css['tabler-field-mobile']} key={key}>
+      <div className={css['tabler-field-mobile']}>
         <span>
           <Icon name={icon} />
         </span>
@@ -157,11 +158,11 @@ const CrudButtons = memo(({ fields }) => {
       }
     })
     .filter((e) => e);
-  return (
-    <div className={css['tabler-item-buttons']}>
-      {buttons.map((value) => value)}
-    </div>
-  );
+  return buttons.map((value, key) => {
+    <div className={css['tabler-item-buttons']} key={key}>
+      {value}
+    </div>;
+  });
 });
 
 export default Tabler;
