@@ -1,17 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
 import { setAlert } from 'components/alert.js';
 import { SubmitButton, CancelButton } from 'components/button.js';
-import {
-  Group,
-  Label,
-  UsernameInput,
-  PasswordInput,
-  Checkbox
-} from 'components/form';
-import { Modal, useModal } from 'components/modal.js';
+import { Group, Label } from 'components/form';
+import { UsernameInput, PasswordInput, Checkbox } from 'components/form/v2';
+import { Modal } from 'components/modal.js';
 import { setCookie, getCookie } from 'constants/cookies';
 import request from 'constants/request.js';
 import { isValidLogin } from 'constants/validations.js';
@@ -29,17 +24,13 @@ import css from 'styles/Auth.module.scss';
  */
 const Login = ({ close, saveUser, theme, visible }) => {
   const [isLoaded, setLoaded] = useState(false);
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [shouldRemember, setShouldRemember] = useModal(
-    getCookie('remember') === 'true'
-  );
-
-  console.log('re-rendering');
+  const usernameRef = useRef('');
+  const passwordRef = useRef('');
+  const shouldRememberRef = useRef(getCookie('remember') === 'true');
 
   useEffect(() => {
     setLoaded(true);
-  }, []);
+  }, [isLoaded]);
 
   /**
    * Log in once the 'Enter' key is pressed.
@@ -52,7 +43,11 @@ const Login = ({ close, saveUser, theme, visible }) => {
 
   /** Log in as a registered user */
   const logIn = () => {
-    const credentials = { username, password, remember: shouldRemember };
+    const credentials = {
+      username: usernameRef.current.value,
+      password: passwordRef.current.value,
+      remember: shouldRememberRef.current.value
+    };
     if (!isValidLogin(credentials)) return;
 
     request({
@@ -61,7 +56,7 @@ const Login = ({ close, saveUser, theme, visible }) => {
       body: JSON.stringify(credentials),
       headers: { Authorization: process.env.AUTH_KEY },
       onSuccess: (user) => {
-        setCookie('remember', shouldRemember, 365 * 24);
+        setCookie('remember', credentials.remember, 365 * 24);
         saveUser(user);
         close();
         setAlert({ type: 'info', message: `Welcome, ${user.firstname}!` });
@@ -72,29 +67,17 @@ const Login = ({ close, saveUser, theme, visible }) => {
 
   const Header = <h2 className={css['text']}>Log In</h2>;
   const Body = (
-    <div className={css['loginForm']}>
+    <div className={css['login-form']}>
       <Group>
         <Label>Username / Email Address:</Label>
-        <UsernameInput
-          value={username}
-          onChange={(event) => setUsername(event.target.value)}
-          placeholder={'Enter your username'}
-        />
+        <UsernameInput ref={usernameRef} placeholder={'Enter your username'} />
       </Group>
       <Group>
         <Label>Password:</Label>
-        <PasswordInput
-          value={password}
-          onChange={(event) => setPassword(event.target.value)}
-          placeholder={'Enter your password'}
-        />
+        <PasswordInput ref={passwordRef} placeholder={'Enter your password'} />
       </Group>
       <Group>
-        <Checkbox
-          checked={shouldRemember}
-          label={'Stay signed in'}
-          onChange={(event) => setShouldRemember(event.target.checked)}
-        />
+        <Checkbox ref={shouldRememberRef} label={'Stay signed in'} />
       </Group>
       <Group>
         <a href={'/account/recovery'} className={css[`link-${theme}`]}>

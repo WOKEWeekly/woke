@@ -1,14 +1,20 @@
-@import "Variables";
+@import 'Variables';
 
 /******************************************
 *** login.js
 ******************************************/
 
-.loginForm {
+.login-form {
   padding: 1em;
-  @media (max-width: $break-md) { font-size: 1em; }
-  .group { @media (max-width: $break-md) { padding: .5em 0; } }
-  .remember { @media (max-width: $break-md) { margin-top: 1em; } }
+  @media (max-width: $break-md) {
+    font-size: 1em;
+  }
+
+  div {
+    @media (max-width: $break-md) {
+      padding: 0.35em 0;
+    }
+  }
 }
 
 /******************************************
@@ -17,7 +23,9 @@
 
 .form {
   @extend .responsive-form;
-  @media (min-width: $break-lg) { width: 50%; }
+  @media (min-width: $break-lg) {
+    width: 50%;
+  }
 }
 
 .honeypot {
@@ -39,15 +47,18 @@
   padding: 1.5em;
   .name {
     @extend .text;
-    @include font-scaler(2.5);}
+    @include font-scaler(2.5);
+  }
   .username {
     color: grey;
     font-family: $body-font;
-    @include font-scaler(1.5);}
+    @include font-scaler(1.5);
+  }
   .clearance {
     color: white;
     font-family: $title-font;
-    @include font-scaler(1.5);}
+    @include font-scaler(1.5);
+  }
   .links {
     display: grid;
     margin-top: 2em;
@@ -56,7 +67,8 @@
       color: #9360ce;
       font-family: $body-font;
       @include font-scaler(1.1);
-      text-align: left; }
+      text-align: left;
+    }
     .features {
       @extend .text;
       @include font-scaler(1.2);
@@ -67,7 +79,6 @@
       font-family: $body-font;
     }
   }
-
 
   .generatedLink {
     margin-top: 1em;
@@ -81,5 +92,7 @@
 .instructions {
   @extend .text;
   font-size: 1.2em;
-  div { margin: 1em 0;}
+  div {
+    margin: 1em 0;
+  }
 }
