@@ -14,6 +14,7 @@ import { BottomToolbar } from 'components/toolbar.js';
 import { Fader, Colorizer } from 'components/transitioner.js';
 import CLEARANCES from 'constants/clearances.js';
 import request from 'constants/request.js';
+import { ARTICLE_STATUS } from 'constants/strings';
 import css from 'styles/pages/Articles.module.scss';
 
 import ArticleSidebar from './single.sidebar';
@@ -158,6 +159,8 @@ const ArticlePage = ({ article, user }) => {
   };
 
   const ReactionBlock = () => {
+    if (article.status !== ARTICLE_STATUS.PUBLISHED) return null;
+
     return (
       <>
         <Title className={css['reaction-heading']}>
@@ -174,14 +177,15 @@ const ArticlePage = ({ article, user }) => {
             color={'rgba(243, 10, 63, 0.5)'}
             determinant={clapCountAnimating}
             duration={500}
-            className={css['clap-count-block']}
-            >
+            className={css['clap-count-block']}>
             <Icon name={'heart'} style={{ color: 'red', fontSize: '1.2rem' }} />
             <span className={css['clap-count']}>
               {clapCount} clap{clapCount !== 1 && 's'}
             </span>
           </Colorizer>
         </div>
+
+        <SocialMediaShareBlock message={shareMessage} url={location.href} />
       </>
     );
   };
@@ -236,10 +240,6 @@ const ArticlePage = ({ article, user }) => {
                 <Content />
                 <TagBlock />
                 <ReactionBlock />
-                <SocialMediaShareBlock
-                  message={shareMessage}
-                  url={location.href}
-                />
                 <Divider />
                 <AuthorProfile />
               </Container>
