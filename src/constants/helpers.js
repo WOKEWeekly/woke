@@ -1,3 +1,8 @@
+/**
+ * Determine the slug of a specified member based on their level.
+ * @param {object} member - The member.
+ * @returns {string} The full slug.
+ */
 exports.determineMemberSlug = (member) => {
   if (!member) return '/';
 
