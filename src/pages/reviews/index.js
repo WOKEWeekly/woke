@@ -68,6 +68,7 @@ class ReviewsList extends Component {
             subtitle={description}
             image={'header-reviews.jpg'}
             height={200}
+            imageVersion={1593013330}
             backgroundPosition={'center'}
           />
 
