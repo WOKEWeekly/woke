@@ -21,10 +21,9 @@ pipeline {
     EMAIL_PWD = credentials('email-pwd')
   }
 
-  // TODO: revert after
-  // options {
-  //   timeout(time: 4.5, unit: 'MINUTES')
-  // }
+  options {
+    timeout(time: 7.5, unit: 'MINUTES')
+  }
 
   stages {
     stage('Install dependencies') {
