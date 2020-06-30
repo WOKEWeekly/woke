@@ -4,7 +4,7 @@ import { isSmallDevice } from 'components/layout';
 import { Title, ReadMore } from 'components/text.js';
 import { Fader } from 'components/transitioner.js';
 import request from 'constants/request.js';
-import Review from 'pages/reviews/unit.js';
+import Review from 'partials/pages/reviews/unit.js';
 import css from 'styles/pages/Reviews.module.scss';
 
 export default () => {

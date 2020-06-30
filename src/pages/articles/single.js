@@ -15,9 +15,8 @@ import { Fader, Colorizer } from 'components/transitioner.js';
 import CLEARANCES from 'constants/clearances.js';
 import request from 'constants/request.js';
 import { ARTICLE_STATUS } from 'constants/strings';
+import ArticleSidebar from 'partials/pages/articles/single.sidebar';
 import css from 'styles/pages/Articles.module.scss';
-
-import ArticleSidebar from './single.sidebar';
 
 const clapLimit = 5;
 

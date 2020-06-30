@@ -168,7 +168,7 @@ const MemberAdmin = ({ user, countries }) => {
 
   return (
     <>
-      <Shader className={css.memberTabler}>
+      <Shader className={css['member-admin-container']}>
         <MemberCollection />
       </Shader>
 

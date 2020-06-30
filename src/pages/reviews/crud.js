@@ -7,7 +7,7 @@ import request from 'constants/request.js';
 import { cloudinary } from 'constants/settings.js';
 import { isValidReview } from 'constants/validations.js';
 
-import ReviewForm from './form.js';
+import ReviewForm from 'partials/pages/reviews/form.js';
 
 class ReviewCrud extends Component {
   static async getInitialProps({ query }) {

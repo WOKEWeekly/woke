@@ -7,7 +7,7 @@ import request from 'constants/request.js';
 import { cloudinary } from 'constants/settings.js';
 import { isValidCandidate } from 'constants/validations.js';
 
-import CandidateForm from './form.js';
+import CandidateForm from 'partials/pages/candidates/form.js';
 
 class CandidateAdd extends Component {
   static async getInitialProps({ query }) {
