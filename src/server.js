@@ -12,7 +12,7 @@ const { limits } = require('./constants/settings');
 const next = require('next');
 const server = next({
   dev,
-  quiet: isStageTesting
+  quiet: false // TODO: change back
 });
 const handle = server.getRequestHandler();
 
