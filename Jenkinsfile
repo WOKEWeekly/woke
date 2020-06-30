@@ -36,7 +36,7 @@ pipeline {
     stage('Build') {
       steps {
         dir('src') {
-          sh 'npm run build'
+          sh 'npm run build --max-old-space-size=1024'
         }
       }
     }
