@@ -51,7 +51,7 @@ const navigationLinks = [
  * @param {Function} props.clearUser - The reducer called after user logs out.
  * @returns {React.Component} The component.
  */
-const IPreNavbar = ({ user, theme, clearUser }) => {
+const PreNavbar = ({ user, theme, clearUser }) => {
   const [isLoaded, setLoaded] = useState(false);
   const [loginModalVisible, setLoginModalVisibility] = useModal(false);
 
@@ -66,7 +66,7 @@ const IPreNavbar = ({ user, theme, clearUser }) => {
   const logOut = () => {
     clearUser();
     setAlert({ type: 'info', message: 'You have successfully logged out.' });
-    location.reload();
+    setTimeout(() => location.reload(), 500);
   };
 
   const AccountBlock = () => {
@@ -76,7 +76,7 @@ const IPreNavbar = ({ user, theme, clearUser }) => {
       return (
         <div className={css['prenav-authorized']}>
           <Dropdown style={{ zIndex: zIndices.accountMenu }} alignRight>
-            <Dropdown.Toggle variant={"dark"}>
+            <Dropdown.Toggle variant={'dark'}>
               <Icon name={'user'} />
               <Default>{fullname}</Default>
               <Mobile>
@@ -149,7 +149,7 @@ const IPreNavbar = ({ user, theme, clearUser }) => {
  * @param {string} props.theme - The page theme.
  * @returns {React.Component} The component.
  */
-const IMainNavbar = ({ user, theme }) => {
+const MainNavbar = ({ user, theme }) => {
   const [isLoaded, setLoaded] = useState(false);
   const [navImageSrc, setNavImageSource] = useState('');
 
@@ -204,10 +204,16 @@ const mapDispatchToProps = (dispatch) =>
     dispatch
   );
 
-export const PreNavBar = connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(IPreNavbar);
-export const MainNavBar = connect(
-  mapStateToProps
-)(IMainNavbar);
+const Header = () => {
+  const PreNav = connect(mapStateToProps, mapDispatchToProps)(PreNavbar);
+  const MainNav = connect(mapStateToProps, mapDispatchToProps)(MainNavbar);
+
+  return (
+    <>
+      <PreNav />
+      <MainNav />
+    </>
+  );
+};
+
+export default Header;
