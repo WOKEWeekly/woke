@@ -21,22 +21,23 @@ pipeline {
     EMAIL_PWD = credentials('email-pwd')
   }
 
-  options {
-    timeout(time: 4.5, unit: 'MINUTES')
-  }
+  // TODO: revert after
+  // options {
+  //   timeout(time: 4.5, unit: 'MINUTES')
+  // }
 
   stages {
     stage('Install dependencies') {
       steps {
         dir('src') {
-          sh 'npm install'
+          sh 'npm ci'
         }
       }
     }
     stage('Build') {
       steps {
         dir('src') {
-          sh 'npm run build --max-old-space-size=1024'
+          sh 'npm run build'
         }
       }
     }
