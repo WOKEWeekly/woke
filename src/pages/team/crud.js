@@ -7,7 +7,7 @@ import request from 'constants/request.js';
 import { cloudinary } from 'constants/settings.js';
 import { isValidMember } from 'constants/validations.js';
 
-import MemberForm from './form.js';
+import MemberForm from 'partials/pages/members/form.js';
 
 // TODO: Handle resulting hyperlink after editing member
 

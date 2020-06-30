@@ -1,5 +1,12 @@
 @import '../Variables';
 
+.review-admin-container {
+  padding: 1em 2em;
+  @media (max-width: $break-md) {
+    padding: 1em 0.5em;
+  }
+}
+
 .reviews-heading {
   @include font-scaler(2);
   margin: 0.5em 0;

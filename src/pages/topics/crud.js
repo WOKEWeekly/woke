@@ -6,7 +6,7 @@ import { setAlert } from 'components/alert.js';
 import request from 'constants/request.js';
 import { isValidTopic } from 'constants/validations.js';
 
-import TopicForm from './form.js';
+import TopicForm from 'partials/pages/topics/form.js';
 
 class TopicCrud extends Component {
   static async getInitialProps({ query }) {

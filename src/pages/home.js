@@ -4,12 +4,12 @@ import { Container, Col, Row } from 'react-bootstrap';
 import { Cover, Shader } from 'components/layout.js';
 import css from 'styles/pages/Home.module.scss';
 
-const ThreePart = React.lazy(() => import('./home.advertiser'));
-const ReviewsPreview = React.lazy(() => import('./home.reviews'));
-const UpcomingSession = React.lazy(() => import('./home.session'));
-const RandomCandidate = React.lazy(() => import('./home.candidate'));
-const TopicVoter = React.lazy(() => import('./home.voter'));
-const RandomMember = React.lazy(() => import('./home.member'));
+const ThreePart = React.lazy(() => import('../partials/pages/home/home.advertiser'));
+const ReviewsPreview = React.lazy(() => import('../partials/pages/home/home.reviews'));
+const UpcomingSession = React.lazy(() => import('../partials/pages/home/home.session'));
+const RandomCandidate = React.lazy(() => import('../partials/pages/home/home.candidate'));
+const TopicVoter = React.lazy(() => import('../partials/pages/home/home.voter'));
+const RandomMember = React.lazy(() => import('../partials/pages/home/home.member'));
 
 export default class Home extends Component {
   constructor() {

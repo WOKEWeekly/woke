@@ -7,7 +7,7 @@ import { Empty, Loader } from 'components/loader.js';
 import { BottomToolbar } from 'components/toolbar.js';
 import CLEARANCES from 'constants/clearances.js';
 import request from 'constants/request.js';
-import Review from 'pages/reviews/unit.js';
+import Review from 'partials/pages/reviews/unit.js';
 import css from 'styles/pages/Reviews.module.scss';
 
 class ReviewsList extends Component {
