@@ -46,7 +46,7 @@ const Login = ({ close, saveUser, theme, visible }) => {
     const credentials = {
       username: usernameRef.current.value,
       password: passwordRef.current.value,
-      remember: shouldRememberRef.current.value
+      remember: shouldRememberRef.current.checked
     };
     if (!isValidLogin(credentials)) return;
 
