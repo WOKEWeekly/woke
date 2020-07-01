@@ -1,59 +1,84 @@
-@import "../Variables";
+@import '../Variables';
+@import '../externals/scss/main';
 
-.toastContainer {
+.toast-container {
   left: 0 !important;
   margin: 0 !important;
   padding: 0 1em !important;
   width: 100% !important;
 }
 
-.message {
+.toast-message {
+  @extend .responsive-container;
   border-radius: 10px !important;
   font-family: $body-font !important;
   font-weight: bold;
   text-align: center;
-  @extend .responsive-container;
-  @media (max-width: $break-md) { font-size: .9em; }
-}
-
-.cookiePrompt {
-  background-color: rgba(0,0,0,0.95);
-  bottom: 0%;
-  font-size: 1em;
-  padding: .7em;
-  margin: 0;
-  position: -webkit-sticky;
-  position: sticky;
-  width: 100%;
-  z-index: 1100;
-  @media (max-width: $break-md) { font-size: .8em; }
-  div {
-    @extend .responsive-container;
-    display: flex;
-    align-items: center;
-    span {
-      color: white;
-      font-family: $title-font;
-      margin: 0 auto;
-      padding-right: 1em;
-      a {
-        color: white;
-        text-decoration: underline;
-      }
-    }
-    button { @extend .invisible_button; }
+  @media (max-width: $break-md) {
+    font-size: 0.9em;
   }
 }
 
-.fadeIn { animation-name: fadeIn; }
-.fadeOut { animation-name: fadeOut; }
+.toast-transition-fadein {
+  animation-name: fadeIn;
+}
+
+.toast-transition-fadeout {
+  animation-name: fadeOut;
+}
 
 @keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
 }
 
 @keyframes fadeOut {
-  from { opacity: 1; }
-  to { opacity: 0; }
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+  }
+}
+
+.cookiePrompt {
+  background-color: rgba(0, 0, 0, 0.95);
+  bottom: 0%;
+  font-size: 1em;
+  margin: 0;
+  padding: 0.7em;
+  position: sticky;
+  width: 100%;
+  z-index: 1100;
+
+  div {
+    @extend .responsive-container;
+    align-items: center;
+    display: flex;
+
+    span {
+      color: #fff;
+      font-family: $title-font;
+      margin: 0 auto;
+      padding-right: 1em;
+
+      a {
+        color: #fff;
+        text-decoration: underline;
+      }
+    }
+
+    button {
+      @extend .invisible_button;
+    }
+  }
+  @media (max-width: $break-md) {
+    font-size: 0.8em;
+  }
 }
