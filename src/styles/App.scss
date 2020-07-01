@@ -35,6 +35,9 @@
   border-radius: 15px !important;
   overflow: hidden;
 }
+.modal-footer {
+  flex-wrap: nowrap;
+}
 
 /** Global styles for tooltips **/
 .tooltip [class$="inner"] {
