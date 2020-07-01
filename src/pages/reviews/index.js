@@ -53,7 +53,7 @@ class ReviewsList extends Component {
           );
         });
         return (
-          <div className={css['review-index-container']}>
+          <div className={css['reviews-index-container']}>
             <div className={css['reviews-list']}>{items}</div>
           </div>
         );
