@@ -160,10 +160,10 @@ exports.isValidMember = (member) => {
     return false;
   if (!ifExists(member.lastname, "Enter the member's last name.")) return false;
   if (!ifExists(member.level, "Select the member's level.")) return false;
-  if (!ifExists(member.role, "Enter the candidate's role.")) return false;
+  if (!ifExists(member.role, "Enter the member's role.")) return false;
   if (
     member.level !== 'Guest' &&
-    !ifExists(member.birthday, "Select the candidate's date of birth.")
+    !ifExists(member.birthday, "Select the member's date of birth.")
   )
     return false;
   if (!isUnderFileSizeLimit(member.image)) return false;
@@ -305,7 +305,7 @@ const ifExists = (value, message) => {
     value = value.trim();
   }
 
-  if (!value || !value.length) {
+  if (!value || value.length === 0) {
     alert.error(message);
     return false;
   } else {
