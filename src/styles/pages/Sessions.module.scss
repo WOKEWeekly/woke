@@ -54,9 +54,13 @@
     border-radius: 10px;
     border: 1px solid $faded-white;
     cursor: pointer;
-    margin: 0.8em 0;
+    margin: 1em 0;
     overflow: hidden;
     user-select: none;
+    @media (max-width: $break-md) {
+      margin: 1em;
+    }
+
     .image { width: 100%; }
     .details {
       padding: 1em;
