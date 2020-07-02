@@ -155,9 +155,13 @@ class MemberCrud extends Component {
       body: data,
       headers: { Authorization: `Bearer ${this.props.user.token}` },
       onSuccess: ({ slug }) => {
-        const { firstname, lastname } = this.state;
+        const { firstname, lastname, level } = this.state;
         const backPath =
-          slug === null ? '/admin/members' : `/team/${slug}`;
+          slug === null
+            ? '/admin/members'
+            : level === 'Guest'
+            ? `/author/${slug}`
+            : `/team/${slug}`;
 
         setAlert({
           type: 'success',
