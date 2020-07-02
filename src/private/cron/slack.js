@@ -95,7 +95,7 @@ const constructBirthdayMessage = (member) => {
  * Constructs the session reminder message to be sent.
  * @param {string} session - The session.
  * @param {string} session.title - The title of the session.
- * @param {string} session.title - The time the session will be held.
+ * @param {string} session.timeHeld - The time the session will be held.
  * @returns {string} The constructed message.
  */
 const constructSessionReminderMessage = ({ title, timeHeld }) => {

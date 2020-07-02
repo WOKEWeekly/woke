@@ -1,7 +1,7 @@
 const schedule = require('node-schedule');
 
-const { notifyMemberBirthday, notifySessionToday } = require('./database');
-const { notifyDueExecTasks, notifyUncaptionedCards } = require('./trello');
+const database = require('./database');
+const trello = require('./trello');
 
 const isDev = process.env.NODE_ENV !== 'production';
 
@@ -32,21 +32,21 @@ const INTERVALS = {
 module.exports = () => {
   schedule.scheduleJob(
     isBirthdayTest ? testInterval : INTERVALS.BIRTHDAYS,
-    notifyMemberBirthday
+    database.notifyMemberBirthday
   );
 
   schedule.scheduleJob(
     isSessionTest ? testInterval : INTERVALS.SESSIONS,
-    notifySessionToday
+    database.notifySessionToday
   );
 
   schedule.scheduleJob(
     isDueExecTaskTest ? testInterval : INTERVALS.DUE_EXEC_TASKS,
-    notifyDueExecTasks
+    trello.notifyDueExecTasks
   );
 
   schedule.scheduleJob(
     isPostsWithoutCaptionTest ? testInterval : INTERVALS.POSTS_WITHOUT_CAPTIONS,
-    notifyUncaptionedCards
+    trello.notifyUncaptionedCards
   );
 };
