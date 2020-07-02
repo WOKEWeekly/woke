@@ -90,7 +90,7 @@ const WOKEApp = ({ Component, pageProps, router }) => {
 
   /**
    * Show the cookies prompt if the cookie policy has not been accepted.
-   * @returns {React.Compoent}The cookie prompt component. Null if cookies have been accepted.
+   * @returns {React.Component}The cookie prompt component. Null if cookies have been accepted.
    */
   const CookiePolicyAlert = () => {
     if (isCookiePolicyAccepted) return null;
