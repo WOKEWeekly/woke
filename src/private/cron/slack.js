@@ -1,11 +1,12 @@
 const { WebClient } = require('@slack/web-api');
-const { zDate } = require('zavid-modules');
+const { zDate, zString } = require('zavid-modules');
 const inDev = process.env.NODE_ENV !== 'production';
 
 const slack = new WebClient(process.env.SLACK_TOKEN);
 
 const mySlackID = 'UDEMRRR8T';
 const channels = {
+  exec: 'exec',
   general: 'general',
   socialMedia: 'socialmedia'
 };
@@ -20,12 +21,12 @@ exports.sendSessionReminder = async (session) => {
   await postMessage(message, channels.general);
 };
 
-exports.sendTrelloReminder = async () => {
-  const message = constructTrelloReminderMessage();
-  await postMessage(message, channels.socialMedia);
+exports.sendDueExecTasks = async (cards) => {
+  const message = constructDueExecTaskMessage(cards);
+  await postMessage(message, channels.exec);
 };
 
-exports.sendSocialMediaUncaptionedCards = async (cards) => {
+exports.sendPostsWithoutCaptions = async (cards) => {
   const message = constructSMUCMessage(cards);
   await postMessage(message, channels.socialMedia);
 };
@@ -124,13 +125,18 @@ const constructSessionReminderMessage = ({ title, timeHeld }) => {
   )}`;
 };
 
-/**
- * Constructs the Trello task reminder message to be sent.
- * @returns {string} The constructed message.
- */
-const constructTrelloReminderMessage = () => {
+const constructDueExecTaskMessage = (cards) => {
+  const cardMessages = cards
+    .map(({ name, due, members }) => {
+      const item = `• "_${name}_" assigned to *${zString.toPunctuatedList(
+        members
+      )}* which was due *${zDate.formatDate(due, true)}*`;
+      return item;
+    })
+    .join('\n');
+
   return `
-  Hello everybody. Hope everyone's feeling good!\nThis is your weekly reminder to *move*, or *report progress on*, your tasks on the Trello board.\nHave an amazing week!
+  Executives.\nThe following tasks have passed their due date:\n\n${cardMessages}\n\nPlease report the status of your task. If it is complete, move it to "Done".
   `;
 };
 
@@ -140,11 +146,13 @@ const constructTrelloReminderMessage = () => {
  * @returns {string} The constructed message.
  */
 const constructSMUCMessage = (cards) => {
-  const cardMessages = cards.map((card) => {
-    return `"_${card.name}_" due *${zDate.formatDate(card.due, true)}*`;
-  }).join('\n');
+  const cardMessages = cards
+    .map((card) => {
+      return `• "_${card.name}_" due *${zDate.formatDate(card.due, true)}*`;
+    })
+    .join('\n');
   return `
-  Social Media Team!\nThe following cards have been assigned a due date but have not yet been captioned:\n\n${cardMessages}\n\nCan somebody please caption them!
+  Social Media Team!\nThe following posts have been scheduled but have not yet been captioned:\n\n${cardMessages}\n\nCan somebody please caption them!
   `;
 };
 

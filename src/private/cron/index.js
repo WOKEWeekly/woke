@@ -1,3 +1,4 @@
+const async = require('async');
 const fetch = require('node-fetch');
 const schedule = require('node-schedule');
 
@@ -6,26 +7,39 @@ const slack = require('./slack.js');
 const knex = require('../singleton/knex').getKnex();
 
 const isDev = process.env.NODE_ENV !== 'production';
+const TRELLO_API_KEY = process.env.TRELLO_API_KEY;
+const TRELLO_TOKEN = process.env.TRELLO_TOKEN;
+const queryParams = `key=${TRELLO_API_KEY}&token=${TRELLO_TOKEN}`;
 
+/** 5 second interval for test messages. */
 const testInterval = '*/5 * * * * *';
 
+/** Toggle to test each */
 const isBirthdayTest = isDev && false;
 const isSessionTest = isDev && false;
-const isTrelloTaskTest = isDev && false;
-const isUncaptionedCardTest = isDev && false;
+const isDueExecTaskTest = isDev && true;
+const isPostsWithoutCaptionTest = isDev && false;
 
+/** The Trello board IDs */
+const BOARDS = {
+  EXEC: 'cPCwhUI4',
+  GENERAL: 'mbzVPEE6',
+  SOCIAL_MEDIA: 'qKuY4vcl'
+};
+
+/** The intervals for each cron job */
 const INTERVALS = {
-  // Everyday at 9:00am
-  BIRTHDAYS: '0 9 * * *',
+  // Everyday at 8:00am
+  BIRTHDAYS: '0 8 * * *',
 
   // Everyday at 10:00am
   SESSIONS: '0 10 * * *',
 
-  // Every Monday at 7:00am
-  TRELLO_TASKS: '0 7 * * 1',
+  // Everyday at 9:00am
+  DUE_EXEC_TASKS: '0 7 * * 1',
 
-  // Every weekday at 9:00am
-  UNCAPTIONED_CARDS: '0 9 * * 1-5'
+  // Every weekday at 8:00am
+  POSTS_WITHOUT_CAPTIONS: '0 8 * * 1-5'
 };
 
 module.exports = () => {
@@ -39,18 +53,13 @@ module.exports = () => {
     notifySessionToday
   );
 
-  /** Notify General Slack channel of to accelerate Trello tasks */
-  // schedule.scheduleJob(
-  //   isTrelloTaskTest ? testInterval : trelloWeeklyReminderTime,
-  //   function () {
-  //     slack.sendTrelloReminder();
-  //     console.info(`Trello weekly reminder sent.`);
-  //   }
-  // );
-
-  /** Notify General Slack channel of to accelerate Trello tasks */
   schedule.scheduleJob(
-    isUncaptionedCardTest ? testInterval : INTERVALS.UNCAPTIONED_CARDS,
+    isDueExecTaskTest ? testInterval : INTERVALS.DUE_EXEC_TASKS,
+    notifyDueExecTasks
+  );
+
+  schedule.scheduleJob(
+    isPostsWithoutCaptionTest ? testInterval : INTERVALS.POSTS_WITHOUT_CAPTIONS,
     notifyUncaptionedCards
   );
 };
@@ -95,33 +104,88 @@ const notifySessionToday = () => {
   });
 };
 
+const notifyDueExecTasks = () => {
+  getCardsFromTrelloBoard(BOARDS.EXEC, (cards) => {
+    const seenMembers = {};
+    const execTasks = cards
+      .map((card) => {
+        const { name, due, dueComplete, idMembers } = card;
+        const dueInMs = new Date(due).getTime();
+
+        // If card has a due date, was due in the past
+        // and has not been completed...
+        if (due && dueInMs < Date.now() && !dueComplete) {
+          const members = idMembers.map((memberId) => {
+            seenMembers[memberId] = '';
+            return memberId;
+          });
+
+          return { name, due, members };
+        }
+      })
+      .filter((e) => e);
+
+    if (!execTasks.length) return;
+
+    async.mapValues(
+      seenMembers,
+      function (value, id, callback) {
+        getMemberByTrelloId(id, (name) => {
+          const firstname = name.split(' ')[0];
+          callback(null, firstname);
+        });
+      },
+      function (err, memberMapping) {
+        const execTasksWithMembers = execTasks.map((card) => {
+          card.members = card.members.map((member) => {
+            return memberMapping[member];
+          });
+
+          return card;
+        });
+
+        slack.sendDueExecTasks(execTasksWithMembers);
+      }
+    );
+  });
+};
+
 /** Notify Social Media Slack channel of uncaptioned cards */
 const notifyUncaptionedCards = () => {
-  const id = 'qKuY4vcl';
-  const key = process.env.TRELLO_API_KEY;
-  const token = process.env.TRELLO_TOKEN;
-  fetch(
-    `https://api.trello.com/1/boards/${id}/cards?key=${key}&token=${token}`,
-    { method: 'GET' }
-  )
+  getCardsFromTrelloBoard(BOARDS.SOCIAL_MEDIA, (cards) => {
+    const postWithoutCaptions = cards
+      .map((card) => {
+        const { name, desc, due } = card;
+        const dueinMs = new Date(due).getTime();
+
+        // If card has a due date, is due in the future
+        // and doesn't already have a caption...
+        if (due && dueinMs > Date.now() && !desc) {
+          return { name, due };
+        }
+      })
+      .filter((e) => e);
+
+    if (postWithoutCaptions.length) {
+      slack.sendPostsWithoutCaptions(postWithoutCaptions);
+    }
+  });
+};
+
+const getCardsFromTrelloBoard = (boardId, callback) => {
+  fetch(`https://api.trello.com/1/boards/${boardId}/cards?${queryParams}`, {
+    method: 'GET'
+  })
     .then((res) => res.json())
-    .then((cards) => {
-      const uncaptionedCards = cards
-        .map((card) => {
-          const { name, desc, due } = card;
-          const dueinMs = new Date(due).getTime();
+    .then((cards) => callback(cards))
+    .catch((err) => console.error(err));
+};
 
-          // If card has a due date, is due in the future
-          // and doesn't already have a caption...
-          if (due && dueinMs > Date.now() && !desc) {
-            return { name, due };
-          }
-        })
-        .filter((e) => e);
-
-      if (uncaptionedCards.length) {
-        slack.sendSocialMediaUncaptionedCards(uncaptionedCards);
-      }
-    })
+const getMemberByTrelloId = (memberId, callback) => {
+  fetch(`https://api.trello.com/1/members/${memberId}?${queryParams}`, {
+    method: 'GET'
+  })
+    .then((res) => res.json())
+    .then(({ fullName }) => callback(fullName))
     .catch((err) => console.error(err));
 };
