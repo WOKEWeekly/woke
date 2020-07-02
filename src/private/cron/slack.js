@@ -130,7 +130,7 @@ const constructDueExecTaskMessage = (cards) => {
     .map(({ name, due, members }) => {
       const item = `• "_${name}_" assigned to *${zString.toPunctuatedList(
         members
-      )}* which was due *${zDate.formatDate(due, true)}*`;
+      )}* which was due *${zDate.getAdverbRelativeToToday(due)}*.`;
       return item;
     })
     .join('\n');
@@ -148,7 +148,7 @@ const constructDueExecTaskMessage = (cards) => {
 const constructSMUCMessage = (cards) => {
   const cardMessages = cards
     .map((card) => {
-      return `• "_${card.name}_" due *${zDate.formatDate(card.due, true)}*`;
+      return `• "_${card.name}_" due *${zDate.getAdverbRelativeToToday(card.due)}*.`;
     })
     .join('\n');
   return `
