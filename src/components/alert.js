@@ -27,7 +27,7 @@ exports.alert = {
     toast(message, { className: classNames('alert-danger', classes) });
   },
   info: (message) => {
-    toast(message, { className: classNames('alert-primary', classes) });
+    toast(message, { className: classNames('alert-info', classes) });
   }
 };
 
