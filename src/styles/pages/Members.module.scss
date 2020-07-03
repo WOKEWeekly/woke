@@ -111,8 +111,11 @@
 *** admin.js
 *************/
 
-.memberTabler {
-  @include entity-tabler(4% 15% 4% 0.6fr 1.3fr 1fr 0.8fr 4% 4% 4%);
+.member-admin-container {
+  padding: 1em 2em;
+  @media (max-width: $break-md) {
+    padding: 1em 0.5em;
+  }
 }
 
 .userTabler {

@@ -22,14 +22,14 @@ pipeline {
   }
 
   options {
-    timeout(time: 4.5, unit: 'MINUTES')
+    timeout(time: 7.5, unit: 'MINUTES')
   }
 
   stages {
     stage('Install dependencies') {
       steps {
         dir('src') {
-          sh 'npm install'
+          sh 'npm ci'
         }
       }
     }

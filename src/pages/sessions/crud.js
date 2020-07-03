@@ -7,7 +7,7 @@ import request from 'constants/request.js';
 import { cloudinary } from 'constants/settings.js';
 import { isValidSession } from 'constants/validations.js';
 
-import SessionForm from './form.js';
+import SessionForm from 'partials/pages/sessions/form.js';
 
 class SessionCrud extends Component {
   static async getInitialProps({ query }) {

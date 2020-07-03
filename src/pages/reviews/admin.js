@@ -142,7 +142,7 @@ const ReviewsAdmin = ({ user }) => {
 
   return (
     <>
-      <Shader className={css.reviewTabler}>
+      <Shader className={css['review-admin-container']}>
         <ReviewCollection />
       </Shader>
 

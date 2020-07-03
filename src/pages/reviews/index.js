@@ -7,7 +7,7 @@ import { Empty, Loader } from 'components/loader.js';
 import { BottomToolbar } from 'components/toolbar.js';
 import CLEARANCES from 'constants/clearances.js';
 import request from 'constants/request.js';
-import Review from 'pages/reviews/unit.js';
+import Review from 'partials/pages/reviews/unit.js';
 import css from 'styles/pages/Reviews.module.scss';
 
 class ReviewsList extends Component {
@@ -53,7 +53,7 @@ class ReviewsList extends Component {
           );
         });
         return (
-          <div className={css['review-index-container']}>
+          <div className={css['reviews-index-container']}>
             <div className={css['reviews-list']}>{items}</div>
           </div>
         );
@@ -68,6 +68,7 @@ class ReviewsList extends Component {
             subtitle={description}
             image={'header-reviews.jpg'}
             height={200}
+            imageVersion={1593013330}
             backgroundPosition={'center'}
           />
 

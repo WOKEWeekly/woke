@@ -7,7 +7,7 @@ import request from 'constants/request.js';
 import { OPERATIONS } from 'constants/strings.js';
 import { isValidDocument } from 'constants/validations.js';
 
-import DocumentForm from './form.js';
+import DocumentForm from 'partials/pages/documents/form.js';
 
 class DocumentCrud extends Component {
   static async getInitialProps({ query }) {

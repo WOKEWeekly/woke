@@ -8,8 +8,7 @@ import request from 'constants/request.js';
 import { cloudinary } from 'constants/settings.js';
 import { ARTICLE_STATUS, OPERATIONS } from 'constants/strings.js';
 import { isValidArticle } from 'constants/validations.js';
-
-import ArticleForm from './form.js';
+import ArticleForm from 'partials/pages/articles/form.js';
 
 const ArticleCrud = ({ article: currentArticle, operation, title, user }) => {
   const [stateArticle, setArticle] = useState({

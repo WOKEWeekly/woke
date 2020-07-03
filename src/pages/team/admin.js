@@ -12,8 +12,8 @@ import { Title } from 'components/text.js';
 import { BottomToolbar } from 'components/toolbar.js';
 import CLEARANCES from 'constants/clearances.js';
 import { countriesToString } from 'constants/countries.js';
-import { determineMemberSlug } from 'constants/helpers';
 import request from 'constants/request.js';
+import { determineMemberSlug } from 'partials/pages/members/helpers';
 import css from 'styles/pages/Members.module.scss';
 
 const MemberAdmin = ({ user, countries }) => {
@@ -168,7 +168,7 @@ const MemberAdmin = ({ user, countries }) => {
 
   return (
     <>
-      <Shader className={css.memberTabler}>
+      <Shader className={css['member-admin-container']}>
         <MemberCollection />
       </Shader>
 

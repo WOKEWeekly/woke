@@ -3,33 +3,31 @@ const { toast, cssTransition } = require('react-toastify');
 
 const css = require('styles/components/Alert.module.scss');
 
-const animation = cssTransition({
-  enter: css.fadeIn,
-  exit: css.fadeOut,
-  duration: 500
-});
-
 toast.configure({
   autoClose: 2500,
-  className: css.toastContainer,
+  className: css['toast-container'],
   closeButton: false,
   draggable: false,
   hideProgressBar: true,
   position: toast.POSITION.BOTTOM_CENTER,
-  transition: animation
+  transition: cssTransition({
+    enter: css['toast-transition-fadein'],
+    exit: css['toast-transition-fadeout'],
+    duration: 500
+  })
 });
 
-const defaultClasses = ['alert', css.message];
+const classes = ['alert', css['toast-message']];
 
 exports.alert = {
   success: (message) => {
-    toast(message, { className: classNames('alert-success', defaultClasses) });
+    toast(message, { className: classNames('alert-success', classes) });
   },
   error: (message) => {
-    toast(message, { className: classNames('alert-danger', defaultClasses) });
+    toast(message, { className: classNames('alert-danger', classes) });
   },
   info: (message) => {
-    toast(message, { className: classNames('alert-primary', defaultClasses) });
+    toast(message, { className: classNames('alert-info', classes) });
   }
 };
 
