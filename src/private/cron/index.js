@@ -11,7 +11,7 @@ const testInterval = '*/5 * * * * *';
 /** Toggle to test each */
 const isBirthdayTest = isDev && false;
 const isSessionTest = isDev && false;
-const isDueExecTaskTest = isDev && true;
+const isDueExecTaskTest = isDev && false;
 const isPostsWithoutCaptionTest = isDev && false;
 
 /** The intervals for each cron job */
