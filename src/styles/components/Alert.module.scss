@@ -1,10 +1,12 @@
 @import '../Variables';
 
 .toast-container {
-  left: 0 !important;
   margin: 0 !important;
   padding: 0 1em !important;
   width: 100% !important;
+  @media (max-width: $break-sm) {
+    padding: .5em 1em !important;
+  }
 }
 
 .toast-message {
