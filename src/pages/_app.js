@@ -17,7 +17,7 @@ import configureStore from 'reducers/store.js';
 
 import 'styles/App.scss';
 import 'styles/Categories.scss';
-import 'react-toastify/dist/ReactToastify.min.css';
+// import 'react-toastify/dist/ReactToastify.min.css';
 
 library.add(fab, far, fas);
 
