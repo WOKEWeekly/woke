@@ -43,7 +43,7 @@ export const Subtitle = ({ children, className }) => {
  * @param {string} [props.morelink] - The hyperlink for the embedded {@link ReadMore} component.
  * @param {string} [props.moretext] - The text to be formatted.
  * @param {object} [props.moreclass] - The CSS styling for the embedded {@link ReadMore} component.
- * @param {number} [truncate] - Truncate the text to a certain number of characters.
+ * @param {number} [props.truncate] - Truncate the text to a certain number of characters.
  * @returns {React.Component} A formatted paragraph component.
  */
 const IParagraph = ({
