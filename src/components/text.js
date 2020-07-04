@@ -72,7 +72,6 @@ const IParagraph = ({
       paragraph: css.body,
       divider: css.divider,
       hyperlink: css[`link-${theme.toLowerCase()}`],
-      numberedListItem: css['numbered-list-item'],
       ...cssOverrides
     },
     socialWrappers: {
