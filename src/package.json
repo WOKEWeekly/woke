@@ -60,7 +60,7 @@
     "request": "^2.88.0",
     "sass": "^1.26.3",
     "sitemap": "^3.2.2",
-    "zavid-modules": "^2.7.0"
+    "zavid-modules": "^2.8.1"
   },
   "devDependencies": {
     "@babel/core": "^7.9.0",
