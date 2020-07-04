@@ -12,9 +12,13 @@ import {
   TextInput,
   ShortTextArea,
   LongTextArea,
-  FileSelector,
   Select
 } from 'components/form';
+import {
+  FileSelector,
+  ASPECT_RATIO,
+  SELECTOR_LOOK
+} from 'components/form/fileselector';
 import { Shader, Spacer } from 'components/layout.js';
 import { ConfirmModal } from 'components/modal.js';
 import { categories } from 'constants/categories.js';
@@ -155,6 +159,9 @@ const ArticleForm = ({
                 image={article.image}
                 operation={operation}
                 onChange={handleFile}
+                placeholder={"Choose this article's cover image..."}
+                aspectRatio={ASPECT_RATIO.WIDE}
+                selectorLook={SELECTOR_LOOK.PLACEHOLDER}
               />
             </Col>
           </Group>
@@ -169,6 +176,41 @@ const ArticleForm = ({
                   'Add a comma-separated list of tags (e.g. woke, society, black women)'
                 }
               />
+            </Col>
+          </Group>
+          <Group>
+            <Col>
+              <Label>Additional Images:</Label>
+              <div style={{display: 'flex'}}>
+                <FileSelector
+                  image={article.image}
+                  operation={operation}
+                  onChange={handleFile}
+                  aspectRatio={ASPECT_RATIO.WIDE}
+                  selectorLook={SELECTOR_LOOK.PLACEHOLDER}
+                />
+                <FileSelector
+                  image={article.image}
+                  operation={operation}
+                  onChange={handleFile}
+                  aspectRatio={ASPECT_RATIO.WIDE}
+                  selectorLook={SELECTOR_LOOK.PLACEHOLDER}
+                />
+                <FileSelector
+                  image={article.image}
+                  operation={operation}
+                  onChange={handleFile}
+                  aspectRatio={ASPECT_RATIO.WIDE}
+                  selectorLook={SELECTOR_LOOK.PLACEHOLDER}
+                />
+                <FileSelector
+                  image={article.image}
+                  operation={operation}
+                  onChange={handleFile}
+                  aspectRatio={ASPECT_RATIO.WIDE}
+                  selectorLook={SELECTOR_LOOK.PLACEHOLDER}
+                />
+              </div>
             </Col>
           </Group>
         </div>

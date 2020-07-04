@@ -9,7 +9,7 @@ import { Fader } from 'components/transitioner.js';
 import css from 'styles/components/Form.module.scss';
 
 export * from './input';
-export * from './file-selector';
+export * from './fileselector';
 export * from './subscribe';
 
 /** For the form heading */
