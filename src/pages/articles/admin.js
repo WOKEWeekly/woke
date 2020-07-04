@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { alert } from 'components/alert.js';
 import { AddEntityButton, BackButton } from 'components/button.js';
 import { Icon } from 'components/icon.js';
-import { CloudinaryImage } from 'components/image.js';
+import { CloudinaryImage } from 'components/coverImage.js';
 import { Default, Mobile, Shader } from 'components/layout.js';
 import { Loader, Empty } from 'components/loader.js';
 import { ConfirmModal } from 'components/modal.js';
@@ -71,7 +71,7 @@ class BlogAdmin extends Component {
           <span>Title</span>
           <span>Author</span>
           <span>Category</span>
-          <span>Image</span>
+          <span>Cover</span>
           <span>Status</span>
           <span />
           <span />
@@ -173,13 +173,13 @@ const IArticle = memo(({ article, idx, user, getArticles }) => {
   };
 
   const ArticleImage = () => {
-    if (!article.image) return 'None';
+    if (!article.coverImage) return 'None';
     return (
       <CloudinaryImage
-        src={article.image}
+        src={article.coverImage}
         lazy={'sw'}
         alt={article.title}
-        className={css.image}
+        className={css.coverImage}
       />
     );
   };
@@ -242,7 +242,7 @@ const IArticle = memo(({ article, idx, user, getArticles }) => {
           </button>
         </div>
         <CloudinaryImage
-          src={article.image}
+          src={article.coverImage}
           lazy={'sw'}
           className={css.listImage}
         />

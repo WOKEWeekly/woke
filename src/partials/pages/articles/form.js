@@ -156,7 +156,7 @@ const ArticleForm = ({
           <Group>
             <Col>
               <FileSelector
-                image={article.image}
+                image={article.coverImage}
                 operation={operation}
                 onChange={handleFile}
                 placeholder={"Choose this article's cover image..."}

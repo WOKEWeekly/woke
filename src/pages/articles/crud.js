@@ -17,7 +17,7 @@ const ArticleCrud = ({ article: currentArticle, operation, title, user }) => {
     content: '',
     category: '',
     excerpt: '',
-    image: null,
+    coverImage: null,
     authorId: null,
     status: ARTICLE_STATUS.DRAFT,
     datePublished: new Date(),
@@ -56,7 +56,7 @@ const ArticleCrud = ({ article: currentArticle, operation, title, user }) => {
       category,
       excerpt,
       tags,
-      image,
+      coverImage,
       authorId,
       status,
       datePublished
@@ -74,14 +74,14 @@ const ArticleCrud = ({ article: currentArticle, operation, title, user }) => {
       category: category.trim(),
       excerpt: excerpt.trim(),
       tags: JSON.stringify(zString.convertCsvToArray(tags)),
-      image,
+      coverImage,
       authorId,
       status,
       datePublished: date
     };
 
     const imageHasChanged =
-      image !== '' && image !== null && !cloudinary.check(image);
+      coverImage !== '' && coverImage !== null && !cloudinary.check(coverImage);
 
     const data = JSON.stringify(
       isCreateOperation

@@ -122,7 +122,7 @@ const ArticlePage = ({ article, user }) => {
     return (
       <Fader determinant={isLoaded} duration={500} delay={750}>
         <CloudinaryImage
-          src={article.image}
+          src={article.coverImage}
           alt={article.title}
           className={css['article-image']}
         />
