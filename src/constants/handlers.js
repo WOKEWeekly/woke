@@ -25,6 +25,14 @@ module.exports = (hook, state) => {
      */
     handleFile: (file, name = 'image') => {
       hook(Object.assign({}, state, { [name]: file }));
-    }
+    },
+
+    /**
+     * Removes a file from state.
+     * @param {string} [name] - The name of the element. Default is 'image'.
+     */
+    removeFile: (name = 'image') => {
+      hook(Object.assign({}, state, { [name]: null }));
+    },
   };
 };

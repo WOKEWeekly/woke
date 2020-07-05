@@ -99,7 +99,7 @@ exports.isValidArticle = (article) => {
       return false;
     if (!ifExists(article.excerpt, "Enter the article's excerpt."))
       return false;
-    if (!isValidImage(article.image, 'article')) return false;
+    if (!isValidImage(article.coverImage, 'article')) return false;
   }
 
   return true;

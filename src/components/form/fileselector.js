@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { connect } from 'react-redux';
 
+import { Icon } from 'components/icon.js';
 import { Zoomer } from 'components/transitioner.js';
 import { cloudinary } from 'constants/settings.js';
 import { OPERATIONS } from 'constants/strings.js';
@@ -18,13 +19,14 @@ export const SELECTOR_LOOK = {
 
 export const IFileSelector = ({
   aspectRatio,
-  operation,
   image,
-  theme,
   onChange,
+  operation,
   placeholder = 'Choose a file...',
   placeholderContainerWidth,
-  selectorLook = SELECTOR_LOOK.INPUT
+  removeImage,
+  selectorLook = SELECTOR_LOOK.INPUT,
+  theme
 }) => {
   const [sImage, setImage] = useState(image);
   const [sFilename, setFilename] = useState('');
@@ -91,6 +93,10 @@ export const IFileSelector = ({
         placeholder={placeholder}
         placeholderContainerWidth={placeholderContainerWidth}
         previewImage={previewImage}
+        removeImage={() => {
+          removeImage();
+          setImage(null);
+        }}
         theme={theme}
       />
     );
@@ -109,7 +115,7 @@ const InputSelector = ({
 }) => {
   return (
     <>
-      <div className={css['file']}>
+      <div className={css['file-selector']}>
         <label className={css[`file-button-${theme}`]}>
           Browse...
           <input
@@ -146,7 +152,8 @@ const PlaceholderImageSelector = ({
   imageRef,
   placeholder,
   placeholderContainerWidth = '50%',
-  previewImage
+  previewImage,
+  removeImage
 }) => {
   const ChoiceImage = () => {
     return (
@@ -157,6 +164,9 @@ const PlaceholderImageSelector = ({
           ref={imageRef}
           className={css['placeholder-image']}
         />
+        <button className={css['remove-image-button']} onClick={removeImage}>
+          <Icon name={'times'} />
+        </button>
       </Zoomer>
     );
   };

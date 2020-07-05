@@ -23,6 +23,7 @@ const ArticleCrud = ({ article: currentArticle, operation, title, user }) => {
     datePublished: new Date(),
     tags: ''
   });
+  const [fillerImages, setFillerImages] = useState([null, null, null, null]);
   const [isLoaded, setLoaded] = useState(false);
 
   const isCreateOperation = operation === OPERATIONS.CREATE;
@@ -39,15 +40,29 @@ const ArticleCrud = ({ article: currentArticle, operation, title, user }) => {
 
   useEffect(() => {
     if (!isCreateOperation) {
+      // Retrieve array of tags
       const tags = zString.convertArrayToCsv(JSON.parse(currentArticle.tags));
+
+      // If publishing, set date to right now.
       const datePublished =
         currentArticle.status !== ARTICLE_STATUS.PUBLISHED
           ? new Date()
           : currentArticle.datePublished;
+
       setArticle(Object.assign({}, currentArticle, { tags, datePublished }));
     }
     setLoaded(true);
   }, [isLoaded]);
+
+  const compileFillerImages = (file, index) => {
+    fillerImages[index] = file;
+    setFillerImages(fillerImages);
+  };
+
+  const removeFillerImage = (index) => {
+    fillerImages[index] = null;
+    setFillerImages(fillerImages);
+  };
 
   const buildRequest = () => {
     const {
@@ -75,6 +90,7 @@ const ArticleCrud = ({ article: currentArticle, operation, title, user }) => {
       excerpt: excerpt.trim(),
       tags: JSON.stringify(zString.convertCsvToArray(tags)),
       coverImage,
+      fillerImages: JSON.stringify(fillerImages),
       authorId,
       status,
       datePublished: date
@@ -121,6 +137,8 @@ const ArticleCrud = ({ article: currentArticle, operation, title, user }) => {
     if (!isValidArticle(stateArticle)) return;
     const data = buildRequest();
 
+    return console.log(data);
+
     /** Update article in database */
     request({
       url: `/api/v1/articles/${currentArticle.id}`,
@@ -142,8 +160,12 @@ const ArticleCrud = ({ article: currentArticle, operation, title, user }) => {
   return (
     <ArticleForm
       heading={title}
-      article={stateArticle}
+      article={{ ...stateArticle, fillerImages }}
       handlers={handlers(setArticle, stateArticle)}
+
+      compileFillerImages={compileFillerImages}
+      removeFillerImage={removeFillerImage}
+
       confirmText={confirmText}
       confirmFunc={isCreateOperation ? submitArticle : updateArticle}
       cancelFunc={() => (location.href = '/admin/articles')}

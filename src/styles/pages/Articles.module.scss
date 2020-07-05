@@ -291,8 +291,13 @@
 *** form.js
 *************/
 
-.form {
+.article-form {
   @extend .responsive-form;
+}
+
+.article-filler-images {
+  display: flex;
+  justify-content: space-between;
 }
 
 /*************

@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { alert } from 'components/alert.js';
 import { AddEntityButton, BackButton } from 'components/button.js';
 import { Icon } from 'components/icon.js';
-import { CloudinaryImage } from 'components/coverImage.js';
+import { CloudinaryImage } from 'components/image.js';
 import { Default, Mobile, Shader } from 'components/layout.js';
 import { Loader, Empty } from 'components/loader.js';
 import { ConfirmModal } from 'components/modal.js';

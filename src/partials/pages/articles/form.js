@@ -36,6 +36,8 @@ const ArticleForm = ({
   handlers,
   operation,
   isPublish,
+  compileFillerImages,
+  removeFillerImage,
   user
 }) => {
   if (user.clearance < CLEARANCES.ACTIONS.CRUD_ARTICLES) {
@@ -47,7 +49,7 @@ const ArticleForm = ({
   const [isDateFieldVisible, setVisibility] = useState(false);
   const [isPublishModalVisible, setPublishModalVisibility] = useState(false);
 
-  const { handleText, handleDate, handleFile } = handlers;
+  const { handleText, handleDate, handleFile, removeFile } = handlers;
 
   useEffect(() => {
     request({
@@ -77,9 +79,13 @@ const ArticleForm = ({
     setVisibility(article.status === ARTICLE_STATUS.PUBLISHED);
   });
 
+  // Cater for null filler images
+  if (article.fillerImages === null)
+    article.fillerImages = [null, null, null, null];
+
   return (
     <Shader>
-      <Spacer className={css.form}>
+      <Spacer className={css['article-form']}>
         <div>
           <Heading>{heading}</Heading>
 
@@ -156,10 +162,12 @@ const ArticleForm = ({
           <Group>
             <Col>
               <FileSelector
+                name={'coverImage'}
                 image={article.coverImage}
                 operation={operation}
                 onChange={handleFile}
                 placeholder={"Choose this article's cover image..."}
+                removeImage={removeFile}
                 aspectRatio={ASPECT_RATIO.WIDE}
                 selectorLook={SELECTOR_LOOK.PLACEHOLDER}
               />
@@ -181,36 +189,12 @@ const ArticleForm = ({
           <Group>
             <Col>
               <Label>Additional Images:</Label>
-              <div style={{display: 'flex'}}>
-                <FileSelector
-                  image={article.image}
-                  operation={operation}
-                  onChange={handleFile}
-                  aspectRatio={ASPECT_RATIO.WIDE}
-                  selectorLook={SELECTOR_LOOK.PLACEHOLDER}
-                />
-                <FileSelector
-                  image={article.image}
-                  operation={operation}
-                  onChange={handleFile}
-                  aspectRatio={ASPECT_RATIO.WIDE}
-                  selectorLook={SELECTOR_LOOK.PLACEHOLDER}
-                />
-                <FileSelector
-                  image={article.image}
-                  operation={operation}
-                  onChange={handleFile}
-                  aspectRatio={ASPECT_RATIO.WIDE}
-                  selectorLook={SELECTOR_LOOK.PLACEHOLDER}
-                />
-                <FileSelector
-                  image={article.image}
-                  operation={operation}
-                  onChange={handleFile}
-                  aspectRatio={ASPECT_RATIO.WIDE}
-                  selectorLook={SELECTOR_LOOK.PLACEHOLDER}
-                />
-              </div>
+              <FillerImagesGroup
+                article={article}
+                operation={operation}
+                compileFillerImages={compileFillerImages}
+                removeImage={removeFillerImage}
+              />
             </Col>
           </Group>
         </div>
@@ -261,6 +245,30 @@ const DatePublished = ({ isDateFieldVisible, datePublished, handleDate }) => {
       </Col>
     </Group>
   );
+};
+
+const FillerImagesGroup = ({
+  article,
+  operation,
+  compileFillerImages,
+  removeImage
+}) => {
+  const fileSelectors = [];
+  for (let i = 0; i < 4; i++) {
+    fileSelectors.push(
+      <FileSelector
+        image={article.fillerImages[i]}
+        operation={operation}
+        onChange={(e) => compileFillerImages(e, i)}
+        aspectRatio={ASPECT_RATIO.WIDE}
+        placeholderContainerWidth={'24%'}
+        removeImage={() => removeImage(i)}
+        selectorLook={SELECTOR_LOOK.PLACEHOLDER}
+      />
+    );
+  }
+
+  return <div className={css['article-filler-images']}>{fileSelectors}</div>;
 };
 
 const mapStateToProps = (state) => ({
