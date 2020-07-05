@@ -10,8 +10,8 @@ const topicsEndpoints = require('./endpoints/topics.endpoint');
 const usersEndpoints = require('./endpoints/users.endpoint');
 
 const { logUserActivity } = require('../middleware.js');
+const app = require('../singleton/app').getApp();
 
-module.exports = function (app) {
   /** Log user activity on each request */
   app.use('/api', logUserActivity);
 
@@ -44,4 +44,3 @@ module.exports = function (app) {
 
   // Users routes
   app.use('/api/v1/users', usersEndpoints);
-};
