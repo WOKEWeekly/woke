@@ -118,6 +118,33 @@ exports.destroyImage = (image, next) => {
 };
 
 /**
+ * Delete multiple images from Cloudinary.
+ * @param {string[]} images - A list of image string identifiers.
+ * @param {Function} next - Calls the next function.
+ */
+exports.destroyMultipleImages = (images, next) => {
+  if (!images) return next(null);
+
+  // e.g. public_id = "dev/sessions/2020-08-03_manchester"
+  const publicIds = images.map((image) => {
+    return image.substring(image.indexOf('/') + 1, image.indexOf('.'));
+  });
+
+  async.each(
+    publicIds,
+    function (publicId, callback) {
+      cloudinary.uploader.destroy(publicId, (err) => {
+        callback(err);
+      });
+    },
+    function (err) {
+      if (err) console.warn(err);
+      next(null);
+    }
+  );
+};
+
+/**
  * Upload document to Cloudinary.
  * @param {object} document - The document to be uploaded.
  * @param {Function} next - The next callback function in the series.

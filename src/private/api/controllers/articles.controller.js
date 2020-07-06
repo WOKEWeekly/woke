@@ -1,7 +1,7 @@
 /* eslint-disable jsdoc/require-param */
 const async = require('async');
 
-const { DIRECTORY, ENTITY } = require('../../../constants/strings');
+const { ENTITY } = require('../../../constants/strings');
 const emails = require('../../emails');
 const ERROR = require('../../errors');
 const filer = require('../../filer');
@@ -126,12 +126,12 @@ exports.updateArticle = (req, res) => {
           if (!article)
             return callback(ERROR.INVALID_ENTITY_ID(ENTITY.ARTICLE, id));
           if (!changed) return callback(null);
-          filer.destroyImage(article.image, callback);
+          deleteArticleImages(article, callback);
         });
       },
       // Equally, upload new image if changed
       function (callback) {
-        filer.uploadImage(article, DIRECTORY.ARTICLES, changed, callback);
+        filer.uploadArticleImages(article, changed, callback);
       },
       // Update article in database
       function (article, callback) {
@@ -191,7 +191,7 @@ exports.clapForArticle = (req, res) => {
 
 /** Delete the article */
 exports.deleteArticle = (req, res) => {
-  const id = req.params.id;
+  const { id } = req.params;
 
   async.waterfall(
     [
@@ -202,7 +202,8 @@ exports.deleteArticle = (req, res) => {
           if (err) return callback(err);
           if (!article)
             return callback(ERROR.INVALID_ENTITY_ID(ENTITY.ARTICLE, id));
-          filer.destroyImage(article.image, callback);
+
+          deleteArticleImages(article, callback);
         });
       },
       function (callback) {
@@ -217,4 +218,15 @@ exports.deleteArticle = (req, res) => {
       respondToClient(res, err, 204);
     }
   );
+};
+
+/**
+ * Delete an article's images.
+ * @param {*} article - The article whose images are to be deleted.
+ * @param {*} callback - The callback.
+ */
+const deleteArticleImages = (article, callback) => {
+  const { coverImage, fillerImages } = article;
+  const images = [coverImage].concat(JSON.parse(fillerImages));
+  filer.destroyMultipleImages(images, callback);
 };
