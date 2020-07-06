@@ -9,6 +9,7 @@ import { cloudinary } from 'constants/settings.js';
 import { ARTICLE_STATUS, OPERATIONS } from 'constants/strings.js';
 import { isValidArticle } from 'constants/validations.js';
 import ArticleForm from 'partials/pages/articles/form.js';
+import { FILLER_IMAGE_LIMIT } from 'partials/pages/articles/helpers';
 
 const ArticleCrud = ({ article: currentArticle, operation, title, user }) => {
   const [stateArticle, setArticle] = useState({
@@ -23,7 +24,9 @@ const ArticleCrud = ({ article: currentArticle, operation, title, user }) => {
     datePublished: new Date(),
     tags: ''
   });
-  const [fillerImages, setFillerImages] = useState([null, null, null, null]);
+  const [fillerImages, setFillerImages] = useState(
+    new Array(FILLER_IMAGE_LIMIT).fill(null)
+  );
   const [isLoaded, setLoaded] = useState(false);
 
   const isCreateOperation = operation === OPERATIONS.CREATE;
@@ -55,11 +58,20 @@ const ArticleCrud = ({ article: currentArticle, operation, title, user }) => {
     setLoaded(true);
   }, [isLoaded]);
 
+  /**
+   * Update the list of filler images.
+   * @param {string} file - The base64 value of the file.
+   * @param {number} index - The index of the file selector.
+   */
   const compileFillerImages = (file, index) => {
     fillerImages[index] = file;
     setFillerImages(fillerImages);
   };
 
+  /**
+   * Set a filler image to null on removal.
+   * @param {number} index - The index of the file selector.
+   */
   const removeFillerImage = (index) => {
     fillerImages[index] = null;
     setFillerImages(fillerImages);
@@ -98,7 +110,7 @@ const ArticleCrud = ({ article: currentArticle, operation, title, user }) => {
     };
 
     const imageHasChanged =
-      coverImage !== '' && coverImage !== null && !cloudinary.check(coverImage);
+      coverImage && coverImage !== null && !cloudinary.check(coverImage);
 
     const data = JSON.stringify(
       isCreateOperation

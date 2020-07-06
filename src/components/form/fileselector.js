@@ -23,7 +23,6 @@ export const IFileSelector = ({
   onChange,
   operation,
   placeholder = 'Choose a file...',
-  placeholderContainerWidth,
   removeImage,
   selectorLook = SELECTOR_LOOK.INPUT,
   theme
@@ -91,7 +90,6 @@ export const IFileSelector = ({
         image={sImage}
         imageRef={imageRef}
         placeholder={placeholder}
-        placeholderContainerWidth={placeholderContainerWidth}
         previewImage={previewImage}
         removeImage={() => {
           removeImage();
@@ -151,7 +149,6 @@ const PlaceholderImageSelector = ({
   image,
   imageRef,
   placeholder,
-  placeholderContainerWidth = '50%',
   previewImage,
   removeImage
 }) => {
@@ -191,7 +188,7 @@ const PlaceholderImageSelector = ({
     );
   };
   return (
-    <div style={{ width: placeholderContainerWidth }}>
+    <div style={{ width: '100%' }}>
       <div className={css['placeholder-image-container']}>
         <ChoosePrompt />
         <ChoiceImage />

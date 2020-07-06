@@ -27,6 +27,8 @@ import request from 'constants/request.js';
 import { ARTICLE_STATUS } from 'constants/strings.js';
 import css from 'styles/pages/Articles.module.scss';
 
+import { FILLER_IMAGE_LIMIT } from './helpers';
+
 const ArticleForm = ({
   article,
   heading,
@@ -160,7 +162,7 @@ const ArticleForm = ({
             handleDate={handleDate}
           />
           <Group>
-            <Col>
+            <Col sm={6}>
               <FileSelector
                 image={article.coverImage}
                 operation={operation}
@@ -253,14 +255,13 @@ const FillerImagesGroup = ({
   removeImage
 }) => {
   const fileSelectors = [];
-  for (let i = 0; i < 4; i++) {
+  for (let i = 0; i < FILLER_IMAGE_LIMIT; i++) {
     fileSelectors.push(
       <FileSelector
         image={article.fillerImages[i]}
         operation={operation}
         onChange={(e) => compileFillerImages(e, i)}
         aspectRatio={ASPECT_RATIO.WIDE}
-        placeholderContainerWidth={'24%'}
         removeImage={() => removeImage(i)}
         selectorLook={SELECTOR_LOOK.PLACEHOLDER}
       />
