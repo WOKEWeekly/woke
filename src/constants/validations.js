@@ -6,7 +6,7 @@ const { ARTICLE_STATUS } = require('./strings');
 
 /**
  * Login validation.
- * @param {string} user - User credentials to be validated.
+ * @param {object} user - User credentials to be validated.
  * @returns {boolean} True if valid. False with error message if invalid.
  */
 exports.isValidLogin = (user) => {
@@ -24,7 +24,7 @@ exports.isValidLogin = (user) => {
 
 /**
  * Registration validation.
- * @param {string} user - User information to be validated.
+ * @param {object} user - User information to be validated.
  * @returns {boolean} True if valid. False with error message if invalid.
  */
 exports.isValidSignup = (user) => {
@@ -44,7 +44,7 @@ exports.isValidSignup = (user) => {
 
 /**
  * Validation of session submission or update.
- * @param {string} session - Session information to be validated.
+ * @param {object} session - Session information to be validated.
  * @returns {boolean} True if valid. False with error message if invalid.
  */
 exports.isValidSession = (session) => {
@@ -62,7 +62,7 @@ exports.isValidSession = (session) => {
 
 /**
  * Validation of topic submission or update.
- * @param {string} topic - Topic information to be validated.
+ * @param {object} topic - Topic information to be validated.
  * @returns {boolean} True if valid. False with error message if invalid.
  */
 exports.isValidTopic = (topic) => {
@@ -82,24 +82,31 @@ exports.isValidTopic = (topic) => {
 
 /**
  * Validation of article submission or update.
- * @param {string} article - Article information to be validated.
+ * @param {object} article - Article information to be validated.
  * @returns {boolean} True if valid. False with error message if invalid.
  */
 exports.isValidArticle = (article) => {
+  const isPublish = article.status === ARTICLE_STATUS.PUBLISHED;
+
   if (!ifExists(article.title, 'Enter the article title.')) return false;
   if (!ifExists(article.status, 'Select the status of the article.'))
     return false;
-  if (ifTrue(article.authorId === 0, 'Select the author of this article.'))
+
+  // TODO: Check this validation works
+  if (!ifExists(article.authorId, 'Select the author of this article.'))
+    return false;
+  if (!isValidImage(article.coverImage, 'article', { mustExist: isPublish }))
+    return false;
+  if (!isValidImageGroup(article.fillerImages, { reference: 'Filler image' }))
     return false;
 
-  if (article.status === ARTICLE_STATUS.PUBLISHED) {
+  if (isPublish) {
     if (!ifExists(article.category, "Select the article's category."))
       return false;
     if (!ifExists(article.content, 'Write out the content of this article.'))
       return false;
     if (!ifExists(article.excerpt, "Enter the article's excerpt."))
       return false;
-    if (!isValidImage(article.coverImage, 'article')) return false;
   }
 
   return true;
@@ -107,7 +114,7 @@ exports.isValidArticle = (article) => {
 
 /**
  * Validation of candidate submission or update.
- * @param {string} candidate - Candidate information to be validated.
+ * @param {object} candidate - Candidate information to be validated.
  * @returns {boolean} True if valid. False with error message if invalid.
  */
 exports.isValidCandidate = (candidate) => {
@@ -128,6 +135,8 @@ exports.isValidCandidate = (candidate) => {
     !ifExists(candidate.occupation, 'Please select an image for the session.')
   )
     return false;
+
+  // TODO: Change this validation
   if (
     ifTrue(
       candidate.authorId === 0,
@@ -141,7 +150,7 @@ exports.isValidCandidate = (candidate) => {
 
 /**
  * Validation of document update.
- * @param {string} document - Document information to be validated.
+ * @param {object} document - Document information to be validated.
  * @returns {boolean} True if valid. False with error message if invalid.
  */
 exports.isValidDocument = (document) => {
@@ -152,7 +161,7 @@ exports.isValidDocument = (document) => {
 
 /**
  * Validation of team member submission or update.
- * @param {string} member - Team member information to be validated.
+ * @param {object} member - Team member information to be validated.
  * @returns {boolean} True if valid. False with error message if invalid.
  */
 exports.isValidMember = (member) => {
@@ -172,7 +181,7 @@ exports.isValidMember = (member) => {
 
 /**
  * Validation of review submission or update.
- * @param {string} review - Review information to be validated.
+ * @param {object} review - Review information to be validated.
  * @returns {boolean} True if valid. False with error message if invalid.
  */
 exports.isValidReview = (review) => {
@@ -255,11 +264,18 @@ exports.isValidPassword = (password1, password2, oldPassword) => {
  * Ensure submitted file meets requirements.
  * @param {string} file - Base64 string of file to be uploaded.
  * @param {string} entity - The entity this file represents.
+ * @param {object} [options] - Options for image validation.
+ * @param {boolean} [options.mustExist] - Specifies if the image must exist. Defaults to true.
  * @returns {boolean} True if meets requirements. If not, false.
  */
-const isValidImage = (file, entity) => {
-  if (!ifExists(file, `Please select an image for the ${entity}.`))
-    return false;
+const isValidImage = (file, entity, options = {}) => {
+  const { mustExist = true } = options;
+
+  if (mustExist) {
+    if (!ifExists(file, `Please select an image for the ${entity}.`))
+      return false;
+  }
+
   if (!isUnderFileSizeLimit(file)) return false;
   return true;
 };
@@ -271,23 +287,46 @@ const isValidImage = (file, entity) => {
  */
 const isValidDocument = (file) => {
   if (!ifExists(file, `Please select a document to upload.`)) return false;
-  if (!isUnderFileSizeLimit(file, limits.file)) return false;
+  if (!isUnderFileSizeLimit(file, { limit: limits.file })) return false;
+  return true;
+};
+
+/**
+ * Check if a group of similar images are valid.
+ * @param {string[]} images - A list of Base64 file strings.
+ * @param {object} [options] - Options for validating image group.
+ * @param {string} [options.reference] - A string reference to each image.
+ * @returns {boolean} True if images are valid. False if not.
+ */
+const isValidImageGroup = (images, options = {}) => {
+  const { reference = 'Image' } = options;
+  if (
+    !images.every((image, key) =>
+      isUnderFileSizeLimit(image, { reference: `${reference} ${key + 1}` })
+    )
+  )
+    return false;
+
   return true;
 };
 
 /**
  * Ensure file size is within limit.
  * @param {string} file - Base64 string of file to be uploaded.
- * @param {number} limit - The upper size limit in MB. Defaults to 2MB.
+ * @param {object} [options] - Options for validating file size.
+ * @param {number} [options.limit] - The upper size limit in MB. Defaults to 2MB.
+ * @param {string} [options.reference] - A string reference to the file.
  * @returns {boolean} True if within limit. False if not.
  */
-const isUnderFileSizeLimit = (file, limit = limits.image) => {
+const isUnderFileSizeLimit = (file, options = {}) => {
   if (!file) return true;
+
+  const { reference = 'The file', limit = limits.image } = options;
   const size = Buffer.from(file.substring(file.indexOf(',') + 1)).length;
   if (
     ifTrue(
       size > limit * 1024 * 1024,
-      `The file you selected is larger than ${limit}MB. Please compress this file or use a smaller one.`
+      `${reference} you selected is larger than ${limit}MB. Please compress this file or use a smaller one.`
     )
   )
     return false;
@@ -296,7 +335,7 @@ const isUnderFileSizeLimit = (file, limit = limits.image) => {
 
 /**
  * Check for presence of a value.
- * @param {string} value - Value to be checked.
+ * @param {any} value - Value to be checked.
  * @param {string} message - Error message to be returned if value is absent.
  * @returns {boolean} True if value exists. False if not.
  */

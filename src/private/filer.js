@@ -1,5 +1,9 @@
+/* eslint-disable jsdoc/require-returns */
+const async = require('async');
 const cloudinary = require('cloudinary').v2;
-const { zDate, zString } = require('zavid-modules');
+const { zDate, zNumber, zString } = require('zavid-modules');
+
+const knex = require('./singleton/knex').getKnex();
 
 const { DIRECTORY, ARTICLE_STATUS } = require('../constants/strings.js');
 
@@ -39,6 +43,59 @@ exports.uploadImage = (iEntity, directory, imageHasChanged, next) => {
       const { public_id, version, format } = result;
       entity.image = `v${version}/${public_id}.${format}`;
       next(null, entity);
+    }
+  );
+};
+
+exports.uploadArticleImages = async (article, imagesHaveChanged, next) => {
+  const directory = DIRECTORY.ARTICLES;
+
+  // Construct the slug and image filename.
+  const { entity, filename } = await generateSlugAndFilename(
+    article,
+    directory
+  );
+
+  const fillerImages = JSON.parse(entity.fillerImages).filter((e) => e);
+
+  // Map images to keys for reference.
+  const imagesToUpload = {};
+  [entity.coverImage].concat(fillerImages).forEach((image, key) => {
+    imagesToUpload[key] = image;
+  });
+
+  // Discontinue if no images have been changed.
+  const noImagesExistInRequest = !(entity.coverImage || fillerImages.length);
+  const noImagesToUpload = !imagesHaveChanged || noImagesExistInRequest;
+  if (noImagesToUpload) return next(null, entity);
+
+  const appendKey = (key) => {
+    return key > 0 ? '-' + zNumber.makeDoubleDigit(key) : '';
+  };
+
+  async.mapValues(
+    imagesToUpload,
+    function (image, key, callback) {
+      if (!image) return callback(null);
+
+      cloudinary.uploader.upload(
+        image,
+        {
+          public_id: `${env}/${directory}/${filename}${appendKey(key)}`,
+          unique_filename: false
+        },
+        (err, result) => {
+          const { public_id, version, format } = result;
+          callback(err, `v${version}/${public_id}.${format}`);
+        }
+      );
+    },
+    function (err, result) {
+      if (err) return next(err);
+      const images = Object.values(result);
+      entity.coverImage = images.shift();
+      entity.fillerImages = JSON.stringify(images);
+      next(err, entity);
     }
   );
 };
@@ -116,15 +173,20 @@ exports.destroyDocument = (document, next) => {
  * @param {string} directory - The Cloudinary directory the image should be uploaded to.
  * @returns {object} The filename as well as the entity with the assigned slug.
  */
-const generateSlugAndFilename = (entity, directory) => {
+const generateSlugAndFilename = async (entity, directory) => {
   let filename;
 
   switch (directory) {
     case DIRECTORY.ARTICLES:
+      const res = await knex
+        .select()
+        .from('members')
+        .where('id', entity.authorId);
+      const [author] = res;
       entity.slug = zString.constructCleanSlug(
-        `${entity.authorId} ${entity.title}`
+        `${author.firstname} ${author.lastname} ${entity.title}`
       );
-      filename = createArticleFilename(entity.slug);
+      filename = entity.slug;
       if (entity.status === ARTICLE_STATUS.DRAFT) entity.slug = null;
       break;
     case DIRECTORY.CANDIDATES:
@@ -153,7 +215,6 @@ const generateSlugAndFilename = (entity, directory) => {
 };
 
 /** Generate filenames from entities */
-const createArticleFilename = (slug) => `${slug}`;
 const createCandidateFilename = (id, slug) => `${id}_${slug}`;
 const createMemberFilename = (slug) => slug;
 const createReviewFilename = (rating, slug) => `${rating}-${slug}`;

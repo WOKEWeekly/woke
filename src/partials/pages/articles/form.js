@@ -162,10 +162,9 @@ const ArticleForm = ({
           <Group>
             <Col>
               <FileSelector
-                name={'coverImage'}
                 image={article.coverImage}
                 operation={operation}
-                onChange={handleFile}
+                onChange={(img) => handleFile(img, 'coverImage')}
                 placeholder={"Choose this article's cover image..."}
                 removeImage={removeFile}
                 aspectRatio={ASPECT_RATIO.WIDE}

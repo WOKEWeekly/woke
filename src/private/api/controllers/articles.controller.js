@@ -78,7 +78,7 @@ exports.addArticle = (req, res) => {
     [
       // Upload image to cloud
       function (callback) {
-        filer.uploadImage(article, DIRECTORY.ARTICLES, true, callback);
+        filer.uploadArticleImages(article, true, callback);
       },
       // Add article to database
       function (article, callback) {

@@ -50,6 +50,7 @@ const ArticleCrud = ({ article: currentArticle, operation, title, user }) => {
           : currentArticle.datePublished;
 
       setArticle(Object.assign({}, currentArticle, { tags, datePublished }));
+      setFillerImages(JSON.parse(currentArticle.fillerImages));
     }
     setLoaded(true);
   }, [isLoaded]);
@@ -113,7 +114,7 @@ const ArticleCrud = ({ article: currentArticle, operation, title, user }) => {
   };
 
   const submitArticle = () => {
-    if (!isValidArticle(stateArticle)) return;
+    if (!isValidArticle({ ...stateArticle, fillerImages })) return;
     const data = buildRequest();
 
     /** Add article to database */
@@ -134,10 +135,8 @@ const ArticleCrud = ({ article: currentArticle, operation, title, user }) => {
 
   /** Update article on server */
   const updateArticle = () => {
-    if (!isValidArticle(stateArticle)) return;
+    if (!isValidArticle({ ...stateArticle, fillerImages })) return;
     const data = buildRequest();
-
-    return console.log(data);
 
     /** Update article in database */
     request({
@@ -162,10 +161,8 @@ const ArticleCrud = ({ article: currentArticle, operation, title, user }) => {
       heading={title}
       article={{ ...stateArticle, fillerImages }}
       handlers={handlers(setArticle, stateArticle)}
-
       compileFillerImages={compileFillerImages}
       removeFillerImage={removeFillerImage}
-
       confirmText={confirmText}
       confirmFunc={isCreateOperation ? submitArticle : updateArticle}
       cancelFunc={() => (location.href = '/admin/articles')}
