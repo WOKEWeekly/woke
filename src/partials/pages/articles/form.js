@@ -256,8 +256,10 @@ const FillerImagesGroup = ({
 }) => {
   const fileSelectors = [];
   for (let i = 0; i < FILLER_IMAGE_LIMIT; i++) {
+    // if (i === 0 || (i > 0 && article.fillerImages[i - 1] !== null)
     fileSelectors.push(
       <FileSelector
+        key={i}
         image={article.fillerImages[i]}
         operation={operation}
         onChange={(e) => compileFillerImages(e, i)}

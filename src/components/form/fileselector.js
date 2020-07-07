@@ -132,7 +132,7 @@ const InputSelector = ({
         />
       </div>
       <Zoomer
-        determinant={image}
+        determinant={image !== null}
         duration={400}
         className={css['file-image']}
         style={{ display }}>
@@ -154,7 +154,7 @@ const PlaceholderImageSelector = ({
 }) => {
   const ChoiceImage = () => {
     return (
-      <Zoomer determinant={image} duration={400} style={{ display }}>
+      <Zoomer determinant={image !== null} duration={400} style={{ display }}>
         <img
           src={image}
           alt={'Image preview...'}

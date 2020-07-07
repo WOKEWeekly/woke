@@ -53,7 +53,13 @@ const ArticleCrud = ({ article: currentArticle, operation, title, user }) => {
           : currentArticle.datePublished;
 
       setArticle(Object.assign({}, currentArticle, { tags, datePublished }));
-      setFillerImages(JSON.parse(currentArticle.fillerImages));
+
+      // Cater for null filler images
+      const images =
+        currentArticle.fillerImages === null
+          ? fillerImages
+          : JSON.parse(currentArticle.fillerImages);
+      setFillerImages(images);
     }
     setLoaded(true);
   }, [isLoaded]);
