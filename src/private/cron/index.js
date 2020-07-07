@@ -22,8 +22,8 @@ const INTERVALS = {
   // Everyday at 10:00am
   SESSIONS: '0 10 * * *',
 
-  // Everyday at 9:00am
-  DUE_EXEC_TASKS: '0 7 * * 1',
+  // Everyday at 7:00am
+  DUE_EXEC_TASKS: '0 7 * * *',
 
   // Every weekday at 8:00am
   POSTS_WITHOUT_CAPTIONS: '0 8 * * 1-5'
