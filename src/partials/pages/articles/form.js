@@ -81,10 +81,6 @@ const ArticleForm = ({
     setVisibility(article.status === ARTICLE_STATUS.PUBLISHED);
   });
 
-  // Cater for null filler images
-  if (article.fillerImages === null)
-    article.fillerImages = [null, null, null, null];
-
   return (
     <Shader>
       <Spacer className={css['article-form']}>
