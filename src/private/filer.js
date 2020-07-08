@@ -56,7 +56,9 @@ exports.uploadArticleImages = async (article, imagesHaveChanged, next) => {
     directory
   );
 
-  const fillerImages = JSON.parse(entity.fillerImages).filter((e) => e);
+  const fillerImages = Array.isArray(entity.fillerImages)
+    ? entity.fillerImages
+    : JSON.parse(entity.fillerImages).filter((e) => e);
 
   // Map images to keys for reference.
   const imagesToUpload = {};

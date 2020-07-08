@@ -20,7 +20,8 @@ exports.TEST_ARTICLES = {
     content: 'This is an added article via service tests.',
     category: 'Philosophy & Ethics',
     excerpt: 'Added service test article.',
-    image: TEST_IMAGE,
+    coverImage: TEST_IMAGE,
+    fillerImages: JSON.stringify(new Array(4).fill(TEST_IMAGE)),
     authorId: 1,
     status: 'DRAFT',
     datePublished: null
@@ -30,7 +31,8 @@ exports.TEST_ARTICLES = {
     content: 'This is an updated article via service tests.',
     category: 'Society & Stereotypes',
     excerpt: 'Updated service test article.',
-    image: TEST_IMAGE,
+    coverImage: TEST_IMAGE,
+    fillerImages: JSON.stringify([TEST_IMAGE]),
     authorId: 1,
     status: 'PUBLISHED',
     datePublished: '2020-08-30'
