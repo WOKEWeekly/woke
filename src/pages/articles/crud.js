@@ -5,7 +5,6 @@ import { zDate, zString } from 'zavid-modules';
 import { setAlert } from 'components/alert.js';
 import handlers from 'constants/handlers.js';
 import request from 'constants/request.js';
-import { cloudinary } from 'constants/settings.js';
 import { ARTICLE_STATUS, OPERATIONS } from 'constants/strings.js';
 import { isValidArticle } from 'constants/validations.js';
 import ArticleForm from 'partials/pages/articles/form.js';
@@ -28,6 +27,7 @@ const ArticleCrud = ({ article: currentArticle, operation, title, user }) => {
     new Array(FILLER_IMAGE_LIMIT).fill(null)
   );
   const [isLoaded, setLoaded] = useState(false);
+  const [imagesHaveChanged, setImagesChanged] = useState(false);
 
   const isCreateOperation = operation === OPERATIONS.CREATE;
 
@@ -72,6 +72,7 @@ const ArticleCrud = ({ article: currentArticle, operation, title, user }) => {
   const compileFillerImages = (file, index) => {
     fillerImages[index] = file;
     setFillerImages(fillerImages);
+    setImagesChanged(true);
   };
 
   /**
@@ -81,6 +82,7 @@ const ArticleCrud = ({ article: currentArticle, operation, title, user }) => {
   const removeFillerImage = (index) => {
     fillerImages[index] = null;
     setFillerImages(fillerImages);
+    setImagesChanged(true);
   };
 
   const buildRequest = () => {
@@ -115,15 +117,12 @@ const ArticleCrud = ({ article: currentArticle, operation, title, user }) => {
       datePublished: date
     };
 
-    const imageHasChanged =
-      coverImage && coverImage !== null && !cloudinary.check(coverImage);
-
     const data = JSON.stringify(
       isCreateOperation
         ? { article: articleToSubmit, isPublish }
         : {
             article: articleToSubmit,
-            changed: imageHasChanged,
+            changed: imagesHaveChanged,
             isPublish
           }
     );
@@ -178,9 +177,12 @@ const ArticleCrud = ({ article: currentArticle, operation, title, user }) => {
     <ArticleForm
       heading={title}
       article={{ ...stateArticle, fillerImages }}
+
       handlers={handlers(setArticle, stateArticle)}
       compileFillerImages={compileFillerImages}
       removeFillerImage={removeFillerImage}
+      setImagesChanged={setImagesChanged}
+
       confirmText={confirmText}
       confirmFunc={isCreateOperation ? submitArticle : updateArticle}
       cancelFunc={() => (location.href = '/admin/articles')}

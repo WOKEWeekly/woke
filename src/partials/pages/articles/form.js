@@ -40,6 +40,7 @@ const ArticleForm = ({
   isPublish,
   compileFillerImages,
   removeFillerImage,
+  setImagesChanged,
   user
 }) => {
   if (user.clearance < CLEARANCES.ACTIONS.CRUD_ARTICLES) {
@@ -162,9 +163,15 @@ const ArticleForm = ({
               <FileSelector
                 image={article.coverImage}
                 operation={operation}
-                onChange={(img) => handleFile(img, 'coverImage')}
+                onChange={(img) => {
+                  handleFile(img, 'coverImage');
+                  setImagesChanged(true);
+                }}
                 placeholder={"Choose this article's cover image..."}
-                removeImage={removeFile}
+                removeImage={() => {
+                  removeFile();
+                  setImagesChanged(true);
+                }}
                 aspectRatio={ASPECT_RATIO.WIDE}
                 selectorLook={SELECTOR_LOOK.PLACEHOLDER}
               />
