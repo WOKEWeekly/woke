@@ -50,26 +50,30 @@ exports.uploadImage = (iEntity, directory, imageHasChanged, next) => {
 exports.uploadArticleImages = async (article, imagesHaveChanged, next) => {
   const directory = DIRECTORY.ARTICLES;
 
-  // Construct the slug and image filename.
-  const { entity, filename } = await generateSlugAndFilename(
-    article,
-    directory
+  const [author] = await knex
+    .select()
+    .from('members')
+    .where('id', article.authorId);
+  article.slug = zString.constructCleanSlug(
+    `${author.firstname} ${author.lastname} ${article.title}`
   );
+  const filename = article.slug;
+  if (article.status === ARTICLE_STATUS.DRAFT) article.slug = null;
 
-  const fillerImages = Array.isArray(entity.fillerImages)
-    ? entity.fillerImages
-    : JSON.parse(entity.fillerImages).filter((e) => e);
+  const fillerImages = Array.isArray(article.fillerImages)
+    ? article.fillerImages
+    : JSON.parse(article.fillerImages).filter((e) => e);
 
   // Map images to keys for reference.
   const imagesToUpload = {};
-  [entity.coverImage].concat(fillerImages).forEach((image, key) => {
+  [article.coverImage].concat(fillerImages).forEach((image, key) => {
     imagesToUpload[key] = image;
   });
 
   // Discontinue if no images have been changed.
-  const noImagesExistInRequest = !(entity.coverImage || fillerImages.length);
+  const noImagesExistInRequest = !(article.coverImage || fillerImages.length);
   const noImagesToUpload = !imagesHaveChanged || noImagesExistInRequest;
-  if (noImagesToUpload) return next(null, entity);
+  if (noImagesToUpload) return next(null, article);
 
   const appendKey = (key) => {
     return key > 0 ? '-' + zNumber.makeDoubleDigit(key) : '';
@@ -95,9 +99,9 @@ exports.uploadArticleImages = async (article, imagesHaveChanged, next) => {
     function (err, result) {
       if (err) return next(err);
       const images = Object.values(result);
-      entity.coverImage = images.shift();
-      entity.fillerImages = JSON.stringify(images);
-      next(err, entity);
+      article.coverImage = images.shift();
+      article.fillerImages = JSON.stringify(images);
+      next(err, article);
     }
   );
 };
@@ -202,22 +206,10 @@ exports.destroyDocument = (document, next) => {
  * @param {string} directory - The Cloudinary directory the image should be uploaded to.
  * @returns {object} The filename as well as the entity with the assigned slug.
  */
-const generateSlugAndFilename = async (entity, directory) => {
+const generateSlugAndFilename = (entity, directory) => {
   let filename;
 
   switch (directory) {
-    case DIRECTORY.ARTICLES:
-      const res = await knex
-        .select()
-        .from('members')
-        .where('id', entity.authorId);
-      const [author] = res;
-      entity.slug = zString.constructCleanSlug(
-        `${author.firstname} ${author.lastname} ${entity.title}`
-      );
-      filename = entity.slug;
-      if (entity.status === ARTICLE_STATUS.DRAFT) entity.slug = null;
-      break;
     case DIRECTORY.CANDIDATES:
       const slug = zString.constructCleanSlug(entity.name);
       filename = createCandidateFilename(entity.id, slug);
