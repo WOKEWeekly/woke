@@ -14,6 +14,7 @@ import { BottomToolbar } from 'components/toolbar.js';
 import { Fader, Colorizer } from 'components/transitioner.js';
 import CLEARANCES from 'constants/clearances.js';
 import request from 'constants/request.js';
+import { cloudinary } from 'constants/settings.js';
 import { ARTICLE_STATUS } from 'constants/strings';
 import ArticleSidebar from 'partials/pages/articles/single.sidebar';
 import css from 'styles/pages/Articles.module.scss';
@@ -122,7 +123,7 @@ const ArticlePage = ({ article, user }) => {
     return (
       <Fader determinant={isLoaded} duration={500} delay={750}>
         <CloudinaryImage
-          src={article.image}
+          src={article.coverImage}
           alt={article.title}
           className={css['article-image']}
         />
@@ -135,9 +136,18 @@ const ArticlePage = ({ article, user }) => {
    * @returns {React.Component} The component.
    */
   const Content = () => {
+    let substitutions = {};
+
+    const fillerImages = JSON.parse(article.fillerImages).filter(e => e);
+    fillerImages.forEach((image, key) => {
+      substitutions[`image${key + 1}`] = `![](${cloudinary.url}/${image})`;
+    });
+
     return (
       <Fader determinant={isLoaded} duration={500} delay={1000}>
-        <Paragraph className={css['article-content']}>
+        <Paragraph
+          className={css['article-content']}
+          substitutions={substitutions}>
           {article.content}
         </Paragraph>
       </Fader>

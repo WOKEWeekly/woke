@@ -12,9 +12,13 @@ import {
   TextInput,
   ShortTextArea,
   LongTextArea,
-  FileSelector,
   Select
 } from 'components/form';
+import {
+  FileSelector,
+  ASPECT_RATIO,
+  SELECTOR_LOOK
+} from 'components/form/fileselector';
 import { Shader, Spacer } from 'components/layout.js';
 import { ConfirmModal } from 'components/modal.js';
 import { categories } from 'constants/categories.js';
@@ -22,6 +26,8 @@ import CLEARANCES from 'constants/clearances.js';
 import request from 'constants/request.js';
 import { ARTICLE_STATUS } from 'constants/strings.js';
 import css from 'styles/pages/Articles.module.scss';
+
+import { FILLER_IMAGE_LIMIT } from './helpers';
 
 const ArticleForm = ({
   article,
@@ -32,6 +38,9 @@ const ArticleForm = ({
   handlers,
   operation,
   isPublish,
+  compileFillerImages,
+  removeFillerImage,
+  setImagesChanged,
   user
 }) => {
   if (user.clearance < CLEARANCES.ACTIONS.CRUD_ARTICLES) {
@@ -43,7 +52,7 @@ const ArticleForm = ({
   const [isDateFieldVisible, setVisibility] = useState(false);
   const [isPublishModalVisible, setPublishModalVisibility] = useState(false);
 
-  const { handleText, handleDate, handleFile } = handlers;
+  const { handleText, handleDate, handleFile, removeFile } = handlers;
 
   useEffect(() => {
     request({
@@ -75,7 +84,7 @@ const ArticleForm = ({
 
   return (
     <Shader>
-      <Spacer className={css.form}>
+      <Spacer className={css['article-form']}>
         <div>
           <Heading>{heading}</Heading>
 
@@ -150,11 +159,21 @@ const ArticleForm = ({
             handleDate={handleDate}
           />
           <Group>
-            <Col>
+            <Col sm={6}>
               <FileSelector
-                image={article.image}
+                image={article.coverImage}
                 operation={operation}
-                onChange={handleFile}
+                onChange={(img) => {
+                  handleFile(img, 'coverImage');
+                  setImagesChanged(true);
+                }}
+                placeholder={"Choose this article's cover image..."}
+                removeImage={() => {
+                  removeFile();
+                  setImagesChanged(true);
+                }}
+                aspectRatio={ASPECT_RATIO.WIDE}
+                selectorLook={SELECTOR_LOOK.PLACEHOLDER}
               />
             </Col>
           </Group>
@@ -168,6 +187,17 @@ const ArticleForm = ({
                 placeholder={
                   'Add a comma-separated list of tags (e.g. woke, society, black women)'
                 }
+              />
+            </Col>
+          </Group>
+          <Group>
+            <Col>
+              <Label>Additional Images:</Label>
+              <FillerImagesGroup
+                article={article}
+                operation={operation}
+                compileFillerImages={compileFillerImages}
+                removeImage={removeFillerImage}
               />
             </Col>
           </Group>
@@ -219,6 +249,31 @@ const DatePublished = ({ isDateFieldVisible, datePublished, handleDate }) => {
       </Col>
     </Group>
   );
+};
+
+const FillerImagesGroup = ({
+  article,
+  operation,
+  compileFillerImages,
+  removeImage
+}) => {
+  const fileSelectors = [];
+  for (let i = 0; i < FILLER_IMAGE_LIMIT; i++) {
+    // if (i === 0 || (i > 0 && article.fillerImages[i - 1] !== null)
+    fileSelectors.push(
+      <FileSelector
+        key={i}
+        image={article.fillerImages[i]}
+        operation={operation}
+        onChange={(e) => compileFillerImages(e, i)}
+        aspectRatio={ASPECT_RATIO.WIDE}
+        removeImage={() => removeImage(i)}
+        selectorLook={SELECTOR_LOOK.PLACEHOLDER}
+      />
+    );
+  }
+
+  return <div className={css['article-filler-images']}>{fileSelectors}</div>;
 };
 
 const mapStateToProps = (state) => ({

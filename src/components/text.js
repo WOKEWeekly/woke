@@ -48,13 +48,13 @@ export const Subtitle = ({ children, className }) => {
  */
 const IParagraph = ({
   children,
-  substitutions,
-  theme,
-  morelink,
-  moretext,
-  moreclass,
   className,
   cssOverrides,
+  moreclass,
+  morelink,
+  moretext,
+  substitutions,
+  theme,
   truncate
 }) => {
   const classes = classNames(css.paragraph, className);

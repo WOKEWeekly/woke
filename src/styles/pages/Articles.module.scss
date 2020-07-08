@@ -15,7 +15,7 @@
     @media (min-width: $break-md) {
       margin: 0.5em;
       padding: 0 0.5em;
-      
+
       &:hover {
         background-color: $primary-light-fade;
       }
@@ -291,8 +291,21 @@
 *** form.js
 *************/
 
-.form {
+.article-form {
   @extend .responsive-form;
+}
+
+.article-filler-images {
+  column-gap: 0.5ch;
+  display: grid;
+  grid-template-columns: repeat(4, 24%);
+  row-gap: 0.5ch;
+  width: 100%;
+
+  @media (max-width: $break-sm) {
+    font-size: 0.8em;
+    grid-template-columns: repeat(3, 33%);
+  }
 }
 
 /*************

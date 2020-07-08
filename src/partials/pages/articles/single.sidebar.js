@@ -69,7 +69,7 @@ const Article = memo(({ article, idx }) => {
       <div className={css['article-cell']}>
         <VanillaLink href={articleHyperlink}>
           <CloudinaryImage
-            src={article.image}
+            src={article.coverImage}
             alt={article.title}
             className={css['article-image']}
             lazy={'mw'}
