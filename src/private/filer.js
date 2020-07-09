@@ -5,6 +5,7 @@ const { zDate, zNumber, zString } = require('zavid-modules');
 
 const knex = require('./singleton/knex').getKnex();
 
+const { cloudinary: cloud } = require('../constants/settings.js');
 const { DIRECTORY, ARTICLE_STATUS } = require('../constants/strings.js');
 
 const env = process.env.NODE_ENV !== 'production' ? 'dev' : 'prod';
@@ -50,16 +51,19 @@ exports.uploadImage = (iEntity, directory, imageHasChanged, next) => {
 exports.uploadArticleImages = async (article, imagesHaveChanged, next) => {
   const directory = DIRECTORY.ARTICLES;
 
+  // Retrieve article author and use in filename generation.
   const [author] = await knex
     .select()
     .from('members')
     .where('id', article.authorId);
-  article.slug = zString.constructCleanSlug(
+  const filename = zString.constructCleanSlug(
     `${author.firstname} ${author.lastname} ${article.title}`
   );
-  const filename = article.slug;
-  if (article.status === ARTICLE_STATUS.DRAFT) article.slug = null;
 
+  // No slug if draft.
+  article.slug = article.status !== ARTICLE_STATUS.DRAFT ? filename : null;
+
+  // Retrieve filler images.
   const fillerImages = Array.isArray(article.fillerImages)
     ? article.fillerImages
     : JSON.parse(article.fillerImages).filter((e) => e);
@@ -83,6 +87,7 @@ exports.uploadArticleImages = async (article, imagesHaveChanged, next) => {
     imagesToUpload,
     function (image, key, callback) {
       if (!image) return callback(null);
+      if (cloud.regex.test(image)) return callback(null, image);
 
       cloudinary.uploader.upload(
         image,
@@ -91,8 +96,9 @@ exports.uploadArticleImages = async (article, imagesHaveChanged, next) => {
           unique_filename: false
         },
         (err, result) => {
+          if (err) return callback(err);
           const { public_id, version, format } = result;
-          callback(err, `v${version}/${public_id}.${format}`);
+          callback(null, `v${version}/${public_id}.${format}`);
         }
       );
     },
@@ -101,7 +107,7 @@ exports.uploadArticleImages = async (article, imagesHaveChanged, next) => {
       const images = Object.values(result);
       article.coverImage = images.shift();
       article.fillerImages = JSON.stringify(images);
-      next(err, article);
+      next(null, article);
     }
   );
 };
@@ -132,9 +138,11 @@ exports.destroyMultipleImages = (images, next) => {
   if (!images) return next(null);
 
   // e.g. public_id = "dev/sessions/2020-08-03_manchester"
-  const publicIds = images.map((image) => {
-    return image.substring(image.indexOf('/') + 1, image.indexOf('.'));
-  });
+  const publicIds = images
+    .filter((e) => e)
+    .map((image) => {
+      return image.substring(image.indexOf('/') + 1, image.indexOf('.'));
+    });
 
   async.each(
     publicIds,

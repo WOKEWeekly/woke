@@ -138,10 +138,12 @@ const ArticlePage = ({ article, user }) => {
   const Content = () => {
     let substitutions = {};
 
-    const fillerImages = JSON.parse(article.fillerImages).filter(e => e);
-    fillerImages.forEach((image, key) => {
-      substitutions[`image${key + 1}`] = `![](${cloudinary.url}/${image})`;
-    });
+    const fillerImages = JSON.parse(article.fillerImages) || [];
+    fillerImages
+      .filter((e) => e)
+      .forEach((image, key) => {
+        substitutions[`image${key + 1}`] = `![](${cloudinary.url}/${image})`;
+      });
 
     return (
       <Fader determinant={isLoaded} duration={500} delay={1000}>

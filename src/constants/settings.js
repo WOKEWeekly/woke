@@ -37,6 +37,8 @@ module.exports = {
       return image.startsWith(match[0]);
     },
 
+    regex: new RegExp(/(v[0-9]+\/)?(dev|prod)\/.*/),
+
     /** Lazy transformations for square images */
     lazy: '/w_800,h_800,c_fill',
 
