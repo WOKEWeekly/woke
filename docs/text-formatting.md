@@ -1,8 +1,6 @@
 # Text Formatting
 
-The #WOKEWeekly website develops in-house. As such, we've develop our own system of rich-text formatting.
-
-If you're familiar with Markdown, it's very similar. We've based our formatting off of Markdown but with a few tweaks.
+#WOKEWeekly develops in-house. As such, we've developed our own system of rich-text formatting. If you're familiar with Markdown, it's very similar. We've based our formatting off of Markdown but with a few tweaks.
 
 ## Emphasis
 
