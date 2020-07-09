@@ -1,4 +1,4 @@
-# Text Formatting
+# Rich-Text Formatting
 
 #WOKEWeekly develops in-house. As such, we've developed our own system of rich-text formatting. If you're familiar with Markdown, it's very similar. We've based our formatting off of Markdown but with a few tweaks.
 
