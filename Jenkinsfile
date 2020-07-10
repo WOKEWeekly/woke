@@ -1,7 +1,7 @@
 boolean isMaster = env.JOB_NAME == "woke"
 String slackMessage = isMaster
   ? "Master build #${env.BUILD_NUMBER}"
-  : "PR build on ${env.CHANGE_BRANCH}-#${env.BUILD_NUMBER} by ${env.CHANGE_AUTHOR_DISPLAY_NAME}"
+  : "PR build #${env.BUILD_NUMBER} on ${env.CHANGE_BRANCH} branch by ${env.CHANGE_AUTHOR_DISPLAY_NAME}"
 
 pipeline {
   agent {
@@ -25,6 +25,7 @@ pipeline {
   }
 
   options {
+    disableConcurrentBuilds()
     timeout(time: 7.5, unit: 'MINUTES')
   }
 
