@@ -1,4 +1,4 @@
-boolean isMaster = $env.JOB_NAME == "woke"
+boolean isMaster = env.JOB_NAME == "woke"
 String slackMessage = isMaster
   ? "Master build #${env.BUILD_NUMBER}"
   : "Branch build [${env.BRANCH_NAME}]"
