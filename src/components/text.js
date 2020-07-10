@@ -132,16 +132,25 @@ export const ExpandText = ({ text = 'Read more...', onClick, className }) => {
   );
 };
 
-export class VanillaLink extends Component {
-  render() {
-    const { href, children } = this.props;
-    return (
-      <a className={css.noUnderline} href={href}>
-        {children}
-      </a>
-    );
-  }
-}
+export const VanillaLink = ({
+  className,
+  href,
+  children,
+  openNewTab = false
+}) => {
+  const classes = classNames(css.noUnderline, className);
+  return (
+    <a
+      className={classes}
+      href={href}
+      {...(openNewTab && {
+        target: '_blank',
+        rel: 'noopener noreferrer'
+      })}>
+      {children}
+    </a>
+  );
+};
 
 /**
  * Component for embedding tweets into articles.

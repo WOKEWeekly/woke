@@ -1,10 +1,10 @@
-@import "../Variables";
-@import "./Button.module.scss";
+@import '../Variables';
+@import './Button.module.scss';
 
 .formHeading {
   @extend .text;
   font-size: 2.2em;
-  margin-bottom: .5em;
+  margin-bottom: 0.5em;
   @media (max-width: $break-md) {
     font-size: 1.8em;
     text-align: center;
@@ -12,7 +12,7 @@
 }
 
 .group {
-  padding: .2em 0;
+  padding: 0.2em 0;
   @media (max-width: $break-md) {
     margin-bottom: 0 !important;
     padding: 0;
@@ -35,9 +35,12 @@
     border-bottom: $underline;
     font-size: 1.2em;
     outline: none;
-    padding: .4em;
+    padding: 0.4em;
     width: 100%;
-    @media (max-width: $break-md) { font-size: 1em; padding: .4em 0}
+    @media (max-width: $break-md) {
+      font-size: 1em;
+      padding: 0.4em 0;
+    }
   }
   .click-input {
     @extend .invisible_button;
@@ -48,8 +51,11 @@
     @extend .text;
     border-bottom: $underline !important;
     font-size: 1.2em;
-    padding: .4em;
-    @media (max-width: $break-md) { font-size: 1em; padding: .4em 0}
+    padding: 0.4em;
+    @media (max-width: $break-md) {
+      font-size: 1em;
+      padding: 0.4em 0;
+    }
   }
   .wordcount {
     color: $faded-white;
@@ -73,31 +79,39 @@
     display: flex;
     align-items: baseline;
     .box {
-      margin-right: .5em;
+      margin-right: 0.5em;
     }
   }
 
   @media (max-width: $break-md) {
-    > div { margin: .8em 0; }
+    > div {
+      margin: 0.8em 0;
+    }
   }
 }
 
 .formattingGuide {
-  div { margin-bottom: 1em; }
+  div {
+    margin-bottom: 1em;
+  }
   .heading {
     @include font-scaler(2);
-    padding-bottom: .4em;
-    margin-bottom: .5em;
+    padding-bottom: 0.4em;
+    margin-bottom: 0.5em;
     border-bottom: 1px solid white;
   }
-  .subheading { font-family: $title-font;}
+  .subheading {
+    font-family: $title-font;
+  }
 }
 
 .searchContainer {
   background: $dark;
   border-radius: 30px;
-  padding: .3em .7em;
-  @media (max-width: $break-md) { width: 75%; }
+  padding: 0.3em 0.7em;
+  @media (max-width: $break-md) {
+    width: 75%;
+  }
   .searchBar {
     @extend .text;
     background: none;
@@ -110,6 +124,10 @@
       width: 90%;
     }
   }
+}
+
+.info-circle {
+  margin-left: 0.5em;
 }
 
 /******************************/
@@ -126,11 +144,13 @@
     width: 100%;
     display: flex;
     align-items: center;
-    padding: .2em 0;
+    padding: 0.2em 0;
 
     .calendar-icon {
-      margin: 0 .2em 0 .4em !important;
-      @media (max-width: $break-md) { margin-right: .5em !important; }
+      margin: 0 0.2em 0 0.4em !important;
+      @media (max-width: $break-md) {
+        margin-right: 0.5em !important;
+      }
     }
 
     .datepicker-text-input {
@@ -143,10 +163,13 @@
 .datepicker-modal {
   justify-content: space-evenly;
   padding: 2em;
-  
+
   select {
     font-size: 1.4em !important;
-    @media (max-width: $break-md) { font-size: 1.2em !important; }}
+    @media (max-width: $break-md) {
+      font-size: 1.2em !important;
+    }
+  }
 }
 
 /******************************/
@@ -158,8 +181,12 @@
   border-radius: 10px;
   overflow: hidden;
   width: max-content;
-  .dropdown_item { padding: 0.5em 1em; }
-  a { color: white; }
+  .dropdown_item {
+    padding: 0.5em 1em;
+  }
+  a {
+    color: white;
+  }
 }
 
 .filter_menu {
@@ -173,8 +200,8 @@
     color: white;
     display: flex;
   }
-  input[type="checkbox"] {
-    margin-right: .5em;
+  input[type='checkbox'] {
+    margin-right: 0.5em;
   }
 }
 
@@ -185,8 +212,12 @@
 .starBar {
   display: flex;
   padding: 0.8em 0 0;
-  button { padding: 0; }
-  .starIcon { font-size: 1.6em; }
+  button {
+    padding: 0;
+  }
+  .starIcon {
+    font-size: 1.6em;
+  }
 }
 
 /****************/
@@ -194,6 +225,6 @@
 /****************/
 
 .subscribe-input {
- font-size: 1.1em !important;
- margin-bottom: 1em;
+  font-size: 1.1em !important;
+  margin-bottom: 1em;
 }

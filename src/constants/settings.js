@@ -66,6 +66,10 @@ module.exports = {
     director: 'zavidegbue@gmail.com'
   },
 
+  github: {
+    pages: 'https://zzavidd.github.io/woke/docs/rich-text'
+  },
+
   /** Defines the size limits in MB */
   limits: {
     file: 10,
