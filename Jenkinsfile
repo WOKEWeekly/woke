@@ -1,4 +1,7 @@
-def slackMessage = "Build ${env.BUILD_NUMBER}"
+boolean isMaster = $env.JOB_NAME == "woke"
+String slackMessage = isMaster
+  ? "Master build #${env.BUILD_NUMBER}"
+  : "Branch build [${env.BRANCH_NAME}]"
 
 pipeline {
   agent {
