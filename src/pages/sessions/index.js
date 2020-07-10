@@ -158,9 +158,7 @@ class Sessions extends Component {
             className={css.cover}
           />
 
-          <Fader
-            determinant={isLoaded}
-            duration={1500}>
+          <Fader determinant={isLoaded} duration={1500}>
             <SessionCollection />
           </Fader>
 

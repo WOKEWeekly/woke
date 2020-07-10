@@ -20,7 +20,7 @@ router.get('/sessions', (req, res) => {
 });
 
 /** Individual session page */
-router.get('/sessions/:slug', (req, res)=>{
+router.get('/sessions/:slug', (req, res) => {
   const { slug } = req.params;
   const query = knex.select().from('sessions').where('slug', slug);
   query.asCallback(function (err, [session] = []) {

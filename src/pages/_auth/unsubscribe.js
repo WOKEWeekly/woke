@@ -18,7 +18,7 @@ const Unsubscribe = () => {
     request({
       url: `/api/v1/subscribers/email`,
       method: 'DELETE',
-      body: JSON.stringify({email}),
+      body: JSON.stringify({ email }),
       headers: { Authorization: process.env.AUTH_KEY },
       onSuccess: () => {
         setAlert({

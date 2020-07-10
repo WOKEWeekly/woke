@@ -1,3 +1,4 @@
+import classNames from 'classnames';
 import React, { Component } from 'react';
 import {
   FacebookShareButton,
@@ -39,7 +40,10 @@ class ShareFacebook extends Component {
   render() {
     const { message, url } = this.props;
     return (
-      <FacebookShareButton quote={message} url={url}>
+      <FacebookShareButton
+        className={css['post_share_icons_onhover']}
+        quote={message}
+        url={url}>
         <FacebookIcon size={50} round={true} />
       </FacebookShareButton>
     );
@@ -51,7 +55,11 @@ class ShareTwitter extends Component {
     const { message, url } = this.props;
     const handle = 'wokeweeklyuk'; // TODO: Abstract handle
     return (
-      <TwitterShareButton title={message} url={url} via={handle}>
+      <TwitterShareButton
+        className={css['post_share_icons_onhover']}
+        title={message}
+        url={url}
+        via={handle}>
         <TwitterIcon size={50} round={true} />
       </TwitterShareButton>
     );
@@ -62,7 +70,11 @@ class ShareWhatsapp extends Component {
   render() {
     const { message, url } = this.props;
     return (
-      <WhatsappShareButton title={message} separator={'\n'} url={url}>
+      <WhatsappShareButton
+        className={css['post_share_icons_onhover']}
+        title={message}
+        separator={'\n'}
+        url={url}>
         <WhatsappIcon size={50} round={true} />
       </WhatsappShareButton>
     );
@@ -72,8 +84,12 @@ class ShareWhatsapp extends Component {
 class ShareLinkedin extends Component {
   render() {
     const { message, url } = this.props;
+
     return (
-      <LinkedinShareButton title={message} url={url}>
+      <LinkedinShareButton
+        className={css['post_share_icons_onhover']}
+        title={message}
+        url={url}>
         <LinkedinIcon size={50} round={true} />
       </LinkedinShareButton>
     );
@@ -85,8 +101,12 @@ const ShareLink = ({ url }) => {
     navigator.clipboard.writeText(url);
     alert.success("Copied this article's link to clipboard!");
   };
+  const classes = classNames(
+    css['copy-link-button'],
+    css.post_share_icons_onhover
+  );
   return (
-    <button className={css['copy-link-button']} onClick={copyLink}>
+    <button className={classes} onClick={copyLink}>
       <div>
         <Icon name={'link'} className={css['copy-link-icon']} />
       </div>

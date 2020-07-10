@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { zHandlers , zDate } from 'zavid-modules';
+import { zHandlers, zDate } from 'zavid-modules';
 
 import { setAlert } from 'components/alert.js';
 import request from 'constants/request.js';
