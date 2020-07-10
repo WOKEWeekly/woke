@@ -48,7 +48,6 @@ pipeline {
       steps {
         dir('src') {
           sh 'npm run test-ci'
-          junit '**/test-results.xml'
         }
       }
     }
@@ -57,6 +56,7 @@ pipeline {
   post {
     always {
       dir('src') {
+        junit '**/test-results.xml'
         sh 'rm -rf node_modules .next'
       }
     }
