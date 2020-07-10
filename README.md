@@ -20,7 +20,7 @@ This following instructions should help you get your development environment up 
 
 6. On any internet browser, go to `http://localhost:3000`. The website should be running in development mode.
 
-## Linting and Prettifying
+<!-- ## Linting and Prettifying
 
 It is strongly recommended that you install the [ESLint](https://eslint.org/) plugin in your text editor.
 
@@ -34,7 +34,7 @@ npm run lint
 Is it also important to ensure that code is correctly formatted before committing. In order to ensure this, run the following command:
 ```
 npm run prettify
-```
+``` -->
 
 
 ## Run Service Tests
