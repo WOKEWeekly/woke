@@ -33,6 +33,6 @@ module.exports = (hook, state) => {
      */
     removeFile: (name = 'image') => {
       hook(Object.assign({}, state, { [name]: null }));
-    },
+    }
   };
 };

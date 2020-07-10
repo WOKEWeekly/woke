@@ -63,7 +63,7 @@ class SessionForm extends Component {
               </Col>
             </Group>
             <Group>
-            <Col md={6}>
+              <Col md={6}>
                 <Label>Date Held:</Label>
                 <EventDatePicker
                   name={'dateHeld'}
