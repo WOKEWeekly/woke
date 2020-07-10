@@ -1,7 +1,7 @@
 boolean isMaster = env.JOB_NAME == "woke"
 String slackMessage = isMaster
   ? "Master build #${env.BUILD_NUMBER}"
-  : "Branch build [${env.BRANCH_NAME}]"
+  : "PR build on ${env.CHANGE_BRANCH}-#${env.BUILD_NUMBER} by ${env.CHANGE_AUTHOR_DISPLAY_NAME}"
 
 pipeline {
   agent {
