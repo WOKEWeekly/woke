@@ -29,13 +29,13 @@ export const Modal = (props) => {
   const Header = () => {
     if (!header) return null;
 
-    return <IModal.Header className={css.modal_header}>{header}</IModal.Header>;
+    return <IModal.Header className={css['modal-header']}>{header}</IModal.Header>;
   };
 
   const Body = () => {
     return (
       <IModal.Body
-        className={css.modal_body}
+        className={css['modal-body']}
         style={{ padding: onlyBody ? '1rem' : '0 1rem' }}>
         {body}
       </IModal.Body>
@@ -45,7 +45,7 @@ export const Modal = (props) => {
   const Footer = () => {
     if (!footer) return null;
 
-    return <IModal.Footer className={css.modal_footer}>{footer}</IModal.Footer>;
+    return <IModal.Footer className={css['modal-footer']}>{footer}</IModal.Footer>;
   };
 
   return (
@@ -70,7 +70,7 @@ export const ConfirmModal = ({
   }, [isLoaded]);
 
   const Body = (
-    <Paragraph className={css.text} style={{ fontSize: '1.1em' }}>
+    <Paragraph className={css['text']} style={{ fontSize: '1.1em' }}>
       {message}
     </Paragraph>
   );
@@ -174,7 +174,7 @@ class _EthnicSelect extends Component {
           onChange={onChange}
           placeholder={placeholder}
         />
-        <button onClick={() => clearSelection(name)} className={css.clear}>
+        <button onClick={() => clearSelection(name)} className={css['ethnic-clear-button']}>
           Clear
         </button>
       </Col>

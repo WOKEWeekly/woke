@@ -1,17 +1,17 @@
 @import '../Variables';
 
-.modal_header,
-.modal_body,
-.modal_footer {
+.modal-header,
+.modal-body,
+.modal-footer {
   background: $dark;
 }
 
-.modal_body,
-.modal_footer {
+.modal-body,
+.modal-footer {
   border-style: none !important;
 }
 
-.modal_footer {
+.modal-footer {
   padding-top: 0 !important;
 }
 
@@ -26,9 +26,9 @@
   width: 35px;
 }
 
-.clear {
-  @extend .invisible_button;
-  color: skyblue;
+.ethnic-clear-button {
+  @extend %invisible-button;
+  color: $skyblue;
   font-size: 0.8em;
   margin-top: 0.4em;
   text-align: right;
