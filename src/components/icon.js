@@ -110,15 +110,11 @@ export class _SocialsList extends Component {
 }
 
 export const MaleSymbol = () => {
-  return (
-    <Icon name={'mars'} color={'aqua'} />
-  );
+  return <Icon name={'mars'} color={'aqua'} />;
 };
 
 export const FemaleSymbol = () => {
-  return (
-    <Icon name={'venus'} color={'pink'} />
-  );
+  return <Icon name={'venus'} color={'pink'} />;
 };
 
 /** Template for social icons */

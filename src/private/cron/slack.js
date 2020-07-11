@@ -148,7 +148,9 @@ const constructDueExecTaskMessage = (cards) => {
 const constructSMUCMessage = (cards) => {
   const cardMessages = cards
     .map((card) => {
-      return `• "_${card.name}_" due *${zDate.getAdverbRelativeToToday(card.due)}*.`;
+      return `• "_${card.name}_" due *${zDate.getAdverbRelativeToToday(
+        card.due
+      )}*.`;
     })
     .join('\n');
   return `

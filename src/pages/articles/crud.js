@@ -177,12 +177,10 @@ const ArticleCrud = ({ article: currentArticle, operation, title, user }) => {
     <ArticleForm
       heading={title}
       article={{ ...stateArticle, fillerImages }}
-
       handlers={handlers(setArticle, stateArticle)}
       compileFillerImages={compileFillerImages}
       removeFillerImage={removeFillerImage}
       setImagesChanged={setImagesChanged}
-
       confirmText={confirmText}
       confirmFunc={isCreateOperation ? submitArticle : updateArticle}
       cancelFunc={() => (location.href = '/admin/articles')}

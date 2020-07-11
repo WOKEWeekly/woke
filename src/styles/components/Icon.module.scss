@@ -32,6 +32,10 @@
   width: 5.5em;
 }
 
+.post_share_icons_onhover {
+  @include scale-on-hover(1.1);
+}
+
 .promo_bar {
   .promo_socials {
     font-size: 1.2em;

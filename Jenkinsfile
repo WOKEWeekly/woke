@@ -1,7 +1,7 @@
-boolean isMaster = $env.JOB_NAME == "woke"
+boolean isMaster = env.JOB_NAME == "woke"
 String slackMessage = isMaster
   ? "Master build #${env.BUILD_NUMBER}"
-  : "Branch build [${env.BRANCH_NAME}]"
+  : "PR build #${env.BUILD_NUMBER} on ${env.CHANGE_BRANCH} branch by ${env.CHANGE_AUTHOR_DISPLAY_NAME}"
 
 pipeline {
   agent {
@@ -25,6 +25,7 @@ pipeline {
   }
 
   options {
+    disableConcurrentBuilds()
     timeout(time: 7.5, unit: 'MINUTES')
   }
 
@@ -47,7 +48,6 @@ pipeline {
       steps {
         dir('src') {
           sh 'npm run test-ci'
-          junit '**/test-results.xml'
         }
       }
     }
@@ -56,6 +56,7 @@ pipeline {
   post {
     always {
       dir('src') {
+        junit '**/test-results.xml'
         sh 'rm -rf node_modules .next'
       }
     }

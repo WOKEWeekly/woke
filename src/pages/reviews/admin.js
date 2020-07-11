@@ -20,7 +20,7 @@ const ReviewsAdmin = ({ user }) => {
   const [reviews, setReviews] = useState([]);
   const [selectedReview, setSelectedReview] = useState({});
   const [isLoaded, setLoaded] = useState(false);
-  
+
   const [deleteModalVisible, setDeleteModalVisibility] = useModal(false);
 
   useEffect(() => getReviews(), [isLoaded]);

@@ -31,12 +31,9 @@ export default () => {
   const ReviewsHeading = () => {
     const [isLoaded, setLoaded] = useState(false);
     useEffect(() => setLoaded(true), [isLoaded]);
-  
+
     return (
-      <Fader
-        determinant={isLoaded}
-        duration={1500}
-        delay={1000}>
+      <Fader determinant={isLoaded} duration={1500} delay={1000}>
         <Title className={css['reviews-heading']}>
           What are people saying about us?
         </Title>
@@ -46,14 +43,7 @@ export default () => {
 
   const ReviewsList = () => {
     const items = reviews.map((item, index) => {
-      return (
-        <Review
-          key={index}
-          idx={index}
-          item={item}
-          showFullText={true}
-        />
-      );
+      return <Review key={index} idx={index} item={item} showFullText={true} />;
     });
 
     return <div className={css['reviews-list']}>{items}</div>;

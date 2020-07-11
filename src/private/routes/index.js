@@ -13,8 +13,8 @@ const seoResources = require('./misc/seo');
 
 const { siteDescription } = require('../../constants/settings.js');
 const server = require('../singleton/server').getServer();
+const app = require('../singleton/app').getApp();
 
-module.exports = (app) => {
   app.use('/', [
     accountRoutes,
     articlesRoutes,
@@ -53,4 +53,3 @@ module.exports = (app) => {
       title: 'Registered Users | #WOKEWeekly'
     });
   });
-};
