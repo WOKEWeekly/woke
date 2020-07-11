@@ -160,6 +160,18 @@
 								],
 								"type": "text/javascript"
 							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "56e69a00-8e36-4a99-be2a-61222877f7c2",
+								"exec": [
+									"const image1 = pm.environment.get(\"image1\");",
+									"const image2 = pm.environment.get(\"image2\");",
+									"pm.environment.set(\"fillerImages\", JSON.stringify([image1, image2]));"
+								],
+								"type": "text/javascript"
+							}
 						}
 					],
 					"request": {
@@ -179,7 +191,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"title\": \"Crazy Blues\",\n\t\"content\": \"This is an added article via Postman.\",\n\t\"category\": \"Philosophy & Ethics\",\n\t\"excerpt\": \"Added Postman article.\",\n\t\"image\": {{image1}},\n\t\"authorId\": 1,\n\t\"status\": \"DRAFT\",\n\t\"datePublished\": null\n}",
+							"raw": "{\n\t\"article\": {\n\t\t\"title\": \"Crazy Blues\",\n\t\t\"content\": \"This is an added article via Postman.\",\n\t\t\"category\": \"Philosophy & Ethics\",\n\t\t\"excerpt\": \"Added Postman article.\",\n\t\t\"coverImage\": \"{{image1}}\",\n\t\t\"fillerImages\": {{fillerImages}},\n\t\t\"authorId\": 1,\n\t\t\"status\": \"DRAFT\",\n\t\t\"datePublished\": null\n\t},\n\t\"isPublish\": false\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -218,6 +230,18 @@
 								],
 								"type": "text/javascript"
 							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "b9f1978a-9f30-4275-b6b8-1433505e248c",
+								"exec": [
+									"const image1 = pm.environment.get(\"image1\");",
+									"const image2 = pm.environment.get(\"image2\");",
+									"pm.environment.set(\"fillerImages\", JSON.stringify([image2]));"
+								],
+								"type": "text/javascript"
+							}
 						}
 					],
 					"request": {
@@ -237,7 +261,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"article\": {\n\t\t\"title\": \"Electric Pinks\",\n\t\t\"content\": \"This is an updated article via Postman.\",\n\t\t\"category\": \"Philosophy & Ethics\",\n\t\t\"excerpt\": \"Updated Postman article.\",\n\t\t\"image\": {{image2}},\n\t\t\"authorId\": 1,\n\t\t\"status\": \"PUBLISHED\",\n\t\t\"datePublished\": \"2020-08-30\"\n\t},\n\t\"changed\": true\n}",
+							"raw": "{\n\t\"article\": {\n\t\t\"title\": \"Electric Pinks\",\n\t\t\"content\": \"This is an updated article via Postman.\",\n\t\t\"category\": \"Philosophy & Ethics\",\n\t\t\"excerpt\": \"Updated Postman article.\",\n\t\t\"coverImage\": \"{{image2}}\",\n\t\t\"fillerImages\": {{fillerImages}},\n\t\t\"authorId\": 1,\n\t\t\"status\": \"PUBLISHED\",\n\t\t\"datePublished\": \"2020-08-30\"\n\t},\n\t\"changed\": true,\n\t\"isPublish\": true\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1864,7 +1888,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"title\": \"Manchester 2020\",\n\t\"dateHeld\": \"2020-08-30\",\n\t\"timeHeld\": \"18:00\",\n\t\"description\": \"An added description from Postman.\",\n\t\"image\": {{image1}}\n}",
+							"raw": "{\n\t\"title\": \"Manchester 2020\",\n\t\"dateHeld\": \"2020-06-17\",\n\t\"timeHeld\": \"18:00\",\n\t\"description\": \"An added description from Postman.\",\n\t\"image\": {{image1}}\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -2110,14 +2134,14 @@
 						"header": [
 							{
 								"key": "admission",
-								"value": "true",
-								"type": "text"
+								"type": "text",
+								"value": "true"
 							},
 							{
 								"key": "Content-Type",
 								"name": "Content-Type",
-								"value": "application/json",
-								"type": "text"
+								"type": "text",
+								"value": "application/json"
 							}
 						],
 						"body": {
@@ -2199,7 +2223,7 @@
 					"response": []
 				},
 				{
-					"name": "Delete Topic",
+					"name": "Delete Subscriber",
 					"event": [
 						{
 							"listen": "test",
@@ -2238,6 +2262,102 @@
 								"v1",
 								"subscribers",
 								"{{SUBSCRIBER_ID}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Subscriber By Email",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "e6f66198-9a0f-4c3a-8312-0db9931550c5",
+								"exec": [
+									"pm.test(\"Subscriber is deleted.\", () => {",
+									"    pm.response.to.have.status(204);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "admission",
+								"type": "text",
+								"value": "true"
+							},
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"email\": \"wokeweeklyuk@gmail.com\"\n}",
+							"options": {
+								"raw": {}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/v1/subscribers/email",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"subscribers",
+								"email"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Purge Subscribers",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "1a9183ab-5a8b-4a0d-915a-8eaaee997e9d",
+								"exec": [
+									"pm.test(\"Subscribers are purged.\", () => {",
+									"    pm.response.to.have.status(204);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PURGE",
+						"header": [
+							{
+								"key": "admission",
+								"type": "text",
+								"value": "true"
+							},
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/api/v1/subscribers",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"subscribers"
 							]
 						}
 					},

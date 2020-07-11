@@ -195,6 +195,9 @@
 
   .article-metadata {
     @include font-scaler(0.8);
+    @media (max-width: $break-sm) {
+      margin-bottom: 2em;
+    }
 
     .metadata-author-name {
       @extend .link-default;

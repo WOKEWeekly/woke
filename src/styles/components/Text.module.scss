@@ -1,60 +1,114 @@
 @import '../Variables';
+@import url('https://fonts.googleapis.com/css2?family=Passion+One&display=swap');
+
+$skyblue: rgb(135, 206, 235);
 
 .title {
-  color: white;
+  color: $white;
   font-family: $title-font;
 }
+
 .subtitle {
-  color: white;
+  color: $white;
   font-family: $body-font;
 }
+
 .paragraph {
-  color: white;
+  color: $white;
   display: inline;
   font-family: $body-font;
   white-space: pre-line;
-  .heading {
-    font-family: $title-font;
-    font-size: 1.8em;
-    padding: 0.4em 0;
+}
+
+.paragraph-heading {
+  font-family: $title-font;
+  font-size: 1.8em;
+  padding: 0.4em 0;
+}
+
+.paragraph-subheading {
+  font-family: $title-font;
+  font-size: 1.2em;
+  padding: 0.2em 0;
+}
+
+.paragraph-body {
+  line-height: 1.7;
+  margin-bottom: 2rem;
+}
+
+%quotes {
+  color: rgba(255, 255, 255, 0.9);
+  font-family: 'Passion One', cursive;
+  font-size: 4em;
+  font-style: normal;
+  position: absolute;
+
+  @media (max-width: $break-sm) {
+    font-size: 5.5em;
   }
-  .subheading {
-    font-family: $title-font;
+}
+
+.paragraph-blockquote {
+  border-radius: 30px;
+  color: rgba(255, 255, 255, 0.9) !important;
+  font-family: $title-font;
+  font-size: 1.4em;
+  font-style: italic;
+  line-height: 1.2;
+  margin: 1em 0;
+  padding: 2em 2.5em;
+  position: relative;
+
+  @media (max-width: $break-sm) {
     font-size: 1.2em;
-    padding: 0.2em 0;
-  }
-  .body {
-    line-height: 1.7;
-    margin-bottom: 2rem;
   }
 
-  .floatImage {
-    margin: 1.5em 0;
-    width: 100%;
-    img {
-      border-radius: 50%;
-      border: 2px inset rgba(255, 255, 255, 0.8);
-      width: 50%;
-      float: right;
-      margin: 0 0 1em 1em;
-      shape-outside: ellipse(50%);
-      @media (max-width: $break-md) {
-        all: initial;
-        border-radius: 30px;
-        width: 100%;
-      }
-    }
+  &::before {
+    @extend %quotes;
+    content: '“';
+    left: 0;
+    top: -30px;
   }
-  .fullImage {
-    margin: 1.5em 0;
-    width: 100%;
-    img {
+
+  &::after {
+    @extend %quotes;
+    bottom: -70px;
+    content: '”';
+    right: 0;
+  }
+}
+
+.paragraph-image-float {
+  margin: 1.5em 0;
+  width: 100%;
+
+  img {
+    border: 2px inset rgba(255, 255, 255, 0.8);
+    border-radius: 50%;
+    float: right;
+    margin: 0 0 1em 1em;
+    shape-outside: ellipse(50%);
+    width: 50%;
+    @media (max-width: $break-sm) {
+      all: initial;
+      border-radius: 30px;
       width: 100%;
     }
   }
 }
-.divider {
-  background-color: white;
+
+.paragraph-image-full {
+  margin: 1.5em 0;
+  width: 100%;
+
+  img {
+    width: 100%;
+  }
+}
+
+.paragraph-divider {
+  background-color: $white;
   overflow: hidden;
 }
 
@@ -64,7 +118,7 @@
 
   %quotes {
     @include font-scaler(6);
-    color: white;
+    color: $white;
     display: inline-block;
     font-family: 'Yeseva One', cursive;
     line-height: 0;
@@ -84,33 +138,37 @@
   }
 }
 
-.readmore {
+.paragraph-read-more {
   @include font-scaler(1.1);
-  color: skyblue;
+  color: $skyblue;
   cursor: pointer;
   display: block;
   font-family: $body-font;
   margin-top: 0.5em;
+
   &:hover {
     text-decoration: underline;
   }
-  .linkIcon {
+
+  .link-icon {
     @include font-scaler(1.1);
-    color: skyblue;
+    color: $skyblue;
   }
 }
-.expandText {
+
+.paragraph-expand-text {
   @include font-scaler(1.1);
-  color: skyblue;
+  color: $skyblue;
   cursor: pointer;
   display: block;
   font-family: $body-font;
+
   &:hover {
     text-decoration: underline;
   }
 }
 
-.noUnderline {
+.vanilla-link {
   &:hover {
     text-decoration: none;
   }
