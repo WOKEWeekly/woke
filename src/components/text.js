@@ -15,7 +15,7 @@ import css from 'styles/components/Text.module.scss';
  * @returns {React.Component} A title component.
  */
 export const Title = ({ children, className }) => {
-  const classes = classNames(css.title, className);
+  const classes = classNames(css['title'], className);
   return <div className={classes}>{children}</div>;
 };
 
@@ -26,7 +26,7 @@ export const Title = ({ children, className }) => {
  * @returns {React.Component} A subtitle component.
  */
 export const Subtitle = ({ children, className }) => {
-  const classes = classNames(css.subtitle, className);
+  const classes = classNames(css['subtitle'], className);
   return <div className={classes}>{children}</div>;
 };
 
@@ -57,20 +57,21 @@ const IParagraph = ({
   theme,
   truncate
 }) => {
-  const classes = classNames(css.paragraph, className);
+  const classes = classNames(css['paragraph'], className);
 
   let text = truncate ? zText.truncateText(children, truncate) : children;
   text = zText.applySubstitutions(text, substitutions);
   text = zText.formatText(text, {
     css: {
-      heading: css.heading,
-      subheading: css.subheading,
+      heading: css['paragraph-heading'],
+      subheading: css['paragraph-subheading'],
       image: {
-        full: css.fullImage,
-        float: css.floatImage
+        full: css['paragraph-image-full'],
+        float: css['paragraph-image-float']
       },
-      paragraph: css.body,
-      divider: css.divider,
+      blockquote: css['paragraph-blockquote'],
+      paragraph: css['paragraph-body'],
+      divider: css['paragraph-divider'],
       hyperlink: css[`link-${theme.toLowerCase()}`],
       ...cssOverrides
     },
@@ -106,17 +107,17 @@ export const QuoteWrapper = ({ children }) => {
 
 export class Divider extends Component {
   render() {
-    const classes = classNames(css.divider, this.props.className);
+    const classes = classNames(css['paragraph-divider'], this.props.className);
     return <hr className={classes} style={this.props.style} />;
   }
 }
 
 export const ReadMore = ({ link, text = 'Read more', className }) => {
-  const classes = classNames(css.readmore, className);
+  const classes = classNames(css['paragraph-read-more'], className);
   return (
     <VanillaLink href={link}>
       <div className={classes}>
-        <Icon name={'external-link-alt'} className={css.linkIcon} />
+        <Icon name={'external-link-alt'} className={css['link-icon']} />
         {text}
       </div>
     </VanillaLink>
@@ -124,10 +125,10 @@ export const ReadMore = ({ link, text = 'Read more', className }) => {
 };
 
 export const ExpandText = ({ text = 'Read more...', onClick, className }) => {
-  const classes = classNames(css.invisible_button, className);
+  const classes = classNames(css['invisible_button'], className);
   return (
     <button className={classes} onClick={onClick} style={{ padding: 0 }}>
-      <div className={css.expandText}>{text}</div>
+      <div className={css['paragraph-expand-text']}>{text}</div>
     </button>
   );
 };
@@ -138,7 +139,7 @@ export const VanillaLink = ({
   children,
   openNewTab = false
 }) => {
-  const classes = classNames(css.noUnderline, className);
+  const classes = classNames(css['vanilla-link'], className);
   return (
     <a
       className={classes}
