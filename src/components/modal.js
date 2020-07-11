@@ -1,14 +1,16 @@
-import React, { Component, useState, useEffect } from 'react';
+import React, { Component, useEffect, useRef, useState } from 'react';
 import { Col, Modal as IModal } from 'react-bootstrap';
 import { connect } from 'react-redux';
-import { zHandlers } from 'zavid-modules';
 
-import { SubmitButton, CancelButton, DeleteButton } from 'components/button.js';
-import { Group, Label, Select, UsernameInput } from 'components/form';
+import { CancelButton, DeleteButton, SubmitButton } from 'components/button.js';
+import { Group, Label, Select } from 'components/form';
+import { UsernameInput } from 'components/form/v2';
 import { SocialIcon } from 'components/icon.js';
 import { Paragraph } from 'components/text.js';
 import { socialPlatforms } from 'constants/settings';
 import css from 'styles/components/Modal.module.scss';
+
+const platformList = Object.keys(socialPlatforms);
 
 /**
  * Custom hook for controlling modal visibility
@@ -180,86 +182,79 @@ class _EthnicSelect extends Component {
   }
 }
 
-export class SocialsModal extends Component {
-  constructor(props) {
-    super(props);
+/**
+ * The modal for inputting social media handles.
+ * @param {object} props - The component props.
+ * @param {Function} props.confirm - The function to confirm input socials on the form.
+ * @param {Function} props.close - The function to close the modal.
+ * @param {object} props.socials - The map of social media handles.
+ * @param {boolean} props.visible - An indicator for whether the modal is visible or not.
+ * @returns {React.Component} - The component.
+ */
+export const SocialsModal = ({ confirm, close, socials = {}, visible }) => {
 
-    this.state = {};
-    for (const idx of Object.keys(socialPlatforms)) {
-      this.state[idx] = '';
-    }
-  }
+  // Create a map of references.
+  const socialRefs = {};
+  platformList.forEach((platform) => {
+    socialRefs[platform] = useRef(socials[platform] || '');
+  });
 
-  /** Receive socials from props and populate state */
-  static getDerivedStateFromProps(props, state) {
-    if (props.visible) return;
-
-    if (props.socials) {
-      for (const idx of Object.keys(socialPlatforms)) {
-        let social = props.socials[idx];
-        state[idx] = social ? social : state[idx];
-      }
-    }
-    return state;
-  }
-
-  confirmSocials = () => {
-    this.props.confirm(this.state);
-    this.props.close();
+  /** Confirm the input socials on the form. */
+  const confirmSocials = () => {
+    const socials = {};
+    platformList.forEach((platform) => {
+      socials[platform] = socialRefs[platform].current.value;
+    });
+    confirm(socials);
+    close();
   };
 
-  render() {
-    const { close, visible } = this.props;
+  const SocialFields = () => {
+    return platformList.map((platform, key) => {
+      const social = socialPlatforms[platform];
+      return (
+        <Col md={6} key={key} style={{ marginBottom: '1em' }}>
+          <Label>{social.name}</Label>
+          <div className={css['social-modal-fields']}>
+            <SocialIcon
+              icon={social.icon}
+              className={css['social-modal-icons']}
+            />
+            <UsernameInput
+              value={socials[platform]}
+              ref={socialRefs[platform]}
+              placeholder={`${social.name} ${
+                social.domain ? 'username' : 'URL'
+              }`}
+            />
+          </div>
+        </Col>
+      );
+    });
+  };
 
-    const renderFields = () => {
-      const items = [];
-
-      for (const idx of Object.keys(socialPlatforms)) {
-        let social = socialPlatforms[idx];
-        items.push(
-          <Col md={6} key={idx} style={{ marginBottom: '1em' }}>
-            <Label>{social.name}</Label>
-            <div className={css.social_fields}>
-              <SocialIcon icon={social.icon} className={css.icons} />
-              <UsernameInput
-                name={idx}
-                value={this.state[idx]}
-                onChange={zHandlers(this).handleText}
-                placeholder={`${social.name} ${
-                  social.domain === '' ? 'URL' : 'username'
-                }`}
-              />
-            </div>
-          </Col>
-        );
+  return (
+    <Modal
+      show={visible}
+      scrollable
+      onlyBody={true}
+      body={
+        <Group>
+          <SocialFields />
+        </Group>
       }
+      footer={
+        <>
+          <SubmitButton onClick={confirmSocials}>Confirm</SubmitButton>
+          <CancelButton onClick={close}>Close</CancelButton>
+        </>
+      }
+    />
+  );
+};
 
-      return items;
-    };
-
-    const body = <Group>{renderFields()}</Group>;
-
-    const footer = (
-      <React.Fragment>
-        <SubmitButton onClick={this.confirmSocials}>Confirm</SubmitButton>
-        <CancelButton onClick={close}>Close</CancelButton>
-      </React.Fragment>
-    );
-
-    return (
-      <Modal
-        show={visible}
-        scrollable
-        body={body}
-        footer={footer}
-        onlyBody={true}
-      />
-    );
-  }
-}
-
-const mapStateToProps = (state) => ({
-  countries: state.countries
+const mapStateToProps = ({ countries }) => ({
+  countries
 });
 
 const EthnicSelect = connect(mapStateToProps)(_EthnicSelect);
