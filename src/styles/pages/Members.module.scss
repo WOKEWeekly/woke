@@ -140,8 +140,8 @@
       border-radius: 45%;
       width: 100%;
       @media (max-width: $break-md) {
-        border-style: none;
         border-radius: 10%;
+        border-style: none;
       }
     }
 
@@ -189,4 +189,8 @@
 
 .form {
   @extend .responsive-form;
+}
+
+.member-file-selector {
+  max-width: 400px;
 }

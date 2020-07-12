@@ -159,6 +159,19 @@ const ArticleForm = ({
             handleDate={handleDate}
           />
           <Group>
+            <Col>
+              <Label>Tags:</Label>
+              <ShortTextArea
+                name={'tags'}
+                value={article.tags}
+                onChange={handleText}
+                placeholder={
+                  'Add a comma-separated list of tags (e.g. woke, society, black women)'
+                }
+              />
+            </Col>
+          </Group>
+          <Group>
             <Col sm={6}>
               <FileSelector
                 image={article.coverImage}
@@ -174,19 +187,6 @@ const ArticleForm = ({
                 }}
                 aspectRatio={ASPECT_RATIO.WIDE}
                 selectorLook={SELECTOR_LOOK.PLACEHOLDER}
-              />
-            </Col>
-          </Group>
-          <Group>
-            <Col>
-              <Label>Tags:</Label>
-              <ShortTextArea
-                name={'tags'}
-                value={article.tags}
-                onChange={handleText}
-                placeholder={
-                  'Add a comma-separated list of tags (e.g. woke, society, black women)'
-                }
               />
             </Col>
           </Group>

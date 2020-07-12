@@ -1,3 +1,4 @@
+import classnames from 'classnames';
 import React, { useState, useEffect, useRef } from 'react';
 import { connect } from 'react-redux';
 
@@ -19,6 +20,7 @@ export const SELECTOR_LOOK = {
 
 export const IFileSelector = ({
   aspectRatio,
+  className,
   image,
   onChange,
   operation,
@@ -84,6 +86,7 @@ export const IFileSelector = ({
     return (
       <PlaceholderImageSelector
         aspectRatio={aspectRatio}
+        className={className}
         display={display}
         filename={sFilename}
         fileRef={fileRef}
@@ -144,13 +147,14 @@ const InputSelector = ({
 
 const PlaceholderImageSelector = ({
   aspectRatio = ASPECT_RATIO.SQUARE,
+  className,
   display,
   fileRef,
   image,
   imageRef,
   placeholder,
   previewImage,
-  removeImage
+  removeImage,
 }) => {
   const ChoiceImage = () => {
     return (
@@ -182,18 +186,16 @@ const PlaceholderImageSelector = ({
             onChange={previewImage}
             ref={fileRef}
           />
-          {placeholder}
+          <span>{placeholder}</span>
         </label>
       </>
     );
   };
   return (
-    <div style={{ width: '100%' }}>
-      <div className={css['placeholder-image-container']}>
+      <div className={classnames(css['placeholder-image-container'], className)}>
         <ChoosePrompt />
         <ChoiceImage />
       </div>
-    </div>
   );
 };
 

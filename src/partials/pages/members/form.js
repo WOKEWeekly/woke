@@ -18,9 +18,13 @@ import {
   Select,
   TextInput,
   ClickInput,
-  LongTextArea,
-  FileSelector
+  LongTextArea
 } from 'components/form';
+import {
+  FileSelector,
+  ASPECT_RATIO,
+  SELECTOR_LOOK
+} from 'components/form/fileselector';
 import { SocialsList } from 'components/icon.js';
 import { Shader, Spacer } from 'components/layout.js';
 import { EthnicModal, SocialsModal } from 'components/modal.js';
@@ -56,8 +60,11 @@ const MemberForm = ({
     handleFile,
     handleRadio,
     handleCheckboxButton,
+    removeFile,
     confirmSocials
   } = handlers;
+
+  const isNotGuest = member.level !== 'Guest';
 
   return (
     <Shader>
@@ -66,57 +73,7 @@ const MemberForm = ({
           <Heading>{heading}</Heading>
 
           <Group>
-            <Col md={6}>
-              <Label>First Name:</Label>
-              <TextInput
-                name={'firstname'}
-                value={member.firstname}
-                onChange={handleText}
-                placeholder={'Enter first name.'}
-              />
-            </Col>
-            <Col md={6}>
-              <Label>Last Name:</Label>
-              <TextInput
-                name={'lastname'}
-                value={member.lastname}
-                onChange={handleText}
-                placeholder={'Enter last name.'}
-              />
-            </Col>
-          </Group>
-          <Group>
-            <Col md={3}>
-              <Label>Sex:</Label>
-              <RadioButtonGroup
-                name={'sex'}
-                value={member.sex}
-                onChange={handleRadio}
-                items={[
-                  { label: 'Male', value: 'M' },
-                  { label: 'Female', value: 'F' }
-                ]}
-              />
-            </Col>
-            <Col md={9}>
-              <Label>Ethnic Origin:</Label>
-              <ClickInput
-                onClick={() => setEthnicModalVisibility(true)}
-                value={countriesToString(ethnicities, countries)}
-                placeholder={'Click to select countries of origin...'}
-              />
-            </Col>
-          </Group>
-          <Group>
-            <Col md={7}>
-              <Label>Birthday:</Label>
-              <BirthdayPicker
-                name={'birthday'}
-                date={member.birthday}
-                onConfirm={handleDate}
-              />
-            </Col>
-            <Col md={5}>
+            <Col md={4}>
               <Label>Level:</Label>
               <Select
                 name={'level'}
@@ -128,27 +85,81 @@ const MemberForm = ({
             </Col>
           </Group>
           <Group>
-            <Col md={8}>
-              <Label>Role:</Label>
+            <Col md={4}>
+              <Label>First Name:</Label>
               <TextInput
-                name={'role'}
-                value={member.role}
+                name={'firstname'}
+                value={member.firstname}
                 onChange={handleText}
-                placeholder={"Enter member's role."}
+                placeholder={'Enter first name.'}
               />
             </Col>
             <Col md={4}>
-              <Label>Slack ID:</Label>
+              <Label>Last Name:</Label>
               <TextInput
-                name={'slackId'}
-                value={member.slackId}
+                name={'lastname'}
+                value={member.lastname}
                 onChange={handleText}
-                placeholder={'e.g. UDL5UM6KG'}
+                placeholder={'Enter last name.'}
+              />
+            </Col>
+            <Col md={4}>
+              <Label>Sex:</Label>
+              <RadioButtonGroup
+                name={'sex'}
+                value={member.sex}
+                onChange={handleRadio}
+                items={[
+                  { label: 'Male', value: 'M' },
+                  { label: 'Female', value: 'F' }
+                ]}
               />
             </Col>
           </Group>
+          {isNotGuest ? (
+            <>
+              <Group>
+                <Col md={6}>
+                  <Label>Ethnic Origin:</Label>
+                  <ClickInput
+                    onClick={() => setEthnicModalVisibility(true)}
+                    value={countriesToString(ethnicities, countries)}
+                    placeholder={'Click to select countries of origin...'}
+                  />
+                </Col>
+                <Col md={6}>
+                  <Label>Birthday:</Label>
+                  <BirthdayPicker
+                    name={'birthday'}
+                    date={member.birthday}
+                    onConfirm={handleDate}
+                  />
+                </Col>
+              </Group>
+              <Group>
+                <Col md={8}>
+                  <Label>Role:</Label>
+                  <TextInput
+                    name={'role'}
+                    value={member.role}
+                    onChange={handleText}
+                    placeholder={"Enter member's role."}
+                  />
+                </Col>
+                <Col md={4}>
+                  <Label>Slack ID:</Label>
+                  <TextInput
+                    name={'slackId'}
+                    value={member.slackId}
+                    onChange={handleText}
+                    placeholder={'e.g. UDL5UM6KG'}
+                  />
+                </Col>
+              </Group>
+            </>
+          ) : null}
           <Group>
-            <Col md={6}>
+            <Col md={12}>
               <Label>Socials:</Label>
               <AddEntityButton
                 title={'Add Socials'}
@@ -156,7 +167,9 @@ const MemberForm = ({
               />
               <SocialsList socials={member.socials} />
             </Col>
-            <Col md={3}>
+          </Group>
+          <Group>
+            <Col lg={6} xl={4}>
               <Label>Author:</Label>
               <CheckboxButton
                 name={'isAuthor'}
@@ -165,7 +178,7 @@ const MemberForm = ({
                 label={'This member is an author.'}
               />
             </Col>
-            <Col md={3}>
+            <Col lg={6} xl={4}>
               <Label>Status:</Label>
               <CheckboxButton
                 name={'verified'}
@@ -189,12 +202,16 @@ const MemberForm = ({
           <Group>
             <Col>
               <FileSelector
+                className={css['member-file-selector']}
                 image={member.image}
                 operation={operation}
                 onChange={(img) => {
                   handleFile(img);
                   setImageChanged(true);
                 }}
+                aspectRatio={ASPECT_RATIO.SQUARE}
+                removeImage={removeFile}
+                selectorLook={SELECTOR_LOOK.PLACEHOLDER}
               />
             </Col>
           </Group>

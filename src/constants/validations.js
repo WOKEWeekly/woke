@@ -162,16 +162,21 @@ exports.isValidDocument = (document) => {
  * @returns {boolean} True if valid. False with error message if invalid.
  */
 exports.isValidMember = (member) => {
+  if (!ifExists(member.level, "Select the member's level.")) return false;
   if (!ifExists(member.firstname, "Enter the member's first name."))
     return false;
   if (!ifExists(member.lastname, "Enter the member's last name.")) return false;
-  if (!ifExists(member.level, "Select the member's level.")) return false;
-  if (!ifExists(member.role, "Enter the member's role.")) return false;
-  if (
-    member.level !== 'Guest' &&
-    !ifExists(member.birthday, "Select the member's date of birth.")
-  )
-    return false;
+
+  const isNotGuest = member.level !== 'Guest';
+  if (isNotGuest) {
+    if (!ifExists(member.role, "Enter the member's role.")) return false;
+    if (
+      member.level !== 'Guest' &&
+      !ifExists(member.birthday, "Select the member's date of birth.")
+    )
+      return false;
+  }
+
   if (!isUnderFileSizeLimit(member.image)) return false;
   return true;
 };
