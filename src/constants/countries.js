@@ -1,3 +1,5 @@
+const { zString } = require('zavid-modules');
+
 exports.loadCountries = () => {
   return fetch('https://restcountries.eu/rest/v2/all')
     .then((res) => res.json())
@@ -6,8 +8,8 @@ exports.loadCountries = () => {
 
 /** Retrieve demonym from country */
 exports.getDemonym = (value, data) => {
-  const found = data.find((country) => country.label === value);
-  return found ? found.demonym : value;
+  const matchedCountry = data.find((country) => country.label === value);
+  return matchedCountry ? matchedCountry.demonym : value;
 };
 
 exports.getISOCode = (value, data) => {
@@ -19,14 +21,11 @@ exports.getISOCode = (value, data) => {
 exports.countriesToString = (countries, data) => {
   if (!countries) return '';
 
-  const array = [];
-  countries.forEach((country) => {
-    if (!country || country === '') return;
-    array.push(this.getDemonym(country, data));
-  });
+  countries = countries
+    .filter((e) => e)
+    .map((country) => {
+      return this.getDemonym(country, data);
+    });
 
-  const str = [array.slice(0, -1).join(', '), array.slice(-1)[0]].join(
-    array.length < 2 ? '' : ' & '
-  );
-  return str;
+  return zString.toPunctuatedList(countries);
 };

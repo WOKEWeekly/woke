@@ -3,8 +3,8 @@ import { Col, Modal as IModal } from 'react-bootstrap';
 import { connect } from 'react-redux';
 
 import { CancelButton, DeleteButton, SubmitButton } from 'components/button.js';
-import { Group, Label, Select } from 'components/form';
-import { UsernameInput } from 'components/form/v2';
+import { Group, Label } from 'components/form';
+import { Select, UsernameInput } from 'components/form/v2';
 import { SocialIcon } from 'components/icon.js';
 import { Paragraph } from 'components/text.js';
 import { socialPlatforms } from 'constants/settings';
@@ -170,30 +170,52 @@ export const SocialsModal = ({ confirm, close, socials = {}, visible }) => {
 /**
  * The modal for selecting countries of origin.
  * @param {object} props - The component props.
- * @param {Function} props.clearSelection - The function to clear a country selection.
  * @param {Function} props.close - The function to close the modal.
  * @param {object[]} props.countries - The array of countries from Redux.
- * @param {object} props.entity - The map of ethnicities.
- * @param {Function} props.handleSelect - The function to handle a country selection.
+ * @param {object} props.ethnicities - The map of ethnicities.
  * @param {true} props.visible - Indicates whether the modal is visible or not.
  * @returns {React.Component} - The component.
  */
-const IEthnicModal = ({
-  clearSelection,
-  close,
-  countries,
-  entity,
-  handleSelect,
-  visible
-}) => {
-  const { ethnicity1, ethnicity2, ethnicity3, ethnicity4 } = entity;
+const IEthnicModal = ({ confirm, close, countries, ethnicities, visible }) => {
+  const [ethnicity1, ethnicity2, ethnicity3, ethnicity4] = ethnicities;
 
   const selects = [
-    ['First ethnicity', 'ethnicity1', ethnicity1, 'Select first country...'],
-    ['Second ethnicity', 'ethnicity2', ethnicity2, 'Select second country...'],
-    ['Third ethnicity', 'ethnicity3', ethnicity3, 'Select third country...'],
-    ['Fourth ethnicity', 'ethnicity4', ethnicity4, 'Select fourth country...']
+    [
+      'First ethnicity',
+      ethnicity1,
+      'Select first country...',
+      useRef(ethnicity1)
+    ],
+    [
+      'Second ethnicity',
+      ethnicity2,
+      'Select second country...',
+      useRef(ethnicity2)
+    ],
+    [
+      'Third ethnicity',
+      ethnicity3,
+      'Select third country...',
+      useRef(ethnicity3)
+    ],
+    [
+      'Fourth ethnicity',
+      ethnicity4,
+      'Select fourth country...',
+      useRef(ethnicity4)
+    ]
   ];
+
+  /** Confirm the selected ethnicities on the form. */
+  const confirmEthnicities = () => {
+    const ethnicList = selects.map(([, , , ref]) => ref.current.value);
+    confirm(ethnicList);
+    close();
+  };
+
+  const clearSelectedEthnicity = (ref) => {
+    ref.current.value = '';
+  };
 
   return (
     <Modal
@@ -201,19 +223,18 @@ const IEthnicModal = ({
       scrollable
       body={
         <Group>
-          {selects.map(([label, name, value, placeholder], key) => {
+          {selects.map(([label, value, placeholder, ref], key) => {
             return (
               <Col md={6} key={key}>
                 <Label>{label}:</Label>
                 <Select
-                  name={name}
+                  ref={ref}
                   value={value}
                   items={countries}
-                  onChange={handleSelect}
                   placeholder={placeholder}
                 />
                 <button
-                  onClick={() => clearSelection(name)}
+                  onClick={() => clearSelectedEthnicity(ref)}
                   className={css['ethnic-clear-button']}>
                   Clear
                 </button>
@@ -222,7 +243,12 @@ const IEthnicModal = ({
           })}
         </Group>
       }
-      footer={<CancelButton onClick={close}>Close</CancelButton>}
+      footer={
+        <>
+          <SubmitButton onClick={confirmEthnicities}>Confirm</SubmitButton>
+          <CancelButton onClick={close}>Close</CancelButton>
+        </>
+      }
       onlyBody={true}
     />
   );

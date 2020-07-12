@@ -108,7 +108,7 @@ export const InfoCircle = () => {
  * OTHERS
  **************************/
 
-/** For dropdown menus */
+/** A v2 exists. */
 export class Select extends Component {
   render() {
     const { name, placeholder, items, onChange } = this.props;
@@ -143,7 +143,7 @@ export class Select extends Component {
   }
 }
 
-/** For checkboxes */
+/** A v2 exists. */
 export class Checkbox extends Component {
   render() {
     const classes = classNames(css.checkbox, this.props.className);
