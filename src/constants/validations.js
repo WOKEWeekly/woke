@@ -91,8 +91,6 @@ exports.isValidArticle = (article) => {
   if (!ifExists(article.title, 'Enter the article title.')) return false;
   if (!ifExists(article.status, 'Select the status of the article.'))
     return false;
-
-  // TODO: Check this validation works
   if (!ifExists(article.authorId, 'Select the author of this article.'))
     return false;
   if (!isValidImage(article.coverImage, 'article', { mustExist: isPublish }))
@@ -136,7 +134,6 @@ exports.isValidCandidate = (candidate) => {
   )
     return false;
 
-  // TODO: Change this validation
   if (
     ifTrue(
       candidate.authorId === 0,

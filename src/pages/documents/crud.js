@@ -52,7 +52,6 @@ class DocumentCrud extends Component {
       data = JSON.stringify({
         document,
         changed: zFile.checkBase64(file)
-        // TODO: Repeat this for all changed
         // TODO: Change "changed" to "hasChanged"
       });
     }

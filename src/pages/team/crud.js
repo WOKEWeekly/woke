@@ -11,8 +11,6 @@ import MemberForm from 'partials/pages/members/form.js';
 
 const adminPage = '/admin/members';
 
-// TODO: Handle resulting hyperlink after editing member
-
 const MemberCrud = ({ member: currentMember, operation, title, user }) => {
   const [stateMember, setMember] = useState({
     firstname: '',
