@@ -5,7 +5,7 @@ const CLEARANCES = require('../../../constants/clearances');
 const { verifyToken, validateReq } = require('../../middleware');
 const SessionsController = require('../controllers/sessions.controller');
 
-const authorize = verifyToken(CLEARANCES.ACTIONS.CRUD_SESSIONS);
+const authorize = verifyToken(CLEARANCES.ACTIONS.SESSIONS.MODIFY);
 
 /** GET all sessions */
 router.get('/', validateReq, SessionsController.getAllSessions);

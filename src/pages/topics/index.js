@@ -43,7 +43,7 @@ class TopicBank extends Component {
     };
 
     if (props.hasAccess === false) {
-      if (props.user.clearance < CLEARANCES.ACTIONS.VIEW_TOPICS) {
+      if (props.user.clearance < CLEARANCES.ACTIONS.TOPICS.VIEW) {
         if (location.href.indexOf('?') > -1)
           setAlert({
             type: 'error',
@@ -255,7 +255,7 @@ class TopicBank extends Component {
     const { topicsLoaded, searchWord, results, filters } = this.state;
     const { user } = this.props;
 
-    const hasPrivileges = user.clearance >= CLEARANCES.ACTIONS.CRUD_TOPICS;
+    const hasPrivileges = user.clearance >= CLEARANCES.ACTIONS.TOPICS.MODIFY;
 
     const sortItems = [
       'Sort Oldest To Newest',

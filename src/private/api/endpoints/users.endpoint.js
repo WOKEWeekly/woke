@@ -8,7 +8,7 @@ const UsersController = require('../controllers/users.controller');
 /** GET all registered users */
 router.get(
   '/',
-  verifyToken(CLEARANCES.ACTIONS.VIEW_USERS),
+  verifyToken(CLEARANCES.ACTIONS.USERS.VIEW),
   UsersController.getAllUsers
 );
 
@@ -24,28 +24,28 @@ router.post('/login', validateReq, UsersController.loginUser);
 /** PUT; change username */
 router.put(
   '/:id/username',
-  verifyToken(CLEARANCES.ACTIONS.CHANGE_ACCOUNT),
+  verifyToken(CLEARANCES.ACTIONS.USERS.CHANGE_USERNAME),
   UsersController.changeUsername
 );
 
 /** PUT; change password */
 router.put(
   '/:id/password',
-  verifyToken(CLEARANCES.ACTIONS.CHANGE_ACCOUNT),
+  verifyToken(CLEARANCES.ACTIONS.USERS.CHANGE_PASSWORD),
   UsersController.changePassword
 );
 
 /** PUT; change user clearance */
 router.put(
   '/:id/clearance/:value',
-  verifyToken(CLEARANCES.ACTIONS.CRUD_USERS),
+  verifyToken(CLEARANCES.ACTIONS.USERS.MODIFY),
   UsersController.changeClearance
 );
 
 /** DELETE user */
 router.delete(
   '/:id',
-  verifyToken(CLEARANCES.ACTIONS.DELETE_ACCOUNT),
+  verifyToken(CLEARANCES.ACTIONS.USERS.DELETE_OWN_ACCOUNT),
   UsersController.deleteUser
 );
 

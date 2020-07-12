@@ -21,7 +21,7 @@ class ReviewForm extends Component {
   constructor(props) {
     super(props);
 
-    if (props.user.clearance < CLEARANCES.ACTIONS.CRUD_REVIEWS) {
+    if (props.user.clearance < CLEARANCES.ACTIONS.REVIEWS.MODIFY) {
       return (location.href = '/reviews');
     }
   }

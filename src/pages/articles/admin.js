@@ -23,7 +23,7 @@ class BlogAdmin extends Component {
       isLoaded: false
     };
 
-    if (props.user.clearance < CLEARANCES.ACTIONS.CRUD_ARTICLES) {
+    if (props.user.clearance < CLEARANCES.ACTIONS.ARTICLES.MODIFY) {
       return (location.href = '/');
     }
   }

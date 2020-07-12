@@ -23,7 +23,7 @@ class Documents extends Component {
       isLoaded: false
     };
 
-    if (props.user.clearance < CLEARANCES.ACTIONS.CRUD_DOCUMENTS) {
+    if (props.user.clearance < CLEARANCES.ACTIONS.DOCUMENTS.MODIFY) {
       return (location.href = '/');
     }
   }

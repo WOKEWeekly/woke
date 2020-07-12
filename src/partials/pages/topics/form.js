@@ -27,7 +27,7 @@ class TopicForm extends Component {
   constructor(props) {
     super(props);
 
-    if (props.user.clearance < CLEARANCES.ACTIONS.CRUD_TOPICS) {
+    if (props.user.clearance < CLEARANCES.ACTIONS.TOPICS.MODIFY) {
       return (location.href = '/topics');
     }
   }

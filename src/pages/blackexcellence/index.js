@@ -160,7 +160,7 @@ class BlackExcellence extends Component {
           <CandidateGrid />
 
           <BottomToolbar>
-            {user.clearance >= CLEARANCES.ACTIONS.CRUD_BLACKEX ? (
+            {user.clearance >= CLEARANCES.ACTIONS.CANDIDATES.MODIFY ? (
               <AddEntityButton
                 title={'Add Candidate'}
                 onClick={() => (location.href = '/admin/candidates/add')}

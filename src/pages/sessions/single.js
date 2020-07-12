@@ -112,7 +112,7 @@ class SessionPage extends Component {
             onClick={() => (location.href = '/sessions')}
           />
 
-          {user.clearance >= CLEARANCES.ACTIONS.CRUD_SESSIONS ? (
+          {user.clearance >= CLEARANCES.ACTIONS.SESSIONS.MODIFY ? (
             <React.Fragment>
               <EditEntityButton
                 title={'Edit Session'}

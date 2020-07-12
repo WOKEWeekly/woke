@@ -25,7 +25,7 @@ const MemberAdmin = ({ user, countries }) => {
 
   useEffect(() => getMembers(), [isLoaded]);
 
-  if (user.clearance < CLEARANCES.ACTIONS.VIEW_TEAM) {
+  if (user.clearance < CLEARANCES.ACTIONS.MEMBERS.VIEW) {
     return (location.href = '/');
   }
 

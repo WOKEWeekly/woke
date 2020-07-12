@@ -5,12 +5,12 @@ const CLEARANCES = require('../../../constants/clearances');
 const { verifyToken, validateReq } = require('../../middleware');
 const TopicsController = require('../controllers/topics.controller');
 
-const authorize = verifyToken(CLEARANCES.ACTIONS.CRUD_TOPICS);
+const authorize = verifyToken(CLEARANCES.ACTIONS.TOPICS.MODIFY);
 
 /** GET all topics */
 router.get(
   '/',
-  verifyToken(CLEARANCES.ACTIONS.VIEW_TOPICS),
+  verifyToken(CLEARANCES.ACTIONS.TOPICS.VIEW),
   TopicsController.getAllTopics
 );
 
@@ -23,7 +23,7 @@ router.get('/random', validateReq, TopicsController.getRandomTopic);
 /** GET; generate Topic Bank token */
 router.get(
   '/token',
-  verifyToken(CLEARANCES.ACTIONS.GENERATE_NEW_TOKEN),
+  verifyToken(CLEARANCES.ACTIONS.TOPICS.GENERATE_TOKEN),
   TopicsController.generateTopicBankToken
 );
 

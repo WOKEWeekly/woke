@@ -163,7 +163,7 @@ class Sessions extends Component {
           </Fader>
 
           <BottomToolbar>
-            {user.clearance >= CLEARANCES.ACTIONS.CRUD_TOPICS ? (
+            {user.clearance >= CLEARANCES.ACTIONS.TOPICS.MODIFY ? (
               <AddEntityButton
                 title={'Add Session'}
                 onClick={() => (location.href = '/admin/sessions/add')}

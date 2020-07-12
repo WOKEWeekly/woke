@@ -75,7 +75,7 @@ class ReviewsList extends Component {
           <ReviewsList />
 
           <BottomToolbar>
-            {user.clearance >= CLEARANCES.ACTIONS.CRUD_REVIEWS ? (
+            {user.clearance >= CLEARANCES.ACTIONS.REVIEWS.MODIFY ? (
               <AdminButton
                 title={'Reviews Admin'}
                 onClick={() => (location.href = '/admin/reviews')}

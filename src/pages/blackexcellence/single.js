@@ -146,7 +146,7 @@ class CandidatePage extends Component {
             onClick={() => (location.href = '/blackexcellence')}
           />
 
-          {user.clearance >= CLEARANCES.ACTIONS.CRUD_BLACKEX ? (
+          {user.clearance >= CLEARANCES.ACTIONS.CANDIDATES.MODIFY ? (
             <React.Fragment>
               <EditEntityButton
                 title={'Edit Candidate'}

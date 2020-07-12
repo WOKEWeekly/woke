@@ -25,7 +25,7 @@ const ReviewsAdmin = ({ user }) => {
 
   useEffect(() => getReviews(), [isLoaded]);
 
-  if (user.clearance < CLEARANCES.ACTIONS.VIEW_ADMIN_REVIEWS) {
+  if (user.clearance < CLEARANCES.ACTIONS.REVIEWS.VIEW) {
     return (location.href = '/');
   }
 

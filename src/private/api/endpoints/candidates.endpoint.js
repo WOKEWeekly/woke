@@ -5,7 +5,7 @@ const CLEARANCES = require('../../../constants/clearances');
 const { verifyToken, validateReq } = require('../../middleware');
 const CandidatesController = require('../controllers/candidates.controller');
 
-const authorize = verifyToken(CLEARANCES.ACTIONS.CRUD_BLACKEX);
+const authorize = verifyToken(CLEARANCES.ACTIONS.CANDIDATES.MODIFY);
 
 /** GET all candidates */
 router.get('/', validateReq, CandidatesController.getAllCandidates);

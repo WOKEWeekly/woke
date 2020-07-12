@@ -17,9 +17,9 @@ import css from 'styles/partials/Header.module.scss';
 /** The list of options in the account menu. */
 const accountMenuOptions = [
   ['Your Account', '/account'],
-  ['Team Members', '/admin/members', CLEARANCES.ACTIONS.VIEW_TEAM],
-  ['Registered Users', '/admin/users', CLEARANCES.ACTIONS.VIEW_USERS],
-  ['Documents', '/admin/documents', CLEARANCES.ACTIONS.VIEW_DOCUMENTS],
+  ['Team Members', '/admin/members', CLEARANCES.ACTIONS.MEMBERS.VIEW],
+  ['Registered Users', '/admin/users', CLEARANCES.ACTIONS.USERS.VIEW],
+  ['Documents', '/admin/documents', CLEARANCES.ACTIONS.DOCUMENTS.VIEW],
   ['Admin Tools', '/admin', 8]
 ];
 
@@ -36,11 +36,11 @@ const socialButtons = [
 const navigationLinks = [
   ['About Us', '/about'],
   ['Sessions', '/sessions'],
-  ['Blog', '/blog', CLEARANCES.ACTIONS.CRUD_ARTICLES], // TODO: Remove when finished
+  ['Blog', '/blog', CLEARANCES.ACTIONS.ARTICLES.MODIFY], // TODO: Remove when finished
   ['Reviews', '/reviews'],
   ['The Team', '/team'],
   ['#BlackExcellence', '/blackexcellence'],
-  ['Topic Bank', '/topics', CLEARANCES.ACTIONS.VIEW_TOPICS]
+  ['Topic Bank', '/topics', CLEARANCES.ACTIONS.TOPICS.VIEW]
 ];
 
 /**

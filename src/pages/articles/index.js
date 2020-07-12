@@ -22,7 +22,7 @@ class Blog extends Component {
     };
 
     // TODO: Remove when finished
-    if (props.user.clearance < CLEARANCES.ACTIONS.CRUD_ARTICLES) {
+    if (props.user.clearance < CLEARANCES.ACTIONS.ARTICLES.MODIFY) {
       return (location.href = '/');
     }
   }
@@ -74,7 +74,7 @@ class Blog extends Component {
         </Spacer>
 
         <BottomToolbar>
-          {user.clearance >= CLEARANCES.ACTIONS.CRUD_ARTICLES ? (
+          {user.clearance >= CLEARANCES.ACTIONS.ARTICLES.MODIFY ? (
             <AdminButton
               title={'Blog Admin'}
               onClick={() => (location.href = '/admin/articles')}

@@ -99,7 +99,7 @@ class MemberPage extends Component {
         <BottomToolbar>
           <ReturnButton />
 
-          {user.clearance >= CLEARANCES.ACTIONS.CRUD_TEAM ? (
+          {user.clearance >= CLEARANCES.ACTIONS.MEMBERS.MODIFY ? (
             <EditEntityButton
               title={'Edit Member'}
               onClick={() =>

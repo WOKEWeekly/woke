@@ -46,7 +46,7 @@ const CandidateForm = ({
   const [isSocialsModalVisible, setSocialsModalVisibility] = useState(false);
   const [authors, setAuthors] = useState([]);
 
-  if (user.clearance < CLEARANCES.ACTIONS.CRUD_BLACKEX) {
+  if (user.clearance < CLEARANCES.ACTIONS.CANDIDATES.MODIFY) {
     return (location.href = '/blackexcellence');
   }
 

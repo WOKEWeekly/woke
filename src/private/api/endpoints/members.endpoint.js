@@ -5,12 +5,12 @@ const CLEARANCES = require('../../../constants/clearances');
 const { verifyToken, validateReq } = require('../../middleware');
 const MembersController = require('../controllers/members.controller');
 
-const authorize = verifyToken(CLEARANCES.ACTIONS.CRUD_TEAM);
+const authorize = verifyToken(CLEARANCES.ACTIONS.MEMBERS.MODIFY);
 
 /** GET all members */
 router.get(
   '/',
-  verifyToken(CLEARANCES.ACTIONS.VIEW_TEAM),
+  verifyToken(CLEARANCES.ACTIONS.MEMBERS.VIEW),
   MembersController.getAllMembers
 );
 /** GET single member by ID */

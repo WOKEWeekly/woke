@@ -22,7 +22,7 @@ class SessionForm extends Component {
   constructor(props) {
     super(props);
 
-    if (props.user.clearance < CLEARANCES.ACTIONS.CRUD_SESSIONS) {
+    if (props.user.clearance < CLEARANCES.ACTIONS.SESSIONS.MODIFY) {
       return (location.href = '/sessions');
     }
   }

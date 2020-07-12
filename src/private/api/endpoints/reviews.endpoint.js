@@ -5,7 +5,7 @@ const CLEARANCES = require('../../../constants/clearances');
 const { verifyToken, validateReq } = require('../../middleware');
 const ReviewsController = require('../controllers/reviews.controller');
 
-const authorize = verifyToken(CLEARANCES.ACTIONS.CRUD_REVIEWS);
+const authorize = verifyToken(CLEARANCES.ACTIONS.REVIEWS.MODIFY);
 
 /** GET all reviews */
 router.get('/', validateReq, ReviewsController.getAllReviews);

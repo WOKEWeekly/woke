@@ -8,7 +8,7 @@ const PagesController = require('../controllers/pages.controller');
 /** PUT; update review details */
 router.put(
   '/',
-  verifyToken(CLEARANCES.ACTIONS.EDIT_PAGE),
+  verifyToken(CLEARANCES.ACTIONS.PAGES.MODIFY),
   PagesController.updatePage
 );
 

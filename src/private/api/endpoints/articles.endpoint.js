@@ -5,7 +5,7 @@ const CLEARANCES = require('../../../constants/clearances');
 const { verifyToken, validateReq } = require('../../middleware');
 const ArticlesController = require('../controllers/articles.controller');
 
-const authorize = verifyToken(CLEARANCES.ACTIONS.CRUD_ARTICLES);
+const authorize = verifyToken(CLEARANCES.ACTIONS.ARTICLES.MODIFY);
 
 /** GET all articles */
 router.get('/', authorize, ArticlesController.getAllArticles);

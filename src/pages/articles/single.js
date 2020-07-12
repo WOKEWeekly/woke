@@ -23,7 +23,7 @@ const clapLimit = 5;
 
 const ArticlePage = ({ article, user }) => {
   // TODO: Remove when finished
-  if (user.clearance < CLEARANCES.ACTIONS.CRUD_ARTICLES) {
+  if (user.clearance < CLEARANCES.ACTIONS.ARTICLES.MODIFY) {
     return (location.href = '/');
   }
 
@@ -268,7 +268,7 @@ const ArticlePage = ({ article, user }) => {
           onClick={() => (location.href = '/blog')}
         />
 
-        {user.clearance >= CLEARANCES.ACTIONS.CRUD_ARTICLES ? (
+        {user.clearance >= CLEARANCES.ACTIONS.ARTICLES.MODIFY ? (
           <AdminButton
             title={'Blog Admin'}
             onClick={() => (location.href = '/admin/articles')}

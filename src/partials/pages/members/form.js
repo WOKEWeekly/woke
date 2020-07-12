@@ -46,7 +46,7 @@ const MemberForm = ({
   const [isEthnicModalVisible, setEthnicModalVisibility] = useState(false);
   const [isSocialsModalVisible, setSocialsModalVisibility] = useState(false);
 
-  if (user.clearance < CLEARANCES.ACTIONS.CRUD_TEAM) {
+  if (user.clearance < CLEARANCES.ACTIONS.MEMBERS.MODIFY) {
     return (location.href = backPath);
   }
 

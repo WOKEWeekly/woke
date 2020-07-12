@@ -24,7 +24,7 @@ class Users extends Component {
       isLoaded: false
     };
 
-    if (props.user.clearance < CLEARANCES.ACTIONS.VIEW_USERS) {
+    if (props.user.clearance < CLEARANCES.ACTIONS.USERS.VIEW) {
       return (location.href = '/');
     }
   }

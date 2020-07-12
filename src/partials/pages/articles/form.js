@@ -43,7 +43,7 @@ const ArticleForm = ({
   setImagesChanged,
   user
 }) => {
-  if (user.clearance < CLEARANCES.ACTIONS.CRUD_ARTICLES) {
+  if (user.clearance < CLEARANCES.ACTIONS.ARTICLES.MODIFY) {
     return (location.href = '/');
   }
 
