@@ -1,4 +1,4 @@
-import React, { Component, useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Col, Modal as IModal } from 'react-bootstrap';
 import { connect } from 'react-redux';
 
@@ -29,7 +29,9 @@ export const Modal = (props) => {
   const Header = () => {
     if (!header) return null;
 
-    return <IModal.Header className={css['modal-header']}>{header}</IModal.Header>;
+    return (
+      <IModal.Header className={css['modal-header']}>{header}</IModal.Header>
+    );
   };
 
   const Body = () => {
@@ -45,7 +47,9 @@ export const Modal = (props) => {
   const Footer = () => {
     if (!footer) return null;
 
-    return <IModal.Footer className={css['modal-footer']}>{footer}</IModal.Footer>;
+    return (
+      <IModal.Footer className={css['modal-footer']}>{footer}</IModal.Footer>
+    );
   };
 
   return (
@@ -93,95 +97,6 @@ export const ConfirmModal = ({
   );
 };
 
-export class EthnicModal extends Component {
-  render() {
-    const { close, visible, handleSelect, clearSelection, entity } = this.props;
-    const { ethnicity1, ethnicity2, ethnicity3, ethnicity4 } = entity;
-
-    const body = (
-      <React.Fragment>
-        <Group>
-          <EthnicSelect
-            label={'First ethnicity'}
-            name={'ethnicity1'}
-            value={ethnicity1}
-            onChange={handleSelect}
-            clearSelection={clearSelection}
-            placeholder={'Select first country...'}
-          />
-          <EthnicSelect
-            label={'Second ethnicity'}
-            name={'ethnicity2'}
-            value={ethnicity2}
-            onChange={handleSelect}
-            clearSelection={clearSelection}
-            placeholder={'Select second country...'}
-          />
-        </Group>
-        <Group>
-          <EthnicSelect
-            label={'Third ethnicity'}
-            name={'ethnicity3'}
-            value={ethnicity3}
-            onChange={handleSelect}
-            clearSelection={clearSelection}
-            placeholder={'Select third country...'}
-          />
-          <EthnicSelect
-            label={'Fourth ethnicity'}
-            name={'ethnicity4'}
-            value={ethnicity4}
-            onChange={handleSelect}
-            clearSelection={clearSelection}
-            placeholder={'Select fourth country...'}
-          />
-        </Group>
-      </React.Fragment>
-    );
-
-    const footer = <CancelButton onClick={close}>Close</CancelButton>;
-
-    return (
-      <Modal
-        show={visible}
-        scrollable
-        body={body}
-        footer={footer}
-        onlyBody={true}
-      />
-    );
-  }
-}
-
-class _EthnicSelect extends Component {
-  render() {
-    const {
-      label,
-      name,
-      value,
-      onChange,
-      clearSelection,
-      placeholder,
-      countries
-    } = this.props;
-    return (
-      <Col md={6}>
-        <Label>{label}:</Label>
-        <Select
-          name={name}
-          value={value}
-          items={countries}
-          onChange={onChange}
-          placeholder={placeholder}
-        />
-        <button onClick={() => clearSelection(name)} className={css['ethnic-clear-button']}>
-          Clear
-        </button>
-      </Col>
-    );
-  }
-}
-
 /**
  * The modal for inputting social media handles.
  * @param {object} props - The component props.
@@ -192,7 +107,6 @@ class _EthnicSelect extends Component {
  * @returns {React.Component} - The component.
  */
 export const SocialsModal = ({ confirm, close, socials = {}, visible }) => {
-
   // Create a map of references.
   const socialRefs = {};
   platformList.forEach((platform) => {
@@ -253,8 +167,69 @@ export const SocialsModal = ({ confirm, close, socials = {}, visible }) => {
   );
 };
 
+/**
+ * The modal for selecting countries of origin.
+ * @param {object} props - The component props.
+ * @param {Function} props.clearSelection - The function to clear a country selection.
+ * @param {Function} props.close - The function to close the modal.
+ * @param {object[]} props.countries - The array of countries from Redux.
+ * @param {object} props.entity - The map of ethnicities.
+ * @param {Function} props.handleSelect - The function to handle a country selection.
+ * @param {true} props.visible - Indicates whether the modal is visible or not.
+ * @returns {React.Component} - The component.
+ */
+const IEthnicModal = ({
+  clearSelection,
+  close,
+  countries,
+  entity,
+  handleSelect,
+  visible
+}) => {
+  const { ethnicity1, ethnicity2, ethnicity3, ethnicity4 } = entity;
+
+  const selects = [
+    ['First ethnicity', 'ethnicity1', ethnicity1, 'Select first country...'],
+    ['Second ethnicity', 'ethnicity2', ethnicity2, 'Select second country...'],
+    ['Third ethnicity', 'ethnicity3', ethnicity3, 'Select third country...'],
+    ['Fourth ethnicity', 'ethnicity4', ethnicity4, 'Select fourth country...']
+  ];
+
+  return (
+    <Modal
+      show={visible}
+      scrollable
+      body={
+        <Group>
+          {selects.map(([label, name, value, placeholder], key) => {
+            return (
+              <Col md={6} key={key}>
+                <Label>{label}:</Label>
+                <Select
+                  name={name}
+                  value={value}
+                  items={countries}
+                  onChange={handleSelect}
+                  placeholder={placeholder}
+                />
+                <button
+                  onClick={() => clearSelection(name)}
+                  className={css['ethnic-clear-button']}>
+                  Clear
+                </button>
+              </Col>
+            );
+          })}
+        </Group>
+      }
+      footer={<CancelButton onClick={close}>Close</CancelButton>}
+      onlyBody={true}
+    />
+  );
+};
+
 const mapStateToProps = ({ countries }) => ({
   countries
 });
 
-const EthnicSelect = connect(mapStateToProps)(_EthnicSelect);
+export const EthnicModal = connect(mapStateToProps)(IEthnicModal);
