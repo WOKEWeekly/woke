@@ -191,9 +191,8 @@ const MainNavbar = ({ user, theme }) => {
   );
 };
 
-const mapStateToProps = (state) => ({
-  user: state.user,
-  theme: state.theme
+const mapStateToProps = ({theme, user}) => ({
+  theme, user
 });
 
 const mapDispatchToProps = (dispatch) =>
