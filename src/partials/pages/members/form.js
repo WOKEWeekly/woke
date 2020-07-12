@@ -40,7 +40,8 @@ const MemberForm = ({
   operation,
   member,
   ethnicities,
-  setEthnicities
+  setEthnicities,
+  setImageChanged
 }) => {
   const [isEthnicModalVisible, setEthnicModalVisibility] = useState(false);
   const [isSocialsModalVisible, setSocialsModalVisibility] = useState(false);
@@ -190,7 +191,10 @@ const MemberForm = ({
               <FileSelector
                 image={member.image}
                 operation={operation}
-                onChange={handleFile}
+                onChange={(img) => {
+                  handleFile(img);
+                  setImageChanged(true);
+                }}
               />
             </Col>
           </Group>
@@ -209,10 +213,9 @@ const MemberForm = ({
       </Spacer>
 
       <EthnicModal
-        confirm={setEthnicities}
         close={() => setEthnicModalVisibility(false)}
+        confirm={setEthnicities}
         ethnicities={ethnicities}
-        handleSelect={handleText}
         visible={isEthnicModalVisible}
       />
 

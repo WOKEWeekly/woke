@@ -38,11 +38,12 @@ const MemberCrud = ({ member: currentMember, operation, title, user }) => {
     if (!isCreateOperation) {
       const { birthday, ethnicity, socials } = currentMember;
 
-      setMember({
-        ...currentMember,
-        socials: JSON.parse(socials),
-        birthday: birthday && new Date(birthday)
-      });
+      setMember(
+        Object.assign({}, currentMember, {
+          socials: JSON.parse(socials),
+          birthday: birthday && new Date(birthday)
+        })
+      );
       setEthnicities(JSON.parse(ethnicity));
     }
   }, []);
@@ -147,11 +148,9 @@ const MemberCrud = ({ member: currentMember, operation, title, user }) => {
       heading={title}
       member={stateMember}
       ethnicities={ethnicities}
-
       handlers={handlers(setMember, stateMember)}
       setEthnicities={setEthnicities}
       setImageChanged={setImageChanged}
-
       confirmText={isCreateOperation ? 'Submit' : 'Update'}
       confirmFunc={isCreateOperation ? submitMember : updateMember}
       cancelFunc={() => (location.href = adminPage)}

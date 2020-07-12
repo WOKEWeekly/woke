@@ -150,6 +150,7 @@ export const SocialsModal = ({ confirm, close, socials = {}, visible }) => {
   return (
     <Modal
       show={visible}
+      dialogClassName={css['social-modal-dialog']}
       scrollable
       onlyBody={true}
       body={
@@ -170,6 +171,7 @@ export const SocialsModal = ({ confirm, close, socials = {}, visible }) => {
 /**
  * The modal for selecting countries of origin.
  * @param {object} props - The component props.
+ * @param {Function} props.confirm - The function to confirm selected ethnicities on the form.
  * @param {Function} props.close - The function to close the modal.
  * @param {object[]} props.countries - The array of countries from Redux.
  * @param {object} props.ethnicities - The map of ethnicities.
@@ -226,18 +228,20 @@ const IEthnicModal = ({ confirm, close, countries, ethnicities, visible }) => {
           {selects.map(([label, value, placeholder, ref], key) => {
             return (
               <Col md={6} key={key}>
-                <Label>{label}:</Label>
-                <Select
-                  ref={ref}
-                  value={value}
-                  items={countries}
-                  placeholder={placeholder}
-                />
-                <button
-                  onClick={() => clearSelectedEthnicity(ref)}
-                  className={css['ethnic-clear-button']}>
-                  Clear
-                </button>
+                <div className={css['ethnic-modal-fields']}>
+                  <Label>{label}:</Label>
+                  <Select
+                    ref={ref}
+                    value={value}
+                    items={countries}
+                    placeholder={placeholder}
+                  />
+                  <button
+                    onClick={() => clearSelectedEthnicity(ref)}
+                    className={css['ethnic-clear-button']}>
+                    Clear
+                  </button>
+                </div>
               </Col>
             );
           })}

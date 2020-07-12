@@ -15,6 +15,10 @@
   padding-top: 0 !important;
 }
 
+.social-modal-dialog {
+  max-width: 600px !important;
+}
+
 .social-modal-fields {
   align-items: center;
   display: flex;
@@ -24,6 +28,10 @@
 .social-modal-icons {
   font-size: 1.4em;
   width: 35px;
+}
+
+.ethnic-modal-fields {
+  margin: 1em 0;
 }
 
 .ethnic-clear-button {

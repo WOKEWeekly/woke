@@ -1,80 +1,68 @@
-import React, { Component } from 'react';
+import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
-import { zHandlers, zDate } from 'zavid-modules';
+import { zDate } from 'zavid-modules';
 
 import { setAlert } from 'components/alert.js';
+import handlers from 'constants/handlers.js';
 import request from 'constants/request.js';
-import { cloudinary } from 'constants/settings.js';
+import { OPERATIONS } from 'constants/strings.js';
 import { isValidCandidate } from 'constants/validations.js';
-
 import CandidateForm from 'partials/pages/candidates/form.js';
 
-class CandidateAdd extends Component {
-  static async getInitialProps({ query }) {
-    return { ...query };
-  }
+const CandidateCrud = ({
+  candidate: currentCandidate,
+  operation,
+  title,
+  user
+}) => {
+  const [stateCandidate, setCandidate] = useState({
+    id: null,
+    name: '',
+    occupation: '',
+    birthday: null,
+    description: '',
+    image: '',
+    socials: {},
+    authorId: null,
+    dateWritten: new Date()
+  });
 
-  constructor() {
-    super();
-    this.state = {
-      id: null,
-      name: '',
-      occupation: '',
-      birthday: null,
-      description: '',
-      image: '',
-      ethnicity1: '',
-      ethnicity2: '',
-      ethnicity3: '',
-      ethnicity4: '',
-      socials: {},
-      authorId: null,
-      dateWritten: new Date()
-    };
-  }
+  const [ethnicities, setEthnicities] = useState(new Array(4).fill(''));
+  const [imageHasChanged, setImageChanged] = useState(false);
 
-  /** Get latest candidate ID */
-  componentDidMount() {
-    const { operation, candidate } = this.props;
-    const isEditOperation = operation === 'edit';
+  const isCreateOperation = operation === OPERATIONS.CREATE;
 
-    request({
-      url: '/api/v1/candidates/latest',
-      method: 'GET',
-      headers: { Authorization: process.env.AUTH_KEY },
-      onSuccess: ({ id = 0 }) => {
-        if (!isEditOperation) {
+  useEffect(() => {
+    if (isCreateOperation) {
+      // Get the next candidate ID number.
+      request({
+        url: '/api/v1/candidates/latest',
+        method: 'GET',
+        headers: { Authorization: process.env.AUTH_KEY },
+        onSuccess: ({ id = 0 }) => {
           id = id + 1;
-          this.setState({ id });
+          setCandidate(Object.assign({}, currentCandidate, { id }));
         }
-      }
-    });
-
-    if (isEditOperation) {
-      const { birthday, dateWritten, ethnicity, socials } = candidate;
-      const ethnicityArr = JSON.parse(ethnicity);
-
-      /** Populate ethnicity array */
-      const ethnicities = {};
-      for (let i = 0; i < 4; i++) {
-        ethnicities[`ethnicity${i + 1}`] = ethnicityArr ? ethnicityArr[i] : '';
-      }
-
-      this.setState({
-        ...candidate,
-        socials: JSON.parse(socials),
-        birthday: new Date(birthday),
-        dateWritten: new Date(dateWritten),
-        ...ethnicities
       });
+    } else {
+      const { birthday, ethnicity, socials, dateWritten } = currentCandidate;
+
+      setCandidate(
+        Object.assign({}, currentCandidate, {
+          socials: JSON.parse(socials),
+          birthday: birthday && new Date(birthday),
+          dateWritten: dateWritten && new Date(dateWritten)
+        })
+      );
+      setEthnicities(JSON.parse(ethnicity));
     }
-  }
+  }, []);
 
   /**
    * Build candidate(s) object from state and props.
    * @returns {object} Payload to be submitted to server.
    */
-  buildRequest = () => {
+  const buildRequest = () => {
     const {
       id,
       name,
@@ -85,21 +73,13 @@ class CandidateAdd extends Component {
       socials,
       authorId,
       dateWritten
-    } = this.state;
-    const { operation } = this.props;
-
-    // Add ethncities to array
-    const ethnicities = [];
-    for (let i = 1; i <= 4; i++) {
-      if (this.state[`ethnicity${i}`])
-        ethnicities.push(this.state[`ethnicity${i}`]);
-    }
+    } = stateCandidate;
 
     const candidate = {
-      id: id,
+      id,
       name: name.trim(),
       occupation: occupation.trim(),
-      image: image,
+      image,
       birthday: zDate.formatISODate(birthday),
       ethnicity: JSON.stringify(ethnicities),
       description: description,
@@ -108,34 +88,34 @@ class CandidateAdd extends Component {
       dateWritten: zDate.formatISODate(dateWritten)
     };
 
-    let data;
+    let payload;
 
-    if (operation === 'add') {
-      data = JSON.stringify(candidate);
+    if (isCreateOperation) {
+      payload = JSON.stringify(candidate);
     } else {
-      data = JSON.stringify({
+      payload = JSON.stringify({
         candidate: candidate,
-        changed: image !== '' && image !== null && !cloudinary.check(image)
+        changed: imageHasChanged
       });
     }
 
-    return data;
+    return payload;
   };
 
   /** Submit the candidate to the server */
-  submitCandidate = () => {
-    if (!isValidCandidate(this.state)) return;
-    const data = this.buildRequest();
+  const submitCandidate = () => {
+    if (!isValidCandidate({ ...stateCandidate, ethnicities })) return;
+    const payload = buildRequest();
 
     request({
       url: '/api/v1/candidates',
       method: 'POST',
-      body: data,
-      headers: { Authorization: `Bearer ${this.props.user.token}` },
+      body: payload,
+      headers: { Authorization: `Bearer ${user.token}` },
       onSuccess: () => {
         setAlert({
           type: 'success',
-          message: `You've successfully added candidate ${this.state.name}.`
+          message: `You've successfully added candidate ${stateCandidate.name}.`
         });
         location.href = '/blackexcellence';
       }
@@ -143,17 +123,17 @@ class CandidateAdd extends Component {
   };
 
   /** Update candidate on server */
-  updateCandidate = () => {
-    if (!isValidCandidate(this.state)) return;
-    const data = this.buildRequest();
+  const updateCandidate = () => {
+    if (!isValidCandidate({ ...stateCandidate, ethnicities })) return;
+    const payload = buildRequest();
 
     request({
-      url: `/api/v1/candidates/${this.props.candidate.id}`,
+      url: `/api/v1/candidates/${currentCandidate.id}`,
       method: 'PUT',
-      body: data,
-      headers: { Authorization: `Bearer ${this.props.user.token}` },
+      body: payload,
+      headers: { Authorization: `Bearer ${user.token}` },
       onSuccess: () => {
-        const { id, name } = this.state;
+        const { id, name } = stateCandidate;
         setAlert({
           type: 'success',
           message: `You've successfully edited the details of ${name}.`
@@ -163,32 +143,33 @@ class CandidateAdd extends Component {
     });
   };
 
-  render() {
-    const { title, operation } = this.props;
-    const backPath =
-      operation === 'add'
-        ? '/blackexcellence'
-        : `/blackexcellence/${this.state.id}`;
-    return (
-      <CandidateForm
-        heading={title}
-        candidate={this.state}
-        handlers={zHandlers(this)}
-        confirmText={operation === 'add' ? 'Submit' : 'Update'}
-        confirmFunc={
-          operation === 'add' ? this.submitCandidate : this.updateCandidate
-        }
-        cancelFunc={() => (location.href = backPath)}
-        operation={operation}
-        metaTitle={title}
-        metaUrl={`/${operation}`}
-      />
-    );
-  }
-}
+  const backPath = isCreateOperation
+    ? '/blackexcellence'
+    : `/blackexcellence/${stateCandidate.id}`;
+  return (
+    <CandidateForm
+      heading={title}
+      candidate={stateCandidate}
+      ethnicities={ethnicities}
+      setEthnicities={setEthnicities}
+      setImageChanged={setImageChanged}
+      handlers={handlers(setCandidate, stateCandidate)}
+      confirmText={isCreateOperation ? 'Submit' : 'Update'}
+      confirmFunc={isCreateOperation ? submitCandidate : updateCandidate}
+      cancelFunc={() => (location.href = backPath)}
+      operation={operation}
+      metaTitle={title}
+      metaUrl={`/${operation}`}
+    />
+  );
+};
 
-const mapStateToProps = (state) => ({
-  user: state.user
+CandidateCrud.getInitialProps = async ({ query }) => {
+  return { ...query };
+};
+
+const mapStateToProps = ({ user }) => ({
+  user
 });
 
-export default connect(mapStateToProps)(CandidateAdd);
+export default connect(mapStateToProps)(CandidateCrud);
