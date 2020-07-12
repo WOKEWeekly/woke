@@ -1,24 +1,47 @@
-@import "../Variables";
+@import '../Variables';
 
-.modal_header, .modal_body, .modal_footer { background: $dark; }
-.modal_body, .modal_footer { border-style: none !important; }
-.modal_footer { padding-top: 0 !important; }
-
-.social_fields {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  .icons {
-    font-size: 1.4em;
-    width: 35px;
-  }
+.modal-header,
+.modal-body,
+.modal-footer {
+  background: $dark;
 }
 
-.clear {
-  @extend .invisible_button;
-  font-size: .8em;
-  color: skyblue;
-  margin-top: .4em;
+.modal-body,
+.modal-footer {
+  border-style: none !important;
+}
+
+.modal-footer {
+  padding-top: 0 !important;
+}
+
+.social-modal-dialog {
+  max-width: 600px !important;
+}
+
+.social-modal-fields {
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+}
+
+.social-modal-icons {
+  font-size: 1.4em;
+  width: 35px;
+}
+
+.ethnic-modal-fields {
+  margin: 1em 0;
+}
+
+.ethnic-clear-button {
+  @extend %invisible-button;
+  color: $skyblue;
+  font-size: 0.8em;
+  margin-top: 0.4em;
   text-align: right;
-  &:hover { text-decoration: underline; }
+
+  &:hover {
+    text-decoration: underline;
+  }
 }

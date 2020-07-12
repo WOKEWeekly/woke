@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Col } from 'react-bootstrap';
 import { connect } from 'react-redux';
 
@@ -28,237 +28,193 @@ import { countriesToString } from 'constants/countries.js';
 import request from 'constants/request.js';
 import css from 'styles/pages/Candidates.module.scss';
 
-class CandidateForm extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      ethnicModalVisible: false,
-      socialsModalVisible: false,
-      authors: []
-    };
+const CandidateForm = ({
+  cancelFunc,
+  candidate,
+  confirmFunc,
+  confirmText,
+  countries,
+  ethnicities,
+  handlers,
+  heading,
+  operation,
+  setEthnicities,
+  setImageChanged,
+  user
+}) => {
+  const [isEthnicModalVisible, setEthnicModalVisibility] = useState(false);
+  const [isSocialsModalVisible, setSocialsModalVisibility] = useState(false);
+  const [authors, setAuthors] = useState([]);
 
-    if (props.user.clearance < CLEARANCES.ACTIONS.CRUD_SESSIONS) {
-      return (location.href = '/blackexcellence');
-    }
+  if (user.clearance < CLEARANCES.ACTIONS.CRUD_BLACKEX) {
+    return (location.href = '/blackexcellence');
   }
 
-  componentDidMount() {
+  useEffect(() => {
     request({
       url: '/api/v1/members/authors',
       method: 'GET',
       headers: { Authorization: process.env.AUTH_KEY },
       onSuccess: (response) => {
-        const authors = [];
-        response.forEach((author) => {
-          authors.push({
-            value: author.id,
-            label: `${author.firstname} ${author.lastname}`
+        const authors = response
+          .map((author) => {
+            return {
+              value: author.id,
+              label: `${author.firstname} ${author.lastname}`
+            };
+          })
+          .sort((a, b) => {
+            a = a.label;
+            b = b.label;
+            return a < b ? -1 : a > b ? 1 : 0;
           });
-        });
-        authors.sort((a, b) => {
-          a = a.label;
-          b = b.label;
-          return a < b ? -1 : a > b ? 1 : 0;
-        });
-        this.setState({ authors });
+        setAuthors(authors);
       }
     });
-  }
+  }, []);
 
-  showEthnicModal = () => {
-    this.setState({ ethnicModalVisible: true });
-  };
-  hideEthnicModal = () => {
-    this.setState({ ethnicModalVisible: false });
-  };
-  showSocialsModal = () => {
-    this.setState({ socialsModalVisible: true });
-  };
-  hideSocialsModal = () => {
-    this.setState({ socialsModalVisible: false });
-  };
+  const { handleText, handleDate, handleFile, confirmSocials } = handlers;
 
-  render() {
-    const {
-      heading,
-      confirmText,
-      confirmFunc,
-      cancelFunc,
-      handlers,
-      countries,
-      operation
-    } = this.props;
-    const {
-      handleText,
-      handleDate,
-      handleFile,
-      clearSelection,
-      confirmSocials
-    } = handlers;
+  return (
+    <Shader>
+      <Spacer className={css.form}>
+        <div>
+          <Heading>{heading}</Heading>
 
-    const {
-      id,
-      name,
-      description,
-      occupation,
-      birthday,
-      image,
-      socials,
-      ethnicity1,
-      ethnicity2,
-      ethnicity3,
-      ethnicity4,
-      authorId,
-      dateWritten
-    } = this.props.candidate;
+          <Group>
+            <Col md={6}>
+              <Label>Name:</Label>
+              <TextInput
+                name={'name'}
+                value={candidate.name}
+                onChange={handleText}
+                placeholder={"Enter candidate's name."}
+              />
+            </Col>
+            <Col md={2}>
+              <Label>Number:</Label>
+              <NumberPicker
+                name={'id'}
+                value={candidate.id}
+                onChange={handleText}
+                placeholder={'ID No.'}
+              />
+            </Col>
+            <Col md={4}>
+              <Label>Birthday:</Label>
+              <BirthdayPicker
+                name={'birthday'}
+                date={candidate.birthday}
+                onConfirm={handleDate}
+              />
+            </Col>
+          </Group>
+          <Group>
+            <Col md={5}>
+              <Label>Occupation:</Label>
+              <TextInput
+                name={'occupation'}
+                value={candidate.occupation}
+                onChange={handleText}
+                placeholder={"Enter candidate's occupation."}
+              />
+            </Col>
+            <Col md={7}>
+              <Label>Ethnic Origin:</Label>
+              <ClickInput
+                onClick={() => setEthnicModalVisibility(true)}
+                value={countriesToString(ethnicities, countries)}
+                placeholder={'Click to select countries of origin...'}
+              />
+            </Col>
+          </Group>
+          <Group>
+            <Col md={12}>
+              <Label>Socials:</Label>
+              <AddEntityButton
+                title={'Add Socials'}
+                onClick={() => setSocialsModalVisibility(true)}
+              />
+              <SocialsList socials={candidate.socials} />
+            </Col>
+          </Group>
+          <Group>
+            <Col>
+              <LabelInfo>Description</LabelInfo>
+              <LongTextArea
+                name={'description'}
+                value={candidate.description}
+                onChange={handleText}
+                placeholder={'Write out candidate tribute...'}
+              />
+            </Col>
+          </Group>
+          <Group>
+            <Col md={5}>
+              <Label>Author:</Label>
+              <Select
+                name={'authorId'}
+                value={candidate.authorId}
+                placeholder={'Select the author.'}
+                items={authors}
+                onChange={handleText}
+              />
+            </Col>
+            <Col md={{ span: 5, offset: 2 }}>
+              <Label>Date Written:</Label>
+              <AuthoredDatePicker
+                name={'dateWritten'}
+                date={candidate.dateWritten}
+                onConfirm={handleDate}
+              />
+            </Col>
+          </Group>
+          <Group>
+            <Col>
+              <FileSelector
+                image={candidate.image}
+                operation={operation}
+                onChange={(img) => {
+                  handleFile(img);
+                  setImageChanged(true);
+                }}
+              />
+            </Col>
+          </Group>
+        </div>
 
-    const { authors, ethnicModalVisible, socialsModalVisible } = this.state;
+        <div>
+          <Group>
+            <Col>
+              <SubmitButton onClick={confirmFunc} className={'mr-2'}>
+                {confirmText}
+              </SubmitButton>
+              <CancelButton onClick={cancelFunc}>Cancel</CancelButton>
+            </Col>
+          </Group>
+        </div>
+      </Spacer>
 
-    const ethnicities = countriesToString(
-      [ethnicity1, ethnicity2, ethnicity3, ethnicity4],
-      countries
-    );
+      <EthnicModal
+        confirm={setEthnicities}
+        close={() => setEthnicModalVisibility(false)}
+        ethnicities={ethnicities}
+        visible={isEthnicModalVisible}
+      />
 
-    return (
-      <Shader>
-        <Spacer className={css.form}>
-          <div>
-            <Heading>{heading}</Heading>
+      <SocialsModal
+        close={() => setSocialsModalVisibility(false)}
+        confirm={confirmSocials}
+        socials={candidate.socials}
+        visible={isSocialsModalVisible}
+      />
+    </Shader>
+  );
+};
 
-            <Group>
-              <Col md={6}>
-                <Label>Name:</Label>
-                <TextInput
-                  name={'name'}
-                  value={name}
-                  onChange={handleText}
-                  placeholder={"Enter candidate's name."}
-                />
-              </Col>
-              <Col md={2}>
-                <Label>Number:</Label>
-                <NumberPicker
-                  name={'id'}
-                  value={id}
-                  onChange={handleText}
-                  placeholder={'ID No.'}
-                />
-              </Col>
-              <Col md={4}>
-                <Label>Birthday:</Label>
-                <BirthdayPicker
-                  name={'birthday'}
-                  date={birthday}
-                  onConfirm={handleDate}
-                />
-              </Col>
-            </Group>
-            <Group>
-              <Col md={5}>
-                <Label>Occupation:</Label>
-                <TextInput
-                  name={'occupation'}
-                  value={occupation}
-                  onChange={handleText}
-                  placeholder={"Enter candidate's occupation."}
-                />
-              </Col>
-              <Col md={7}>
-                <Label>Ethnic Origin:</Label>
-                <ClickInput
-                  onClick={this.showEthnicModal}
-                  value={ethnicities}
-                  placeholder={'Click to select countries of origin...'}
-                />
-              </Col>
-            </Group>
-            <Group>
-              <Col md={12}>
-                <Label>Socials:</Label>
-                <AddEntityButton
-                  title={'Add Socials'}
-                  onClick={this.showSocialsModal}
-                />
-                <SocialsList socials={socials} />
-              </Col>
-            </Group>
-            <Group>
-              <Col>
-                <LabelInfo>Description</LabelInfo>
-                <LongTextArea
-                  name={'description'}
-                  value={description}
-                  onChange={handleText}
-                  placeholder={'Write out candidate tribute...'}
-                />
-              </Col>
-            </Group>
-            <Group>
-              <Col md={5}>
-                <Label>Author:</Label>
-                <Select
-                  name={'authorId'}
-                  value={authorId}
-                  placeholder={'Select the author.'}
-                  items={authors}
-                  onChange={handleText}
-                />
-              </Col>
-              <Col md={{ span: 5, offset: 2 }}>
-                <Label>Date Written:</Label>
-                <AuthoredDatePicker
-                  name={'dateWritten'}
-                  date={dateWritten}
-                  onConfirm={handleDate}
-                />
-              </Col>
-            </Group>
-            <Group>
-              <Col>
-                <FileSelector
-                  image={image}
-                  operation={operation}
-                  onChange={handleFile}
-                />
-              </Col>
-            </Group>
-          </div>
-
-          <div>
-            <Group>
-              <Col>
-                <SubmitButton onClick={confirmFunc} className={'mr-2'}>
-                  {confirmText}
-                </SubmitButton>
-                <CancelButton onClick={cancelFunc}>Cancel</CancelButton>
-              </Col>
-            </Group>
-          </div>
-        </Spacer>
-
-        <EthnicModal
-          visible={ethnicModalVisible}
-          entity={this.props.candidate}
-          handleSelect={handleText}
-          clearSelection={clearSelection}
-          close={this.hideEthnicModal}
-        />
-
-        <SocialsModal
-          visible={socialsModalVisible}
-          socials={socials}
-          handleText={handleText}
-          confirm={confirmSocials}
-          close={this.hideSocialsModal}
-        />
-      </Shader>
-    );
-  }
-}
-
-const mapStateToProps = (state) => ({
-  user: state.user,
-  countries: state.countries
+const mapStateToProps = ({ countries, user }) => ({
+  countries,
+  user
 });
 
 export default connect(mapStateToProps)(CandidateForm);
