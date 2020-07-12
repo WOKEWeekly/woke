@@ -1,17 +1,15 @@
 User-agent: *
 Disallow:
 
+#Disallow: /account/*
 #Disallow: /admin/*
-#Disallow: /docs/*
-#Disallow: /topics
-#Disallow: /account
-#Disallow: /about/*
+#Disallow: /constitution
 #Disallow: /cookies/*
+#Disallow: /docs/*
 #Disallow: /donate/*
 #Disallow: /faq/*
-#Disallow: /privacy/*
 #Disallow: /mentalhealth/*
-#Disallow: /constitution
-#Disallow: /admin/*
+#Disallow: /privacy/*
+#Disallow: /topics
 
 Sitemap: https://www.wokeweekly.co.uk/sitemap.xml

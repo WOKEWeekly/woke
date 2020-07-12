@@ -23,6 +23,7 @@ router.get('/sitemap.xml', (req, res) => {
     '/',
     '/home',
     '/sessions',
+    '/blog',
     '/blackexcellence',
     '/team',
     '/reviews',
@@ -31,6 +32,7 @@ router.get('/sitemap.xml', (req, res) => {
 
   async.parallel(
     [
+      // Add session pages to sitemap.
       function (callback) {
         const query = knex.select('slug').from('sessions');
         query.asCallback(function (err, result) {
@@ -39,6 +41,7 @@ router.get('/sitemap.xml', (req, res) => {
           callback(null);
         });
       },
+      // Add all candidate pages to sitemap.
       function (callback) {
         const query = knex.select('id').from('candidates');
         query.asCallback(function (err, result) {
@@ -49,6 +52,7 @@ router.get('/sitemap.xml', (req, res) => {
           callback(null);
         });
       },
+      // Add verified team member pages to sitemap.
       function (callback) {
         const query = knex.select('slug').from('members').where('verified', 1);
         query.asCallback(function (err, result) {
@@ -57,6 +61,19 @@ router.get('/sitemap.xml', (req, res) => {
           callback(null);
         });
       },
+      // Add blog articles to sitemap.
+      function (callback) {
+        const query = knex
+          .select('slug')
+          .from('articles')
+          .where('articles.status', 'PUBLISHED');
+        query.asCallback(function (err, result) {
+          if (err) return callback(err);
+          result.forEach((article) => routes.push(`/blog/${article.slug}`));
+          callback(null);
+        });
+      },
+      // Add all pages to sitemap.
       function (callback) {
         const query = knex.select('name').from('pages');
         query.asCallback(function (err, result) {
