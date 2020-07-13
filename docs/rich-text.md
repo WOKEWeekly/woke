@@ -243,6 +243,8 @@ To emphasise a paragraph of text as a quote, simply prepend the paragraph with a
   </p>
 </blockquote>
 
+**Note**: Though plain here, the quotation marks and the text are more stylistic on the website itself. Try them out.
+
 <!-- TODO: Add hyphenated list -->
 
 ## Social Media Embeds
