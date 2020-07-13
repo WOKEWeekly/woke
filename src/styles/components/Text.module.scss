@@ -35,7 +35,7 @@
   margin-bottom: 2rem;
 }
 
-%quotes {
+%blockquotes {
   color: rgba(255, 255, 255, 0.9);
   font-family: 'Passion One', cursive;
   font-size: 4em;
@@ -63,14 +63,14 @@
   }
 
   &::before {
-    @extend %quotes;
+    @extend %blockquotes;
     content: '“';
     left: 0;
     top: -30px;
   }
 
   &::after {
-    @extend %quotes;
+    @extend %blockquotes;
     bottom: -70px;
     content: '”';
     right: 0;
@@ -114,23 +114,23 @@
   margin-top: 1em;
   position: relative;
 
-  %quotes {
+  %wrapper-quotes {
     @include font-scaler(6);
-    color: $white;
+    color: #fff;
     display: inline-block;
-    font-family: 'Yeseva One', cursive;
+    font-family: 'Passion One', cursive;
     line-height: 0;
   }
 
   .quote-left {
-    @extend %quotes;
+    @extend %wrapper-quotes;
     float: left;
     margin-top: 0.45em;
     padding-right: 0.1em;
   }
 
   .quote-right {
-    @extend %quotes;
+    @extend %wrapper-quotes;
     float: right;
     padding-left: 0.1em;
   }

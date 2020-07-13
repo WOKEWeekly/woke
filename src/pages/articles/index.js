@@ -172,7 +172,7 @@ const Article = memo(({ article, idx }) => {
             moretext={'Read the full article'}
             moreclass={css['article-readmore']}
             cssOverrides={{
-              paragraph: css['article-content']
+              paragraph: css['article-content-sm']
             }}>
             {article.content}
           </Paragraph>
