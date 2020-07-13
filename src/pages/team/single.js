@@ -64,6 +64,11 @@ class MemberPage extends Component {
       }
     };
 
+    const subtitle =
+      member.level !== 'Guest'
+        ? `${member.role} • ${member.age} • ${member.demonyms}`
+        : 'Guest Writer';
+
     return (
       <Spacer>
         <Shader>
@@ -81,9 +86,7 @@ class MemberPage extends Component {
                 <Title className={css.title}>{member.fullname}</Title>
               </Fader>
               <Fader determinant={isLoaded} duration={500} delay={500}>
-                <Subtitle className={css.subtitle}>
-                  {member.role} • {member.age} • {member.demonyms}
-                </Subtitle>
+                <Subtitle className={css.subtitle}>{subtitle}</Subtitle>
                 <PromoIconsBar socials={member.socials} />
               </Fader>
               <Fader determinant={isLoaded} duration={500} delay={1000}>

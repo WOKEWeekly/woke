@@ -39,7 +39,7 @@ const MemberCrud = ({ member: currentMember, operation, title, user }) => {
       setMember(
         Object.assign({}, currentMember, {
           socials: JSON.parse(socials),
-          birthday: birthday && new Date(birthday)
+          birthday: birthday !== null ? new Date(birthday) : null
         })
       );
       setEthnicities(JSON.parse(ethnicity));
@@ -69,7 +69,7 @@ const MemberCrud = ({ member: currentMember, operation, title, user }) => {
       role: role.trim(),
       sex,
       image,
-      birthday: zDate.formatISODate(birthday),
+      birthday: zDate.formatISODate(birthday) || null,
       description: description,
       ethnicity: JSON.stringify(ethnicities),
       socials: JSON.stringify(socials),
