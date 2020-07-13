@@ -1,4 +1,4 @@
-# Contributing to The #WOKEWeekly Website
+# Contributing Guidelines
 
 For starters, thank you for your interest in contributing to the #WOKEWeekly website repository.
 
