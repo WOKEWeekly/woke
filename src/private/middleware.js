@@ -42,7 +42,7 @@ exports.verifyToken = (threshold) => {
         }
       ],
       function (err) {
-        if (err) respondToClient(res, err);
+        if (err) return respondToClient(res, err);
         next();
       }
     );

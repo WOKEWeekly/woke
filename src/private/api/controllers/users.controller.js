@@ -152,6 +152,7 @@ exports.addUser = (req, res) => {
   );
 };
 
+// TODO: Include in signup
 /* Log in / authenticate user */
 exports.loginUser = (req, res) => {
   const { username, password, remember } = req.body;
