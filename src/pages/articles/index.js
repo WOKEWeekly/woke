@@ -20,11 +20,6 @@ class Blog extends Component {
       articles: [],
       isLoaded: false
     };
-
-    // TODO: Remove when finished
-    if (props.user.clearance < CLEARANCES.ACTIONS.ARTICLES.MODIFY) {
-      return (location.href = '/');
-    }
   }
 
   /** Get published articles on mount */

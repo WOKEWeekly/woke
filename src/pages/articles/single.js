@@ -22,11 +22,6 @@ import css from 'styles/pages/Articles.module.scss';
 const clapLimit = 5;
 
 const ArticlePage = ({ article, user }) => {
-  // TODO: Remove when finished
-  if (user.clearance < CLEARANCES.ACTIONS.ARTICLES.MODIFY) {
-    return (location.href = '/');
-  }
-
   const [isLoaded, setLoaded] = useState(false);
   const [clapCount, setClapCount] = useState(article.claps);
   const [repeatClaps, setRepeatClaps] = useState(0);

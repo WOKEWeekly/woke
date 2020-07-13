@@ -36,7 +36,7 @@ const socialButtons = [
 const navigationLinks = [
   ['About Us', '/about'],
   ['Sessions', '/sessions'],
-  ['Blog', '/blog', CLEARANCES.ACTIONS.ARTICLES.MODIFY], // TODO: Remove when finished
+  ['Blog', '/blog'],
   ['Reviews', '/reviews'],
   ['The Team', '/team'],
   ['#BlackExcellence', '/blackexcellence'],
