@@ -229,8 +229,21 @@ For numbered lists, surround your list with `::olb` and `::end` and include a nu
   </ol>
 </blockquote>
 
+#### Blockquotes
+
+To emphasise a paragraph of text as a quote, simply prepend the paragraph with a right chevron as follows:
+
+```
+> Black is beautiful.
+```
+
+<blockquote>
+  <p>
+    <q>Black is beautiful.</q>
+  </p>
+</blockquote>
+
 <!-- TODO: Add hyphenated list -->
-<!-- TODO: Add block quotes -->
 
 ## Social Media Embeds
 

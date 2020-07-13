@@ -18,6 +18,35 @@ In addition to the standard:
 
 4. All pull requests need to pass the check builds as well as have received an approval from Zavid before merging. Upon approval, please ensure that you **squash & merge** to keep commit history clean.
 
+
+## Code Syntax / Code Style
+
+It is strongly recommended that you install the [ESLint](https://eslint.org/) plugin in your text editor or IDE.
+
+This plugin is very useful for highlighting problems while you're writing code and ensuring the code you're writing matches the standard convention for this repository.
+
+## Run Service Tests
+
+Before pushing your commits to this repository, especially after making changes to server-side code, you should ensure that all service tests pass. 
+
+>**Note:** The following instructions assume that you have at least fulfilled instructions 1 - 5 from the [Development Environment Setup](./docs/dev-environment-setup.md) section.
+
+To run all of the service tests:
+
+1. Ensure you have a command prompt / terminal open at `woke/src`.
+
+2. Run the following command to run all of the service tests using Mocha and display the test results:
+   ```
+   npm test
+   ```
+
+   Alternatively, if you want to only run a single test suite, run the following command:
+   
+   ```
+   npm test ./test/[test-filename].js
+   ```
+   Replace  `[test-filename]` with the name of the test suite file.
+
 ## Troubleshooting
 
 Remember to pull from `master` before making any changes to the code. It may also be necessary to `npm install` if dependencies have been changed by other contributors.
