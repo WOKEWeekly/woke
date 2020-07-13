@@ -60,10 +60,10 @@ export default () => {
   };
 
   return (
-    <>
+    <div className={css['reviews-index-container']}>
       <ReviewsHeading />
       <ReviewsList />
       <SeeMoreReviews />
-    </>
+    </div>
   );
 };
