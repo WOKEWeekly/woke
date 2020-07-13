@@ -21,9 +21,17 @@ In addition to the standard:
 
 ## Code Syntax / Code Style
 
+#### ESLint
+
 It is strongly recommended that you install the [ESLint](https://eslint.org/) plugin in your text editor or IDE.
 
 This plugin is very useful for highlighting problems while you're writing code and ensuring the code you're writing matches the standard convention for this repository.
+
+#### Prettier
+
+Additionally, you should also install the [Prettier](https://prettier.io/) plugin.
+
+This allows you to format your files using the shortcut `Alt` + `Shift` + `F` and helps to maintain the stylistic convention for this repository.
 
 ## Run Service Tests
 
@@ -50,3 +58,5 @@ To run all of the service tests:
 ## Troubleshooting
 
 Remember to pull from `master` before making any changes to the code. It may also be necessary to `npm install` if dependencies have been changed by other contributors.
+
+If there are any other issues or concerns, speak to Zavid and he'll be happy to assist.
