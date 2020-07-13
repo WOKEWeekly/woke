@@ -20,22 +20,11 @@ This following instructions should help you get your development environment up 
 
 6. On any internet browser, go to `http://localhost:3000`. The website should be running in development mode.
 
-<!-- ## Linting and Prettifying
+## Code Syntax / Code Style
 
-It is strongly recommended that you install the [ESLint](https://eslint.org/) plugin in your text editor.
+It is strongly recommended that you install the [ESLint](https://eslint.org/) plugin in your text editor or IDE.
 
-This plugin is very useful for highlighting problems while you're writing code and ensuring the code you're writing matches standard convention.
-
-To scan the source files for linting errors or warnings, run the following command:
-```
-npm run lint
-```
-
-Is it also important to ensure that code is correctly formatted before committing. In order to ensure this, run the following command:
-```
-npm run prettify
-``` -->
-
+This plugin is very useful for highlighting problems while you're writing code and ensuring the code you're writing matches the standard convention for this repository.
 
 ## Run Service Tests
 
@@ -49,12 +38,12 @@ To run all of the service tests:
 
 2. Run the following command to run all of the service tests using Mocha and display the test results:
    ```
-   npm run test
+   npm test
    ```
 
    Alternatively, if you want to only run a single test suite, run the following command:
    
    ```
-   npm run test ./test/[test-filename].js
+   npm test ./test/[test-filename].js
    ```
    Replace  `[test-filename]` with the name of the test suite file.
