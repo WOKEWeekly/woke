@@ -211,7 +211,7 @@ const sendMailToAllSubscribers = (type, subject, message, options = {}) => {
     // Send email to shortlisted subscribers on mailing list
     async.each(
       mailList,
-      function (recipient) {
+      function (recipient, callback) {
         transporter.sendMail(
           {
             from: `#WOKEWeekly <${emails.site}>`,
@@ -230,7 +230,7 @@ const sendMailToAllSubscribers = (type, subject, message, options = {}) => {
       },
       function (err) {
         console.info(
-          `Emails: "${subject}" email sent to all ${type} subscribers.`
+          `Emails: "${subject}" email sent to ${mailList.length} ${type} subscribers.`
         );
         if (callback) callback(err, params);
       }
