@@ -222,11 +222,16 @@ exports.deleteArticle = (req, res) => {
 
 /**
  * Delete an article's images.
- * @param {*} article - The article whose images are to be deleted.
- * @param {*} callback - The callback.
+ * @param {object} article - The article whose images are to be deleted.
+ * @param {Function} callback - The callback.
  */
 const deleteArticleImages = (article, callback) => {
   const { coverImage, fillerImages } = article;
-  const images = [coverImage].concat(JSON.parse(fillerImages));
-  filer.destroyMultipleImages(images, callback);
+  try {
+    const images = [coverImage].concat(JSON.parse(fillerImages));
+    filer.destroyMultipleImages(images, callback);
+  } catch (e) {
+    console.error('There was a problem deleting the article image.', e);
+    callback(null);
+  }
 };

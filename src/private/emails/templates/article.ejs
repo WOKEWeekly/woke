@@ -7,30 +7,35 @@
   <div class="container email-content">
     <h1 class="article-title"><%= article.title %></h1>
 
-    <div class="article-metadata">
-      <img
-        src="<%= article.authorImage %>"
-        alt="<%= article.authorName %>"
-        class="author-thumbnail"
-      />
-      <div class="article-details">
-        <div>
-          Written by
-          <a href="<%= article.authorSlug %>" class="author-link"
-            ><%= article.authorName %></a
-          >
+    <table>
+      <td>
+        <img
+          src="<%= article.authorImage %>"
+          alt="<%= article.authorName %>"
+          class="author-thumbnail"
+        />
+      </td>
+
+      <td>
+        <div class="article-details">
+          <div>
+            Written by
+            <a href="<%= article.authorSlug %>" class="author-link">
+              <%= article.authorName %>
+            </a>
+          </div>
+          <div><%= article.datePublished %></div>
         </div>
-        <div><%= article.datePublished %></div>
-      </div>
-    </div>
+      </td>
+    </table>
 
     <img
-      src="<%= article.image %>"
+      src="<%= article.coverImage %>"
       alt="<%= article.title %>"
       class="content-image"
     />
 
-    <%= article.content %>
+    <p><%= article.content %></p>
 
     <div class="button-container">
       <a href="<%= article.slug %>" class="button">

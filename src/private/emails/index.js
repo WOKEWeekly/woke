@@ -1,3 +1,4 @@
+const async = require('async');
 const ejs = require('ejs');
 const htmlToText = require('html-to-text');
 const nodemailer = require('nodemailer');
@@ -123,7 +124,7 @@ exports.notifyNewArticle = (article, options) => {
     title,
     content,
     datePublished,
-    image,
+    coverImage,
     slug,
     authorName,
     authorLevel,
@@ -141,7 +142,7 @@ exports.notifyNewArticle = (article, options) => {
         content: zText.truncateText(content),
         slug: `${domain}/blog/${slug}`,
         datePublished: zDate.formatDate(datePublished, true),
-        image: `${cloudinary.url}/w_768,c_lfill/${image}`,
+        coverImage: `${cloudinary.url}/w_768,c_lfill/${coverImage}`,
         authorImage: `${cloudinary.url}/w_400,c_lfill/${authorImage}`,
         authorSlug: `${domain}/${isGuest ? 'author' : 'team'}/${authorSlug}`
       }),
@@ -199,27 +200,37 @@ const sendMailToAllSubscribers = (type, subject, message, options = {}) => {
   const query = knex.select().from('subscribers');
   query.asCallback(function (err, results) {
     // Retrieve list of subscribers to corresponding type
-    const mailList = results.map((subscriber) => {
-      const subscriptions = JSON.parse(subscriber.subscriptions);
-      const isSubscribed = subscriptions[type];
-      if (isSubscribed) return subscriber.email;
-    });
+    const mailList = isDev
+      ? [testRecipient]
+      : results.map((subscriber) => {
+          const subscriptions = JSON.parse(subscriber.subscriptions);
+          const isSubscribed = subscriptions[type];
+          if (isSubscribed) return subscriber.email;
+        });
 
     // Send email to shortlisted subscribers on mailing list
-    transporter.sendMail(
-      {
-        from: `#WOKEWeekly <${emails.site}>`,
-        to: isDev ? testRecipient : mailList,
-        subject,
-        html: message,
-        text: htmlToText.fromString(
-          message,
-          Object.assign({}, htmlToTextOptions, emailText)
-        )
+    async.each(
+      mailList,
+      function (recipient, callback) {
+        transporter.sendMail(
+          {
+            from: `#WOKEWeekly <${emails.site}>`,
+            to: recipient,
+            subject,
+            html: message,
+            text: htmlToText.fromString(
+              message,
+              Object.assign({}, htmlToTextOptions, emailText)
+            )
+          },
+          function (err) {
+            callback(err);
+          }
+        );
       },
       function (err) {
         console.info(
-          `Emails: "${subject}" email sent to all ${type} subscribers.`
+          `Emails: "${subject}" email sent to ${mailList.length} ${type} subscribers.`
         );
         if (callback) callback(err, params);
       }
