@@ -1,3 +1,4 @@
+const async = require('async');
 const ejs = require('ejs');
 const htmlToText = require('html-to-text');
 const nodemailer = require('nodemailer');
@@ -36,7 +37,8 @@ const htmlToTextOptions = {
 };
 
 /** The email address of the recipient in development. */
-const testRecipient = process.env.ETHEREAL_EMAIL;
+// const testRecipient = process.env.ETHEREAL_EMAIL;
+const testRecipient = 'zavidegbue@gmail.com';
 
 /** Initialise the mail transporter */
 const transporter = nodemailer.createTransport({
@@ -199,23 +201,33 @@ const sendMailToAllSubscribers = (type, subject, message, options = {}) => {
   const query = knex.select().from('subscribers');
   query.asCallback(function (err, results) {
     // Retrieve list of subscribers to corresponding type
-    const mailList = results.map((subscriber) => {
-      const subscriptions = JSON.parse(subscriber.subscriptions);
-      const isSubscribed = subscriptions[type];
-      if (isSubscribed) return subscriber.email;
-    });
+    const mailList = isDev
+      ? [testRecipient]
+      : results.map((subscriber) => {
+          const subscriptions = JSON.parse(subscriber.subscriptions);
+          const isSubscribed = subscriptions[type];
+          if (isSubscribed) return subscriber.email;
+        });
 
     // Send email to shortlisted subscribers on mailing list
-    transporter.sendMail(
-      {
-        from: `#WOKEWeekly <${emails.site}>`,
-        to: isDev ? testRecipient : mailList,
-        subject,
-        html: message,
-        text: htmlToText.fromString(
-          message,
-          Object.assign({}, htmlToTextOptions, emailText)
-        )
+    async.each(
+      mailList,
+      function (recipient) {
+        transporter.sendMail(
+          {
+            from: `#WOKEWeekly <${emails.site}>`,
+            to: recipient,
+            subject,
+            html: message,
+            text: htmlToText.fromString(
+              message,
+              Object.assign({}, htmlToTextOptions, emailText)
+            )
+          },
+          function (err) {
+            callback(err);
+          }
+        );
       },
       function (err) {
         console.info(
