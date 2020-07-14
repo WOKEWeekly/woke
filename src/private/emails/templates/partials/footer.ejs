@@ -1,42 +1,79 @@
-<% 
-  const websiteLinks = [
-    ['about', 'About Us'],
-    ['faq', 'FAQs'],
-    ['privacy', 'Privacy Policy']
-  ];
-
-  const socialButtons = [
-    ['facebook', 'FB'], 
-    ['twitter', 'TW'], 
-    ['instagram', 'IG'], 
-    ['linkedin', 'LI'], 
-    ['youtube', 'YT'], 
-  ]
-%>
-
 <div class="container">
-
   <!-- The footer's website links. -->
-  <div class="footer-website-container">
-    <% websiteLinks.map(([url, title]) => {%>
-      <a href="<%= domain %>/<%= url %>" class="footer-website-links"><%= title %></a>
-    <% })%>
-  </div>
+  <table class="footer-website-container">
+    <tr>
+      <td>
+        <a href="<%= domain %>/about" class="footer-website-links">
+          About Us
+        </a>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <a href="<%= domain %>/faq" class="footer-website-links">
+          FAQs
+        </a>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <a href="<%= domain %>/privacy" class="footer-website-links">
+          Privacy Policy
+        </a>
+      </td>
+    </tr>
+  </table>
 
   <!-- The footer's social buttons. -->
-  <div class="footer-social-container">
-    <% socialButtons.map(([platform, alt]) => {%>
-      <a href="<%= accounts[platform] %>" class="footer-social-links">
-        <img
-          src="<%= cloudinary.url %>/public/logos/<%= platform %>-icon.png"
-          alt=<%= alt %>
-        />
-      </a>
-    <% })%>
-  </div>
+  <table class="footer-social-container">
+    <tr>
+      <td>
+        <a href="<%= accounts.facebook %>" class="footer-social-links">
+          <img
+            src="<%= cloudinary.url %>/public/logos/facebook-icon.png"
+            alt="FB"
+          />
+        </a>
+      </td>
+      <td>
+        <a href="<%= accounts.twitter %>" class="footer-social-links">
+          <img
+            src="<%= cloudinary.url %>/public/logos/twitter-icon.png"
+            alt="TW"
+          />
+        </a>
+      </td>
+      <td>
+        <a href="<%= accounts.instagram %>" class="footer-social-links">
+          <img
+            src="<%= cloudinary.url %>/public/logos/instagram-icon.png"
+            alt="IG"
+          />
+        </a>
+      </td>
+      <td>
+        <a href="<%= accounts.linkedin %>" class="footer-social-links">
+          <img
+            src="<%= cloudinary.url %>/public/logos/linkedin-icon.png"
+            alt="LI"
+          />
+        </a>
+      </td>
+      <td>
+        <a href="<%= accounts.youtube %>" class="footer-social-links">
+          <img
+            src="<%= cloudinary.url %>/public/logos/youtube-icon.png"
+            alt="YT"
+          />
+        </a>
+      </td>
+    </tr>
+  </table>
 
   <!-- The #WOKEWeekly tagline. -->
-  <div class="tagline">Awakening Through Conversation.</div>
+  <div class="tagline">
+    Awakening Through Conversation.
+  </div>
 
   <a href="<%= domain %>">
     <img
@@ -50,5 +87,4 @@
   <div class="copyright">
     <%= copyright %>
   </div>
-
 </div>

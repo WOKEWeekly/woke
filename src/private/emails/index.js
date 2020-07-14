@@ -125,7 +125,7 @@ exports.notifyNewArticle = (article, options) => {
     title,
     content,
     datePublished,
-    image,
+    coverImage,
     slug,
     authorName,
     authorLevel,
@@ -143,7 +143,7 @@ exports.notifyNewArticle = (article, options) => {
         content: zText.truncateText(content),
         slug: `${domain}/blog/${slug}`,
         datePublished: zDate.formatDate(datePublished, true),
-        image: `${cloudinary.url}/w_768,c_lfill/${image}`,
+        coverImage: `${cloudinary.url}/w_768,c_lfill/${coverImage}`,
         authorImage: `${cloudinary.url}/w_400,c_lfill/${authorImage}`,
         authorSlug: `${domain}/${isGuest ? 'author' : 'team'}/${authorSlug}`
       }),
