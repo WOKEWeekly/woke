@@ -37,8 +37,7 @@ const htmlToTextOptions = {
 };
 
 /** The email address of the recipient in development. */
-// const testRecipient = process.env.ETHEREAL_EMAIL;
-const testRecipient = 'zavidegbue@gmail.com';
+const testRecipient = process.env.ETHEREAL_EMAIL;
 
 /** Initialise the mail transporter */
 const transporter = nodemailer.createTransport({
