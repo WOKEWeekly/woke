@@ -53,7 +53,7 @@ router.get('/blog/:slug', (req, res) => {
       title: `${article.title} | #WOKEWeekly`,
       description: article.excerpt,
       ogUrl: `/blog/${article.slug}`,
-      cardImage: article.image,
+      cardImage: article.coverImage,
       backgroundImage: 'bg-blog.jpg',
       article
     });
