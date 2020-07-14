@@ -50,7 +50,7 @@ router.get('/blog/:slug', (req, res) => {
       );
 
     return server.render(req, res, '/articles/single', {
-      title: `${article.title} | #WOKEWeekly`,
+      title: `${article.title} by ${article.authorName} | #WOKEWeekly`,
       description: article.excerpt,
       ogUrl: `/blog/${article.slug}`,
       cardImage: article.coverImage,
