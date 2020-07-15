@@ -108,7 +108,7 @@ const Review = memo(({ fullText, item: review, user, idx }) => {
           <Paragraph className={css['review-paragraph']}>
             {showFullText
               ? review.description
-              : zText.truncateText(review.description, limit)}
+              : zText.truncateText(review.description, { limit: limit })}
           </Paragraph>
           <ReadMore className={css['review-readmore']} />
         </QuoteWrapper>

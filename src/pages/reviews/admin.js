@@ -127,7 +127,7 @@ const ReviewsAdmin = ({ user }) => {
                 { icon: 'star-half-alt' }
               ],
               [
-                zText.truncateText(review.description, 30),
+                zText.truncateText(review.description, { limit: 30 }),
                 { hideOnMobile: true }
               ],
               [<EditButton id={review.id} key={key} />, { type: 'button' }],

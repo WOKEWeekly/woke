@@ -43,7 +43,7 @@ export const Subtitle = ({ children, className }) => {
  * @param {string} [props.morelink] - The hyperlink for the embedded {@link ReadMore} component.
  * @param {string} [props.moretext] - The text to be formatted.
  * @param {object} [props.moreclass] - The CSS styling for the embedded {@link ReadMore} component.
- * @param {number} [props.truncate] - Truncate the text to a certain number of characters.
+ * @param {number} [props.truncate] - Number of words to truncate off text. No truncation by default.
  * @returns {React.Component} A formatted paragraph component.
  */
 const IParagraph = ({
@@ -55,11 +55,13 @@ const IParagraph = ({
   moretext,
   substitutions,
   theme,
-  truncate
+  truncate = 0
 }) => {
   const classes = classNames(css['paragraph'], className);
 
-  let text = truncate ? zText.truncateText(children, truncate) : children;
+  let text = truncate
+    ? zText.truncateText(children, { limit: truncate })
+    : children;
   text = zText.applySubstitutions(text, substitutions);
   text = zText.formatText(text, {
     css: {

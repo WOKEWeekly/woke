@@ -53,7 +53,7 @@ const Meta = ({
     <meta property="og:title" content={title} />
     <meta
       property="og:description"
-      content={zText.truncateText(description, 30)}
+      content={zText.truncateText(description, { limit: 30 })}
     />
     <meta property="og:type" content="website" />
     <meta property="og:url" content={`${domain}${ogUrl}`} />
