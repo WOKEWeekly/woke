@@ -44,10 +44,9 @@ const ArticleSidebar = memo(({ currentArticleId: id }) => {
 
   return (
     <div className={css['recent-posts-sidebar']}>
+      <SubscribeField />
       <Title className={css['heading']}>Recent Posts</Title>
       <ArticleList />
-      <Divider />
-      <SubscribeField />
     </div>
   );
 });
