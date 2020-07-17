@@ -47,6 +47,7 @@
     "react-bootstrap": "^1.0.1",
     "react-dom": "^16.13.1",
     "react-instagram-embed": "^1.5.0",
+    "react-lazyload": "^3.0.0",
     "react-redux": "^7.2.0",
     "react-responsive": "^7.0.0",
     "react-share": "^4.1.0",
