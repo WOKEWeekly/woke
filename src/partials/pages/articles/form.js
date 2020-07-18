@@ -21,10 +21,11 @@ import { ShortTextArea, LongTextArea } from 'components/form/v2/textarea';
 import { Shader, Spacer } from 'components/layout.js';
 import { ConfirmModal } from 'components/modal.js';
 import { Paragraph } from 'components/text.js';
-import { Fader } from 'components/transitioner.js';
+import { Fader, Slider } from 'components/transitioner.js';
 import { categories } from 'constants/categories.js';
 import CLEARANCES from 'constants/clearances.js';
 import request from 'constants/request.js';
+import { cloudinary } from 'constants/settings.js';
 import { ARTICLE_STATUS } from 'constants/strings.js';
 import css from 'styles/pages/Articles.module.scss';
 
@@ -74,19 +75,32 @@ const ArticleForm = (props) => {
               setPreviewVisibility={setPreviewVisibility}
             />
             <ArticleEditorPreview
+              article={article}
+              style={{ display: previewVisible ? 'block' : 'none' }}
               visible={previewVisible}
               text={article.content}
             />
           </div>
           <div className={css['article-editor-buttons']}>
-            <SubmitButton
-              onClick={
-                isPublish ? () => setPublishModalVisibility(true) : confirmFunc
-              }
-              className={'mr-2'}>
-              {confirmText}
-            </SubmitButton>
-            <CancelButton onClick={cancelFunc}>Cancel</CancelButton>
+            <div className={css['preview-toggle-container']}>
+              <button
+                className={css['preview-toggle-button']}
+                onClick={() => setPreviewVisibility(!previewVisible)}>
+                {previewVisible ? 'Hide Preview' : 'Show Preview'}
+              </button>
+            </div>
+            <div className={css['article-form-buttons']}>
+              <SubmitButton
+                onClick={
+                  isPublish
+                    ? () => setPublishModalVisibility(true)
+                    : confirmFunc
+                }
+                className={'mr-2'}>
+                {confirmText}
+              </SubmitButton>
+              <CancelButton onClick={cancelFunc}>Cancel</CancelButton>
+            </div>
           </div>
         </Spacer>
       </Fader>
@@ -115,7 +129,6 @@ const ArticleForm = (props) => {
  * @param {boolean} props.previewVisible - Hook state indicating if editor preview is visible.
  * @param {Function} props.removeFillerImage - The function for removing a filler image from selection.
  * @param {Function} props.setImagesChanged - The hook for setting whether images have changed in the form.
- * @param {Function} props.setPreviewVisibility - The hook for setting editor visibility.
  * @returns {React.Component} The component.
  */
 const ArticleEditorForm = ({
@@ -126,8 +139,7 @@ const ArticleEditorForm = ({
   operation,
   previewVisible,
   removeFillerImage,
-  setImagesChanged,
-  setPreviewVisibility
+  setImagesChanged
 }) => {
   const [isLoaded, setLoaded] = useState(false);
   const [authors, setAuthors] = useState([]);
@@ -166,18 +178,7 @@ const ArticleEditorForm = ({
   return (
     <div
       className={css[previewVisible ? 'article-editor-form' : 'article-form']}>
-      <Group>
-        <Col lg>
-          <Heading>{heading}</Heading>
-        </Col>
-        <Col lg className={css['preview-toggle-container']}>
-          <button
-            className={css['preview-toggle-button']}
-            onClick={() => setPreviewVisibility(!previewVisible)}>
-            {previewVisible ? 'Hide Preview' : 'Show Preview'}
-          </button>
-        </Col>
-      </Group>
+      <Heading>{heading}</Heading>
 
       <Group>
         <Col md={7}>
@@ -197,28 +198,6 @@ const ArticleEditorForm = ({
             placeholder={'Select a category.'}
             items={categories}
             onChange={handleText}
-          />
-        </Col>
-      </Group>
-      <Group>
-        <Col>
-          <LabelInfo>Content:</LabelInfo>
-          <LongTextArea
-            name={'content'}
-            value={article.content}
-            placeholder={'Write your thoughts. Express yourself.'}
-            onChange={handleText}
-          />
-        </Col>
-      </Group>
-      <Group>
-        <Col>
-          <Label>Excerpt:</Label>
-          <ShortTextArea
-            name={'excerpt'}
-            value={article.excerpt}
-            onChange={handleText}
-            placeholder={"Enter this article's excerpt."}
           />
         </Col>
       </Group>
@@ -250,20 +229,8 @@ const ArticleEditorForm = ({
         handleDate={handleDate}
       />
       <Group>
-        <Col>
-          <Label>Tags:</Label>
-          <ShortTextArea
-            name={'tags'}
-            value={article.tags}
-            onChange={handleText}
-            placeholder={
-              'Add a comma-separated list of tags (e.g. woke, society, black women)'
-            }
-          />
-        </Col>
-      </Group>
-      <Group>
         <Col sm={6}>
+          <Label>Cover Image:</Label>
           <FileSelector
             image={article.coverImage}
             operation={operation}
@@ -292,6 +259,41 @@ const ArticleEditorForm = ({
           />
         </Col>
       </Group>
+      <Group>
+        <Col>
+          <LabelInfo>Content:</LabelInfo>
+          <LongTextArea
+            name={'content'}
+            value={article.content}
+            placeholder={'Write your thoughts. Express yourself.'}
+            onChange={handleText}
+          />
+        </Col>
+      </Group>
+      <Group>
+        <Col>
+          <Label>Excerpt:</Label>
+          <ShortTextArea
+            name={'excerpt'}
+            value={article.excerpt}
+            onChange={handleText}
+            placeholder={"Enter this article's excerpt."}
+          />
+        </Col>
+      </Group>
+      <Group>
+        <Col>
+          <Label>Tags:</Label>
+          <ShortTextArea
+            name={'tags'}
+            value={article.tags}
+            onChange={handleText}
+            placeholder={
+              'Add a comma-separated list of tags (e.g. woke, society, black women)'
+            }
+          />
+        </Col>
+      </Group>
     </div>
   );
 };
@@ -299,17 +301,32 @@ const ArticleEditorForm = ({
 /**
  * The editor preview of the article content.
  * @param {object} props - The component props.
+ * @param {object} props.article - The article object.
+ * @param {object} props.style - JS styling.
  * @param {string} props.text - The article content to be previewed.
  * @param {boolean} props.visible - Indicates whether the editor preview should be visible.
  * @returns {React.Component} The component.
  */
-const ArticleEditorPreview = ({ text, visible }) => {
-  if (!visible) return null;
+const ArticleEditorPreview = ({ article, style, text, visible }) => {
+  let substitutions = {};
+
+  const fillerImages = article.fillerImages || [];
+  fillerImages
+    .filter((e) => e)
+    .forEach((image, key) => {
+      if (!image.startsWith('data')) image = `${cloudinary.url}/${image}`;
+      substitutions[`image${key + 1}`] = `![](${image})`;
+    });
 
   return (
-    <div className={css['article-editor-preview']}>
-      <Paragraph>{text}</Paragraph>
-    </div>
+    <Slider
+      determinant={visible}
+      duration={300}
+      direction={'right'}
+      className={css['article-editor-preview']}
+      style={style}>
+      <Paragraph substitutions={substitutions}>{text}</Paragraph>
+    </Slider>
   );
 };
 

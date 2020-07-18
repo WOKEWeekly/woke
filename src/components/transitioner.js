@@ -58,37 +58,43 @@ export class Zoomer extends Component {
 }
 
 /** Slide transition */
-export class Slider extends Component {
-  render() {
-    const { duration, delay = 0, direction, postTransitions } = this.props;
+export const Slider = (props) => {
+  const { duration, delay = 0, direction, postTransitions = '' } = props;
 
-    const defaultStyle = {
-      transition: `${direction} ${duration}ms ease ${delay}ms,
+  const defaultStyle = {
+    transition: `${direction} ${duration}ms ease ${delay}ms,
         opacity ${duration}ms ease ${delay}ms`,
-      opacity: 0,
-      position: 'relative'
-    };
+    opacity: 0,
+    position: 'relative'
+  };
 
-    const transitionStyles = {
-      entering: {
-        [direction]: '-100vw'
-      },
-      entered: {
-        [direction]: '0',
-        opacity: 1,
-        transition: `${defaultStyle.transition}, ${postTransitions}`
-      }
-    };
+  const transitionStyles = {
+    entering: {
+      [direction]: '-100vw'
+    },
+    entered: {
+      [direction]: 0,
+      opacity: 1,
+      transition: `${defaultStyle.transition}, ${postTransitions}`
+    },
+    // exiting: {
+    //   [direction]: 0,
+    // },
+    // exited: {
+    //   [direction]: '-100vw',
+    //   opacity: 0,
+    //   transition: `${defaultStyle.transition}, ${postTransitions}`
+    // }
+  };
 
-    return (
-      <Template
-        {...this.props}
-        defaultStyle={defaultStyle}
-        transitionStyles={transitionStyles}
-      />
-    );
-  }
-}
+  return (
+    <Template
+      {...props}
+      defaultStyle={defaultStyle}
+      transitionStyles={transitionStyles}
+    />
+  );
+};
 
 export class Mover extends Component {
   render() {

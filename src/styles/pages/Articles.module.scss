@@ -295,19 +295,6 @@
 *** form.js
 *************/
 
-.preview-toggle-container {
-  display: flex;
-  justify-content: flex-end;
-  @media (max-width: $break-lg) {
-    display: none;
-  }
-}
-
-.preview-toggle-button {
-  @extend .toggle-button;
-  text-align: right;
-}
-
 .article-form {
   @extend .responsive-form;
 }
@@ -355,15 +342,32 @@
   bottom: 0%;
   display: flex;
   font-size: 0.8em;
-  justify-content: flex-end;
+  justify-content: space-between;
   padding: 1em;
   position: sticky;
 
-  button {
-    @media (max-width: $break-sm) {
-      justify-content: space-around;
-    }
+  @media (max-width: $break-sm) {
+    display: block;
   }
+}
+
+.article-form-buttons {
+  display: flex;
+  @media (max-width: $break-sm) {
+    justify-content: space-around;
+  }
+}
+
+.preview-toggle-container {
+  display: flex;
+  justify-content: flex-end;
+  @media (max-width: $break-lg) {
+    display: none;
+  }
+}
+
+.preview-toggle-button {
+  @extend .toggle-button;
 }
 
 /*************

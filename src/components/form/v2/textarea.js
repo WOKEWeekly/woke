@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import TextareaAutosize from 'react-textarea-autosize';
 
 import css from 'styles/components/Form.module.scss';
@@ -19,16 +19,18 @@ const TextArea = (props) => {
   );
 };
 
-/** For shorter text inputs */
 export const ShortTextArea = (props) => {
   const { onChange } = props;
   return <TextArea {...props} minRows={1} onChange={onChange} />;
 };
 
-/** For long text inputs with word counters */
 export const LongTextArea = (props) => {
   const { onChange, value } = props;
-  const [wordCount, setWordCount] = useState(value.length);
+  const [wordCount, setWordCount] = useState(0);
+
+  useEffect(() => {
+    setWordCount(value.length);
+  }, [value]);
 
   return (
     <>
