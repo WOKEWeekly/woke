@@ -349,6 +349,23 @@
   }
 }
 
+.article-editor-buttons {
+  background: rgba(0, 0, 0, 1);
+  border-top: 1px solid #fff;
+  bottom: 0%;
+  display: flex;
+  font-size: 0.8em;
+  justify-content: flex-end;
+  padding: 1em;
+  position: sticky;
+
+  button {
+    @media (max-width: $break-sm) {
+      justify-content: space-around;
+    }
+  }
+}
+
 /*************
 *** single.sidebar.js
 *************/
