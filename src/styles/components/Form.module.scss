@@ -27,7 +27,7 @@
     display: flex;
     align-items: baseline;
   }
-  .input {
+  .input, .textarea-v2 {
     @extend .text;
     background: none;
     border-style: none;
@@ -47,8 +47,9 @@
     padding: 0;
     width: 100%;
   }
+  // TODO: Remove eventually
   .textarea {
-    @extend .text;
+    @extend .input;
     border-bottom: $underline !important;
     font-size: 1.2em;
     padding: 0.4em;
@@ -57,7 +58,8 @@
       padding: 0.4em 0;
     }
   }
-  .wordcount {
+  // TODO: Remove "wordcount" eventually
+  .wordcount, .word-count {
     color: $faded-white;
     font-family: $title-font;
     margin: 0;
