@@ -5,7 +5,6 @@ import { zForm } from 'zavid-modules';
 
 import { Icon } from 'components/icon.js';
 import { VanillaLink } from 'components/text.js';
-import { Fader } from 'components/transitioner.js';
 import { github } from 'constants/settings';
 import css from 'styles/components/Form.module.scss';
 
@@ -14,47 +13,19 @@ export * from './input';
 export * from './subscribe';
 
 /** For the form heading */
-export class Heading extends Component {
-  constructor() {
-    super();
-    this.state = { isLoaded: false };
-  }
-
-  componentDidMount() {
-    this.setState({ isLoaded: true });
-  }
-
-  render() {
-    return (
-      <Fader determinant={this.state.isLoaded} duration={750}>
-        <div className={css.formHeading}>{this.props.children}</div>
-      </Fader>
-    );
-  }
-}
+export const Heading = ({ children }) => {
+  return <div className={css.formHeading}>{children}</div>;
+};
 
 /** For grouping form components */
-export class Group extends Component {
-  constructor() {
-    super();
-    this.state = { isLoaded: false };
-  }
-
-  componentDidMount() {
-    this.setState({ isLoaded: true });
-  }
-
-  render() {
-    const classes = classNames(css.group, this.props.className);
-    return (
-      <Fader determinant={this.state.isLoaded} duration={750}>
-        <Form.Group as={Row} className={classes} style={this.props.style}>
-          {this.props.children}
-        </Form.Group>
-      </Fader>
-    );
-  }
-}
+export const Group = ({ children, className, style }) => {
+  const classes = classNames(css['group'], className);
+  return (
+    <Form.Group as={Row} className={classes} style={style}>
+      {children}
+    </Form.Group>
+  );
+};
 
 /** For labels */
 export class Label extends Component {

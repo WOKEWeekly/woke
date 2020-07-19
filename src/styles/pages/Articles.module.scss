@@ -1,4 +1,5 @@
 @import '../Variables';
+@import '../components/Button.module';
 
 /************
 *** index.js
@@ -298,6 +299,30 @@
   @extend .responsive-form;
 }
 
+.article-editor {
+  display: grid;
+  grid-template-columns: repeat(2, 50%);
+
+  @media (max-width: $break-lg) {
+    display: block;
+  }
+}
+
+.article-editor-form,
+.article-editor-preview {
+  height: 100vh;
+  overflow-y: scroll;
+  padding: 2em;
+}
+
+.article-editor-preview {
+  background: rgba(0, 0, 0, 0.4);
+  border-left: 1px solid #fff;
+  @media (max-width: $break-lg) {
+    display: none;
+  }
+}
+
 .article-filler-images {
   column-gap: 0.5ch;
   display: grid;
@@ -309,6 +334,40 @@
     font-size: 0.8em;
     grid-template-columns: repeat(3, 33%);
   }
+}
+
+.article-editor-buttons {
+  background: rgba(0, 0, 0, 1);
+  border-top: 1px solid #fff;
+  bottom: 0%;
+  display: flex;
+  font-size: 0.8em;
+  justify-content: space-between;
+  padding: 1em;
+  position: sticky;
+
+  @media (max-width: $break-sm) {
+    display: block;
+  }
+}
+
+.article-form-buttons {
+  display: flex;
+  @media (max-width: $break-sm) {
+    justify-content: space-around;
+  }
+}
+
+.preview-toggle-container {
+  display: flex;
+  justify-content: flex-end;
+  @media (max-width: $break-lg) {
+    display: none;
+  }
+}
+
+.preview-toggle-button {
+  @extend .toggle-button;
 }
 
 /*************
