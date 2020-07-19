@@ -8,53 +8,13 @@ import css from 'styles/components/Tabler.module.scss';
 
 /**
  * A component for tabling entities.
- * @param {object} props  - The component props.
- * @param {any[]} props.columns - The table column headings.
- * @param {object} props.items - The map of items for rows.
+ * @param {object} props - The component props.
  * @param {string} props.emptyMessage - The message shown when there are no rows.
- * @param {string} props.distribution - The CSS grid-template-columns value.
  * @param {boolean} props.itemsLoaded - Indicates if items are loaded.
  * @returns {React.Component} - The component.
  */
-const Tabler = ({
-  columns,
-  items,
-  emptyMessage = '',
-  distribution,
-  itemsLoaded
-}) => {
-  const gridDistribution = { gridTemplateColumns: distribution };
-
-  /**
-   * The header row for the table.
-   * @returns {React.Component} The component.
-   */
-  const HeaderRow = () => {
-    return (
-      <div className={css['tabler-header-row']} style={gridDistribution}>
-        {columns.map((name, key) => {
-          return <span key={key}>{name}</span>;
-        })}
-      </div>
-    );
-  };
-
-  /**
-   * The items rows for the table.
-   * @returns {React.Component[]} The list of row components.
-   */
-  const ItemRows = () => {
-    return items.map((fields, key) => {
-      return (
-        <Item
-          fields={fields}
-          distribution={gridDistribution}
-          key={key}
-          index={key}
-        />
-      );
-    });
-  };
+const Tabler = (props) => {
+  const { items, emptyMessage = '', itemsLoaded } = props;
 
   if (!itemsLoaded) {
     return <Loader />;
@@ -66,8 +26,8 @@ const Tabler = ({
     <div className={css['tabler-container']}>
       <Default>
         <div className={css['tabler-grid']}>
-          <HeaderRow />
-          <ItemRows />
+          <HeaderRow {...props} />
+          <ItemRows {...props} />
         </div>
       </Default>
       <Mobile>
@@ -80,10 +40,49 @@ const Tabler = ({
 };
 
 /**
+ * The header row for the table.
+ * @param {object} props - The component props.
+ * @param {any[]} props.columns - The table column headings.
+ * @param {string} props.distribution - The CSS grid-template-columns value.
+ * @returns {React.Component} The component.
+ */
+const HeaderRow = ({ columns, distribution }) => {
+  return (
+    <div
+      className={css['tabler-header-row']}
+      style={{ gridTemplateColumns: distribution }}>
+      {columns.map((name, key) => {
+        return <span key={key}>{name}</span>;
+      })}
+    </div>
+  );
+};
+
+/**
+ * The items rows for the table.
+ * @param {object} props - The component props.
+ * @param {string} props.distribution - The CSS grid-template-columns value.
+ * @param {object} props.items - The map of items for rows.
+ * @returns {React.Component[]} The list of row components.
+ */
+const ItemRows = ({ distribution, items }) => {
+  return items.map((fields, key) => {
+    return (
+      <Item
+        fields={fields}
+        distribution={{ gridTemplateColumns: distribution }}
+        key={key}
+        index={key}
+      />
+    );
+  });
+};
+
+/**
  * Each row in the {@see Tabler} component.
  * @param {object} props - The component props.
- * @param {any[]} props.fields - Each field in the row.
  * @param {any[]} props.distribution - The CSS grid-template-columns value.
+ * @param {any[]} props.fields - Each field in the row.
  * @param {any[]} props.index - The row's index.
  * @returns {React.Component} - The component.
  */
