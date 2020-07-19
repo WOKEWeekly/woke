@@ -119,9 +119,12 @@ const MemberCollection = ({ user, countries }) => {
               { icon: 'venus-mars' }
             ],
             [member.level, { icon: 'star' }],
-            [member.role, { icon: 'signature' }],
-            [member.demonyms, { icon: 'globe-africa' }],
-            [zDate.formatDate(member.birthday), { icon: 'birthday-cake' }],
+            [member.role, { icon: 'signature', hideIfEmpty: true }],
+            [member.demonyms, { icon: 'globe-africa', hideIfEmpty: true }],
+            [
+              zDate.formatDate(member.birthday),
+              { icon: 'birthday-cake', hideIfEmpty: true }
+            ],
             [<LinkButton member={member} key={key} />, { type: 'button' }],
             [<EditButton id={member.id} key={key} />, { type: 'button' }],
             [

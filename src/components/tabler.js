@@ -32,7 +32,7 @@ const Tabler = (props) => {
       </Default>
       <Mobile>
         <div className={css['tabler-list']}>
-          <ItemRows />
+          <ItemRows {...props} />
         </div>
       </Mobile>
     </div>
@@ -99,20 +99,22 @@ const Item = memo(({ fields, distribution, index }) => {
       className={css['tabler-item-row']}
       postTransitions={'background-color .1s ease'}
       style={distribution}>
-      {fields.map((field, key) => {
-        const [value] = field;
-        return (
-          <React.Fragment key={key}>
-            <Default>
-              <span>{value}</span>
-            </Default>
-            <Mobile>
-              <MobileView field={field} key={key} />
-              <CrudButtons fields={fields} />
-            </Mobile>
-          </React.Fragment>
-        );
-      })}
+      {fields
+        .filter((e) => e)
+        .map((field, key) => {
+          const [value] = field;
+          return (
+            <React.Fragment key={key}>
+              <Default>
+                <span>{value}</span>
+              </Default>
+              <Mobile>
+                <MobileView field={field} key={key} />
+                <CrudButtons fields={fields} />
+              </Mobile>
+            </React.Fragment>
+          );
+        })}
     </Fader>
   );
 });
@@ -124,7 +126,11 @@ const Item = memo(({ fields, distribution, index }) => {
  * @returns {React.Component} - The component.
  */
 const MobileView = ({ field }) => {
-  const [value, { icon, type, hideOnMobile = false } = {}] = field;
+  const [
+    value,
+    { icon, type, hideIfEmpty = false, hideOnMobile = false } = {}
+  ] = field;
+  if (!value && hideIfEmpty) return null;
   if (hideOnMobile || type === 'button') return null;
 
   if (type === 'image') {
@@ -151,6 +157,7 @@ const MobileView = ({ field }) => {
  */
 const CrudButtons = memo(({ fields }) => {
   const buttons = fields
+    .filter((e) => e)
     .map(([value, options]) => {
       if (options.type === 'button') {
         return value;
