@@ -1,4 +1,4 @@
-@import "../Variables";
+@import '../Variables';
 
 .cover {
   @media (max-width: $break-sm) {
@@ -11,16 +11,19 @@
 .paragraph {
   a {
     color: skyblue !important;
-    &:hover { color: #2babb4 !important; }
+
+    &:hover {
+      color: #2babb4 !important;
+    }
   }
 }
 
 .threepart {
-  @media (min-width: $break-lg) { height: 32vw; }
   overflow-x: hidden;
+
   .colpart {
     padding: 1em 0.5em;
-    @media (max-width: $break-lg) { padding: 1em; }
+
     .part {
       @include scale-on-hover(1.04);
       align-items: center;
@@ -33,71 +36,111 @@
       padding-bottom: 1.5em;
       text-align: center;
       width: 100%;
-      @media (max-width: $break-lg) { height: 50vw; }
-      @media (max-width: $break-sm) { height: 100vw; }
-      @media (max-width: $break-lg) and (min-width: $break-md) {
-        background-position-y: -5vh;
-      }
+
       .caption {
         vertical-align: top;
         width: 80%;
-        @media (max-width: $break-lg) and (min-width: $break-md) {
-          width: 60%;
-        }
+
         .headline {
           @include font-scaler(2.2);
           color: white;
-          font-family: $title-font;}
+          font-family: $title-font;
+        }
+
         .description {
           @include font-scaler(1);
           color: white;
           font-family: $body-font;
           text-align: center;
-        } 
+        }
+        @media (max-width: $break-lg) and (min-width: $break-md) {
+          width: 60%;
+        }
+      }
+      @media (max-width: $break-lg) {
+        height: 50vw;
+      }
+      @media (max-width: $break-sm) {
+        height: 100vw;
+      }
+      @media (max-width: $break-lg) and (min-width: $break-md) {
+        background-position-y: -5vh;
       }
     }
+    @media (max-width: $break-lg) {
+      padding: 1em;
+    }
+  }
+  @media (min-width: $break-lg) {
+    height: 32vw;
   }
 }
 
 .advertiser {
   height: 100%;
+  padding: 0.5em 1em;
   text-align: center;
-  padding: .5em 1em;
-  transition: all .3s;
-  -webkit-transition: all .3s;
+  -webkit-transition: all 0.3s;
+  transition: all 0.3s;
+
   .heading {
-    text-transform: uppercase;
     font-size: 1.5em;
-    margin: .5em 0;
-    @media (max-width: $break-md) { font-size: 1.4em; }}
+    margin: 0.5em 0;
+    text-transform: uppercase;
+    @media (max-width: $break-md) {
+      font-size: 1.4em;
+    }
+  }
+
   .image {
     @include scale-on-hover(1.03);
     border: $secondary-border;
     border-radius: 5px;
     cursor: pointer;
-    margin-bottom: .8em;
+    margin-bottom: 0.8em;
     width: 60%;
-    @media (max-width: $break-md) { width: 100%; } }
+    @media (max-width: $break-md) {
+      width: 100%;
+    }
+  }
+
   .details {
     margin: 0 auto 2em;
     width: 90%;
-    @media (max-width: $break-md) { width: 100%; }
-    .title { @include font-scaler(1.4); }
-    .subtitle { @include font-scaler(1.1); }
-    .paragraph { @include font-scaler(1.1); }
+
+    .title {
+      @include font-scaler(1.4);
+    }
+
+    .subtitle {
+      @include font-scaler(1.1);
+    }
+
+    .paragraph {
+      @include font-scaler(1.1);
+    }
+    @media (max-width: $break-md) {
+      width: 100%;
+    }
   }
 }
 
 .upcomingSession {
   @extend .advertiser;
-  background-color: rgba(156, 0, 43, .2);
-  &:hover { background-color: rgba(156, 0, 43, .35);}
+  background-color: rgba(156, 0, 43, 0.2);
+
+  &:hover {
+    background-color: rgba(156, 0, 43, 0.35);
+  }
 }
 
 .randomCandidate {
   @extend .advertiser;
-  background-color: rgba(0, 141, 158, .2);
-  &:hover { background-color: rgba(0, 141, 158, .35);}
+  background-color: rgba(0, 141, 158, 0.2);
+
+  &:hover {
+    background-color: rgba(0, 141, 158, 0.35);
+  }
 }
 
 .topicVoter {
@@ -107,78 +150,139 @@
   justify-content: center;
   padding: 2em 0;
   text-align: center;
-  transition: all .3s;
-  -webkit-transition: all .3s;
+  -webkit-transition: all 0.3s;
+  transition: all 0.3s;
   width: 100%;
-  &:hover { background-color: rgba(14, 27, 179, 0.35); }
+
+  &:hover {
+    background-color: rgba(14, 27, 179, 0.35);
+  }
+
   .heading {
     @include font-scaler(1.8);
+    margin-bottom: 1em;
     text-transform: uppercase;
-    margin-bottom: 1em; }
+  }
+
   .container {
     @extend .responsive-container;
-    .headline {
-      @include font-scaler(2);}
-    .question {
-      @include font-scaler(1.4);}
-    .voter { margin: 1em 0;}
-    .voteCount { @extend .text; }
-    .voteThanks { @extend .text; margin-top: 1em; }
-  }
-}
 
-.randomMember {
-  background-color: rgba(97, 72, 0, .2);
-  padding: .5em 1em;
-  transition: all .3s;
-  -webkit-transition: all .3s;
-  &:hover { background-color: rgba(97, 72, 0, .35);}
-  @media (max-width: $break-sm) { text-align: center; }
-  .container {
-    margin: 2em auto;
-    width: 90%;
-    @media (max-width: $break-md) { width: 100%; }
-    .heading {
-      font-size: 1.7em;
-      text-transform: uppercase;
-      margin-bottom: 1em;
-      @media (max-width: $break-md) { font-size: 1.4em; }}
-    .image {
-      @include scale-on-hover(1.03);
-      border: $secondary-border;
-      border-radius: 45%;
-      float: left;
-      cursor: pointer;
-      width: 100%;
-      @media (max-width: $break-md) { margin-bottom: 1em; }}
-    .details {
-      margin: 0 auto;
-      @media (max-width: $break-md) { width: 100%;}
-      .title { @include font-scaler(1.6); }
-      .subtitle { @include font-scaler(1.2); }
-      .paragraph { @include font-scaler(1.2); }
+    .headline {
+      @include font-scaler(2);
+    }
+
+    .question {
+      @include font-scaler(1.4);
+    }
+
+    .voter {
+      margin: 1em 0;
+    }
+
+    .voteCount {
+      @extend .text;
+    }
+
+    .voteThanks {
+      @extend .text;
+      margin-top: 1em;
     }
   }
 }
 
+.home-random-member {
+  background-color: rgba(97, 72, 0, 0.2);
+  padding: 0.5em 1em;
+  transition: all 0.3s;
+  width: 100%;
+
+  &:hover {
+    background-color: rgba(97, 72, 0, 0.35);
+  }
+
+  @media (max-width: $break-sm) {
+    text-align: center;
+  }
+}
+
+.random-member-container {
+  margin: 2em auto;
+  width: 90%;
+
+  @media (max-width: $break-sm) {
+    width: 100%;
+  }
+}
+
+.random-member-heading {
+  font-size: 1.7em;
+  margin-bottom: 1em;
+  text-transform: uppercase;
+  @media (max-width: $break-sm) {
+    font-size: 1.4em;
+  }
+}
+
+.random-member-image {
+  @include scale-on-hover(1.03);
+  border: $secondary-border;
+  border-radius: 45%;
+  cursor: pointer;
+  float: left;
+  max-width: 500px;
+  width: 100%;
+  @media (max-width: $break-sm) {
+    margin-bottom: 1em;
+  }
+}
+
+.random-member-flags {
+  @extend %country-flags;
+}
+
+.random-member-details {
+  margin: 0 auto;
+
+  .random-member-name {
+    @include font-scaler(1.6);
+  }
+
+  .random-member-role {
+    @include font-scaler(1.2);
+  }
+
+  .random-member-preview {
+    @include font-scaler(1.2);
+  }
+
+  @media (max-width: $break-sm) {
+    width: 100%;
+  }
+}
+
 .forumAdvertiser {
+  min-height: 450px;
+  width: 100%;
   background: {
     position: top;
     size: cover;
   }
-  min-height: 450px;
-  width: 100%;
+
   .container {
-    background-color: rgba(0, 0, 0, .3);
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.3);
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    padding: .5em 1em;
     height: 100%;
-    transition: all .3s;
-    -webkit-transition: all .3s;
-    &:hover { background-color: rgba(24, 22, 26, 0.25);}
+    justify-content: center;
+    padding: 0.5em 1em;
+    -webkit-transition: all 0.3s;
+    transition: all 0.3s;
+
+    &:hover {
+      background-color: rgba(24, 22, 26, 0.25);
+    }
+
     .coverText {
       @extend .text, .responsive-container;
       @include font-scaler(1.4);

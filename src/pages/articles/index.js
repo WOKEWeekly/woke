@@ -1,7 +1,5 @@
-import React, { memo, useState, useEffect, useRef } from 'react';
-import LazyLoad from 'react-lazyload';
+import React, { memo, useState, useEffect } from 'react';
 import { connect } from 'react-redux';
-import VisibilitySensor from 'react-visibility-sensor';
 import { zDate } from 'zavid-modules';
 
 import { AdminButton } from 'components/button.js';

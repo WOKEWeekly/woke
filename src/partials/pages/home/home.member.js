@@ -1,9 +1,9 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Col, Row } from 'react-bootstrap';
-import LazyLoader from 'react-visibility-sensor';
-import { zText } from 'zavid-modules';
 
+import { CountryFlags } from 'components/emoji.js';
 import { Default, Mobile } from 'components/layout.js';
+import { LazyLoader } from 'components/loader.js';
 import {
   Title,
   Subtitle,
@@ -16,97 +16,99 @@ import request from 'constants/request.js';
 import { cloudinary } from 'constants/settings.js';
 import css from 'styles/pages/Home.module.scss';
 
-export default class RandomMember extends Component {
-  constructor() {
-    super();
-    this.state = {
-      member: {},
-      inView: false,
-      detectViewChange: true
-    };
-  }
+const RandomMember = () => {
+  const [member, setMember] = useState({});
+  const [isLoaded, setLoaded] = useState(false);
+  const [isInView, setInView] = useState(false);
 
-  componentDidMount() {
-    this.getRandomMember();
-  }
+  useEffect(() => {
+    getRandomMember();
+  }, [isLoaded]);
 
-  toggleVisibility = (inView) => {
-    this.setState({ inView, detectViewChange: inView === false });
-  };
-
-  getRandomMember = () => {
+  const getRandomMember = () => {
     request({
       url: '/api/v1/members/random',
       method: 'GET',
       headers: { Authorization: process.env.AUTH_KEY },
       onSuccess: (member) => {
-        member.loaded = true;
-        this.setState({ member });
+        member.fullname = `${member.firstname} ${member.lastname}`;
+        try {
+          member.description = member.description.trim() || 'No description.';
+        } catch (ex) {
+          member.description = 'No description.';
+        }
+        setMember(member);
+        setLoaded(true);
       }
     });
   };
 
-  render() {
-    const { member, inView, detectViewChange } = this.state;
+  const isExecutive = member.level === 'Executive';
 
-    if (member.loaded) {
-      member.fullname = `${member.firstname} ${member.lastname}`;
-      member.description =
-        member.description && member.description.trim().length > 0
-          ? member.description
-          : 'No description.';
-    }
+  const link = `/team/${member.slug}`;
+  const heading = `Have you met our ${isExecutive ? 'executive' : 'member'}?`;
 
-    const isExecutive = member.level === 'Executive';
-
-    const link = `/team/${member.slug}`;
-    const heading = `Have you met our ${isExecutive ? 'executive' : 'member'}?`;
-
+  const MemberImage = () => {
+    if (!member.image) return null;
     return (
-      <div className={css.randomMember}>
-        <LazyLoader
-          onChange={this.toggleVisibility}
-          partialVisibility={true}
-          active={detectViewChange}>
-          <Fader determinant={inView} duration={750}>
-            <div className={css.container}>
-              <Mobile>
-                <Title className={css.heading}>{heading}</Title>
-              </Mobile>
-              <Row>
-                <Col md={4}>
-                  {member.image ? (
-                    <VanillaLink href={link}>
-                      <img
-                        src={`${cloudinary.url}/${member.image}`}
-                        alt={member.fullname}
-                        className={css.image}
-                      />
-                    </VanillaLink>
-                  ) : null}
-                </Col>
-                <Col md={8}>
-                  <Default>
-                    <Title className={css.heading}>{heading}</Title>
-                  </Default>
-                  <div className={css.details}>
-                    <Title className={css.title}>{member.fullname}</Title>
-                    <Subtitle className={css.subtitle}>{member.role}</Subtitle>
-                    <Divider />
-                    <Paragraph
-                      truncate={45}
-                      morelink={link}
-                      moretext={`Read more on ${member.firstname}`}
-                      className={css.paragraph}>
-                      {member.description}
-                    </Paragraph>
-                  </div>
-                </Col>
-              </Row>
-            </div>
-          </Fader>
-        </LazyLoader>
-      </div>
+      <Col sm={4}>
+        <VanillaLink href={link}>
+          <img
+            src={`${cloudinary.url}/${member.image}`}
+            alt={member.fullname}
+            className={css['random-member-image']}
+          />
+        </VanillaLink>
+      </Col>
     );
-  }
-}
+  };
+
+  const MemberPreview = () => {
+    return (
+      <Col sm={8}>
+        <Default>
+          <Title className={css['random-member-heading']}>{heading}</Title>
+        </Default>
+        <div className={css['random-member-details']}>
+          <Title className={css['random-member-name']}>{member.fullname}</Title>
+          <Subtitle className={css['random-member-role']}>
+            <span>{`${member.role} • `}</span>
+            <CountryFlags
+              ethnicities={member.ethnicity}
+              size={25}
+              className={css['random-member-flags']}
+            />
+          </Subtitle>
+          <Divider />
+          <Paragraph
+            truncate={45}
+            morelink={link}
+            moretext={`Read more on ${member.firstname}`}
+            className={css['random-member-preview']}>
+            {member.description}
+          </Paragraph>
+        </div>
+      </Col>
+    );
+  };
+
+  return (
+    <div className={css['home-random-member']}>
+      <LazyLoader setInView={setInView}>
+        <Fader determinant={isInView} duration={750}>
+          <div className={css['random-member-container']}>
+            <Mobile>
+              <Title className={css['random-member-heading']}>{heading}</Title>
+            </Mobile>
+            <Row>
+              <MemberImage />
+              <MemberPreview />
+            </Row>
+          </div>
+        </Fader>
+      </LazyLoader>
+    </div>
+  );
+};
+
+export default RandomMember;

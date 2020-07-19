@@ -87,9 +87,7 @@
 }
 
 .member-flags {
-  margin-left: 0.1em;
-  position: relative;
-  top: 0.2em;
+  @extend %country-flags;
 }
 
 .member-excerpt {
