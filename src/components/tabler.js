@@ -81,9 +81,9 @@ const ItemRows = ({ distribution, items }) => {
 /**
  * Each row in the {@see Tabler} component.
  * @param {object} props - The component props.
- * @param {any[]} props.distribution - The CSS grid-template-columns value.
+ * @param {string} props.distribution - The CSS grid-template-columns value.
  * @param {any[]} props.fields - Each field in the row.
- * @param {any[]} props.index - The row's index.
+ * @param {number} props.index - The row's index.
  * @returns {React.Component} - The component.
  */
 const Item = memo(({ fields, distribution, index }) => {
