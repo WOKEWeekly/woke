@@ -259,34 +259,3 @@
     width: 100%;
   }
 }
-
-.forumAdvertiser {
-  min-height: 450px;
-  width: 100%;
-  background: {
-    position: top;
-    size: cover;
-  }
-
-  .container {
-    align-items: center;
-    background-color: rgba(0, 0, 0, 0.3);
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-    justify-content: center;
-    padding: 0.5em 1em;
-    -webkit-transition: all 0.3s;
-    transition: all 0.3s;
-
-    &:hover {
-      background-color: rgba(24, 22, 26, 0.25);
-    }
-
-    .coverText {
-      @extend .text, .responsive-container;
-      @include font-scaler(1.4);
-      text-align: center;
-    }
-  }
-}
