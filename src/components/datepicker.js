@@ -11,109 +11,32 @@ import { Modal, ConfirmModal } from 'components/modal.js';
 import { creationDate } from 'constants/settings.js';
 import css from 'styles/components/Form.module.scss';
 
-export const DatePicker = ({
-  date,
-  placeholderText,
-  minDate,
-  maxDate,
-  withDayOfWeek,
-  name,
-  onConfirm
-}) => {
-  const {
-    day: initialDay,
-    month: initialMonth,
-    year: initialYear
-  } = extractDates(date);
-  const [stateDay, setDay] = useState(initialDay);
-  const [stateMonth, setMonth] = useState(initialMonth);
-  const [stateYear, setYear] = useState(initialYear);
+export const DatePicker = (props) => {
+  const { date, name, onConfirm, placeholderText, withDayOfWeek } = props;
+
+  const [selectedDay, setDay] = useState(1);
+  const [selectedMonth, setMonth] = useState(1);
+  const [selectedYear, setYear] = useState(2000);
+
   const [datePickerVisible, setDatePickerVisibility] = useState(false);
   const [clearDateModalVisible, setClearDateModalVisibility] = useState(false);
 
   useEffect(() => {
+    const {
+      day: initialDay,
+      month: initialMonth,
+      year: initialYear
+    } = extractDates(date);
     setDay(initialDay);
     setMonth(initialMonth);
     setYear(initialYear);
+
   }, [datePickerVisible]);
-
-  /** Update component dates on confirmation */
-  const confirmDateSelection = () => {
-    let day = stateDay;
-    let month = stateMonth;
-    let year = stateYear;
-
-    if (!day) return alert.error('Please set the day of the month.');
-    if (!month) return alert.error('Please set month of the year.');
-    if (!year) return alert.error('Please set the year.');
-
-    month = zDate.MONTHS[month.toUpperCase()].NUMBER - 1;
-    day = parseInt(day.replace(/([0-9]+)(.*)/g, '$1'));
-
-    const date = new Date(year, month, day);
-    onConfirm(date, name);
-    setDatePickerVisibility(false);
-  };
 
   /** Clear the date */
   const clearDate = () => {
     onConfirm(null, name);
     setClearDateModalVisibility(false);
-  };
-
-  const startYear = minDate && minDate.getFullYear();
-  const endYear = maxDate && maxDate.getFullYear();
-
-  const DatePickerBody = (
-    <Group className={css['datepicker-modal']}>
-      <Col xs={3}>
-        <Select
-          name={'day'}
-          value={stateDay}
-          items={zDate.getDatesForMonth(stateMonth)}
-          placeholder={'DD'}
-          onChange={(event) => setDay(event.target.value)}
-        />
-      </Col>
-      <Col xs={6}>
-        <Select
-          name={'month'}
-          value={stateMonth}
-          items={zDate.getAllMonths()}
-          placeholder={'MMMM'}
-          onChange={(event) => setMonth(event.target.value)}
-        />
-      </Col>
-      <Col xs={3}>
-        <Select
-          name={'year'}
-          value={stateYear}
-          items={zDate.getYearsInRange(startYear, endYear)}
-          placeholder={'YYYY'}
-          onChange={(event) => setYear(event.target.value)}
-        />
-      </Col>
-    </Group>
-  );
-
-  const DatePickerFooter = (
-    <>
-      <SubmitButton onClick={confirmDateSelection}>Confirm</SubmitButton>
-      <CancelButton onClick={() => setDatePickerVisibility(false)}>
-        Close
-      </CancelButton>
-    </>
-  );
-
-  const ClearDateButton = () => {
-    if (date === null) return null;
-    return (
-      <button
-        onClick={() => setClearDateModalVisibility(true)}
-        className={css['invisible_button']}>
-        <Icon name={'times'} />
-      </button>
-    );
   };
 
   return (
@@ -135,13 +58,34 @@ export const DatePicker = ({
             readOnly
           />
         </button>
-        <ClearDateButton />
+        <ClearDateButton
+          date={date}
+          setClearDateModalVisibility={setClearDateModalVisibility}
+        />
       </div>
 
       <Modal
         show={datePickerVisible}
-        body={DatePickerBody}
-        footer={DatePickerFooter}
+        body={
+          <DatePickerBody
+            {...props}
+            selectedDay={selectedDay}
+            selectedMonth={selectedMonth}
+            selectedYear={selectedYear}
+            setDay={setDay}
+            setMonth={setMonth}
+            setYear={setYear}
+          />
+        }
+        footer={
+          <DatePickerFooter
+            {...props}
+            day={selectedDay}
+            month={selectedMonth}
+            year={selectedYear}
+            setDatePickerVisibility={setDatePickerVisibility}
+          />
+        }
         onlyBody={true}
       />
 
@@ -153,6 +97,95 @@ export const DatePicker = ({
         close={() => setClearDateModalVisibility(false)}
       />
     </>
+  );
+};
+
+const DatePickerBody = ({
+  minDate,
+  maxDate,
+  selectedDay,
+  selectedMonth,
+  selectedYear,
+  setDay,
+  setMonth,
+  setYear
+}) => {
+  const startYear = minDate && minDate.getFullYear();
+  const endYear = maxDate && maxDate.getFullYear();
+
+  return (
+    <Group className={css['datepicker-modal']}>
+      <Col xs={3}>
+        <Select
+          name={'day'}
+          value={selectedDay}
+          items={zDate.getDatesForMonth(selectedMonth)}
+          placeholder={'DD'}
+          onChange={(event) => setDay(event.target.value)}
+        />
+      </Col>
+      <Col xs={6}>
+        <Select
+          name={'month'}
+          value={selectedMonth}
+          items={zDate.getAllMonths()}
+          placeholder={'MMMM'}
+          onChange={(event) => setMonth(event.target.value)}
+        />
+      </Col>
+      <Col xs={3}>
+        <Select
+          name={'year'}
+          value={selectedYear}
+          items={zDate.getYearsInRange(startYear, endYear)}
+          placeholder={'YYYY'}
+          onChange={(event) => setYear(event.target.value)}
+        />
+      </Col>
+    </Group>
+  );
+};
+
+const DatePickerFooter = ({
+  name,
+  day,
+  month,
+  year,
+  onConfirm,
+  setDatePickerVisibility,
+}) => {
+  /** Update component dates on confirmation */
+  const confirmDateSelection = () => {
+    if (!day) return alert.error('Please set the day of the month.');
+    if (!month) return alert.error('Please set the month of the year.');
+    if (!year) return alert.error('Please set the year.');
+
+    month = zDate.MONTHS[month.toUpperCase()].NUMBER - 1;
+    day = parseInt(day.replace(/([0-9]+)(.*)/g, '$1'));
+
+    const date = new Date(year, month, day);
+    onConfirm(date, name);
+    setDatePickerVisibility(false);
+  };
+
+  return (
+    <>
+      <SubmitButton onClick={confirmDateSelection}>Confirm</SubmitButton>
+      <CancelButton onClick={() => setDatePickerVisibility(false)}>
+        Close
+      </CancelButton>
+    </>
+  );
+};
+
+const ClearDateButton = ({ date, setClearDateModalVisibility }) => {
+  if (date === null) return null;
+  return (
+    <button
+      onClick={() => setClearDateModalVisibility(true)}
+      className={css['invisible_button']}>
+      <Icon name={'times'} />
+    </button>
   );
 };
 
