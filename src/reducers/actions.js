@@ -54,3 +54,13 @@ export const setTheme = (theme) => ({
   type: 'SET_THEME',
   payload: theme
 });
+
+export const clapStorageForArticles = (articleClapData) => ({
+  type: 'CLAPS_PER_ARTICLE',
+  payload: articleClapData
+});
+
+export const clapLimitReachedStorage = (clapLimitData) => ({
+  type: 'CLAP_LIMIT_REACHED',
+  payload: clapLimitData
+});

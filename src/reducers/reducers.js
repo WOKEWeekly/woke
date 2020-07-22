@@ -118,11 +118,34 @@ const themeReducer = (state = 'default', action) => {
   }
 };
 
+const defaultClapLimitData = {};
+
+const clapLimitReducer = (state = defaultClapLimitData, action) => {
+  switch (action.type) {
+    case 'CLAPS_PER_ARTICLE':
+      return action.payload;
+    default:
+      return state;
+  }
+};
+
+const clapLimitReachedForArticle = (state = defaultClapLimitData,  action) => {
+  switch (action.type) {
+    case 'CLAP_LIMIT_REACHED':
+      return Object.assign({}, state, action.payload);
+    default:
+      return state;
+  }
+
+};
+
 export default combineReducers({
   user: userReducer,
   session: sessionReducer,
   topic: topicReducer,
   blackex: blackexReducer,
   countries: countryReducer,
-  theme: themeReducer
+  theme: themeReducer,
+  clapLimit: clapLimitReducer,
+  limitReachedPerArticle: clapLimitReachedForArticle
 });
