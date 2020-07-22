@@ -34,11 +34,35 @@ $break-lg: 992px; // Large devices (desktops)
 $break-xl: 1200px; // Extra large devices (large desktops)
 $break-xxl: 1408px; // Extra large devices (large desktops)
 
+/************************************
+* NEW ERA SCSS
+************************************/
+
 %country-flags {
   margin-left: 0.1em;
   position: relative;
   top: 0.2em;
 }
+
+.admin-table-heading {
+  border-bottom: 1px solid #ccc;
+  border-top: 1px solid #ccc;
+  font-size: 1.8em;
+  margin: 0.5em 0;
+  padding: 0.5em 1em;
+  text-align: center;
+
+  @media (max-width: $break-sm) {
+    border-style: none;
+    font-size: 1.5em;
+    padding: 0 1em;
+    text-align: left;
+  }
+}
+
+/************************************
+* LEGACY SCSS
+************************************/
 
 /** Global template styles */
 .text,
@@ -148,7 +172,7 @@ $break-xxl: 1408px; // Extra large devices (large desktops)
   @media (min-width: $break-lg) {
     -webkit-transition: transform 0.2s ease-in-out;
     transition: transform 0.2s ease-in-out;
-  
+
     &:hover {
       transform: scale($scale);
     }
@@ -252,7 +276,7 @@ $break-xxl: 1408px; // Extra large devices (large desktops)
       grid-template-columns: repeat(2, 50%);
     }
   }
-  
+
   @media (max-width: $break-md) {
     grid-template-columns: 100%;
   }

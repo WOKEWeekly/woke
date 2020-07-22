@@ -1,10 +1,32 @@
 import React, { memo, useEffect, useState } from 'react';
 
 import { Icon } from 'components/icon.js';
+import { CloudinaryImage } from 'components/image.js';
 import { Default, Mobile } from 'components/layout.js';
 import { Empty, Loader } from 'components/loader.js';
 import { Fader } from 'components/transitioner';
 import css from 'styles/components/Tabler.module.scss';
+
+/** The mobile view of each field. */
+class TablerField {
+  /**
+   * Create a point.
+   * @param {any} value - The value of the field.
+   * @param {object} options - The options for the field.
+   * @param {string} options.icon - The name of the icon to display beside the field.
+   * @param {string} [options.type] - The type of the field.
+   * @param {boolean} [options.hideIfEmpty] - Hide the field if the value is empty.
+   * @param {boolean} [options.hideOnMobile] - Hide the field when shown on mobile.
+   * @param {object} [options.imageOptions] - The options for an image.
+   * @param {string} [options.imageOptions.css] - The CSS for the image.
+   * @param {object} [options.imageOptions.lazy] - The lazy option for the image.
+   */
+  constructor(value = '', options = {}) {
+    this.value = value;
+    this.options = options;
+    return this;
+  }
+}
 
 /**
  * A component for tabling entities.
@@ -82,7 +104,7 @@ const ItemRows = ({ distribution, items }) => {
  * Each row in the {@see Tabler} component.
  * @param {object} props - The component props.
  * @param {string} props.distribution - The CSS grid-template-columns value.
- * @param {any[]} props.fields - Each field in the row.
+ * @param {TablerField[]} props.fields - Each field in the row.
  * @param {number} props.index - The row's index.
  * @returns {React.Component} - The component.
  */
@@ -102,7 +124,18 @@ const Item = memo(({ fields, distribution, index }) => {
       {fields
         .filter((e) => e)
         .map((field, key) => {
-          const [value] = field;
+          let [value, { type, imageOptions }] = field;
+
+          if (type === 'image') {
+            value = (
+              <CloudinaryImage
+                src={value}
+                className={imageOptions.css}
+                lazy={imageOptions.lazy}
+              />
+            );
+          }
+
           return (
             <React.Fragment key={key}>
               <Default>
@@ -122,53 +155,68 @@ const Item = memo(({ fields, distribution, index }) => {
 /**
  * The mobile view for each {@see Item}.
  * @param {object} props - The component props.
- * @param {any[]} props.field - Each field in the row.
+ * @param {TablerField} props.field - Each field in the row.
  * @returns {React.Component} - The component.
  */
 const MobileView = ({ field }) => {
-  const [
+  let [
     value,
-    { icon, type, hideIfEmpty = false, hideOnMobile = false } = {}
+    {
+      icon,
+      type,
+      hideIfEmpty = false,
+      hideOnMobile = false,
+      imageOptions = {
+        css: '',
+        lazy: ''
+      }
+    } = {}
   ] = field;
-  if (!value && hideIfEmpty) return null;
-  if (hideOnMobile || type === 'button') return null;
 
-  if (type === 'image') {
-    return value;
-  } else if (type === 'index') {
-    return <div className={css['tabler-item-index']}>{value}</div>;
-  } else {
-    return (
-      <div className={css['tabler-field-mobile']}>
-        <span>
-          <Icon name={icon} />
-        </span>
-        <span>{value}</span>
-      </div>
-    );
+  if (!value && hideIfEmpty) return null;
+  if (hideOnMobile) return null;
+
+  switch (type) {
+    case 'button':
+      return null;
+    case 'image':
+      return (
+        <CloudinaryImage
+          src={value}
+          className={imageOptions.css}
+          lazy={imageOptions.lazy}
+        />
+      );
+    case 'index':
+      return <div className={css['tabler-item-index']}>{value}</div>;
+    default:
+      return (
+        <div className={css['tabler-field-mobile']}>
+          <span>
+            <Icon name={icon} />
+          </span>
+          <span>{value}</span>
+        </div>
+      );
   }
 };
 
 /**
  * The CRUD buttons for each {@see Item}.
  * @param {object} props - The component props.
- * @param {any[]} props.fields - All fields of the {@see Item}.
+ * @param {TablerField[]} props.fields - All fields of the {@see Item}.
  * @returns {React.Component} - The component.
  */
 const CrudButtons = memo(({ fields }) => {
-  const buttons = fields
-    .filter((e) => e)
-    .map(([value, options]) => {
-      if (options.type === 'button') {
-        return value;
-      }
-    })
-    .filter((e) => e);
-  return buttons.map((value, key) => {
-    <div className={css['tabler-item-buttons']} key={key}>
-      {value}
-    </div>;
-  });
+  return (
+    <div className={css['tabler-item-buttons']}>
+      {fields
+        .filter(([, options]) => options.type === 'button')
+        .map(([button], key) => {
+          return <span key={key}>{button}</span>;
+        })}
+    </div>
+  );
 });
 
 export default Tabler;
