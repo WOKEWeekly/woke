@@ -7,7 +7,6 @@ import { Icon } from 'components/icon.js';
 import { Shader } from 'components/layout.js';
 import { ConfirmModal } from 'components/modal.js';
 import Tabler from 'components/tabler';
-import { Title } from 'components/text.js';
 import { BottomToolbar } from 'components/toolbar.js';
 import CLEARANCES from 'constants/clearances.js';
 import request from 'constants/request.js';
@@ -24,19 +23,19 @@ const BlogAdmin = (props) => {
     <>
       <Shader>
         <ArticleCollection {...props} />
-
-        <BottomToolbar>
-          <BackButton
-            title={'Go to Blog'}
-            onClick={() => (location.href = '/blog')}
-          />
-
-          <AddEntityButton
-            title={'Add Article'}
-            onClick={() => (location.href = '/admin/articles/add')}
-          />
-        </BottomToolbar>
       </Shader>
+
+      <BottomToolbar>
+        <BackButton
+          title={'Go to Blog'}
+          onClick={() => (location.href = '/blog')}
+        />
+
+        <AddEntityButton
+          title={'Add Article'}
+          onClick={() => (location.href = '/admin/articles/add')}
+        />
+      </BottomToolbar>
     </>
   );
 };
@@ -87,13 +86,13 @@ const ArticleCollection = ({ user }) => {
         itemsLoaded={isLoaded}
         emptyMessage={'No articles found.'}
         columns={[
-          '#',
-          'Title',
-          'Author',
-          'Category',
-          'Claps',
-          'Status',
-          'Cover'
+          ['#'],
+          ['Title'],
+          ['Author'],
+          ['Category'],
+          ['Claps', { centerAlign: true }],
+          ['Status', { centerAlign: true }],
+          ['Cover', { centerAlign: true }]
         ]}
         items={articles.map((article, key) => {
           return [

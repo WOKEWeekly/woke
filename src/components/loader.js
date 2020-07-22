@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Spinner } from 'react-bootstrap';
-import LazyLoad from 'react-lazyload';
+import LazyLoad, { forceCheck } from 'react-lazyload';
 import VisibilitySensor from 'react-visibility-sensor';
 
 import css from 'styles/components/Layout.module.scss';
@@ -20,7 +20,7 @@ export const LazyLoader = ({
   children,
   setInView,
   height = 400,
-  offset = -100,
+  offset = -100
 }) => {
   const [shouldDetectChange, setDetectivity] = useState(true);
 

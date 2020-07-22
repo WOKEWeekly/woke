@@ -109,6 +109,19 @@
 *** admin.js
 *************/
 
+.member-admin-image {
+  border-radius: 10px;
+  overflow: hidden;
+
+  @media (max-width: $break-sm) {
+    border-radius: 10px;
+    margin: 0.5em 0;
+    max-height: 80px;
+    max-width: 80px;
+    position: relative;
+  }
+}
+
 .userTabler {
   @include entity-tabler(4% 15% 4% 1fr 13% 1fr 15% 4% 4%);
 }

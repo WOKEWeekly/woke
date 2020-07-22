@@ -96,13 +96,14 @@ const MemberCollection = ({ user, countries }) => {
         itemsLoaded={isLoaded}
         emptyMessage={'No members found.'}
         columns={[
-          '#',
-          'Name',
-          <Icon name={'venus-mars'} key={1} />,
-          'Level',
-          'Role',
-          'Ethnicity',
-          'Birthday'
+          ['#', { centerAlign: true }],
+          [<Icon name={'camera'} key={0} />, { centerAlign: true }],
+          ['Name'],
+          [<Icon name={'venus-mars'} key={0} />, { centerAlign: true }],
+          ['Level'],
+          ['Role'],
+          ['Ethnicity'],
+          ['Birthday']
         ]}
         items={members.map((member, key) => {
           member.demonyms = countriesToString(
@@ -112,6 +113,13 @@ const MemberCollection = ({ user, countries }) => {
           member.fullname = `${member.firstname} ${member.lastname}`;
           return [
             [key + 1, { type: 'index' }],
+            [
+              member.image,
+              {
+                type: 'image',
+                imageOptions: { css: css['member-admin-image'], lazy: 'ss' }
+              }
+            ],
             [member.fullname, { icon: 'user' }],
             [
               <GenderSymbol member={member} key={key} />,
@@ -137,7 +145,7 @@ const MemberCollection = ({ user, countries }) => {
             ]
           ];
         })}
-        distribution={'4% 15% 4% 0.6fr 1.3fr 1fr 0.8fr 4% 4% 4%'}
+        distribution={'4% 6% 1fr 4% 0.6fr 1.3fr 1fr 0.8fr 4% 4% 4%'}
       />
       <ConfirmModal
         visible={deleteModalVisible}
