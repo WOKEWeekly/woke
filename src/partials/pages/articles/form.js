@@ -240,7 +240,7 @@ const ArticleEditorForm = ({
             }}
             placeholder={"Choose this article's cover image..."}
             removeImage={() => {
-              removeFile();
+              removeFile('coverImage');
               setImagesChanged(true);
             }}
             aspectRatio={ASPECT_RATIO.WIDE}

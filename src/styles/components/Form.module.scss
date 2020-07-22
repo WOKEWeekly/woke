@@ -211,13 +211,16 @@
 /** rator *******/
 /****************/
 
-.starBar {
+.rator-star-bar {
   display: flex;
   padding: 0.8em 0 0;
-  button {
+
+  .rator-star-button {
+    @extend %invisible-button;
     padding: 0;
   }
-  .starIcon {
+  
+  .rator-star-icon {
     font-size: 1.6em;
   }
 }

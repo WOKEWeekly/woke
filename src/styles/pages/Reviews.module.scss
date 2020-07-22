@@ -1,12 +1,5 @@
 @import '../Variables';
 
-.review-admin-container {
-  padding: 1em 2em;
-  @media (max-width: $break-md) {
-    padding: 1em 0.5em;
-  }
-}
-
 .reviews-heading {
   @include font-scaler(2);
   margin: 0.5em 0;
@@ -102,29 +95,15 @@
 
 /** admin.js **/
 
-.review-table-heading {
-  @include font-scaler(1.5);
-  border-bottom: 1px solid #ccc;
-  border-top: 1px solid #ccc;
-  margin: 0.5em 0;
-  padding: 0.5em 0;
-  text-align: center;
-}
+.review-admin-image {
+  border-radius: 10px;
+  overflow: hidden;
 
-.admin-rator {
-  @include font-scaler(0.75);
-  flex-wrap: wrap;
-  line-height: 2;
   @media (max-width: $break-sm) {
-    font-size: 0.8em;
-  }
-}
-
-.review-image-mobile {
-  @media (max-width: $break-md) {
-    border-radius: 15px;
-    margin-bottom: 1em;
-    overflow: hidden;
-    width: 50%;
+    border-radius: 10px;
+    margin: 0.5em 0;
+    max-height: 80px;
+    max-width: 80px;
+    position: relative;
   }
 }

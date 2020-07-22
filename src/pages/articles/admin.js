@@ -1,282 +1,206 @@
-import React, { Component, memo, useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 
 import { alert } from 'components/alert.js';
 import { AddEntityButton, BackButton } from 'components/button.js';
 import { Icon } from 'components/icon.js';
-import { CloudinaryImage } from 'components/image.js';
-import { Default, Mobile, Shader } from 'components/layout.js';
-import { Loader, Empty } from 'components/loader.js';
+import { Shader } from 'components/layout.js';
 import { ConfirmModal } from 'components/modal.js';
-import { Title } from 'components/text.js';
+import Tabler from 'components/tabler';
 import { BottomToolbar } from 'components/toolbar.js';
-import { Fader } from 'components/transitioner.js';
 import CLEARANCES from 'constants/clearances.js';
 import request from 'constants/request.js';
 import css from 'styles/pages/Articles.module.scss';
 
-class BlogAdmin extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      articles: [],
-      isLoaded: false
-    };
+const BlogAdmin = (props) => {
+  const { user } = props;
 
-    if (props.user.clearance < CLEARANCES.ACTIONS.ARTICLES.MODIFY) {
-      return (location.href = '/');
-    }
+  if (user.clearance < CLEARANCES.ACTIONS.ARTICLES.MODIFY) {
+    return (location.href = '/');
   }
 
-  /** Get articles on mount */
-  componentDidMount() {
-    this.getArticles();
-  }
+  return (
+    <>
+      <Shader>
+        <ArticleCollection {...props} />
+      </Shader>
+
+      <BottomToolbar>
+        <BackButton
+          title={'Go to Blog'}
+          onClick={() => (location.href = '/blog')}
+        />
+
+        <AddEntityButton
+          title={'Add Article'}
+          onClick={() => (location.href = '/admin/articles/add')}
+        />
+      </BottomToolbar>
+    </>
+  );
+};
+
+const ArticleCollection = ({ user }) => {
+  const [articles, setArticles] = useState([]);
+  const [selectedArticle, setSelectedArticle] = useState({});
+  const [isLoaded, setLoaded] = useState(false);
+  const [deleteModalVisible, setDeleteModalVisibility] = useState(false);
+
+  useEffect(() => {
+    getArticles();
+  }, [isLoaded]);
 
   /** Get all articles */
-  getArticles = () => {
+  const getArticles = () => {
     request({
       url: '/api/v1/articles',
       method: 'GET',
-      headers: { Authorization: `Bearer ${this.props.user.token}` },
+      headers: { Authorization: `Bearer ${user.token}` },
       onSuccess: (articles) => {
-        this.setState({
-          articles: articles,
-          isLoaded: true
-        });
+        setArticles(articles);
+        setLoaded(true);
       }
     });
   };
 
-  render() {
-    const { isLoaded, articles } = this.state;
-
-    const items = [];
-
-    for (const [index, item] of articles.entries()) {
-      items.push(
-        <Article
-          key={index}
-          idx={index}
-          article={item}
-          getArticles={this.getArticles}
-        />
-      );
-    }
-
-    const ArticleTable = () => {
-      const headerRow = (
-        <div className={css.header}>
-          <span>#</span>
-          <span>Title</span>
-          <span>Author</span>
-          <span>Category</span>
-          <span>Cover</span>
-          <span>Status</span>
-          <span />
-          <span />
-          <span />
-        </div>
-      );
-
-      return (
-        <div className={css.grid}>
-          {headerRow}
-          {items}
-        </div>
-      );
-    };
-
-    const ArticleList = () => {
-      return <div className={css.list}>{items}</div>;
-    };
-
-    const ArticleCollection = () => {
-      if (!isLoaded) {
-        return <Loader />;
-      } else if (!articles.length) {
-        return <Empty message={'There are no articles.'} />;
-      }
-
-      return (
-        <>
-          <Title className={css.heading}>Blog Articles</Title>
-          <Default>
-            <ArticleTable />
-          </Default>
-          <Mobile>
-            <ArticleList />
-          </Mobile>
-        </>
-      );
-    };
-
-    return (
-      <>
-        <Shader className={css.articleTabler}>
-          <ArticleCollection />
-        </Shader>
-
-        <BottomToolbar>
-          <BackButton
-            title={'Go to Blog'}
-            onClick={() => (location.href = '/blog')}
-          />
-
-          <AddEntityButton
-            title={'Add Article'}
-            onClick={() => (location.href = '/admin/articles/add')}
-          />
-        </BottomToolbar>
-      </>
-    );
-  }
-}
-
-const IArticle = memo(({ article, idx, user, getArticles }) => {
-  const [isLoaded, setLoaded] = useState(false);
-  const [isDeleteModalVisible, setVisibility] = useState(false);
-
-  useEffect(() => {
-    setLoaded(true);
-  }, [isLoaded]);
-
-  /** Go to edit article */
-  const editArticle = () =>
-    (location.href = `/admin/articles/edit/${article.id}`);
-
   /** Delete article */
   const deleteArticle = () => {
+    const { id, title } = selectedArticle;
     request({
-      url: `/api/v1/articles/${article.id}`,
+      url: `/api/v1/articles/${id}`,
       method: 'DELETE',
-      body: JSON.stringify(article),
+      body: JSON.stringify(selectedArticle),
       headers: { Authorization: `Bearer ${user.token}` },
       onSuccess: () => {
-        alert.success(`You've deleted article: ${article.title}.`);
-        setVisibility(false);
+        alert.success(`You've deleted article: ${title}.`);
+        setDeleteModalVisibility(false);
         getArticles();
       }
     });
   };
 
-  const LinkButton = () => {
-    if (!article.slug) return null;
-
-    return (
-      <button
-        className={css.invisible_button}
-        onClick={() => (location.href = `/blog/${article.slug}`)}>
-        <Icon name={'external-link-alt'} />
-      </button>
-    );
-  };
-
-  const ArticleImage = () => {
-    if (!article.coverImage) return 'None';
-    return (
-      <CloudinaryImage
-        src={article.coverImage}
-        lazy={'sw'}
-        alt={article.title}
-        className={css.coverImage}
-      />
-    );
-  };
-
   return (
-    <Fader
-      key={idx}
-      determinant={isLoaded}
-      duration={500 + idx * 100}
-      className={css.row}
-      postTransitions={'background-color .1s ease'}>
-      <Default>
-        <span>{idx + 1}</span>
-        <span>{article.title}</span>
-        <span>{article.authorName}</span>
-        <span>{article.category}</span>
-        <span>
-          <ArticleImage />
-        </span>
-        <span>{article.status}</span>
-        <span>
-          <LinkButton />
-        </span>
-        <span>
-          <button
-            className={css.invisible_button}
-            onClick={() => editArticle()}>
-            <Icon name={'edit'} />
-          </button>
-        </span>
-        <span>
-          <button
-            className={css.invisible_button}
-            onClick={() => setVisibility(true)}>
-            <Icon name={'trash'} />
-          </button>
-        </span>
-      </Default>
-      <Mobile>
-        <MobileField
-          icon={'heading'}
-          text={article.title}
-          className={css.name}
-        />
-        <MobileField icon={'user'} text={article.authorName} />
-        <MobileField icon={'star'} text={article.category} />
-        <MobileField icon={'unlock'} text={article.status} />
-        <div className={css.index}>{idx + 1}</div>
-        <div className={css.crud}>
-          <LinkButton />
-          <button
-            className={css.invisible_button}
-            onClick={() => editArticle()}>
-            <Icon name={'edit'} />
-          </button>
-          <button
-            className={css.invisible_button}
-            onClick={() => setVisibility(true)}>
-            <Icon name={'trash'} />
-          </button>
-        </div>
-        <CloudinaryImage
-          src={article.coverImage}
-          lazy={'sw'}
-          className={css.listImage}
-        />
-      </Mobile>
-
+    <>
+      <Tabler
+        heading={'Blog Articles'}
+        itemsLoaded={isLoaded}
+        emptyMessage={'No articles found.'}
+        columns={[
+          ['#'],
+          ['Title'],
+          ['Author'],
+          ['Category'],
+          ['Claps', { centerAlign: true }],
+          ['Status', { centerAlign: true }],
+          ['Cover', { centerAlign: true }]
+        ]}
+        items={articles.map((article, key) => {
+          return [
+            [key + 1, { type: 'index' }],
+            [article.title, { icon: 'heading' }],
+            [article.authorName, { icon: 'user' }],
+            [article.category, { icon: 'star' }],
+            [article.claps, { icon: 'sign-language' }],
+            [article.status, { icon: 'unlock' }],
+            [
+              article.coverImage,
+              {
+                type: 'image',
+                hideIfEmpty: true,
+                imageOptions: {
+                  css: css['article-admin-image'],
+                  lazy: 'sw'
+                }
+              }
+            ],
+            [<LinkButton article={article} key={key} />, { type: 'button' }],
+            [<EditButton id={article.id} key={key} />, { type: 'button' }],
+            [
+              <DeleteButton
+                article={article}
+                setDeleteModalVisibility={setDeleteModalVisibility}
+                setSelectedArticle={setSelectedArticle}
+                key={key}
+              />,
+              { type: 'button' }
+            ]
+          ];
+        })}
+        distribution={'4% 1.2fr 0.8fr .8fr 8% 0.6fr 8% 4% 4% 4%'}
+      />
       <ConfirmModal
-        visible={isDeleteModalVisible}
-        message={`Are you sure you want to delete article: ${article.title}?`}
+        visible={deleteModalVisible}
+        message={`Are you sure you want to delete article: ${selectedArticle.title}?`}
         confirmFunc={deleteArticle}
         confirmText={'Delete'}
-        close={() => setVisibility(false)}
+        close={() => setDeleteModalVisibility(false)}
       />
-    </Fader>
-  );
-});
-
-// TODO: Abstract for all mobile-table conversions
-const MobileField = ({ icon, text, className }) => {
-  return (
-    <div
-      style={{
-        display: 'grid',
-        gridTemplateColumns: '8% auto',
-        alignItems: 'baseline'
-      }}>
-      <Icon name={icon} style={{ textAlign: 'right' }} />
-      <span className={className}>{text}</span>
-    </div>
+    </>
   );
 };
 
-const mapStateToProps = (state) => ({
-  user: state.user
+/**
+ * Navigate to the article's page.
+ * @param {object} props - The component properties.
+ * @param {object} props.article - The article object.
+ * @returns {React.Component} The component.
+ */
+const LinkButton = ({ article }) => {
+  if (!article.slug) return null;
+
+  return (
+    <button
+      className={css.invisible_button}
+      onClick={() => (location.href = `/blog/${article.slug}`)}>
+      <Icon name={'external-link-alt'} />
+    </button>
+  );
+};
+
+/**
+ * Navigate to edit a article.
+ * @param {object} props - The component properties.
+ * @param {number} props.id - The ID of the article.
+ * @returns {React.Component} The component.
+ */
+const EditButton = ({ id }) => {
+  const link = `/admin/articles/edit/${id}`;
+  return (
+    <button
+      className={css.invisible_button}
+      onClick={() => (location.href = link)}>
+      <Icon name={'edit'} />
+    </button>
+  );
+};
+
+/**
+ * Attempt to delete a article.
+ * @param {object} props - The component properties.
+ * @param {number} props.article - The article to be deleted.
+ * @param {Function} props.setDeleteModalVisibility - The hook for setting modal visibility.
+ * @param {Function} props.setSelectedArticle - The hook for setting the currently-selected article.
+ * @returns {React.Component} The component.
+ */
+const DeleteButton = ({
+  article,
+  setDeleteModalVisibility,
+  setSelectedArticle
+}) => {
+  return (
+    <button
+      className={css.invisible_button}
+      onClick={() => {
+        setDeleteModalVisibility(true);
+        setSelectedArticle(article);
+      }}>
+      <Icon name={'trash'} />
+    </button>
+  );
+};
+
+const mapStateToProps = ({ user }) => ({
+  user
 });
 
-const Article = connect(mapStateToProps)(IArticle);
 export default connect(mapStateToProps)(BlogAdmin);
