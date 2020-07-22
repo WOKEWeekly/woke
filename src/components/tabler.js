@@ -4,6 +4,7 @@ import { Icon } from 'components/icon.js';
 import { CloudinaryImage } from 'components/image.js';
 import { Default, Mobile } from 'components/layout.js';
 import { Empty, Loader } from 'components/loader.js';
+import { Title } from 'components/text.js';
 import { Fader } from 'components/transitioner';
 import css from 'styles/components/Tabler.module.scss';
 
@@ -31,12 +32,16 @@ class TablerField {
 /**
  * A component for tabling entities.
  * @param {object} props - The component props.
+ * @param {any[]} props.columns - The table column headings.
+ * @param {string} props.distribution - The CSS grid-template-columns value.
  * @param {string} props.emptyMessage - The message shown when there are no rows.
+ * @param {string} [props.heading] - The heading to be shown above the table.
+ * @param {any[]} props.items - The items to populate the table.
  * @param {boolean} props.itemsLoaded - Indicates if items are loaded.
  * @returns {React.Component} - The component.
  */
 const Tabler = (props) => {
-  const { items, emptyMessage = '', itemsLoaded } = props;
+  const { heading = '', items, emptyMessage = '', itemsLoaded } = props;
 
   if (!itemsLoaded) {
     return <Loader />;
@@ -45,20 +50,34 @@ const Tabler = (props) => {
   }
 
   return (
-    <div className={css['tabler-container']}>
-      <Default>
-        <div className={css['tabler-grid']}>
-          <HeaderRow {...props} />
-          <ItemRows {...props} />
-        </div>
-      </Default>
-      <Mobile>
-        <div className={css['tabler-list']}>
-          <ItemRows {...props} />
-        </div>
-      </Mobile>
-    </div>
+    <>
+      <TableHeading heading={heading} />
+      <div className={css['tabler-container']}>
+        <Default>
+          <div className={css['tabler-grid']}>
+            <HeaderRow {...props} />
+            <ItemRows {...props} />
+          </div>
+        </Default>
+        <Mobile>
+          <div className={css['tabler-list']}>
+            <ItemRows {...props} />
+          </div>
+        </Mobile>
+      </div>
+    </>
   );
+};
+
+/**
+ * A component for tabling entities.
+ * @param {object} props - The component props.
+ * @param {string} props.heading - The heading to be shown above the table.
+ * @returns {React.Component} - The component.
+ */
+const TableHeading = ({ heading }) => {
+  if (!heading) return null;
+  return <Title className={css['tabler-heading']}>{heading}</Title>;
 };
 
 /**

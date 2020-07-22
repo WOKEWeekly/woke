@@ -82,8 +82,8 @@ const ArticleCollection = ({ user }) => {
 
   return (
     <>
-      <Title className={css['admin-table-heading']}>Blog Articles</Title>
       <Tabler
+        heading={'Blog Articles'}
         itemsLoaded={isLoaded}
         emptyMessage={'No articles found.'}
         columns={[

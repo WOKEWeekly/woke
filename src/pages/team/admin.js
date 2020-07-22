@@ -8,7 +8,6 @@ import { FemaleSymbol, Icon, MaleSymbol } from 'components/icon.js';
 import { Shader } from 'components/layout.js';
 import { ConfirmModal } from 'components/modal.js';
 import Tabler from 'components/tabler';
-import { Title } from 'components/text.js';
 import { BottomToolbar } from 'components/toolbar.js';
 import CLEARANCES from 'constants/clearances.js';
 import { countriesToString } from 'constants/countries.js';
@@ -31,7 +30,7 @@ const MemberAdmin = (props) => {
 
   return (
     <>
-      <Shader className={css['member-admin-container']}>
+      <Shader>
         <MemberCollection {...props} />
       </Shader>
 
@@ -92,8 +91,8 @@ const MemberCollection = ({ user, countries }) => {
 
   return (
     <>
-      <Title className={css.heading}>List of #WOKEWeekly Team Members</Title>
       <Tabler
+        heading={'List of #WOKEWeekly Team Members'}
         itemsLoaded={isLoaded}
         emptyMessage={'No members found.'}
         columns={[

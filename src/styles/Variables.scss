@@ -44,23 +44,6 @@ $break-xxl: 1408px; // Extra large devices (large desktops)
   top: 0.2em;
 }
 
-.admin-table-heading {
-  border-bottom: 1px solid #ccc;
-  border-top: 1px solid #ccc;
-  font-size: 1.8em;
-  margin: 0.5em 1em;
-  padding: 0.5em 0;
-  text-align: center;
-
-  @media (max-width: $break-sm) {
-    border-style: none;
-    font-size: 1.5em;
-    margin: 1em 1em 0;
-    padding: 0;
-    text-align: left;
-  }
-}
-
 /************************************
 * LEGACY SCSS
 ************************************/
