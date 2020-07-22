@@ -127,7 +127,7 @@ const ArticleCollection = ({ user }) => {
             ]
           ];
         })}
-        distribution={'4% 1fr 0.6fr 1fr 8% 0.8fr 10% 4% 4% 4%'}
+        distribution={'4% 1.2fr 0.8fr .8fr 8% 0.6fr 8% 4% 4% 4%'}
       />
       <ConfirmModal
         visible={deleteModalVisible}
