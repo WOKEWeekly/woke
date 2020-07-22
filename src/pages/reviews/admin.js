@@ -105,7 +105,7 @@ const ReviewCollection = ({ user }) => {
             [review.position, { icon: 'signature' }],
             [review.rating, { icon: 'star-half-alt', type: 'rating' }],
             [
-              zText.truncateText(review.description, { limit: 25 }),
+              zText.truncateText(review.description, { limit: 30 }),
               { hideOnMobile: true }
             ],
             [<EditButton id={review.id} key={key} />, { type: 'button' }],
