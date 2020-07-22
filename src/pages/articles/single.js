@@ -1,6 +1,7 @@
-import React, { useEffect, useState, memo } from 'react';
+import React, { useEffect, useState, useRef, memo } from 'react';
 import { Col, Row, Container } from 'react-bootstrap';
-import { connect } from 'react-redux';
+import { connect, useSelector, useDispatch } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import { zDate } from 'zavid-modules';
 
 import { alert } from 'components/alert.js';
@@ -13,10 +14,13 @@ import { Title, Subtitle, Paragraph, Divider } from 'components/text.js';
 import { BottomToolbar } from 'components/toolbar.js';
 import { Fader, Colorizer } from 'components/transitioner.js';
 import CLEARANCES from 'constants/clearances.js';
+import { setCookie, getCookie, checkCookies } from 'constants/cookies';
+import { loadState, saveState} from 'constants/localstorage.js';
 import request from 'constants/request.js';
 import { cloudinary } from 'constants/settings.js';
 import { ARTICLE_STATUS } from 'constants/strings';
 import ArticleSidebar from 'partials/pages/articles/single.sidebar';
+import { clapStorageForArticles, clapLimitReachedStorage } from 'reducers/actions';
 import css from 'styles/pages/Articles.module.scss';
 
 const clapLimit = 5;
@@ -26,26 +30,53 @@ const ArticlePage = ({ article, user }) => {
   const [clapCount, setClapCount] = useState(article.claps);
   const [repeatClaps, setRepeatClaps] = useState(0);
   const [clapCountAnimating, runClapCountAnimation] = useState(false);
-
+  const dispatch = useDispatch();
+  const clapLimitPerArticle = useSelector(state => state.clapLimit[article.id]);
+  const limitReachedOnArticle = useSelector(state => state.limitReachedPerArticle);
+ 
   useEffect(() => {
     setLoaded(true);
   }, [isLoaded]);
 
   const incrementClapCount = () => {
-    if (repeatClaps >= clapLimit) {
-      alert.info(`That's enough clapping for today, buddy.`);
-      return;
-    }
-    request({
-      url: `/api/v1/articles/${article.id}/clap`,
-      method: 'PUT',
-      headers: { Authorization: process.env.AUTH_KEY },
-      onSuccess: ({ claps }) => {
-        runClapCountAnimation(true);
-        setClapCount(claps);
-        setRepeatClaps(repeatClaps + 1);
+    
+    // Checks to see if user has accepted cookies before letting them like articles.
+    if(checkCookies('Accept cookies to clap')){
+      // Check if previous data has been stored on the article.
+      // If not allow user to clap, if yes check the claps have not exceeded the clap limit.
+      if (limitReachedOnArticle[article.id] == undefined || limitReachedOnArticle[article.id] <= clapLimit){
+    
+          // Increment claps and call action to change state in store.
+          setRepeatClaps(repeatClaps + 1);
+          // Increment counter for claps.
+          dispatch(clapStorageForArticles({
+              [article.id]: repeatClaps,
+          }));
+          // Storage for article that the user has maxed thier claps.
+          dispatch(clapLimitReachedStorage({[article.id]: repeatClaps}));
+
+      }else if( clapLimitPerArticle >= clapLimit || limitReachedOnArticle[article.id] >= clapLimit){
+       
+        // If clapLimit on the article has reached then the user cannot clap anymore.
+        // The second part of the else if block is useful only when the user revisits the article and tried to clap again.
+        dispatch(clapLimitReachedStorage({[article.id]: limitReachedOnArticle[article.id]}));
+        
+        alert.info(`That's enough clapping for today, buddy.`);
+        return;
       }
-    });
+    
+      request({
+        url: `/api/v1/articles/${article.id}/clap`,
+        method: 'PUT',
+        headers: { Authorization: process.env.AUTH_KEY },
+        onSuccess: ({ claps }) => {
+          runClapCountAnimation(true);
+          setClapCount(claps);
+          setRepeatClaps(repeatClaps + 1);
+        }
+      });
+    }
+    
   };
 
   const {
@@ -283,7 +314,16 @@ ArticlePage.getInitialProps = async ({ query }) => {
 };
 
 const mapStateToProps = (state) => ({
-  user: state.user
+  user: state.user, 
+  clapLimit: state.clapLimit
 });
 
-export default connect(mapStateToProps)(ArticlePage);
+const mapDispatchToProps = (dispatch) =>
+  bindActionCreators(
+    {
+      clapStorageForArticles,
+    },
+    dispatch
+  );
+
+export default connect(mapStateToProps, mapDispatchToProps)(ArticlePage);
