@@ -22,21 +22,21 @@ const BlogAdmin = (props) => {
 
   return (
     <>
-      <Shader className={css.articleTabler}>
+      <Shader>
         <ArticleCollection {...props} />
+
+        <BottomToolbar>
+          <BackButton
+            title={'Go to Blog'}
+            onClick={() => (location.href = '/blog')}
+          />
+
+          <AddEntityButton
+            title={'Add Article'}
+            onClick={() => (location.href = '/admin/articles/add')}
+          />
+        </BottomToolbar>
       </Shader>
-
-      <BottomToolbar>
-        <BackButton
-          title={'Go to Blog'}
-          onClick={() => (location.href = '/blog')}
-        />
-
-        <AddEntityButton
-          title={'Add Article'}
-          onClick={() => (location.href = '/admin/articles/add')}
-        />
-      </BottomToolbar>
     </>
   );
 };
