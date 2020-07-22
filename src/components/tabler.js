@@ -5,6 +5,7 @@ import { Icon } from 'components/icon.js';
 import { CloudinaryImage } from 'components/image.js';
 import { Default, Mobile } from 'components/layout.js';
 import { Empty, Loader, LazyLoader } from 'components/loader.js';
+import Rator from 'components/rator.js';
 import { Title } from 'components/text.js';
 import { Fader } from 'components/transitioner';
 import css from 'styles/components/Tabler.module.scss';
@@ -173,14 +174,27 @@ const Item = memo(({ centerAlignedIndices, fields, distribution, index }) => {
           .map((field, key) => {
             let [value, { type, imageOptions = {} }] = field;
 
-            if (type === 'image') {
-              value = (
-                <CloudinaryImage
-                  src={value}
-                  className={imageOptions.css}
-                  lazy={imageOptions.lazy}
-                />
-              );
+            switch (type) {
+              case 'image':
+                value = (
+                  <CloudinaryImage
+                    src={value}
+                    className={imageOptions.css}
+                    lazy={imageOptions.lazy}
+                  />
+                );
+                break;
+              case 'rating':
+                value = (
+                  <Rator
+                    rating={value}
+                    changeable={false}
+                    containerClassName={css['tabler-rator-container']}
+                    starClassName={css['tabler-rator-star']}
+                    key={key}
+                  />
+                );
+                break;
             }
 
             const isCenterAligned = centerAlignedIndices.includes(key);
@@ -240,6 +254,15 @@ const MobileView = ({ field }) => {
       );
     case 'index':
       return <div className={css['tabler-item-index']}>{value}</div>;
+    case 'rating':
+      return (
+        <Rator
+          rating={value}
+          changeable={false}
+          containerClassName={css['tabler-rator-container']}
+          starClassName={css['tabler-rator-star']}
+        />
+      );
     default:
       return (
         <div className={css['tabler-field-mobile']}>
