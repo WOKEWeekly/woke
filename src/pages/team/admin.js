@@ -8,7 +8,6 @@ import { FemaleSymbol, Icon, MaleSymbol } from 'components/icon.js';
 import { Shader } from 'components/layout.js';
 import { ConfirmModal } from 'components/modal.js';
 import Tabler from 'components/tabler';
-import { Title } from 'components/text.js';
 import { BottomToolbar } from 'components/toolbar.js';
 import CLEARANCES from 'constants/clearances.js';
 import { countriesToString } from 'constants/countries.js';
@@ -31,7 +30,7 @@ const MemberAdmin = (props) => {
 
   return (
     <>
-      <Shader className={css['member-admin-container']}>
+      <Shader>
         <MemberCollection {...props} />
       </Shader>
 
@@ -92,18 +91,19 @@ const MemberCollection = ({ user, countries }) => {
 
   return (
     <>
-      <Title className={css.heading}>List of #WOKEWeekly Team Members</Title>
       <Tabler
+        heading={'List of #WOKEWeekly Team Members'}
         itemsLoaded={isLoaded}
         emptyMessage={'No members found.'}
         columns={[
-          '#',
-          'Name',
-          <Icon name={'venus-mars'} key={1} />,
-          'Level',
-          'Role',
-          'Ethnicity',
-          'Birthday'
+          ['#', { centerAlign: true }],
+          [<Icon name={'camera'} key={0} />, { centerAlign: true }],
+          ['Name'],
+          [<Icon name={'venus-mars'} key={0} />, { centerAlign: true }],
+          ['Level'],
+          ['Role'],
+          ['Ethnicity'],
+          ['Birthday']
         ]}
         items={members.map((member, key) => {
           member.demonyms = countriesToString(
@@ -113,6 +113,13 @@ const MemberCollection = ({ user, countries }) => {
           member.fullname = `${member.firstname} ${member.lastname}`;
           return [
             [key + 1, { type: 'index' }],
+            [
+              member.image,
+              {
+                type: 'image',
+                imageOptions: { css: css['member-admin-image'], lazy: 'ss' }
+              }
+            ],
             [member.fullname, { icon: 'user' }],
             [
               <GenderSymbol member={member} key={key} />,
@@ -138,7 +145,7 @@ const MemberCollection = ({ user, countries }) => {
             ]
           ];
         })}
-        distribution={'4% 15% 4% 0.6fr 1.3fr 1fr 0.8fr 4% 4% 4%'}
+        distribution={'4% 6% 1fr 4% 0.6fr 1.3fr 1fr 0.8fr 4% 4% 4%'}
       />
       <ConfirmModal
         visible={deleteModalVisible}

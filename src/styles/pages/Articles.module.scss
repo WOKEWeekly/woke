@@ -279,16 +279,16 @@
 *** admin.js
 *************/
 
-.articleTabler {
-  @include entity-tabler(4% 15% 15% 1fr 7% 1fr 4% 4% 4%);
-}
-
-.listImage {
-  border-radius: 10px;
-  margin: 0.5em 0;
-  max-height: 100px;
-  max-width: 50%;
+.article-admin-image {
+  border-radius: 5px;
   overflow: hidden;
+
+  @media (max-width: $break-sm) {
+    border-radius: 10px;
+    margin: 0.5em 0;
+    max-height: 100px;
+    max-width: 50%;
+  }
 }
 
 /*************
