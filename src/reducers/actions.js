@@ -55,12 +55,7 @@ export const setTheme = (theme) => ({
   payload: theme
 });
 
-export const clapStorageForArticles = (articleClapData) => ({
-  type: 'CLAPS_PER_ARTICLE',
-  payload: articleClapData
-});
-
-export const clapLimitReachedStorage = (clapLimitData) => ({
-  type: 'CLAP_LIMIT_REACHED',
-  payload: clapLimitData
+export const incrementClapsOnArticle = (numberOfClaps) => ({
+  type: 'INCREMENT_CLAP',
+  payload: numberOfClaps
 });
