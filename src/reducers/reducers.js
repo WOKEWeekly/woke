@@ -118,20 +118,9 @@ const themeReducer = (state = 'default', action) => {
   }
 };
 
-const defaultClapLimitData = {};
-
-const clapLimitReducer = (state = defaultClapLimitData, action) => {
+const articleReducer = (state = {},  action) => {
   switch (action.type) {
-    case 'CLAPS_PER_ARTICLE':
-      return action.payload;
-    default:
-      return state;
-  }
-};
-
-const clapLimitReachedForArticle = (state = defaultClapLimitData,  action) => {
-  switch (action.type) {
-    case 'CLAP_LIMIT_REACHED':
+    case 'INCREMENT_CLAP':
       return Object.assign({}, state, action.payload);
     default:
       return state;
@@ -146,6 +135,5 @@ export default combineReducers({
   blackex: blackexReducer,
   countries: countryReducer,
   theme: themeReducer,
-  clapLimit: clapLimitReducer,
-  limitReachedPerArticle: clapLimitReachedForArticle
+  articleClapCount: articleReducer
 });
