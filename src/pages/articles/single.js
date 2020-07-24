@@ -1,6 +1,6 @@
 import React, { useEffect, useState, memo } from 'react';
 import { Col, Row, Container } from 'react-bootstrap';
-import { connect } from 'react-redux';
+import { connect, useSelector, useDispatch } from 'react-redux';
 import { zDate } from 'zavid-modules';
 
 import { alert } from 'components/alert.js';
@@ -13,29 +13,43 @@ import { Title, Subtitle, Paragraph, Divider } from 'components/text.js';
 import { BottomToolbar } from 'components/toolbar.js';
 import { Fader, Colorizer } from 'components/transitioner.js';
 import CLEARANCES from 'constants/clearances.js';
+import { checkCookies } from 'constants/cookies';
 import request from 'constants/request.js';
 import { cloudinary } from 'constants/settings.js';
 import { ARTICLE_STATUS } from 'constants/strings';
 import ArticleSidebar from 'partials/pages/articles/single.sidebar';
+import { incrementClapsOnArticle } from 'reducers/actions';
 import css from 'styles/pages/Articles.module.scss';
 
 const clapLimit = 5;
+const prohibitedClapMessage =
+  'You cannot clap for an article without accepting the cookie policy.';
 
 const ArticlePage = ({ article, user }) => {
   const [isLoaded, setLoaded] = useState(false);
   const [clapCount, setClapCount] = useState(article.claps);
-  const [repeatClaps, setRepeatClaps] = useState(0);
   const [clapCountAnimating, runClapCountAnimation] = useState(false);
+
+  const dispatch = useDispatch();
+
+  const numberOfClapsOnArticle = useSelector(
+    (state) => state.articleClapCount[article.id] || 0
+  );
 
   useEffect(() => {
     setLoaded(true);
   }, [isLoaded]);
 
   const incrementClapCount = () => {
-    if (repeatClaps >= clapLimit) {
-      alert.info(`That's enough clapping for today, buddy.`);
+    // Prohibits clapping if user has not accepted cookie policy.
+    if (!checkCookies(prohibitedClapMessage)) return;
+
+    // Prohibit clapping if user has reached limit on claps.
+    if (numberOfClapsOnArticle >= clapLimit) {
+      alert.info(`You've reached your clap limit on this article, buddy.`);
       return;
     }
+
     request({
       url: `/api/v1/articles/${article.id}/clap`,
       method: 'PUT',
@@ -43,7 +57,12 @@ const ArticlePage = ({ article, user }) => {
       onSuccess: ({ claps }) => {
         runClapCountAnimation(true);
         setClapCount(claps);
-        setRepeatClaps(repeatClaps + 1);
+
+        dispatch(
+          incrementClapsOnArticle({
+            [article.id]: numberOfClapsOnArticle + 1
+          })
+        );
       }
     });
   };

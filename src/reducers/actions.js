@@ -54,3 +54,8 @@ export const setTheme = (theme) => ({
   type: 'SET_THEME',
   payload: theme
 });
+
+export const incrementClapsOnArticle = (numberOfClaps) => ({
+  type: 'INCREMENT_CLAP',
+  payload: numberOfClaps
+});
