@@ -50,7 +50,9 @@ const RandomCandidate = () => {
     <div className={css['home-random-candidate']}>
       <LazyLoader setInView={setInView}>
         <Fader determinant={isInView} duration={750}>
-          <Title className={css['heading']}>Check out our candidate:</Title>
+          <Title className={css['featured-advert-heading']}>
+            Check out our candidate:
+          </Title>
           <div>
             <CandidateImage candidate={candidate} link={link} />
             <CandidatePreview candidate={candidate} link={link} />

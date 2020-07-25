@@ -5,7 +5,7 @@ import { Cover, Shader } from 'components/layout.js';
 import css from 'styles/pages/Home.module.scss';
 
 const ThreePart = React.lazy(() =>
-  import('partials/pages/home/home.advertiser')
+  import('partials/pages/home/home.threepart')
 );
 const ReviewsPreview = React.lazy(() =>
   import('partials/pages/home/home.reviews')

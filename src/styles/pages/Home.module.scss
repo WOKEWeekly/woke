@@ -23,63 +23,84 @@
   margin-left: 0.3em;
 }
 
-.threepart {
+/********************
+* home.threepart.js
+********************/
+
+.home-threepart {
   overflow-x: hidden;
 
-  .colpart {
-    padding: 1em 0.5em;
-
-    .part {
-      @include scale-on-hover(1.04);
-      align-items: center;
-      background-size: cover;
-      border-radius: 30px;
-      display: flex;
-      flex-direction: column;
-      height: 100%;
-      justify-content: flex-end;
-      padding-bottom: 1.5em;
-      text-align: center;
-      width: 100%;
-
-      .caption {
-        vertical-align: top;
-        width: 80%;
-
-        .headline {
-          @include font-scaler(2.2);
-          color: white;
-          font-family: $title-font;
-        }
-
-        .description {
-          @include font-scaler(1);
-          color: white;
-          font-family: $body-font;
-          text-align: center;
-        }
-        @media (max-width: $break-lg) and (min-width: $break-md) {
-          width: 60%;
-        }
-      }
-      @media (max-width: $break-lg) {
-        height: 50vw;
-      }
-      @media (max-width: $break-sm) {
-        height: 100vw;
-      }
-      @media (max-width: $break-lg) and (min-width: $break-md) {
-        background-position-y: -5vh;
-      }
-    }
-    @media (max-width: $break-lg) {
-      padding: 1em;
-    }
-  }
   @media (min-width: $break-lg) {
     height: 32vw;
   }
 }
+
+.home-threepart-column {
+  padding: 1em 0.5em;
+
+  @media (max-width: $break-lg) {
+    padding: 1em;
+  }
+}
+
+.home-threepart-part {
+  @include scale-on-hover(1.04);
+  align-items: center;
+  background-size: cover;
+  border-radius: 30px;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  justify-content: flex-end;
+  padding-bottom: 1.5em;
+  text-align: center;
+  width: 100%;
+
+  @media (max-width: $break-lg) {
+    height: 50vw;
+  }
+  @media (max-width: $break-sm) {
+    height: 100vw;
+  }
+  @media (max-width: $break-lg) and (min-width: $break-md) {
+    background-position-y: -5vh;
+  }
+}
+
+.home-threepart-caption {
+  vertical-align: top;
+  width: 80%;
+
+  @media (max-width: $break-lg) and (min-width: $break-md) {
+    width: 60%;
+  }
+}
+
+.home-threepart-headline {
+  @include font-size-changer(2.2, 1.9);
+  color: #fff;
+  font-family: $title-font;
+}
+
+.home-threepart-description {
+  @include font-size-changer(1, 0.85);
+  color: #fff;
+  font-family: $body-font;
+  text-align: center;
+}
+
+@mixin bg-colorizer($red, $green, $blue) {
+  background-color: rgba($red, $green, $blue, 0.2);
+
+  &:hover {
+    background-color: rgba($red, $green, $blue, 0.3);
+  }
+}
+
+/********************
+* home.candidate.js
+* home.session.js
+********************/
 
 %featured-advert {
   height: 100%;
@@ -132,20 +153,12 @@
 
 .home-featured-session {
   @extend %featured-advert;
-  background-color: rgba(156, 0, 43, 0.2);
-
-  &:hover {
-    background-color: rgba(156, 0, 43, 0.35);
-  }
+  @include bg-colorizer(156, 0, 43);
 }
 
 .home-random-candidate {
   @extend %featured-advert;
-  background-color: rgba(0, 141, 158, 0.2);
-
-  &:hover {
-    background-color: rgba(0, 141, 158, 0.35);
-  }
+  @include bg-colorizer(0, 141, 158);
 }
 
 /********************
@@ -153,18 +166,14 @@
 ********************/
 
 .home-random-topic {
+  @include bg-colorizer(14, 27, 179);
   align-items: center;
-  background-color: rgba(14, 27, 179, 0.2);
   display: flex;
   justify-content: center;
   padding: 2em 0;
   text-align: center;
   transition: all 0.3s;
   width: 100%;
-
-  &:hover {
-    background-color: rgba(14, 27, 179, 0.35);
-  }
 
   .random-topic-heading {
     @include font-size-changer(1.8, 1.5);
@@ -199,14 +208,10 @@
 ********************/
 
 .home-random-member {
-  background-color: rgba(97, 72, 0, 0.2);
+  @include bg-colorizer(97, 72, 0);
   padding: 0.5em 1em;
   transition: all 0.3s;
   width: 100%;
-
-  &:hover {
-    background-color: rgba(97, 72, 0, 0.35);
-  }
 
   @media (max-width: $break-sm) {
     text-align: center;

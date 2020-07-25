@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Spinner } from 'react-bootstrap';
-import LazyLoad, { forceCheck } from 'react-lazyload';
+import LazyLoad from 'react-lazyload';
 import VisibilitySensor from 'react-visibility-sensor';
 
 import css from 'styles/components/Layout.module.scss';
