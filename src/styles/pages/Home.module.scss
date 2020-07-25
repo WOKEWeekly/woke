@@ -18,6 +18,11 @@
   }
 }
 
+.home-country-flags {
+  @extend %country-flags;
+  margin-left: 0.3em;
+}
+
 .threepart {
   overflow-x: hidden;
 
@@ -80,16 +85,12 @@
   height: 100%;
   padding: 0.5em 1em;
   text-align: center;
-  -webkit-transition: all 0.3s;
   transition: all 0.3s;
 
   .heading {
-    font-size: 1.5em;
+    @include font-size-changer(1.5, 1.4);
     margin: 0.5em 0;
     text-transform: uppercase;
-    @media (max-width: $break-md) {
-      font-size: 1.4em;
-    }
   }
 
   .image {
@@ -109,15 +110,18 @@
     width: 90%;
 
     .title {
-      @include font-scaler(1.4);
+      @include font-size-changer(1.4, 1.2);
     }
 
     .subtitle {
-      @include font-scaler(1.1);
+      @include font-size-changer(1.1, 1);
+      align-items: center;
+      display: flex;
+      justify-content: center;
     }
 
     .paragraph {
-      @include font-scaler(1.1);
+      @include font-size-changer(1.1, 0.95);
     }
     @media (max-width: $break-md) {
       width: 100%;
@@ -134,7 +138,10 @@
   }
 }
 
-.randomCandidate {
+/********************
+* home.candidate.js
+********************/
+.home-random-candidate {
   @extend .advertiser;
   background-color: rgba(0, 141, 158, 0.2);
 
@@ -143,6 +150,10 @@
   }
 }
 
+/********************
+* home.topics.js
+********************/
+
 .topicVoter {
   align-items: center;
   background-color: rgba(14, 27, 179, 0.2);
@@ -150,7 +161,6 @@
   justify-content: center;
   padding: 2em 0;
   text-align: center;
-  -webkit-transition: all 0.3s;
   transition: all 0.3s;
   width: 100%;
 
@@ -190,6 +200,10 @@
   }
 }
 
+/********************
+* home.member.js
+********************/
+
 .home-random-member {
   background-color: rgba(97, 72, 0, 0.2);
   padding: 0.5em 1em;
@@ -215,12 +229,9 @@
 }
 
 .random-member-heading {
-  font-size: 1.7em;
+  @include font-size-changer(1.7, 1.4);
   margin-bottom: 1em;
   text-transform: uppercase;
-  @media (max-width: $break-sm) {
-    font-size: 1.4em;
-  }
 }
 
 .random-member-image {
@@ -236,23 +247,25 @@
   }
 }
 
-.random-member-flags {
-  @extend %country-flags;
-}
-
 .random-member-details {
   margin: 0 auto;
 
   .random-member-name {
-    @include font-scaler(1.6);
+    @include font-size-changer(1.6, 1.35);
   }
 
   .random-member-role {
-    @include font-scaler(1.2);
+    @include font-size-changer(1.3, 1.05);
+    align-items: center;
+    display: flex;
+    justify-content: flex-start;
+    @media (max-width: $break-sm) {
+      justify-content: center;
+    }
   }
 
   .random-member-preview {
-    @include font-scaler(1.2);
+    @include font-size-changer(1.3, 1);
   }
 
   @media (max-width: $break-sm) {
