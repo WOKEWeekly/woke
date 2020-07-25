@@ -16,7 +16,7 @@ const UpcomingSession = React.lazy(() =>
 const RandomCandidate = React.lazy(() =>
   import('partials/pages/home/home.candidate')
 );
-const TopicVoter = React.lazy(() => import('partials/pages/home/home.voter'));
+const TopicVoter = React.lazy(() => import('partials/pages/home/home.topic'));
 const RandomMember = React.lazy(() =>
   import('partials/pages/home/home.member')
 );

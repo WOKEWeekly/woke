@@ -81,19 +81,19 @@
   }
 }
 
-.advertiser {
+%featured-advert {
   height: 100%;
   padding: 0.5em 1em;
   text-align: center;
   transition: all 0.3s;
 
-  .heading {
+  .featured-advert-heading {
     @include font-size-changer(1.5, 1.4);
     margin: 0.5em 0;
     text-transform: uppercase;
   }
 
-  .image {
+  .featured-advert-image {
     @include scale-on-hover(1.03);
     border: $secondary-border;
     border-radius: 5px;
@@ -105,32 +105,33 @@
     }
   }
 
-  .details {
+  .featured-advert-details {
     margin: 0 auto 2em;
     width: 90%;
 
-    .title {
+    .featured-advert-title {
       @include font-size-changer(1.4, 1.2);
     }
 
-    .subtitle {
+    .featured-advert-subtitle {
       @include font-size-changer(1.1, 1);
       align-items: center;
       display: flex;
       justify-content: center;
     }
 
-    .paragraph {
+    .featured-advert-paragraph {
       @include font-size-changer(1.1, 0.95);
     }
+
     @media (max-width: $break-md) {
       width: 100%;
     }
   }
 }
 
-.upcomingSession {
-  @extend .advertiser;
+.home-featured-session {
+  @extend %featured-advert;
   background-color: rgba(156, 0, 43, 0.2);
 
   &:hover {
@@ -138,11 +139,8 @@
   }
 }
 
-/********************
-* home.candidate.js
-********************/
 .home-random-candidate {
-  @extend .advertiser;
+  @extend %featured-advert;
   background-color: rgba(0, 141, 158, 0.2);
 
   &:hover {
@@ -154,7 +152,7 @@
 * home.topics.js
 ********************/
 
-.topicVoter {
+.home-random-topic {
   align-items: center;
   background-color: rgba(14, 27, 179, 0.2);
   display: flex;
@@ -168,33 +166,29 @@
     background-color: rgba(14, 27, 179, 0.35);
   }
 
-  .heading {
-    @include font-scaler(1.8);
+  .random-topic-heading {
+    @include font-size-changer(1.8, 1.5);
     margin-bottom: 1em;
     text-transform: uppercase;
   }
 
-  .container {
+  .random-topic-container {
     @extend .responsive-container;
 
-    .headline {
-      @include font-scaler(2);
+    .random-topic-headline {
+      @include font-size-changer(2, 1.7);
     }
 
-    .question {
-      @include font-scaler(1.4);
+    .random-topic-question {
+      @include font-size-changer(1.4, 1.2);
     }
 
-    .voter {
+    .random-topic-voter {
       margin: 1em 0;
     }
 
-    .voteCount {
-      @extend .text;
-    }
-
-    .voteThanks {
-      @extend .text;
+    .random-topic-vote-thanks {
+      @extend %text;
       margin-top: 1em;
     }
   }

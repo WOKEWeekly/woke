@@ -68,7 +68,7 @@ const CandidateImage = ({ candidate, link }) => {
       <img
         src={`${cloudinary.url}/${candidate.image}`}
         alt={candidate.name}
-        className={css['image']}
+        className={css['featured-advert-image']}
       />
     </VanillaLink>
   );
@@ -76,9 +76,9 @@ const CandidateImage = ({ candidate, link }) => {
 
 const CandidatePreview = ({ candidate, link }) => {
   return (
-    <div className={css['details']}>
-      <Title className={css['title']}>{candidate.name}</Title>
-      <Subtitle className={css['subtitle']}>
+    <div className={css['featured-advert-details']}>
+      <Title className={css['featured-advert-title']}>{candidate.name}</Title>
+      <Subtitle className={css['featured-advert-subtitle']}>
         {candidate.age} • {candidate.occupation}
         <CountryFlags
           ethnicities={candidate.ethnicity}
@@ -91,7 +91,7 @@ const CandidatePreview = ({ candidate, link }) => {
         truncate={45}
         morelink={link}
         moretext={`Discover more on ${candidate.firstname}`}
-        className={css['paragraph']}>
+        className={css['featured-advert-paragraph']}>
         {candidate.description}
       </Paragraph>
     </div>
