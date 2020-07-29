@@ -3,17 +3,6 @@ const axios = require('axios');
 const { startTestServer, isStageTesting, port } = require('../../server.js');
 axios.defaults.baseURL = `http://localhost:${port}`;
 
-/**
-  * Abstract function for HTTP requests.
-  * @param {string} request.url - The url to make the request to.
-  * @param {string} [request.method] - The method of the request. Defaults to GET.
-  * @param {object} [request.body] - The payload for the request.
-  * @param {object} [request.headers] - The headers to accompany the request.
-  * @param {Function} [request.onSuccess] - Function triggered on successful request.
-  * @param {Function} [request.onError] - Function triggered on successful request.
-  * @param {Function} [request.done] - The callback to finish the test.
-*/
-
 // Check if user is dev before running test.
 if (process.env.MYSQL_USER !== 'dev') {
   console.error('Trying to run test with user that is not dev');
@@ -33,6 +22,19 @@ after(function () {
   setTimeout(() => process.exit(0), 2000);
 });
 
+/** For the assertion library */
+exports.assert = require('chai').assert;
+
+/**
+  * Abstract function for HTTP requests.
+  * @param {string} request.url - The url to make the request to.
+  * @param {string} [request.method] - The method of the request. Defaults to GET.
+  * @param {object} [request.body] - The payload for the request.
+  * @param {object} [request.headers] - The headers to accompany the request.
+  * @param {Function} [request.onSuccess] - Function triggered on successful request.
+  * @param {Function} [request.onError] - Function triggered on successful request.
+  * @param {Function} [request.done] - The callback to finish the test.
+*/
 exports.request = ({ 
   url,
   method = 'GET',
@@ -43,6 +45,7 @@ exports.request = ({
   done
 
 }) => {
+
   headers['Content-Type'] = 'application/json';
 
   axios({
@@ -75,6 +78,5 @@ exports.HEADERS = {
   }
 };
 
- /** For the assertion library */
-exports.assert = require('chai').assert;
+ 
 
