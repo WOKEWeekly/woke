@@ -1,6 +1,23 @@
 @import '../Variables';
 
-.cover {
+@mixin bg-colorizer($red, $green, $blue) {
+  background-color: rgba($red, $green, $blue, 0.2);
+
+  &:hover {
+    background-color: rgba($red, $green, $blue, 0.3);
+  }
+}
+
+.home-country-flags {
+  @extend %country-flags;
+  margin-left: 0.3em;
+}
+
+/********************
+* home.js
+********************/
+
+.home-cover {
   @media (max-width: $break-sm) {
     background-position: center;
     text-align: left;
@@ -18,83 +35,74 @@
   }
 }
 
-.home-country-flags {
-  @extend %country-flags;
-  margin-left: 0.3em;
-}
-
 /********************
 * home.threepart.js
 ********************/
 
 .home-threepart {
+  display: grid;
+  grid-template-columns: repeat(3, calc(100% / 3));
   overflow-x: hidden;
-
-  @media (min-width: $break-lg) {
-    height: 32vw;
-  }
-}
-
-.home-threepart-column {
   padding: 1em 0.5em;
 
-  @media (max-width: $break-lg) {
-    padding: 1em;
+  @media (max-width: $break-sm) {
+    grid-template-columns: 100%;
   }
 }
+
+// .home-threepart-column {
+//   padding: 1em 0.5em;
+
+//   @media (max-width: $break-lg) {
+//     padding: 1em;
+//   }
+// }
 
 .home-threepart-part {
   @include scale-on-hover(1.04);
-  align-items: center;
+  align-items: flex-end;
   background-size: cover;
   border-radius: 30px;
   display: flex;
-  flex-direction: column;
-  height: 100%;
-  justify-content: flex-end;
+  height: 50vh;
+  justify-content: center;
+  margin: 0 1em;
+  max-height: 375px;
   padding-bottom: 1.5em;
   text-align: center;
-  width: 100%;
+  width: 95%;
 
-  @media (max-width: $break-lg) {
-    height: 50vw;
-  }
   @media (max-width: $break-sm) {
-    height: 100vw;
+    margin: 0.5em 0;
+    width: 100%;
   }
-  @media (max-width: $break-lg) and (min-width: $break-md) {
-    background-position-y: -5vh;
-  }
+
+  // @media (max-width: $break-lg) {
+  //   height: 50vw;
+  // }
+  // @media (max-width: $break-sm) {
+  //   height: 100vw;
+  // }
+  // @media (max-width: $break-lg) and (min-width: $break-md) {
+  //   background-position-y: -5vh;
+  // }
 }
 
 .home-threepart-caption {
-  vertical-align: top;
   width: 80%;
-
-  @media (max-width: $break-lg) and (min-width: $break-md) {
-    width: 60%;
-  }
 }
 
 .home-threepart-headline {
-  @include font-size-changer(2.2, 1.9);
+  @include responsive-font(2.2em, $md: 2em, $sm: 1.9em);
   color: #fff;
   font-family: $title-font;
 }
 
 .home-threepart-description {
-  @include font-size-changer(1, 0.85);
+  @include responsive-font(1em, $sm: 0.85em);
   color: #fff;
   font-family: $body-font;
   text-align: center;
-}
-
-@mixin bg-colorizer($red, $green, $blue) {
-  background-color: rgba($red, $green, $blue, 0.2);
-
-  &:hover {
-    background-color: rgba($red, $green, $blue, 0.3);
-  }
 }
 
 /********************
@@ -109,7 +117,7 @@
   transition: all 0.3s;
 
   .featured-advert-heading {
-    @include font-size-changer(1.5, 1.4);
+    @include responsive-font(1.5em, $sm: 1.4em);
     margin: 0.5em 0;
     text-transform: uppercase;
   }
@@ -131,18 +139,18 @@
     width: 90%;
 
     .featured-advert-title {
-      @include font-size-changer(1.4, 1.2);
+      @include responsive-font(1.4em, $sm: 1.2em);
     }
 
     .featured-advert-subtitle {
-      @include font-size-changer(1.1, 1);
+      @include responsive-font(1.1em, $sm: 1em);
       align-items: center;
       display: flex;
       justify-content: center;
     }
 
     .featured-advert-paragraph {
-      @include font-size-changer(1.1, 0.95);
+      @include responsive-font(1.1em, $sm: 0.95em);
     }
 
     @media (max-width: $break-md) {
@@ -176,7 +184,7 @@
   width: 100%;
 
   .random-topic-heading {
-    @include font-size-changer(1.8, 1.5);
+    @include responsive-font(1.8em, $sm: 1.5em);
     margin-bottom: 1em;
     text-transform: uppercase;
   }
@@ -185,11 +193,11 @@
     @extend .responsive-container;
 
     .random-topic-headline {
-      @include font-size-changer(2, 1.7);
+      @include responsive-font(2em, $sm: 1.7em);
     }
 
     .random-topic-question {
-      @include font-size-changer(1.4, 1.2);
+      @include responsive-font(1.4em, $sm: 1.2em);
     }
 
     .random-topic-voter {
@@ -228,7 +236,7 @@
 }
 
 .random-member-heading {
-  @include font-size-changer(1.7, 1.4);
+  @include responsive-font(1.7em, $sm: 1.4em);
   margin-bottom: 1em;
   text-transform: uppercase;
 }
@@ -250,11 +258,11 @@
   margin: 0 auto;
 
   .random-member-name {
-    @include font-size-changer(1.6, 1.35);
+    @include responsive-font(1.6em, $sm: 1.35em);
   }
 
   .random-member-role {
-    @include font-size-changer(1.3, 1.05);
+    @include responsive-font(1.3em, $sm: 1.05em);
     align-items: center;
     display: flex;
     justify-content: flex-start;
@@ -264,7 +272,7 @@
   }
 
   .random-member-preview {
-    @include font-size-changer(1.3, 1);
+    @include responsive-font(1.3em, $sm: 1em);
   }
 
   @media (max-width: $break-sm) {

@@ -10,13 +10,37 @@
   }
 }
 
-/// Scale's a component on mouse-over.
-/// @param {number} $default - The default font-size.
-/// @param {number} $mobile - The font-size on mobile.
-@mixin font-size-changer($default, $mobile) {
-  font-size: ($default) + em;
-  @media (max-width: $break-sm) {
-    font-size: ($mobile) + em;
+/// Caters responsively to different attributes based on screen size.
+/// @param {any} $default - The default value for the attribute.
+/// @param {any} [$sm] - Optional value for mobile phones.
+/// @param {any} [$md] - Optional value for tablets
+/// @param {any} [$lg] - Optional value for small desktops
+/// @param {any} [$xl] - Optional value for large desktops.
+@mixin responsive-font($default, $sm: 0, $md: 0, $lg: 0, $xl: 0) {
+  font-size: $default;
+
+  @if $xl != 0 {
+    @media (max-width: $break-xl) {
+      font-size: $xl;
+    }
+  }
+
+  @if $lg != 0 {
+    @media (max-width: $break-lg) {
+      font-size: $lg;
+    }
+  }
+
+  @if $md != 0 {
+    @media (max-width: $break-md) {
+      font-size: $md;
+    }
+  }
+
+  @if $sm != 0 {
+    @media (max-width: $break-sm) {
+      font-size: $sm;
+    }
   }
 }
 

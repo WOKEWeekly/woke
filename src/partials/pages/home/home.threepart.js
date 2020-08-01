@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
-import { Col, Row } from 'react-bootstrap';
 
 import { LazyLoader } from 'components/loader';
-import { Slider } from 'components/transitioner.js';
+import { Fader } from 'components/transitioner.js';
 import { cloudinary } from 'constants/settings.js';
 import css from 'styles/pages/Home.module.scss';
 
@@ -10,7 +9,7 @@ const ThreePart = () => {
   const [isInView, setInView] = useState(false);
   return (
     <LazyLoader setInView={setInView}>
-      <Row className={css['home-threepart']}>
+      <div className={css['home-threepart']}>
         <Part
           headline={'Enlightenment'}
           description={
@@ -35,7 +34,7 @@ const ThreePart = () => {
           image={'three-part-3.jpg'}
           isInView={isInView}
         />
-      </Row>
+      </div>
     </LazyLoader>
   );
 };
@@ -44,21 +43,17 @@ const Part = ({ headline, description, image, isInView }) => {
   const src = `${cloudinary.url}/public/fillers/${image}`;
 
   return (
-    <Slider
+    <Fader
       determinant={isInView}
       duration={750}
-      direction={'right'}
-      postTransitions={'background-color .3s ease 0s'}
-      notDiv>
-      <Col lg={4} className={css['home-threepart-column']}>
-        <div className={css['home-threepart-part']} style={{ backgroundImage: `url(${src})` }}>
-          <div className={css['home-threepart-caption']}>
-            <div className={css['home-threepart-headline']}>{headline}</div>
-            <div className={css['home-threepart-description']}>{description}</div>
-          </div>
-        </div>
-      </Col>
-    </Slider>
+      postTransitions={'transform .3s ease 0s'}
+      className={css['home-threepart-part']}
+      style={{ backgroundImage: `url(${src})` }}>
+      <div className={css['home-threepart-caption']}>
+        <div className={css['home-threepart-headline']}>{headline}</div>
+        <div className={css['home-threepart-description']}>{description}</div>
+      </div>
+    </Fader>
   );
 };
 export default ThreePart;
