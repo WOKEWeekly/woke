@@ -12,7 +12,7 @@ const TextArea = (props) => {
       name={name}
       placeholder={placeholder}
       className={classNames(css['textarea-v2'], className)}
-      rows={minRows}
+      minRows={minRows}
       value={value}
       onChange={onChange}
     />

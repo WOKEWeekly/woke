@@ -1,7 +1,7 @@
-import React, { Component } from 'react';
-import LazyLoader from 'react-visibility-sensor';
-import { zDate, zText } from 'zavid-modules';
+import React, { useState, useEffect } from 'react';
+import { zDate } from 'zavid-modules';
 
+import { LazyLoader } from 'components/loader.js';
 import {
   Title,
   Subtitle,
@@ -14,80 +14,75 @@ import request from 'constants/request.js';
 import { cloudinary } from 'constants/settings.js';
 import css from 'styles/pages/Home.module.scss';
 
-export default class UpcomingSession extends Component {
-  constructor() {
-    super();
-    this.state = {
-      session: {},
-      inView: false,
-      detectViewChange: true
-    };
-  }
+const FeaturedSession = () => {
+  const [session, setSession] = useState([]);
+  const [isLoaded, setLoaded] = useState(false);
+  const [isInView, setInView] = useState(false);
 
-  componentDidMount() {
-    this.getUpcomingSession();
-  }
+  useEffect(() => {
+    getFeaturedSession();
+  }, [isLoaded]);
 
-  toggleVisibility = (inView) => {
-    this.setState({ inView, detectViewChange: inView === false });
-  };
-
-  getUpcomingSession = () => {
+  const getFeaturedSession = () => {
     request({
       url: '/api/v1/sessions/featured',
       method: 'GET',
       headers: { Authorization: process.env.AUTH_KEY },
-      onSuccess: (response) => {
-        let { session, upcoming } = response;
+      onSuccess: ({ session, upcoming }) => {
         session.upcoming = upcoming;
-        session.loaded = true;
-        this.setState({ session });
+        setSession(session);
+        setLoaded(true);
       }
     });
   };
 
-  render() {
-    const { session, inView, detectViewChange } = this.state;
-    const heading = session.upcoming
-      ? 'Most Upcoming Session'
-      : 'Latest Session';
-    const link = `/sessions/${session.slug}` || '/';
-    return (
-      <div className={css.upcomingSession}>
-        <LazyLoader
-          onChange={this.toggleVisibility}
-          partialVisibility={true}
-          active={detectViewChange}>
-          <Fader determinant={inView} duration={750}>
-            <Title className={css.heading}>{heading}</Title>
-            <div>
-              {session.image ? (
-                <VanillaLink href={link}>
-                  <img
-                    src={`${cloudinary.url}/${session.image}`}
-                    alt={session.title}
-                    className={css.image}
-                  />
-                </VanillaLink>
-              ) : null}
-              <div className={css.details}>
-                <Title className={css.title}>{session.title}</Title>
-                <Subtitle className={css.subtitle}>
-                  {zDate.formatDate(session.dateHeld, true)}
-                </Subtitle>
-                <Divider />
-                <Paragraph
-                  truncate={45}
-                  morelink={link}
-                  moretext={'Find out more'}
-                  className={css.paragraph}>
-                  {session.description}
-                </Paragraph>
-              </div>
-            </div>
-          </Fader>
-        </LazyLoader>
-      </div>
-    );
-  }
-}
+  const heading = session.upcoming ? 'Most Upcoming Session' : 'Latest Session';
+  const link = `/sessions/${session.slug}`;
+  return (
+    <div className={css['home-featured-session']}>
+      <LazyLoader setInView={setInView}>
+        <Fader determinant={isInView} duration={750}>
+          <Title className={css['featured-advert-heading']}>{heading}</Title>
+          <div>
+            <SessionImage session={session} link={link} />
+            <SessionPreview session={session} link={link} />
+          </div>
+        </Fader>
+      </LazyLoader>
+    </div>
+  );
+};
+
+const SessionImage = ({ session, link }) => {
+  if (!session.image) return null;
+  return (
+    <VanillaLink href={link}>
+      <img
+        src={`${cloudinary.url}/${session.image}`}
+        alt={session.title}
+        className={css['featured-advert-image']}
+      />
+    </VanillaLink>
+  );
+};
+
+const SessionPreview = ({session, link}) => {
+  return (
+    <div className={css['featured-advert-details']}>
+      <Title className={css['featured-advert-title']}>{session.title}</Title>
+      <Subtitle className={css['featured-advert-subtitle']}>
+        {zDate.formatDate(session.dateHeld, true)}
+      </Subtitle>
+      <Divider />
+      <Paragraph
+        truncate={45}
+        morelink={link}
+        moretext={'Find out more'}
+        className={css['featured-advert-paragraph']}>
+        {session.description}
+      </Paragraph>
+    </div>
+  );
+};
+
+export default FeaturedSession;

@@ -1,0 +1,250 @@
+/// Scales a component on mouse-over.
+/// @param {number} $scale - The scale factor.
+@mixin scale-on-hover($scale) {
+  @media (min-width: $break-md) {
+    transition: transform 0.2s ease-in-out;
+
+    &:hover {
+      transform: scale($scale);
+    }
+  }
+}
+
+/// Caters responsively to different attributes based on screen size.
+/// @param {any} $default - The default value for the attribute.
+/// @param {any} [$sm] - Optional value for mobile phones.
+/// @param {any} [$md] - Optional value for tablets
+/// @param {any} [$lg] - Optional value for small desktops
+/// @param {any} [$xl] - Optional value for large desktops.
+@mixin responsive-font($default, $sm: 0, $md: 0, $lg: 0, $xl: 0) {
+  font-size: $default;
+
+  @if $xl != 0 {
+    @media (max-width: $break-xl) {
+      font-size: $xl;
+    }
+  }
+
+  @if $lg != 0 {
+    @media (max-width: $break-lg) {
+      font-size: $lg;
+    }
+  }
+
+  @if $md != 0 {
+    @media (max-width: $break-md) {
+      font-size: $md;
+    }
+  }
+
+  @if $sm != 0 {
+    @media (max-width: $break-sm) {
+      font-size: $sm;
+    }
+  }
+}
+
+@mixin entity($float, $width) {
+  margin: 1em auto;
+  overflow-x: hidden;
+
+  .image {
+    border-radius: 8px;
+    float: $float;
+    margin-bottom: 1em;
+    width: $width;
+    @if $float == right {
+      margin-left: 1.5em;
+    } @else {
+      margin-right: 1.5em;
+    }
+    @media (max-width: $break-xl) {
+      width: 50%;
+    }
+    @media (max-width: $break-sm) {
+      width: 100%;
+    }
+  }
+
+  .details {
+    .title {
+      @include font-scaler(2);
+    }
+
+    .subtitle {
+      @include font-scaler(1.1);
+    }
+
+    .description {
+      @include font-scaler(1.2);
+    }
+  }
+}
+
+@mixin responsive-grid($maxCol: 6) {
+  display: grid;
+  grid-template-columns: repeat($maxCol, calc(100% / #{$maxCol}));
+
+  @if $maxCol > 5 {
+    @media (max-width: $break-xl) {
+      grid-template-columns: repeat(5, 20%);
+    }
+  }
+
+  @if $maxCol > 4 {
+    @media (max-width: $break-lg) {
+      grid-template-columns: repeat(4, 25%);
+    }
+  }
+
+  @if $maxCol > 3 {
+    @media (max-width: $break-md) {
+      grid-template-columns: repeat(3, calc(100% / 3));
+    }
+  }
+
+  @media (max-width: $break-sm) {
+    grid-template-columns: repeat(2, 50%);
+  }
+}
+
+@mixin responsive-grid-2($maxCol: 4) {
+  display: grid;
+  grid-template-columns: repeat($maxCol, calc(100% / #{$maxCol}));
+
+  @if $maxCol > 3 {
+    @media (max-width: $break-xl) {
+      grid-template-columns: repeat(3, calc(100% / 3));
+    }
+  }
+
+  @if $maxCol > 2 {
+    @media (max-width: $break-lg) {
+      grid-template-columns: repeat(2, 50%);
+    }
+  }
+
+  @media (max-width: $break-md) {
+    grid-template-columns: 100%;
+  }
+}
+
+/************************************
+* TO BE DEPRECATED
+************************************/
+
+@mixin font-scaler($size) {
+  font-size: ($size) + em;
+
+  @media (max-width: $break-xxl) {
+    font-size: ($size * 1.2) + em;
+  }
+
+  @media (max-width: $break-xl) {
+    font-size: ($size * 1.1) + em;
+  }
+  @media (max-width: $break-lg) {
+    font-size: ($size) + em;
+  }
+  @media (max-width: $break-sm) {
+    font-size: ($size * 0.85) + em;
+  }
+}
+
+@mixin entity-tabler($columns...) {
+  padding: 1em 2em;
+
+  .heading {
+    font-size: 2em;
+    margin-bottom: 0.5em;
+    @media (max-width: $break-md) {
+      font-size: 1.5em;
+    }
+  }
+
+  .grid {
+    display: grid;
+    font-size: 1.1em;
+    position: relative;
+
+    .header,
+    .row {
+      align-items: center;
+      color: white;
+      display: grid;
+      grid-template-columns: $columns;
+      padding: 0.7em 0;
+
+      span {
+        padding: 0 0.5em;
+        word-break: break-word;
+
+        .image {
+          width: 100%;
+        }
+      }
+    }
+
+    .header {
+      border-bottom: 1px solid rgba(255, 255, 255, 0.6);
+      font-family: $title-font;
+    }
+
+    .row {
+      border-radius: 10px;
+      font-family: $body-font;
+
+      &:hover {
+        background-color: $primary-light;
+      }
+
+      button {
+        @extend .invisible_button;
+        cursor: pointer;
+      }
+    }
+  }
+
+  .list {
+    @include font-scaler(1);
+    color: white;
+    display: grid;
+
+    .row {
+      background: $primary-dark;
+      border: 1px solid white;
+      border-radius: 15px;
+      font-family: $body-font;
+      margin: 0.5em 0;
+      padding: 1em;
+      position: relative;
+
+      div:not(.index):not(.crud):not([class*='image' i]) {
+        display: grid;
+        grid-template-columns: 2em 1fr;
+      }
+
+      .name {
+        @include font-scaler(1.5);
+        font-family: $title-font;
+      }
+
+      .index {
+        @include font-scaler(1.5);
+        font-family: $title-font;
+        position: absolute;
+        right: 5%;
+        top: 5%;
+      }
+
+      .crud {
+        bottom: 5%;
+        position: absolute;
+        right: 0;
+      }
+    }
+  }
+  @media (max-width: $break-md) {
+    padding: 1em;
+  }
+}

@@ -1,6 +1,23 @@
 @import '../Variables';
 
-.cover {
+@mixin bg-colorizer($red, $green, $blue) {
+  background-color: rgba($red, $green, $blue, 0.2);
+
+  &:hover {
+    background-color: rgba($red, $green, $blue, 0.3);
+  }
+}
+
+.home-country-flags {
+  @extend %country-flags;
+  margin-left: 0.3em;
+}
+
+/********************
+* home.js
+********************/
+
+.home-cover {
   @media (max-width: $break-sm) {
     background-position: center;
     text-align: left;
@@ -18,81 +35,94 @@
   }
 }
 
-.threepart {
+/********************
+* home.threepart.js
+********************/
+
+.home-threepart {
+  display: grid;
+  grid-template-columns: repeat(3, calc(100% / 3));
   overflow-x: hidden;
+  padding: 1em 0.5em;
 
-  .colpart {
-    padding: 1em 0.5em;
-
-    .part {
-      @include scale-on-hover(1.04);
-      align-items: center;
-      background-size: cover;
-      border-radius: 30px;
-      display: flex;
-      flex-direction: column;
-      height: 100%;
-      justify-content: flex-end;
-      padding-bottom: 1.5em;
-      text-align: center;
-      width: 100%;
-
-      .caption {
-        vertical-align: top;
-        width: 80%;
-
-        .headline {
-          @include font-scaler(2.2);
-          color: white;
-          font-family: $title-font;
-        }
-
-        .description {
-          @include font-scaler(1);
-          color: white;
-          font-family: $body-font;
-          text-align: center;
-        }
-        @media (max-width: $break-lg) and (min-width: $break-md) {
-          width: 60%;
-        }
-      }
-      @media (max-width: $break-lg) {
-        height: 50vw;
-      }
-      @media (max-width: $break-sm) {
-        height: 100vw;
-      }
-      @media (max-width: $break-lg) and (min-width: $break-md) {
-        background-position-y: -5vh;
-      }
-    }
-    @media (max-width: $break-lg) {
-      padding: 1em;
-    }
-  }
-  @media (min-width: $break-lg) {
-    height: 32vw;
+  @media (max-width: $break-sm) {
+    grid-template-columns: 100%;
   }
 }
 
-.advertiser {
+// .home-threepart-column {
+//   padding: 1em 0.5em;
+
+//   @media (max-width: $break-lg) {
+//     padding: 1em;
+//   }
+// }
+
+.home-threepart-part {
+  @include scale-on-hover(1.04);
+  align-items: flex-end;
+  background-size: cover;
+  border-radius: 30px;
+  display: flex;
+  height: 50vh;
+  justify-content: center;
+  margin: 0 1em;
+  max-height: 375px;
+  padding-bottom: 1.5em;
+  text-align: center;
+  width: 95%;
+
+  @media (max-width: $break-sm) {
+    margin: 0.5em 0;
+    width: 100%;
+  }
+
+  // @media (max-width: $break-lg) {
+  //   height: 50vw;
+  // }
+  // @media (max-width: $break-sm) {
+  //   height: 100vw;
+  // }
+  // @media (max-width: $break-lg) and (min-width: $break-md) {
+  //   background-position-y: -5vh;
+  // }
+}
+
+.home-threepart-caption {
+  width: 80%;
+}
+
+.home-threepart-headline {
+  @include responsive-font(2.2em, $md: 2em, $sm: 1.9em);
+  color: #fff;
+  font-family: $title-font;
+}
+
+.home-threepart-description {
+  @include responsive-font(1em, $sm: 0.85em);
+  color: #fff;
+  font-family: $body-font;
+  text-align: center;
+}
+
+/********************
+* home.candidate.js
+* home.session.js
+********************/
+
+%featured-advert {
   height: 100%;
   padding: 0.5em 1em;
   text-align: center;
-  -webkit-transition: all 0.3s;
   transition: all 0.3s;
 
-  .heading {
-    font-size: 1.5em;
+  .featured-advert-heading {
+    @include responsive-font(1.5em, $sm: 1.4em);
     margin: 0.5em 0;
     text-transform: uppercase;
-    @media (max-width: $break-md) {
-      font-size: 1.4em;
-    }
   }
 
-  .image {
+  .featured-advert-image {
     @include scale-on-hover(1.03);
     border: $secondary-border;
     border-radius: 5px;
@@ -104,101 +134,92 @@
     }
   }
 
-  .details {
+  .featured-advert-details {
     margin: 0 auto 2em;
     width: 90%;
 
-    .title {
-      @include font-scaler(1.4);
+    .featured-advert-title {
+      @include responsive-font(1.4em, $sm: 1.2em);
     }
 
-    .subtitle {
-      @include font-scaler(1.1);
+    .featured-advert-subtitle {
+      @include responsive-font(1.1em, $sm: 1em);
+      align-items: center;
+      display: flex;
+      justify-content: center;
     }
 
-    .paragraph {
-      @include font-scaler(1.1);
+    .featured-advert-paragraph {
+      @include responsive-font(1.1em, $sm: 0.95em);
     }
+
     @media (max-width: $break-md) {
       width: 100%;
     }
   }
 }
 
-.upcomingSession {
-  @extend .advertiser;
-  background-color: rgba(156, 0, 43, 0.2);
-
-  &:hover {
-    background-color: rgba(156, 0, 43, 0.35);
-  }
+.home-featured-session {
+  @extend %featured-advert;
+  @include bg-colorizer(156, 0, 43);
 }
 
-.randomCandidate {
-  @extend .advertiser;
-  background-color: rgba(0, 141, 158, 0.2);
-
-  &:hover {
-    background-color: rgba(0, 141, 158, 0.35);
-  }
+.home-random-candidate {
+  @extend %featured-advert;
+  @include bg-colorizer(0, 141, 158);
 }
 
-.topicVoter {
+/********************
+* home.topics.js
+********************/
+
+.home-random-topic {
+  @include bg-colorizer(14, 27, 179);
   align-items: center;
-  background-color: rgba(14, 27, 179, 0.2);
   display: flex;
   justify-content: center;
   padding: 2em 0;
   text-align: center;
-  -webkit-transition: all 0.3s;
   transition: all 0.3s;
   width: 100%;
 
-  &:hover {
-    background-color: rgba(14, 27, 179, 0.35);
-  }
-
-  .heading {
-    @include font-scaler(1.8);
+  .random-topic-heading {
+    @include responsive-font(1.8em, $sm: 1.5em);
     margin-bottom: 1em;
     text-transform: uppercase;
   }
 
-  .container {
+  .random-topic-container {
     @extend .responsive-container;
 
-    .headline {
-      @include font-scaler(2);
+    .random-topic-headline {
+      @include responsive-font(2em, $sm: 1.7em);
     }
 
-    .question {
-      @include font-scaler(1.4);
+    .random-topic-question {
+      @include responsive-font(1.4em, $sm: 1.2em);
     }
 
-    .voter {
+    .random-topic-voter {
       margin: 1em 0;
     }
 
-    .voteCount {
-      @extend .text;
-    }
-
-    .voteThanks {
-      @extend .text;
+    .random-topic-vote-thanks {
+      @extend %text;
       margin-top: 1em;
     }
   }
 }
 
+/********************
+* home.member.js
+********************/
+
 .home-random-member {
-  background-color: rgba(97, 72, 0, 0.2);
+  @include bg-colorizer(97, 72, 0);
   padding: 0.5em 1em;
   transition: all 0.3s;
   width: 100%;
-
-  &:hover {
-    background-color: rgba(97, 72, 0, 0.35);
-  }
 
   @media (max-width: $break-sm) {
     text-align: center;
@@ -215,12 +236,9 @@
 }
 
 .random-member-heading {
-  font-size: 1.7em;
+  @include responsive-font(1.7em, $sm: 1.4em);
   margin-bottom: 1em;
   text-transform: uppercase;
-  @media (max-width: $break-sm) {
-    font-size: 1.4em;
-  }
 }
 
 .random-member-image {
@@ -236,23 +254,25 @@
   }
 }
 
-.random-member-flags {
-  @extend %country-flags;
-}
-
 .random-member-details {
   margin: 0 auto;
 
   .random-member-name {
-    @include font-scaler(1.6);
+    @include responsive-font(1.6em, $sm: 1.35em);
   }
 
   .random-member-role {
-    @include font-scaler(1.2);
+    @include responsive-font(1.3em, $sm: 1.05em);
+    align-items: center;
+    display: flex;
+    justify-content: flex-start;
+    @media (max-width: $break-sm) {
+      justify-content: center;
+    }
   }
 
   .random-member-preview {
-    @include font-scaler(1.2);
+    @include responsive-font(1.3em, $sm: 1em);
   }
 
   @media (max-width: $break-sm) {

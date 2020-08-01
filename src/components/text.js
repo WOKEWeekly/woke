@@ -1,7 +1,7 @@
 import classNames from 'classnames';
 import React, { Component } from 'react';
 import InstagramEmbed from 'react-instagram-embed';
-import { connect } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { TwitterTweetEmbed } from 'react-twitter-embed';
 import { zText } from 'zavid-modules';
 
@@ -37,7 +37,6 @@ export const Subtitle = ({ children, className }) => {
  * @param {string} [props.className] - The CSS styling.
  * @param {object} [props.substitutions] - A map of variable substitutions
  * to be made to the text.
- * @param {string} [props.theme] - The current theme from the Redux state.
  * @param {string} [props.cssOverrides] - The CSS styling overrides for the emphasis
  * and section formatting.
  * @param {string} [props.morelink] - The hyperlink for the embedded {@link ReadMore} component.
@@ -46,7 +45,7 @@ export const Subtitle = ({ children, className }) => {
  * @param {number} [props.truncate] - Number of words to truncate off text. No truncation by default.
  * @returns {React.Component} A formatted paragraph component.
  */
-const IParagraph = ({
+export const Paragraph = ({
   children,
   className,
   cssOverrides,
@@ -54,9 +53,9 @@ const IParagraph = ({
   morelink,
   moretext,
   substitutions,
-  theme,
   truncate = 0
 }) => {
+  const theme = useSelector(({ theme }) => theme);
   const classes = classNames(css['paragraph'], className);
 
   let text = truncate
@@ -175,9 +174,3 @@ const EmbeddedTweet = ({ id }) => {
 const EmbeddedInsta = ({ url, hideCaption = false }) => {
   return <InstagramEmbed url={url} maxWidth={500} hideCaption={hideCaption} />;
 };
-
-const mapStateToProps = (state) => ({
-  theme: state.theme
-});
-
-export const Paragraph = connect(mapStateToProps)(IParagraph);

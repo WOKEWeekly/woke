@@ -48,50 +48,6 @@ const RandomMember = () => {
   const link = `/team/${member.slug}`;
   const heading = `Have you met our ${isExecutive ? 'executive' : 'member'}?`;
 
-  const MemberImage = () => {
-    if (!member.image) return null;
-    return (
-      <Col sm={4}>
-        <VanillaLink href={link}>
-          <img
-            src={`${cloudinary.url}/${member.image}`}
-            alt={member.fullname}
-            className={css['random-member-image']}
-          />
-        </VanillaLink>
-      </Col>
-    );
-  };
-
-  const MemberPreview = () => {
-    return (
-      <Col sm={8}>
-        <Default>
-          <Title className={css['random-member-heading']}>{heading}</Title>
-        </Default>
-        <div className={css['random-member-details']}>
-          <Title className={css['random-member-name']}>{member.fullname}</Title>
-          <Subtitle className={css['random-member-role']}>
-            <span>{`${member.role} • `}</span>
-            <CountryFlags
-              ethnicities={member.ethnicity}
-              size={25}
-              className={css['random-member-flags']}
-            />
-          </Subtitle>
-          <Divider />
-          <Paragraph
-            truncate={45}
-            morelink={link}
-            moretext={`Read more on ${member.firstname}`}
-            className={css['random-member-preview']}>
-            {member.description}
-          </Paragraph>
-        </div>
-      </Col>
-    );
-  };
-
   return (
     <div className={css['home-random-member']}>
       <LazyLoader setInView={setInView}>
@@ -101,13 +57,57 @@ const RandomMember = () => {
               <Title className={css['random-member-heading']}>{heading}</Title>
             </Mobile>
             <Row>
-              <MemberImage />
-              <MemberPreview />
+              <MemberImage member={member} link={link} />
+              <MemberPreview member={member} link={link} heading={heading} />
             </Row>
           </div>
         </Fader>
       </LazyLoader>
     </div>
+  );
+};
+
+const MemberImage = ({ link, member }) => {
+  if (!member.image) return null;
+  return (
+    <Col sm={4}>
+      <VanillaLink href={link}>
+        <img
+          src={`${cloudinary.url}/${member.image}`}
+          alt={member.fullname}
+          className={css['random-member-image']}
+        />
+      </VanillaLink>
+    </Col>
+  );
+};
+
+const MemberPreview = ({ heading, link, member }) => {
+  return (
+    <Col sm={8}>
+      <Default>
+        <Title className={css['random-member-heading']}>{heading}</Title>
+      </Default>
+      <div className={css['random-member-details']}>
+        <Title className={css['random-member-name']}>{member.fullname}</Title>
+        <Subtitle className={css['random-member-role']}>
+          <span>{member.role}</span>
+          <CountryFlags
+            ethnicities={member.ethnicity}
+            size={25}
+            className={css['home-country-flags']}
+          />
+        </Subtitle>
+        <Divider />
+        <Paragraph
+          truncate={45}
+          morelink={link}
+          moretext={`Read more on ${member.firstname}`}
+          className={css['random-member-preview']}>
+          {member.description}
+        </Paragraph>
+      </div>
+    </Col>
   );
 };
 

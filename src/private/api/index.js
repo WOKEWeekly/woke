@@ -12,35 +12,35 @@ const usersEndpoints = require('./endpoints/users.endpoint');
 const { logUserActivity } = require('../middleware.js');
 const app = require('../singleton/app').getApp();
 
-  /** Log user activity on each request */
-  app.use('/api', logUserActivity);
+/** Log user activity on each request */
+app.use('/api', logUserActivity);
 
-  // Articles routes
-  app.use('/api/v1/articles', articlesEndpoints);
+// Articles routes
+app.use('/api/v1/articles', articlesEndpoints);
 
-  // Candidates routes
-  app.use('/api/v1/candidates', candidatesEndpoints);
+// Candidates routes
+app.use('/api/v1/candidates', candidatesEndpoints);
 
-  // Documents routes
-  app.use('/api/v1/documents', documentsEndpoints);
+// Documents routes
+app.use('/api/v1/documents', documentsEndpoints);
 
-  // Members routes
-  app.use('/api/v1/members', membersEndpoints);
+// Members routes
+app.use('/api/v1/members', membersEndpoints);
 
-  // Pages routes
-  app.use('/api/v1/pages', pagesEndpoints);
+// Pages routes
+app.use('/api/v1/pages', pagesEndpoints);
 
-  // Reviews routes
-  app.use('/api/v1/reviews', reviewsEndpoints);
+// Reviews routes
+app.use('/api/v1/reviews', reviewsEndpoints);
 
-  // Sessions routes
-  app.use('/api/v1/sessions', sessionsEndpoints);
+// Sessions routes
+app.use('/api/v1/sessions', sessionsEndpoints);
 
-  // Subscribers routes
-  app.use('/api/v1/subscribers', subscribersEndpoints);
+// Subscribers routes
+app.use('/api/v1/subscribers', subscribersEndpoints);
 
-  // Topics routes
-  app.use('/api/v1/topics', topicsEndpoints);
+// Topics routes
+app.use('/api/v1/topics', topicsEndpoints);
 
-  // Users routes
-  app.use('/api/v1/users', usersEndpoints);
+// Users routes
+app.use('/api/v1/users', usersEndpoints);
