@@ -22,58 +22,59 @@ after(function () {
   setTimeout(() => process.exit(0), 2000);
 });
 
-module.exports = {
-  /** For the assertion library */
-  assert: require('chai').assert,
+/** For the assertion library */
+exports.assert = require('chai').assert;
 
-  /**
-   * Abstract function for HTTP requests.
-   * @param {string} request.url - The url to make the request to.
-   * @param {string} [request.method] - The method of the request. Defaults to GET.
-   * @param {object} [request.body] - The payload for the request.
-   * @param {object} [request.headers] - The headers to accompany the request.
-   * @param {Function} [request.onSuccess] - Function triggered on successful request.
-   * @param {Function} [request.onError] - Function triggered on successful request.
-   * @param {Function} [request.done] - The callback to finish the test.
-   */
-  request: ({
+/**
+  * Abstract function for HTTP requests.
+  * @param {string} request.url - The url to make the request to.
+  * @param {string} [request.method] - The method of the request. Defaults to GET.
+  * @param {object} [request.body] - The payload for the request.
+  * @param {object} [request.headers] - The headers to accompany the request.
+  * @param {Function} [request.onSuccess] - Function triggered on successful request.
+  * @param {Function} [request.onError] - Function triggered on successful request.
+  * @param {Function} [request.done] - The callback to finish the test.
+*/
+exports.request = ({ 
+  url,
+  method = 'GET',
+  body,
+  headers = {},
+  onSuccess,
+  onError,
+  done
+
+}) => {
+
+  headers['Content-Type'] = 'application/json';
+
+  axios({
     url,
-    method = 'GET',
-    body,
-    headers = {},
-    onSuccess,
-    onError,
-    done
-  }) => {
-    headers['Content-Type'] = 'application/json';
-
-    axios({
-      url,
-      method,
-      data: body,
-      headers
+    method,
+    data: body,
+    headers
+  })
+    .then((response) => {
+      if (onSuccess) onSuccess(response);
+      done();
     })
-      .then((response) => {
-        if (onSuccess) onSuccess(response);
+    .catch((error) => {
+      if (typeof onError === 'function') {
+        onError(error.response);
         done();
-      })
-      .catch((error) => {
-        if (typeof onError === 'function') {
-          onError(error.response);
-          done();
-        } else {
-          done(error);
-        }
-      });
-  },
+      } else {
+        done(error);
+      }
+    });
+};
 
-  /** The header options used for valid requests */
-  HEADERS: {
-    TOKEN: (user) => ({
-      Authorization: `Bearer ${user.token}`
-    }),
-    KEY: {
-      Authorization: process.env.AUTH_KEY
-    }
+/** The header options used for valid requests */
+exports.HEADERS = {
+  TOKEN: (user) => ({
+    Authorization: `Bearer ${user.token}`
+  }),
+  KEY: {
+    Authorization: process.env.AUTH_KEY
   }
 };
+
