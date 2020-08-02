@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Container } from 'react-bootstrap';
 
-import { LazyLoader } from 'components/loader.js';
+import { VisibleLoader } from 'components/loader.js';
 import { Title, Subtitle } from 'components/text.js';
 import { Fader } from 'components/transitioner.js';
 import { Voter } from 'components/voter.js';
@@ -89,7 +89,7 @@ const RandomTopic = () => {
   return (
     <div className={css['home-random-topic']}>
       <Container>
-        <LazyLoader setInView={setInView}>
+        <VisibleLoader setInView={setInView}>
           <Fader determinant={isInView} duration={750}>
             <Subtitle className={css['random-topic-heading']}>
               Quick Question
@@ -122,7 +122,7 @@ const RandomTopic = () => {
               </Fader>
             </Fader>
           </Fader>
-        </LazyLoader>
+        </VisibleLoader>
       </Container>
     </div>
   );

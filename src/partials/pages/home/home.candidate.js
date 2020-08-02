@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { zDate } from 'zavid-modules';
 
 import { CountryFlags } from 'components/emoji.js';
-import { LazyLoader } from 'components/loader.js';
+import { VisibleLoader } from 'components/loader.js';
 import {
   Title,
   Subtitle,
@@ -16,7 +16,7 @@ import { cloudinary } from 'constants/settings.js';
 import css from 'styles/pages/Home.module.scss';
 
 const RandomCandidate = () => {
-  const [candidate, setCandidate] = useState([]);
+  const [candidate, setCandidate] = useState({});
   const [isLoaded, setLoaded] = useState(false);
   const [isInView, setInView] = useState(false);
 
@@ -48,7 +48,7 @@ const RandomCandidate = () => {
 
   return (
     <div className={css['home-random-candidate']}>
-      <LazyLoader setInView={setInView}>
+      <VisibleLoader setInView={setInView}>
         <Fader determinant={isInView} duration={750}>
           <Title className={css['featured-advert-heading']}>
             Check out our candidate:
@@ -58,7 +58,7 @@ const RandomCandidate = () => {
             <CandidatePreview candidate={candidate} link={link} />
           </div>
         </Fader>
-      </LazyLoader>
+      </VisibleLoader>
     </div>
   );
 };

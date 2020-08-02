@@ -3,7 +3,7 @@ import { Col, Row } from 'react-bootstrap';
 
 import { CountryFlags } from 'components/emoji.js';
 import { Default, Mobile } from 'components/layout.js';
-import { LazyLoader } from 'components/loader.js';
+import { VisibleLoader } from 'components/loader.js';
 import {
   Title,
   Subtitle,
@@ -50,7 +50,7 @@ const RandomMember = () => {
 
   return (
     <div className={css['home-random-member']}>
-      <LazyLoader setInView={setInView}>
+      <VisibleLoader setInView={setInView}>
         <Fader determinant={isInView} duration={750}>
           <div className={css['random-member-container']}>
             <Mobile>
@@ -62,7 +62,7 @@ const RandomMember = () => {
             </Row>
           </div>
         </Fader>
-      </LazyLoader>
+      </VisibleLoader>
     </div>
   );
 };

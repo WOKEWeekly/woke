@@ -1,7 +1,7 @@
-import classNames from 'classnames';
-import React, { Component } from 'react';
+import classnames from 'classnames';
+import React, { useState, useEffect } from 'react';
 import { Container } from 'react-bootstrap';
-import { connect } from 'react-redux';
+import { useSelector } from 'react-redux';
 import Responsive from 'react-responsive';
 
 import { Fader } from 'components/transitioner.js';
@@ -13,102 +13,101 @@ export const isSmallDevice = () => {
   return window.matchMedia('(max-width: 576px)').matches;
 };
 
-class ICover extends Component {
-  constructor() {
-    super();
-    this.state = {
-      imageLoaded: false,
-      imageSrc: ''
-    };
-  }
+/**
+ * The cover image component.
+ * @param {object} props - The component props.
+ * @param {string} props.image - The image source.
+ * @param {string} props.height - The CSS minimum height value.
+ * @param {string} [props.backgroundPosition] - The CSS background position override value.
+ * @param {string} [props.className] - The corresponding CSS class.
+ * @param {Image} [props.imageTitle] - An image to be displayed in place of cover title text.
+ * @param {number} [props.imageVersion] - The Cloudinary version number of the image.
+ * @param {string} [props.subtitle] - The Cloudinary version number of the image.
+ * @param {string} [props.title] - The Cloudinary version number of the image.
+ * @returns {React.Component} The component.
+ */
+export const Cover = ({
+  image: imageToLoad,
+  height,
+  backgroundPosition,
+  className,
+  imageTitle,
+  imageVersion,
+  subtitle,
+  title
+}) => {
+  const [isLoaded, setLoaded] = useState(false);
+  const [imageSrc, setImageSrc] = useState('');
+  const theme = useSelector(({ theme }) => theme);
 
-  componentDidMount() {
-    const version = this.props.imageVersion
-      ? `/v${this.props.imageVersion}`
-      : '';
+  useEffect(() => {
+    const version = imageVersion ? `/v${imageVersion}` : '';
     const image = new Image();
-    image.src = `${cloudinary.url}${version}/public/bg/${this.props.image}`;
-    image.onload = () =>
-      this.setState({ imageLoaded: true, imageSrc: image.src });
-  }
+    image.src = `${cloudinary.url}${version}/public/bg/${imageToLoad}`;
+    image.onload = () => {
+      setImageSrc(image.src);
+      setLoaded(true);
+    };
+  }, [isLoaded]);
 
-  render() {
-    const {
-      backgroundPosition,
-      height,
-      title,
-      subtitle,
-      imageTitle,
-      theme
-    } = this.props;
-    const { imageLoaded, imageSrc } = this.state;
-
-    const classes = classNames(css[`cover-${theme}`], this.props.className);
-
-    return (
-      <Fader determinant={imageLoaded} duration={1000}>
-        <Container
-          fluid={true}
-          className={classes}
-          style={{
-            backgroundImage: `url(${imageSrc})`,
-            backgroundPosition: backgroundPosition,
-            minHeight: height
-          }}>
-          <div className={css.coverText}>
-            <Fader determinant={imageLoaded} duration={500} delay={250}>
-              {imageTitle || <div className={css.coverTitle}>{title}</div>}
-            </Fader>
-            <Fader determinant={imageLoaded} duration={500} delay={750}>
-              <div className={css.coverSubtitle}>{subtitle}</div>
-            </Fader>
-          </div>
-        </Container>
-      </Fader>
-    );
-  }
-}
-
-export class Partitioner extends Component {
-  render() {
-    return (
-      <Container {...this.props} className={css.partitioner}>
-        {this.props.children}
+  return (
+    <Fader determinant={isLoaded} duration={1000}>
+      <Container
+        fluid={true}
+        className={classnames(css[`cover-${theme}`], className)}
+        style={{
+          backgroundImage: `url(${imageSrc})`,
+          backgroundPosition,
+          minHeight: height
+        }}>
+        <div className={css.coverText}>
+          <Fader determinant={isLoaded} duration={500} delay={250}>
+            {imageTitle || <div className={css.coverTitle}>{title}</div>}
+          </Fader>
+          <Fader determinant={isLoaded} duration={500} delay={750}>
+            <div className={css.coverSubtitle}>{subtitle}</div>
+          </Fader>
+        </div>
       </Container>
-    );
-  }
-}
+    </Fader>
+  );
+};
 
-export class Shader extends Component {
-  render() {
-    return (
-      <div
-        {...this.props}
-        style={{
-          backgroundColor: 'rgba(0, 0, 0, .5)',
-          width: '100%'
-        }}>
-        {this.props.children}
-      </div>
-    );
-  }
-}
+export const Partitioner = (props) => {
+  return (
+    <Container {...props} className={css.partitioner}>
+      {props.children}
+    </Container>
+  );
+};
 
-export class Spacer extends Component {
-  render() {
-    return (
-      <div
-        {...this.props}
-        style={{
-          display: 'grid',
-          height: '100%',
-          gridTemplateRows: this.props.gridrows || '1fr auto'
-        }}>
-        {this.props.children}
-      </div>
-    );
-  }
-}
+export const Shader = (props) => {
+  return (
+    <div
+      {...props}
+      style={{
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+        width: '100%'
+      }}>
+      {props.children}
+    </div>
+  );
+};
+
+export const Spacer = (props) => {
+  const { gridrows, children } = props;
+  return (
+    <div
+      {...props}
+      style={{
+        display: 'grid',
+        height: '100%',
+        gridTemplateRows: gridrows || '1fr auto'
+      }}>
+      {children}
+    </div>
+  );
+};
 
 export const Desktop = (props) => <Responsive {...props} minWidth={992} />;
 export const Tablet = (props) => (
@@ -123,9 +122,3 @@ export const zIndices = {
   accountMenu: 1050,
   alerts: 1100
 };
-
-const mapStateToProps = (state) => ({
-  theme: state.theme
-});
-
-export const Cover = connect(mapStateToProps)(ICover);

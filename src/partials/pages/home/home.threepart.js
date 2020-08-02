@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import { LazyLoader } from 'components/loader';
+import { VisibleLoader } from 'components/loader';
 import { Fader } from 'components/transitioner.js';
 import { cloudinary } from 'constants/settings.js';
 import css from 'styles/pages/Home.module.scss';
@@ -8,7 +8,7 @@ import css from 'styles/pages/Home.module.scss';
 const ThreePart = () => {
   const [isInView, setInView] = useState(false);
   return (
-    <LazyLoader setInView={setInView}>
+    <VisibleLoader setInView={setInView}>
       <div className={css['home-threepart']}>
         <Part
           headline={'Enlightenment'}
@@ -35,7 +35,7 @@ const ThreePart = () => {
           isInView={isInView}
         />
       </div>
-    </LazyLoader>
+    </VisibleLoader>
   );
 };
 

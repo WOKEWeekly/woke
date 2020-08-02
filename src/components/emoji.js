@@ -1,27 +1,25 @@
 import { Emoji } from 'emoji-mart';
 import React from 'react';
-import { connect } from 'react-redux';
+import { useSelector } from 'react-redux';
 
 import { getISOCode } from 'constants/countries.js';
 
-const mapStateToProps = (state) => ({
-  countries: state.countries
-});
+export const CountryFlags = ({ ethnicities, size = 16, className }) => {
+  const countries = useSelector(({ countries }) => countries);
 
-export const CountryFlags = connect(mapStateToProps)(
-  ({ ethnicities = [], countries, size = 16, className }) => {
+  try {
     ethnicities = JSON.parse(ethnicities);
-    const CountryEmojis = () => {
-      return ethnicities.map((ethnicity, key) => {
+  } catch {
+    ethnicities = [];
+  }
+
+  return (
+    <span className={className}>
+      {ethnicities.map((ethnicity, key) => {
         const code = getISOCode(ethnicity, countries);
         const iso = code ? code.toLowerCase() : '';
         return <Emoji key={key} emoji={`flag-${iso}`} size={size} />;
-      });
-    };
-    return (
-      <span className={className}>
-        <CountryEmojis />
-      </span>
-    );
-  }
-);
+      })}
+    </span>
+  );
+};

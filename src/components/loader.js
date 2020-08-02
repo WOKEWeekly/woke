@@ -41,6 +41,27 @@ export const LazyLoader = ({
   );
 };
 
+export const VisibleLoader = ({
+  children,
+  setInView
+}) => {
+  const [shouldDetectChange, setDetectivity] = useState(true);
+
+  const toggleVisibility = () => {
+    setInView(true);
+    setDetectivity(false);
+  };
+
+  return (
+    <VisibilitySensor
+      onChange={toggleVisibility}
+      partialVisibility={true}
+      active={shouldDetectChange}>
+      {children}
+    </VisibilitySensor>
+  );
+};
+
 export class Loader extends React.Component {
   render() {
     return (

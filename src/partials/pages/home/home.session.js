@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { zDate } from 'zavid-modules';
 
-import { LazyLoader } from 'components/loader.js';
+import { VisibleLoader } from 'components/loader.js';
 import {
   Title,
   Subtitle,
@@ -40,7 +40,7 @@ const FeaturedSession = () => {
   const link = `/sessions/${session.slug}`;
   return (
     <div className={css['home-featured-session']}>
-      <LazyLoader setInView={setInView}>
+      <VisibleLoader setInView={setInView}>
         <Fader determinant={isInView} duration={750}>
           <Title className={css['featured-advert-heading']}>{heading}</Title>
           <div>
@@ -48,7 +48,7 @@ const FeaturedSession = () => {
             <SessionPreview session={session} link={link} />
           </div>
         </Fader>
-      </LazyLoader>
+      </VisibleLoader>
     </div>
   );
 };
@@ -66,7 +66,7 @@ const SessionImage = ({ session, link }) => {
   );
 };
 
-const SessionPreview = ({session, link}) => {
+const SessionPreview = ({ session, link }) => {
   return (
     <div className={css['featured-advert-details']}>
       <Title className={css['featured-advert-title']}>{session.title}</Title>
