@@ -16,42 +16,42 @@ const { siteDescription } = require('../../constants/settings.js');
 const server = require('../singleton/server').getServer();
 const app = require('../singleton/app').getApp();
 
-  app.use('/', [
-    accountRoutes,
-    articlesRoutes,
-    candidateRoutes,
-    documentsRoutes,
-    membersRoutes,
-    pagesRoutes,
-    reviewsRoutes,
-    sessionsRoutes,
-    topicsRoutes,
-    subscribersRoutes,
+app.use('/', [
+  accountRoutes,
+  articlesRoutes,
+  candidateRoutes,
+  documentsRoutes,
+  membersRoutes,
+  pagesRoutes,
+  reviewsRoutes,
+  sessionsRoutes,
+  topicsRoutes,
+  subscribersRoutes,
 
-    externalForms,
-    externalLinks,
-    seoResources
-  ]);
+  externalForms,
+  externalLinks,
+  seoResources
+]);
 
-  /** Home page */
-  app.get(['/', '/home'], function (req, res) {
-    return server.render(req, res, '/home', {
-      title: '#WOKEWeekly - Awakening Through Conversation',
-      description: siteDescription,
-      ogUrl: '/',
-      backgroundImage: 'bg-app.jpg'
-    });
+/** Home page */
+app.get(['/', '/home'], function (req, res) {
+  return server.render(req, res, '/home', {
+    title: '#WOKEWeekly - Awakening Through Conversation',
+    description: siteDescription,
+    ogUrl: '/',
+    backgroundImage: 'bg-app.jpg'
   });
+});
 
-  app.get('/admin', (req, res) => {
-    server.render(req, res, '/_auth/admin', {
-      title: 'Admin Tools | #WOKEWeekly'
-    });
+app.get('/admin', (req, res) => {
+  server.render(req, res, '/_auth/admin', {
+    title: 'Admin Tools | #WOKEWeekly'
   });
+});
 
-  /** Registered users page */
-  app.get('/admin/users', function (req, res) {
-    return server.render(req, res, '/users', {
-      title: 'Registered Users | #WOKEWeekly'
-    });
+/** Registered users page */
+app.get('/admin/users', function (req, res) {
+  return server.render(req, res, '/users', {
+    title: 'Registered Users | #WOKEWeekly'
   });
+});

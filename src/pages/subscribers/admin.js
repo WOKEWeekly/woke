@@ -11,7 +11,6 @@ import CLEARANCES from 'constants/clearances.js';
 import request from 'constants/request.js';
 import css from 'styles/pages/Members.module.scss';
 
-
 /**
  * The admin page for members.
  * @param {object} props - The component properties.
@@ -94,12 +93,15 @@ const SubscriberCollection = ({ user }) => {
         items={subscribers.map((subscriber, key) => {
           subscriber.fullname = `${subscriber.firstname} ${subscriber.lastname}`;
           subscriber.parsedSubscription = JSON.parse(subscriber.subscriptions);
-        
+
           return [
             [key + 1, { type: 'index' }],
             [subscriber.fullname, { icon: 'user' }],
             [subscriber.email, { icon: 'email' }],
-            [subscriber.parsedSubscription.articles ? "true" : " ", { icon: 'sub' }],
+            [
+              subscriber.parsedSubscription.articles ? 'true' : ' ',
+              { icon: 'sub' }
+            ],
             [
               zDate.formatDate(subscriber.createTime),
               { icon: 'time', hideIfEmpty: true }
@@ -148,10 +150,13 @@ const DeleteButton = ({
       onClick={() => {
         setDeleteModalVisibility(true);
         setSelectedSubscriber(
-          Object.assign({}, {
-            id, 
-            fullname: `${firstname} ${lastname}`
-          })
+          Object.assign(
+            {},
+            {
+              id,
+              fullname: `${firstname} ${lastname}`
+            }
+          )
         );
       }}>
       <Icon name={'trash'} />
@@ -159,7 +164,7 @@ const DeleteButton = ({
   );
 };
 
-const mapStateToProps = ({  user }) => ({
+const mapStateToProps = ({ user }) => ({
   user
 });
 

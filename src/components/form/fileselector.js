@@ -154,7 +154,7 @@ const PlaceholderImageSelector = ({
   imageRef,
   placeholder,
   previewImage,
-  removeImage,
+  removeImage
 }) => {
   const ChoiceImage = () => {
     return (
@@ -192,10 +192,10 @@ const PlaceholderImageSelector = ({
     );
   };
   return (
-      <div className={classnames(css['placeholder-image-container'], className)}>
-        <ChoosePrompt />
-        <ChoiceImage />
-      </div>
+    <div className={classnames(css['placeholder-image-container'], className)}>
+      <ChoosePrompt />
+      <ChoiceImage />
+    </div>
   );
 };
 
