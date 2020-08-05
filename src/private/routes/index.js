@@ -6,6 +6,7 @@ const membersRoutes = require('./entities/members.routes');
 const pagesRoutes = require('./entities/pages.routes');
 const reviewsRoutes = require('./entities/reviews.routes');
 const sessionsRoutes = require('./entities/sessions.routes');
+const subscribersRoutes = require('./entities/subscribers.routes');
 const topicsRoutes = require('./entities/topics.routes');
 const externalForms = require('./misc/forms');
 const externalLinks = require('./misc/links');
@@ -25,6 +26,7 @@ const app = require('../singleton/app').getApp();
     reviewsRoutes,
     sessionsRoutes,
     topicsRoutes,
+    subscribersRoutes,
 
     externalForms,
     externalLinks,
