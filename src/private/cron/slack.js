@@ -5,30 +5,35 @@ const inDev = process.env.NODE_ENV !== 'production';
 const slack = new WebClient(process.env.SLACK_TOKEN);
 
 const mySlackID = 'UDEMRRR8T';
-const channels = {
-  exec: 'exec',
-  general: 'general',
-  socialMedia: 'socialmedia'
+const CHANNELS = {
+  EXEC: 'exec',
+  GENERAL: 'general',
+  SOCIAL_MEDIA: 'socialmedia'
 };
 
 exports.sendBirthdayMessage = async (member) => {
   const message = constructBirthdayMessage(member);
-  await postMessage(message, channels.general);
+  await postMessage(message, CHANNELS.GENERAL);
 };
 
 exports.sendSessionReminder = async (session) => {
   const message = constructSessionReminderMessage(session);
-  await postMessage(message, channels.general);
+  await postMessage(message, CHANNELS.GENERAL);
 };
 
 exports.sendDueExecTasks = async (cards) => {
   const message = constructDueExecTaskMessage(cards);
-  await postMessage(message, channels.exec);
+  await postMessage(message, CHANNELS.EXEC);
+};
+
+exports.sendDueGeneralTasks = async (cards) => {
+  const message = constructDueGeneralTaskMessage(cards);
+  await postMessage(message, CHANNELS.GENERAL);
 };
 
 exports.sendPostsWithoutCaptions = async (cards) => {
   const message = constructSMUCMessage(cards);
-  await postMessage(message, channels.socialMedia);
+  await postMessage(message, CHANNELS.SOCIAL_MEDIA);
 };
 
 /**
@@ -125,18 +130,29 @@ const constructSessionReminderMessage = ({ title, timeHeld }) => {
   )}`;
 };
 
+/**
+ * Constructs the message containing due executive task cards.
+ * @param {object[]} cards - The list of due executive task cards.
+ * @returns {string} The constructed message.
+ */
 const constructDueExecTaskMessage = (cards) => {
-  const cardMessages = cards
-    .map(({ name, due, members }) => {
-      const item = `• "_${name}_" assigned to *${zString.toPunctuatedList(
-        members
-      )}* which was due *${zDate.getAdverbRelativeToToday(due)}*.`;
-      return item;
-    })
-    .join('\n');
+  const cardMessages = constructDueCardMessages(cards);
 
   return `
   Executives.\nThe following tasks have passed their due date:\n\n${cardMessages}\n\nPlease report the status of your task. If it is complete, move it to "Done".
+  `;
+};
+
+/**
+ * Constructs the message containing due cards on the General board.
+ * @param {object[]} cards - The list of due tasks on the General board.
+ * @returns {string} The constructed message.
+ */
+const constructDueGeneralTaskMessage = (cards) => {
+  const cardMessages = constructDueCardMessages(cards);
+
+  return `
+  Hey everyone!\nThe following tasks have passed their due date:\n\n${cardMessages}\n\nPlease report the status of your task. If it is complete, move it to "Done".
   `;
 };
 
@@ -165,4 +181,22 @@ const constructSMUCMessage = (cards) => {
  */
 const getRandomMessage = (messages) => {
   return messages[Math.floor(Math.random() * messages.length)];
+};
+
+/**
+ * Constructs the messages containing due cards.
+ * @param {object[]} cards - The list of due tasks.
+ * @returns {string} The constructed card message(s).
+ */
+const constructDueCardMessages = (cards) => {
+  const cardMessages = cards
+    .map(({ name, due, members }) => {
+      const item = `• "_${name}_" assigned to *${zString.toPunctuatedList(
+        members
+      )}* which was due *${zDate.getAdverbRelativeToToday(due)}*.`;
+      return item;
+    })
+    .join('\n');
+
+  return cardMessages;
 };
