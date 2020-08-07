@@ -11,7 +11,8 @@ const testInterval = '*/5 * * * * *';
 /** Toggle to test each */
 const isBirthdayTest = isDev && false;
 const isSessionTest = isDev && false;
-const isDueExecTaskTest = isDev && false;
+const isDueExecTaskTest = isDev && true;
+const isDueGeneralTaskTest = isDev && false;
 const isPostsWithoutCaptionTest = isDev && false;
 
 /** The intervals for each cron job */
@@ -24,6 +25,9 @@ const INTERVALS = {
 
   // Everyday at 7:00am
   DUE_EXEC_TASKS: '0 7 * * *',
+
+  // Everyday at 7:00am
+  DUE_GENERAL_TASKS: '0 7 * * *',
 
   // Every weekday at 8:00am
   POSTS_WITHOUT_CAPTIONS: '0 8 * * 1-5'
@@ -43,6 +47,11 @@ module.exports = () => {
   schedule.scheduleJob(
     isDueExecTaskTest ? testInterval : INTERVALS.DUE_EXEC_TASKS,
     trello.notifyDueExecTasks
+  );
+
+  schedule.scheduleJob(
+    isDueGeneralTaskTest ? testInterval : INTERVALS.DUE_GENERAL_TASKS,
+    trello.notifyDueGeneralTasks
   );
 
   schedule.scheduleJob(
