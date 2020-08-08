@@ -18,7 +18,7 @@ import request from 'constants/request.js';
 import { isValidSignup } from 'constants/validations';
 import { saveUser } from 'reducers/actions';
 import css from 'styles/Auth.module.scss';
-import { TEST_USERS } from 'test/configuration/data';
+import { TEST_USERS } from 'test/data';
 
 class Signup extends Component {
   constructor(props) {

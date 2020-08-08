@@ -1,38 +1,38 @@
-const { assert, request, HEADERS } = require('./configuration');
-const { TEST_SESSIONS, TEST_USERS } = require('./configuration/data.js');
+const { assert, request, HEADERS } = require('../configuration');
+const { TEST_TOPICS, TEST_USERS } = require('../data');
 
 const superuser = TEST_USERS.NINE;
 
-let SESSION_ID = 0;
+let TOPIC_ID = 0;
 
-describe('Session Tests', function () {
+describe('Topic Tests', function () {
   this.slow(10000);
 
-  /** Test creating a new session */
+  /** Test creating a new topic */
   describe('Create', function () {
-    it('Add session', function (done) {
+    it('Add topic', function (done) {
       request({
-        url: `/api/v1/sessions`,
+        url: `/api/v1/topics`,
         method: 'POST',
-        body: JSON.stringify(TEST_SESSIONS.CREATED),
+        body: JSON.stringify(TEST_TOPICS.CREATED),
         headers: HEADERS.TOKEN(superuser),
         done,
         onSuccess: ({ status, data }) => {
           assert.equal(status, 201);
           assert.hasAllKeys(data, ['id']);
-          SESSION_ID = data.id;
+          TOPIC_ID = data.id;
         }
       });
     });
   });
 
-  /** Test retrieval of all sessions */
+  /** Test retrieval of all topics */
   describe('Read', function () {
-    it('Get all sessions', function (done) {
+    it('Get all topics', function (done) {
       request({
-        url: `/api/v1/sessions`,
+        url: `/api/v1/topics`,
         method: 'GET',
-        headers: HEADERS.KEY,
+        headers: HEADERS.TOKEN(superuser),
         done,
         onSuccess: ({ status, data }) => {
           assert.equal(status, 200);
@@ -41,9 +41,9 @@ describe('Session Tests', function () {
       });
     });
 
-    it('Get single session', function (done) {
+    it('Get random topic', function (done) {
       request({
-        url: `/api/v1/sessions/${SESSION_ID}`,
+        url: `/api/v1/topics/random`,
         method: 'GET',
         headers: HEADERS.KEY,
         done,
@@ -54,22 +54,22 @@ describe('Session Tests', function () {
       });
     });
 
-    it('Get featured session', function (done) {
+    it('Get single topic', function (done) {
       request({
-        url: `/api/v1/sessions/featured`,
+        url: `/api/v1/topics/${TOPIC_ID}`,
         method: 'GET',
         headers: HEADERS.KEY,
         done,
         onSuccess: ({ status, data }) => {
           assert.equal(status, 200);
-          assert.hasAllKeys(data, ['session', 'upcoming']);
+          assert.isObject(data);
         }
       });
     });
 
-    it('Attempt get single session with invalid ID', function (done) {
+    it('Attempt get single topic with invalid ID', function (done) {
       request({
-        url: `/api/v1/sessions/0`,
+        url: `/api/v1/topics/0`,
         method: 'GET',
         headers: HEADERS.KEY,
         done,
@@ -78,52 +78,54 @@ describe('Session Tests', function () {
         }
       });
     });
+
+    it('Regenerate Topic Bank access token', function (done) {
+      request({
+        url: `/api/v1/topics/token`,
+        method: 'GET',
+        headers: HEADERS.TOKEN(superuser),
+        done,
+        onSuccess: ({ status, data }) => {
+          assert.equal(status, 200);
+          assert.hasAllKeys(data, ['token']);
+        }
+      });
+    });
   });
 
-  /** Test updating the session */
+  /** Test updating the topic */
   describe('Update', function () {
-    it('Update session without image change', function (done) {
+    it('Update topic', function (done) {
       request({
-        url: `/api/v1/sessions/${SESSION_ID}`,
+        url: `/api/v1/topics/${TOPIC_ID}`,
         method: 'PUT',
-        body: JSON.stringify({
-          session: TEST_SESSIONS.UPDATED,
-          changed: false
-        }),
+        body: JSON.stringify(TEST_TOPICS.UPDATED),
         headers: HEADERS.TOKEN(superuser),
         done,
-        onSuccess: ({ status, data }) => {
+        onSuccess: ({ status }) => {
           assert.equal(status, 200);
-          assert.hasAllKeys(data, ['slug']);
         }
       });
     });
 
-    it('Update session with image change', function (done) {
+    it('Vote on topic', function (done) {
       request({
-        url: `/api/v1/sessions/${SESSION_ID}`,
+        url: `/api/v1/topics/${TOPIC_ID}/vote/yes`,
         method: 'PUT',
-        body: JSON.stringify({
-          session: TEST_SESSIONS.UPDATED,
-          changed: true
-        }),
-        headers: HEADERS.TOKEN(superuser),
+        headers: HEADERS.KEY,
         done,
         onSuccess: ({ status, data }) => {
           assert.equal(status, 200);
-          assert.hasAllKeys(data, ['slug']);
+          assert.hasAllKeys(data, ['yes', 'no']);
         }
       });
     });
 
-    it('Attempt update session with invalid ID', function (done) {
+    it('Attempt update topic with invalid ID', function (done) {
       request({
-        url: `/api/v1/sessions/0`,
+        url: `/api/v1/topics/0`,
         method: 'PUT',
-        body: JSON.stringify({
-          session: TEST_SESSIONS.UPDATED,
-          changed: true
-        }),
+        body: JSON.stringify(TEST_TOPICS.UPDATED),
         headers: HEADERS.TOKEN(superuser),
         done,
         onError: ({ status }) => {
@@ -133,11 +135,11 @@ describe('Session Tests', function () {
     });
   });
 
-  /** Test deleting the session */
+  /** Test deleting the topic */
   describe('Delete', function () {
-    it('Delete session', function (done) {
+    it('Delete topic', function (done) {
       request({
-        url: `/api/v1/sessions/${SESSION_ID}`,
+        url: `/api/v1/topics/${TOPIC_ID}`,
         method: 'DELETE',
         headers: HEADERS.TOKEN(superuser),
         done,
@@ -147,9 +149,9 @@ describe('Session Tests', function () {
       });
     });
 
-    it('Attempt delete session with invalid ID', function (done) {
+    it('Attempt delete topic with invalid ID', function (done) {
       request({
-        url: `/api/v1/sessions/0`,
+        url: `/api/v1/topics/0`,
         method: 'DELETE',
         headers: HEADERS.TOKEN(superuser),
         done,

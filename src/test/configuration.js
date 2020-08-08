@@ -1,11 +1,11 @@
 const axios = require('axios');
 
-const { startTestServer, isStageTesting, port } = require('../../server.js');
+const { startTestServer, isStageTesting, port } = require('../server');
 axios.defaults.baseURL = `http://localhost:${port}`;
 
 // Check if user is dev before running test.
 if (process.env.MYSQL_USER !== 'dev') {
-  console.error('Trying to run test with user that is not dev');
+  console.error('Trying to run test with user that is not dev.');
   process.exit(0);
 }
 
@@ -26,16 +26,16 @@ after(function () {
 exports.assert = require('chai').assert;
 
 /**
-  * Abstract function for HTTP requests.
-  * @param {string} request.url - The url to make the request to.
-  * @param {string} [request.method] - The method of the request. Defaults to GET.
-  * @param {object} [request.body] - The payload for the request.
-  * @param {object} [request.headers] - The headers to accompany the request.
-  * @param {Function} [request.onSuccess] - Function triggered on successful request.
-  * @param {Function} [request.onError] - Function triggered on successful request.
-  * @param {Function} [request.done] - The callback to finish the test.
-*/
-exports.request = ({ 
+ * Abstract function for HTTP requests.
+ * @param {string} request.url - The url to make the request to.
+ * @param {string} [request.method] - The method of the request. Defaults to GET.
+ * @param {object} [request.body] - The payload for the request.
+ * @param {object} [request.headers] - The headers to accompany the request.
+ * @param {Function} [request.onSuccess] - Function triggered on successful request.
+ * @param {Function} [request.onError] - Function triggered on successful request.
+ * @param {Function} [request.done] - The callback to finish the test.
+ */
+exports.request = ({
   url,
   method = 'GET',
   body,
@@ -43,9 +43,7 @@ exports.request = ({
   onSuccess,
   onError,
   done
-
 }) => {
-
   headers['Content-Type'] = 'application/json';
 
   axios({
@@ -77,4 +75,3 @@ exports.HEADERS = {
     Authorization: process.env.AUTH_KEY
   }
 };
-

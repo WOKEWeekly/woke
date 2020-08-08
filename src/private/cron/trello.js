@@ -3,6 +3,8 @@ const fetch = require('node-fetch');
 
 const slack = require('./slack.js');
 
+const knex = require('../singleton/knex').getKnex();
+
 const TRELLO_API_KEY = process.env.TRELLO_API_KEY;
 const TRELLO_TOKEN = process.env.TRELLO_TOKEN;
 const authorization = `key=${TRELLO_API_KEY}&token=${TRELLO_TOKEN}`;
@@ -84,20 +86,23 @@ const processDueCards = (cards, next) => {
   async.mapValues(
     seenMembers,
     function (value, id, callback) {
-      // Retrieve the name of each unique member.
-      getMemberByTrelloId(id, (name) => {
-        const firstname = name.split(' ')[0];
-        callback(null, firstname);
+      // Retrieve the firstname and Slack ID of each unique member.
+      getMemberByTrelloId(id, (member) => {
+        callback(null, member);
       });
     },
     function (err, memberMapping) {
       // Replace the member IDs on each card with the member names.
       const dueTasksWithMembers = dueTasks.map((card) => {
-        card.members = card.members.map((member) => memberMapping[member]);
+        card.members = card.members.map((member) => {
+          const { firstname, slackId } = memberMapping[member];
+          return slackId && slackId !== null
+            ? `<@${slackId}>`
+            : `*${firstname}*`;
+        });
         return card;
       });
 
-      // slack.sendDueExecTasks(dueTasksWithMembers);
       next(dueTasksWithMembers);
     }
   );
@@ -119,14 +124,13 @@ const getCardsFromTrelloBoard = (boardId, callback) => {
 
 /**
  * Get the member corresponding to a specified ID.
- * @param {string} memberId - The member's ID.
- * @param {Function} callback - The function to be performed on the resulting member.
+ * @param {string} memberId - The member's Trello ID.
+ * @param {Function} next - The function to be performed on the resulting member.
  */
-const getMemberByTrelloId = (memberId, callback) => {
-  fetch(`https://api.trello.com/1/members/${memberId}?${authorization}`, {
-    method: 'GET'
-  })
-    .then((res) => res.json())
-    .then(({ fullName }) => callback(fullName))
-    .catch((err) => console.error(err));
+const getMemberByTrelloId = (memberId, next) => {
+  const query = knex.select().from('members').where('trelloId', memberId);
+  query.asCallback(function (err, [member]) {
+    if (err) return console.error(err);
+    next(member);
+  });
 };

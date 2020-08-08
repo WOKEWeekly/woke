@@ -191,9 +191,9 @@ const getRandomMessage = (messages) => {
 const constructDueCardMessages = (cards) => {
   const cardMessages = cards
     .map(({ name, due, members }) => {
-      const item = `• "_${name}_" assigned to *${zString.toPunctuatedList(
+      const item = `• "_${name}_" assigned to ${zString.toPunctuatedList(
         members
-      )}* which was due *${zDate.getAdverbRelativeToToday(due)}*.`;
+      )} which was due *${zDate.getAdverbRelativeToToday(due)}*.`;
       return item;
     })
     .join('\n');

@@ -1,5 +1,5 @@
-const { assert, request, HEADERS } = require('./configuration');
-const { TEST_USERS } = require('./configuration/data.js');
+const { assert, request, HEADERS } = require('../configuration');
+const { TEST_USERS } = require('../data');
 
 const superuser = TEST_USERS.NINE;
 

@@ -25,6 +25,7 @@ const MemberCrud = ({ member: currentMember, operation, title, user }) => {
     socials: {},
     verified: false,
     slackId: '',
+    trelloId: '',
     isAuthor: false
   });
   const [ethnicities, setEthnicities] = useState(new Array(4).fill(''));
@@ -59,6 +60,7 @@ const MemberCrud = ({ member: currentMember, operation, title, user }) => {
       socials,
       verified,
       slackId,
+      trelloId,
       isAuthor
     } = stateMember;
 
@@ -75,6 +77,7 @@ const MemberCrud = ({ member: currentMember, operation, title, user }) => {
       socials: JSON.stringify(socials),
       verified,
       slackId: slackId ? slackId.trim() : null,
+      trelloId: trelloId ? trelloId.trim() : null,
       isAuthor
     };
 
