@@ -146,6 +146,8 @@ const MemberForm = ({
                     placeholder={"Enter member's role."}
                   />
                 </Col>
+              </Group>
+              <Group>
                 <Col md={4}>
                   <Label>Slack ID:</Label>
                   <TextInput
@@ -153,6 +155,15 @@ const MemberForm = ({
                     value={member.slackId}
                     onChange={handleText}
                     placeholder={'e.g. UDL5UM6KG'}
+                  />
+                </Col>
+                <Col md={6}>
+                  <Label>Trello ID:</Label>
+                  <TextInput
+                    name={'trelloId'}
+                    value={member.trelloId}
+                    onChange={handleText}
+                    placeholder={'e.g. 5d93a5ad6da9b85a5e65883b'}
                   />
                 </Col>
               </Group>
