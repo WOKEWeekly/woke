@@ -96,11 +96,9 @@ const processDueCards = (cards, next) => {
       const dueTasksWithMembers = dueTasks.map((card) => {
         card.members = card.members.map((member) => {
           const { firstname, slackId } = memberMapping[member];
-          if (slackId && slackId !== null) {
-            return slackId;
-          } else {
-            return firstname;
-          }
+          return slackId && slackId !== null
+            ? `<@${slackId}>`
+            : `*${firstname}*`;
         });
         return card;
       });
@@ -130,12 +128,6 @@ const getCardsFromTrelloBoard = (boardId, callback) => {
  * @param {Function} next - The function to be performed on the resulting member.
  */
 const getMemberByTrelloId = (memberId, next) => {
-  // fetch(`https://api.trello.com/1/members/${memberId}?${authorization}`, {
-  //   method: 'GET'
-  // })
-  //   .then((res) => res.json())
-  //   .then(({ fullName }) => callback(fullName))
-  //   .catch((err) => console.error(err));
   const query = knex.select().from('members').where('trelloId', memberId);
   query.asCallback(function (err, [member]) {
     if (err) return console.error(err);
