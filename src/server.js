@@ -24,9 +24,9 @@ const dotenv = require('dotenv').config({
   path: config
 });
 const port = isStageTesting ? 3010 : process.env.PORT || 3000;
+const { setApp } = require('./private/singleton/app');
 const { setKnex } = require('./private/singleton/knex');
 const { setServer } = require('./private/singleton/server');
-const { setApp } = require('./private/singleton/app');
 
 app.use(bodyParser.json({ limit: `${limits.file}MB` }));
 app.use(cookieParser());
@@ -43,28 +43,27 @@ const knex = require('knex')({
   }
 });
 
-// Check for loaded environment variables
-if (dotenv.error && !process.env.PORT) {
-  throw new Error(`No environment variables loaded.`);
-}
-
-// Start client server
-if (!isStageTesting && !isDevTesting) {
-  startClientServer();
-}
-
-function startClientServer() {
+/** Start the server including client functions. */
+const startClientServer = () => {
   startServer();
   setServer(server);
   require('./private/routes');
   require('./private/cron')();
-}
+};
 
-function startTestServer(next) {
-  startServer(next);
-}
+/**
+ * Start the server for testing.
+ * @param {Function} done - The Mocha completion signal.
+ */
+const startTestServer = (done) => {
+  startServer(done);
+};
 
-function startServer(next) {
+/**
+ * Start the server.
+ * @param {Function} [done] - The possible Mocha completion signal.
+ */
+const startServer = (done) => {
   async.parallel(
     [
       // Start the server
@@ -80,18 +79,18 @@ function startServer(next) {
       },
       // Set database instances
       function (callback) {
-        setKnex(knex);
         setApp(app);
+        setKnex(knex);
         require('./private/api');
         callback(null);
       }
     ],
     function (err) {
       if (err) throw err;
-      if (next) next();
+      if (done) done();
     }
   );
-}
+};
 
 module.exports = {
   startTestServer,
@@ -100,3 +99,13 @@ module.exports = {
   port,
   isStageTesting
 };
+
+// Check for loaded environment variables
+if (dotenv.error && !process.env.PORT) {
+  throw new Error(`No environment variables loaded.`);
+}
+
+// Start client server
+if (!isStageTesting && !isDevTesting) {
+  startClientServer();
+}

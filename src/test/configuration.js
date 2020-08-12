@@ -1,11 +1,11 @@
 const axios = require('axios');
 
-const { startTestServer, isStageTesting, port } = require('../../server.js');
+const { startTestServer, isStageTesting, port } = require('../server');
 axios.defaults.baseURL = `http://localhost:${port}`;
 
 // Check if user is dev before running test.
 if (process.env.MYSQL_USER !== 'dev') {
-  console.error('Trying to run test with user that is not dev');
+  console.error('Trying to run test with user that is not dev.');
   process.exit(0);
 }
 

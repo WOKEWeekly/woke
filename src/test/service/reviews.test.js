@@ -1,38 +1,38 @@
-const { assert, request, HEADERS } = require('./configuration');
-const { TEST_TOPICS, TEST_USERS } = require('./configuration/data.js');
+const { assert, request, HEADERS } = require('../configuration');
+const { TEST_REVIEWS, TEST_USERS } = require('../data');
 
 const superuser = TEST_USERS.NINE;
 
-let TOPIC_ID = 0;
+let REVIEW_ID = 0;
 
-describe('Topic Tests', function () {
+describe('Review Tests', function () {
   this.slow(10000);
 
-  /** Test creating a new topic */
+  /** Test creating a new review */
   describe('Create', function () {
-    it('Add topic', function (done) {
+    it('Add review', function (done) {
       request({
-        url: `/api/v1/topics`,
+        url: `/api/v1/reviews`,
         method: 'POST',
-        body: JSON.stringify(TEST_TOPICS.CREATED),
+        body: JSON.stringify(TEST_REVIEWS.CREATED),
         headers: HEADERS.TOKEN(superuser),
         done,
         onSuccess: ({ status, data }) => {
           assert.equal(status, 201);
           assert.hasAllKeys(data, ['id']);
-          TOPIC_ID = data.id;
+          REVIEW_ID = data.id;
         }
       });
     });
   });
 
-  /** Test retrieval of all topics */
+  /** Test retrieval of all reviews */
   describe('Read', function () {
-    it('Get all topics', function (done) {
+    it('Get all reviews', function (done) {
       request({
-        url: `/api/v1/topics`,
+        url: `/api/v1/reviews`,
         method: 'GET',
-        headers: HEADERS.TOKEN(superuser),
+        headers: HEADERS.KEY,
         done,
         onSuccess: ({ status, data }) => {
           assert.equal(status, 200);
@@ -41,9 +41,9 @@ describe('Topic Tests', function () {
       });
     });
 
-    it('Get random topic', function (done) {
+    it('Get single review', function (done) {
       request({
-        url: `/api/v1/topics/random`,
+        url: `/api/v1/reviews/${REVIEW_ID}`,
         method: 'GET',
         headers: HEADERS.KEY,
         done,
@@ -54,22 +54,27 @@ describe('Topic Tests', function () {
       });
     });
 
-    it('Get single topic', function (done) {
+    it('Get featured reviews', function (done) {
       request({
-        url: `/api/v1/topics/${TOPIC_ID}`,
+        url: `/api/v1/reviews/featured`,
         method: 'GET',
         headers: HEADERS.KEY,
         done,
         onSuccess: ({ status, data }) => {
           assert.equal(status, 200);
-          assert.isObject(data);
+          assert.isAtMost(data.length, 3);
+          data.forEach((review) => {
+            assert.include(review, { rating: 5 });
+            assert.exists(review.image);
+            assert.isNotEmpty(review.image);
+          });
         }
       });
     });
 
-    it('Attempt get single topic with invalid ID', function (done) {
+    it('Attempt get single review with invalid ID', function (done) {
       request({
-        url: `/api/v1/topics/0`,
+        url: `/api/v1/reviews/0`,
         method: 'GET',
         headers: HEADERS.KEY,
         done,
@@ -78,28 +83,18 @@ describe('Topic Tests', function () {
         }
       });
     });
-
-    it('Regenerate Topic Bank access token', function (done) {
-      request({
-        url: `/api/v1/topics/token`,
-        method: 'GET',
-        headers: HEADERS.TOKEN(superuser),
-        done,
-        onSuccess: ({ status, data }) => {
-          assert.equal(status, 200);
-          assert.hasAllKeys(data, ['token']);
-        }
-      });
-    });
   });
 
-  /** Test updating the topic */
+  /** Test updating the review */
   describe('Update', function () {
-    it('Update topic', function (done) {
+    it('Update review without image change', function (done) {
       request({
-        url: `/api/v1/topics/${TOPIC_ID}`,
+        url: `/api/v1/reviews/${REVIEW_ID}`,
         method: 'PUT',
-        body: JSON.stringify(TEST_TOPICS.UPDATED),
+        body: JSON.stringify({
+          review: TEST_REVIEWS.UPDATED,
+          changed: false
+        }),
         headers: HEADERS.TOKEN(superuser),
         done,
         onSuccess: ({ status }) => {
@@ -108,24 +103,30 @@ describe('Topic Tests', function () {
       });
     });
 
-    it('Vote on topic', function (done) {
+    it('Update review with image change', function (done) {
       request({
-        url: `/api/v1/topics/${TOPIC_ID}/vote/yes`,
+        url: `/api/v1/reviews/${REVIEW_ID}`,
         method: 'PUT',
-        headers: HEADERS.KEY,
+        body: JSON.stringify({
+          review: TEST_REVIEWS.UPDATED,
+          changed: true
+        }),
+        headers: HEADERS.TOKEN(superuser),
         done,
-        onSuccess: ({ status, data }) => {
+        onSuccess: ({ status }) => {
           assert.equal(status, 200);
-          assert.hasAllKeys(data, ['yes', 'no']);
         }
       });
     });
 
-    it('Attempt update topic with invalid ID', function (done) {
+    it('Attempt update review with invalid ID', function (done) {
       request({
-        url: `/api/v1/topics/0`,
+        url: `/api/v1/reviews/0`,
         method: 'PUT',
-        body: JSON.stringify(TEST_TOPICS.UPDATED),
+        body: JSON.stringify({
+          review: TEST_REVIEWS.UPDATED,
+          changed: true
+        }),
         headers: HEADERS.TOKEN(superuser),
         done,
         onError: ({ status }) => {
@@ -135,11 +136,11 @@ describe('Topic Tests', function () {
     });
   });
 
-  /** Test deleting the topic */
+  /** Test deleting the review */
   describe('Delete', function () {
-    it('Delete topic', function (done) {
+    it('Delete review', function (done) {
       request({
-        url: `/api/v1/topics/${TOPIC_ID}`,
+        url: `/api/v1/reviews/${REVIEW_ID}`,
         method: 'DELETE',
         headers: HEADERS.TOKEN(superuser),
         done,
@@ -149,9 +150,9 @@ describe('Topic Tests', function () {
       });
     });
 
-    it('Attempt delete topic with invalid ID', function (done) {
+    it('Attempt delete review with invalid ID', function (done) {
       request({
-        url: `/api/v1/topics/0`,
+        url: `/api/v1/reviews/0`,
         method: 'DELETE',
         headers: HEADERS.TOKEN(superuser),
         done,
