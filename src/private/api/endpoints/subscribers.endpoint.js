@@ -19,7 +19,7 @@ router.get(
 );
 
 /** POST new subscriber */
-router.post('/', authorizeModify, SubscribersController.addSubscriber);
+router.post('/', validateReq, SubscribersController.addSubscriber);
 
 /** PUT; update subscriber details */
 router.put('/:id', authorizeModify, SubscribersController.updateSubscriber);

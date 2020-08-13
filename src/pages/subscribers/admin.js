@@ -3,12 +3,10 @@ import { connect } from 'react-redux';
 import { zDate } from 'zavid-modules';
 
 import { alert } from 'components/alert.js';
-import { AddEntityButton } from 'components/button.js';
 import { Icon } from 'components/icon.js';
 import { Shader } from 'components/layout.js';
 import { ConfirmModal } from 'components/modal.js';
 import Tabler from 'components/tabler';
-import { BottomToolbar } from 'components/toolbar.js';
 import CLEARANCES from 'constants/clearances.js';
 import request from 'constants/request.js';
 import css from 'styles/pages/Members.module.scss';
@@ -31,12 +29,6 @@ const SubscriberAdmin = (props) => {
       <Shader>
         <SubscriberCollection {...props} />
       </Shader>
-      <BottomToolbar>
-        <AddEntityButton
-          title={'Add Subscriber'}
-          onClick={() => (location.href = '/admin/subscribers/add')}
-        />
-      </BottomToolbar>
     </>
   );
 };
@@ -114,7 +106,6 @@ const SubscriberCollection = ({ user }) => {
               zDate.formatDate(subscriber.createTime),
               { icon: 'time', hideIfEmpty: true }
             ],
-            [<EditButton id={subscriber.id} key={key} />, { type: 'button' }],
             [
               <DeleteButton
                 subscriber={subscriber}
@@ -126,7 +117,7 @@ const SubscriberCollection = ({ user }) => {
             ]
           ];
         })}
-        distribution={'4% 1fr 1fr 1fr 1fr 4% 4%'}
+        distribution={'4% 1fr 1fr 1fr 1fr 4%'}
       />
       <ConfirmModal
         visible={deleteModalVisible}
@@ -169,23 +160,6 @@ const DeleteButton = ({
         );
       }}>
       <Icon name={'trash'} />
-    </button>
-  );
-};
-
-/**
- * Navigate to edit a subscriber.
- * @param {object} props - The component properties.
- * @param {number} props.id - The ID of the subcriber.
- * @returns {React.Component} The component.
- */
-const EditButton = ({ id }) => {
-  const link = `/admin/subscribers/edit/${id}`;
-  return (
-    <button
-      className={css.invisible_button}
-      onClick={() => (location.href = link)}>
-      <Icon name={'edit'} />
     </button>
   );
 };
