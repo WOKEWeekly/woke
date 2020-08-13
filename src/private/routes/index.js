@@ -25,8 +25,9 @@ app.use('/', [
   pagesRoutes,
   reviewsRoutes,
   sessionsRoutes,
-  topicsRoutes,
   subscribersRoutes,
+  topicsRoutes,
+  
 
   externalForms,
   externalLinks,

@@ -82,7 +82,7 @@ const SubscriberCollection = ({ user }) => {
       <Tabler
         heading={'List of #WOKEWeekly Subscriptions'}
         itemsLoaded={isLoaded}
-        emptyMessage={'No members found.'}
+        emptyMessage={'No subscribers found.'}
         columns={[
           ['#', { centerAlign: true }],
           ['Name'],

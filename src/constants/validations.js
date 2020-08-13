@@ -182,24 +182,6 @@ exports.isValidMember = (member) => {
 };
 
 /**
- * Validation of subscriber on submission or update.
- * @param {object} subscriber - Subscriber information to be validated.
- * @returns {boolean} True if valid. False with error message if invalid.
- */
-exports.isValidSubscriber = (subscriber) => {
-  if (!ifExists(subscriber.firstname, "Enter the subscriber's first name."))
-    return false;
-  if (!ifExists(subscriber.lastname, "Enter the subscriber's last name."))
-    return false;
-
-  const isNotSusbscribed = subscriber.subscription !== false;
-  if (!ifExists(isNotSusbscribed, 'Check box for subscribed.')) return false;
-  if (!ifExists(subscriber.createtime, "Select the subscriber's create time."))
-    return false;
-  return true;
-};
-
-/**
  * Validation of review submission or update.
  * @param {object} review - Review information to be validated.
  * @returns {boolean} True if valid. False with error message if invalid.
