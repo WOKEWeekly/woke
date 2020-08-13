@@ -189,11 +189,13 @@ exports.isValidMember = (member) => {
 exports.isValidSubscriber = (subscriber) => {
   if (!ifExists(subscriber.firstname, "Enter the subscriber's first name."))
     return false;
-  if (!ifExists(subscriber.lastname, "Enter the subscriber's last name.")) return false;
+  if (!ifExists(subscriber.lastname, "Enter the subscriber's last name."))
+    return false;
 
   const isNotSusbscribed = subscriber.subscription !== false;
-  if (!ifExists(isNotSusbscribed, "Check box for subscribed.")) return false;
-  if (!ifExists(subscriber.createtime, "Select the subscriber's create time.")) return false;
+  if (!ifExists(isNotSusbscribed, 'Check box for subscribed.')) return false;
+  if (!ifExists(subscriber.createtime, "Select the subscriber's create time."))
+    return false;
   return true;
 };
 

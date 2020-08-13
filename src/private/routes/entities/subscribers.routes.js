@@ -18,7 +18,7 @@ router.get('/admin/subscribers', (req, res) => {
 router.get('/admin/subscribers/add', (req, res) => {
   return server.render(req, res, '/subscribers/crud', {
     title: 'Add New Subscriber',
-    operation: OPERATIONS.CREATE,
+    operation: OPERATIONS.CREATE
   });
 });
 

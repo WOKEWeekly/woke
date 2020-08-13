@@ -5,15 +5,10 @@ import { connect } from 'react-redux';
 import {
   SubmitButton,
   CancelButton,
-  CheckboxButton,
+  CheckboxButton
 } from 'components/button.js';
 import { DatePicker } from 'components/datepicker.js';
-import {
-  Heading,
-  Group,
-  Label,
-  TextInput,
-} from 'components/form';
+import { Heading, Group, Label, TextInput } from 'components/form';
 import { Shader, Spacer } from 'components/layout.js';
 import CLEARANCES from 'constants/clearances.js';
 import css from 'styles/pages/Members.module.scss';
@@ -26,18 +21,13 @@ const SubscriberForm = ({
   confirmFunc,
   cancelFunc,
   handlers,
-  subscriber,
+  subscriber
 }) => {
-
   if (user.clearance < CLEARANCES.ACTIONS.MEMBERS.MODIFY) {
     return (location.href = backPath);
   }
 
-  const {
-    handleText,
-    handleDate,
-    handleCheckboxButton,
-  } = handlers;
+  const { handleText, handleDate, handleCheckboxButton } = handlers;
 
   return (
     <Shader>
@@ -74,12 +64,12 @@ const SubscriberForm = ({
               />
             </Col>
             <Col md={6}>
-                  <Label>Create Time:</Label>
-                  <DatePicker
-                    name={'createtime'}
-                    date={subscriber.createtime}
-                    onConfirm={handleDate}
-                  />
+              <Label>Create Time:</Label>
+              <DatePicker
+                name={'createtime'}
+                date={subscriber.createtime}
+                onConfirm={handleDate}
+              />
             </Col>
           </Group>
           <Group>
