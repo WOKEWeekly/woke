@@ -41,10 +41,7 @@ export const LazyLoader = ({
   );
 };
 
-export const VisibleLoader = ({
-  children,
-  setInView
-}) => {
+export const VisibleLoader = ({ children, setInView }) => {
   const [shouldDetectChange, setDetectivity] = useState(true);
 
   const toggleVisibility = () => {

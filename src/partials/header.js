@@ -19,6 +19,7 @@ const accountMenuOptions = [
   ['Your Account', '/account'],
   ['Team Members', '/admin/members', CLEARANCES.ACTIONS.MEMBERS.VIEW],
   ['Registered Users', '/admin/users', CLEARANCES.ACTIONS.USERS.VIEW],
+  ['Subscribers', '/admin/subscribers', CLEARANCES.ACTIONS.SUBSCRIBERS.VIEW],
   ['Documents', '/admin/documents', CLEARANCES.ACTIONS.DOCUMENTS.VIEW],
   ['Admin Tools', '/admin', 8]
 ];
@@ -191,8 +192,9 @@ const MainNavbar = ({ user, theme }) => {
   );
 };
 
-const mapStateToProps = ({theme, user}) => ({
-  theme, user
+const mapStateToProps = ({ theme, user }) => ({
+  theme,
+  user
 });
 
 const mapDispatchToProps = (dispatch) =>

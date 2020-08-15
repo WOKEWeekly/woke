@@ -30,7 +30,6 @@ export const DatePicker = (props) => {
     setDay(initialDay);
     setMonth(initialMonth);
     setYear(initialYear);
-
   }, [datePickerVisible]);
 
   /** Clear the date */
@@ -152,7 +151,7 @@ const DatePickerFooter = ({
   month,
   year,
   onConfirm,
-  setDatePickerVisibility,
+  setDatePickerVisibility
 }) => {
   /** Update component dates on confirmation */
   const confirmDateSelection = () => {

@@ -73,7 +73,11 @@ const Star = ({ changeRating, className, empty = false, value = 0 }) => {
       value={value}
       className={css['rator-star-button']}
       onClick={changeRating}>
-      <Icon {...iconProps} name={'star'} className={classnames(css['rator-star-icon'], className)} />
+      <Icon
+        {...iconProps}
+        name={'star'}
+        className={classnames(css['rator-star-icon'], className)}
+      />
     </button>
   );
 };

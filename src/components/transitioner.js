@@ -76,7 +76,7 @@ export const Slider = (props) => {
       [direction]: 0,
       opacity: 1,
       transition: `${defaultStyle.transition}, ${postTransitions}`
-    },
+    }
     // exiting: {
     //   [direction]: 0,
     // },

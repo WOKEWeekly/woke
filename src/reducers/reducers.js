@@ -118,14 +118,13 @@ const themeReducer = (state = 'default', action) => {
   }
 };
 
-const articleReducer = (state = {},  action) => {
+const articleReducer = (state = {}, action) => {
   switch (action.type) {
     case 'INCREMENT_CLAP':
       return Object.assign({}, state, action.payload);
     default:
       return state;
   }
-
 };
 
 export default combineReducers({
