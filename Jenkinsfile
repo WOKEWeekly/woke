@@ -1,11 +1,12 @@
-boolean isMaster = env.JOB_NAME == "woke"
+boolean isMaster = env.JOB_NAME == 'woke'
 String slackMessage = isMaster
   ? "Master build #${env.BUILD_NUMBER}"
   : "PR build #${env.BUILD_NUMBER} on ${env.CHANGE_BRANCH} branch by ${env.CHANGE_AUTHOR_DISPLAY_NAME}"
+String cwd = 'src'
 
 pipeline {
   agent {
-    dockerfile true
+    docker { image 'node:13-alpine' }
   }
 
   environment {
@@ -32,21 +33,21 @@ pipeline {
   stages {
     stage('Install dependencies') {
       steps {
-        dir('src') {
+        dir(cwd) {
           sh 'npm ci'
         }
       }
     }
     stage('Build') {
       steps {
-        dir('src') {
+        dir(cwd) {
           sh 'npm run build'
         }
       }
     }
     stage('Test') {
       steps {
-        dir('src') {
+        dir(cwd) {
           sh 'npm run test-ci'
         }
       }
@@ -55,7 +56,7 @@ pipeline {
 
   post {
     always {
-      dir('src') {
+      dir(cwd) {
         junit '**/test-results.xml'
         sh 'rm -rf node_modules .next'
       }
@@ -68,7 +69,7 @@ pipeline {
     aborted {
       slackSend (color: 'warning', message: "${slackMessage} timed out.")
     }
-    
+
     failure {
       slackSend (color: 'danger', message: "${slackMessage} failed.")
     }
