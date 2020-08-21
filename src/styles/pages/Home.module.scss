@@ -50,14 +50,6 @@
   }
 }
 
-// .home-threepart-column {
-//   padding: 1em 0.5em;
-
-//   @media (max-width: $break-lg) {
-//     padding: 1em;
-//   }
-// }
-
 .home-threepart-part {
   @include scale-on-hover(1.04);
   align-items: flex-end;
@@ -77,16 +69,6 @@
     max-height: 375px;
     width: 100%;
   }
-
-  // @media (max-width: $break-lg) {
-  //   height: 50vw;
-  // }
-  // @media (max-width: $break-sm) {
-  //   height: 100vw;
-  // }
-  // @media (max-width: $break-lg) and (min-width: $break-md) {
-  //   background-position-y: -5vh;
-  // }
 }
 
 .home-threepart-caption {
