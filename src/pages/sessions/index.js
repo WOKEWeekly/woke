@@ -226,7 +226,7 @@ class Session extends PureComponent {
               <div className={css.details}>
                 <Title className={css.title}>{item.title}</Title>
                 <Subtitle className={css.date}>
-                  {zDate.formatDate(item.dateHeld, true)}
+                  {zDate.formatDate(item.dateHeld, { withWeekday: true })}
                 </Subtitle>
               </div>
             </div>
@@ -253,7 +253,7 @@ class Session extends PureComponent {
                 <div className={css.details}>
                   <Title className={css.title}>{item.title}</Title>
                   <Subtitle className={css.date}>
-                    {zDate.formatDate(item.dateHeld, true)}
+                    {zDate.formatDate(item.dateHeld, { withWeekday: true })}
                   </Subtitle>
                   <Divider />
                   <Paragraph

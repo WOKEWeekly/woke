@@ -93,7 +93,7 @@ class SessionPage extends Component {
               </Fader>
               <Fader determinant={isLoaded} duration={500} delay={500}>
                 <Subtitle className={css.subtitle}>
-                  {zDate.formatDate(session.dateHeld, true)}
+                  {zDate.formatDate(session.dateHeld, { withWeekday: true })}
                 </Subtitle>
               </Fader>
               <Fader determinant={isLoaded} duration={500} delay={1000}>

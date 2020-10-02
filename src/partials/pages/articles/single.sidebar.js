@@ -91,7 +91,7 @@ const Article = memo(({ article, idx }) => {
             </Subtitle>
             <Subtitle className={css['article-details']}>
               {article.category} •{' '}
-              {zDate.formatDate(article.datePublished, true)}
+              {zDate.formatDate(article.datePublished, { withWeekday: true })}
             </Subtitle>
           </div>
         </div>

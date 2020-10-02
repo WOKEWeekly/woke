@@ -141,7 +141,7 @@ exports.notifyNewArticle = (article, options) => {
       article: Object.assign({}, article, {
         content: zText.truncateText(content),
         slug: `${domain}/blog/${slug}`,
-        datePublished: zDate.formatDate(datePublished, true),
+        datePublished: zDate.formatDate(datePublished, { withWeekday: true }),
         coverImage: `${cloudinary.url}/w_768,c_lfill/${coverImage}`,
         authorImage: `${cloudinary.url}/w_400,c_lfill/${authorImage}`,
         authorSlug: `${domain}/${isGuest ? 'author' : 'team'}/${authorSlug}`

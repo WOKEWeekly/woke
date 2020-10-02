@@ -99,7 +99,7 @@ const ArticlePage = ({ article, user }) => {
    * @returns {React.Component} The component.
    */
   const BlogDetails = () => {
-    const date = datePublished && zDate.formatDate(datePublished, true);
+    const date = datePublished && zDate.formatDate(datePublished, { withWeekday: true });
     if (!authorName) return null;
 
     return (

@@ -50,7 +50,7 @@ export const DatePicker = (props) => {
             className={css['calendar-icon']}
           />
           <TextInput
-            value={date ? zDate.formatDate(date, withDayOfWeek) : null}
+            value={date ? zDate.formatDate(date, { withWeekday: withDayOfWeek }) : null}
             placeholder={placeholderText}
             style={{ textAlign: 'left' }}
             className={css['datepicker-text-input']}

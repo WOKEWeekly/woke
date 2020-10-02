@@ -113,7 +113,7 @@ const Article = memo(({ article, idx }) => {
                   </Subtitle>
                   <Subtitle className={css['article-metadata']}>
                     {article.category} •{' '}
-                    {zDate.formatDate(article.datePublished, true)}
+                    {zDate.formatDate(article.datePublished, { withWeekday: true })}
                   </Subtitle>
                 </div>
               </div>
@@ -154,7 +154,7 @@ const Article = memo(({ article, idx }) => {
                   {article.authorName} • {article.category}
                 </Subtitle>
                 <Subtitle>
-                  {zDate.formatDate(article.datePublished, true)}
+                  {zDate.formatDate(article.datePublished, { withWeekday: true })}
                 </Subtitle>
               </div>
             </div>
