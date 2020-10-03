@@ -70,3 +70,12 @@ exports.logUserActivity = (req, res, next) => {
     next();
   });
 };
+
+exports.checkAuthentication = (req, res, next) => {
+  if (req.isAuthenticated()) {
+    next();
+  } else {
+    req.session.returnTo = req.originalUrl;
+    res.redirect('/');
+  }
+};

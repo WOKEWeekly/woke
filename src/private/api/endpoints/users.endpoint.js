@@ -3,6 +3,7 @@ const router = express.Router();
 
 const CLEARANCES = require('../../../constants/clearances');
 const { verifyToken, validateReq } = require('../../middleware');
+const { passportAuthenticate } = require('../../routes/auth');
 const UsersController = require('../controllers/users.controller');
 
 /** GET all registered users */
@@ -13,13 +14,21 @@ router.get(
 );
 
 /** GET single user by ID */
-router.get('/:id', validateReq, UsersController.getSingleUser);
+router.get('/:id([0-9]+)', validateReq, UsersController.getSingleUser);
 
 /** POST new user */
 router.post('/', validateReq, UsersController.addUser);
 
 /** POST; authenticate user */
-router.post('/login', validateReq, UsersController.loginUser);
+router.post(
+  '/login',
+  validateReq,
+  passportAuthenticate,
+  UsersController.loginUser
+);
+
+/** DELETE; log user out */
+router.delete('/logout', validateReq, UsersController.logOut);
 
 /** PUT; change username */
 router.put(
@@ -44,7 +53,7 @@ router.put(
 
 /** DELETE user */
 router.delete(
-  '/:id',
+  '/:id([0-9]+)',
   verifyToken(CLEARANCES.ACTIONS.USERS.DELETE_OWN_ACCOUNT),
   UsersController.deleteUser
 );

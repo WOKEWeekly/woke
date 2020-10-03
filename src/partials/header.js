@@ -9,6 +9,7 @@ import { CloudinaryImage } from 'components/image';
 import { Default, Mobile, zIndices } from 'components/layout';
 import { useModal } from 'components/modal';
 import CLEARANCES from 'constants/clearances.js';
+import request from 'constants/request';
 import { accounts, cloudinary } from 'constants/settings.js';
 import Login from 'pages/_auth/login';
 import { clearUser } from 'reducers/actions';
@@ -66,8 +67,18 @@ const PreNavbar = ({ user, theme, clearUser }) => {
   /** Log out, de-authenticating the user */
   const logOut = () => {
     clearUser();
-    setAlert({ type: 'info', message: 'You have successfully logged out.' });
-    setTimeout(() => location.reload(), 500);
+    request({
+      url: '/api/v1/users/logout',
+      method: 'DELETE',
+      headers: { Authorization: process.env.AUTH_KEY },
+      onSuccess: () => {
+        setAlert({
+          type: 'info',
+          message: 'You have successfully logged out.'
+        });
+        location.href = '/';
+      }
+    });
   };
 
   const AccountBlock = () => {

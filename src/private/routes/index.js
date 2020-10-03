@@ -13,9 +13,10 @@ const externalLinks = require('./misc/links');
 const seoResources = require('./misc/seo');
 
 const { siteDescription } = require('../../constants/settings.js');
+const { checkAuthentication } = require('../middleware');
+const app = require('../singleton/app').getApp();
 const knex = require('../singleton/knex').getKnex();
 const server = require('../singleton/server').getServer();
-const app = require('../singleton/app').getApp();
 
 app.use('/', [
   accountRoutes,
@@ -43,6 +44,8 @@ app.get(['/', '/home'], function (req, res) {
     backgroundImage: 'bg-app.jpg'
   });
 });
+
+app.use('/admin', checkAuthentication);
 
 app.get('/admin', (req, res) => {
   Promise.resolve()

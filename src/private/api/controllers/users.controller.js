@@ -199,6 +199,16 @@ exports.loginUser = (req, res) => {
   );
 };
 
+exports.logOut = (req, res) => {
+  if (!req.session) return res.redirect('/');
+  req.session.destroy(() => {
+    req.logout();
+    // res.cookie('justDeauthenticated', true, authCookieOptions);
+    // res.redirect('/');
+    res.sendStatus(200);
+  });
+};
+
 /** Change user's username in database */
 exports.changeUsername = (req, res) => {
   const { id } = req.params;
