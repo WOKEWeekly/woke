@@ -1,3 +1,46 @@
+/// Caters responsively to different attributes based on screen size.
+/// @param {string} $attr - The CSS attribute.
+/// @param {any} $default - The default value for the attribute.
+/// @param {any} [$sm] - Optional value for mobile phones.
+/// @param {any} [$md] - Optional value for tablets
+/// @param {any} [$lg] - Optional value for small desktops
+/// @param {any} [$xl] - Optional value for large desktops.
+@mixin responsive($attr, $default: 0, $sm: 0, $md: 0, $lg: 0, $xl: 0, $xxl: 0) {
+  @if $default != 0 {
+    #{$attr}: $default;
+  }
+
+  @if $xxl != 0 {
+    @media (max-width: $break-xxl) {
+      #{$attr}: $xxl !important;
+    }
+  }
+
+  @if $xl != 0 {
+    @media (max-width: $break-xl) {
+      #{$attr}: $xl !important;
+    }
+  }
+
+  @if $lg != 0 {
+    @media (max-width: $break-lg) {
+      #{$attr}: $lg !important;
+    }
+  }
+
+  @if $md != 0 {
+    @media (max-width: $break-md) {
+      #{$attr}: $md !important;
+    }
+  }
+
+  @if $sm != 0 {
+    @media (max-width: $break-sm) {
+      #{$attr}: $sm !important;
+    }
+  }
+}
+
 /// Scales a component on mouse-over.
 /// @param {number} $scale - The scale factor.
 @mixin scale-on-hover($scale) {

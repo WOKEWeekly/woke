@@ -1,58 +1,93 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
+import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 
 import { alert } from 'components/alert.js';
-import { SubmitButton } from 'components/button.js';
-import { Icon } from 'components/icon';
+import { SubmitButton, CancelButton } from 'components/button.js';
+import { TextInput, Group, Label } from 'components/form';
 import { Shader } from 'components/layout.js';
-import { ConfirmModal } from 'components/modal.js';
+import { ConfirmModal, Modal } from 'components/modal.js';
+import { VanillaLink } from 'components/text.js';
 import request from 'constants/request.js';
 import { domain } from 'constants/settings.js';
 import css from 'styles/Auth.module.scss';
 
-class Admin extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      isLoaded: false,
-      ...props.user,
-      generateTokenModal: false,
-      accessInput: null,
-      accessLink: '',
-      tokenGenerated: false
-    };
+const links = [
+  // { name: 'Sessions', url: 'sessions' },
+  { name: 'Members', url: 'members' },
+  { name: 'Articles', url: 'articles' },
+  // { name: 'Candidates', url: 'candidates' },
+  { name: 'Reviews', url: 'reviews' },
+  { name: 'Users', url: 'users' },
+  { name: 'Subscribers', url: 'subscribers' },
+  { name: 'Documents', url: 'documents' }
+];
 
-    if (props.user.clearance < 8) {
-      return (location.href = '/');
-    }
+const Admin = ({ zoomLink }) => {
+  const [isLoaded, setLoaded] = useState(false);
+  const user = useSelector(({ user }) => user);
+
+  if (user.clearance < 8) {
+    return (location.href = '/');
   }
 
-  componentDidMount() {
-    this.setState({ isLoaded: true });
-  }
+  useEffect(() => {
+    setLoaded(true);
+  }, [isLoaded]);
+
+  return (
+    <Shader>
+      <div className={css['admin-page']}>
+        <div className={css['admin-block-wrapper']}>
+          {links.map(({ name, url }, key) => {
+            return (
+              <VanillaLink
+                href={`/admin/${url}`}
+                key={key}
+                className={css['admin-block']}>
+                {name}
+              </VanillaLink>
+            );
+          })}
+        </div>
+        <div className={css['admin-subblock-wrapper']}>
+          <TopicTokenGenerateButton />
+          <ZoomLinkUpdateButton zoomLink={zoomLink} />
+        </div>
+      </div>
+    </Shader>
+  );
+};
+
+const TopicTokenGenerateButton = () => {
+  const [tokenModalVisible, setTokenModalVisible] = useState(false);
+  const hideTokenModal = () => {
+    setTokenModalVisible(false);
+  };
+  const user = useSelector(({ user }) => user);
 
   /** Regenerate a new Topic Bank access token */
-  generateTopicBankToken = () => {
+  const generateTopicBankToken = () => {
     request({
       url: '/api/v1/topics/token',
       method: 'GET',
-      headers: { Authorization: `Bearer ${this.props.user.token}` },
+      headers: { Authorization: `Bearer ${user.token}` },
       onSuccess: ({ token }) => {
-        alert.success('Topic Bank token successfully regenerated.');
-        this.setState({
-          tokenGenerated: true,
-          accessLink: `${domain}/topics?access=${token}`
-        });
-        this.hideGenerateTokenModal();
+        hideTokenModal();
+        copyAccessLink(`${domain}/topics?access=${token}`);
       }
     });
   };
 
-  /** Copy access link to clipboard */
-  copyAccessLink = () => {
-    navigator.clipboard.writeText(this.state.accessLink).then(
+  /**
+   * Copy access link to clipboard
+   * @param {string} accessLink The link to be copied.
+   */
+  const copyAccessLink = (accessLink) => {
+    navigator.clipboard.writeText(accessLink).then(
       () => {
-        alert.success('Access link copied!');
+        alert.info(
+          'Topic Bank token successfully regenerated. Access link copied to clipboard.'
+        );
       },
       () => {
         alert.error('Could not copy access link.');
@@ -60,58 +95,77 @@ class Admin extends Component {
     );
   };
 
-  showGenerateTokenModal = () => {
-    this.setState({ generateTokenModal: true });
+  return (
+    <>
+      <SubmitButton
+        onClick={() => setTokenModalVisible(true)}
+        className={css['generate-token-button']}>
+        Regenerate Topic Bank Token
+      </SubmitButton>
+      <ConfirmModal
+        visible={tokenModalVisible}
+        message={`Are you sure you want to regenerate the access token for the Topic Bank? The previous link will no longer work.`}
+        confirmFunc={generateTopicBankToken}
+        confirmText={'Regenerate'}
+        close={hideTokenModal}
+      />
+    </>
+  );
+};
+
+const ZoomLinkUpdateButton = ({ zoomLink: serverZoomLink = '' }) => {
+  const [zoomLinkModalVisible, setZoomLinkModalVisible] = useState(false);
+  const [clientZoomLink, setZoomLink] = useState(serverZoomLink);
+  const user = useSelector(({ user }) => user);
+
+  const hideZoomLinkModal = () => setZoomLinkModalVisible(false);
+
+  const updateZoomLink = () => {
+    request({
+      url: '/api/v1/tokens/zoom',
+      method: 'PUT',
+      body: JSON.stringify({ value: clientZoomLink }),
+      headers: { Authorization: `Bearer ${user.token}` },
+      onSuccess: () => {
+        alert.success('Zoom link successfully updated.');
+      }
+    });
   };
-  hideGenerateTokenModal = () => {
-    this.setState({ generateTokenModal: false });
-  };
 
-  render() {
-    const {
-      isLoaded,
-      generateTokenModal,
-      accessLink,
-      tokenGenerated
-    } = this.state;
-    if (!isLoaded) return null;
+  return (
+    <>
+      <SubmitButton
+        onClick={() => setZoomLinkModalVisible(true)}
+        className={css['generate-token-button']}>
+        Update Zoom Link
+      </SubmitButton>
 
-    return (
-      <React.Fragment>
-        <Shader>
-          <div className={css.container}>
-            <SubmitButton onClick={this.showGenerateTokenModal}>
-              Regenerate Topic Bank Token
-            </SubmitButton>
-            <div
-              className={css.generatedLink}
-              style={{ visibility: tokenGenerated ? 'visible' : 'hidden' }}>
-              <a href={accessLink} className={css['link-default']}>
-                {accessLink}
-              </a>
-              <button
-                className={css.invisible_button}
-                onClick={this.copyAccessLink}>
-                <Icon name={'copy'} prefix={'far'} />
-              </button>
-            </div>
-          </div>
-        </Shader>
+      <Modal
+        visible={zoomLinkModalVisible}
+        onHide={hideZoomLinkModal}
+        body={
+          <Group className={css['admin-zoom-field']}>
+            <Label>New Zoom Link</Label>
+            <TextInput
+              value={clientZoomLink}
+              placeholder={'Enter the new Zoom link'}
+              onChange={(e) => setZoomLink(e.target.value)}
+            />
+          </Group>
+        }
+        footer={
+          <>
+            <SubmitButton onClick={updateZoomLink}>Update</SubmitButton>
+            <CancelButton onClick={hideZoomLinkModal}>Cancel</CancelButton>
+          </>
+        }
+      />
+    </>
+  );
+};
 
-        <ConfirmModal
-          visible={generateTokenModal}
-          message={`Are you sure you want to regenerate the access token for the Topic Bank? The previous link will no longer work.`}
-          confirmFunc={this.generateTopicBankToken}
-          confirmText={'Regenerate'}
-          close={this.hideGenerateTokenModal}
-        />
-      </React.Fragment>
-    );
-  }
-}
+Admin.getInitialProps = async ({ query }) => {
+  return { ...query };
+};
 
-const mapStateToProps = (state) => ({
-  user: state.user
-});
-
-export default connect(mapStateToProps)(Admin);
+export default Admin;

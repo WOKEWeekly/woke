@@ -9,11 +9,11 @@ const server = require('../../singleton/server').getServer();
 
 router.get('/:page', function (req, res, next) {
   const name = req.params.page;
-  knex
-    .select()
-    .from('pages')
-    .asCallback(function (err, pages) {
-      const page = pages.find((element) => element.name === name);
+  Promise.resolve()
+    .then(() => {
+      return knex.select().from('pages').where('name', name);
+    })
+    .then(([page]) => {
       if (!page) return next();
       return renderPage(req, res, page, PAGE.OPERATIONS.READ);
     });

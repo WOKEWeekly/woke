@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 const { accounts } = require('../../../constants/settings.js');
+const knex = require('../../singleton/knex').getKnex();
 
 /** Link to Spotify */
 router.get('/spotify', function (req, res) {
@@ -21,11 +22,17 @@ router.get('/youtube', function (req, res) {
 
 /** Current zoom link */
 router.get('/zoom', function (req, res) {
-  res.writeHead(301, {
-    Location: accounts.zoom,
-    'Cache-Control': 'no-cache'
-  });
-  res.end();
+  Promise.resolve()
+    .then(() => {
+      return knex.select().from('tokens').where('name', 'zoomLink');
+    })
+    .then(([zoomLink]) => {
+      res.writeHead(301, {
+        Location: zoomLink.value,
+        'Cache-Control': 'no-cache'
+      });
+      res.end();
+    });
 });
 
 /** Join Slack workspace link */

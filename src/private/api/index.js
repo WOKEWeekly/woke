@@ -6,6 +6,7 @@ const pagesEndpoints = require('./endpoints/pages.endpoint');
 const reviewsEndpoints = require('./endpoints/reviews.endpoint');
 const sessionsEndpoints = require('./endpoints/sessions.endpoint');
 const subscribersEndpoints = require('./endpoints/subscribers.endpoint');
+const tokensEndpoints = require('./endpoints/tokens.endpoint');
 const topicsEndpoints = require('./endpoints/topics.endpoint');
 const usersEndpoints = require('./endpoints/users.endpoint');
 
@@ -38,6 +39,9 @@ app.use('/api/v1/sessions', sessionsEndpoints);
 
 // Subscribers routes
 app.use('/api/v1/subscribers', subscribersEndpoints);
+
+// Token routes
+app.use('/api/v1/tokens', tokensEndpoints);
 
 // Topics routes
 app.use('/api/v1/topics', topicsEndpoints);

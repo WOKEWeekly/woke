@@ -13,6 +13,7 @@ const externalLinks = require('./misc/links');
 const seoResources = require('./misc/seo');
 
 const { siteDescription } = require('../../constants/settings.js');
+const knex = require('../singleton/knex').getKnex();
 const server = require('../singleton/server').getServer();
 const app = require('../singleton/app').getApp();
 
@@ -27,7 +28,6 @@ app.use('/', [
   sessionsRoutes,
   subscribersRoutes,
   topicsRoutes,
-  
 
   externalForms,
   externalLinks,
@@ -45,9 +45,16 @@ app.get(['/', '/home'], function (req, res) {
 });
 
 app.get('/admin', (req, res) => {
-  server.render(req, res, '/_auth/admin', {
-    title: 'Admin Tools | #WOKEWeekly'
-  });
+  Promise.resolve()
+    .then(() => {
+      return knex.select().from('tokens').where('name', 'zoomLink');
+    })
+    .then(([zoomLink]) => {
+      server.render(req, res, '/_auth/admin', {
+        title: 'Admin Console | #WOKEWeekly',
+        zoomLink: zoomLink.value
+      });
+    });
 });
 
 /** Registered users page */

@@ -1,4 +1,4 @@
-@import 'Variables';
+@import 'Variables.scss';
 
 /******************************************
 *** login.js
@@ -6,14 +6,14 @@
 
 .login-form {
   padding: 1em;
-  @media (max-width: $break-md) {
-    font-size: 1em;
-  }
 
   div {
     @media (max-width: $break-md) {
       padding: 0.35em 0;
     }
+  }
+  @media (max-width: $break-md) {
+    font-size: 1em;
   }
 }
 
@@ -29,13 +29,64 @@
 }
 
 .honeypot {
+  height: 0;
+  left: 0;
   opacity: 0;
   position: absolute;
   top: 0;
-  left: 0;
-  height: 0;
   width: 0;
   z-index: -1;
+}
+
+//////////////////////////////////////////
+/// Admin
+//////////////////////////////////////////
+
+.admin-page {
+  min-height: 100%;
+}
+
+.admin-block-wrapper {
+  @include responsive(grid-template-columns, repeat(2, 50%), $md: 100%);
+  display: grid;
+}
+
+.admin-block {
+  $color: #120023;
+  @include responsive(font-size, 1.5em, $md: 1.3em);
+  @include responsive(margin, 1em, $md: 0.5em);
+  @include scale-on-hover(1.05);
+  align-items: center;
+  background-color: rgba($color, $alpha: 0.8);
+  border-radius: 20px;
+  box-shadow: 0 0 2px 3px #fff;
+  color: #fff !important;
+  display: flex;
+  font-family: $body-font;
+  justify-content: center;
+  min-height: 100px;
+  text-align: center;
+  transition-duration: 0.3s;
+
+  &:hover {
+    background-color: adjust-color($color, $lightness: 10%);
+  }
+}
+
+.admin-subblock-wrapper {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.generate-token-button {
+  @include responsive(margin, 1em, $md: 0.5em);
+  box-shadow: 0 0 2px 1px #fff;
+  max-width: fit-content;
+}
+
+.admin-zoom-field {
+  padding: 1.5em;
 }
 
 /******************************************
@@ -45,43 +96,46 @@
 .container {
   @extend .responsive-container;
   padding: 1.5em;
+
   .name {
     @extend .text;
     @include font-scaler(2.5);
   }
+
   .username {
+    @include font-scaler(1.5);
     color: grey;
     font-family: $body-font;
-    @include font-scaler(1.5);
   }
+
   .clearance {
+    @include font-scaler(1.5);
     color: white;
     font-family: $title-font;
-    @include font-scaler(1.5);
   }
+
   .links {
     display: grid;
     margin-top: 2em;
+
     button {
       @extend .link-button;
+      @include font-scaler(1.1);
       color: #9360ce;
       font-family: $body-font;
-      @include font-scaler(1.1);
       text-align: left;
     }
+
     .features {
       @extend .text;
       @include font-scaler(1.2);
       margin-bottom: 2em;
     }
+
     .warning {
       color: white;
       font-family: $body-font;
     }
-  }
-
-  .generatedLink {
-    margin-top: 1em;
   }
 }
 
@@ -92,6 +146,7 @@
 .instructions {
   @extend .text;
   font-size: 1.2em;
+
   div {
     margin: 1em 0;
   }

@@ -16,12 +16,12 @@ import css from 'styles/partials/Header.module.scss';
 
 /** The list of options in the account menu. */
 const accountMenuOptions = [
+  ['Admin Console', '/admin', 8],
   ['Your Account', '/account'],
   ['Team Members', '/admin/members', CLEARANCES.ACTIONS.MEMBERS.VIEW],
   ['Registered Users', '/admin/users', CLEARANCES.ACTIONS.USERS.VIEW],
   ['Subscribers', '/admin/subscribers', CLEARANCES.ACTIONS.SUBSCRIBERS.VIEW],
-  ['Documents', '/admin/documents', CLEARANCES.ACTIONS.DOCUMENTS.VIEW],
-  ['Admin Tools', '/admin', 8]
+  ['Documents', '/admin/documents', CLEARANCES.ACTIONS.DOCUMENTS.VIEW]
 ];
 
 /** The social media hyperlinks in the prenav bar. */
