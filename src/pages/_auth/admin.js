@@ -26,7 +26,7 @@ const Admin = ({ zoomLink }) => {
   const [isLoaded, setLoaded] = useState(false);
   const user = useSelector(({ user }) => user);
 
-  if (user.clearance < 8) {
+  if (user.clearance < 7) {
     return (location.href = '/');
   }
 

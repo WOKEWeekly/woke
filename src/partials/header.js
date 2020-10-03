@@ -16,7 +16,7 @@ import css from 'styles/partials/Header.module.scss';
 
 /** The list of options in the account menu. */
 const accountMenuOptions = [
-  ['Admin Console', '/admin', 8],
+  ['Admin Console', '/admin', 7],
   ['Your Account', '/account'],
   ['Team Members', '/admin/members', CLEARANCES.ACTIONS.MEMBERS.VIEW],
   ['Registered Users', '/admin/users', CLEARANCES.ACTIONS.USERS.VIEW],
