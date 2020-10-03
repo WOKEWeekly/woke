@@ -5,21 +5,22 @@ const CLEARANCES = require('../../../constants/clearances');
 const { verifyToken } = require('../../middleware');
 const DocumentsController = require('../controllers/documents.controller');
 
-const authorize = verifyToken(CLEARANCES.ACTIONS.DOCUMENTS.MODIFY);
+const viewAuthorize = verifyToken(CLEARANCES.ACTIONS.DOCUMENTS.VIEW);
+const modifyAuthorize = verifyToken(CLEARANCES.ACTIONS.DOCUMENTS.MODIFY);
 
 /** GET all documents */
-router.get('/', authorize, DocumentsController.getAllDocuments);
+router.get('/', viewAuthorize, DocumentsController.getAllDocuments);
 
 /** GET single document by ID */
-router.get('/:id', authorize, DocumentsController.getSingleDocument);
+router.get('/:id', viewAuthorize, DocumentsController.getSingleDocument);
 
 /** POST new document */
-router.post('/', authorize, DocumentsController.addDocument);
+router.post('/', modifyAuthorize, DocumentsController.addDocument);
 
 /** PUT; update documents details */
-router.put('/:id', authorize, DocumentsController.updateDocument);
+router.put('/:id', modifyAuthorize, DocumentsController.updateDocument);
 
 /** DELETE document */
-router.delete('/:id', authorize, DocumentsController.deleteDocument);
+router.delete('/:id', modifyAuthorize, DocumentsController.deleteDocument);
 
 module.exports = router;
