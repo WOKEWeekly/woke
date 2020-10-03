@@ -12,6 +12,7 @@ pipeline {
   environment {
     PORT = 3000
     JWT_SECRET = credentials('jwt-secret')
+    SESSION_NAME = credentials('session-name')
     SESSION_SECRET = credentials('session-secret')
     AUTH_KEY = credentials('authorization-key')
     MYSQL_HOST = credentials('mysql-host')

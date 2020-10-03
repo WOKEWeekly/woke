@@ -3,7 +3,7 @@ import { Dropdown, Nav, Navbar } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
-import { setAlert, checkAlert } from 'components/alert.js';
+import { setAlert } from 'components/alert.js';
 import { Icon, HeaderIcon } from 'components/icon';
 import { CloudinaryImage } from 'components/image';
 import { Default, Mobile, zIndices } from 'components/layout';
@@ -58,7 +58,6 @@ const PreNavbar = ({ user, theme, clearUser }) => {
   const [loginModalVisible, setLoginModalVisibility] = useModal(false);
 
   useEffect(() => {
-    checkAlert();
     setLoaded(true);
   }, [isLoaded]);
 

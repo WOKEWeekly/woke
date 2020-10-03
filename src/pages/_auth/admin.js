@@ -128,6 +128,7 @@ const ZoomLinkUpdateButton = ({ zoomLink: serverZoomLink = '' }) => {
       headers: { Authorization: `Bearer ${user.token}` },
       onSuccess: () => {
         alert.success('Zoom link successfully updated.');
+        hideZoomLinkModal();
       }
     });
   };

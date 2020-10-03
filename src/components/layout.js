@@ -51,7 +51,7 @@ export const Cover = ({
   }, [isLoaded]);
 
   return (
-    <Fader determinant={isLoaded} duration={1000}>
+    <Fader determinant={isLoaded} duration={500}>
       <Container
         fluid={true}
         className={classnames(css[`cover-${theme}`], className)}

@@ -3,7 +3,7 @@ const { zString } = require('zavid-modules');
 exports.loadCountries = () => {
   return fetch('https://restcountries.eu/rest/v2/all')
     .then((res) => res.json())
-    .catch((error) => console.error(error));
+    .catch(console.error);
 };
 
 /** Retrieve demonym from country */

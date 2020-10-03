@@ -1,4 +1,4 @@
-import React, { Suspense, useState } from 'react';
+import React, { Suspense } from 'react';
 import { Container, Col, Row } from 'react-bootstrap';
 
 import { Cover, Shader } from 'components/layout.js';
