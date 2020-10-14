@@ -94,11 +94,13 @@ const processDueCards = (cards, next) => {
     function (err, memberMapping) {
       // Replace the member IDs on each card with the member names.
       const dueTasksWithMembers = dueTasks.map((card) => {
-        card.members = card.members.map((member) => {
-          const { firstname, slackId } = memberMapping[member];
-          return slackId && slackId !== null
-            ? `<@${slackId}>`
-            : `*${firstname}*`;
+        card.members = card.members.map((memberId) => {
+          const member = memberMapping[memberId];
+          if (member) {
+            const { firstname, slackId } = member;
+            const hasSlackId = slackId && slackId !== null;
+            return hasSlackId ? `<@${slackId}>` : `*${firstname}*`;
+          }
         });
         return card;
       });
