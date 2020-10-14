@@ -170,7 +170,7 @@ const constructSMUCMessage = (cards) => {
     })
     .join('\n');
   return `
-  Social Media Team!\nThe following posts have been scheduled but have not yet been captioned:\n\n${cardMessages}\n\nCan somebody please caption them!
+  Good morning! Just a reminder that the following posts have been scheduled:\n\n${cardMessages}
   `;
 };
 
