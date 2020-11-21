@@ -35,6 +35,21 @@ router.get('/zoom', function (req, res) {
     });
 });
 
+/** Current event link */
+router.get('/event', function (req, res) {
+  Promise.resolve()
+    .then(() => {
+      return knex.select().from('tokens').where('name', 'eventLink');
+    })
+    .then(([eventLink]) => {
+      res.writeHead(301, {
+        Location: eventLink.value,
+        'Cache-Control': 'no-cache'
+      });
+      res.end();
+    });
+});
+
 /** Join Slack workspace link */
 router.get('/slack', function (req, res) {
   res.writeHead(301, {
