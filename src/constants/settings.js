@@ -44,7 +44,7 @@ exports.cloudinary = {
 };
 
 /** The copyright notice. */
-exports.copyright = `\u00A9 2020 #WOKEWeekly`;
+exports.copyright = `\u00A9 ${new Date().getFullYear()} #WOKEWeekly`;
 
 /** The date #WOKEWeekly was established */
 exports.creationDate = new Date(2017, 2, 2);
