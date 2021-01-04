@@ -64,16 +64,16 @@ pipeline {
       }
     }
 
-    success {
-      slackSend (color: 'good', message: "${slackMessage} successful.")
-    }
+    // success {
+    //   slackSend (color: 'good', message: "${slackMessage} successful.")
+    // }
 
-    aborted {
-      slackSend (color: 'warning', message: "${slackMessage} timed out.")
-    }
+    // aborted {
+    //   slackSend (color: 'warning', message: "${slackMessage} timed out.")
+    // }
 
-    failure {
-      slackSend (color: 'danger', message: "${slackMessage} failed.")
-    }
+    // failure {
+    //   slackSend (color: 'danger', message: "${slackMessage} failed.")
+    // }
   }
 }
